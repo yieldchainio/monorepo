@@ -1,0 +1,141 @@
+.vaultsection {
+  background: #050505;
+  color: #ffffff;
+  padding: 0px 64px;
+  font-family: "Athletics";
+}
+
+.statsDiv {
+  background: #202023;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 40px;
+  margin-bottom: 60px;
+}
+
+.flexDiv2 {
+  gap: 40px;
+  display: flex;
+}
+
+.flexDiv3 {
+  gap: 40px;
+  display: flex;
+  text-align: right;
+}
+
+.createBtn {
+  background: #ffffff;
+  border-radius: 8px;
+  font-family: "Athletics";
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  color: #050505;
+  padding: 12px 33px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border: none;
+  cursor: pointer;
+}
+
+.statTitle {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #676771;
+}
+
+.statTitle a {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 24px;
+  text-decoration-line: underline;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.statValue {
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.flexDiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 44px;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.arrows {
+  gap: 24px;
+  display: flex;
+}
+
+.arrowOff {
+  background: #454445;
+  border-radius: 32px;
+  padding: 11.34px 16.33px;
+  border: none;
+  transition: transform 0.2s; /* Animation */
+}
+
+.arrowOn {
+  background: #ffffff;
+  border-radius: 32px;
+  padding: 11.34px 16.33px;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s; /* Animation */
+}
+.arrowOn:hover {
+  transform: scale(1.1);
+}
+.arrowOff:hover {
+  transform: scale(1.1);
+}
+
+.backArrowOn {
+  background: #aaaaaa;
+  border-radius: 32px;
+  padding: 11.34px 16.33px;
+  cursor: pointer;
+  border: none;
+}
+
+.arrowImg {
+  margin-top: 2.5px;
+}
+
+.cards {
+  box-sizing: border-box;
+  display: grid;
+  gap: 8px;
+  /* flex-wrap: nowrap; */
+  grid-auto-flow: column;
+  grid-auto-columns: 25%;
+  overflow-x: hidden;
+  overscroll-behavior-inline: contain;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+}
+
+.trendingVault {
+  margin-top: 84px;
+}

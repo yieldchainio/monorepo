@@ -1,0 +1,777 @@
+.vaultDiv {
+  position: relative;
+  line-height: 24px;
+  display: inline-block;
+}
+.arrowChevronDuoRight {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.createVaultB {
+  position: relative;
+  line-height: 24px;
+  display: inline-block;
+  color: #fff;
+}
+.frameDiv {
+  position: absolute;
+  top: 136px;
+  left: 64px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frameDiv > * + * {
+  margin-left: 8px;
+}
+.icon24cursor {
+  position: absolute;
+  top: 352px;
+  left: 560px;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  display: none;
+}
+.rectangleDiv,
+.rectangleDiv1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+}
+.rectangleDiv {
+  background-color: #050505;
+  border-top: 0 solid #050505;
+  border-right: 1px solid #050505;
+  border-bottom: 0 solid #050505;
+  border-left: 0 solid #050505;
+  width: 1440px;
+  height: 1322px;
+  z-index: 1;
+}
+.rectangleDiv1 {
+  width: 100%;
+  right: 0;
+  border-radius: 4px;
+  background-color: #000000;
+  border: 1px solid #2d2d31;
+  height: 56px;
+  overflow: hidden;
+
+}
+.chevronDownIcon {
+  position: absolute;
+  top: 72px;
+  left: 544px;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  display: none;
+}
+.stakeDiv {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  font-family: Athletics;
+  color: #676771;
+  text-align: center;
+  display: inline-block;
+}
+.groupDiv2 {
+  width: 100%;
+  top: 0;
+  right: 0;
+  height: 56px;
+}
+.actionDiv,
+.groupDiv1,
+.groupDiv2 {
+  position: absolute;
+  left: 0;
+}
+.groupDiv1 {
+  width: 100%;
+  top: 32px;
+  right: 0;
+  height: 56px;
+}
+.actionDiv {
+  top: 0;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  font-family: Athletics;
+  color: #fff;
+  text-align: left;
+  display: inline-block;
+  z-index: 10;
+}
+.groupDiv {
+  position: absolute;
+  width: 92.11%;
+  top: 34px;
+  right: 3.95%;
+  left: 3.95%;
+  height: 88px;
+}
+.chevronDownIcon1,
+.ellipseIcon {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+}
+.chevronDownIcon1 {
+  top: 176px;
+  left: 544px;
+  overflow: hidden;
+  display: none;
+}
+.ellipseIcon {
+  top: 0;
+  left: 0;
+  object-fit: cover;
+}
+.pancakeswapDiv {
+  position: absolute;
+  top: 0;
+  left: 32px;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  font-family: Athletics;
+  color: #676771;
+  text-align: left;
+  display: inline-block;
+}
+.groupDiv3,
+.groupDiv6 {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 115px;
+  height: 24px;
+}
+.groupDiv3 {
+  width: 92.11%;
+  top: 155px;
+  right: 3.95%;
+  left: 3.95%;
+  height: 88px;
+}
+.chevronDownIcon2 {
+  position: absolute;
+  top: 288px;
+  left: 544px;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  display: none;
+}
+.groupDiv10 {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 133px;
+  height: 24px;
+}
+.groupDiv7,
+.rectangleDiv4 {
+  position: absolute;
+  width: 92.11%;
+  top: 280px;
+  right: 3.95%;
+  left: 3.95%;
+  height: 88px;
+}
+.rectangleDiv4 {
+  width: 100%;
+  top: 0;
+  right: 0;
+  left: 0;
+  border-radius: 4px;
+  background-color: #050505;
+  border: 1px solid #2d2d31;
+  box-sizing: border-box;
+  height: 56px;
+  overflow: hidden;
+
+}
+.chevronDownIcon3 {
+  position: absolute;
+  top: 16px;
+  left: 520px;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+}
+.enterAmountDiv {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  font-family: Athletics;
+  color: #676771;
+  text-align: left;
+  display: inline-block;
+}
+.groupDiv11 {
+  position: absolute;
+  width: 92.11%;
+  top: 352px;
+  right: 3.95%;
+  left: 3.95%;
+  height: 88px;
+}
+.createStrategyDiv {
+  position: relative;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 900;
+  font-family: Athletics;
+  color: #050505;
+  text-align: left;
+  display: inline-block;
+  opacity: 0.8;
+}
+.cancelActionBtnDiv {
+  position: relative;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 900;
+  font-family: Athletics;
+  color: white;
+  text-align: left;
+  display: inline-block;
+  opacity: 0.8;
+}
+.cancelActionBtnDiv:hover {
+  position: relative;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 900;
+  font-family: Athletics;
+  color: white;
+  text-align: left;
+  display: inline-block;
+  opacity: 0.8;
+}
+.frameDiv2,
+.cancelActionBtn .frameDiv3 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+.frameDiv2 {
+  position: absolute;
+  top: 472px;
+  left: 210px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #00b2ec, #d9ca0f);
+  padding: 16px 40px;
+  box-sizing: border-box;
+  overflow: hidden;
+
+}
+.cancelActionBtn {
+  position: absolute;
+  top: 472px;
+  left: 24px;
+  border-radius: 8px;
+  border: 1px solid #ffffff;
+  color: white;
+  padding: 16px 40px;
+  box-sizing: border-box;
+  cursor: pointer;
+  overflow: hidden;
+
+}
+
+.frameDiv1 {
+  position: absolute;
+
+  top: 40px;
+  left: 418px;
+  border-radius: 4px;
+  background-color: #202023;
+  width: 608px;
+  height: 552px;
+  z-index: 2;
+  overflow: hidden;
+
+}
+.groupForm {
+  position: absolute;
+  top: 184px;
+  left: 0;
+  width: 1440px;
+  height: 1322px;
+}
+.cantFindPoolAggregateIn2 {
+  position: absolute;
+  top: 982px;
+  left: 517px;
+  font-size: 12px;
+  font-family: Inter;
+  color: #050505;
+  display: inline-block;
+}
+.ellipseIcon2,
+.yieldchainLogo1 {
+  position: absolute;
+  top: 44px;
+  left: 64px;
+  width: 164.83px;
+  height: 32px;
+  object-fit: cover;
+}
+.ellipseIcon2 {
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+}
+.iD65FG646Div,
+.metamaskDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 24px;
+  display: inline-block;
+}
+.iD65FG646Div {
+  top: 24px;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: left;
+}
+.groupDiv15 {
+  position: absolute;
+  top: 0;
+  left: 48px;
+  width: 74px;
+  height: 40px;
+}
+.chevronDownIcon4 {
+  position: absolute;
+  top: 10px;
+  left: 138px;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+}
+.groupDiv14 {
+  position: absolute;
+  top: 40px;
+  left: 1031px;
+  width: 158px;
+  height: 40px;
+  text-align: right;
+  font-size: 16px;
+  color: #fff;
+}
+.simpleIconslitecoin {
+  position: relative;
+  border-radius: 100px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  overflow: hidden;
+  object-fit: cover;
+  overflow: hidden;
+
+}
+.etherumDiv {
+  position: relative;
+  line-height: 24px;
+  font-weight: 500;
+  display: inline-block;
+}
+.frameDiv5 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frameDiv5 > * + * {
+  margin-left: 8px;
+}
+.chevronDownIcon5 {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.frameDiv4 {
+  position: absolute;
+  top: 40px;
+  left: 876px;
+  border-radius: 4px;
+  border: 1px solid #2d2d31;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  overflow: hidden;
+
+}
+.frameDiv4 > * + * {
+  margin-left: 8px;
+}
+.createVaultDiv {
+  position: relative;
+  line-height: 24px;
+  font-weight: 900;
+  display: inline-block;
+  opacity: 0.8;
+}
+.frameDiv6,
+.vaultB {
+  background: linear-gradient(90deg, #00b2ec, #d9ca0f);
+}
+.frameDiv6 {
+  position: absolute;
+  top: 40px;
+  left: 1213px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 40px;
+  box-sizing: border-box;
+  align-items: flex-start;
+  justify-content: flex-start;
+  color: #050505;
+  overflow: hidden;
+
+}
+.vaultB {
+  position: relative;
+  line-height: 24px;
+  display: inline-block;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.frameDiv9 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+}
+.portfolioDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 24px;
+  font-weight: 500;
+  display: inline-block;
+}
+.groupDiv16 {
+  position: relative;
+  width: 65px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.frameDiv10,
+.frameDiv8 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.frameDiv8 {
+  position: absolute;
+  top: 48px;
+  left: 528px;
+  text-align: center;
+  font-size: 16px;
+}
+.frameDiv8 > * + * {
+  margin-left: 24px;
+}
+.dashboardDiv {
+  position: flex;
+  background-color: #050505;
+  border: 1px solid #050505;
+  box-sizing: border-box;
+  width: 100%;
+  height: 900px;
+  overflow: hidden;
+  text-align: left;
+  font-size: 14px;
+  color: #676771;
+  font-family: Athletics;
+}
+
+.menuContainer {
+  position: relative;
+  display: inline;
+  cursor: pointer;
+}
+
+.menu {
+  cursor: pointer;
+  background: #442b2b;
+  border-radius: 8px;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 100%;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+  overflow: hidden;
+
+}
+
+.menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  border-bottom: 1px solid #683f3f;
+}
+
+.menu li a {
+  text-decoration: none;
+  color: #ffffff;
+  padding: 15px 20px;
+  display: block;
+}
+
+.menuTrigger {
+  cursor: pointer;
+  background: none;
+  border-radius: 90px;
+  color: #ffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  vertical-align: middle;
+  transition: box-shadow 0.4s ease;
+  overflow: hidden;
+
+}
+
+.menuTrigger:hover {
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+}
+
+.menuTriggerspan {
+  font-weight: 700;
+  vertical-align: middle;
+  font-size: 14px;
+  margin: 0 10px;
+}
+
+.menuTrigger img {
+  border-radius: 90px;
+  overflow: hidden;
+
+}
+
+.dropdownProtocol {
+  cursor: pointer;
+  background: none;
+  border-radius: 3px;
+  width: 100%;
+  background-color: #000000;
+  height: 50px;
+  color: #ffff;
+  padding: 8px 8px 8px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  vertical-align: middle;
+  text-align: center;
+  transition: box-shadow 0.4s ease;
+  z-index: 4000;
+  overflow: hidden;
+
+}
+
+.dropdownProtocolStyle {
+  border: none;
+  background-color: #010101;
+  overflow: hidden;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  outline: none;
+  color: rgba(255, 255, 255, 0.685);
+  font-size: 14px;
+  z-index: 5000;
+}
+
+ul {
+  padding-inline-start: 0px;
+  padding-inline-end: 0px;
+}
+
+.modalHeadingSection {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+.modalHeadingSection h2 {
+  font-size: 18px;
+  color: white;
+  font-weight: 700;
+}
+
+.modalTokenContainer {
+  margin-top: 30px;
+  height: 400px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.modalTokenContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.modalSearchBar {
+  background-color: #232222;
+  height: 52px;
+  width: 100%;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+}
+
+.modalSearchInput {
+  font-size: 1rem;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  margin-left: 10px;
+  width: 80%;
+  color: #fff;
+}
+
+.modalTokenComponent {
+  display: flex;
+  border-bottom: gray 1px solid;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+  padding: 0 0 20px 0;
+}
+
+.modalComponentData {
+  display: flex;
+}
+
+.modalTokenSymbol {
+  margin: 0;
+  color: #fff;
+  font-size: 20px;
+}
+
+.modalTokenName {
+  margin: 0;
+  color: #777;
+}
+
+.modalTokenLogo {
+  height: 40px;
+  margin-right: 16px;
+}
+
+.modalSendLogo {
+  height: 20px;
+}
+
+.swapTokenSelection {
+  background-color: #000000;
+  width: 35rem;
+  margin-bottom: 20px;
+  padding: 7px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.SwapTokenSelectonContainer {
+  margin-top: 9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.swapIcon {
+  height: 40px;
+  margin-bottom: -25px;
+}
+
+.swapTokenSelectionLogo {
+  height: 30px;
+  margin-right: 15px;
+}
+
+.swapTokenSelectionText {
+  color: white;
+}
+
+.downArrowIcon {
+  height: 10px;
+}
+
+.swapTokenDataContainer {
+  display: flex;
+  align-items: center;
+}
+
+.swapHeadingText {
+  color: #fff;
+  width: 34rem;
+}
+
+.deployBtn {
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  color: grey;
+  padding: 16px 40px;
+  width: 600px;
+  background: red;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@yc/sqs-orchestrator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "bin/index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ofir Smolinsky",
+  "license": "ISC",
+  "dependencies": {
+    "ethers": "^6.1.0"
+  }
+}

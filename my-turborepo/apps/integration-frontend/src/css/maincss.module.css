@@ -1,0 +1,453 @@
+* {
+  user-select: none;
+}
+.main {
+  background-color: rgb(227, 227, 227);
+  width: 100vw;
+  height: max(max-content, 150vh);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-bottom: 30%;
+  overflow: hidden;
+}
+
+.mainText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 940;
+  font-size: 54px;
+  /* identical to box height, or 133% */
+
+  color: black;
+}
+
+.fieldTitleText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 940;
+  font-size: 24px;
+  /* identical to box height, or 133% */
+
+  color: black;
+}
+
+.firstFieldsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 50%;
+  margin-top: 20px;
+  padding-top: 24px;
+  gap: 8vh;
+}
+
+.textBoxInput {
+  box-sizing: border-box;
+  background: #f2f2f2;
+  border: 1px solid #000000;
+  border-radius: 12px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.7vw;
+  /* identical to box height */
+  text-align: start;
+  padding: 1.7vw;
+
+  color: #000000;
+  height: 56px;
+  width: 30vw;
+}
+
+.button {
+  box-sizing: border-box;
+  background: #f2f2f2;
+  border: 1px solid #000000;
+  border-radius: 12px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  /* identical to box height */
+  text-align: center;
+  padding: 24px;
+
+  color: #000000;
+  height: 48px;
+  width: 15vw;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropdownBox {
+  box-sizing: border-box;
+  border: 1px solid #000000;
+  border-radius: 12px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 58px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #000000;
+  height: 7vh;
+  width: 20vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  cursor: pointer;
+  background-color: rgb(242, 242, 242);
+}
+
+.dropdownTriangle {
+  /* Polygon 3 */
+
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+}
+
+.dropdownBoxImage {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.dropdownBoxTitle {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 29px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #000000;
+  align-self: center;
+  white-space: nowrap;
+  width: 60%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.singleFieldContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.dropdown {
+  box-sizing: border-box;
+  border: 1px solid #000000;
+  border-radius: 12px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 58px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #000000;
+  height: 40vh;
+  width: 20vw;
+
+  gap: 16px;
+  cursor: pointer;
+  background-color: rgb(242, 242, 242);
+  display: grid;
+  grid-auto-flow: row;
+  grid-auto-columns: auto;
+  overflow: scroll;
+  overflow-x: hidden;
+  filter: drop-shadow(0px 8px 10px rgba(0, 0, 0, 0.33));
+}
+
+.dropdown::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
+}
+
+.dropdownItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+  padding: 8px;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(242, 242, 242);
+}
+
+.textInputBox {
+  box-sizing: border-box;
+  background: #f2f2f2;
+  border: 1px solid #000000;
+  border-radius: 12px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 58px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #000000;
+  height: 102px;
+  width: 30%;
+}
+
+.functionsTable {
+  display: grid;
+  gap: 0px 0px;
+  width: 100%;
+  height: 100%;
+  grid-auto-columns: max-content;
+  grid-auto-flow: row;
+  margin-top: 100px;
+  justify-content: center;
+}
+
+.functionsTableRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 120px;
+  width: 100vw;
+  height: 100%;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 58px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #000000;
+}
+
+.functionsTableColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: max-content;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.45vw;
+  line-height: 58px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #000000;
+}
+
+.functionsTableColumn > :first-child {
+  text-decoration: underline;
+  position: relative;
+  top: 0px;
+}
+
+.checkBox {
+  box-sizing: border-box;
+
+  width: 3vw;
+  height: 3vw;
+
+  cursor: pointer;
+  /* Gradient/Normal */
+
+  background-color: linear-gradient(
+    90deg,
+    rgb(0, 178, 236) 0%,
+    rgb(217, 202, 15) 100%
+  );
+  border: 1px solid #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 8.5vw;
+}
+
+.checkBox > img {
+  width: 50%;
+  height: 50%;
+  cursor: pointer;
+}
+
+.loadingScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.funcPageWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100vw;
+  height: 300vh;
+  background-color: #0000006b;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  scrollbar-width: 0px;
+  --webkit-scrollbar: 0px;
+  backdrop-filter: blur(3px);
+  overflow: hidden;
+  padding-top: 4vh;
+}
+
+.funcPageWrapper::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
+  display: none;
+}
+
+.funcModalBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 90vw;
+  height: 200vh;
+  background-color: white;
+
+  scrollbar-width: 0px;
+  --webkit-scrollbar: 0px;
+  border: 3px solid black;
+  padding-top: 8vh;
+}
+
+.funcModalBody::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
+  display: none;
+}
+
+.funcModalTitleContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.funcModalTitle {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 2.5vw;
+  line-height: 58px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #000000;
+  text-decoration: underline;
+}
+
+.funcModalSubtitle {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.5vw;
+  line-height: 30px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #000000;
+  text-decoration: underline;
+}
+
+.funcModalFlowsTitle {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.5vw;
+  line-height: 30px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #000000;
+  text-decoration: underline;
+  margin-top: 20vh;
+}
+
+.funcModalFlowsTable {
+  display: grid;
+  gap: 0px 0px;
+  width: 100%;
+  height: 100%;
+  grid-auto-columns: max-content;
+  grid-auto-flow: row;
+  margin-top: 20vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.funcModalFlowRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 80vw;
+  height: 10vh;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #000000;
+}
+
+.funcModalFlowColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4.7vh;
+}
+
+.funcModalColumContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1vw;
+}

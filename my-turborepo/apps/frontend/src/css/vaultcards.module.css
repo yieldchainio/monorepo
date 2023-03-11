@@ -1,0 +1,334 @@
+.vaultCard {
+  color: #ffffff;
+  font-family: "Athletics";
+  scroll-snap-align: start;
+  z-index: 9999999999999;
+  overflow: hidden;
+}
+
+.apyvalues {
+  background: linear-gradient(
+    90.02deg,
+    rgba(80, 175, 149, 0.1) 0.03%,
+    rgba(248, 157, 47, 0.1) 99.98%
+  );
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  width: 304px;
+  overflow: visible;
+}
+
+.trendingVerifiedTag {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  gap: 4px;
+
+  position: relative;
+  width: 95px;
+  height: 32px;
+  right: 40px;
+  top: 121px;
+  margin-top: 100px;
+  z-index: 999999;
+
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.apyvalue {
+  font-weight: 800;
+  font-size: 21px;
+  line-height: 32px;
+  position: relative;
+  top: -10px;
+  left: 1px;
+}
+
+.apyvalueUnd {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  text-decoration-line: line-through;
+  color: #676771;
+  position: relative;
+  top: 14px;
+  left: -98.5px;
+  margin-left: 0px;
+  margin-right: 0px;
+  overflow: hidden;
+}
+
+.verifiedTag {
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  gap: 4px;
+
+  position: fixed;
+  width: 95px;
+  height: 32px;
+  left: 185px;
+  top: 24px;
+
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+
+  border-radius: 100px;
+  overflow: hidden;
+}
+.cardContent {
+  background: #202023;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  padding: 24px;
+  width: 304px;
+  height: 434px;
+  overflow: hidden;
+}
+
+.cardlists {
+  list-style-type: none;
+  background: none;
+  margin: 0;
+  padding: 0;
+  margin-top: 24px;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.cardlist {
+  padding: 0;
+  border-bottom: none;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.cardlist:last-child {
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.key {
+  font-weight: 400;
+  line-height: 24px;
+  color: #676771;
+  overflow: hidden;
+}
+
+.value {
+  font-weight: 800;
+  line-height: 24px;
+  display: flex;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.pairname {
+  margin: auto;
+  text-align: center;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 32px;
+  overflow: hidden;
+}
+
+.network {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  color: #676771;
+  margin-top: 4px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.imgBorder {
+  position: relative;
+  height: 112px;
+}
+
+.imgBorder::before {
+  content: "";
+  position: absolute;
+  border: 1px solid transparent;
+  /* border-image: linear-gradient(90deg, #00b2ec 0%, #d9ca0f 100%);
+  border-image-slice: 1; */
+  background: linear-gradient(90deg, #00b2ec 0%, #d9ca0f 100%) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  border-radius: 50%;
+  width: 112px;
+  height: 112px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+}
+
+.img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 60px;
+  max-height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.rewardimg {
+  max-width: 20px;
+  max-height: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.img2 {
+  position: absolute;
+  right: 25%;
+  transform: translate(-30%);
+  bottom: 1%;
+  max-width: 25px;
+  max-height: 25px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.trendingNetworkImg {
+  position: absolute;
+  transform: translate(-30%);
+  bottom: 1%;
+  max-width: 25px;
+  max-height: 25px;
+  margin-left: 38px;
+  position: absolute;
+  overflow: hidden;
+}
+
+.cardBtn {
+  padding: 8px 64px;
+  border: none;
+  color: #2d2d31;
+  font-family: Athletics;
+  font-weight: 900;
+  font-size: 16px;
+  line-height: 24px;
+  opacity: 0.8;
+  background: linear-gradient(90deg, #00b2ec 0%, #d9ca0f 100%);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  width: 262px;
+  transition: transform 0.2s;
+  overflow: hidden;
+}
+.cardBtn:hover {
+  transform: scale(1.01);
+  background: linear-gradient(black, black) padding-box,
+    linear-gradient(90deg, #00b2ec 0%, #d9ca0f 100%) border-box;
+
+  border-color: transparent;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 8px;
+  color: white;
+  overflow: hidden;
+}
+
+.trendingvault {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: -80px;
+  margin-bottom: 100px;
+}
+
+.trendingVaultCard {
+  width: 304px;
+  height: 338px;
+  color: #ffffff;
+  font-family: "Athletics";
+  border-radius: 16px;
+  position: relative;
+}
+
+.imgs {
+  position: absolute;
+  top: -15%;
+  left: 50%;
+}
+
+.trendingimg2 {
+  position: absolute;
+  transform: translate(100%);
+  bottom: 1%;
+}
+
+.trendingvaultapys {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  top: 60px;
+}
+
+.trendingvaultapy1 {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 24px;
+  position: relative;
+  top: 55px;
+}
+
+.trendingvaultapy2 {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  text-decoration-line: line-through;
+  color: #676771;
+  margin-right: 20px;
+  position: relative;
+  top: 55px;
+  left: 127px;
+}
+
+.trendingCardContent {
+  padding: 80px 24px 24px 24px;
+  background: #202023;
+  border-radius: 16px;
+}
+
+.trendingPairname {
+  font-weight: 900;
+  font-size: 21px;
+  line-height: 32px;
+  margin-bottom: 4px;
+}
+
+.trendingNetwork {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  color: #676771;
+  margin-bottom: -8px;
+  overflow: hidden;
+}
+
+.copyImg {
+  cursor: pointer;
+  overflow: hidden;
+}

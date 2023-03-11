@@ -1,0 +1,184 @@
+.body {
+  overflow: hidden;
+}
+
+.blurbackground {
+  position: absolute;
+  width: 1432px;
+  height: 900px;
+  left: 0px;
+  top: 0px;
+
+  background: rgba(0, 0, 0, 0.54);
+  z-index: 9999999999999;
+  scrollbar-width: none;
+  overflow: auto;
+}
+.modalBackground {
+  position: fixed;
+  width: 402px;
+  height: 628px;
+  left: 518px;
+  top: 136px;
+  box-sizing: border-box;
+  background: #2d2d31;
+  z-index: 9999999999;
+  border-radius: 7px;
+  scrollbar-width: none;
+  overflow: auto;
+  overflow: hidden;
+
+}
+
+.titleText {
+  position: absolute;
+  width: 172px;
+  height: 27px;
+  left: 32px;
+  top: 32px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height, or 150% */
+
+  color: #ffffff;
+}
+
+.closeBtn {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 346px;
+  top: 33px;
+  cursor: pointer;
+}
+
+.inputTokenContainer {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 338px;
+  height: 52px;
+  left: 32px;
+  top: 83px;
+
+  background: #232222;
+  border: 1px solid #2d2d31;
+  border-radius: 10px;
+  cursor: text;
+  padding-left: 15px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  color: #ffffff;
+  overflow: hidden;
+
+}
+
+.inputTokenContainer::placeholder {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  white-space: none !important;
+  word-wrap: normal;
+  overflow: visible;
+  color: #515151;
+
+  /* identical to box height, or 171% */
+}
+
+.tokensList {
+  position: absolute;
+  width: 338px;
+  height: 392px;
+  display: grid;
+  row-gap: 24px;
+  grid-auto-flow: repeat(auto-fit, 64px);
+  top: 167px;
+  left: 37px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  background: transparent;
+}
+
+.tokensList::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+.tokenItemContainer {
+  width: 346px;
+  height: 64px;
+  position: relative;
+  left: 4px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.tokenImg {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  left: -4px;
+  top: 0px;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+
+}
+
+.flatLine {
+  position: absolute;
+  width: 346px;
+  height: 1px;
+  left: -12px;
+  top: 64px;
+}
+
+.tokenSymbol {
+  position: absolute;
+  width: 37px;
+  height: 24px;
+  left: 52px;
+  top: 4px;
+  cursor: pointer;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  /* line-height: 24px; */
+  /* identical to box height, or 171% */
+
+  color: #ffffff;
+}
+
+.tokenName {
+  position: absolute;
+  width: 57px;
+  height: 16px;
+  left: 52px;
+  top: 28px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 16px;
+
+  /* Grey/Light: active */
+
+  color: #d8d8dc;
+  cursor: pointer;
+}

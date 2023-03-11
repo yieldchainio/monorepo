@@ -1,0 +1,330 @@
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.ellipseIcon,
+.ellipseIcon1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1104px;
+  height: 900px;
+  opacity: 0.5;
+}
+.ellipseIcon1 {
+  left: 396px;
+  width: 1044px;
+}
+.icon24cursor {
+  position: absolute;
+  top: 352px;
+  left: 567px;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  display: none;
+}
+.groupButton {
+  position: relative;
+}
+.button {
+  cursor: pointer;
+  border: 0;
+  padding: 16px 64px;
+  background-color: transparent;
+  position: absolute;
+  top: 596px;
+  left: 420px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #00b2ec, #d9ca0f);
+  width: 600px;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  overflow: hidden;
+
+}
+.button.animate {
+  animation: 1s ease 0s 1 normal forwards fade-in;
+}
+.yieldchainLogo2 {
+  position: absolute;
+  top: 230px;
+  left: 688px;
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+}
+.letsGetStarted {
+  position: absolute;
+  top: 334px;
+  left: 543px;
+  font-size: 40px;
+  line-height: 56px;
+  font-weight: 900;
+  display: inline-block;
+}
+.toSuccessfullyAggregateAPr {
+  position: absolute;
+  top: 396px;
+  left: 420px;
+  line-height: 24px;
+  font-weight: 500;
+  display: inline-block;
+  width: 600px;
+}
+.groupInput {
+  border: 0;
+  background-color: transparent;
+  position: absolute;
+  color: #fff;
+  width: 41.67%;
+  top: 500px;
+  right: 29.17%;
+  left: 29.17%;
+  height: 56px;
+  font-family: 'Courier New', Courier, monospace;
+}
+.backDiv {
+  position: absolute;
+  top: 0;
+  left: 32px;
+  line-height: 24px;
+  font-weight: 900;
+  display: inline-block;
+}
+.arrowRightIcon,
+.groupA {
+  position: absolute;
+  height: 24px;
+}
+.arrowRightIcon {
+  top: 0;
+  left: 0;
+  width: 24px;
+  overflow: hidden;
+}
+.groupA {
+  text-decoration: none;
+  top: 150px;
+  left: 64px;
+  width: 68px;
+  text-align: left;
+  color: inherit;
+}
+.yieldchainLogo1 {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  position: absolute;
+  top: 44px;
+  left: 66px;
+  width: 164.83px;
+  height: 32px;
+  background-image: url(../../public/yieldchain-logo-1@2x.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+}
+.ellipseIcon2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+.iD65FG646Div,
+.metamaskDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 24px;
+  display: inline-block;
+}
+.iD65FG646Div {
+  top: 24px;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: left;
+}
+.chevronDownIcon,
+.groupDiv1 {
+  position: absolute;
+  top: 0;
+  left: 48px;
+  width: 74px;
+  height: 40px;
+}
+.chevronDownIcon {
+  top: 10px;
+  left: 138px;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+}
+.groupDiv {
+  position: absolute;
+  top: 40px;
+  left: 1033px;
+  width: 158px;
+  height: 40px;
+  text-align: right;
+}
+.simpleIconslitecoin {
+  position: relative;
+  border-radius: 100px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  overflow: hidden;
+  object-fit: cover;
+}
+.etherumDiv {
+  position: relative;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  font-family: Athletics;
+  color: #fff;
+  text-align: left;
+  display: inline-block;
+}
+.frameDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frameDiv > * + * {
+  margin-left: 8px;
+}
+.chevronDownIcon1 {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.frameButton {
+  cursor: pointer;
+  border: 1px solid #2d2d31;
+  padding: 8px;
+  background-color: transparent;
+  position: absolute;
+  top: 40px;
+  left: 878px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.frameButton > * + * {
+  margin-left: 8px;
+}
+.createVaultDiv {
+  position: relative;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 900;
+  font-family: Athletics;
+  color:  #050505;
+  text-align: left;
+  display: inline-block;
+  opacity: 0.8;
+}
+.frameButton1,
+.frameDiv1 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frameButton1 {
+  cursor: pointer;
+  border: 0;
+  padding: 8px 40px;
+  background-color: #fff;
+  position: absolute;
+  top: 40px;
+  left: 1215px;
+  border-radius: 8px;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.vaultB {
+  position: relative;
+  line-height: 24px;
+  display: inline-block;
+  background: linear-gradient(90deg, #00b2ec, #d9ca0f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.frameDiv3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+}
+.portfolioDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 24px;
+  font-weight: 500;
+  display: inline-block;
+}
+.groupDiv2 {
+  position: relative;
+  width: 65px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.frameDiv4 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.myVaultDiv {
+  position: relative;
+  line-height: 24px;
+  font-weight: 500;
+  display: inline-block;
+}
+.frameDiv2 {
+  position: absolute;
+  top: 48px;
+  left: 530px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  color: #f8f8fae4;
+}
+.frameDiv2 > * + * {
+  margin-left: 24px;
+}
+.dashboardDiv {
+  position: flex;
+  background-color: #050505;
+  width: 100%;
+  height: 900px;
+  overflow: hidden;
+  text-align: center;
+  font-size: 16px;
+  color: #fff;
+  font-family: Athletics;
+}

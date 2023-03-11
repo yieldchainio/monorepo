@@ -1,0 +1,1947 @@
+.pageDiv {
+  width: 100vw;
+  height: 500vh;
+  background: #050505;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: absolute;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+.headerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-end;
+
+  z-index: 999999;
+  overflow: visible;
+  position: fixed;
+  /*background: linear-gradient(
+    95.87deg,
+    rgba(53, 53, 53, 0.4) 19.94%,
+    rgba(53, 53, 53, 0.25) 47.32%
+  );
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(20px); */
+  height: 10vh;
+  align-items: center;
+  width: 100.4vw;
+  left: -5vw;
+}
+
+.headerLogo {
+  width: 164.83px;
+  height: 32px;
+  overflow: visible;
+}
+
+.headerButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  gap: 27px;
+  align-self: center;
+  justify-self: flex-end;
+  flex: none;
+  overflow: visible;
+}
+
+.launchAppButton {
+  cursor: pointer;
+  width: 176px;
+  height: 40px;
+  border-radius: 8px;
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0)) padding-box,
+    linear-gradient(90deg, rgb(0, 178, 236) 0%, rgb(217, 202, 15) 100%)
+      border-box;
+
+  border: 2px solid transparent;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+
+  color: #ffffff;
+  overflow: visible;
+}
+
+.connectWalletButton {
+  box-sizing: border-box;
+  white-space: nowrap;
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+
+  width: 180px;
+  height: 40px;
+
+  /* Grey/Light */
+
+  background: #ffffff;
+  border-radius: 8px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  /* Grey/Darker */
+
+  color: #050505;
+  overflow: hidden;
+  border: 0px solid transparent;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 600px) {
+  .headerLogo {
+    width: 100px;
+    height: 20px;
+    margin-left: 10vw;
+  }
+  .launchAppButton {
+    width: 5vw;
+    height: 4vh;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .connectWalletButton {
+    width: 22.5vw;
+    height: calc(4vh + 4px);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .headerContainer {
+    justify-content: space-between;
+  }
+}
+
+.earnPage {
+  width: 100vw;
+  height: 200vh;
+  top: 200vh;
+  position: absolute;
+  background: #050505;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  z-index: 100000;
+  overflow: visible;
+}
+
+.earnTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-left: 64px;
+  margin-top: 94px;
+  gap: 38px;
+  z-index: 30;
+  white-space: auto;
+  overflow: visible;
+}
+
+@media screen and (max-width: 768px) {
+  .earnTextContainer {
+    margin-top: 200px;
+  }
+}
+
+.earnTitle {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 13.8vh;
+  line-height: 56px;
+  /* identical to box height, or 58% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Light */
+
+  color: #ffffff;
+  overflow: visible;
+}
+
+.earnDescription {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 500;
+  font-size: min(2.5vw, 40px);
+  line-height: 40px;
+  /* or 67% */
+
+  font-feature-settings: "liga" off;
+
+  /* Grey/Normal */
+
+  color: #676771;
+  overflow: visible;
+}
+
+@media screen and (max-width: 768px) {
+  .earnTitle {
+    font-size: 75px;
+    line-height: 36px;
+    margin-left: 0px;
+  }
+
+  .earnTextContainer {
+    align-items: center;
+    justify-content: center;
+    margin-left: 2.5vw;
+    z-index: 100000000000;
+    margin-top: 3vh;
+  }
+
+  .earnDescription {
+    font-size: 26px;
+    line-height: 32px;
+    margin-left: 0px;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .earnTitle {
+    white-space: pre-wrap;
+    line-height: 95px;
+  }
+  .earnDescription {
+    white-space: pre-wrap;
+  }
+}
+
+@media only screen and (max-width: 522px) {
+  .earnDescription {
+    margin-top: -5vh;
+  }
+}
+
+.earnTopBlackBlur {
+  position: absolute;
+  width: 150vw;
+  height: 50vh;
+  left: -50%;
+  top: 0px;
+
+  background: #070700;
+  filter: blur(200px);
+  z-index: 5;
+  overflow: visible;
+  -webkit-filter: blur(200px);
+}
+
+.earnTopCyanBlur {
+  position: absolute;
+  width: 914px;
+  height: 914px;
+  left: -25%;
+  top: 15vh;
+
+  /* Accent/Normal: active */
+
+  background: #008ebd;
+  opacity: 0.5;
+  filter: blur(350px);
+  overflow: visible;
+  z-index: 100;
+  -webkit-filter: blur(200px);
+}
+
+.earnVaultsGrid {
+  display: grid;
+  grid-auto-flow: row;
+  grid-auto-rows: auto;
+  gap: 10px;
+  height: 100vh;
+  width: 100vw;
+  margin-top: -30vh;
+  overflow-x: hidden;
+  overflow-y: visible;
+  margin-top: -15vh;
+  overflow: visible;
+}
+
+@media screen and (max-width: 768px) {
+  .earnVaultsGrid {
+    gap: 10px;
+  }
+}
+
+.earnBottomBlackBlur {
+  position: absolute;
+  width: 80%;
+  height: 258px;
+  left: 8%;
+  top: 90%;
+
+  background: linear-gradient(0deg, #010007, #070700), #000000;
+  filter: blur(200px);
+  z-index: 20;
+  overflow-x: visible;
+  overflow: visible;
+  -webkit-filter: blur(200px);
+}
+
+.gasPage {
+  width: 100vw;
+  height: 300vh;
+  background: #050505;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-y: visible;
+  position: absolute;
+  top: 300vh;
+  overflow: visible;
+
+  scroll-snap-type: y mandatory;
+  z-index: 100000;
+}
+
+.gasGlassContainer {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 90vw;
+  height: 30vh;
+  top: 20vh;
+
+  background: linear-gradient(
+    95.87deg,
+    rgba(53, 53, 53, 0.4) 19.94%,
+    rgba(53, 53, 53, 0.25) 47.32%
+  );
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(20px);
+  /* Note: backdrop-filter has minimal browser support */
+
+  border-radius: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 10px solid linear-gradient(0deg, #02cb00, #cb0000);
+  z-index: 10;
+  left: 5vw;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 768px) {
+  .gasGlassContainer {
+    height: 35vh;
+    padding-left: 10px;
+  }
+}
+
+.moreFrensLessGasText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: min(5.5vw, 70px);
+  line-height: 56px;
+  /* identical to box height, or 58% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Light */
+
+  color: #ffffff;
+  order: 0;
+  flex: none;
+  overflow: visible;
+  white-space: pre-wrap;
+}
+
+.gasDescription {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 500;
+  font-size: min(2vw, 30px);
+  line-height: 24px;
+  /* identical to box height, or 67% */
+
+  font-feature-settings: "liga" off;
+
+  /* Grey/Normal */
+
+  color: #676771;
+  order: 1;
+  flex: none;
+  margin-top: 32px;
+  white-space: nowrap;
+  white-space: pre-wrap;
+  text-align: center;
+}
+
+@media screen and (max-width: 1050px) {
+  .gasDescription {
+    font-size: 3vw;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .moreFrensLessGasText {
+    font-size: 11vw;
+    line-height: 48px;
+  }
+  .gasDescription {
+    font-size: min(5vw, 20px);
+    line-height: 6vw;
+  }
+}
+
+.gasPageRedBlur {
+  background-color: rgb(255, 4, 4);
+  opacity: 0.5;
+  filter: blur(200px);
+  -webkit-filter: blur(200px);
+  position: absolute;
+  width: 55vw;
+  height: 50vh;
+  left: -30%;
+  top: 25vh;
+  z-index: 2;
+}
+.gasPageGreenBlur {
+  background-color: rgb(160, 196, 74);
+  top: 25vh;
+
+  opacity: 0.5;
+  filter: blur(200px);
+  position: absolute;
+  width: 50vw;
+  height: 60vh;
+  left: 70vw;
+  z-index: 1;
+  -webkit-filter: blur(200px);
+}
+
+.greenWojaksContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  z-index: 100;
+  width: max-content;
+  height: max-content;
+  order: 3;
+}
+
+.greenWojak {
+  margin-left: -5.902vw;
+  margin-right: -5.902vw;
+  overflow: hidden;
+  width: 23.3333vw;
+  max-width: 335px;
+  border: 0px solid transparent;
+}
+
+.gasDescriptionContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  top: 85vh;
+  left: 100.5vw;
+  position: absolute;
+  z-index: 1000;
+  z-index: 1;
+  height: 100px;
+  padding: 50px;
+}
+
+.greenArrow {
+  flex: none;
+  margin-right: -5.55555vw;
+  width: 15.55555vw;
+  max-width: 223px;
+  /* min-width: 70px; */
+}
+
+@media screen and (max-width: 537px) {
+  .greenArrow {
+    margin-right: -32.5px;
+  }
+}
+
+.redWojak {
+  margin-left: 0px;
+  position: absolute;
+  top: calc(100vh - 25.57vh);
+  left: 0vw;
+  z-index: 1;
+  width: min(30.625vw, 425px);
+}
+
+.metamaskTxidContainer {
+  width: 17.222222vw;
+  height: 47.9999vh;
+  left: 27vw;
+  top: 49vh;
+
+  background: #fbfbfb;
+  border-radius: 10px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 0px;
+  padding-left: 5.69vw;
+  padding-right: 5.69vw;
+}
+
+.metaMaskImg {
+  width: 5.76vw;
+}
+
+@media screen and (max-width: 1200px) {
+  .metamaskTxidContainer {
+    height: 25vw;
+    width: 13.2222222vw;
+    padding-bottom: 20vh;
+  }
+}
+@media screen and (max-width: 900px) {
+  .metamaskTxidContainer {
+    height: 20vw;
+    width: 8.2222222vw;
+  }
+}
+
+.redTextContainer {
+  width: max-content;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: visible;
+  z-index: 0;
+  gap: -10px;
+}
+
+.redEthText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 3vw;
+  line-height: 4.3vw;
+  /* identical to box height, or 140% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Error/Dark */
+
+  color: #b4332a;
+}
+
+.redDollarsText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.7vw;
+  line-height: 3.3vw;
+  /* identical to box height, or 233% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  color: #8f4a45;
+  margin-top: -15px;
+}
+
+@media screen and (max-width: 768px) {
+  .redEthText {
+    line-height: 5.5vw;
+    font-size: 2.7vw;
+  }
+}
+
+.metamaskButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 7.67vw;
+  width: 100px;
+  height: 100px;
+  overflow: visible;
+  white-space: nowrap;
+  padding-bottom: 10vh;
+}
+
+@media screen and (max-width: 900px) {
+  .metamaskButtonsContainer {
+    margin-top: auto;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .metamaskButtonsContainer {
+    margin-top: 0px;
+  }
+
+  .metamaskTxidContainer {
+    height: 3.5px;
+    width: 3.5px;
+    overflow: hidden;
+    padding-bottom: 16vw;
+  }
+
+  .redTextContainer {
+    margin-top: -10px;
+    gap: 10px;
+  }
+}
+
+.getRektButton {
+  box-sizing: border-box;
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  width: 15vw;
+  height: 4.1666vh;
+
+  background: #3083ff;
+  border-radius: 8px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 0.97vw;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  /* Grey/Light */
+
+  color: #ffffff;
+  padding: 0.5vw;
+}
+
+.cancelButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 15vw;
+  height: 4.1666vh;
+
+  background: #ffffff;
+  border: 1px solid #3083ff;
+  border-radius: 8px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 0.97vw;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  /* Grey/Dark: active */
+
+  color: #0e0e10;
+  padding: 0.5vw;
+}
+
+@media screen and (max-width: 900px) {
+  .getRektButton {
+    height: 3vh;
+    align-items: center;
+    justify-content: center;
+    width: 4vw;
+    font-size: 0.7vw;
+  }
+  .cancelButton {
+    /* width: 20vw; */
+    width: 4vw;
+    height: 3vh;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7vw;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .getRektButton {
+    height: 1vh;
+    width: 2vh;
+  }
+  .cancelButton {
+    height: 1vh;
+    width: 2vh;
+  }
+}
+
+.heroPage {
+  width: 100vw;
+  height: 101vh;
+  background: #050505;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-y: hidden;
+  max-height: 100%;
+  position: absolute;
+  top: 0vh;
+  z-index: 0;
+  gap: 27vw;
+}
+
+.heroPageleftContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow: visible;
+  width: 38vw;
+  height: 84vh;
+  margin-top: 13vh;
+  padding-left: 3vw;
+}
+
+@media screen and (max-width: 768px) {
+  .heroPageleftContainer {
+    width: 100vw;
+  }
+}
+
+.heroPageRightContainer {
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000000000000000000000000000;
+  margin-left: -20vw;
+  right: 0vh;
+}
+
+.heroLeftTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow: visible;
+  width: 100%;
+  height: 65%;
+  padding-top: 2vh;
+  margin-top: 0vh;
+  gap: 2vh;
+  z-index: 10;
+}
+
+@media screen and (max-width: 768px) {
+  .heroLeftTextContainer {
+    align-items: center;
+  }
+}
+
+.heroPageWhiteTextFull {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 6.7vw;
+  line-height: 56px;
+  /* identical to box height, or 58% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Light */
+
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.heroPageWhiteTextStrikethrough {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 6.7vw;
+  line-height: 56px;
+  /* identical to box height, or 58% */
+
+  text-align: center;
+  text-decoration-line: line-through;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Light */
+
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.heroPageGradientText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 9.8vw;
+  /* identical to box height, or 36% */
+
+  font-feature-settings: "liga" off;
+
+  /* Gradient/Normal */
+
+  background: linear-gradient(90deg, #00b2ec 0%, #d9ca0f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  overflow: visible;
+}
+
+.singleRowTextFlex {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow: visible;
+  gap: 30px;
+}
+
+.heroPageEarlyAccessContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: visible;
+  width: 100%;
+  height: 35%;
+  padding-top: 2vh;
+  margin-top: 0vh;
+  gap: 1vh;
+  z-index: 2;
+}
+
+.heroPageEarlyAccessText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 56px;
+  /* identical to box height, or 233% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Light */
+
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.heroPageBottomBlackBlur {
+  width: 80vw;
+  height: 100vh;
+  left: 115vw;
+  top: 170vh;
+  transform: translate(-100%, -120%);
+
+  background: #070700;
+  /* filter: blur(200px); */
+  /* -webkit-filter: blur(200px); */
+  position: absolute;
+  z-index: 100000;
+  pointer-events: none;
+  filter: blur(200px);
+  -webkit-filter: blur(200px);
+}
+
+.heroPageBottomYellowBlur {
+  width: 50vw;
+  height: 85vh;
+  left: 138vw;
+  top: 125vh;
+  transform: translate(-100%, -100%);
+
+  background: linear-gradient(0deg, #d9ca0f, #d9ca0f), #0ab4e2;
+  opacity: 0.5;
+  filter: blur(10000px);
+
+  position: absolute;
+  z-index: 2;
+  overflow: inherit;
+  -webkit-filter: blur(10000px);
+
+}
+@media only screen and (max-width: 1100px) {
+  .heroPageWhiteTextFull {
+    font-size: 74px;
+  }
+  .heroPageWhiteTextStrikethrough {
+    font-size: 74px;
+  }
+  .heroPageGradientText {
+    font-size: 134px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .heroPageEarlyAccessContainer {
+    margin-left: auto;
+    margin-right: auto;
+    align-self: center;
+  }
+}
+
+@media only screen and (max-width: 20000px) {
+  * {
+    overflow: visible;
+    scrollbar-width: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 300px) and (max-width: 768px) {
+  .heroPageWhiteTextFull {
+    font-size: 14vw;
+  }
+  .heroPageWhiteTextStrikethrough {
+    font-size: 14vw;
+  }
+  .heroPageGradientText {
+    font-size: 28.25vw;
+  }
+}
+
+.heroPageHigher {
+  width: 50vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-height: 100%;
+  position: absolute;
+  top: 0vh;
+  z-index: 100000;
+  gap: 27vw;
+}
+
+html,
+body {
+  overflow-x: hidden !important;
+}
+
+.defiToysPage {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-height: 100%;
+  position: absolute;
+  top: 100vh;
+  z-index: 10;
+  gap: 27vw;
+  background-color: #050505;
+}
+
+.defiToysPageHigher {
+  width: 37vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-height: 100%;
+  position: absolute;
+  top: 100vh;
+  z-index: 100000;
+  gap: 27vw;
+}
+
+.defiToysBlueBlur {
+  background: #416100;
+  opacity: 0.5;
+  filter: blur(200px);
+  backdrop-filter: blur(200px);
+  position: absolute;
+  width: 40vw;
+  height: 100vh;
+  z-index: 1000;
+  top: 100vh;
+  transform: translate(-20%, -30%);
+  pointer-events: none;
+  -webkit-filter: blur(200px);
+
+}
+
+.defiToysTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow: visible;
+  width: 38vw;
+  height: 84vh;
+  padding-left: 3vw;
+  margin-top: 100vh;
+  transform: translate(0%, -70%);
+  z-index: 10000000;
+}
+
+@media screen and (max-width: 768px) {
+  .defiToysTextContainer {
+    width: 200vw;
+    /* height: 100vh; */
+    padding-left: 0vw;
+    margin-top: 8vh;
+    transform: translate(-50%, 0%);
+    z-index: 10000000;
+    align-items: center;
+    text-align: center;
+    padding-left: 2vw;
+    margin-left: 50vw;
+    margin-right: auto;
+  }
+}
+
+.defiToysTitleText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 6.5vw;
+  line-height: 56px;
+  /* identical to box height, or 58% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Light */
+
+  color: #ffffff;
+  margin-bottom: 6vh;
+  white-space: nowrap;
+}
+
+.defiToysDescriptionText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 500;
+  font-size: min(2.5vw, 40px);
+  line-height: 58px;
+  /* or 67% */
+
+  font-feature-settings: "liga" off;
+
+  /* Grey/Normal */
+
+  color: #676771;
+  white-space: nowrap;
+}
+@media only screen and (max-width: 1500px) {
+  .defiToysDescriptionText {
+    white-space: pre-wrap;
+    margin-bottom: 20px;
+  }
+}
+
+@media only screen and (max-width: 1240px) {
+  .defiToysTitleText {
+    font-size: 80px;
+  }
+}
+
+@media only screen and (max-width: 1240px) {
+  .defiToysDescriptionText {
+    font-size: 40px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .defiToysDescriptionText {
+    white-space: pre-wrap;
+    margin-bottom: 20px;
+    font-size: 21px;
+    line-height: 35px;
+  }
+  .defiToysTitleText {
+    font-size: 70px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.nodesContainer {
+  width: 58.5vw;
+  height: 200vh;
+  z-index: 1000;
+  position: absolute;
+  left: 47.2vw;
+}
+.signUpButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 40px;
+
+  gap: 10px;
+  /* Grey/Darker */
+
+  background: linear-gradient(rgb(26, 26, 27), rgb(22, 22, 23)) padding-box,
+    linear-gradient(90deg, rgb(0, 178, 236) 0%, rgb(217, 202, 15) 100%)
+      border-box;
+
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  display: flex;
+  align-items: center;
+
+  /* Grey/Light */
+
+  color: #ffffff;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  cursor: pointer;
+  /* identical to box height, or 171% */
+  width: 12vw;
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+  .signUpButton {
+    width: 20vw;
+  }
+}
+
+.signUpBlurWrapper {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 100000;
+}
+
+.signUpModalBody {
+  background-image: linear-gradient(
+    95.87deg,
+    rgba(53, 53, 53, 1) 100%,
+    rgb(53, 53, 53, 1) 100%
+  );
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(100px);
+  /* Note: backdrop-filter has minimal browser support */
+
+  border-radius: 26px;
+  width: 49vw;
+  height: 48vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 45px;
+  padding-left: 110px;
+  padding-right: 110px;
+}
+
+@media screen and (max-width: 1000px) {
+  .signUpModalBody {
+    width: 70vw;
+    height: 50vh;
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .signUpModalBody {
+    width: 90vw;
+  }
+}
+
+.signUpModalTextFlex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.signUpModalTitleText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: min(6vw, 36px);
+  line-height: 56px;
+  /* identical to box height, or 156% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Light */
+
+  color: #ffffff;
+}
+
+.signUpModalDescriptionText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 500;
+  font-size: min(3vw, 18px);
+  line-height: 56px;
+  /* identical to box height, or 311% */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Normal */
+
+  color: #676771;
+  margin-top: -10px;
+}
+
+@media screen and (max-width: 768px) {
+  /* .signUpModalDescriptionText {
+    font-size: 14px;
+    line-height: 24px;
+    /* identical to box height, or 171% */
+}
+
+.signUpModalBottomFlex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 20px;
+  gap: 43px;
+}
+
+.signUpModalEmailFlex {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0px;
+}
+
+.signUpModalButton {
+  /* Gradient/Normal */
+  box-sizing: border-box;
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px 24px;
+  gap: 10px;
+
+  background: linear-gradient(90deg, #00b2ec 0%, #d9ca0f 100%);
+  border-radius: 8px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+
+  /* Grey/Darker */
+
+  color: #050505;
+}
+
+.signUpModalEmailTitleText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 56px;
+  /* identical to box height, or 467% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  color: #767682;
+  margin-left: 6px;
+  margin-bottom: -15px;
+}
+
+.signUpModalEmailInputContainer {
+  box-sizing: border-box;
+
+  width: 431px;
+  height: 44px;
+
+  background: #111111;
+  border: 1px solid;
+  border-radius: 12px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 56px;
+  /* identical to box height, or 467% */
+
+  text-align: start;
+  font-feature-settings: "liga" off;
+
+  color: #b3b3b3;
+  overflow: visible;
+  padding-right: 22px;
+  padding-left: 22px;
+}
+
+.signUpModalEmailInputContainer::placeholder {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 56px;
+  /* identical to box height, or 467% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  color: #767682;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.automationPageCogWheel {
+  width: 25.8333vw;
+  transform: matrix(-0.97, -0.23, -0.23, 0.97, 0, 0);
+}
+
+.automationPageRobot {
+  font-size: 20.8333vw;
+  /* transform: rotate(-13.34deg); */
+}
+
+@media screen and (max-width: 1200px) {
+  .automationPageRobot {
+    font-size: 210px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .automationPageRobot {
+    font-size: 180px;
+  }
+}
+.greenArrowsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  margin-left: 65vw;
+}
+.lowLeftActionContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 85vh;
+  width: 220px;
+  height: 159px;
+  z-index: 1;
+  overflow: visible;
+}
+
+.highLeftActionContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 27vh;
+  width: 220px;
+  height: 159px;
+  z-index: 0;
+  overflow: visible;
+}
+
+.lowRightActionContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 65vh;
+  width: 220px;
+  height: 159px;
+  z-index: 1;
+  overflow: visible;
+}
+
+.highRightActionContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 27vh;
+  width: 220px;
+  height: 159px;
+  z-index: 0;
+  overflow: visible;
+}
+
+.floatingProtocolImg {
+  width: 159px;
+  height: 159px;
+  border-radius: 50%;
+  margin-top: -400px;
+  z-index: 2;
+}
+
+.protocolsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 982px;
+  height: 508px;
+  z-index: 0;
+  overflow: visible;
+  margin-top: 38vh;
+  gap: 35px;
+  position: absolute;
+  /* scale: 0.7; */
+}
+
+@media screen and (max-width: 1124px) {
+  .protocolsContainer {
+    scale: 0.7;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .protocolsContainer {
+    scale: 0.5;
+    /* margin-left: 0vw; */
+    margin-top: 35vh;
+    /* transform: translate(-57.5%, 0); */
+  }
+}
+.finalPage {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-y: visible;
+  position: absolute;
+  top: 300vh;
+
+  z-index: 0;
+  overflow: hidden;
+}
+
+@media screen and (min-width: 1124px) {
+  .finalPage {
+    top: 320vh;
+  }
+}
+
+.finalPageGradientBlur {
+  width: 120vw;
+  height: 110vh;
+  background: linear-gradient(
+    90deg,
+    rgb(0, 178, 236) 0%,
+    rgb(217, 202, 15) 100%
+  );
+  opacity: 0.5;
+  filter: blur(220px);
+  -webkit-filter: blur(200px);
+  position: relative;
+  top: 60vh;
+  overflow: hidden;
+}
+
+.finalPageContentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  margin-top: -75vh;
+}
+
+.finalPageTitleText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 5vw;
+  line-height: 6.714vw;
+  /* or 135% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Light */
+
+  color: #ffffff;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.finalPageDescriptionText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 500;
+  font-size: min(1.66666vw, 25px);
+  line-height: 2.066vw;
+  /* or 123% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Normal */
+
+  color: #676771;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.finalPageTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 74.74vw;
+  height: 100vh;
+  overflow: visible;
+  padding-top: 12vh;
+  gap: 3vh;
+}
+
+@media screen and (max-width: 768px) {
+  .finalPageTitleText {
+    font-size: 12vw;
+    line-height: 13.714vw;
+  }
+
+  .finalPageDescriptionText {
+    font-size: 3.66666vw;
+    line-height: 5.066vw;
+  }
+}
+
+.finalPageBottomContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 80vh;
+  margin-bottom: 0vh;
+}
+
+@media screen and (max-width: 768px) {
+  .finalPageBottomContainer {
+    margin-bottom: 5vh;
+  }
+}
+.finalPageSignUpContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 20vh;
+  width: calc(50vw - 2px);
+  gap: 3.11vh;
+}
+
+.finalPageDivisingLine {
+  border-left: 1px solid #5f5f5f;
+  height: 217px;
+  /* margin-left: auto;
+  margin-right: auto; */
+}
+
+.finalPageSubTitleText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 40px;
+  /* identical to box height, or 165% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  color: #c9c9d0;
+  white-space: nowrap;
+}
+
+.finalPageSocialMediaButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 40px;
+  gap: 10px;
+  /* Grey/Darker */
+
+  background: linear-gradient(rgb(26, 26, 27), rgb(22, 22, 23)) padding-box,
+    linear-gradient(90deg, rgb(0, 178, 236) 0%, rgb(217, 202, 15) 100%)
+      border-box;
+
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  display: flex;
+  align-items: center;
+
+  /* Grey/Light */
+
+  color: rgba(255, 255, 255, 1);
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  cursor: pointer;
+  /* identical to box height, or 171% */
+  width: 8.95vw;
+  height: 7.4vh;
+  cursor: pointer;
+}
+
+.finalPageSmContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 20vh;
+  width: calc(50vw - 2px);
+  gap: 3.11vh;
+}
+
+.finalPageSmButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+@media screen and (max-width: 768px) {
+  .finalPageSocialMediaButton {
+    width: 10vw;
+    height: 5vh;
+    padding: 0px 0px;
+    font-size: 0px;
+    gap: 0px;
+  }
+
+  .finalPageSmButtonsContainer {
+    gap: 15px;
+  }
+
+  .finalPageSubTitleText {
+    font-size: 14px;
+    line-height: 20px;
+    white-space: pre-wrap;
+    width: 160px;
+  }
+  .finalPageDivisingLine {
+    border-left: 1px solid #5f5f5f;
+    height: 20vh;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 30vh;
+  background: rgb(31, 31, 31);
+  /* Grey/Darker */
+  position: absolute;
+  top: 400vh;
+  z-index: 100;
+}
+
+.blackBackdropMobile {
+  width: 93vw;
+  height: 50vh;
+  background: rgba(0, 0, 0, 0.655);
+  position: absolute;
+  z-index: 0;
+  top: 10vh;
+  filter: blur(200px);
+  -webkit-filter: blur(200px);
+}
+.earnPageGradientBlur {
+  width: 50vw;
+  height: 40vh;
+  background: linear-gradient(59deg, #0086ec 0%, #f7e700 100%);
+  opacity: 0.7;
+  filter: blur(150px);
+  position: relative;
+  top: 2vh;
+  z-index: 0;
+  position: absolute;
+  -webkit-filter: blur(150px);
+}
+
+@media screen and (max-width: 768px) {
+  .earnPage {
+    top: 220vh;
+  }
+
+  .gasPage {
+    top: 320vh;
+  }
+
+  .defiToysPageHigher {
+    top: 120vh;
+  }
+}
+
+.whitelistingPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: rgb(255, 255, 255);
+  /* Grey/Darker */
+  position: absolute;
+  z-index: 0;
+  padding-top: 15vh;
+  overflow: hidden;
+}
+
+.whitelistingPageBottomBlur {
+  width: 120vw;
+  height: 110vh;
+  opacity: 0.7;
+  filter: blur(220px);
+  position: absolute;
+  top: 60vh;
+  overflow: hidden;
+  z-index: 0;
+  -webkit-filter: blur(200px);
+}
+
+.whitelistingPageTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 50vh;
+  /* Grey/Darker */
+  z-index: 1;
+}
+
+.whitelistingPageTitleText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: min(6vw, 80px);
+  line-height: 8vw;
+  /* identical to box height, or 135% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Dark: hover */
+
+  color: #202023;
+  width: 69vw;
+}
+
+.whitelistingPageSubtitleText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: min(2.2vw, 30px);
+  line-height: 63px;
+  /* or 131% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  /* Grey/Normal: active */
+
+  color: #4d4d55;
+}
+
+.whitelistingPageBottomContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 50vh;
+  /* Grey/Darker */
+}
+.whitelistingPageSignedUpContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 80vh;
+  margin-bottom: 0vh;
+}
+
+.whitelistingPageContactContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 20vh;
+  width: calc(50vw - 2px);
+  gap: 3.11vh;
+}
+
+.whitelistingPageDivisingLine {
+  border-left: 1px solid #5a5a5a;
+  height: 317px;
+  /* margin-left: auto;
+  margin-right: auto; */
+}
+
+.whitelistingPageContactTitleText {
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 40px;
+  /* identical to box height, or 165% */
+
+  text-align: center;
+  font-feature-settings: "liga" off;
+
+  color: #c9c9d0;
+  white-space: nowrap;
+}
+
+.whitelistingPageShareButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 40px;
+  gap: 10px;
+  /* Grey/Darker */
+
+  background: linear-gradient(rgb(242, 242, 244), rgb(242, 242, 244))
+      padding-box,
+    linear-gradient(90deg, rgb(0, 178, 236) 0%, rgb(217, 202, 15) 100%)
+      border-box;
+
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  display: flex;
+  align-items: center;
+
+  /* Grey/Light */
+
+  color: rgb(32, 32, 35);
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  cursor: pointer;
+  /* identical to box height, or 171% */
+  width: 8.95vw;
+  height: 7.4vh;
+  cursor: pointer;
+}
+
+.finalPageSmContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 20vh;
+  width: calc(50vw - 2px);
+  gap: 3.11vh;
+}
+
+.finalPageSmButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}

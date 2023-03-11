@@ -1,0 +1,1033 @@
+.box {
+  display: flex;
+  z-index: 1010;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.wrapper {
+  background-color: rgba(21, 21, 22, 0.75);
+  backdrop-filter: blur(4px);
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  overflow-y: scroll;
+  overflow-block: visible;
+  max-height: 200%;
+}
+
+.modal_content {
+  display: flex;
+  background-color: #202023;
+  border-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  position: absolute;
+  left: 13.89%;
+  right: 13.89%;
+  /* margin: 15% auto; 15% from the top and centered */
+  margin-top: 21px;
+
+  width: 72%;
+  height: 850px;
+  overflow: hidden;
+}
+
+.vaultTitleSection {
+  background: transparent;
+  width: 100%;
+  height: 13.3%;
+}
+
+.vaultTitleImg {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  top: 40px;
+  left: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.vaultTitle {
+  position: relative;
+  width: 82px;
+  left: 106px;
+  top: -13px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 27px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  /* identical to box height, or 150% */
+
+  color: #ffffff;
+}
+
+.vaultSubTitle {
+  position: absolute;
+  width: 104px;
+  height: 20px;
+  left: 106px;
+  top: 68px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  /* identical to box height, or 167% */
+
+  color: #797982;
+  white-space: nowrap;
+}
+
+.vaultMainDetails {
+  position: relative;
+  width: 1340px;
+  height: 103px;
+  top: 120px;
+  right: 414px;
+  background: #2d2d31;
+  border-radius: 13.7143px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.vaultDetailTitle {
+  z-index: 99999;
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+  position: relative;
+  width: 51px;
+  height: 20px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  top: 26px;
+  left: 24px;
+  /* identical to box height, or 167% */
+
+  color: #797982;
+}
+
+.vaultDetailContent {
+  width: 35px;
+  height: 27px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 27px;
+  position: relative;
+  top: 30px;
+  left: 24px;
+  /* identical to box height, or 150% */
+
+  /* Grey/Light */
+
+  color: #ffffff;
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.vaultDetailRewardTitle {
+  position: relative;
+  width: 51px;
+  height: 20px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  top: -21px;
+  left: 219px;
+  /* identical to box height, or 167% */
+
+  color: #797982;
+}
+
+.vaultDetailRewardContent {
+  width: 35px;
+  height: 27px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 27px;
+  position: relative;
+  left: 247px;
+  top: -15px;
+  /* identical to box height, or 150% */
+
+  /* Grey/Light */
+
+  color: #ffffff;
+}
+
+.vaultRewardImg {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  top: -41.5px;
+  left: 219px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.vaultDetailDepositTitle {
+  position: relative;
+  width: 51px;
+  height: 20px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  top: -95.5px;
+  left: 415px;
+  /* identical to box height, or 167% */
+
+  color: #797982;
+}
+
+.vaultDetailDepositContent {
+  width: 35px;
+  height: 27px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 27px;
+  position: relative;
+  top: -90.5px;
+  left: 415px;
+
+  /* Grey/Light */
+
+  color: #ffffff;
+}
+
+.vaultDetailSeperator {
+  position: relative;
+  width: 55px;
+  height: 0px;
+  left: 168.5px;
+  top: -117px;
+  z-index: 9999;
+
+  border: 0.5px solid #464945;
+  transform: rotate(90deg);
+}
+
+.vaultDetailSeperator2 {
+  position: relative;
+  width: 55px;
+  height: 0px;
+  left: 363.5px;
+  top: -117px;
+  z-index: 9999;
+
+  border: 0.5px solid #464945;
+  transform: rotate(90deg);
+}
+
+.vaultRewardsSection {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 350px;
+  height: 100px;
+  left: 650px;
+  top: 120px;
+
+  /* Grey/Dark */
+
+  background: #2d2d31;
+  border-radius: 13.7143px;
+}
+
+.vaultOperationsSection {
+  position: absolute;
+  width: 350px;
+  height: 269px;
+  left: 650px;
+  top: 270px;
+
+  background: #2d2d31;
+  border-radius: 16px;
+}
+
+.operationsHeader {
+  position: absolute;
+  width: 350px;
+  height: 46px;
+  left: 0px;
+  top: 0px;
+
+  background: #151516;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.operationsSwitchBtnOff {
+  z-index: 9999;
+  position: relative;
+  width: 52px;
+  height: 20px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  /* identical to box height, or 167% */
+
+  text-align: center;
+
+  color: #797982;
+  background-color: transparent;
+  border: 0px solid transparent;
+  cursor: pointer;
+}
+
+.operationsSwitchBtnOn {
+  z-index: 9999;
+  position: relative;
+  width: 52px;
+  height: 20px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 20px;
+  /* identical to box height, or 167% */
+
+  text-align: center;
+
+  color: #ffffff;
+
+  background-color: transparent;
+  border: 0px solid transparent;
+  cursor: pointer;
+}
+
+.operationsSwitchOnLine {
+  width: 175px;
+  height: 2px;
+  position: relative;
+  top: 23px;
+
+  background: #ffffff;
+}
+
+.operationsTitle {
+  position: relative;
+  width: 103px;
+  height: 24px;
+  left: 24px;
+  top: 24px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  /* identical to box height, or 171% */
+
+  /* Grey/Light: active */
+
+  color: #d8d8dc;
+}
+
+.vaultOperationsInput {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 302px;
+  height: 56px;
+  left: 24px;
+  top: 102px;
+  padding-left: 16px;
+  text-align: left;
+  background-color: #050505;
+  color: white;
+  border: 1px solid #2d2d31;
+  border-radius: 8px;
+  border: 0px solid transparent;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+::placeholder {
+  width: 28px;
+  height: 24px;
+  left: 800px;
+  top: 118px;
+  margin-left: 50px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  /* Grey/Light: active */
+
+  color: #d8d8dc;
+  outline: none;
+}
+
+*:focus {
+  outline: none;
+}
+
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.operationsMaxBtn {
+  z-index: 9999;
+  position: relative;
+  width: 32px;
+  height: 24px;
+  left: 217px;
+  top: 47px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  /* Gradient/Normal */
+
+  background: linear-gradient(90deg, #00b2ec 0%, #d9ca0f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border: 0px solid transparent;
+  cursor: pointer;
+}
+
+.operationsInputImg {
+  z-index: 9999;
+  position: absolute;
+  top: 122px;
+  left: 260px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.operationsInputToken {
+  z-index: 9999;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 280px;
+  top: 119px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 24px;
+  /* identical to box height, or 200% */
+
+  color: #ffffff;
+}
+
+.vaultOperationsExecuteBtn {
+  box-sizing: border-box;
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 40px;
+  gap: 10px;
+
+  position: absolute;
+  width: 302px;
+  height: 56px;
+  left: 24px;
+  top: 189px;
+  background: linear-gradient(#202023, #202023) padding-box,
+    linear-gradient(90deg, #00b2ec 0%, #d9ca0f 100%) border-box;
+
+  border-color: transparent;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  display: flex;
+
+  /* Grey/Darker */
+
+  text-align: center;
+  -webkit-text-fill-color: white;
+  transform-origin: 50% 50%;
+}
+
+.vaultOperationsExecuteBtnHover {
+  box-sizing: border-box;
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 40px;
+  gap: 10px;
+
+  position: absolute;
+  width: 302px;
+  height: 56px;
+  left: 24px;
+  top: 189px;
+  background: linear-gradient(90deg, #00b2ec 0%, #d9ca0f 100%);
+
+  border-color: transparent;
+  border-width: 0px;
+  border-style: solid;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  display: flex;
+
+  /* Grey/Darker */
+
+  text-align: center;
+  -webkit-text-fill-color: black;
+}
+
+.vaultMiddleSection {
+  position: absolute;
+  width: 586.45px;
+  height: 228px;
+  left: 40px;
+  top: 255px;
+
+  background: transparent;
+}
+
+.vaultExtraDetailsTitleText {
+  position: relative;
+  width: 95px;
+  height: 24px;
+  left: 0px;
+  top: 0px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  /* identical to box height, or 150% */
+
+  text-align: left;
+
+  /* Grey/Light */
+
+  color: #ffffff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.vaultExtraSection {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 382px;
+  height: 182px;
+  left: 0px;
+  top: 40px;
+
+  /* Grey/Dark */
+
+  background: #2d2d31;
+  border-radius: 13.7143px;
+}
+
+.gasBalanceBox {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 188px;
+  height: 182px;
+  left: 398px;
+  top: 40px;
+
+  /* Grey/Dark */
+
+  background: #2d2d31;
+  border-radius: 13.7143px;
+}
+
+.gasBalanceBtn {
+  box-sizing: border-box;
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 40px;
+  gap: 10px;
+
+  position: absolute;
+  width: 140px;
+  height: 40px;
+  left: 24px;
+  top: 90px;
+
+  background: linear-gradient(0deg, #ffffff, #ffffff),
+    linear-gradient(90deg, #00b2ec 0%, #d9ca0f 100%);
+  border-radius: 8px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  display: flex;
+  align-items: flex-end;
+
+  /* Grey/Darker */
+
+  color: #050505;
+}
+
+.deployerProfileSection {
+  position: absolute;
+  width: 586px;
+  height: 86px;
+  left: 40px;
+  top: 509px;
+
+  background: transparent;
+}
+
+.profileSocialMediaSection {
+  position: relative;
+  width: 104px;
+  height: 24px;
+  left: 82.3%;
+  top: -116px;
+
+  background: transparent;
+}
+
+.profileImg {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  left: 0px;
+  top: 0px;
+
+  border-radius: 66.6667px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profileName {
+  position: relative;
+  width: 73px;
+  height: 24px;
+  left: 56px;
+  top: -46px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  display: flex;
+  align-items: flex-end;
+
+  color: #ffffff;
+}
+
+.profileDescription {
+  position: relative;
+  width: 239px;
+  height: 40px;
+  left: 56px;
+  top: -50px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  /* or 167% */
+
+  display: flex;
+  align-items: flex-end;
+
+  color: #797982;
+}
+
+.socialMediaBtn {
+  width: 24px;
+  height: 24px;
+
+  background: #303030;
+  border-radius: 99.7159px;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  outline: none;
+  border: 0px solid transparent;
+  cursor: pointer;
+  margin-left: 10px;
+  align-items: center;
+  align-content: center;
+}
+
+.socialMediaBtnImg {
+  position: relative;
+  width: 13.75px;
+  height: 11.21px;
+  top: 2px;
+}
+
+.strategyBlur {
+  z-index: 100000000000000;
+  position: absolute;
+  width: 1040px;
+  height: 229px;
+  left: 0px;
+  top: 622px;
+  margin-bottom: 20px;
+
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #151516 77.08%);
+}
+
+.stepBlockMini {
+  position: absolute;
+  width: 216px;
+  height: 56px;
+  left: 407px;
+  margin-top: 10px;
+
+  /* Grey/Dark */
+
+  background: #2d2d31;
+  border-radius: 8px;
+}
+
+.stepBlockMiniMainImg {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 16px;
+  left: 16px;
+
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.stepBlockMiniInterContainer {
+  position: absolute;
+  width: 138px;
+  height: 24px;
+  left: 48px;
+  top: 16px;
+
+  /* Grey/Dark */
+
+  background: #2d2d31;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding-left: 8px;
+  padding-top: 4px;
+  padding-right: 8px;
+}
+
+.stepBlockMiniActionContainer {
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 4px 8px;
+  gap: 4px;
+
+  position: absolute;
+  width: max-content;
+  height: 24px;
+  left: 48px;
+  top: 16px;
+
+  /* Grey/Dark */
+
+  background: #353539;
+  border-radius: 16px;
+  z-index: 99999;
+  flex: none;
+  min-width: 130px;
+}
+
+.stepBlockMiniFlowsContainer {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  order: 0;
+  flex-grow: 4;
+  flex: none;
+  margin-left: 4px;
+}
+
+.stepBlockMiniActionName {
+  z-index: 9999999;
+  width: max-content;
+  max-width: max-content;
+  height: 16px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  /* identical to box height, or 133% */
+
+  /* display: flex;
+  align-items: flex-end; */
+
+  color: #ffffff;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 1;
+}
+
+.stepBlockMiniActionFlowImg {
+  /* position: absolute; */
+  width: 16px;
+  height: 16px;
+  /* left: 46px;
+  top: 4px; */
+
+  border-radius: 50%;
+  flex-grow: 4;
+  margin: -3px;
+  flex: none;
+  overflow: hidden;
+}
+
+.stepBlockMiniArrowLeft {
+  left: 67px;
+  flex: none;
+  margin-left: 2px;
+  margin-right: 2px;
+  order: 0;
+}
+
+.stepBlockMiniHorizontalDots {
+  position: absolute;
+  left: 187px;
+  top: 25.5px;
+  flex: auto;
+  order: 5;
+  z-index: 9999999999;
+}
+
+.viewDetailsExpanderContainer {
+  z-index: 10000000000000;
+  position: absolute;
+  width: 134px;
+  height: 24px;
+  left: 453px;
+  top: 763px;
+  cursor: pointer;
+  background: transparent;
+  animation-name: viewDetailsExpandAnimation;
+  animation-duration: 4s;
+  cursor: pointer;
+}
+
+.viewDetailsText {
+  z-index: 999999999;
+  position: relative;
+  width: 115px;
+  height: 24px;
+  left: 0px;
+  bottom: 0px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  text-align: center;
+  color: white;
+
+  /* Grey/Light */
+  cursor: pointer;
+}
+
+.viewDetailsArrowDown {
+  z-index: 99999999;
+  position: absolute;
+  bottom: 9.8px;
+  left: -12px;
+  width: 25%;
+  height: 25%;
+  cursor: pointer;
+}
+
+.initialStrategyView {
+  display: grid;
+  gap: 2px;
+  position: absolute;
+  width: 1040px;
+  height: 229px;
+  left: 0px;
+  top: 540px;
+
+  background: transparent;
+}
+
+.fullStrategyViewContainer {
+  display: grid;
+  gap: 28px;
+  position: absolute;
+  width: 1040px;
+  left: 0px;
+  top: 540px;
+}
+
+.stepPercentageContainer {
+  /* Auto layout */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 4px;
+
+  position: relative;
+  width: 60px;
+  height: 24px;
+  left: 482px;
+  top: 110px;
+
+  /* Grey/Darker */
+
+  background: #202023;
+  border-radius: 2px;
+}
+
+.stepPercentageText {
+  width: 28px;
+  height: 24px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  color: #ffffff;
+
+  /* Inside auto layout */
+
+  order: 0;
+  flex-grow: 0;
+  position: relative;
+  right: 3px;
+  top: 1px;
+}
+
+.stepStraightLine {
+  position: relative;
+  width: 0px;
+  height: 68px;
+  left: 510px;
+  top: 162px;
+
+  border: 1px solid #ffffff;
+}
+
+.wrapperAddon {
+  margin-top: 975px;
+  background: transparent;
+  width: 1040px;
+  height: 21px;
+}

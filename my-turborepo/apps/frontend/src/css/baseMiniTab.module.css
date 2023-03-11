@@ -1,0 +1,393 @@
+.miniTabBody {
+  box-sizing: border-box;
+
+  position: fixed;
+  width: 600px;
+  height: 120px;
+  left: 413px;
+  top: 641px;
+
+  background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9))
+      padding-box,
+    linear-gradient(
+        90deg,
+        rgba(0, 176, 235, 0.5) 0%,
+        rgba(217, 202, 15, 0.5) 100%
+      )
+      border-box;
+  border: 1px solid transparent;
+  backdrop-filter: blur(5px);
+  /* Note: backdrop-filter has minimal browser support */
+
+  border-radius: 1000px;
+  z-index: 99999999999;
+}
+
+.vaultDepositTokenTitle {
+  position: relative;
+  width: 146px;
+  height: 24px;
+  left: 51px;
+  top: 48px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  /* identical to box height, or 150% */
+
+  /* Grey/Normal */
+
+  color: #676771;
+  white-space: nowrap;
+}
+
+.depositTokenName {
+  position: absolute;
+  width: 43px;
+  height: 24px;
+  left: 231px;
+  top: 48px;
+
+  font-family: "Athletics";
+  font-style: bold;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  /* identical to box height, or 150% */
+
+  color: #ffffff;
+}
+
+.depositTokenImg {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 202px;
+  top: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.baseStepsTitle {
+  position: absolute;
+  width: 203px;
+  height: 24px;
+  left: 295px;
+  top: 48px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  /* identical to box height, or 150% */
+
+  /* Grey/Normal */
+
+  color: #676771;
+}
+
+.baseStepsText {
+  position: absolute;
+  width: 203px;
+  height: 24px;
+  left: 384px;
+  top: 48px;
+
+  font-family: "Athletics";
+  font-style: bold;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  /* identical to box height, or 150% */
+
+  /* Grey/Normal */
+
+  color: #ffffff;
+}
+
+.expandIcon {
+  position: absolute;
+  left: 562px;
+  top: 0px;
+  /* Grey/Light */
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+  transform: rotate(180deg);
+}
+
+.continueBtnOff {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 159px;
+  height: 41px;
+  left: 220.5px;
+  top: 99px;
+
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 8px;
+
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  /* identical to box height, or 150% */
+
+  /* Grey/Normal */
+
+  color: #676771;
+  border: 0px solid transparent;
+  z-index: 9999999999;
+  cursor: default;
+}
+
+.continueBtnOn {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 159px;
+  height: 41px;
+  left: 220.5px;
+  top: 99px;
+  /* Gradient/Normal */
+
+  background: linear-gradient(90deg, #00b2ec 0%, #d9ca0f 100%);
+  border-radius: 8px;
+  overflow: hidden;
+
+  /* Text Props */
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 24px;
+  /* identical to box height, or 171% */
+
+  /* Grey/Darker */
+
+  color: #050505;
+  border: 0px solid transparent;
+}
+
+.continueArrowImg {
+  position: absolute;
+  width: 10px;
+  height: 8px;
+  top: 115.5px;
+  left: 351.5px;
+  color: black;
+}
+
+.wrapper {
+  background-color: rgba(21, 21, 22, 0.75);
+  backdrop-filter: blur(4px);
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  overflow-y: scroll;
+  overflow-block: visible;
+  max-height: 200%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.baseLargeTab {
+  box-sizing: border-box;
+
+  width: 1279px;
+  height: 987px;
+
+  margin-bottom: 30px;
+  margin-top: 20%;
+
+  background: linear-gradient(rgba(0, 0, 0, 0.86), rgba(0, 0, 0, 0.86))
+      padding-box,
+    linear-gradient(
+        90deg,
+        rgba(0, 178, 236, 0.26) 0%,
+        rgba(217, 202, 15, 0.26) 100%
+      )
+      border-box;
+  backdrop-filter: blur(5px);
+  /* Note: backdrop-filter has minimal browser support */
+  border: 1px solid transparent;
+  border-radius: 50px;
+  z-index: 99999999999999999;
+  overflow: hidden;
+}
+
+.baseStrategyContainer {
+  position: relative;
+  width: 1500px;
+  height: 300%;
+  margin-top: 10.4%;
+  overflow: hidden;
+}
+
+.baseStrategyBackground {
+  position: absolute;
+  min-width: max-content;
+  height: 300%;
+  margin-top: -200px;
+  left: 28.5%;
+  background: transparent;
+  z-index: 99999999999999999999;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: max-content;
+  min-width: max-content;
+}
+
+.minimizeIcon {
+  margin-top: 29px;
+  margin-left: 1220px;
+  width: 23px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.strategyName {
+  position: absolute;
+  top: 50px;
+  left: 449px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 40px;
+  line-height: 24px;
+  /* identical to box height, or 60% */
+
+  /* Grey/Light */
+
+  color: #ffffff;
+
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.depositTokenImgBigTab {
+  position: relative;
+  left: calc(50% - 43px);
+  top: -4155px;
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  z-index: 99999;
+  overflow: hidden;
+}
+
+.depositTokenNameContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 8px;
+  gap: 4px;
+
+  position: relative;
+  width: 80px;
+  height: 24px;
+  left: calc(50% + -127.5px);
+  top: -4112px;
+
+  /* Grey/Dark */
+
+  background: #2d2d31;
+  border-radius: 16px;
+  z-index: 999999;
+  overflow: hidden;
+}
+
+.depositTokenNameText {
+  position: absolute;
+  font-family: "Athletics";
+  font-style: bold;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 24px;
+  /* identical to box height, or 150% */
+
+  /* Grey/Normal */
+
+  color: #ffffff;
+  z-index: 99999;
+}
+
+.whiteLine {
+  position: absolute;
+  width: 0px;
+  height: 52px;
+  left: calc(50%);
+  top: 321px;
+
+  border: 1px solid #ffffff;
+}
+
+.batchSwapBlock {
+  position: relative;
+  width: 188px;
+  height: 56px;
+  left: -23.5%;
+  top: -4032px;
+
+  /* Grey/Dark */
+
+  background: #2d2d31;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.batchSwapText {
+  position: absolute;
+  top: 20px;
+  left: 75px;
+  font-family: "Athletics";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 16px;
+  /* identical to box height, or 80% */
+
+  color: #ffffff;
+}
+
+.batchSwapImg {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.largeTokenImgsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  width: (max-content + 50px);
+  height: 64px;
+}
+
+.bigTokenImg {
+  height: 64px;
+  width: 64px;
+  margin: -15px;
+  border-radius: 50%;
+  border: 2px solid #000000;
+  overflow: hidden;
+}

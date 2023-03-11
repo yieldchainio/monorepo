@@ -1,0 +1,858 @@
+.icon24cursor {
+  position: absolute;
+  top: 352px;
+  left: 567px;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  display: none;
+}
+.sortByTVL {
+  flex: 1;
+  position: relative;
+  line-height: 24px;
+  display: inline-block;
+  opacity: 0.8;
+}
+.frameDiv1 {
+  width: 82px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.chevronDownIcon {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.frameDiv {
+  position: absolute;
+  top: 267px;
+  left: 716px;
+  border-radius: 8px;
+  background-color: #050505;
+  border: 1px solid #2d2d31;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  padding: 12px 16px;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #676771;
+}
+.frameDiv > * + * {
+  margin-left: 24px;
+}
+.poolsDiv,
+.protocolsDiv {
+  position: absolute;
+  top: 263px;
+  left: 64px;
+  font-size: 40px;
+  line-height: 56px;
+  font-weight: 800;
+  display: inline-block;
+}
+.poolsDiv {
+  top: 363px;
+  font-size: 24px;
+  line-height: 32px;
+}
+.b,
+.b1,
+.b2,
+.b3,
+.b4,
+.b5,
+.b6,
+.b7,
+.tVLDiv {
+  position: absolute;
+  top: 56px;
+  left: 0;
+  line-height: 24px;
+  display: inline-block;
+}
+.b1,
+.b2,
+.b3,
+.b4,
+.b5,
+.b6,
+.b7,
+.tVLDiv {
+  top: 144px;
+}
+.b2,
+.b3,
+.b4,
+.b5,
+.b6,
+.b7,
+.tVLDiv {
+  top: 232px;
+}
+.b3,
+.b4,
+.b5,
+.b6,
+.b7,
+.tVLDiv {
+  top: 320px;
+}
+.b4,
+.b5,
+.b6,
+.b7,
+.tVLDiv {
+  top: 408px;
+}
+.b5,
+.b6,
+.b7,
+.tVLDiv {
+  top: 496px;
+}
+.b6,
+.b7,
+.tVLDiv {
+  top: 588px;
+}
+.b7,
+.tVLDiv {
+  top: 680px;
+}
+.tVLDiv {
+  top: 0;
+  font-size: 14px;
+  color: #676771;
+  opacity: 0.8;
+}
+.groupDiv {
+  position: absolute;
+  top: 419px;
+  left: 870px;
+  width: 103px;
+  height: 704px;
+}
+.actionDiv,
+.aggregateDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 24px;
+  display: inline-block;
+}
+.actionDiv {
+  color: #676771;
+  text-align: left;
+  opacity: 0.8;
+}
+.aggregateDiv {
+  height: 100%;
+  width: 100%;
+  right: 0;
+  bottom: 0;
+  font-weight: 900;
+}
+.groupDiv2 {
+  position: relative;
+  width: 70px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.buttonDiv,
+.buttonDiv1,
+.buttonDiv2,
+.buttonDiv3,
+.buttonDiv4,
+.buttonDiv5,
+.buttonDiv6,
+.buttonDiv7 {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  border-radius: 4px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 40px;
+  box-sizing: border-box;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.buttonDiv1,
+.buttonDiv2,
+.buttonDiv3,
+.buttonDiv4,
+.buttonDiv5,
+.buttonDiv6,
+.buttonDiv7 {
+  top: 136px;
+}
+.buttonDiv2,
+.buttonDiv3,
+.buttonDiv4,
+.buttonDiv5,
+.buttonDiv6,
+.buttonDiv7 {
+  top: 224px;
+}
+.buttonDiv3,
+.buttonDiv4,
+.buttonDiv5,
+.buttonDiv6,
+.buttonDiv7 {
+  top: 312px;
+}
+.buttonDiv4,
+.buttonDiv5,
+.buttonDiv6,
+.buttonDiv7 {
+  top: 400px;
+}
+.buttonDiv5,
+.buttonDiv6,
+.buttonDiv7 {
+  top: 488px;
+}
+.buttonDiv6,
+.buttonDiv7 {
+  top: 580px;
+}
+.buttonDiv7 {
+  top: 668px;
+}
+.groupDiv1 {
+  position: absolute;
+  top: 419px;
+  left: 1225px;
+  width: 150px;
+  height: 708px;
+  text-align: center;
+  font-size: 14px;
+  color: #2d2d31;
+}
+.frameDiv2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.groupDiv11,
+.groupDiv12,
+.groupDiv13,
+.groupDiv14 {
+  position: absolute;
+  top: 56px;
+  left: 0;
+  width: 32px;
+  height: 24px;
+}
+.groupDiv12,
+.groupDiv13,
+.groupDiv14 {
+  top: 144px;
+  width: 42px;
+}
+.groupDiv13,
+.groupDiv14 {
+  top: 408px;
+  width: 51px;
+}
+.groupDiv14 {
+  top: 496px;
+}
+.groupDiv15,
+.groupDiv16,
+.groupDiv17,
+.groupDiv18 {
+  position: absolute;
+  top: 588px;
+  left: 0;
+  width: 39px;
+  height: 24px;
+}
+.groupDiv16,
+.groupDiv17,
+.groupDiv18 {
+  top: 232px;
+  width: 32px;
+}
+.groupDiv17,
+.groupDiv18 {
+  top: 320px;
+}
+.groupDiv18 {
+  top: 680px;
+  width: 44px;
+}
+.frameDiv10 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #676771;
+}
+.groupDiv10 {
+  position: absolute;
+  top: 419px;
+  left: 739px;
+  width: 51px;
+  height: 704px;
+}
+.groupIcon {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+.cAKEB {
+  position: relative;
+  line-height: 24px;
+  display: inline-block;
+}
+.frameDiv11 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.frameDiv11 > * + * {
+  margin-left: 8px;
+}
+.frameDiv12 {
+  position: absolute;
+  top: 88px;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.frameDiv12 > * + * {
+  margin-left: 8px;
+}
+.frameDiv13 {
+  position: absolute;
+  top: 176px;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.frameDiv13 > * + * {
+  margin-left: 8px;
+}
+.frameDiv14 {
+  position: absolute;
+  top: 264px;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.frameDiv14 > * + * {
+  margin-left: 8px;
+}
+.frameDiv15 {
+  position: absolute;
+  top: 352px;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.frameDiv15 > * + * {
+  margin-left: 8px;
+}
+.frameDiv16 {
+  position: absolute;
+  top: 440px;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.frameDiv16 > * + * {
+  margin-left: 8px;
+}
+.frameDiv17 {
+  position: absolute;
+  top: 532px;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.frameDiv17 > * + * {
+  margin-left: 8px;
+}
+.frameDiv18 {
+  position: absolute;
+  top: 620px;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.frameDiv18 > * + * {
+  margin-left: 8px;
+}
+.groupDiv20 {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 92px;
+  height: 660px;
+}
+.rewardTokenDiv {
+  position: relative;
+  line-height: 24px;
+  display: inline-block;
+  opacity: 0.8;
+}
+.frameDiv19 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #676771;
+}
+.groupDiv19 {
+  position: absolute;
+  top: 419px;
+  left: 1053px;
+  width: 92px;
+  height: 708px;
+}
+.rectangleIcon {
+  left: 0;
+  border-radius: 8px;
+  width: 486px;
+  height: 48px;
+}
+.icon1,
+.rectangleIcon,
+.textAreaDiv {
+  position: absolute;
+  top: 0;
+}
+.icon1 {
+  left: 0;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+}
+.textAreaDiv {
+  left: 40px;
+  line-height: 24px;
+  display: inline-block;
+  opacity: 0.8;
+}
+.groupDiv22,
+.lineDiv {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  width: 49px;
+  height: 24px;
+}
+.lineDiv {
+  top: 13.5px;
+  left: 72.5px;
+  border-right: 1px solid #fff;
+  box-sizing: border-box;
+  width: 1px;
+  height: 21px;
+}
+.groupDiv21 {
+  position: absolute;
+  top: 267px;
+  left: 890px;
+  width: 486px;
+  height: 48px;
+  font-size: 14px;
+}
+.groupIcon8 {
+  position: relative;
+  width: 64px;
+  height: 40px;
+  flex-shrink: 0;
+}
+.groupDiv24 {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 156px;
+  height: 660px;
+}
+.frameDiv28 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 46px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #676771;
+}
+.groupDiv23 {
+  position: absolute;
+  top: 419px;
+  left: 64px;
+  width: 156px;
+  height: 708px;
+}
+.groupDiv25,
+.groupDiv26 {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 149px;
+  height: 660px;
+}
+.groupDiv25 {
+  top: 419px;
+  left: 300px;
+  height: 708px;
+}
+.appuniswaporgDiv {
+  position: relative;
+  line-height: 24px;
+  font-weight: 800;
+  display: inline-block;
+}
+.frameDiv44 {
+  position: absolute;
+  top: 528px;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.frameDiv44 > * + * {
+  margin-left: 8px;
+}
+.frameDiv45 {
+  position: absolute;
+  top: 616px;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.frameDiv45 > * + * {
+  margin-left: 8px;
+}
+.groupDiv28 {
+  position: absolute;
+  top: 56px;
+  left: 0;
+  width: 130px;
+  height: 640px;
+}
+.frameDiv46 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  color: #676771;
+}
+.groupDiv27 {
+  position: absolute;
+  top: 419px;
+  left: 529px;
+  width: 130px;
+  height: 696px;
+  text-align: right;
+  font-size: 14px;
+}
+.rectangleDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 16px;
+  width: 1312px;
+  height: 103px;
+}
+.addNewPoolIn2min,
+.isTheProtocolYouWantToAg {
+  position: absolute;
+  left: 0;
+  display: inline-block;
+}
+.addNewPoolIn2min {
+  top: 0;
+  line-height: 27px;
+  font-weight: 800;
+}
+.isTheProtocolYouWantToAg {
+  top: 35px;
+  font-size: 12px;
+  line-height: 20px;
+  color: #d8d8dc;
+  opacity: 0.8;
+}
+.groupDiv30 {
+  position: absolute;
+  top: 24px;
+  left: 80px;
+  width: 611px;
+  height: 55px;
+}
+.plusIcon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.addNewProtocol {
+  position: relative;
+  line-height: 24px;
+  font-weight: 900;
+  display: inline-block;
+  opacity: 0.8;
+}
+.frameDiv49 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frameDiv49 > * + * {
+  margin-left: 8px;
+}
+.frameDiv48 {
+  position: absolute;
+  top: 28px;
+  left: 1090px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #00b2ec, #d9ca0f);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #050505;
+}
+.frameIcon {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  width: 40px;
+  height: 40px;
+}
+.frameDiv47,
+.groupDiv29 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1312px;
+  height: 103px;
+}
+.groupDiv29 {
+  top: 120px;
+  left: 64px;
+  font-size: 18px;
+}
+.ellipseIcon,
+.yieldchainLogo1 {
+  position: absolute;
+  top: 44px;
+  left: 64px;
+  width: 164.83px;
+  height: 32px;
+  object-fit: cover;
+}
+.ellipseIcon {
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+}
+.iD65FG646Div,
+.metamaskDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 24px;
+  display: inline-block;
+}
+.iD65FG646Div {
+  top: 24px;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: left;
+}
+.groupDiv32 {
+  position: absolute;
+  top: 0;
+  left: 48px;
+  width: 74px;
+  height: 40px;
+}
+.chevronDownIcon1 {
+  position: absolute;
+  top: 10px;
+  left: 138px;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+}
+.groupDiv31 {
+  position: absolute;
+  top: 40px;
+  left: 1031px;
+  width: 158px;
+  height: 40px;
+  text-align: right;
+}
+.simpleIconslitecoin {
+  position: relative;
+  border-radius: 100px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  overflow: hidden;
+  object-fit: cover;
+}
+.etherumDiv {
+  position: relative;
+  line-height: 24px;
+  font-weight: 500;
+  display: inline-block;
+}
+.frameDiv50 {
+  position: absolute;
+  top: 40px;
+  left: 876px;
+  border-radius: 4px;
+  border: 1px solid #2d2d31;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+.frameDiv50 > * + * {
+  margin-left: 8px;
+}
+.frameDiv52,
+.frameDiv53 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frameDiv52 {
+  position: absolute;
+  top: 40px;
+  left: 1213px;
+  border-radius: 8px;
+  background-color: #fff;
+  flex-direction: column;
+  padding: 8px 40px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #050505;
+}
+.vaultB {
+  position: relative;
+  line-height: 24px;
+  display: inline-block;
+  background: linear-gradient(90deg, #00b2ec, #d9ca0f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.frameDiv55 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+}
+.portfolioDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 24px;
+  font-weight: 500;
+  display: inline-block;
+}
+.groupDiv33 {
+  position: relative;
+  width: 65px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.frameDiv54,
+.frameDiv56 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.frameDiv54 {
+  position: absolute;
+  top: 48px;
+  left: 528px;
+  text-align: center;
+  color: #676771;
+}
+.frameDiv54 > * + * {
+  margin-left: 24px;
+}
+.dashboardDiv {
+  position: flex;
+  background-color: #050505;
+  width: 100%;
+  height: 1200px;
+  overflow: hidden;
+  text-align: left;
+  font-size: 16px;
+  color: #fff;
+  font-family: Athletics;
+}

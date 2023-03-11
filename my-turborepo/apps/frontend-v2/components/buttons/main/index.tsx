@@ -18,11 +18,14 @@ export interface ButtonProps {
 const Button = ({ text, onClick, className }: ButtonProps) => {
   return (
     <motion.div
-      className="w-[195px] h-[44px] font-athletics font-bold flex items-center justify-center ml-auto cursor-pointer z-100 select-none"
+      className={
+        "w-[195px] h-[44px] font-athletics font-bold text-[14.5px] flex items-center justify-center ml-auto cursor-pointer z-100 select-none blur-none" +
+        (className || "")
+      }
       style={{
         background: "var(--light-gradient)",
         color: "black",
-        borderRadius: "16px",
+        borderRadius: "12px",
       }}
       whileHover={{
         background:

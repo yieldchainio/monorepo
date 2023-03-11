@@ -9,6 +9,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 // The props interface
 interface LoadingBarProps {
@@ -54,7 +55,7 @@ const LoadingBar = () => {
 
   // Return the loading bar
   return (
-    <div
+    <motion.div
       className={`h-[3px] ${
         "w-[" + `${progress}` + "vw]"
       } fixed top-[-0.5px] left-0`}
@@ -62,7 +63,8 @@ const LoadingBar = () => {
         background: "var(--gradient)",
         filter: "drop-shadow(4px, 4px, 4px, 4px)",
       }}
-    ></div>
+      layout
+    ></motion.div>
   );
 };
 

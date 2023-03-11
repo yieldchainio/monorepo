@@ -72,6 +72,17 @@ export class YCClassifications {
   #actions: DBAction[] = [];
   #users: DBUser[] = [];
 
+  #YCaddresses: YCAddress[] = [];
+  #YCfunctions: YCFunc[] = [];
+  #YCtokens: YCToken[] = [];
+  #YCparameters: YCArgument[] = []; // TODO: Change name to arguments
+  #YCflows: YCFlow[] = [];
+  #YCprotocols: YCProtocol[] = [];
+  #YCstrategies: YCStrategy[] = [];
+  #YCnetworks: YCNetwork[] = [];
+  #YCactions: YCAction[] = [];
+  #YCusers: YCUser[] = [];
+
   // =======================
   //      CONSTRUCTOR
   //      (SINGLETON)
@@ -144,56 +155,64 @@ export class YCClassifications {
   // ==============
   //    ENDPOINTS
   // ==============
-  addresses = () => {
+  get addresses() {
     return this.#addresses.map(
       (address: DBAddress) => new YCAddress(address, this)
     );
-  };
+  }
 
-  networks = () => {
+  get networks() {
     console.log("These are class networks", this.#networks);
-    return this.#networks.map(
-      (network: DBNetwork) => new YCNetwork(network, this)
-    );
-  };
+    if (!this.#YCnetworks.length) {
+      const networks = this.#networks.map(
+        (network: DBNetwork) => new YCNetwork(network, this)
+      );
+      this.#YCnetworks = networks;
+    }
+    return this.#YCnetworks;
+  }
 
-  functions = () => {
+  get functions() {
     return this.#functions.map((func: DBFunction) => new YCFunc(func, this));
-  };
+  }
 
-  arguments = (_customValue?: CustomArgument) => {
+  get arguments() {
+    return this.#parameters.map((arg: DBArgument) => new YCArgument(arg, this));
+  }
+
+  getArguments = (_customValue?: CustomArgument) => {
     return this.#parameters.map(
       (arg: DBArgument) => new YCArgument(arg, this, _customValue)
     );
   };
 
-  flows = () => {
+  get flows() {
     return this.#flows.map((flow: DBFlow) => new YCFlow(flow, this));
-  };
+  }
 
-  strategies = () => {
+  get strategies() {
     return this.#strategies.map(
       (strategy: DBStrategy) => new YCStrategy(strategy, this)
     );
-  };
+  }
 
-  protocols = () => {
+  get protocols() {
     return this.#protocols.map(
       (protocol: DBProtocol) => new YCProtocol(protocol, this)
     );
-  };
+  }
 
-  tokens = (): YCToken[] => {
+  get tokens(): YCToken[] {
     return this.#tokens.map((token: DBToken) => new YCToken(token, this));
-  };
+  }
 
-  actions = (): YCAction[] => {
+  get actions(): YCAction[] {
     return this.#actions.map((action: DBAction) => new YCAction(action, this));
-  };
+  }
 
-  users = () => {
+  get users() {
     return this.#users.map((user: DBUser) => new YCUser(user, this));
-  };
+  }
 
   // users = (): YCUser[] => {
   //   return this.#users.map((user: DBUser) => new YCUser(user, this));

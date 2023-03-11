@@ -17,7 +17,7 @@ export interface DropdownHandlerProps {
 export interface DropdownProps {
   options: DropdownOption[];
   choice?: DropdownOption;
-  MenuComponent?: React.ElementType;
+  MenuComponent?: JSX.Element;
   onClick?: (options: DropdownOption[]) => any;
   choiceHandler?:
     | ((_choice: DropdownOption) => Promise<any>)

@@ -9,6 +9,7 @@ import { DropdownOption } from "./dropdown/types";
 import { useYCContext } from "utilities/stores/yc-data";
 import { useHideScroll } from "utilities/hooks/useHideScroll";
 import { useEffect, useState } from "react";
+import { Switch } from "components/buttons/switch";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",
@@ -27,6 +28,8 @@ export const Header = () => {
     HeaderLocation.VISIBLE
   );
 
+  const [theme, setTheme] = useState(false);
+
   useEffect(() => {
     if (show) setHeaderLocation(HeaderLocation.VISIBLE);
     else setHeaderLocation(HeaderLocation.HIDDEN);
@@ -38,6 +41,7 @@ export const Header = () => {
       <div className="absolute w-full h-full overflow-hidden bg-transparent z-0 opacity-100 rounded-xl drop-shadow-lg">
         <div className="absolute w-[100vw] h-[100%] bg-[#383838] opacity-[45%] filter blur-xl z-1 pointer-events-auto overflow-hidden rounded-xl"></div>
       </div>
+
       <div className="relative">
         <div className="flex w-[35vw] h-[100%] gap-10 blur-none pl-10">
           <Image
@@ -55,7 +59,9 @@ export const Header = () => {
           </div>
         </div>
       </div>
-
+      <div className="relative">
+        <Switch handler={setTheme} />
+      </div>
       <div className="flex items-center justify-end w-[50%] h-[10vh] pr-10 blur-none gap-6">
         <Dropdown
           options={networks.map((network: YCNetwork): DropdownOption => {

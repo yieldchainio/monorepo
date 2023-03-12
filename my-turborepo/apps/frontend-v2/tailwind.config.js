@@ -5,8 +5,15 @@ module.exports = {
     borderRadius: {
       lg: "18px",
     },
+    colors: {
+      testColor: "#fef464",
+      lala: "#ae9999",
+    },
     extend: {
       colors: {
+        lala: "#ae9999",
+
+        testColor: "#fef464",
         custom: {
           // Background colors
           bg: "var(--bg)",
@@ -38,6 +45,6 @@ module.exports = {
       athletics: "Athletics",
     },
   },
-  content: ["./app/**/*.{js,ts,jsx,tsx}"],
+  content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   plugins: [],
 };

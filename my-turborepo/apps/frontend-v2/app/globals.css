@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  /**
+    *  Global Dark/Light mode variables
+    */
+  --light-bg: #ffffff;
+  --dark-bg: #0e0e0e;
+
+  --light-subbg: #ffffff;
+  --dark-subbg: #202023;
+
+  --light-bigcomponentbg: #f2f2f4;
+  --dark-bigcomponentbg: #202023;
+
+  --light-componentbg: #f2f2f4;
+  --dark-componentbg: #2d2d31;
+
+  --light-turnedoff-text: #676771;
+  --dark-turnedoff-text: #676771;
+
+  --light-turnedoff-text-hover: #808086;
+  --dark-turnedoff-text-hover: #808086;
+
+  --dark-mode-text: #ffffff;
+  --light-mode-text: #000000;
+
+  --gradient: linear-gradient(
+    90deg,
+    rgb(0, 178, 236) 0%,
+    rgb(217, 202, 15) 100%
+  );
+
+  --dark-dimmed-component: #2d2d31;
+  --light-dimmed-component: rgb(174, 174, 174) 1;
+}
+
+/**
+ * @notice
+ * Global variables, Dark & Light
+*/
+html {
+  /*Backgrounds*/
+  --bg: var(--light-bg);
+  --subbg: var(--light-subbg);
+  --componentbg: var(--light-componentbg);
+  --bigcomponentbg: var(var(--light-bigcomponentbg));
+
+  /*Texts*/
+  --text: var(--light-mode-text);
+  --off: var(--light-turnedoff-text);
+  --offhover: var(--light-turnedoff-text-hover);
+  --gradient: linear-gradient(
+    90deg,
+    rgb(0, 178, 236) 0%,
+    rgb(217, 202, 15) 100%
+  );
+  --light-gradient: linear-gradient(
+    90deg,
+    rgb(104, 218, 255) 0%,
+    rgb(255, 245, 118) 100%
+  );
+
+  --dimmed: var(--light-dimmed-component);
+}
+
+html.dark {
+  --bg: var(--dark-bg);
+  --subbg: var(--dark-subbg);
+  --componentbg: var(--dark-componentbg);
+  --bigcomponentbg: var(--dark-bigcomponentbg);
+  --off: var(--dark-turnedoff-text);
+  --offhover: var(--dark-turnedoff-text-hover);
+
+  /*texts*/
+  --text: var(--dark-mode-text);
+
+  --dimmed: var(--dark-dimmed-component);
+}
+
+/*Other Global Variables*/
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}

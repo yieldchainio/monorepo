@@ -63,15 +63,11 @@ export const HeaderCatagoryText = ({ text, page }: HeaderCatagoryTextProps) => {
         <motion.div
           style={{
             fontFamily: "Athletics",
-            color: "--off",
           }}
-          className={`font-athletics ${style} whitespace-nowrap cursor-pointer z-100 hover:text-custom-offhover`}
+          className={`font-athletics ${style} whitespace-nowrap cursor-pointer z-100 text-custom-off hover:text-custom-offhover transition duration-200 ease-in-out`}
           onClick={(e: React.MouseEvent<HTMLElement>) =>
             pathname == page ? e.preventDefault() : null
           }
-          whileHover={{
-            scale: 1.01,
-          }}
           whileTap={{
             scale: 0.98,
           }}

@@ -5,25 +5,19 @@ module.exports = {
     borderRadius: {
       lg: "18px",
     },
-    colors: {
-      testColor: "#fef464",
-      lala: "#ae9999",
-    },
+
     extend: {
       colors: {
-        lala: "#ae9999",
-
-        testColor: "#fef464",
         custom: {
           // Background colors
           bg: "var(--bg)",
           subbg: "var(--subbg)",
           bcomponentbg: "var(--bigcomponentbg)",
           componentbg: "var(--componentbg)",
-          "text-color": "var(--text)",
+          textColor: "var(--text)",
 
           // Unrelated
-          header: "#383838",
+          header: "var(--header)",
 
           // Text Colors
           off: "var(--off)",
@@ -38,6 +32,17 @@ module.exports = {
 
           ycllb: "#68DAFF",
           ycly: "#fef464",
+
+          lightcomponent: "var(--lightcomponent)",
+
+          skeleton: "var(--skeleton)",
+
+          border: "var(--border)",
+
+          themedBorder: "var(--themed-border)",
+
+          dropdown: ({ opacityValue }) =>
+            `rgba(var(--dropdown), ${opacityValue || 1})`,
         },
       },
     },

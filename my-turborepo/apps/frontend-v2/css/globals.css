@@ -34,6 +34,24 @@
 
   --dark-dimmed-component: #2d2d31;
   --light-dimmed-component: rgb(174, 174, 174) 1;
+
+  --dark-lightcomponent: #61616a;
+  --light-lightcomponent: #afafaf;
+
+  --dark-skeleton: #4e4e4e;
+  --light-skeleton: #888888;
+
+  --dark-header: #383838;
+  --light-header: #dadada;
+
+  --dark-border: #2d2d3198;
+  --light-border: #868687a7;
+
+  --dark-themed-border: #252628;
+  --light-themed-border: #c9c9c9;
+
+  --dark-dropdown: 56, 56, 56;
+  --light-dropdown: 218, 218, 218;
 }
 
 /**
@@ -63,6 +81,18 @@ html {
   );
 
   --dimmed: var(--light-dimmed-component);
+
+  --lightcomponent: var(--light-lightcomponent);
+
+  --skeleton: var(--light-skeleton);
+
+  --header: var(--light-header);
+
+  --border: var(--light-border);
+
+  --themed-border: var(--light-themed-border);
+
+  --dropdown: var(--light-dropdown);
 }
 
 html.dark {
@@ -77,6 +107,18 @@ html.dark {
   --text: var(--dark-mode-text);
 
   --dimmed: var(--dark-dimmed-component);
+
+  --lightcomponent: var(--dark-lightcomponent);
+
+  --skeleton: var(--dark-skeleton);
+
+  --header: var(--dark-header);
+
+  --border: var(--dark-border);
+
+  --themed-border: var(--dark-themed-border);
+
+  --dropdown: var(--dark-dropdown);
 }
 
 /*Other Global Variables*/

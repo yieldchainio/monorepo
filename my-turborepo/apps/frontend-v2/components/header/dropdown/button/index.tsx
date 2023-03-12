@@ -2,6 +2,8 @@ import Image from "next/image";
 import React, { ForwardedRef, MutableRefObject, useState } from "react";
 import { DropdownOption, data, DropdownProps } from "../types";
 import "../../../../css/globals.css";
+import WrappedImage from "components/wrappers/image";
+import WrappedText from "components/wrappers/text";
 
 // The props for the dropdown component
 interface DropdownButtonProps extends Omit<DropdownProps, "menuComponent"> {
@@ -22,13 +24,13 @@ const DropdownButton = React.forwardRef(
     return (
       <>
         <div
-          className="w-[178px] overflow-hidden h-max bg-custom-header bg-opacity-0 flex items-center justify-between border-[#47474B] border-[0.5px] rounded-xl py-3 px-4 gap-4 select-none cursor-pointer hover:bg-opacity-20 hover:border-[#4F4F55] transition duration-200 ease-in-out"
+          className="w-[178px] overflow-hidden h-max bg-custom-dropdown bg-opacity-20 flex items-center justify-between border-[#47474B] border-[0.5px] rounded-xl py-3 px-4 gap-4 select-none cursor-pointer hover:bg-opacity-70 hover:border-[#4F4F55] transition duration-200 ease-in-out"
           onClick={() => onClick(options)}
           ref={ref}
         >
           <div className="flex gap-2.5">
             {choice?.image && (
-              <Image
+              <WrappedImage
                 src={choice.image}
                 alt=""
                 width={24}
@@ -36,11 +38,14 @@ const DropdownButton = React.forwardRef(
                 className="rounded-[50%]"
               />
             )}
-            <div className="font-athletics font-custom-text-color truncate">
-              {choice?.text}
-            </div>
+            <WrappedText
+              className="text-custom-textColor truncate whitespace-nowrap"
+              text={choice.text}
+              fontSize={14}
+              fontStyle={"reguler"}
+            />
           </div>
-          <Image
+          <WrappedImage
             src="/icons/dropdown-arrow.svg"
             alt=""
             width={20}

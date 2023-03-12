@@ -5,5 +5,5 @@ import StoreInitiallizor, {
 } from "utilities/stores/store-initiallizor";
 
 export default async function Home() {
-  return <main className=""></main>;
+  return <main className="dark"></main>;
 }

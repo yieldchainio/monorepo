@@ -5,6 +5,7 @@ import { DataVersions, fetchYC } from "utilities/storage/fetch-yc";
 import StoreInitiallizor, {
   StoreInitiallizorProps,
 } from "utilities/stores/store-initiallizor";
+import { useTheme } from "utilities/stores/theme";
 
 export const metadata = {
   title: "Yieldchain",

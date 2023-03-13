@@ -3,6 +3,7 @@ import { Header } from "../components/header";
 import { ClassificationContext } from "@yc/yc-models";
 import { DataVersions, fetchYC } from "utilities/storage/fetch-yc";
 import StoreInitiallizor from "utilities/stores/store-initiallizor";
+import WrappedWagmi from "configs/wagmi";
 
 export const metadata = {
   title: "Yieldchain",
@@ -22,8 +23,10 @@ export default async function RootLayout({
     <html lang="en" className="dark">
       <StoreInitiallizor context={data} />
       <body className="bg-custom-bg h-[200vh] z-100">
-        {children}
-        <Header />
+        <WrappedWagmi>
+          {children}
+          <Header />
+        </WrappedWagmi>
       </body>
     </html>
   );

@@ -113,7 +113,11 @@ export const Header = () => {
             <ProfileModal />
           </Dropdown>
         ) : (
-          <RegulerButton onClick={() => openAccountModal?.()}> </RegulerButton>
+          <RegulerButton
+            onClick={() => openAccountModal?.() || console.log("Undefined")}
+          >
+            Connect Wallet
+          </RegulerButton>
         )}
 
         <div className="relative">

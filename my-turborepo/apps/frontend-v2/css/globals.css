@@ -11,8 +11,8 @@
   --light-subbg: #ffffff;
   --dark-subbg: #202023;
 
-  --light-bigcomponentbg: #f2f2f4;
-  --dark-bigcomponentbg: #202023;
+  --light-bigcomponentbg: 242, 242, 244;
+  --dark-bigcomponentbg: 32, 32, 35;
 
   --light-componentbg: #f2f2f4;
   --dark-componentbg: #2d2d31;
@@ -23,8 +23,8 @@
   --light-turnedoff-text-hover: #808086;
   --dark-turnedoff-text-hover: #808086;
 
-  --dark-mode-text: #ffffff;
-  --light-mode-text: #000000;
+  --dark-mode-text: 255, 255, 255;
+  --light-mode-text: 0, 0, 0;
 
   --gradient: linear-gradient(
     90deg,
@@ -32,8 +32,8 @@
     rgb(217, 202, 15) 100%
   );
 
-  --dark-dimmed-component: #2d2d31;
-  --light-dimmed-component: rgb(174, 174, 174) 1;
+  --dark-dimmed-component: 45, 45, 49;
+  --light-dimmed-component: 174, 174, 174;
 
   --dark-lightcomponent: #61616a;
   --light-lightcomponent: #afafaf;
@@ -45,13 +45,16 @@
   --light-header: #dadada;
 
   --dark-border: #2d2d3198;
-  --light-border: #868687a7;
+  --light-border: #eeeeeee4;
 
   --dark-themed-border: #252628;
   --light-themed-border: #c9c9c9;
 
   --dark-dropdown: 56, 56, 56;
   --light-dropdown: 218, 218, 218;
+
+  --dark-lighthover: #898989;
+  --light-lighthover: #d0d0d0;
 }
 
 /**
@@ -84,6 +87,8 @@ html {
 
   --lightcomponent: var(--light-lightcomponent);
 
+  --lighthover: var(--light-lighthover);
+
   --skeleton: var(--light-skeleton);
 
   --header: var(--light-header);
@@ -109,6 +114,8 @@ html.dark {
   --dimmed: var(--dark-dimmed-component);
 
   --lightcomponent: var(--dark-lightcomponent);
+
+  --lighthover: var(--dark-lighthover);
 
   --skeleton: var(--dark-skeleton);
 

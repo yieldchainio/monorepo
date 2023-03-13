@@ -35,8 +35,7 @@ export const HeaderCatagoryText = ({ text, page }: HeaderCatagoryTextProps) => {
           onClick={(e: React.MouseEvent<HTMLElement>) =>
             pathname == page ? e.preventDefault() : null
           }
-          text={text}
-          fontSize={14}
+          fontSize={16}
           fontStyle={"bold"}
           fontFamily={"athletics"}
           fontColor={"transparent"}
@@ -44,14 +43,15 @@ export const HeaderCatagoryText = ({ text, page }: HeaderCatagoryTextProps) => {
           className={
             "bg-gradient-to-r bg-clip-text from-custom-yclb to-custom-ycy cursor-pointer z-100 hover:scale-[1.01] truncate"
           }
-        />
+        >
+          {text}
+        </WrappedText>
       ) : (
         <WrappedText
           onClick={(e: React.MouseEvent<HTMLElement>) =>
             pathname == page ? e.preventDefault() : null
           }
-          text={text}
-          fontSize={14}
+          fontSize={16}
           fontStyle={"reguler"}
           fontFamily={"athletics"}
           fontColor={"custom-off"}
@@ -59,7 +59,9 @@ export const HeaderCatagoryText = ({ text, page }: HeaderCatagoryTextProps) => {
           className={
             "cursor-pointer z-100 hover:text-custom-offhover transition duration-200 ease-in-out active:scale-[0.98] truncate"
           }
-        />
+        >
+          {text}
+        </WrappedText>
       )}
     </Link>
   );

@@ -47,12 +47,9 @@ const DropdownMenu = ({
             />
           )}
 
-          <WrappedText
-            text={option.text}
-            className="truncate"
-            fontStyle="reguler"
-            fontSize={14}
-          />
+          <WrappedText className="truncate" fontStyle="reguler" fontSize={14}>
+            {option.text}
+          </WrappedText>
         </div>
       ))}
     </div>

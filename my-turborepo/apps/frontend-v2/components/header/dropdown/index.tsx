@@ -10,7 +10,7 @@ import uuid from "uuid-random";
 const Dropdown = ({
   options,
   choice = options[0],
-  MenuComponent,
+  children,
   onClick,
   choiceHandler,
 }: DropdownProps) => {
@@ -68,8 +68,8 @@ const Dropdown = ({
   return (
     <div className="relative">
       {menuOpen &&
-        (MenuComponent ? (
-          <MenuComponent options={options} />
+        (children ? (
+          children
         ) : (
           <DropdownMenu
             options={options}

@@ -24,11 +24,11 @@ const DropdownButton = React.forwardRef(
     return (
       <>
         <div
-          className="w-[178px] overflow-hidden h-max bg-custom-dropdown bg-opacity-20 flex items-center justify-between border-[#47474B] border-[0.5px] rounded-xl py-3 px-4 gap-4 select-none cursor-pointer hover:bg-opacity-70 hover:border-[#4F4F55] transition duration-200 ease-in-out"
+          className="w-[178px] overflow-hidden h-max bg-custom-dropdown bg-opacity-80 flex items-center justify-between border-[#47474B] border-[1px] rounded-xl py-3 px-4 gap-4 select-none cursor-pointer hover:bg-opacity-70 hover:border-[#4F4F55] transition duration-200 ease-in-out"
           onClick={() => onClick(options)}
           ref={ref}
         >
-          <div className="flex gap-2.5">
+          <div className="flex gap-2.5 items-center">
             {choice?.image && (
               <WrappedImage
                 src={choice.image}
@@ -40,10 +40,11 @@ const DropdownButton = React.forwardRef(
             )}
             <WrappedText
               className="text-custom-textColor truncate whitespace-nowrap"
-              text={choice.text}
-              fontSize={14}
+              fontSize={16}
               fontStyle={"reguler"}
-            />
+            >
+              {choice.text}
+            </WrappedText>
           </div>
           <WrappedImage
             src="/icons/dropdown-arrow.svg"

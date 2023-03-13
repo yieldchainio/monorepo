@@ -8,13 +8,14 @@ module.exports = {
 
     extend: {
       colors: {
+        current: "currentColor",
         custom: {
           // Background colors
           bg: "var(--bg)",
           subbg: "var(--subbg)",
-          bcomponentbg: "var(--bigcomponentbg)",
           componentbg: "var(--componentbg)",
-          textColor: "var(--text)",
+          textColor: ({ opacityValue }) =>
+            `rgba(var(--text), ${opacityValue || 1})`,
 
           // Unrelated
           header: "var(--header)",
@@ -24,7 +25,9 @@ module.exports = {
           offhover: "var(--offhover)",
           gradient: "var(--gradient)",
           lgradient: "var(--light-gradient)",
-          dimmed: "var(--dimmed)",
+
+          dimmed: ({ opacityValue }) =>
+            `rgba(var(--dimmed), ${opacityValue || 1})`,
 
           // General Colors
           yclb: "#00B2EC",
@@ -41,8 +44,13 @@ module.exports = {
 
           themedBorder: "var(--themed-border)",
 
+          bcomponentbg: ({ opacityValue }) =>
+            `rgba(var(--bigcomponentbg), ${opacityValue || 1})`,
+
           dropdown: ({ opacityValue }) =>
             `rgba(var(--dropdown), ${opacityValue || 1})`,
+
+          lightHover: "var(--lighthover)",
         },
       },
     },

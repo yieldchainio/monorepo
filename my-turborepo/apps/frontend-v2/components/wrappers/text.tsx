@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { ImageSkeleton, TextSkeleton } from "./skeleton";
+import { TextSkeleton } from "./skeleton";
 /**
  * @notice
  * Wrapper image component,
@@ -7,7 +6,7 @@ import { ImageSkeleton, TextSkeleton } from "./skeleton";
  */
 
 interface TextProps {
-  text: string;
+  children: string;
   fontSize: number;
   fontStyle: string;
   fontColor?: string;
@@ -23,7 +22,7 @@ export enum Selection {
 }
 
 const WrappedText = ({
-  text,
+  children,
   fontSize = 14,
   fontStyle = "reguler",
   fontFamily = "athletics",
@@ -32,12 +31,13 @@ const WrappedText = ({
   select = Selection.allow,
   className = "",
 }: TextProps) => {
-  if (!text) return <TextSkeleton fontSize={fontSize} className={className} />;
+  if (!children)
+    return <TextSkeleton fontSize={fontSize} className={className} />;
   return (
     <div
       className={`${
-        "font-" +
-        fontSize.toString() +
+        "text-" +
+        `[${fontSize.toString()}px]` +
         " font-" +
         fontFamily +
         " font-" +
@@ -53,7 +53,7 @@ const WrappedText = ({
         onClick ? onClick(e) : null
       }
     >
-      {text}
+      {children}
     </div>
   );
 };

@@ -2,10 +2,10 @@
  * @types for the dropdown's components and it's users.
  */
 export type data = any;
-export interface DropdownOption {
+export interface DropdownOption<T = any> {
   text: string;
   image?: string;
-  data: data;
+  data: T;
 }
 
 export interface DropdownHandlerProps {
@@ -17,7 +17,7 @@ export interface DropdownHandlerProps {
 export interface DropdownProps {
   options: DropdownOption[];
   choice?: DropdownOption;
-  MenuComponent?: JSX.Element;
+  children?: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
   onClick?: (options: DropdownOption[]) => any;
   choiceHandler?:
     | ((_choice: DropdownOption) => Promise<any>)

@@ -2,10 +2,7 @@ import "../css/globals.css";
 import { Header } from "../components/header";
 import { ClassificationContext } from "@yc/yc-models";
 import { DataVersions, fetchYC } from "utilities/storage/fetch-yc";
-import StoreInitiallizor, {
-  StoreInitiallizorProps,
-} from "utilities/stores/store-initiallizor";
-import { useTheme } from "utilities/stores/theme";
+import StoreInitiallizor from "utilities/stores/store-initiallizor";
 
 export const metadata = {
   title: "Yieldchain",
@@ -24,9 +21,9 @@ export default async function RootLayout({
   return (
     <html lang="en" className="dark">
       <StoreInitiallizor context={data} />
-      <body className="bg-custom-bg h-[200vh]">
-        <Header />
+      <body className="bg-custom-bg h-[200vh] z-100">
         {children}
+        <Header />
       </body>
     </html>
   );

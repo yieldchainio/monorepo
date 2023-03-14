@@ -55,8 +55,8 @@ model functionsv2 {
     id                     String            @id @default(uuid())
     name                   String
     address_id             String
-    flowsv2_ids              flowsv2[]
-    argumentsv2              argumentsv2[]
+    flows_ids              flowsv2[]
+    arguments              argumentsv2[]
     is_callback            Boolean           @default(false)
     inverse_function_id    String?
     dependancy_function_id String?
@@ -65,7 +65,7 @@ model functionsv2 {
     return_value_base_type BaseVariableTypes
 
     address addressesv2 @relation(fields: [address_id], references: [id])
-    actionsv2 actionsv2[]
+    actions actionsv2[]
     @@schema("YieldchainV2")
     @@map("functions")
 }
@@ -94,7 +94,7 @@ model tokensv2 {
     decimals Int
     chain_id String?
     markets  protocolsv2[]
-    flowsv2    flowsv2[]
+    flows    flowsv2[]
     @@schema("YieldchainV2")
     @@map("tokens")
 }
@@ -106,7 +106,7 @@ model actionsv2 {
     popularity Int
     available  Boolean
     function   functionsv2[]
-    protocolsv2  protocolsv2[]
+    protocols  protocolsv2[]
     table_name String?
     @@schema("YieldchainV2")
     @@map("actions")
@@ -119,7 +119,7 @@ model addressesv2 {
     abi         Json        @db.Json
     chain_id    Int
     protocol_id String
-    functionsv2   functionsv2[]
+    functions   functionsv2[]
 
     network  networksv2  @relation(fields: [chain_id], references: [id])
     protocol protocolsv2 @relation(references: [id], fields: [protocol_id])
@@ -135,9 +135,9 @@ model networksv2 {
     json_rpc        String
     diamond_address String
     block_explorer  String?
-    addressesv2       addressesv2[]
-    protocolsv2       protocolsv2[]
-    strategiesv2      strategiesv2[]
+    addresses     addressesv2[]
+    protocols     protocolsv2[]
+    strategies     strategiesv2[]
     @@schema("YieldchainV2")
     @@map("networks")
 }
@@ -176,11 +176,11 @@ model protocolsv2 {
     discord     String?
     color       String?
 
-    addressesv2  addressesv2[]
-    networksv2   networksv2[]
-    tokensv2     tokensv2[]
-    actionsv2    actionsv2[]
-    strategiesv2 strategiesv2[]
+    addresses addressesv2[]
+    networks networksv2[]
+    tokens    tokensv2[]
+    actions  actionsv2[]
+    strategies strategiesv2[]
     @@schema("YieldchainV2")
     @@map("protocols")
 
@@ -191,7 +191,7 @@ model strategiesv2 {
     id                 String      @id @default(uuid())
     address            String
     name               String
-    protocolsv2          protocolsv2[]
+    protocols          protocolsv2[]
     creator_id         String
     chain_id           Int
     deposit_token_id   Int

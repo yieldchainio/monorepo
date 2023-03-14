@@ -1,0 +1,194 @@
+// ===========================
+//       CONFIGURATION
+// ===========================
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// ================
+//      ENUMS
+// ================
+
+// Flow Direction Enum
+enum FlowDirection {
+    OUTFLOW
+    INFLOW
+}
+
+// Function Call Type Enum
+enum CallType {
+    CALL
+    DELEGATECALL
+    STATICCALL
+}
+
+// Variable Types Enum
+enum VariableTypes {
+    STATIC
+    DYNAMIC
+}
+
+// Base Variable Types Enum
+enum BaseVariableTypes {
+    NORMAL
+    ARRAY
+    STRUCT
+}
+
+// ================
+//      Models
+// ================
+
+// YC Classified Functions (i.e stake, addLiquidity, etc)
+model functions {
+    id                     String            @id @default(uuid())
+    name                   String
+    address_id             String
+    flows_ids              flows[]
+    arguments              arguments[]
+    is_callback            Boolean           @default(false)
+    inverse_function_id    String?
+    dependancy_function_id String?
+    call_type              CallType
+    return_value_type      VariableTypes
+    return_value_base_type BaseVariableTypes
+
+    address addresses @relation(fields: [address_id], references: [id])
+    actions actions[]
+}
+
+// YC Classified Flows (e.g, inflow of GMX, outflow of ETH, etc)
+model flows {
+    id          String        @id @default(uuid())
+    direction   FlowDirection
+    token_id    String
+    function_id String
+
+    token    tokens    @relation(fields: [token_id], references: [id])
+    function functions @relation(fields: [function_id], references: [id])
+}
+
+// YC Classified tokens (e.g ETH, BNB, GMX, UNI)
+model tokens {
+    id       String      @id @default(uuid())
+    name     String
+    address  String
+    symbol   String
+    logo     String
+    decimals Int
+    chain_id String?
+    markets  protocols[]
+    flows    flows[]
+}
+
+// YC Classified actions (e.g Stake, Add Liquidity, Harvest, Long, Swap, etc)
+model actions {
+    id         String      @id @default(uuid())
+    name       String
+    popularity Int
+    available  Boolean
+    function   functions[]
+    protocols  protocols[]
+    table_name String?
+}
+
+// YC Classified addresses (e.g 0x01481...1F8a, it's ABI, chain, the functions that are available on it, etc)
+model addresses {
+    id          String      @id @default(uuid())
+    address     String
+    abi         Json        @db.Json
+    chain_id    Int
+    protocol_id String
+    functions   functions[]
+
+    network  networks  @relation(fields: [chain_id], references: [id])
+    protocol protocols @relation(references: [id], fields: [protocol_id])
+}
+
+// YC Classified networks (e.g Ethereum, Arbitrum, BNB Chain, Fantom, Optimisim)
+model networks {
+    id              Int          @id
+    name            String
+    logo            String
+    json_rpc        String
+    diamond_address String
+    block_explorer  String?
+    addresses       addresses[]
+    protocols       protocols[]
+    strategies      strategies[]
+}
+
+// YC Classified arguments for YC CLassified function calls
+model arguments {
+    id            String            @id @default(uuid())
+    function_id   String
+    index         Int
+    value         String
+    custom        Boolean           @default(false)
+    solidity_type String
+    variable_type VariableTypes
+    base_type     BaseVariableTypes
+    name          String?
+    dev_notes     String?
+
+    function functions @relation(references: [id], fields: [function_id])
+}
+
+// YC Classified protocols (e.g Uniswap, Beefy Finance, GMX, Veldorome, etc)
+model protocols {
+    id          String   @id @default(uuid())
+    name        String
+    address_ids String[]
+    network_ids Int[]
+    logo        String
+    is_verified Boolean
+    available   Boolean  @default(false)
+    website     String
+    twiter      String?
+    telegram    String?
+    discord     String?
+    color       String?
+
+    addresses  addresses[]
+    networks   networks[]
+    tokens     tokens[]
+    actions    actions[]
+    strategies strategies[]
+}
+
+// YC Classified strategies - With their names, addresses, ENCODED steps
+model strategies {
+    id                 String      @id @default(uuid())
+    address            String
+    name               String
+    protocols          protocols[]
+    creator_id         String
+    chain_id           Int
+    deposit_token_id   Int
+    verified           Boolean     @default(false)
+    execution_interval Int
+    steps              String[]
+
+    creator Users    @relation(references: [id], fields: [creator_id])
+    network networks @relation(fields: [chain_id], references: [id])
+}
+
+// YC Classified users - each new wallet that connects to the platform has an account created. Can have a linked social medias, PFP, description, lists out deployed strategies
+// by the user
+model Users {
+    id                 String       @id @default(uuid())
+    address            String
+    username           String       @unique
+    description        String       @default("I may have nothing to say, but that does not mean anything about me - withhold the judgement -*_*-")
+    profile_picture    String?
+    created_strategies strategies[]
+    twitter            String?      @unique
+    telegram           String?      @unique
+    discord            String?      @unique
+    whitelisted        Boolean      @default(false)
+}

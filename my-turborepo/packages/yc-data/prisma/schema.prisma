@@ -144,9 +144,9 @@ model protocols {
     id          String   @id @default(uuid())
     name        String
     address_ids String[]
-    network_ids Int[]
+    chain_ids   Int[]
     logo        String
-    is_verified Boolean
+    verified    Boolean
     available   Boolean  @default(false)
     website     String
     twiter      String?

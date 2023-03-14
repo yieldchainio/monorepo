@@ -3,11 +3,13 @@
 // ===========================
 generator client {
     provider = "prisma-client-js"
+    previewFeatures = ["multiSchema"]
 }
 
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
+    schemas  = ["YieldchainV2", "Yieldchain"]
 }
 
 // ================
@@ -18,6 +20,7 @@ datasource db {
 enum FlowDirection {
     OUTFLOW
     INFLOW
+    @@schema("YieldchainV2")
 }
 
 // Function Call Type Enum
@@ -25,12 +28,14 @@ enum CallType {
     CALL
     DELEGATECALL
     STATICCALL
+    @@schema("YieldchainV2")
 }
 
 // Variable Types Enum
 enum VariableTypes {
     STATIC
     DYNAMIC
+    @@schema("YieldchainV2")
 }
 
 // Base Variable Types Enum
@@ -38,19 +43,20 @@ enum BaseVariableTypes {
     NORMAL
     ARRAY
     STRUCT
+    @@schema("YieldchainV2")
 }
 
 // ================
 //      Models
 // ================
 
-// YC Classified Functions (i.e stake, addLiquidity, etc)
-model functions {
+// YC Classified functionsv2 (i.e stake, addLiquidity, etc)
+model functionsv2 {
     id                     String            @id @default(uuid())
     name                   String
     address_id             String
-    flows_ids              flows[]
-    arguments              arguments[]
+    flowsv2_ids              flowsv2[]
+    argumentsv2              argumentsv2[]
     is_callback            Boolean           @default(false)
     inverse_function_id    String?
     dependancy_function_id String?
@@ -58,23 +64,28 @@ model functions {
     return_value_type      VariableTypes
     return_value_base_type BaseVariableTypes
 
-    address addresses @relation(fields: [address_id], references: [id])
-    actions actions[]
+    address addressesv2 @relation(fields: [address_id], references: [id])
+    actionsv2 actionsv2[]
+    @@schema("YieldchainV2")
+    @@map("functions")
 }
 
-// YC Classified Flows (e.g, inflow of GMX, outflow of ETH, etc)
-model flows {
+// YC Classified flowsv2 (e.g, inflow of GMX, outflow of ETH, etc)
+model flowsv2 {
     id          String        @id @default(uuid())
     direction   FlowDirection
     token_id    String
     function_id String
 
-    token    tokens    @relation(fields: [token_id], references: [id])
-    function functions @relation(fields: [function_id], references: [id])
+    token    tokensv2    @relation(fields: [token_id], references: [id])
+    function functionsv2 @relation(fields: [function_id], references: [id])
+    @@schema("YieldchainV2")
+    @@map("flows")
+    
 }
 
-// YC Classified tokens (e.g ETH, BNB, GMX, UNI)
-model tokens {
+// YC Classified tokensv2 (e.g ETH, BNB, GMX, UNI)
+model tokensv2 {
     id       String      @id @default(uuid())
     name     String
     address  String
@@ -82,49 +93,57 @@ model tokens {
     logo     String
     decimals Int
     chain_id String?
-    markets  protocols[]
-    flows    flows[]
+    markets  protocolsv2[]
+    flowsv2    flowsv2[]
+    @@schema("YieldchainV2")
+    @@map("tokens")
 }
 
-// YC Classified actions (e.g Stake, Add Liquidity, Harvest, Long, Swap, etc)
-model actions {
+// YC Classified actionsv2 (e.g Stake, Add Liquidity, Harvest, Long, Swap, etc)
+model actionsv2 {
     id         String      @id @default(uuid())
     name       String
     popularity Int
     available  Boolean
-    function   functions[]
-    protocols  protocols[]
+    function   functionsv2[]
+    protocolsv2  protocolsv2[]
     table_name String?
+    @@schema("YieldchainV2")
+    @@map("actions")
 }
 
-// YC Classified addresses (e.g 0x01481...1F8a, it's ABI, chain, the functions that are available on it, etc)
-model addresses {
+// YC Classified addressesv2 (e.g 0x01481...1F8a, it's ABI, chain, the functionsv2 that are available on it, etc)
+model addressesv2 {
     id          String      @id @default(uuid())
     address     String
     abi         Json        @db.Json
     chain_id    Int
     protocol_id String
-    functions   functions[]
+    functionsv2   functionsv2[]
 
-    network  networks  @relation(fields: [chain_id], references: [id])
-    protocol protocols @relation(references: [id], fields: [protocol_id])
+    network  networksv2  @relation(fields: [chain_id], references: [id])
+    protocol protocolsv2 @relation(references: [id], fields: [protocol_id])
+    @@schema("YieldchainV2")
+    @@map("addresses")
 }
 
-// YC Classified networks (e.g Ethereum, Arbitrum, BNB Chain, Fantom, Optimisim)
-model networks {
+// YC Classified networksv2 (e.g Ethereum, Arbitrum, BNB Chain, Fantom, Optimisim)
+model networksv2 {
     id              Int          @id
     name            String
     logo            String
     json_rpc        String
     diamond_address String
     block_explorer  String?
-    addresses       addresses[]
-    protocols       protocols[]
-    strategies      strategies[]
+    addressesv2       addressesv2[]
+    protocolsv2       protocolsv2[]
+    strategiesv2      strategiesv2[]
+    @@schema("YieldchainV2")
+    @@map("networks")
 }
 
-// YC Classified arguments for YC CLassified function calls
-model arguments {
+// YC Classified argumentsv2 for YC CLassified function calls
+model argumentsv2 {
     id            String            @id @default(uuid())
     function_id   String
     index         Int
@@ -136,11 +155,14 @@ model arguments {
     name          String?
     dev_notes     String?
 
-    function functions @relation(references: [id], fields: [function_id])
+    function functionsv2 @relation(references: [id], fields: [function_id])
+    @@schema("YieldchainV2")
+    @@map("arguments")
+
 }
 
-// YC Classified protocols (e.g Uniswap, Beefy Finance, GMX, Veldorome, etc)
-model protocols {
+// YC Classified protocolsv2 (e.g Uniswap, Beefy Finance, GMX, Veldorome, etc)
+model protocolsv2 {
     id          String   @id @default(uuid())
     name        String
     address_ids String[]
@@ -154,19 +176,22 @@ model protocols {
     discord     String?
     color       String?
 
-    addresses  addresses[]
-    networks   networks[]
-    tokens     tokens[]
-    actions    actions[]
-    strategies strategies[]
+    addressesv2  addressesv2[]
+    networksv2   networksv2[]
+    tokensv2     tokensv2[]
+    actionsv2    actionsv2[]
+    strategiesv2 strategiesv2[]
+    @@schema("YieldchainV2")
+    @@map("protocols")
+
 }
 
-// YC Classified strategies - With their names, addresses, ENCODED steps
-model strategies {
+// YC Classified strategiesv2 - With their names, addressesv2, ENCODED steps
+model strategiesv2 {
     id                 String      @id @default(uuid())
     address            String
     name               String
-    protocols          protocols[]
+    protocolsv2          protocolsv2[]
     creator_id         String
     chain_id           Int
     deposit_token_id   Int
@@ -174,21 +199,26 @@ model strategies {
     execution_interval Int
     steps              String[]
 
-    creator Users    @relation(references: [id], fields: [creator_id])
-    network networks @relation(fields: [chain_id], references: [id])
+    creator usersv2    @relation(references: [id], fields: [creator_id])
+    network networksv2 @relation(fields: [chain_id], references: [id])
+    @@schema("YieldchainV2")
+    @@map("strategies")
+
 }
 
-// YC Classified users - each new wallet that connects to the platform has an account created. Can have a linked social medias, PFP, description, lists out deployed strategies
+// YC Classified users - each new wallet that connects to the platform has an account created. Can have a linked social medias, PFP, description, lists out deployed strategiesv2
 // by the user
-model Users {
+model usersv2 {
     id                 String       @id @default(uuid())
     address            String
     username           String       @unique
     description        String       @default("I may have nothing to say, but that does not mean anything about me - withhold the judgement -*_*-")
     profile_picture    String?
-    created_strategies strategies[]
+    created_strategiesv2 strategiesv2[]
     twitter            String?      @unique
     telegram           String?      @unique
     discord            String?      @unique
     whitelisted        Boolean      @default(false)
+    @@schema("YieldchainV2")
+    @@map("users")
 }

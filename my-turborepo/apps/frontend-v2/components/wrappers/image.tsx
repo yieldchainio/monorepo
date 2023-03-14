@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { ImageSkeleton } from "./skeleton";
 /**
@@ -6,7 +7,7 @@ import { ImageSkeleton } from "./skeleton";
  * for ease of use with skeletons and global styling
  */
 
-interface ImageProps {
+export interface ImageProps {
   src:
     | string
     | {
@@ -17,9 +18,17 @@ interface ImageProps {
   height: number;
   className?: string;
   alt?: string;
+  onClick?: () => any;
 }
 
-const WrappedImage = ({ src, alt, width, height, className }: ImageProps) => {
+const WrappedImage = ({
+  src,
+  alt,
+  width,
+  height,
+  className,
+  onClick,
+}: ImageProps) => {
   if (!src) return <ImageSkeleton width={width} height={height} />;
   return (
     <Image
@@ -28,12 +37,14 @@ const WrappedImage = ({ src, alt, width, height, className }: ImageProps) => {
       src={
         typeof src == "string"
           ? src
-          : document.documentElement.className.includes("dark")
+          : typeof window != "undefined" &&
+            document.documentElement.className.includes("dark")
           ? src.dark
           : src.light
       }
       alt={alt || ""}
       className={className || ""}
+      onClick={() => onClick && onClick()}
     />
   );
 };

@@ -12,7 +12,7 @@ import {
   // useYCTokens,
   // useYCUsers,
   YCBaseStore,
-  useYCContext,
+  useYCStore,
 } from "./yc-data";
 import { useTransition } from "react";
 import { YCJsonData } from "./yc-data";
@@ -56,9 +56,9 @@ const StoreInitiallizor = ({ context }: StoreInitiallizorProps) => {
     //   refresh(contextInstance);
     // }
 
-    const refresh = useYCContext((state) => state.refresh);
+    const refresh = useYCStore((state) => state.refresh);
 
-    useYCContext.setState((state) => {
+    useYCStore.setState((state) => {
       return {
         context: YCClassifications.getInstance(context),
       };

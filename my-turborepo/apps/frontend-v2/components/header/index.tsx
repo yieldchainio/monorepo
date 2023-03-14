@@ -1,18 +1,19 @@
 "use client";
 import { HeaderCatagoryText } from "./catagory-text";
 import Button from "../buttons/gradient";
-import Dropdown from "./dropdown";
+import Dropdown from "../dropdown";
 import "../../css/globals.css";
 import { YCNetwork } from "@yc/yc-models";
-import { DropdownOption } from "./dropdown/types";
-import { useYCContext } from "utilities/stores/yc-data";
+import { DropdownOption } from "../dropdown/types";
+import { useYCStore } from "utilities/stores/yc-data";
 import { useEffect, useState } from "react";
 import { Switch } from "components/buttons/switch";
 import WrappedImage from "components/wrappers/image";
 import { ProfileModal } from "components/wallet-profile";
-import { useSwitchNetwork, useAccount } from "wagmi";
+import { useSwitchNetwork, useAccount, useProvider } from "wagmi";
 import { RegulerButton } from "components/buttons/reguler";
-import { useAccountModal } from "@rainbow-me/rainbowkit";
+import ConnectWalletButton from "components/buttons/connect";
+import { useChainSwitch } from "../../utilities/hooks/web3/useChainSwitch";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",
@@ -25,7 +26,7 @@ enum HeaderLocation {
  * @returns The header
  */
 export const Header = () => {
-  const networks = useYCContext((state) => state.context.networks);
+  const networks = useYCStore((state) => state.context.networks);
   // const show = useHideScroll();
   // const [headerLocation, setHeaderLocation] = useState<HeaderLocation>(
   //   HeaderLocation.VISIBLE
@@ -42,9 +43,8 @@ export const Header = () => {
   //   else setHeaderLocation(HeaderLocation.HIDDEN);
   // }, [show]);
 
-  const { switchNetwork } = useSwitchNetwork();
-  const { address, isConnecting, isDisconnected } = useAccount();
-  const { openAccountModal } = useAccountModal();
+  const { address } = useAccount();
+  const { switchNetwork } = useChainSwitch();
 
   return (
     <div
@@ -90,13 +90,13 @@ export const Header = () => {
               data: {
                 json_rpc: network.jsonrpc,
                 chain_id: network.chainid,
+                color: "fill-[" + network.color + "]",
               },
             };
           })}
-          choiceHandler={(_choice: DropdownOption<{ chain_id: number }>) => {
-            const chainId: number = _choice.data.chain_id;
-            switchNetwork?.(chainId);
-          }}
+          choiceHandler={async (
+            _choice: DropdownOption<{ chain_id: number }>
+          ) => await switchNetwork(_choice.data.chain_id)}
         />
         {address ? (
           <Dropdown
@@ -113,11 +113,9 @@ export const Header = () => {
             <ProfileModal />
           </Dropdown>
         ) : (
-          <RegulerButton
-            onClick={() => openAccountModal?.() || console.log("Undefined")}
-          >
-            Connect Wallet
-          </RegulerButton>
+          <>
+            <ConnectWalletButton />
+          </>
         )}
 
         <div className="relative">

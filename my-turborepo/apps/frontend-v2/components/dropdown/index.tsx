@@ -1,11 +1,12 @@
 import { DropdownOption, DropdownProps } from "./types";
-import DropdownButton from "./button";
 import DropdownMenu from "./menu";
 import React, { useEffect, useRef, useState } from "react";
 import { emitCustomEvent } from "react-custom-events";
 import { useCustomEventListener } from "react-custom-events";
 import { BaseEventData, EventTypes } from "types/events";
 import uuid from "uuid-random";
+import { RegulerButton } from "components/buttons/reguler";
+import WrappedImage from "components/wrappers/image";
 
 const Dropdown = ({
   options,
@@ -38,9 +39,9 @@ const Dropdown = ({
   const dropdownBtnRef = useRef<HTMLDivElement>(null);
 
   // Handle the button being clicked
-  const handleClick = () => {
+  const handleClick = async () => {
     // If we got an onClick function ,we invoke it first.
-    if (onClick) onClick(options);
+    if (onClick) await onClick(options);
 
     // If it was an open (rather than a close), we emit an event specifying that
     // a menu was opened (to close all others)
@@ -54,9 +55,9 @@ const Dropdown = ({
   };
 
   // The choice handler we pass on, accepts DropdownOption's data (any)
-  const handleChoice = (_choice: DropdownOption) => {
+  const handleChoice = async (_choice: DropdownOption) => {
     // if we got a choice handler, pass the choice to it
-    if (choiceHandler) choiceHandler(_choice);
+    if (choiceHandler) await choiceHandler(_choice);
 
     // Close the menu
     setMenuOpen(false);
@@ -78,12 +79,20 @@ const Dropdown = ({
           />
         ))}
 
-      <DropdownButton
-        options={options}
-        choice={currentChoice}
-        onClick={handleClick}
-        ref={dropdownBtnRef}
-      />
+      <RegulerButton onClick={handleClick} className=" " ref={dropdownBtnRef}>
+        <div className="flex flex-row gap-2">
+          {currentChoice.image && (
+            <WrappedImage
+              src={currentChoice.image}
+              width={24}
+              height={24}
+              className="rounded-full"
+            />
+          )}
+          {currentChoice.text}
+        </div>
+        <WrappedImage src="/icons/dropdown-arrow.svg" width={24} height={24} />
+      </RegulerButton>
     </div>
   );
 };

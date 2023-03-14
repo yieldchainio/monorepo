@@ -1,17 +1,25 @@
 "use client";
 import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import {
+  darkTheme,
+  getDefaultWallets,
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum } from "wagmi/chains";
+import { mainnet, polygon, optimism, arbitrum, bsc } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
 const { chains, provider } = configureChains(
-  [mainnet, polygon, optimism, arbitrum],
-  [publicProvider(), publicProvider(), publicProvider(), publicProvider()]
+  [bsc, arbitrum, polygon, optimism, mainnet],
+  [
+    publicProvider(),
+    alchemyProvider({ apiKey: "Ywds7ION4p9EBgz93_pF-KwfytqSF8-J" }),
+  ]
 );
+
 const { connectors } = getDefaultWallets({
-  appName: "My RainbowKit App",
+  appName: "Yieldcchain App",
   chains,
 });
 const wagmiClient = createClient({
@@ -26,7 +34,9 @@ interface WrappedWagmiProps {
 const WrappedWagmi = ({ children }: WrappedWagmiProps) => {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+      <RainbowKitProvider chains={chains} theme={darkTheme()}>
+        {children}
+      </RainbowKitProvider>
     </WagmiConfig>
   );
 };

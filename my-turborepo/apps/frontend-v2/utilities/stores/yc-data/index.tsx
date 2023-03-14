@@ -150,7 +150,7 @@ export interface YCContextStore extends YCBaseStore {
 //     })),
 // }));
 
-export const useYCContext = create<YCContextStore>((set, get) => ({
+export const useYCStore = create<YCContextStore>((set, get) => ({
   context: YCClassifications.getInstance(),
   refresh: (_context: ClassificationContext) => {
     const state = get();

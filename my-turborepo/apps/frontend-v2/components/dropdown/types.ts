@@ -17,7 +17,7 @@ export interface DropdownHandlerProps {
 export interface DropdownProps {
   options: DropdownOption[];
   choice?: DropdownOption;
-  children?: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
+  children?: React.ReactNode;
   onClick?: (options: DropdownOption[]) => any;
   choiceHandler?:
     | ((_choice: DropdownOption) => Promise<any>)

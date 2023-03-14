@@ -6,7 +6,7 @@ import { TextSkeleton } from "./skeleton";
  */
 
 interface TextProps {
-  children: string;
+  children: string | undefined;
   fontSize: number;
   fontStyle: string;
   fontColor?: string;

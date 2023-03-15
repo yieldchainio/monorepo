@@ -28,7 +28,7 @@ jobs:
       - name: Build and Push Docker Image
         id: build-and-push
         run: |
-          for dir in services/prod/*; do
+          for dir in services/*; do
             service_name=$(basename "$dir")
             docker buildx build -t --platform linux/amd64 $service_name "$dir"
             docker tag $service_name "${{ steps.ecr_login.outputs.registry }}/$service_name"

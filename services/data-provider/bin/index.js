@@ -3,9 +3,11 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+import { PrismaClient } from "@prisma/client";
 dotenv.config();
 // Instantitate PG Client
 const { Client } = pg;
+const prisma = new PrismaClient();
 // App to use for reguler API
 const app = express();
 // Setup parsers & Cors settings
@@ -72,7 +74,7 @@ const getTableAvailablePrimaryKey = async (tableName, key_column_name) => {
  * Queries From The Database Server
  */
 app.get("/", async (req, res) => {
-    res.send("Wassup Brah");
+    res.status(200).send("Wassup Brah");
 });
 /**
  * @dev Tokens (e.g. DAI, USDC, etc...)
@@ -85,7 +87,7 @@ app.get("/tokens", async (req, res) => {
  * @dev Networks (e.g. Ethereum, Binance, etc...)
  */
 app.get("/networks", async (req, res) => {
-    const networks = await genericQuery("*", "networks");
+    const networks = await prisma.networksv2.findMany();
     res.status(200).json({ networks });
 });
 /**
@@ -124,10 +126,10 @@ app.get("/parameters", async (req, res) => {
     res.status(200).json({ parameters });
 });
 /**
- * @dev Users (e.g. Ofir, Yaron, etc...)
+ * @dev Users (e.g. Ofir, Eden, etc...)
  */
 app.get("/users", async (req, res) => {
-    const users = await genericQuery("*", "users");
+    const users = await prisma.usersv2.findMany();
     res.status(200).json({ users });
 });
 /**
@@ -189,8 +191,22 @@ app.post("/protocolColor/:protocol_identifier/:colorCode", async (req, res) => {
     await genericPost(`UPDATE "Yieldchain".protocols SET color = ${req.params.colorCode} WHERE protocol_identifier = ${req.params.protocol_identifier}`);
 });
 app.post("/signup", async (req, res) => {
-    let data = req.body;
-    await genericPost(`INSERT INTO "Yieldchain".waitlist (address, email) VALUES ('${data.address}', '${data.email}')`);
+    const data = req.body;
+    const result = await prisma.usersv2.create({
+        data: {
+            address: data.address,
+            username: data.username || "Anon",
+            description: data.description,
+            twitter: data.twitter,
+            telegram: data.telegram,
+            discord: data.discord,
+            profile_picture: data.profilePicture,
+        },
+    });
+    if (result)
+        res.status(200).json({ user: data });
+    else
+        res.status(400);
 });
 app.get("/waitlist", async (req, res) => {
     const waitlist = await genericQuery("*", "waitlist");

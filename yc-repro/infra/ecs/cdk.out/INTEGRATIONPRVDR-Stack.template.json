@@ -1,0 +1,437 @@
+{
+ "Resources": {
+  "INTEGRATIONPRVDRTASKDEF74CD0EBE": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_PORT",
+        "Value": "5432"
+       },
+       {
+        "Name": "POSTGRES_PW",
+        "Value": "B.?3f*pbf=2Df!i"
+       },
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": "postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/integration-provider:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "INTEGRATIONPRVDRTASKDEFINTEGRATIONPRVDRCONTAINERLogGroupDEF46B02"
+        },
+        "awslogs-stream-prefix": "INTEGRATIONPRVDR-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "INTEGRATIONPRVDR-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "INTEGRATIONPRVDRTASKDEFExecutionRoleF31E927A",
+      "Arn"
+     ]
+    },
+    "Family": "INTEGRATIONPRVDRStackINTEGRATIONPRVDRTASKDEF28C3AF8C",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/INTEGRATIONPRVDR-TASKDEF/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRTASKDEFINTEGRATIONPRVDRCONTAINERLogGroupDEF46B02": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/INTEGRATIONPRVDR-TASKDEF/INTEGRATIONPRVDR-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRTASKDEFExecutionRoleF31E927A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/INTEGRATIONPRVDR-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRTASKDEFExecutionRoleDefaultPolicyB1FAA57B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/integration-provider"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "INTEGRATIONPRVDRTASKDEFINTEGRATIONPRVDRCONTAINERLogGroupDEF46B02",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "INTEGRATIONPRVDRTASKDEFExecutionRoleDefaultPolicyB1FAA57B",
+    "Roles": [
+     {
+      "Ref": "INTEGRATIONPRVDRTASKDEFExecutionRoleF31E927A"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/INTEGRATIONPRVDR-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "YCECSDefaultSecurityServiceGroupfromINTEGRATIONPRVDRStackYCECSDefaultSecurityServiceGroupC4347B6180808FDB7DCF": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "Load balancer to target",
+    "FromPort": 8080,
+    "GroupId": "sg-06dbb6d3a2f7fa1a9",
+    "SourceSecurityGroupId": "sg-06dbb6d3a2f7fa1a9",
+    "ToPort": 8080
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/YCECSDefaultSecurityServiceGroup/from INTEGRATIONPRVDRStackYCECSDefaultSecurityServiceGroupC4347B61:8080"
+   }
+  },
+  "YCECSDefaultSecurityServiceGroupfrom00000806CFE0216": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "CidrIp": "0.0.0.0/0",
+    "Description": "Allow from anyone on port 80",
+    "FromPort": 80,
+    "GroupId": "sg-06dbb6d3a2f7fa1a9",
+    "ToPort": 80
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/YCECSDefaultSecurityServiceGroup/from 0.0.0.0_0:80"
+   }
+  },
+  "YCECSDefaultSecurityServiceGroupfrom000004435528EFFB": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "CidrIp": "0.0.0.0/0",
+    "Description": "Allow from anyone on port 443",
+    "FromPort": 443,
+    "GroupId": "sg-06dbb6d3a2f7fa1a9",
+    "ToPort": 443
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/YCECSDefaultSecurityServiceGroup/from 0.0.0.0_0:443"
+   }
+  },
+  "INTEGRATIONPRVDRSERVICEService25D6A983": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": "YC-Cluster",
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "INTEGRATIONPRVDR-CONTAINER",
+      "ContainerPort": 8080,
+      "TargetGroupArn": {
+       "Ref": "YCINTEGRATIONPRVDRSERVICETGB97175C4"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       "sg-06dbb6d3a2f7fa1a9"
+      ],
+      "Subnets": [
+       "subnet-0cf3106262ff359cf",
+       "subnet-003ff9e7e7327a824"
+      ]
+     }
+    },
+    "ServiceName": "INTEGRATIONPRVDR-SERVICE",
+    "TaskDefinition": {
+     "Ref": "INTEGRATIONPRVDRTASKDEF74CD0EBE"
+    }
+   },
+   "DependsOn": [
+    "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBYCINTEGRATIONPRVDRSERVICEHTTPLISTENERDE2E150C",
+    "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBYCINTEGRATIONPRVDRSERVICEHTTPSLISTENEREBE8DEFF"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/INTEGRATIONPRVDR-SERVICE/Service"
+   }
+  },
+  "INTEGRATIONPRVDRSERVICETaskCountTargetB48876EB": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/YC-Cluster/",
+       {
+        "Fn::GetAtt": [
+         "INTEGRATIONPRVDRSERVICEService25D6A983",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/INTEGRATIONPRVDR-SERVICE/TaskCount/Target/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBC85DA605": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Name": "YC-INTEGRATIONPRVDR-SERVICE-LB",
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     "sg-06dbb6d3a2f7fa1a9"
+    ],
+    "Subnets": [
+     "subnet-005e4189e4a2950d7",
+     "subnet-04f092956da56785b"
+    ],
+    "Type": "application"
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/INTEGRATIONPRVDR-SERVICE/YC-INTEGRATIONPRVDR-SERVICE-ALB/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBYCINTEGRATIONPRVDRSERVICEHTTPLISTENERDE2E150C": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCINTEGRATIONPRVDRSERVICETGB97175C4"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBC85DA605"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/INTEGRATIONPRVDR-SERVICE/YC-INTEGRATIONPRVDR-SERVICE-ALB/YC-INTEGRATIONPRVDR-SERVICE-HTTPLISTENER/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBYCINTEGRATIONPRVDRSERVICEHTTPSLISTENEREBE8DEFF": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCINTEGRATIONPRVDRSERVICETGB97175C4"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBC85DA605"
+    },
+    "Certificates": [
+     {
+      "CertificateArn": "arn:aws:acm:us-east-1:010073361729:certificate/58b695b0-e6e4-420f-a7e8-712620a3ceda"
+     }
+    ],
+    "Port": 443,
+    "Protocol": "HTTPS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/INTEGRATIONPRVDR-SERVICE/YC-INTEGRATIONPRVDR-SERVICE-ALB/YC-INTEGRATIONPRVDR-SERVICE-HTTPSLISTENER/Resource"
+   }
+  },
+  "YCINTEGRATIONPRVDRSERVICETGB97175C4": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/",
+    "HealthCheckProtocol": "HTTP",
+    "Matcher": {
+     "HttpCode": "200"
+    },
+    "Port": 8080,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": "vpc-0c485efe3b14f9196"
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/YC-INTEGRATIONPRVDR-SERVICE-TG/Resource"
+   }
+  },
+  "integrationapiyieldchainioALBRECORD05F15322": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "Name": "integrationapi.yieldchain.io.",
+    "Type": "A",
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::Join": [
+       "",
+       [
+        "dualstack.",
+        {
+         "Fn::GetAtt": [
+          "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBC85DA605",
+          "DNSName"
+         ]
+        }
+       ]
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBC85DA605",
+       "CanonicalHostedZoneID"
+      ]
+     }
+    },
+    "HostedZoneId": "Z01218335OMCUR3F67FA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/integrationapi.yieldchain.io_ALB_RECORD/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11RwU7DMAz9lt2zwIYY4ghDIKQdUMsdealXecviykmHpqr/jpduo3BJnv1svxdnbhcLO5vAd5y6ajf1tLZdmcDtTIGRW3FolPvq0IktsOFIieX4DBENumi7V5AaEn5C3L3ghgIl4mCWm/A/wyEBBZRR7txbohxIdbTpAksHHtY+j11yG1JvPNcqt+L6TbhtTsUX3BuCve0K9nlGvj/YkzuewgH16nZus4JrhdIxd76HWjBGA02jRXAyBW3iqOoUal3E1YbUmLLBPxmd6iEmcp6hWisTnPYd5rZ7+p24Uu45cyiD7VE8rqOYMJxrLnjED5LX14/C3uiZ8P5OdQt0LFXeQ0aluuyHcPjO3gSu0G7jzWH2aB/s7WQbiaaiS6Y92mK4fwBVPFdtFwIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "INTEGRATIONPRVDR-Stack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

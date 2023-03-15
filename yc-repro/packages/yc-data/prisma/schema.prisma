@@ -1,0 +1,469 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["Yieldchain", "YieldchainV2"]
+}
+
+model functionsv2 {
+  id                     String            @id @default(uuid())
+  name                   String
+  is_callback            Boolean           @default(false)
+  inverse_function_id    String?
+  dependancy_function_id String?
+  call_type              CallType
+  return_value_type      VariableTypes
+  return_value_base_type BaseVariableTypes
+  address_id             String
+  arguments              argumentsv2[]
+  flows_ids              flowsv2[]
+  address                addressesv2       @relation(fields: [address_id], references: [id])
+  actions                actionsv2[]       @relation("actionsv2Tofunctionsv2")
+
+  @@map("functions")
+  @@schema("YieldchainV2")
+}
+
+model flowsv2 {
+  id          String        @id @default(uuid())
+  direction   FlowDirection
+  token_id    String
+  function_id String
+  function    functionsv2   @relation(fields: [function_id], references: [id])
+  token       tokensv2      @relation(fields: [token_id], references: [id])
+
+  @@map("flows")
+  @@schema("YieldchainV2")
+}
+
+model tokensv2 {
+  id       String        @id @default(uuid())
+  name     String
+  address  String
+  symbol   String
+  logo     String
+  decimals Int
+  chain_id Int
+  flows    flowsv2[]
+  markets  protocolsv2[] @relation("protocolsv2Totokensv2")
+
+  @@map("tokens")
+  @@schema("YieldchainV2")
+}
+
+model actionsv2 {
+  id         String        @id @default(uuid())
+  name       String
+  popularity Int
+  available  Boolean
+  table_name String?
+  function   functionsv2[] @relation("actionsv2Tofunctionsv2")
+  protocols  protocolsv2[] @relation("actionsv2Toprotocolsv2")
+
+  @@map("actions")
+  @@schema("YieldchainV2")
+}
+
+model addressesv2 {
+  id          String        @id @default(uuid())
+  address     String
+  abi         Json          @db.Json
+  chain_id    Int
+  protocol_id String
+  network     networksv2    @relation(fields: [chain_id], references: [id])
+  protocol    protocolsv2   @relation(fields: [protocol_id], references: [id])
+  functions   functionsv2[]
+
+  @@map("addresses")
+  @@schema("YieldchainV2")
+}
+
+model networksv2 {
+  id              Int            @id
+  name            String
+  logo            String
+  json_rpc        String
+  diamond_address String
+  block_explorer  String?
+  color           String?
+  addresses       addressesv2[]
+  strategies      strategiesv2[]
+  protocols       protocolsv2[]  @relation("networksv2Toprotocolsv2")
+
+  @@map("networks")
+  @@schema("YieldchainV2")
+}
+
+model argumentsv2 {
+  id            String            @id @default(uuid())
+  index         Int
+  value         String
+  custom        Boolean           @default(false)
+  solidity_type String
+  variable_type VariableTypes
+  base_type     BaseVariableTypes
+  name          String?
+  dev_notes     String?
+  function_id   String
+  function      functionsv2       @relation(fields: [function_id], references: [id])
+
+  @@map("arguments")
+  @@schema("YieldchainV2")
+}
+
+model protocolsv2 {
+  id          String         @id @default(uuid())
+  name        String
+  address_ids String[]
+  logo        String
+  available   Boolean        @default(false)
+  website     String
+  twitter     String?
+  telegram    String?
+  discord     String?
+  color       String?
+  chain_ids   Int[]
+  verified    Boolean
+  addresses   addressesv2[]
+  actions     actionsv2[]    @relation("actionsv2Toprotocolsv2")
+  networks    networksv2[]   @relation("networksv2Toprotocolsv2")
+  strategies  strategiesv2[] @relation("protocolsv2Tostrategiesv2")
+  tokens      tokensv2[]     @relation("protocolsv2Totokensv2")
+
+  @@map("protocols")
+  @@schema("YieldchainV2")
+}
+
+model strategiesv2 {
+  id                 String        @id @default(uuid())
+  address            String
+  title              String
+  creator_id         String
+  chain_id           Int
+  deposit_token_id   Int
+  verified           Boolean       @default(false)
+  execution_interval Int
+  steps              Json[]        @db.Json
+  network            networksv2    @relation(fields: [chain_id], references: [id])
+  creator            usersv2       @relation(fields: [creator_id], references: [id])
+  protocols          protocolsv2[] @relation("protocolsv2Tostrategiesv2")
+
+  @@map("strategies")
+  @@schema("YieldchainV2")
+}
+
+model usersv2 {
+  id                   String         @id @default(uuid())
+  address              String
+  username             String         @unique
+  description          String         @default("I may have nothing to say, but that does not mean anything about me - withhold the judgement -*_*-")
+  profile_picture      String?
+  twitter              String?        @unique
+  telegram             String?        @unique
+  discord              String?        @unique
+  whitelisted          Boolean        @default(false)
+  verified             Boolean        @default(false)
+  created_strategiesv2 strategiesv2[]
+
+  @@map("users")
+  @@schema("YieldchainV2")
+}
+
+model actions {
+  action_identifier Int      @id @default(autoincrement())
+  name              String?
+  single_function   Boolean? @map("single-function")
+  popularity        String?
+  hidden            Boolean?
+  steps             steps[]
+
+  @@schema("Yieldchain")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model addliquidity {
+  function_identifier Int
+
+  @@ignore
+  @@schema("Yieldchain")
+}
+
+model address_relations {
+  address_identifier                                          Int        @id
+  address_identifier_2                                        Int?
+  addresses_address_relations_address_identifier_2Toaddresses addresses? @relation("address_relations_address_identifier_2Toaddresses", fields: [address_identifier_2], references: [address_identifier], onDelete: NoAction, onUpdate: NoAction)
+  addresses_address_relations_address_identifierToaddresses   addresses  @relation("address_relations_address_identifierToaddresses", fields: [address_identifier], references: [address_identifier], onDelete: NoAction, onUpdate: NoAction)
+
+  @@schema("Yieldchain")
+}
+
+model addresses {
+  address_identifier                                                  Int                 @id(map: "pools_pkey") @default(autoincrement())
+  contract_address                                                    String?
+  abi                                                                 Json?               @db.Json
+  chain_id                                                            Int?
+  functions                                                           Int[]
+  address_relations_address_relations_address_identifier_2Toaddresses address_relations[] @relation("address_relations_address_identifier_2Toaddresses")
+  address_relations_address_relations_address_identifierToaddresses   address_relations?  @relation("address_relations_address_identifierToaddresses")
+  networks                                                            networks?           @relation(fields: [chain_id], references: [chain_id], onDelete: NoAction, onUpdate: NoAction, map: "pools_chain_id_fkey")
+
+  @@schema("Yieldchain")
+}
+
+model base_types {
+  type String @id
+
+  @@schema("Yieldchain")
+}
+
+model flows {
+  flow_identifier     Int     @id @default(autoincrement())
+  token_identifier    Int?
+  outflow0_or_inflow1 Int?
+  tokens              tokens? @relation(fields: [token_identifier], references: [token_identifier], onDelete: NoAction, onUpdate: NoAction)
+
+  @@schema("Yieldchain")
+}
+
+model forks {
+  fork_id String @id
+
+  @@schema("Yieldchain")
+}
+
+model functions {
+  function_identifier                                              Int         @id @default(autoincrement())
+  function_name                                                    String?
+  number_of_parameters                                             Int?
+  flows                                                            Int[]
+  arguments                                                        Int[]
+  is_callback                                                      Boolean?    @default(false)
+  counter_function_identifier                                      Int?
+  unlocked_by                                                      Int?
+  call_type                                                        String?
+  return_type                                                      String?
+  return_base_type                                                 String?
+  functions_functions_counter_function_identifierTofunctions       functions?  @relation("functions_counter_function_identifierTofunctions", fields: [counter_function_identifier], references: [function_identifier], onDelete: NoAction, onUpdate: NoAction)
+  other_functions_functions_counter_function_identifierTofunctions functions[] @relation("functions_counter_function_identifierTofunctions")
+  functions_functions_unlocked_byTofunctions                       functions?  @relation("functions_unlocked_byTofunctions", fields: [unlocked_by], references: [function_identifier], onDelete: NoAction, onUpdate: NoAction)
+  other_functions_functions_unlocked_byTofunctions                 functions[] @relation("functions_unlocked_byTofunctions")
+
+  @@schema("Yieldchain")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model harvest {
+  function_identifier Int?
+
+  @@ignore
+  @@schema("Yieldchain")
+}
+
+model networks {
+  chain_id        Int          @id
+  name            String?
+  logo            String?
+  json_rpc        String?
+  diamond_address String?
+  block_explorer  String?
+  color           String
+  addresses       addresses[]
+  strategies      strategies[]
+
+  @@schema("Yieldchain")
+}
+
+model parameters {
+  parameter_identifier Int     @id @default(autoincrement())
+  index                Int?
+  solidity_type        String?
+  value                String?
+  name                 String?
+
+  @@schema("Yieldchain")
+}
+
+model protocols {
+  protocol_identifier Int          @id @default(autoincrement())
+  name                String?
+  website             String?
+  logo                String?
+  is_verified         Boolean?
+  avg_apy             Int?
+  aggregated_tvl      Int?
+  yc_vaults_num       Int?
+  color               String?
+  hidden              Boolean?     @default(false)
+  strategies          strategies[]
+
+  @@schema("Yieldchain")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model protocols_addresses {
+  protocol_identifier Int?
+  address_identifier  Int?
+
+  @@ignore
+  @@schema("Yieldchain")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model protocols_networks {
+  protocol_identifier Int?
+  chain_id            Int?
+
+  @@ignore
+  @@schema("Yieldchain")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model removeliquidity {
+  function_identifier Int?
+
+  @@ignore
+  @@schema("Yieldchain")
+}
+
+model requestwithdrawal {
+  function_identifier Int @id
+
+  @@schema("Yieldchain")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model stake {
+  function_identifier Int
+
+  @@ignore
+  @@schema("Yieldchain")
+}
+
+model steps {
+  step_identifier     Int      @id @default(autoincrement())
+  action_identifier   Int?
+  function_identifier Int?
+  multiplier          Int?
+  actions             actions? @relation(fields: [action_identifier], references: [action_identifier], onDelete: NoAction, onUpdate: NoAction)
+
+  @@schema("Yieldchain")
+}
+
+model strategies {
+  strategy_identifier                              Int        @id @default(autoincrement())
+  address                                          String?
+  name                                             String?
+  upkeep_id                                        Int?
+  apy                                              Int?
+  tvl                                              Int?
+  main_protocol_identifier                         Int?
+  creator_user_identifier                          Int?
+  chain_id                                         Int?
+  main_token_identifier                            Int?
+  final_token_identifier                           Int?
+  is_verified                                      Boolean?
+  is_trending                                      Boolean?
+  execution_interval                               Int?
+  strategy_object                                  Json?
+  networks                                         networks?  @relation(fields: [chain_id], references: [chain_id], onDelete: NoAction, onUpdate: NoAction)
+  tokens_strategies_final_token_identifierTotokens tokens?    @relation("strategies_final_token_identifierTotokens", fields: [final_token_identifier], references: [token_identifier], onDelete: NoAction, onUpdate: NoAction)
+  protocols                                        protocols? @relation(fields: [main_protocol_identifier], references: [protocol_identifier], onDelete: NoAction, onUpdate: NoAction)
+  tokens_strategies_main_token_identifierTotokens  tokens?    @relation("strategies_main_token_identifierTotokens", fields: [main_token_identifier], references: [token_identifier], onDelete: NoAction, onUpdate: NoAction)
+
+  @@schema("Yieldchain")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model swap {
+  function_identifier Int?
+
+  @@ignore
+  @@schema("Yieldchain")
+}
+
+model tokens {
+  token_identifier                                     Int          @id(map: "tokenss_pkey") @default(autoincrement())
+  name                                                 String?
+  address                                              String?
+  symbol                                               String?
+  logo                                                 String?
+  decimals                                             Int?
+  coinkey                                              String?
+  priceusd                                             Float?
+  chain_id                                             String?
+  markets                                              Int[]
+  flows                                                flows[]
+  strategies_strategies_final_token_identifierTotokens strategies[] @relation("strategies_final_token_identifierTotokens")
+  strategies_strategies_main_token_identifierTotokens  strategies[] @relation("strategies_main_token_identifierTotokens")
+
+  @@schema("Yieldchain")
+}
+
+model users {
+  user_identifier     Int     @id @default(autoincrement())
+  address             String?
+  username            String?
+  profile_picture     String?
+  description         String?
+  twitter             String?
+  discord             String?
+  deployed_vaults_num Int?
+
+  @@schema("Yieldchain")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model waitlist {
+  address     String?
+  email       String?
+  twitter     String?
+  telegram    String?
+  discord     String?
+  whitelisted Boolean? @default(false)
+
+  @@ignore
+  @@schema("Yieldchain")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model withdraw {
+  function_identifier Int?
+
+  @@ignore
+  @@schema("Yieldchain")
+}
+
+enum FlowDirection {
+  OUTFLOW
+  INFLOW
+
+  @@schema("YieldchainV2")
+}
+
+enum CallType {
+  CALL
+  DELEGATECALL
+  STATICCALL
+
+  @@schema("YieldchainV2")
+}
+
+enum VariableTypes {
+  STATIC
+  DYNAMIC
+
+  @@schema("YieldchainV2")
+}
+
+enum BaseVariableTypes {
+  NORMAL
+  ARRAY
+  STRUCT
+
+  @@schema("YieldchainV2")
+}

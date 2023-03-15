@@ -1,0 +1,250 @@
+{
+ "Resources": {
+  "ONCHAINLISTENERTASKDEF1C2AB560": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "AWS_ACCESS_KEY_ID",
+        "Value": "AKIAQEWDLJVAXDEJCPWO"
+       },
+       {
+        "Name": "AWS_SECRET_ACCESS_KEY",
+        "Value": "wloVZzJSd2R6hYqxFWMFUaPLxrhRbZU0CYT5JIDy"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/onchain-listener:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "ONCHAINLISTENERTASKDEFONCHAINLISTENERCONTAINERLogGroupF39E6068"
+        },
+        "awslogs-stream-prefix": "ONCHAINLISTENER-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "ONCHAINLISTENER-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "HostPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "ONCHAINLISTENERTASKDEFExecutionRole8454DAF8",
+      "Arn"
+     ]
+    },
+    "Family": "ONCHAINLISTENERStackONCHAINLISTENERTASKDEF5CEA2E09",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ONCHAINLISTENER-Stack/ONCHAINLISTENER-TASKDEF/Resource"
+   }
+  },
+  "ONCHAINLISTENERTASKDEFONCHAINLISTENERCONTAINERLogGroupF39E6068": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ONCHAINLISTENER-Stack/ONCHAINLISTENER-TASKDEF/ONCHAINLISTENER-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "ONCHAINLISTENERTASKDEFExecutionRole8454DAF8": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ONCHAINLISTENER-Stack/ONCHAINLISTENER-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "ONCHAINLISTENERTASKDEFExecutionRoleDefaultPolicy9DD8F4A2": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/onchain-listener"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "ONCHAINLISTENERTASKDEFONCHAINLISTENERCONTAINERLogGroupF39E6068",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ONCHAINLISTENERTASKDEFExecutionRoleDefaultPolicy9DD8F4A2",
+    "Roles": [
+     {
+      "Ref": "ONCHAINLISTENERTASKDEFExecutionRole8454DAF8"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ONCHAINLISTENER-Stack/ONCHAINLISTENER-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "ONCHAINLISTENERWORKERServiceD6F618DE": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": "YC-Cluster",
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "LaunchType": "FARGATE",
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       "sg-06dbb6d3a2f7fa1a9"
+      ],
+      "Subnets": [
+       "subnet-0cf3106262ff359cf",
+       "subnet-003ff9e7e7327a824"
+      ]
+     }
+    },
+    "ServiceName": "ONCHAINLISTENER-WORKER",
+    "TaskDefinition": {
+     "Ref": "ONCHAINLISTENERTASKDEF1C2AB560"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ONCHAINLISTENER-Stack/ONCHAINLISTENER-WORKER/Service"
+   }
+  },
+  "ONCHAINLISTENERWORKERTaskCountTarget377C102B": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/YC-Cluster/",
+       {
+        "Fn::GetAtt": [
+         "ONCHAINLISTENERWORKERServiceD6F618DE",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ONCHAINLISTENER-Stack/ONCHAINLISTENER-WORKER/TaskCount/Target/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12QQU/DMAyFf8vuqWEchrgyxC4cUMsdeZkXec3iykmHpir/nTTbEHDyy0v8PjsPsFrBcoFfsbG7vvG8halLaHvTUpRRLZly9zmRVWhpkMhJ9PyMkQzZCNMrqsNEHxj7F9pz4MQSzHof/jsSEnIg/eVdezvSExdOabrJzqLHra+xaxlDysaLK7g3cRuVcZgf33Q2jEeYWvE1o9Z38WzP8/GissFhKAJnMI5JYiFwcGXZH5Q6SnWIP07ONfT6GdkE2REc4t1p+QSPcL84ROZGy4h8JGgv9RsDG7lSVQEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "ONCHAINLISTENER-Stack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

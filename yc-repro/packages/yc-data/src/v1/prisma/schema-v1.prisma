@@ -1,0 +1,254 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model actions {
+  action_identifier Int      @id @default(autoincrement())
+  name              String?
+  single_function   Boolean? @map("single-function")
+  popularity        String?
+  hidden            Boolean?
+  steps             steps[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model addliquidity {
+  function_identifier Int
+
+  @@ignore
+}
+
+model address_relations {
+  address_identifier                                          Int        @id
+  address_identifier_2                                        Int?
+  addresses_address_relations_address_identifier_2Toaddresses addresses? @relation("address_relations_address_identifier_2Toaddresses", fields: [address_identifier_2], references: [address_identifier], onDelete: NoAction, onUpdate: NoAction)
+  addresses_address_relations_address_identifierToaddresses   addresses  @relation("address_relations_address_identifierToaddresses", fields: [address_identifier], references: [address_identifier], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model addresses {
+  address_identifier                                                  Int                   @id(map: "pools_pkey") @default(autoincrement())
+  contract_address                                                    String?
+  abi                                                                 Json?                 @db.Json
+  chain_id                                                            Int?
+  functions                                                           Int[]
+  address_relations_address_relations_address_identifier_2Toaddresses address_relations[]   @relation("address_relations_address_identifier_2Toaddresses")
+  address_relations_address_relations_address_identifierToaddresses   address_relations?    @relation("address_relations_address_identifierToaddresses")
+  networks                                                            networks?             @relation(fields: [chain_id], references: [chain_id], onDelete: NoAction, onUpdate: NoAction, map: "pools_chain_id_fkey")
+  protocols_addresses                                                 protocols_addresses[] @ignore
+}
+
+model base_types {
+  type String @id
+}
+
+model flows {
+  flow_identifier     Int     @id @default(autoincrement())
+  token_identifier    Int?
+  outflow0_or_inflow1 Int?
+  tokens              tokens? @relation(fields: [token_identifier], references: [token_identifier], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model forks {
+  fork_id String @id
+}
+
+model functions {
+  function_identifier                                              Int                @id @default(autoincrement())
+  function_name                                                    String?
+  number_of_parameters                                             Int?
+  flows                                                            Int[]
+  arguments                                                        Int[]
+  is_callback                                                      Boolean?           @default(false)
+  counter_function_identifier                                      Int?
+  unlocked_by                                                      Int?
+  call_type                                                        String?
+  return_type                                                      String?
+  return_base_type                                                 String?
+  functions_functions_counter_function_identifierTofunctions       functions?         @relation("functions_counter_function_identifierTofunctions", fields: [counter_function_identifier], references: [function_identifier], onDelete: NoAction, onUpdate: NoAction)
+  other_functions_functions_counter_function_identifierTofunctions functions[]        @relation("functions_counter_function_identifierTofunctions")
+  functions_functions_unlocked_byTofunctions                       functions?         @relation("functions_unlocked_byTofunctions", fields: [unlocked_by], references: [function_identifier], onDelete: NoAction, onUpdate: NoAction)
+  other_functions_functions_unlocked_byTofunctions                 functions[]        @relation("functions_unlocked_byTofunctions")
+  harvest                                                          harvest[]          @ignore
+  removeliquidity                                                  removeliquidity[]  @ignore
+  requestwithdrawal                                                requestwithdrawal?
+  stake                                                            stake[]            @ignore
+  steps                                                            steps[]
+  swap                                                             swap[]             @ignore
+  withdraw                                                         withdraw[]         @ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model harvest {
+  function_identifier Int?
+  functions           functions? @relation(fields: [function_identifier], references: [function_identifier], onDelete: NoAction, onUpdate: NoAction)
+
+  @@ignore
+}
+
+model networks {
+  chain_id           Int                  @id
+  name               String?
+  logo               String?
+  json_rpc           String?
+  diamond_address    String?
+  block_explorer     String?
+  addresses          addresses[]
+  protocols_networks protocols_networks[] @ignore
+  strategies         strategies[]
+}
+
+model parameters {
+  parameter_identifier Int     @id @default(autoincrement())
+  index                Int?
+  solidity_type        String?
+  value                String?
+  name                 String?
+}
+
+model protocols {
+  protocol_identifier Int                   @id @default(autoincrement())
+  name                String?
+  website             String?
+  logo                String?
+  is_verified         Boolean?
+  avg_apy             Int?
+  aggregated_tvl      Int?
+  yc_vaults_num       Int?
+  color               String?
+  hidden              Boolean?              @default(false)
+  protocols_addresses protocols_addresses[] @ignore
+  protocols_networks  protocols_networks[]  @ignore
+  strategies          strategies[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model protocols_addresses {
+  protocol_identifier Int?
+  address_identifier  Int?
+  addresses           addresses? @relation(fields: [address_identifier], references: [address_identifier], onDelete: NoAction, onUpdate: NoAction, map: "protocols_pools_pool_identifier_fkey")
+  protocols           protocols? @relation(fields: [protocol_identifier], references: [protocol_identifier], onDelete: NoAction, onUpdate: NoAction, map: "protocols_pools_protocol_identifier_fkey")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model protocols_networks {
+  protocol_identifier Int?
+  chain_id            Int?
+  networks            networks?  @relation(fields: [chain_id], references: [chain_id], onDelete: NoAction, onUpdate: NoAction)
+  protocols           protocols? @relation(fields: [protocol_identifier], references: [protocol_identifier], onDelete: NoAction, onUpdate: NoAction)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model removeliquidity {
+  function_identifier Int?
+  functions           functions? @relation(fields: [function_identifier], references: [function_identifier], onDelete: NoAction, onUpdate: NoAction)
+
+  @@ignore
+}
+
+model requestwithdrawal {
+  function_identifier Int       @id
+  functions           functions @relation(fields: [function_identifier], references: [function_identifier], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model stake {
+  function_identifier Int
+  functions           functions @relation(fields: [function_identifier], references: [function_identifier], onDelete: NoAction, onUpdate: NoAction)
+
+  @@ignore
+}
+
+model steps {
+  step_identifier     Int        @id @default(autoincrement())
+  action_identifier   Int?
+  function_identifier Int?
+  multiplier          Int?
+  actions             actions?   @relation(fields: [action_identifier], references: [action_identifier], onDelete: NoAction, onUpdate: NoAction)
+  functions           functions? @relation(fields: [function_identifier], references: [function_identifier], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model strategies {
+  strategy_identifier                              Int        @id @default(autoincrement())
+  address                                          String?
+  name                                             String?
+  upkeep_id                                        Int?
+  apy                                              Int?
+  tvl                                              Int?
+  main_protocol_identifier                         Int?
+  creator_user_identifier                          Int?
+  chain_id                                         Int?
+  main_token_identifier                            Int?
+  final_token_identifier                           Int?
+  is_verified                                      Boolean?
+  is_trending                                      Boolean?
+  execution_interval                               Int?
+  strategy_object                                  Json?
+  networks                                         networks?  @relation(fields: [chain_id], references: [chain_id], onDelete: NoAction, onUpdate: NoAction)
+  tokens_strategies_final_token_identifierTotokens tokens?    @relation("strategies_final_token_identifierTotokens", fields: [final_token_identifier], references: [token_identifier], onDelete: NoAction, onUpdate: NoAction)
+  protocols                                        protocols? @relation(fields: [main_protocol_identifier], references: [protocol_identifier], onDelete: NoAction, onUpdate: NoAction)
+  tokens_strategies_main_token_identifierTotokens  tokens?    @relation("strategies_main_token_identifierTotokens", fields: [main_token_identifier], references: [token_identifier], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model swap {
+  function_identifier Int?
+  functions           functions? @relation(fields: [function_identifier], references: [function_identifier], onDelete: NoAction, onUpdate: NoAction)
+
+  @@ignore
+}
+
+model tokens {
+  token_identifier                                     Int          @id(map: "tokenss_pkey") @default(autoincrement())
+  name                                                 String?
+  address                                              String?
+  symbol                                               String?
+  logo                                                 String?
+  decimals                                             Int?
+  coinkey                                              String?
+  priceusd                                             Float?
+  chain_id                                             String?
+  markets                                              Int[]
+  flows                                                flows[]
+  strategies_strategies_final_token_identifierTotokens strategies[] @relation("strategies_final_token_identifierTotokens")
+  strategies_strategies_main_token_identifierTotokens  strategies[] @relation("strategies_main_token_identifierTotokens")
+}
+
+model users {
+  user_identifier     Int     @id @default(autoincrement())
+  address             String?
+  name                String?
+  profile_picture     String?
+  description         String?
+  twitter             String?
+  discord             String?
+  deployed_vaults_num Int?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model waitlist {
+  address     String?
+  email       String?
+  twitter     String?
+  telegram    String?
+  discord     String?
+  whitelisted Boolean? @default(false)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model withdraw {
+  function_identifier Int?
+  functions           functions? @relation(fields: [function_identifier], references: [function_identifier], onDelete: NoAction, onUpdate: NoAction)
+
+  @@ignore
+}

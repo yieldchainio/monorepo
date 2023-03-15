@@ -1,0 +1,28 @@
+{
+  "name": "@yc/data-provider",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "bin/index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ofir Smolinsky",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^4.11.0",
+    "@types/body-parser": "^1.19.2",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.15.0",
+    "@types/pg": "^8.6.6",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "pg": "^8.10.0",
+    "typescript": "latest",
+    "@yc/yc-models": "*"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "version": "30.0.0",
+  "files": {
+    "002b38042fed8353112b7b2c87b9789d92c9bced159da434ae9af822b2a9cf10": {
+      "source": {
+        "path": "FRONTEND-Stack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "010073361729-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-010073361729-us-east-1",
+          "objectKey": "002b38042fed8353112b7b2c87b9789d92c9bced159da434ae9af822b2a9cf10.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-file-publishing-role-010073361729-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

@@ -1,0 +1,36 @@
+name: Build and Push Docker Image
+
+on:
+  - workflow_dispatch
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16 # More information on this action can be found below in the 'AWS Credentials' section
+        with:
+          role-to-assume: arn:aws:iam::010073361729:role/cdk-hnb659fds-image-publishing-role-010073361729-us-east-1
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: ecr_login
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and Push Docker Image
+        id: build-and-push
+        run: |
+          for dir in services/*; do
+            service_name=$(basename "$dir")
+            docker buildx build -t --platform linux/amd64 $service_name "$dir"
+            docker tag $service_name "${{ steps.ecr_login.outputs.registry }}/$service_name"
+            docker push "${{ steps.ecr_login.outputs.registry }}/$service_name"
+          done

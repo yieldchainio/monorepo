@@ -1,0 +1,254 @@
+{
+ "Resources": {
+  "OFFCHAINACTIONSTASKDEF2FBCCD06": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "AWS_ACCESS_KEY_ID",
+        "Value": "AKIAQEWDLJVAXDEJCPWO"
+       },
+       {
+        "Name": "AWS_SECRET_ACCESS_KEY",
+        "Value": "wloVZzJSd2R6hYqxFWMFUaPLxrhRbZU0CYT5JIDy"
+       },
+       {
+        "Name": "PRIVATE_KEY",
+        "Value": "e39edcc4392e57bf99671ee281cfbd55d626bfea94fde0dfa577e449fe91d153"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/offchain-actions:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "OFFCHAINACTIONSTASKDEFOFFCHAINACTIONSCONTAINERLogGroup689806D5"
+        },
+        "awslogs-stream-prefix": "OFFCHAINACTIONS-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "OFFCHAINACTIONS-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "HostPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "OFFCHAINACTIONSTASKDEFExecutionRoleB1393F24",
+      "Arn"
+     ]
+    },
+    "Family": "OFFCHAINACTIONSStackOFFCHAINACTIONSTASKDEF07C4CA2B",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "OFFCHAINACTIONS-Stack/OFFCHAINACTIONS-TASKDEF/Resource"
+   }
+  },
+  "OFFCHAINACTIONSTASKDEFOFFCHAINACTIONSCONTAINERLogGroup689806D5": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "OFFCHAINACTIONS-Stack/OFFCHAINACTIONS-TASKDEF/OFFCHAINACTIONS-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "OFFCHAINACTIONSTASKDEFExecutionRoleB1393F24": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "OFFCHAINACTIONS-Stack/OFFCHAINACTIONS-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "OFFCHAINACTIONSTASKDEFExecutionRoleDefaultPolicy4F89C4C2": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/offchain-actions"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "OFFCHAINACTIONSTASKDEFOFFCHAINACTIONSCONTAINERLogGroup689806D5",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "OFFCHAINACTIONSTASKDEFExecutionRoleDefaultPolicy4F89C4C2",
+    "Roles": [
+     {
+      "Ref": "OFFCHAINACTIONSTASKDEFExecutionRoleB1393F24"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "OFFCHAINACTIONS-Stack/OFFCHAINACTIONS-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "OFFCHAINACTIONSWORKERServiceB0B85BB2": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": "YC-Cluster",
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "LaunchType": "FARGATE",
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       "sg-06dbb6d3a2f7fa1a9"
+      ],
+      "Subnets": [
+       "subnet-0cf3106262ff359cf",
+       "subnet-003ff9e7e7327a824"
+      ]
+     }
+    },
+    "ServiceName": "OFFCHAINACTIONS-WORKER",
+    "TaskDefinition": {
+     "Ref": "OFFCHAINACTIONSTASKDEF2FBCCD06"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "OFFCHAINACTIONS-Stack/OFFCHAINACTIONS-WORKER/Service"
+   }
+  },
+  "OFFCHAINACTIONSWORKERTaskCountTarget5F784DA6": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/YC-Cluster/",
+       {
+        "Fn::GetAtt": [
+         "OFFCHAINACTIONSWORKERServiceB0B85BB2",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "OFFCHAINACTIONS-Stack/OFFCHAINACTIONS-WORKER/TaskCount/Target/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12QQU/DMAyFf8vuqWEchrgyxC4cUMsdeZkXec3iykmHpir/nTTbEHDyy0v8PjsPsFrBcoFfsbG7vvG8halLaHvTUpRRLZly9zmRVWhpkMhJ9PyMkQzZCNMrqsNEHxj7F9pz4MQSzHof/jsSEnIg/eVdezvSExdOabrJzqLHra+xaxlDysaLK7g3cRuVcZgf33Q2jEeYWvE1o9Z38WzP8/GissFhKAJnMI5JYiFwcGXZH5Q6SnWIP07ONfT6GdkE2REc4t1p+QSPcL84ROZGy4h8JGgv9RsDG7lSVQEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "OFFCHAINACTIONS-Stack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

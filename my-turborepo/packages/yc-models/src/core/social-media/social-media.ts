@@ -1,11 +1,11 @@
-import { YCClassifications } from "./classification";
-import { YCNotFoundError } from "./errors";
+import { YCClassifications } from "../context/context";
+import { YCNotFoundError } from "../errors/errors";
 
 /**
  * @notice
  * A class represnting social medias - Of a protocol/user
  */
-export  class YCSocialMedia {
+export class YCSocialMedia {
   // Twitter URL
   #twitter: string | null = null;
 
@@ -49,15 +49,32 @@ export  class YCSocialMedia {
           _id
       );
 
-    return user.socialMedia();
+    return user.socialMedia;
   };
 
   // ==================
   //    CONSTRUCTOR
   // ==================
-  constructor(_twitter?: string, _telegram?: string, _discord?: string) {
+  constructor(
+    _twitter?: string | null,
+    _telegram?: string | null,
+    _discord?: string | null
+  ) {
     this.#twitter = _twitter || null;
     this.#telegram = _telegram || null;
     this.#discord = _discord || null;
+  }
+
+  // ==================
+  //      METHODS
+  // ==================
+  get twitter() {
+    return this.#twitter;
+  }
+  get discord() {
+    return this.#discord;
+  }
+  get telegram() {
+    return this.#telegram;
   }
 }

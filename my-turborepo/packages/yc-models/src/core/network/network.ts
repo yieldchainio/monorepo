@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
-import { DBNetwork } from "../types/db";
-import { EthersJsonRpcProvider } from "../types/ethers";
-import { YCClassifications } from "./classification";
-import { YCProtocol } from "./protocol";
+import { DBNetwork } from "../../types/db";
+import { EthersJsonRpcProvider } from "../../types/ethers";
+import { YCClassifications } from "../context/context";
+import { YCProtocol } from "../protocol/protocol";
 
 /**
  * @YCNetwork
@@ -14,6 +14,7 @@ export class YCNetwork {
   #chainid: number;
   #name: string;
   #logo: string;
+  #color: string | undefined;
   #json_rpc: string | null = null; // init to null - network may not be integrated
   #provider: EthersJsonRpcProvider | null = null; // Init to null ^^^^
   #diamondAddress: string | null = null; // Init to null ^^^^^^^^^^
@@ -30,10 +31,10 @@ export class YCNetwork {
     this.#name = _network.name;
     this.#json_rpc = _network.json_rpc;
     this.#logo = _network.logo;
+    this.#color = _network.color || undefined;
 
     // Create new ethers provider
     if (this.#json_rpc) {
-      console.log("Initiating ethers provider with this RPC", this.#json_rpc);
       this.#provider = new ethers.JsonRpcProvider(this.#json_rpc);
       this.#available = true;
     }
@@ -67,6 +68,10 @@ export class YCNetwork {
 
   get logo(): string {
     return this.#logo;
+  }
+
+  get color(): string | undefined {
+    return this.#color;
   }
 
   // Get the chain ID

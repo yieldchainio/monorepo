@@ -1,10 +1,10 @@
 import { ethers, Interface } from "ethers";
-import { DBAddress } from "../types/db";
-import { EthersContract } from "../types/ethers";
-import { YCClassifications } from "./classification";
-import { YCFunc } from "./function";
-import { YCNetwork } from "./network";
-import { YCProtocol } from "./protocol";
+import { DBAddress } from "../../types/db";
+import { EthersContract } from "../../types/ethers";
+import { YCClassifications } from "../context/context";
+import { YCFunc } from "../function/function";
+import { YCNetwork } from "../network/network";
+import { YCProtocol } from "../protocol/protocol";
 
 enum AddressTypes {
   ERC20,
@@ -38,10 +38,9 @@ export class YCAddress {
     this.#address = _address.contract_address;
     this.#abi = _address.abi;
     this.#network =
-      _context
-        .networks()
-        .find((network: YCNetwork) => network.chainid == _address.chain_id) ||
-      null;
+      _context.networks.find(
+        (network: YCNetwork) => network.chainid == _address.chain_id
+      ) || null;
 
     // let protocol = _context
     //   .protocolsAddresses()

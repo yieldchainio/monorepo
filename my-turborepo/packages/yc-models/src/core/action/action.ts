@@ -1,5 +1,5 @@
-import { DBAction } from "../types/db";
-import { YCClassifications } from "./classification";
+import { DBAction } from "../../types/db";
+import { YCClassifications } from "../context/context";
 
 export class YCAction {
   // =====================

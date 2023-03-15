@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { BaseVariableTypes } from "../types/yc";
+import { BaseVariableTypes } from "../../types/yc";
 import {
   DBAddress,
   DBFlow,
@@ -8,19 +8,19 @@ import {
   DBArgument,
   DBStrategy,
   DBProtocol,
-} from "../types/db";
-import { YCClassifications } from "./classification";
-import {YCAddress} from "./address";
-import {YCArgument} from "./argument";
-import {YCFlow} from "./flow";
-import {YCStep} from "./step";
-import { FunctionCall, CallTypes } from "../types/yc";
+} from "../../types/db";
+import { YCClassifications } from "../context/context";
+import { YCAddress } from "../address/address";
+import { YCArgument } from "../argument/argument";
+import { YCFlow } from "../flow/flow";
+import { YCStep } from "../step/step";
+import { FunctionCall, CallTypes } from "../../types/yc";
 
 const addFlags = (arg: any, _arg: any, arg_: any, arg__: any, _arg_: any) => {
   return arg;
 };
 
-export  class YCFunc {
+export class YCFunc {
   // ====================
   //    STATIC FIELDS
   // ====================
@@ -64,9 +64,9 @@ export  class YCFunc {
       ? _context.getFunction(_function.unlocked_by)
       : null;
     this.#calltype = _function.callType;
-    let address: YCAddress | undefined = _context
-      .addresses()
-      .find((address: YCAddress) => address.hasFunction(this.ID()));
+    let address: YCAddress | undefined = _context.addresses.find(
+      (address: YCAddress) => address.hasFunction(this.ID())
+    );
 
     if (!address)
       throw new Error("YCFunc ERR: Address Not Found! Func ID: " + this.ID());

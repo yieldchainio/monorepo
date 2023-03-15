@@ -1,4 +1,4 @@
-import { YCToken } from "../core/token";
+import { YCToken } from "../core/token/token";
 import axios from "axios";
 import { ethers } from "ethers";
 

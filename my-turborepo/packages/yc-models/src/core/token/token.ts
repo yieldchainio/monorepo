@@ -1,9 +1,9 @@
-import { DBToken } from "../types/db";
-import { YCClassifications } from "./classification";
+import { DBToken } from "../../types/db";
+import { YCClassifications } from "../context/context";
 import { ethers } from "ethers";
-import { YCProtocol } from "./protocol";
-import { YCNetwork } from "./network";
-import { LiFi } from "../clients/lifi";
+import { YCProtocol } from "../protocol/protocol";
+import { YCNetwork } from "../network/network";
+import { LiFi } from "../../clients/lifi";
 
 /**
  * @notice

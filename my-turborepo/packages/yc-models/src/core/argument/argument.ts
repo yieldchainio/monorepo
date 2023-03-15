@@ -1,8 +1,8 @@
-import { YCClassifications } from "./classification";
-import { DBArgument } from "../types/db";
-import { bytes } from "../types/global";
-import { YCFunc } from "./function";
-import { YCStep } from "./step";
+import { YCClassifications } from "../context/context";
+import { DBArgument } from "../../types/db";
+import { bytes } from "../../types/global";
+import { YCFunc } from "../function/function";
+import { YCStep } from "../step/step";
 
 export interface CustomArgument {
   value: any;

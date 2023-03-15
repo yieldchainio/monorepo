@@ -1,10 +1,10 @@
 import { ethers } from "ethers";
-import { DBProtocol, DBToken } from "../types/db";
-import { YCClassifications } from "./classification";
-import { YCAddress } from "./address";
-import { YCNetwork } from "./network";
-import { YCSocialMedia } from "./social-media";
-import { YCToken } from "./token";
+import { DBProtocol, DBToken } from "../../types/db";
+import { YCClassifications } from "../context/context";
+import { YCAddress } from "../address/address";
+import { YCNetwork } from "../network/network";
+import { YCSocialMedia } from "../social-media/social-media";
+import { YCToken } from "../token/token";
 
 /**
  * @notice
@@ -48,8 +48,7 @@ export class YCProtocol {
     this.#identifier = _protocol.protocol_identifier;
 
     // Find all tokens that are included in this protocol's markets
-    let tokens = _context
-      .tokens()
+    let tokens = _context.tokens
       // Filter to include tokens that have the ID in their markets field
       .filter((token: YCToken) => token.isInMarket(this.ID()));
 
@@ -57,18 +56,16 @@ export class YCProtocol {
     this.#tokens = tokens;
 
     // Find all networks this protocol is on
-    this.#networks = _context
-      .networks()
-      .filter((network: YCNetwork) =>
-        network.protocols.find(
-          (_protocol: YCProtocol) => _protocol.ID() == this.ID()
-        )
-      );
+    this.#networks = _context.networks.filter((network: YCNetwork) =>
+      network.protocols.find(
+        (_protocol: YCProtocol) => _protocol.ID() == this.ID()
+      )
+    );
 
     // Find all addresses where the parent protocol is this protocol
-    this.#addresses = _context
-      .addresses()
-      .filter((address: YCAddress) => address.protocol()?.ID() == this.ID());
+    this.#addresses = _context.addresses.filter(
+      (address: YCAddress) => address.protocol()?.ID() == this.ID()
+    );
   }
 
   // =======================

@@ -21,7 +21,7 @@ export class YCSocialMedia {
    * @param _id - The ID of the protocol
    * @returns YC Social media instance
    */
-  static fromProtocol = (_id: number): YCSocialMedia => {
+  static fromProtocol = (_id: string): YCSocialMedia => {
     // Init context (singleton)
     const context = new YCClassifications();
 

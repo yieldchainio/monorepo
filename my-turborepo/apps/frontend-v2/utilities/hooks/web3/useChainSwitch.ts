@@ -1,10 +1,4 @@
-import {
-  useNetwork,
-  useProvider,
-  useSwitchNetwork,
-  Chain,
-  SwitchNetworkArgs,
-} from "wagmi";
+import { useNetwork, useProvider, useSwitchNetwork, Chain } from "wagmi";
 
 export const useChainSwitch = () => {
   // Get all chains
@@ -12,7 +6,12 @@ export const useChainSwitch = () => {
 
   // Get the switchNetworkAsync function, set it to call addChain on error
   const { switchNetworkAsync } = useSwitchNetwork({
-    onError: async (err: Error, args: SwitchNetworkArgs) => {
+    onError: async (
+      err: Error,
+      args: {
+        chainId: number;
+      }
+    ) => {
       console.log("Caught error ser!!");
       // Get our chain
       const chain = chains.find((chain: Chain) => chain.id == args.chainId);
@@ -28,7 +27,10 @@ export const useChainSwitch = () => {
         if (chainAdded) await switchNetwork(args.chainId);
 
         // If we did not get a chain at all, we throw an error
-      } else throw new Error("Chain does not exist!");
+      } else
+        throw new Error(
+          "Chain does not exist!, in onError!!!!!!!!! SEr!!!!!!!"
+        );
     },
   });
 
@@ -38,6 +40,7 @@ export const useChainSwitch = () => {
    * @param chainId - Chain ID of the chain
    */
   const switchNetwork = async (_chainId: number) => {
+    console.log("Got Request To Swtich Network To:", _chainId);
     if (switchNetworkAsync)
       try {
         await switchNetworkAsync(_chainId);
@@ -60,7 +63,17 @@ export const useChainSwitch = () => {
           if (chainAdded) await switchNetwork(_chainId);
 
           // If we did not get a chain at all, we throw an error
-        } else throw new Error("Chain does not exist!");
+        } else {
+          console.log(
+            "Your chain:",
+            chain,
+            "Your chain ID:",
+            _chainId,
+            "Chains ser:",
+            chains
+          );
+          throw new Error("Chain does not exist!)");
+        }
       }
     else throw new Error("switchNetworkAsync Does not Exist!!");
   };

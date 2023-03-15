@@ -12,3 +12,4 @@ export * from "./step/step";
 export * from "./strategy/strategy";
 export * from "./token/token";
 export * from "./user/user";
+export * from "./utils/fetch-router";

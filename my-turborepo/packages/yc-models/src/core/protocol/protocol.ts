@@ -15,7 +15,7 @@ export class YCProtocol {
   // =======================
   //     GENERIC FIELDS
   // ======================
-  #identifier: number;
+  #identifier: string;
   #name: string;
   #website: String;
   #logo: string;
@@ -45,7 +45,7 @@ export class YCProtocol {
 
     this.#logo = _protocol.logo;
 
-    this.#identifier = _protocol.protocol_identifier;
+    this.#identifier = _protocol.id;
 
     // Find all tokens that are included in this protocol's markets
     let tokens = _context.tokens

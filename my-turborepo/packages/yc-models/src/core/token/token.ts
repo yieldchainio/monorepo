@@ -40,13 +40,13 @@ export class YCToken {
     this.#native = this.#address == ethers.ZeroAddress ? true : false;
 
     // Getting the token's available "markets" (i.e protocols where the token is liquid)
-    let markets: Array<YCProtocol | null> = _token.markets.map(
-      (protocolID: number) => _context.getProtocol(protocolID)
-    );
+    // let markets: Array<YCProtocol | null> = _token.markets.map(
+    //   (protocolID: number) => _context.getProtocol(protocolID)
+    // );
 
-    for (const marketOrNull of markets) {
-      if (marketOrNull) this.#markets.push(marketOrNull);
-    }
+    // for (const marketOrNull of markets) {
+    //   if (marketOrNull) this.#markets.push(marketOrNull);
+    // }
 
     //
   }
@@ -96,7 +96,7 @@ export class YCToken {
   };
 
   // Check whether this token is liquid in a certain market (By ID)
-  isInMarket = (_protocolID: number) => {
+  isInMarket = (_protocolID: string) => {
     return this.#markets.some((market: YCProtocol) => market.ID());
   };
 }

@@ -1,76 +1,56 @@
 import { create } from "zustand";
-import {
-  DBAddress,
-  DBFunction,
-  DBToken,
-  DBArgument,
-  DBFlow,
-  DBProtocol,
-  DBStrategy,
-  DBNetwork,
-  DBAction,
-  ClassificationContext,
-} from "@yc/yc-models";
-import {
-  YCAddress,
-  YCArgument,
-  YCAction,
-  YCClassifications,
-  YCFlow,
-  YCFunc,
-  YCNetwork,
-  YCProtocol,
-  YCSocialMedia,
-  YCStep,
-  YCStrategy,
-  YCToken,
-  YCUser,
-} from "@yc/yc-models";
+import { ClassificationContext } from "@yc/yc-models";
+import { YCClassifications, Endpoints } from "@yc/yc-models";
 
-/**
- * A base interface for each store
- */
-export interface YCBaseStore {
-  // The refresh function takes in a YC Context class instance, and hydrates the slice's states using the required context methods,
-  // (Impl specfic, of course)
-  refresh: (_context: ClassificationContext) => void;
-}
-/**
- * Interfaces for each one of the slice stores
- */
-export interface YCNetworkStore extends YCBaseStore {
-  networks: YCNetwork[];
-}
-export interface YCProtocolStore extends YCBaseStore {
-  protocols: YCProtocol[];
-}
-export interface YCTokenStore extends YCBaseStore {
-  tokens: YCToken[];
-}
-export interface YCFlowStore extends YCBaseStore {
-  flows: YCFlow[];
-}
-export interface YCStrategiesStore extends YCBaseStore {
-  strategies: YCStrategy[];
-}
-export interface YCActionsStore extends YCBaseStore {
-  actions: YCAction[];
-}
-export interface YCAddressesStore extends YCBaseStore {
-  addresses: YCAddress[];
-}
-export interface YCFunctionsStore extends YCBaseStore {
-  functions: YCFunc[];
-}
-export interface YCArgumentsStore extends YCBaseStore {
-  arguments: YCArgument[];
-}
-export interface YCUserStore extends YCBaseStore {
-  users: YCUser[];
-}
-export interface YCContextStore extends YCBaseStore {
+export interface YCContextStore {
   context: YCClassifications;
+  refresh: (endpoint: Endpoints) => Promise<boolean>;
 }
+/**
+ * The actual YC Store hook
+ */
+export const useYCStore = create<YCContextStore>((set, get) => ({
+  // The context (YCClassifications instance)
+  context: YCClassifications.getInstance(),
+
+  // Refresh function to refresh
+  refresh: async (endpoints: Endpoints[] | Endpoints) =>
+    await get().context.refresh(endpoints),
+}));
+
+// /**
+//  * Interfaces for each one of the slice stores
+//  */
+// export interface YCNetworkStore extends YCBaseStore {
+//   networks: YCNetwork[];
+// }
+// export interface YCProtocolStore extends YCBaseStore {
+//   protocols: YCProtocol[];
+// }
+// export interface YCTokenStore extends YCBaseStore {
+//   tokens: YCToken[];
+// }
+// export interface YCFlowStore extends YCBaseStore {
+//   flows: YCFlow[];
+// }
+// export interface YCStrategiesStore extends YCBaseStore {
+//   strategies: YCStrategy[];
+// }
+// export interface YCActionsStore extends YCBaseStore {
+//   actions: YCAction[];
+// }
+// export interface YCAddressesStore extends YCBaseStore {
+//   addresses: YCAddress[];
+// }
+// export interface YCFunctionsStore extends YCBaseStore {
+//   functions: YCFunc[];
+// }
+// export interface YCArgumentsStore extends YCBaseStore {
+//   arguments: YCArgument[];
+// }
+// export interface YCUserStore extends YCBaseStore {
+//   users: YCUser[];
+// }
 
 /**
  * @notice the @zustand stores
@@ -149,26 +129,6 @@ export interface YCContextStore extends YCBaseStore {
 //       users: _context.users(),
 //     })),
 // }));
-
-export const useYCStore = create<YCContextStore>((set, get) => ({
-  context: YCClassifications.getInstance(),
-  refresh: (_context: ClassificationContext) => {
-    const state = get();
-    state.context.initFromJSON(_context);
-  },
-}));
-
-export interface YCJsonData {
-  addresses: DBAddress[];
-  functions: DBFunction[];
-  tokens: DBToken[];
-  args: DBArgument[];
-  flows: DBFlow[];
-  protocols: DBProtocol[];
-  strategies: DBStrategy[];
-  networks: DBNetwork[];
-  actions: DBAction[];
-}
 
 //   // ==============
 //   //    ENDPOINTS

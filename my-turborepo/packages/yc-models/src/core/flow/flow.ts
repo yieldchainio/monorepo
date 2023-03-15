@@ -41,7 +41,6 @@ export class YCFlow {
       logo: "",
       decimals: 0,
       chain_id: 0,
-      markets: [],
     };
   }
 

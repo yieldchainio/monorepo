@@ -4,7 +4,7 @@
  * it is on a frontend
  */
 
-const fetchRouter = async <T, V = T>(
+export const fetchRouter = async <T, V = T>(
   _handlers: FetchRouterArgs<T, V>
 ): Promise<V | T | null> => {
   // Decide which one of the handlers (frontend / backend) to use,
@@ -21,10 +21,10 @@ const fetchRouter = async <T, V = T>(
   const parsedRes: T | V = handlers.parser ? await handlers.parser(res) : res;
 
   // Else, we set it
-  handlers.setter(handlers.parser ? await handlers.parser(res) : res);
+  handlers.setter && handlers.setter(parsedRes);
 
   // Return true at the end
-  return res;
+  return parsedRes;
 };
 
 export interface FetchRouterArgs<T, V> {
@@ -42,7 +42,5 @@ export interface FetchRouterArgs<T, V> {
 export interface FetcherAttrs<T, V = T> {
   fetcher: () => Promise<T>;
   parser?: (valuess: T) => Promise<V>;
-  setter: (valuess: V | T) => void;
+  setter?: (valuess: V | T) => void;
 }
-
-export default fetchRouter;

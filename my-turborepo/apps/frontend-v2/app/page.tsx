@@ -1,9 +1,3 @@
-import { ClassificationContext } from "@yc/yc-models";
-import { DataVersions, fetchYC } from "utilities/storage/fetch-yc";
-import StoreInitiallizor, {
-  StoreInitiallizorProps,
-} from "utilities/stores/store-initiallizor";
-
 export default function Home() {
   return (
     <div className="w-full h-full bg-[rgb(0,128,128)] absolute">

@@ -1,4 +1,20 @@
+import { getAddress } from "ethers";
+import { PrismaClient } from "@yc/yc-data";
 import {
+  YCClassificationsInternal,
+  Endpoints,
+  ClassificationContext,
+  YCUser,
+  YCAction,
+  YCStrategy,
+  YCAddress,
+  YCNetwork,
+  YCProtocol,
+  YCToken,
+  YCFlow,
+  YCArgument,
+  CustomArgument,
+  YCFunc,
   DBAddress,
   DBFlow,
   DBFunction,
@@ -9,28 +25,14 @@ import {
   DBNetwork,
   DBAction,
   DBUser,
-} from "../../types/db";
-import { YCFunc } from "../function/function";
-import { YCArgument, CustomArgument } from "../argument/argument";
-import { getAddress } from "ethers";
-import { YCFlow } from "../flow/flow";
-import { YCToken } from "../token/token";
-import { YCProtocol } from "../protocol/protocol";
-import { YCNetwork } from "../network/network";
-import { YCAddress } from "../address/address";
-import { YCStrategy } from "../strategy/strategy";
-import { YCUser } from "../user/user";
-import { YCAction } from "../action/action";
-import { ClassificationContext } from "../../types/yc";
-import { PrismaClient } from "@yc/yc-data";
-import { YCClassificationsInternal } from "./internals";
-import { Endpoints } from "./types";
+} from "@yc/yc-models";
 
 /**
  * @notice
  * A complete context of Yieldchain's current classified Database.
  */
 
+console.log("YC Internal class", YCClassificationsInternal);
 // A class representing Yieldchain's classifications. Constructs itself with DB info and has retreival methods/"Indexes"
 export class YCClassifications extends YCClassificationsInternal {
   // =======================
@@ -71,13 +73,13 @@ export class YCClassifications extends YCClassificationsInternal {
    */
   toJSON = (): ClassificationContext => {
     // Initiate an object that will hold the endpoints
-    const obj = {};
+    const obj: {
+      [key in Endpoints]?: any;
+    } = {};
 
     // Iterate over each endpoint
     for (const [endpoint, config] of Object.entries(this.ENDPOINT_CONFIGS)) {
-      Object.assign(obj, {
-        [endpoint]: config.get(),
-      });
+      obj[endpoint as Endpoints] = config.get();
     }
 
     // Return the object
@@ -220,7 +222,11 @@ export class YCClassifications extends YCClassificationsInternal {
   }
 
   get users() {
-    return this.Users.map((user: DBUser) => new YCUser(user, this));
+    if (!this.YCusers.length) {
+      const users = this.Users.map((user: DBUser) => new YCUser(user, this));
+      this.YCusers = users;
+    }
+    return this.YCusers;
   }
 
   // ==============

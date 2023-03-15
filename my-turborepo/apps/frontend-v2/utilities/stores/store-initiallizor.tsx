@@ -1,21 +1,12 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { ClassificationContext, YCClassifications } from "@yc/yc-models";
+import { useState } from "react";
 import {
-  // useYCActions,
-  // useYCAddresses,
-  // useYCArguments,
-  // useYCFlows,
-  // useYCFunctions,
-  // useYCNetworks,
-  // useYCProtocols,
-  // useYCTokens,
-  // useYCUsers,
-  YCBaseStore,
-  useYCStore,
-} from "./yc-data";
+  ClassificationContext,
+  Endpoints,
+  YCClassifications,
+} from "@yc/yc-models";
+import { useYCStore } from "./yc-data";
 import { useTransition } from "react";
-import { YCJsonData } from "./yc-data";
 
 /**
  * @notice
@@ -64,7 +55,7 @@ const StoreInitiallizor = ({ context }: StoreInitiallizorProps) => {
       };
     });
 
-    refresh(context);
+    refresh(Endpoints.ALL);
   }
 
   // Return null (This is a plain compnent)

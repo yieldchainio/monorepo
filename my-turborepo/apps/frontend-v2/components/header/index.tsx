@@ -10,8 +10,6 @@ import { useEffect, useState } from "react";
 import { Switch } from "components/buttons/switch";
 import WrappedImage from "components/wrappers/image";
 import { ProfileModal } from "components/wallet-profile";
-import { useSwitchNetwork, useAccount, useProvider } from "wagmi";
-import { RegulerButton } from "components/buttons/reguler";
 import ConnectWalletButton from "components/buttons/connect";
 import { useChainSwitch } from "../../utilities/hooks/web3/useChainSwitch";
 import useYCUser from "utilities/hooks/yc/useYCUser";
@@ -98,7 +96,10 @@ export const Header = () => {
           })}
           choiceHandler={async (
             _choice: DropdownOption<{ chain_id: number }>
-          ) => await switchNetwork(_choice.data.chain_id)}
+          ) => {
+            console.log("Choice gotten:", _choice);
+            return await switchNetwork(_choice.data.chain_id);
+          }}
         />
         {address ? (
           <Dropdown

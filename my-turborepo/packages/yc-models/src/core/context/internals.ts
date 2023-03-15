@@ -1,4 +1,18 @@
+import axios from "axios";
+import { PrismaClient } from "@yc/yc-data";
 import {
+  Endpoints,
+  ClassificationContext,
+  YCUser,
+  YCAction,
+  YCStrategy,
+  YCAddress,
+  YCNetwork,
+  YCProtocol,
+  YCToken,
+  YCFlow,
+  YCArgument,
+  YCFunc,
   DBAddress,
   DBFlow,
   DBFunction,
@@ -9,24 +23,9 @@ import {
   DBNetwork,
   DBAction,
   DBUser,
-} from "../../types/db";
-import { YCFunc } from "../function/function";
-import axios from "axios";
-import { YCArgument, CustomArgument } from "../argument/argument";
-import { getAddress } from "ethers";
-import { YCFlow } from "../flow/flow";
-import { YCToken } from "../token/token";
-import { YCProtocol } from "../protocol/protocol";
-import { YCNetwork } from "../network/network";
-import { YCAddress } from "../address/address";
-import { YCStrategy } from "../strategy/strategy";
-import { YCUser } from "../user/user";
-import { YCAction } from "../action/action";
-import { ClassificationContext } from "../../types/yc";
-import { PrismaClient } from "@yc/yc-data";
-import { YCClassifications } from "./context";
-import { Endpoints } from "./types";
-import fetchRouter from "../utils/fetch-router";
+  fetchRouter,
+  YCClassifications,
+} from "@yc/yc-models";
 
 /**
  * @notice
@@ -34,7 +33,7 @@ import fetchRouter from "../utils/fetch-router";
  */
 
 // A class representing Yieldchain's classifications. Constructs itself with DB info and has retreival methods/"Indexes"
-export abstract class YCClassificationsInternal {
+export class YCClassificationsInternal {
   // Singleton Instance
   protected static Instance: YCClassifications;
 
@@ -102,45 +101,56 @@ export abstract class YCClassificationsInternal {
 
   // All of the fetching functions
   protected fetchNetworks = async () => {
-    fetchRouter<DBNetwork[]>({
-      backend: {
-        fetcher: async () =>
-        await this?.Client?.networksv2.findMany() || [],
-        setter: (value: DBNetwork[]) => (this.Networks = value),
-      },
-      frontend: {
-        fetcher: async () =>
-          await (
-            await axios.get(YCClassifications.apiURL + "/networks")
-          ).data.networks,
-        setter: (value: DBNetwork[]) => (this.Networks = value),
-      },
-    });
-
-    if (typeof window !== "undefined")
-      this.Networks = await (
-        await axios.get(YCClassifications.apiURL + "/networks")
-      ).data.networks;
-    else if (this.validateClient(this.Client))
-      this.Networks = 
+    this.Networks =
+      (await fetchRouter<DBNetwork[]>({
+        backend: {
+          fetcher: async () =>
+            (await this?.Client?.networksv2.findMany()) || [],
+          setter: (value: DBNetwork[]) => (this.Networks = value),
+        },
+        frontend: {
+          fetcher: async () =>
+            await (
+              await axios.get(YCClassifications.apiURL + "/networks")
+            ).data.networks,
+          setter: (value: DBNetwork[]) => (this.Networks = value),
+        },
+      })) || [];
   };
 
   protected fetchProtocols = async () => {
-    if (typeof window !== "undefined")
-      this.Protocols = await (
-        await axios.get(YCClassifications.apiURL + "/protocols")
-      ).data.protocols;
-    else if (this.validateClient(this.Client))
-      this.Protocols = await this.Client.protocolsv2.findMany();
+    this.Protocols =
+      (await fetchRouter<DBProtocol[]>({
+        backend: {
+          fetcher: async () =>
+            (await this?.Client?.protocolsv2.findMany()) || [],
+          setter: (value: DBProtocol[]) => (this.Protocols = value),
+        },
+        frontend: {
+          fetcher: async () =>
+            await (
+              await axios.get(YCClassifications.apiURL + "/protocols")
+            ).data.protocols,
+          setter: (value: DBProtocol[]) => (this.Protocols = value),
+        },
+      })) || [];
   };
 
   protected fetchTokens = async () => {
-    if (typeof window !== "undefined")
-      this.Tokens = await (
-        await axios.get(YCClassifications.apiURL + "/tokens")
-      ).data.tokens;
-    else if (this.validateClient(this.Client))
-      this.Tokens = await this.Client.tokensv2.findMany();
+    this.Tokens =
+      (await fetchRouter<DBToken[]>({
+        backend: {
+          fetcher: async () => (await this?.Client?.tokensv2.findMany()) || [],
+          setter: (value: DBToken[]) => (this.Tokens = value),
+        },
+        frontend: {
+          fetcher: async () =>
+            await (
+              await axios.get(YCClassifications.apiURL + "/tokens")
+            ).data.tokens,
+          setter: (value: DBToken[]) => (this.Tokens = value),
+        },
+      })) || [];
   };
 
   protected fetchAddresses = async () => {
@@ -168,13 +178,20 @@ export abstract class YCClassificationsInternal {
   };
 
   protected fetchUsers = async () => {
-    if (this.validateClient(this.Client)) {
-      this.Users = await this.Client.usersv2.findMany();
-    } else {
-      this.Users = await (
-        await axios.get(YCClassifications.apiURL + "/users")
-      ).data.users;
-    }
+    this.Users =
+      (await fetchRouter<DBUser[]>({
+        backend: {
+          fetcher: async () => (await this?.Client?.usersv2.findMany()) || [],
+          setter: (value: DBUser[]) => (this.Users = value),
+        },
+        frontend: {
+          fetcher: async () =>
+            await (
+              await axios.get(YCClassifications.apiURL + "/users")
+            ).data.users,
+          setter: (value: DBUser[]) => (this.Users = value),
+        },
+      })) || [];
   };
 
   protected fetchStrategies = async () => {
@@ -295,7 +312,7 @@ export abstract class YCClassificationsInternal {
     [Endpoints.ALL]: {
       fetch: this.fetchAll,
       refresh: this.refreshAll,
-      get: YCClassificationsInternal.Instance.toJSON,
+      get: () => "",
     },
     [Endpoints.NETWORKS]: {
       fetch: this.fetchNetworks,

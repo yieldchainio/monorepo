@@ -6,7 +6,7 @@
 
 // Extending the error class
 export class YCNotFoundError extends Error {
-  constructor(classType: string, id?: number) {
+  constructor(classType: string, id?: number | string) {
     super(`YC ERR: ${classType} Class with id ${id} NOT FOUND!`);
   }
 }

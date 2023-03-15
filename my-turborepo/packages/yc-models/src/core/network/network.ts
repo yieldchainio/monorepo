@@ -27,7 +27,7 @@ export class YCNetwork {
   // =====================
   constructor(_network: DBNetwork, _context?: YCClassifications) {
     // Init static fields
-    this.#chainid = _network.chain_id;
+    this.#chainid = _network.id;
     this.#name = _network.name;
     this.#json_rpc = _network.json_rpc;
     this.#logo = _network.logo;

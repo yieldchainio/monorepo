@@ -1,4 +1,4 @@
-import { address, YCUser } from "@yc/yc-models";
+import { address, Endpoints, YCUser } from "@yc/yc-models";
 import { useYCStore } from "utilities/stores/yc-data";
 import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 import Jazzicon from "@raugfer/jazzicon";
@@ -42,6 +42,8 @@ const useYCUser = (): YCUserHookReturn => {
     );
   });
 
+  const refresher = useYCStore((state) => state.refresh);
+
   /**
    * @notice
    * useEffect that handles a user that has not yet been registered.
@@ -52,9 +54,13 @@ const useYCUser = (): YCUserHookReturn => {
     if (user === null && address) {
       console.log("Calling sign up in hook");
       (async () => {
+        // Sign the user up
         await YCUser.signUp({
           address,
         });
+
+        // Refresh the user data
+        await refresher(Endpoints.USERS);
       })();
     }
   }, [user]);

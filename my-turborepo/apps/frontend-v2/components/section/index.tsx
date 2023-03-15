@@ -70,7 +70,6 @@ const Section = ({
 };
 
 const isSectionComponent = (child: any): boolean => {
-  console.log("Child Is Being Checked With Key: ", child.key);
   return child.key == ".$SectionComponent";
 };
 

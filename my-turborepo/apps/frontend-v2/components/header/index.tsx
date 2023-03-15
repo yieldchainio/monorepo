@@ -14,6 +14,7 @@ import { useSwitchNetwork, useAccount, useProvider } from "wagmi";
 import { RegulerButton } from "components/buttons/reguler";
 import ConnectWalletButton from "components/buttons/connect";
 import { useChainSwitch } from "../../utilities/hooks/web3/useChainSwitch";
+import useYCUser from "utilities/hooks/yc/useYCUser";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",
@@ -43,8 +44,9 @@ export const Header = () => {
   //   else setHeaderLocation(HeaderLocation.HIDDEN);
   // }, [show]);
 
-  const { address } = useAccount();
   const { switchNetwork } = useChainSwitch();
+
+  const { address, userName, profilePic } = useYCUser();
 
   return (
     <div
@@ -90,7 +92,7 @@ export const Header = () => {
               data: {
                 json_rpc: network.jsonrpc,
                 chain_id: network.chainid,
-                color: "fill-[" + network.color + "]",
+                color: network.color,
               },
             };
           })}
@@ -102,8 +104,14 @@ export const Header = () => {
           <Dropdown
             options={[
               {
-                text: "0xc9...12",
-                image: "/icons/ethd.png",
+                text:
+                  !userName || userName == "Anon"
+                    ? address?.slice(0, 4) +
+                      "..." +
+                      address?.slice(address.length - 4, address.length)
+                    : userName,
+
+                image: profilePic || "",
                 data: {
                   name: "Ethereum",
                 },

@@ -81,7 +81,7 @@ const Dropdown = ({
 
       <RegulerButton onClick={handleClick} className=" " ref={dropdownBtnRef}>
         <div className="flex flex-row gap-2">
-          {currentChoice.image && (
+          {currentChoice.image !== undefined && (
             <WrappedImage
               src={currentChoice.image}
               width={24}

@@ -2,9 +2,8 @@
  * A reguler button
  */
 
-import Divisor from "components/general/divisor-line";
 import { forwardRef, useState } from "react";
-import styles from "../../../css/utils.module.css";
+import { hexColors } from "configs/styles/colors";
 
 export interface RegulerButtonProps {
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => any;

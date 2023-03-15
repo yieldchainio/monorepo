@@ -43,7 +43,7 @@ const WrappedImage = ({
           : src.light
       }
       alt={alt || ""}
-      className={className || ""}
+      className={className ? "select-none" + " " + className : "select-none"}
       onClick={() => onClick && onClick()}
     />
   );

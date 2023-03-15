@@ -2,14 +2,6 @@
  * @notice
  * A modal component for the user's profile w web3 functionality
  */
-import WrappedImage from "components/wrappers/image";
-import WrappedText from "components/wrappers/text";
-import Icon from "components/icons/camera";
-import { RegulerButton } from "components/buttons/reguler";
-import DisconnectIcon from "components/icons/disconnect";
-import { useRouter } from "next/navigation";
-import LinkIcon from "components/icons/link";
-import Divisor from "components/general/divisor-line";
 import React from "react";
 import { useDisconnect } from "wagmi";
 import useYCUser from "utilities/hooks/yc/useYCUser";

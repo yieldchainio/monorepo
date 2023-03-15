@@ -34,6 +34,7 @@ const useYCUser = (): YCUserHookReturn => {
 
   // Get the current YC User
   const user: YCUser | null = useYCStore((state) => {
+    console.log("All users", state.context.users);
     return (
       state.context.users.find(
         (user: YCUser) => user.address.toLowerCase() == address?.toLowerCase()
@@ -48,8 +49,13 @@ const useYCUser = (): YCUserHookReturn => {
    * we sign them up.
    */
   useEffect(() => {
-    if (user === null) {
-        YCUser.signUp()
+    if (user === null && address) {
+      console.log("Calling sign up in hook");
+      (async () => {
+        await YCUser.signUp({
+          address,
+        });
+      })();
     }
   }, [user]);
 

@@ -1,0 +1,20 @@
+{
+  "version": "30.0.0",
+  "files": {
+    "1f2bb22a62a21d40142bae16a3c00f0a1f23a239d4563c0a98e702460d7ab50e": {
+      "source": {
+        "path": "STRATEGYBUILDER-Stack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "010073361729-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-010073361729-us-east-1",
+          "objectKey": "1f2bb22a62a21d40142bae16a3c00f0a1f23a239d4563c0a98e702460d7ab50e.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-file-publishing-role-010073361729-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

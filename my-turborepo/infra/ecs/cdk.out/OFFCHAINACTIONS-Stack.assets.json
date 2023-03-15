@@ -1,0 +1,20 @@
+{
+  "version": "30.0.0",
+  "files": {
+    "9367c94a634da28dda644759e59ddde9b635ce97e193aeae3d3592faaf344142": {
+      "source": {
+        "path": "OFFCHAINACTIONS-Stack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "010073361729-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-010073361729-us-east-1",
+          "objectKey": "9367c94a634da28dda644759e59ddde9b635ce97e193aeae3d3592faaf344142.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-file-publishing-role-010073361729-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

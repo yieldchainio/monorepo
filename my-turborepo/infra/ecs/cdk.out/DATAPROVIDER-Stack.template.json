@@ -1,0 +1,437 @@
+{
+ "Resources": {
+  "DATAPROVIDERTASKDEF7690B101": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_PORT",
+        "Value": "5432"
+       },
+       {
+        "Name": "POSTGRES_PW",
+        "Value": "B.?3f*pbf=2Df!i"
+       },
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": "postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/data-provider:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "DATAPROVIDERTASKDEFDATAPROVIDERCONTAINERLogGroup313F245A"
+        },
+        "awslogs-stream-prefix": "DATAPROVIDER-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "DATAPROVIDER-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "DATAPROVIDERTASKDEFExecutionRoleBF437EE1",
+      "Arn"
+     ]
+    },
+    "Family": "DATAPROVIDERStackDATAPROVIDERTASKDEF4847E2C3",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/DATAPROVIDER-TASKDEF/Resource"
+   }
+  },
+  "DATAPROVIDERTASKDEFDATAPROVIDERCONTAINERLogGroup313F245A": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/DATAPROVIDER-TASKDEF/DATAPROVIDER-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "DATAPROVIDERTASKDEFExecutionRoleBF437EE1": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/DATAPROVIDER-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "DATAPROVIDERTASKDEFExecutionRoleDefaultPolicy0AE7E714": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/data-provider"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "DATAPROVIDERTASKDEFDATAPROVIDERCONTAINERLogGroup313F245A",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "DATAPROVIDERTASKDEFExecutionRoleDefaultPolicy0AE7E714",
+    "Roles": [
+     {
+      "Ref": "DATAPROVIDERTASKDEFExecutionRoleBF437EE1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/DATAPROVIDER-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "YCECSDefaultSecurityServiceGroupfromDATAPROVIDERStackYCECSDefaultSecurityServiceGroupA227AF8D808082FAA6B3": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "Load balancer to target",
+    "FromPort": 8080,
+    "GroupId": "sg-06dbb6d3a2f7fa1a9",
+    "SourceSecurityGroupId": "sg-06dbb6d3a2f7fa1a9",
+    "ToPort": 8080
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/YCECSDefaultSecurityServiceGroup/from DATAPROVIDERStackYCECSDefaultSecurityServiceGroupA227AF8D:8080"
+   }
+  },
+  "YCECSDefaultSecurityServiceGroupfrom00000806CFE0216": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "CidrIp": "0.0.0.0/0",
+    "Description": "Allow from anyone on port 80",
+    "FromPort": 80,
+    "GroupId": "sg-06dbb6d3a2f7fa1a9",
+    "ToPort": 80
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/YCECSDefaultSecurityServiceGroup/from 0.0.0.0_0:80"
+   }
+  },
+  "YCECSDefaultSecurityServiceGroupfrom000004435528EFFB": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "CidrIp": "0.0.0.0/0",
+    "Description": "Allow from anyone on port 443",
+    "FromPort": 443,
+    "GroupId": "sg-06dbb6d3a2f7fa1a9",
+    "ToPort": 443
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/YCECSDefaultSecurityServiceGroup/from 0.0.0.0_0:443"
+   }
+  },
+  "DATAPROVIDERSERVICEService2507068A": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": "YC-Cluster",
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "DATAPROVIDER-CONTAINER",
+      "ContainerPort": 8080,
+      "TargetGroupArn": {
+       "Ref": "YCDATAPROVIDERSERVICETGC7460EC4"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       "sg-06dbb6d3a2f7fa1a9"
+      ],
+      "Subnets": [
+       "subnet-0cf3106262ff359cf",
+       "subnet-003ff9e7e7327a824"
+      ]
+     }
+    },
+    "ServiceName": "DATAPROVIDER-SERVICE",
+    "TaskDefinition": {
+     "Ref": "DATAPROVIDERTASKDEF7690B101"
+    }
+   },
+   "DependsOn": [
+    "DATAPROVIDERSERVICEYCDATAPROVIDERSERVICEALBYCDATAPROVIDERSERVICEHTTPLISTENERB9EC0193",
+    "DATAPROVIDERSERVICEYCDATAPROVIDERSERVICEALBYCDATAPROVIDERSERVICEHTTPSLISTENER4DB2A92C"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/DATAPROVIDER-SERVICE/Service"
+   }
+  },
+  "DATAPROVIDERSERVICETaskCountTargetD736F6C6": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/YC-Cluster/",
+       {
+        "Fn::GetAtt": [
+         "DATAPROVIDERSERVICEService2507068A",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/DATAPROVIDER-SERVICE/TaskCount/Target/Resource"
+   }
+  },
+  "DATAPROVIDERSERVICEYCDATAPROVIDERSERVICEALBC6820D49": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Name": "YC-DATAPROVIDER-SERVICE-LB",
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     "sg-06dbb6d3a2f7fa1a9"
+    ],
+    "Subnets": [
+     "subnet-005e4189e4a2950d7",
+     "subnet-04f092956da56785b"
+    ],
+    "Type": "application"
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/DATAPROVIDER-SERVICE/YC-DATAPROVIDER-SERVICE-ALB/Resource"
+   }
+  },
+  "DATAPROVIDERSERVICEYCDATAPROVIDERSERVICEALBYCDATAPROVIDERSERVICEHTTPLISTENERB9EC0193": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCDATAPROVIDERSERVICETGC7460EC4"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "DATAPROVIDERSERVICEYCDATAPROVIDERSERVICEALBC6820D49"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/DATAPROVIDER-SERVICE/YC-DATAPROVIDER-SERVICE-ALB/YC-DATAPROVIDER-SERVICE-HTTPLISTENER/Resource"
+   }
+  },
+  "DATAPROVIDERSERVICEYCDATAPROVIDERSERVICEALBYCDATAPROVIDERSERVICEHTTPSLISTENER4DB2A92C": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCDATAPROVIDERSERVICETGC7460EC4"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "DATAPROVIDERSERVICEYCDATAPROVIDERSERVICEALBC6820D49"
+    },
+    "Certificates": [
+     {
+      "CertificateArn": "arn:aws:acm:us-east-1:010073361729:certificate/db613a68-9aac-453f-b630-6581b5ac6383"
+     }
+    ],
+    "Port": 443,
+    "Protocol": "HTTPS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/DATAPROVIDER-SERVICE/YC-DATAPROVIDER-SERVICE-ALB/YC-DATAPROVIDER-SERVICE-HTTPSLISTENER/Resource"
+   }
+  },
+  "YCDATAPROVIDERSERVICETGC7460EC4": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/",
+    "HealthCheckProtocol": "HTTP",
+    "Matcher": {
+     "HttpCode": "200"
+    },
+    "Port": 8080,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": "vpc-0c485efe3b14f9196"
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/YC-DATAPROVIDER-SERVICE-TG/Resource"
+   }
+  },
+  "apiyieldchainioALBRECORDFEE6805C": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "Name": "api.yieldchain.io.",
+    "Type": "A",
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::Join": [
+       "",
+       [
+        "dualstack.",
+        {
+         "Fn::GetAtt": [
+          "DATAPROVIDERSERVICEYCDATAPROVIDERSERVICEALBC6820D49",
+          "DNSName"
+         ]
+        }
+       ]
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "DATAPROVIDERSERVICEYCDATAPROVIDERSERVICEALBC6820D49",
+       "CanonicalHostedZoneID"
+      ]
+     }
+    },
+    "HostedZoneId": "Z01218335OMCUR3F67FA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/api.yieldchain.io_ALB_RECORD/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11RwU7DMAz9lt2zwIYY4ghDIKQdUMsdealXecviykmHpqr/jpduo3BJnv1svxdnbhcLO5vAd5y6ajf1tLZdmcDtTIGRW3FolPvq0IktsOFIieX4DBENumi7V5AaEn5C3L3ghgIl4mCWm/A/wyEBBZRR7txbohxIdbTpAksHHtY+j11yG1JvPNcqt+L6TbhtTsUX3BuCve0K9nlGvj/YkzuewgH16nZus4JrhdIxd76HWjBGA02jRXAyBW3iqOoUal3E1YbUmLLBPxmd6iEmcp6hWisTnPYd5rZ7+p24Uu45cyiD7VE8rqOYMJxrLnjED5LX14/C3uiZ8P5OdQt0LFXeQ0aluuyHcPjO3gSu0G7jzWH2aB/s7WQbiaaiS6Y92mK4fwBVPFdtFwIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "DATAPROVIDER-Stack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

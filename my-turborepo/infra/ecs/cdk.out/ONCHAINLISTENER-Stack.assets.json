@@ -1,0 +1,20 @@
+{
+  "version": "30.0.0",
+  "files": {
+    "3fd1f71ade0505d675eb6b3eecdaa0156885cf90a8100206ce2d031b9c0d8c5b": {
+      "source": {
+        "path": "ONCHAINLISTENER-Stack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "010073361729-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-010073361729-us-east-1",
+          "objectKey": "3fd1f71ade0505d675eb6b3eecdaa0156885cf90a8100206ce2d031b9c0d8c5b.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-file-publishing-role-010073361729-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

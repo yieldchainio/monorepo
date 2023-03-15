@@ -1,0 +1,36 @@
+name: Deploy All Services To ECS
+
+on:
+  - workflow_dispatch
+
+jobs:
+  ecs-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16 # More information on this action can be found below in the 'AWS Credentials' section
+        with:
+          role-to-assume: arn:aws:iam::010073361729:role/cdk-hnb659fds-deploy-role-010073361729-us-east-1
+          aws-region: us-east-1
+
+      - name: Deploy to ECS using CDK
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: "deploy"
+          cdk_args: "--require-approval never --app ./infra/ECS/bin/ecs.ts"
+          actions_comment: false
+
+      - name: cdk synth
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: "synth"
+          cdk_version: "1.16.2"
+          working_dir: "src"

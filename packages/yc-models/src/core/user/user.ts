@@ -220,7 +220,7 @@ enum TokenType {
   ERC721 = 2,
 }
 
-interface SignupArguments {
+export interface SignupArguments {
   address: string;
   username?: string;
   context?: YCClassifications;

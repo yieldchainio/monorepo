@@ -14,12 +14,16 @@ import {
   DBUser,
   DBAction,
   address,
-} from "./api-types";
+  SignupArguments,
+} from "@yc/yc-models";
 import dotenv from "dotenv";
+import { PrismaClient } from "@prisma/client";
 dotenv.config();
 
 // Instantitate PG Client
 const { Client } = pg;
+
+const prisma = new PrismaClient();
 
 // App to use for reguler API
 const app = express();
@@ -104,7 +108,7 @@ const getTableAvailablePrimaryKey = async (
  */
 
 app.get("/", async (req: any, res: any) => {
-  res.send("Wassup Brah");
+  res.status(200).send("Wassup Brah");
 });
 
 /**
@@ -119,7 +123,7 @@ app.get("/tokens", async (req: any, res: any) => {
  * @dev Networks (e.g. Ethereum, Binance, etc...)
  */
 app.get("/networks", async (req: any, res: any) => {
-  const networks: DBNetwork[] = await genericQuery("*", "networks");
+  const networks: DBNetwork[] = await prisma.networksv2.findMany();
   res.status(200).json({ networks });
 });
 
@@ -164,10 +168,10 @@ app.get("/parameters", async (req: any, res: any) => {
 });
 
 /**
- * @dev Users (e.g. Ofir, Yaron, etc...)
+ * @dev Users (e.g. Ofir, Eden, etc...)
  */
 app.get("/users", async (req: any, res: any) => {
-  const users: DBUser[] = await genericQuery("*", "users");
+  const users: DBUser[] = await prisma.usersv2.findMany();
   res.status(200).json({ users });
 });
 
@@ -272,15 +276,26 @@ app.post(
   }
 );
 
-app.post("/signup", async (req: any, res: any) => {
-  let data: {
-    address: address;
-    email: string;
-  } = req.body;
-  await genericPost(
-    `INSERT INTO "Yieldchain".waitlist (address, email) VALUES ('${data.address}', '${data.email}')`
-  );
-});
+app.post(
+  "/signup",
+  async (req: { body: Omit<SignupArguments, "context"> }, res: any) => {
+    const data: Omit<SignupArguments, "context"> = req.body;
+    const result = await prisma.usersv2.create({
+      data: {
+        address: data.address,
+        username: data.username || "Anon",
+        description: data.description,
+        twitter: data.twitter,
+        telegram: data.telegram,
+        discord: data.discord,
+        profile_picture: data.profilePicture,
+      },
+    });
+
+    if (result) res.status(200).json({ user: data });
+    else res.status(400);
+  }
+);
 
 app.get("/waitlist", async (req: any, res: any) => {
   const waitlist: any = await genericQuery("*", "waitlist");

@@ -20,6 +20,8 @@ import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 dotenv.config();
 
+console.log("DAtabase URL", process.env.DATABASE_URL);
+
 // Instantitate PG Client
 const { Client } = pg;
 
@@ -89,18 +91,6 @@ const valuesPost = async (sql: string, values: any[]) => {
   });
 };
 
-const getTableAvailablePrimaryKey = async (
-  tableName: string,
-  key_column_name: string
-) => {
-  let query: any[] = await genericQuery("*", tableName);
-  let largestId = query.reduce((x: any, y: any) =>
-    x[key_column_name] > y[key_column_name] ? x : y
-  );
-
-  return largestId[key_column_name] + 1;
-};
-
 /**
  * @dev
  * @notice
@@ -115,7 +105,7 @@ app.get("/", async (req: any, res: any) => {
  * @dev Tokens (e.g. DAI, USDC, etc...)
  */
 app.get("/tokens", async (req: any, res: any) => {
-  const tokens: DBToken[] = await genericQuery("*", "tokens");
+  const tokens: DBToken[] = await prisma.tokensv2.findMany();
   res.status(200).json({ tokens });
 });
 
@@ -131,7 +121,8 @@ app.get("/networks", async (req: any, res: any) => {
  * @dev Strategies made by users.
  */
 app.get("/strategies", async (req: any, res: any) => {
-  const strategies: DBStrategy[] = await genericQuery("*", "strategies");
+  // @ts-ignore
+  const strategies: DBStrategy[] = await prisma.strategiesv2.findMany(); // TODO: Change strategiesv2 token id to string, migrate
   res.status(200).json({ strategies });
 });
 

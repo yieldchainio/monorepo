@@ -43,7 +43,6 @@ jobs:
         id: build-and-push
         run: |
           service_name=${{ inputs.service_name }}
-          dir=services/$service_name
-          docker buildx build --platform linux/amd64 -t $service_name "$dir"
+          docker buildx build --platform linux/amd64 -f services/$service_name/Dockerfile -t $service_name "$dir" .
           docker tag $service_name "${{ steps.ecr_login.outputs.registry }}/$service_name"
           docker push "${{ steps.ecr_login.outputs.registry }}/$service_name"

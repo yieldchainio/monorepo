@@ -3,7 +3,22 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-  transpilePackages: ["@yc/yc-models"],
+  webpack: (config, options) => {
+    config.module.rules.push({
+      test: /\.m?js$/,
+      use: [
+        {
+          loader: "babel-loader",
+          options: {
+            presets: [["@babel/preset-env", { targets: "defaults" }]],
+          },
+        },
+      ],
+    });
+
+    return config;
+  },
+  transpilePackages: ["@yc/yc-models", "ethers"],
   images: {
     remotePatterns: [
       {

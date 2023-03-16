@@ -2,10 +2,15 @@
 import { RegulerButton } from "components/buttons/reguler";
 import Section from "components/section";
 
+export interface ProfileStatsProps {
+  createdVaults: number;
+}
+
 /**
  * Subsection for the stats of the profile modal
  */
-const ProfileStats = () => {
+const ProfileStats = ({ createdVaults }: ProfileStatsProps) => {
+  console.log("Created vaults num ser", createdVaults);
   return (
     <div className="">
       <Section
@@ -14,7 +19,7 @@ const ProfileStats = () => {
         fields={{
           Vaults: 5,
           Deposits: "$5,112.14",
-          "Create Vaults": 2,
+          "Create Vaults": createdVaults,
           Royalties: "$1,112.55",
         }}
         key="SectionComponent"

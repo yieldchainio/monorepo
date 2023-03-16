@@ -52,7 +52,7 @@ const DropdownMenu = ({
     <div
       className={`${
         "w-[" + `${parentRef.current?.getBoundingClientRect().width}` + "px]"
-      } bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 absolute top-[60px] left-[0px] z-100 border-1 border-[#2D2D31]`}
+      } bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 absolute top-[60px] left-[0px] z-100 border-1 border-[#2D2D31] animate-popup overflow-hidden`}
     >
       {options.map((option: DropdownOption) => {
         return (

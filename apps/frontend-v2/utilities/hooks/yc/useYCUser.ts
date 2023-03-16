@@ -1,14 +1,16 @@
-import { address, Endpoints, YCUser } from "@yc/yc-models";
+import { address, Endpoints, YCStrategy, YCUser } from "@yc/yc-models";
 import { useYCStore } from "utilities/stores/yc-data";
 import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 import Jazzicon from "@raugfer/jazzicon";
 import WrappedImage, { ImageProps } from "components/wrappers/image";
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export interface YCUserHookReturn {
   address: address | undefined;
   profilePic: string | null;
   userName: string;
+  createdVaults: YCStrategy[];
 }
 
 /**
@@ -18,9 +20,6 @@ const useYCUser = (): YCUserHookReturn => {
   // Current connected wallet's details
   const { address, connector, status } = useAccount();
 
-  /**
-   * Retreive additional onchain details
-   */
   // ENS Name of the user
   const { data: ensName } = useEnsName({ address });
 
@@ -32,29 +31,33 @@ const useYCUser = (): YCUserHookReturn => {
     address ? buildDataUrl(address) : null
   );
 
+  const [user, setUser] = useState<YCUser | null>(null);
+
   // Get the current YC User
-  const user: YCUser | null = useYCStore((state) => {
-    console.log("All users", state.context.users);
-    return (
-      state.context.users.find(
-        (user: YCUser) => user.address.toLowerCase() == address?.toLowerCase()
-      ) || null
-    );
+  const users: YCUser[] = useYCStore((state) => {
+    return state.context.users;
   });
 
   const refresher = useYCStore((state) => state.refresh);
 
-  /**
-   * @notice
-   * useEffect that handles a user that has not yet been registered.
-   * If we got an address and the user is nullish (we didnt find any),
-   * we sign them up.
-   */
   useEffect(() => {
-    if (user === null && address) {
-      console.log("Calling sign up in hook");
+    console.log(
+      "users rerender!, user's addresses:",
+      users.map((user) => user.address),
+      "User found:",
+      users.find((user) => user.address.toLowerCase() === address),
+      "Current Address:",
+      address
+    );
+    let user =
+      users.find(
+        (user) => user.address.toLowerCase() === address?.toLowerCase()
+      ) || null;
+    if (!user && address) {
       (async () => {
+        console.log("Calling signup with this UUID:", uuidv4());
         // Sign the user up
+
         await YCUser.signUp({
           address,
         });
@@ -63,16 +66,30 @@ const useYCUser = (): YCUserHookReturn => {
         await refresher(Endpoints.USERS);
       })();
     }
-  }, [user]);
+    if (user) setUser(user);
+  }, [users]);
 
-  console.log("user ser", user);
+  /**
+   * @notice
+   * useEffect that handles a user that has not yet been registered.
+   * If we got an address and the user is nullish (we didnt find any),
+   * we sign them up.
+   */
 
   /**
    * User's username
    */
-  const [userName, seUsername] = useState<string>(
+  const [userName, setUsername] = useState<string>(
     user?.username || ensName || "Anon"
   );
+
+  useEffect(() => {
+    console.log(
+      "Rerendering on user change for username, user's username:",
+      user
+    );
+    setUsername(user?.username || ensName || "Anon");
+  }, [user, ensName]);
 
   /**
    * profile pic of the user,
@@ -94,7 +111,14 @@ const useYCUser = (): YCUserHookReturn => {
     else if (jazziconPFP) setProfilePic(jazziconPFP);
   }, [user?.profilePic, ensAvater, jazziconPFP]);
 
-  return { address, profilePic, userName };
+  // Some more details about the user
+  const [createdVaults, setCreatedVaults] = useState<YCStrategy[]>([]);
+
+  useEffect(() => {
+    if (user) setCreatedVaults(user.createdVaults);
+  }, [user]);
+
+  return { address, profilePic, userName, createdVaults };
 };
 
 export default useYCUser;

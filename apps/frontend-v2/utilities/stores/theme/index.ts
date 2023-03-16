@@ -7,22 +7,23 @@ import { create } from "zustand";
  */
 
 // Types of themes
-export enum ThemeTypes {
+export enum Themes {
   DARK = "dark",
   LIGHT = "light",
 }
 
 // The interface for this store
 export interface ThemeStore {
-  theme: ThemeTypes;
-  setTheme: (theme: ThemeTypes) => any;
+  theme: Themes;
+  setTheme: (theme: Themes) => any;
 }
 
 // The actual store hook
 export const useTheme = create<ThemeStore>((set) => ({
-  theme: ThemeTypes.DARK,
-  setTheme: (_theme: ThemeTypes) =>
+  theme: Themes.DARK,
+  setTheme: (_theme: Themes) =>
     set((state) => {
+      document.documentElement.className = _theme;
       return {
         theme: _theme,
       };

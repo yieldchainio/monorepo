@@ -3,6 +3,7 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  reactStrictMode: false,
   webpack: (config, options) => {
     config.module.rules.push({
       test: /\.m?js$/,

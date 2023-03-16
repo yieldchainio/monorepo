@@ -6,6 +6,14 @@ module.exports = {
       lg: "18px",
     },
 
+    screens: {
+      mobile: { max: "576px" },
+      tablet: { max: "768px" },
+      laptop: { max: "1150px" },
+      pc: { max: "1920px" },
+      largepc: { max: "2400px" },
+    },
+
     extend: {
       colors: {
         current: "currentColor",
@@ -41,6 +49,7 @@ module.exports = {
           skeleton: "var(--skeleton)",
 
           border: "var(--border)",
+          borderHover: "var(--border-hover)",
 
           themedBorder: "var(--themed-border)",
 
@@ -51,6 +60,40 @@ module.exports = {
             `rgba(var(--dropdown), ${opacityValue || 1})`,
 
           lightHover: "var(--lighthover)",
+
+          button: "var(--button)",
+          buttonHover: "var(--buttonHover)",
+        },
+      },
+      animation: {
+        accountPopup: "accountPopup 0.2s ease-in-out",
+        popup: "popup 0.2s ease-in-out",
+        dropdown: "dropdown 0.2s ease-in-out",
+      },
+      keyframes: {
+        popup: {
+          "0%": {
+            transform: "scale(0.5)",
+          },
+          "100%": {
+            transform: "scale(1)",
+          },
+        },
+        dropdown: {
+          "0%": {
+            height: "100%",
+          },
+          "100%": {
+            height: "max",
+          },
+        },
+        accountPopup: {
+          "0%": {
+            transform: "translateX(-100px) scale(0)",
+          },
+          "100%": {
+            transform: "translateX(-100px) scale(1)",
+          },
         },
       },
     },

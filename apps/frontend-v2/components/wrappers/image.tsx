@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useTheme } from "utilities/stores/theme";
 import { ImageSkeleton } from "./skeleton";
 /**
  * @notice
@@ -30,18 +31,14 @@ const WrappedImage = ({
   onClick,
 }: ImageProps) => {
   if (!src) return <ImageSkeleton width={width} height={height} />;
+
+  const theme = useTheme((state) => state.theme);
+
   return (
     <Image
       width={width}
       height={height}
-      src={
-        typeof src == "string"
-          ? src
-          : typeof window != "undefined" &&
-            document.documentElement.className.includes("dark")
-          ? src.dark
-          : src.light
-      }
+      src={typeof src == "string" ? src : src[theme]}
       alt={alt || ""}
       className={className ? "select-none" + " " + className : "select-none"}
       onClick={() => onClick && onClick()}

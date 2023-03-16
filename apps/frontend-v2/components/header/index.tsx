@@ -13,6 +13,7 @@ import { ProfileModal } from "components/wallet-profile";
 import ConnectWalletButton from "components/buttons/connect";
 import { useChainSwitch } from "../../utilities/hooks/web3/useChainSwitch";
 import useYCUser from "utilities/hooks/yc/useYCUser";
+import { Themes, useTheme } from "utilities/stores/theme";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",
@@ -25,22 +26,12 @@ enum HeaderLocation {
  * @returns The header
  */
 export const Header = () => {
+  // Use the networks from the context
   const networks = useYCStore((state) => state.context.networks);
-  // const show = useHideScroll();
-  // const [headerLocation, setHeaderLocation] = useState<HeaderLocation>(
-  //   HeaderLocation.VISIBLE
-  // );
 
-  const [theme, setTheme] = useState(false);
-
-  useEffect(() => {
-    document.documentElement.className = theme ? "light" : "dark";
-  }, [theme]);
-
-  // useEffect(() => {
-  //   if (show) setHeaderLocation(HeaderLocation.VISIBLE);
-  //   else setHeaderLocation(HeaderLocation.HIDDEN);
-  // }, [show]);
+  // Use the theme
+  const theme = useTheme((state) => state.theme);
+  const setTheme = useTheme((state) => state.setTheme);
 
   const { switchNetwork } = useChainSwitch();
 
@@ -58,8 +49,8 @@ export const Header = () => {
         <div className="flex w-[35vw] h-[100%] gap-10 blur-none pl-10">
           <WrappedImage
             src={{
-              light: "/brand/yc-full-light.svg",
-              dark: "/brand/yc-full-dark.png",
+              light: "/brand/yc-full-dark.png",
+              dark: "/brand/yc-full-light.svg",
             }}
             alt=""
             width={150}
@@ -74,9 +65,9 @@ export const Header = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-end w-[50%] h-[10vh] pr-10 blur-none gap-6">
+      <div className="flex items-center justify-end w-[100%] h-[10vh] pr-10 blur-none gap-6">
         <Switch
-          handler={setTheme}
+          handler={(on: boolean) => setTheme(on ? Themes.LIGHT : Themes.DARK)}
           images={{
             offImage: "/icons/moon.svg",
             onImage: "/icons/sun.svg",
@@ -97,7 +88,6 @@ export const Header = () => {
           choiceHandler={async (
             _choice: DropdownOption<{ chain_id: number }>
           ) => {
-            console.log("Choice gotten:", _choice);
             return await switchNetwork(_choice.data.chain_id);
           }}
         />

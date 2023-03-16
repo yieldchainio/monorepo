@@ -11,7 +11,6 @@ export const useHideScroll = (): boolean => {
   useEffect(() => {
     const handleScroll = () => {
       const currScroll = window.scrollY;
-      console.log(currScroll, prevScroll);
       setPrevScroll(window.scrollY);
 
       if (currScroll > prevScroll + 30) {

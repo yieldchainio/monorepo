@@ -4,7 +4,6 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import "twind/shim";
 import WrappedImage from "components/wrappers/image";
 
@@ -33,14 +32,14 @@ export const Switch = ({ handler, className, images }: SwitchProps) => {
   };
   return (
     <div
-      className="flex w-[70px] h-[36.2px] rounded-full border-custom-border border-2 bg-custom-bg bg-opacity-[10%] drop-shadow-sm py-1 px-1.5 cursor-pointer"
+      className="flex w-[60px] h-[28.2px] rounded-full border-custom-border border-2 bg-custom-bg bg-opacity-[10%] drop-shadow-sm py-1 px-1.5 cursor-pointer"
       onClick={() => handleClick()}
       style={{
         justifyContent: on ? "end" : "start",
       }}
     >
       <motion.div
-        className="flex items-center justify-center w-[42.5%] h-full bg-custom-componentbg rounded-full hover:scale-[1.01] border-2 border-custom-themedBorder"
+        className="flex items-center justify-center w-[40.5%] h-full bg-custom-componentbg rounded-full hover:scale-[1.01] border-2 border-custom-themedBorder drop-shadow-xl"
         layout
         transition={{
           type: "spring",
@@ -50,7 +49,7 @@ export const Switch = ({ handler, className, images }: SwitchProps) => {
         }}
       >
         {!on && images?.offImage && (
-          <WrappedImage alt="" src={images.offImage} width={16} height={16} />
+          <WrappedImage alt="" src={images.offImage} width={12} height={12} />
         )}
         {on && images?.onImage && (
           <WrappedImage alt="" src={images.onImage} width={18} height={18} />

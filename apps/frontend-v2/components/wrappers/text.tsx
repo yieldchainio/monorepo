@@ -31,7 +31,7 @@ const WrappedText = ({
   select = Selection.allow,
   className = "",
 }: TextProps) => {
-  if (!children)
+  if (children === undefined)
     return <TextSkeleton fontSize={fontSize} className={className} />;
   return (
     <div

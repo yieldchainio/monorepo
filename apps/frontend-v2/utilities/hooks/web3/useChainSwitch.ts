@@ -20,7 +20,6 @@ export const useChainSwitch = () => {
       if (chain) {
         // Call addChain, save boolean return value (whether chain was added or not)
         const chainAdded: boolean = await addChain(chain);
-        console.log("Chain Added:", chainAdded);
 
         // If chain was added, we recruse the call to switch to it. THis time we input chain object
         // manually for increased efficency
@@ -49,14 +48,10 @@ export const useChainSwitch = () => {
         // Get our chain
         const chain = chains.find((chain: Chain) => chain.id == _chainId);
 
-        console.log("chain found when catching:", chains);
-        console.log("Inputted Chain ID:", _chainId);
-
         // When catching an error, if we found our chain we call addChain then
         if (chain) {
           // Call addChain, save boolean return value (whether chain was added or not)
           const chainAdded: boolean = await addChain(chain);
-          console.log("Chain Added:", chainAdded);
 
           // If chain was added, we recruse the call to switch to it. THis time we input chain object
           // manually for increased efficency
@@ -87,7 +82,6 @@ export const useChainSwitch = () => {
  * @returns
  */
 const addChain = async (chain: Chain): Promise<boolean> => {
-  console.log("Gonna add chain!!! window.ethereum: ", window?.ethereum);
   return (
     (await window?.ethereum?.request({
       method: "wallet_addEthereumChain",

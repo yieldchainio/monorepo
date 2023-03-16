@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ClassificationContext,
   Endpoints,
@@ -26,36 +26,34 @@ const StoreInitiallizor = ({ context }: StoreInitiallizorProps) => {
   // Keep track to see if we have been initiallized or not
   const [initiallized, setInitiallized] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (!initiallized) {
+      useYCStore.setState((state) => {
+        return {
+          context: YCClassifications.getInstance(context),
+        };
+      });
+
+      setInitiallized(true);
+    }
+  }, []);
+
   // Hydrate the store hooks
   if (!initiallized) {
     // console.log("Running hydration babyyy!!!");
-    // setInitiallized(true);
     // const contextInstance = YCClassifications.getInstance(context);
-
     // // An array of all the datapoints,
     // // feel free to add to here / remove as needed.
     // const stores = [];
-
     // // @notice we iterate over each storage hook
     // for (const stateStore of stores) {
     //   /**
     //    * Get the refresh function out of the store (standard, all stores @uses YCBaseStore
     //    */
     //   const { refresh }: YCBaseStore = stateStore();
-
     //   // Refresh the data
     //   refresh(contextInstance);
     // }
-
-    const refresh = useYCStore((state) => state.refresh);
-
-    useYCStore.setState((state) => {
-      return {
-        context: YCClassifications.getInstance(context),
-      };
-    });
-
-    refresh(Endpoints.ALL);
   }
 
   // Return null (This is a plain compnent)

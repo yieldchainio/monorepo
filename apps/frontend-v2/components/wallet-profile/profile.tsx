@@ -6,6 +6,8 @@ import Icon from "components/icons/camera";
 import WrappedText from "components/wrappers/text";
 import { RegulerButton } from "components/buttons/reguler";
 import DisconnectIcon from "components/icons/disconnect";
+import { Switch } from "components/buttons/switch";
+import { Themes, useTheme } from "utilities/stores/theme";
 
 /**
  * Sub component of the profile for the modal
@@ -14,12 +16,13 @@ const ProfileSection = ({
   address,
   userName,
   profilePic,
-}: YCUserHookReturn) => {
+}: Partial<YCUserHookReturn>) => {
   // Disconnect button
   const { disconnect } = useDisconnect();
+  const { setTheme } = useTheme();
 
   return (
-    <div className="flex flex-row w-full h-[20%]">
+    <div className="flex flex-row w-full h-[20%] gap-12">
       <div className="flex gap-3.5 items-start justify-start">
         <div className="flex flex-col">
           <WrappedImage
@@ -55,14 +58,23 @@ const ProfileSection = ({
           </div>
         </div>
       </div>
-      <RegulerButton
-        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-          disconnect()
-        }
-        className="py-[8px] px-[10px] ml-auto items-center justify-center my-1"
-      >
-        <DisconnectIcon iconClassname="text-custom-textColor scale-[1.2] pointer-events-none" />
-      </RegulerButton>
+      <div className="flex flex-row items-center gap-2 pb-5">
+        <Switch
+          handler={(on: boolean) => setTheme(on ? Themes.LIGHT : Themes.DARK)}
+          images={{
+            offImage: "/icons/moon.svg",
+            onImage: "/icons/sun.svg",
+          }}
+        />
+        <RegulerButton
+          onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+            disconnect()
+          }
+          className="py-[8px] px-[10px] ml-auto items-center justify-center my-1"
+        >
+          <DisconnectIcon iconClassname="text-custom-textColor scale-[1.2] pointer-events-none" />
+        </RegulerButton>
+      </div>
     </div>
   );
 };

@@ -66,6 +66,8 @@ const Dropdown = ({
     setCurrentChoice(_choice);
   };
 
+  console.log(options, "Options ser");
+
   return (
     <div className="relative">
       {menuOpen &&
@@ -81,15 +83,15 @@ const Dropdown = ({
 
       <RegulerButton onClick={handleClick} className=" " ref={dropdownBtnRef}>
         <div className="flex flex-row gap-2">
-          {currentChoice.image !== undefined && (
+          {currentChoice?.image !== undefined && (
             <WrappedImage
               src={currentChoice.image}
               width={24}
               height={24}
-              className="rounded-full"
+              className=" rounded-full"
             />
           )}
-          {currentChoice.text}
+          {currentChoice?.text}
         </div>
         <WrappedImage src="/icons/dropdown-arrow.svg" width={24} height={24} />
       </RegulerButton>

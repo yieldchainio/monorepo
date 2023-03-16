@@ -12,7 +12,6 @@ export interface YCContextStore {
 export const useYCStore = create<YCContextStore>((set, get) => ({
   // The context (YCClassifications instance)
   context: YCClassifications.getInstance(),
-
   // Refresh function to refresh
   refresh: async (endpoints: Endpoints[] | Endpoints) =>
     await get().context.refresh(endpoints),

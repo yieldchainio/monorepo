@@ -2,11 +2,11 @@ import { IconProps } from "./types";
 const Icon = ({ className, iconClassname }: IconProps) => {
   return (
     <svg
-      width={26}
-      height={22}
+      width={24.5}
+      height={21}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className || ""}
+      className={className + " rounded-sm" || ""}
     >
       <g filter="url(#prefix__filter0_d_2312_2084)">
         <path

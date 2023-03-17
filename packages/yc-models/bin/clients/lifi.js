@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ethers } from "ethers";
-export default class LiFi {
+export class LiFi {
     // ====================
     //    PRIVATE FIELDS
     // ====================
@@ -23,10 +23,10 @@ export default class LiFi {
     // ====================
     // Get full token info
     tokenInfo = async (_token) => {
-        let chainid = _token.network()?.chainid;
+        let chainid = _token.network?.chainid;
         if (!chainid)
             return null;
-        return await (await axios.get(this.#apiURL + `/token?chain=${chainid}&token=${_token.address()}`)).data;
+        return await (await axios.get(this.#apiURL + `/token?chain=${chainid}&token=${_token.address}`)).data;
     };
     // Get a USD Price of a token
     getUSDPrice = async (_token) => {
@@ -37,8 +37,8 @@ export default class LiFi {
     };
     // Get a quote
     getFullQuote = async (_fromToken, _toToken, _amount, _sender, _toChain, _receiver) => {
-        let fromChainId = _fromToken.network()?.chainid;
-        let toChainId = _toToken.network()?.chainid;
+        let fromChainId = _fromToken.network?.chainid;
+        let toChainId = _toToken.network?.chainid;
         if (!fromChainId || !toChainId)
             return null;
         let quote = null;
@@ -46,7 +46,7 @@ export default class LiFi {
         let retries = 0;
         try {
             quote = await (await axios.get(this.#apiURL +
-                `/quote?fromChain=${fromChainId}&toChain=${toChainId}&fromToken=${_fromToken.address()}&toToken=${_toToken.address()}&fromAddress=${_sender || ethers.ZeroAddress}&toAddress=${_receiver || _sender || ethers.ZeroAddress}&fromAmount=${_amount || _fromToken.parseDecimals(1)}`)).data;
+                `/quote?fromChain=${fromChainId}&toChain=${toChainId}&fromToken=${_fromToken.address}&toToken=${_toToken.address}&fromAddress=${_sender || ethers.ZeroAddress}&toAddress=${_receiver || _sender || ethers.ZeroAddress}&fromAmount=${_amount || _fromToken.parseDecimals(1)}`)).data;
         }
         catch (e) {
             retries++;

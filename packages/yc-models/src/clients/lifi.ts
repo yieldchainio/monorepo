@@ -28,11 +28,11 @@ export class LiFi {
 
   // Get full token info
   tokenInfo = async (_token: YCToken): Promise<TokenInfo | null> => {
-    let chainid = _token.network()?.chainid;
+    let chainid = _token.network?.chainid;
     if (!chainid) return null;
     return await (
       await axios.get(
-        this.#apiURL + `/token?chain=${chainid}&token=${_token.address()}`
+        this.#apiURL + `/token?chain=${chainid}&token=${_token.address}`
       )
     ).data;
   };
@@ -53,8 +53,8 @@ export class LiFi {
     _toChain?: number,
     _receiver?: string
   ): Promise<FullQuoteResponse | null> => {
-    let fromChainId = _fromToken.network()?.chainid;
-    let toChainId = _toToken.network()?.chainid;
+    let fromChainId = _fromToken.network?.chainid;
+    let toChainId = _toToken.network?.chainid;
     if (!fromChainId || !toChainId) return null;
 
     let quote: FullQuoteResponse | null = null;
@@ -65,7 +65,9 @@ export class LiFi {
       quote = await (
         await axios.get(
           this.#apiURL +
-            `/quote?fromChain=${fromChainId}&toChain=${toChainId}&fromToken=${_fromToken.address()}&toToken=${_toToken.address()}&fromAddress=${
+            `/quote?fromChain=${fromChainId}&toChain=${toChainId}&fromToken=${
+              _fromToken.address
+            }&toToken=${_toToken.address}&fromAddress=${
               _sender || ethers.ZeroAddress
             }&toAddress=${
               _receiver || _sender || ethers.ZeroAddress

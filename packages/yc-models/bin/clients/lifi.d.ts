@@ -1,5 +1,5 @@
-import YCToken from "../core/token";
-export default class LiFi {
+import { YCToken } from "../core/token/token";
+export declare class LiFi {
     #private;
     static instance: LiFi;
     constructor();

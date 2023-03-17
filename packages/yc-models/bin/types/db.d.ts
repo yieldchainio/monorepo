@@ -11,27 +11,22 @@ export interface DBAction {
     hidden: boolean;
 }
 export interface DBStrategy {
-    strategy_identifier: number;
+    id: string;
     address: address;
-    name: string;
-    upkeep_id: number;
-    apy: number;
-    tvl: number;
-    main_protocol_identifier: number;
-    creator_user_identifier: number;
+    title: string;
     chain_id: ChainID;
-    main_token_identifier: number;
-    final_token_identifier: number;
-    is_verified: boolean;
-    is_trending: boolean;
+    deposit_token_id: string;
+    creator_id: string;
+    verified: boolean;
     execution_interval: number;
-    strategy_object: JSON;
+    steps: JSON[];
 }
 export interface DBNetwork {
-    chain_id: number;
+    id: number;
     name: string;
     logo: string;
-    json_rpc: string | null;
+    color: string | null;
+    json_rpc: string;
     diamond_address: string | null;
     block_explorer: string | null;
 }
@@ -57,36 +52,31 @@ export interface DBArgument {
     name: string;
 }
 export interface DBFlow {
-    flow_identifier: number;
-    token_identifier: number;
+    id: number;
+    token_id: string;
     outflow0_or_inflow1: number;
 }
 export interface DBToken {
-    token_identifier: number;
+    id: string;
     name: string;
     address: address;
     symbol: string;
     logo: string;
     decimals: number;
-    coinkey: string;
-    priceusd: number;
     chain_id: ChainID;
-    markets: number[];
 }
 export interface DBProtocol {
-    protocol_identifier: number;
+    id: string;
     name: string;
     website: string;
     logo: string;
-    is_verified: boolean;
-    avg_apy: number;
-    aggregated_tvl: number;
-    yc_vaults_num: number;
-    color: string;
-    hidden: boolean;
-    twitter?: string;
-    telegram?: string;
-    discord?: string;
+    available: boolean;
+    color: string | null;
+    chain_ids: number[];
+    address_ids: string[];
+    twitter: string | null;
+    telegram: string | null;
+    discord: string | null;
 }
 export interface DBAddress {
     address_identifier: number;
@@ -100,10 +90,12 @@ export interface DBUser {
     address: string;
     username: string;
     description: string;
-    profile_picture: string;
-    twitter?: string;
-    telegram?: string;
-    discord?: string;
+    profile_picture: string | null;
+    twitter: string | null;
+    telegram: string | null;
+    discord: string | null;
     whitelisted: boolean;
     verified: boolean;
+}
+export interface Step {
 }

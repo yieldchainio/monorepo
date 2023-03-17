@@ -5,7 +5,7 @@
 import { DBAddress, DBAction, DBFunction, DBFlow, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBUser } from "./db";
 export interface ClassificationContext {
     addresses: DBAddress[];
-    functions: DBFunction[];
+    funcs: DBFunction[];
     tokens: DBToken[];
     parameters: DBArgument[];
     flows: DBFlow[];

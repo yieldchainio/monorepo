@@ -12,6 +12,11 @@ import { fetchRouter } from "../utils/fetch-router";
  * A class representing an on-chain token
  */
 export class YCUser {
+  // =================
+  //   SINGLETON REF
+  // =================
+  static instances: YCUser[] = [];
+
   // =======================
   //    PRIVATE VARIABLES
   // =======================
@@ -176,12 +181,21 @@ export class YCUser {
 
     this.#context = _context;
 
+    // We try to find an existing instance of this user
+    const existingUser = YCUser.instances.find((user) => user.id === _user.id);
+
+    // If it exists, we return it
+    if (existingUser) return existingUser;
+
+    // Else we push this instance into the array
+    YCUser.instances.push(this);
+
     // We only set the following propreties if the context has been initiallized
     console.log("All strategies from coontext ser", _context.strategies);
-    if (_context.initiallized)
-      this.#createdVaults = _context.strategies.filter(
-        (strategy) => strategy.creator?.id == this.id
-      );
+    // if (_context.initiallized)
+    //   this.#createdVaults = _context.strategies.filter(
+    //     (strategy) => strategy.creator?.id == this.id
+    //   );
   }
   // =======================
   //        METHODS

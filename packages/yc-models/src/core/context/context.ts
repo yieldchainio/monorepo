@@ -85,6 +85,11 @@ class YCClassificationsInternal {
   // Prisma Client
   protected Client: PrismaClient | null = null;
 
+  /**
+   * @notice
+   * Loading array indiciating whether 
+   */
+
   // =======================
   //      CONSTRUCTOR
   //      (SINGLETON)

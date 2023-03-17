@@ -66,9 +66,9 @@ const useYCUser = (): YCUserHookReturn => {
       (async () => {
         console.log("Calling signup with this UUID:", uuidv4());
         // Sign the user up using their address
-        dbUser = await YCUser.signUp({
-          address,
-        });
+        // dbUser = await YCUser.signUp({
+        //   address,
+        // });
       })();
     }
 
@@ -142,7 +142,6 @@ const useYCUser = (): YCUserHookReturn => {
   useEffect(() => {
     if (user) setCreatedVaults(user.createdVaults);
   }, [user?.createdVaults]);
-
 
   // Return our states
   return { address, profilePic, userName, createdVaults };

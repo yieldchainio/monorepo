@@ -12,7 +12,7 @@ export class YCStrategy {
   #address: address;
   #title: string;
   #depositToken: YCToken | null;
-  #creator: YCUser | null;
+  #creator: YCUser | null = null;
   #steps: YCStep[];
 
   // =================
@@ -23,8 +23,9 @@ export class YCStrategy {
     this.#address = _strategy.address;
     this.#title = _strategy.title;
     this.#depositToken = _context.getToken(_strategy.deposit_token_id) || null;
-    this.#creator = _context.getUser(_strategy.creator_id) || null;
+    // this.#creator = _context.getUser(_strategy.creator_id) || null;
     console.log("Strategy got creator:", !!this.#creator);
+    console.log("Strategy steps", _strategy);
     this.#steps = _strategy.steps.map((step) => new YCStep(step, _context));
   }
 

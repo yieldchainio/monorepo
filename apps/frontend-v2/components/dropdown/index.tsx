@@ -97,7 +97,14 @@ const Dropdown = ({
           )}
           <span className="laptop:hidden">{currentChoice?.text}</span>
         </div>
-        <WrappedImage src="/icons/dropdown-arrow.svg" width={24} height={24} />
+        <WrappedImage
+          src={{
+            dark: "/icons/dropdown-arrow-light.svg",
+            light: "/icons/dropdown-arrow-dark.svg",
+          }}
+          width={24}
+          height={24}
+        />
       </RegulerButton>
     </div>
   );

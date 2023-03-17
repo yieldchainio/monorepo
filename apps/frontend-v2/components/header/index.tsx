@@ -64,7 +64,7 @@ export const Header = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-end w-[100%] h-[10vh] pr-10 blur-none gap-6">
+      <div className="flex items-center justify-end h-[10vh] pr-10 blur-none gap-6">
         <span className="smallLaptop:hidden">
           <Switch
             handler={(on: boolean) => setTheme(on ? Themes.LIGHT : Themes.DARK)}

@@ -56,9 +56,9 @@ const DropdownMenu = ({
     >
       {options.map((option: DropdownOption) => {
         return (
-          <div className="flex flex-row justify-between items-center gap-3 bg-custom-dropdown bg-opacity-[0] rounded-lg hover:bg-opacity-50 hover:scale-[1.03] cursor-pointer transition duration-200 ease-in-out">
+          <div className="flex flex-row items-center gap-3 bg-custom-dropdown bg-opacity-[0] rounded-lg hover:bg-opacity-50 hover:scale-[1.03] cursor-pointer transition duration-200 ease-in-out">
             <div
-              className="flex items-center w-full py-2.5 px-2 gap-2"
+              className="flex items-center w-full py-2.5 px-2.5 gap-2 laptop:justify-center"
               onClick={async () => await choiceHandler(option)}
             >
               {option.image && (
@@ -71,13 +71,15 @@ const DropdownMenu = ({
                 />
               )}
 
-              <WrappedText
-                className="truncate"
-                fontStyle="reguler"
-                fontSize={16}
-              >
-                {option.text}
-              </WrappedText>
+              <span className="laptop:hidden">
+                <WrappedText
+                  className="truncate"
+                  fontStyle="reguler"
+                  fontSize={16}
+                >
+                  {option.text}
+                </WrappedText>
+              </span>
             </div>
             {typeof loading !== "boolean" &&
               JSON.stringify(loading.data) == JSON.stringify(option.data) && (

@@ -6,8 +6,9 @@ import Icon from "components/icons/camera";
 import WrappedText from "components/wrappers/text";
 import { RegulerButton } from "components/buttons/reguler";
 import DisconnectIcon from "components/icons/disconnect";
-import { Switch } from "components/buttons/switch";
+import { Switch } from "components/switches/base";
 import { Themes, useTheme } from "utilities/stores/theme";
+import { ThemeSwitch } from "components/switches/theme";
 
 /**
  * Sub component of the profile for the modal
@@ -59,13 +60,7 @@ const ProfileSection = ({
         </div>
       </div>
       <div className="flex flex-row items-center gap-2 pb-5 ml-auto">
-        <Switch
-          handler={(on: boolean) => setTheme(on ? Themes.LIGHT : Themes.DARK)}
-          images={{
-            offImage: "/icons/moon.svg",
-            onImage: "/icons/sun.svg",
-          }}
-        />
+        <ThemeSwitch />
         <RegulerButton
           onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
             disconnect()

@@ -6,13 +6,14 @@ import "../../css/globals.css";
 import { YCNetwork } from "@yc/yc-models";
 import { DropdownOption } from "../dropdown/types";
 import { useYCStore } from "utilities/stores/yc-data";
-import { Switch } from "components/buttons/switch";
+import { Switch } from "components/switches/base";
 import WrappedImage from "components/wrappers/image";
 import { ProfileModal } from "components/wallet-profile";
 import ConnectWalletButton from "components/buttons/connect";
 import { useChainSwitch } from "../../utilities/hooks/web3/useChainSwitch";
 import useYCUser from "utilities/hooks/yc/useYCUser";
 import { Themes, useTheme } from "utilities/stores/theme";
+import { ThemeSwitch } from "components/switches/theme";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",
@@ -66,13 +67,7 @@ export const Header = () => {
       </div>
       <div className="flex items-center justify-end h-[10vh] pr-10 blur-none gap-6">
         <span className="smallLaptop:hidden">
-          <Switch
-            handler={(on: boolean) => setTheme(on ? Themes.LIGHT : Themes.DARK)}
-            images={{
-              offImage: "/icons/moon.svg",
-              onImage: "/icons/sun.svg",
-            }}
-          />
+          <ThemeSwitch />
         </span>
         <Dropdown
           options={networks.map((network: YCNetwork): DropdownOption => {

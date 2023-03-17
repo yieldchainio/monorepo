@@ -1,7 +1,6 @@
 import { PrismaClient } from "@yc/yc-data";
 import axios from "axios";
 import { DBUser } from "../../types/db";
-import { YCClassificationsInternal } from "../context";
 import { YCClassifications } from "../context/context";
 import { YCSocialMedia } from "../social-media/social-media";
 import { YCStrategy } from "../strategy/strategy";
@@ -40,20 +39,22 @@ export class YCUser {
     context = YCClassifications.getInstance(),
   }: SignupArguments): Promise<null | DBUser> => {
     // Init the context if it wasnt already
-    if (!context.initiallized) await context.initiallize();
+    if (!context.initiallized) {
+      console.log("Initiallizing Context Inside Signup...");
+      await context.initiallize();
+    }
 
     // Try to find the user if it exists already
     const userExists = context.users.find(
       (user: YCUser) => user.address == address
     );
 
-    console.log("User exists in signup:", userExists);
-    console.log("All users in signuo:", context.users);
-
     // If the user exists, we return false to indicate the signup failed
     if (userExists) return null;
 
     const client = context.client;
+
+    console.log("Gonna sign up the user, frontend window:", typeof window);
 
     // Send the request to the backend
     const res = await fetchRouter<DBUser | undefined>({
@@ -73,7 +74,7 @@ export class YCUser {
       },
       frontend: {
         fetcher: async () =>
-          await axios.post(YCClassificationsInternal.apiURL + "/sign-up", {
+          await axios.post(YCClassifications.apiURL + "/signup", {
             address: address,
             username: username,
             profile_picture: profilePicture,
@@ -142,7 +143,7 @@ export class YCUser {
       },
       frontend: {
         fetcher: async () =>
-          await axios.post(YCClassificationsInternal.apiURL + "/update-user", {
+          await axios.post(YCClassifications.apiURL + "/update-user", {
             address: address || doesUserExist?.address,
             username: username || doesUserExist?.username,
             profile_picture: profilePicture || doesUserExist?.profilePic,
@@ -176,9 +177,10 @@ export class YCUser {
     this.#context = _context;
 
     // We only set the following propreties if the context has been initiallized
+    console.log("All strategies from coontext ser", _context.strategies);
     if (_context.initiallized)
       this.#createdVaults = _context.strategies.filter(
-        (strategy) => strategy.creator?.id === this.#id
+        (strategy) => strategy.creator?.id == this.id
       );
   }
   // =======================
@@ -190,6 +192,10 @@ export class YCUser {
 
   get id() {
     return this.#id;
+  }
+
+  get createdVaults() {
+    return this.#createdVaults;
   }
 
   get address() {

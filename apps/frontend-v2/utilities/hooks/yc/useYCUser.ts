@@ -1,8 +1,14 @@
-import { address, Endpoints, YCStrategy, YCUser } from "@yc/yc-models";
+import {
+  address,
+  DBUser,
+  Endpoints,
+  YCClassifications,
+  YCStrategy,
+  YCUser,
+} from "@yc/yc-models";
 import { useYCStore } from "utilities/stores/yc-data";
 import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 import Jazzicon from "@raugfer/jazzicon";
-import WrappedImage, { ImageProps } from "components/wrappers/image";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -38,35 +44,51 @@ const useYCUser = (): YCUserHookReturn => {
     return state.context.users;
   });
 
+  // Refresher function for the context
   const refresher = useYCStore((state) => state.refresh);
 
+  /**
+   * useEffect running every time the @users update, in an attempt to update our @user,
+   * and optionally sign them up if they are new
+   */
   useEffect(() => {
-    console.log(
-      "users rerender!, user's addresses:",
-      users.map((user) => user.address),
-      "User found:",
-      users.find((user) => user.address.toLowerCase() === address),
-      "Current Address:",
-      address
-    );
-    let user =
+    // We attempt to find the user in the users array
+    let _user =
       users.find(
         (user) => user.address.toLowerCase() === address?.toLowerCase()
       ) || null;
-    if (!user && address) {
+
+    let dbUser: DBUser | null = null;
+
+    // If the user was not found (and the address exists)
+    if (!_user && address) {
+      // We call an async function to sign them up
       (async () => {
         console.log("Calling signup with this UUID:", uuidv4());
-        // Sign the user up
-
-        await YCUser.signUp({
+        // Sign the user up using their address
+        dbUser = await YCUser.signUp({
           address,
         });
+      })();
+    }
 
-        // Refresh the user data
+    // If user exists, set the user
+    if (_user) setUser(_user);
+    // Else if DBUser exists (we got it from signing up)
+    else if (dbUser) {
+      // Set the user to a new YCUser instantiated with that dbUser
+      setUser(new YCUser(dbUser, YCClassifications.getInstance()));
+
+      // Refresh the context
+      (async () => {
         await refresher(Endpoints.USERS);
       })();
     }
-    if (user) setUser(user);
+
+    // Cleanup
+    return () => {
+      setUser(null);
+    };
   }, [users]);
 
   /**
@@ -83,14 +105,6 @@ const useYCUser = (): YCUserHookReturn => {
     user?.username || ensName || "Anon"
   );
 
-  useEffect(() => {
-    console.log(
-      "Rerendering on user change for username, user's username:",
-      user
-    );
-    setUsername(user?.username || ensName || "Anon");
-  }, [user, ensName]);
-
   /**
    * profile pic of the user,
    * return priorities:
@@ -104,20 +118,33 @@ const useYCUser = (): YCUserHookReturn => {
       (ensAvater ? ensAvater : address ? buildDataUrl(address) : null)
   );
 
-  // useEffect to update it
-  useEffect(() => {
-    if (user?.profilePic) setProfilePic(user?.profilePic);
-    else if (ensAvater) setProfilePic(ensAvater);
-    else if (jazziconPFP) setProfilePic(jazziconPFP);
-  }, [user?.profilePic, ensAvater, jazziconPFP]);
-
   // Some more details about the user
   const [createdVaults, setCreatedVaults] = useState<YCStrategy[]>([]);
 
+  /**
+   * useEffect(s) responsible for running each time the user or one of the details change,
+   * in order to potentially change some of our states
+   */
+
+  // useEffect for the username
+  useEffect(() => {
+    // Set the username with the usual priority
+    setUsername(user?.username || ensName || "Anon");
+  }, [user?.username, ensName]);
+
+  // useEffect for the profile pic
+  useEffect(() => {
+    // Set the profile picture with the usual priority
+    setProfilePic(user?.profilePic || ensAvater || jazziconPFP);
+  }, [user?.profilePic, ensAvater, jazziconPFP]);
+
+  // useEffect for the created vaults
   useEffect(() => {
     if (user) setCreatedVaults(user.createdVaults);
-  }, [user]);
+  }, [user?.createdVaults]);
 
+
+  // Return our states
   return { address, profilePic, userName, createdVaults };
 };
 

@@ -15,6 +15,7 @@ export class YCToken {
   //    PRIVATE VARIABLES
   // =======================
   #name: string; // Init in constructor
+  #id: string;
   #symbol: string;
   #address: string;
   #logoURI: string | null = null; // Init to null (Optional field)
@@ -30,6 +31,7 @@ export class YCToken {
   constructor(_token: DBToken, _context: YCClassifications) {
     // Init static fields
     this.#name = _token.name;
+    this.#id = _token.id;
     this.#symbol = _token.symbol;
     this.#network = _context.getNetwork(_token.chain_id);
     this.#address = ethers.getAddress(_token.address);
@@ -55,30 +57,38 @@ export class YCToken {
   // =======================
 
   // The checksummed address
-  address = () => {
+  get address() {
     return ethers.getAddress(this.#address);
-  };
+  }
+
+  get id() {
+    return this.#id;
+  }
 
   // Decimals
-  decimals = () => {
+  get decimals() {
     return this.#decimals;
-  };
+  }
+
+  get chainId() {
+    return this.network?.chainid;
+  }
 
   // Parse a formatted number by the decimals
   parseDecimals = (_number: string | number | bigint) => {
     _number = BigInt(_number);
-    return _number * 10n ** BigInt(this.decimals());
+    return _number * 10n ** BigInt(this.decimals);
   };
 
   // The network instance it is on
-  network = () => {
+  get network() {
     return this.#network;
-  };
+  }
 
   // All markets
-  markets = () => {
+  get markets() {
     return this.#markets;
-  };
+  }
 
   // Quote against $ USD
   price = async (): Promise<number | null> => {
@@ -91,9 +101,9 @@ export class YCToken {
   };
 
   // Indiciating whether th
-  isNative = () => {
+  get isNative() {
     return this.#native;
-  };
+  }
 
   // Check whether this token is liquid in a certain market (By ID)
   isInMarket = (_protocolID: string) => {

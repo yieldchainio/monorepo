@@ -19,10 +19,12 @@ export class YCStrategy {
   //   CONSTRUCTOR
   // =================
   constructor(_strategy: DBStrategy, _context: YCClassifications) {
+    console.log("New YC Strategy");
     this.#address = _strategy.address;
     this.#title = _strategy.title;
     this.#depositToken = _context.getToken(_strategy.deposit_token_id) || null;
     this.#creator = _context.getUser(_strategy.creator_id) || null;
+    console.log("Strategy got creator:", !!this.#creator);
     this.#steps = _strategy.steps.map((step) => new YCStep(step, _context));
   }
 

@@ -41,15 +41,16 @@ model flowsv2 {
 }
 
 model tokensv2 {
-  id       String        @id @default(uuid())
-  name     String
-  address  String
-  symbol   String
-  logo     String
-  decimals Int
-  chain_id Int
-  flows    flowsv2[]
-  markets  protocolsv2[] @relation("protocolsv2Totokensv2")
+  id           String         @id @default(uuid())
+  name         String
+  address      String
+  symbol       String
+  logo         String
+  decimals     Int
+  chain_id     Int
+  flows        flowsv2[]
+  markets      protocolsv2[]  @relation("protocolsv2Totokensv2")
+  strategiesv2 strategiesv2[]
 
   @@map("tokens")
   @@schema("YieldchainV2")
@@ -144,13 +145,14 @@ model strategiesv2 {
   title              String
   creator_id         String
   chain_id           Int
-  deposit_token_id   Int
   verified           Boolean       @default(false)
   execution_interval Int
   steps              Json[]        @db.Json
+  deposit_token_id   String
   network            networksv2    @relation(fields: [chain_id], references: [id])
   creator            usersv2       @relation(fields: [creator_id], references: [id])
   protocols          protocolsv2[] @relation("protocolsv2Tostrategiesv2")
+  token              tokensv2      @relation(references: [id], fields: [deposit_token_id])
 
   @@map("strategies")
   @@schema("YieldchainV2")
@@ -159,7 +161,7 @@ model strategiesv2 {
 model usersv2 {
   id                   String         @id @default(uuid())
   address              String
-  username             String         @unique
+  username             String         @default("Anon")
   description          String         @default("I may have nothing to say, but that does not mean anything about me - withhold the judgement -*_*-")
   profile_picture      String?
   twitter              String?        @unique

@@ -42,7 +42,7 @@ export const Header = () => {
       className={`fixed flex w-[100vw] h-[9vh] items-center  justify-between drop-shadow-sm pointer-events-auto z-100 rounded-xl`}
     >
       <div className="absolute w-full h-full overflow-hidden bg-transparent z-0 opacity-100 rounded-xl drop-shadow-lg">
-        <div className="absolute w-[100vw] h-[100%] bg-custom-header blur-2xl z-1 pointer-events-auto overflow-hidden rounded-xl"></div>
+        <div className="absolute w-[100vw] h-[100%] bg-custom-header backdrop-blur-xl z-1 pointer-events-auto overflow-hidden rounded-xl"></div>
       </div>
 
       <div className="relative">

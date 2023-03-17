@@ -24,9 +24,9 @@ export class YCProtocol {
   // =======================
   //     UNIQUE FIELDS
   // ======================
-  #tokens: YCToken[];
-  #networks: YCNetwork[];
-  #addresses: YCAddress[];
+  // #tokens: YCToken[];
+  // #networks: YCNetwork[];
+  // #addresses: YCAddress[];
   // #actions: YCAction[]; // TODO: Integrate this when u can, not urgent
   // =======================
   //     CONSTRUCTOR
@@ -47,25 +47,25 @@ export class YCProtocol {
 
     this.#identifier = _protocol.id;
 
-    // Find all tokens that are included in this protocol's markets
-    let tokens = _context.tokens
-      // Filter to include tokens that have the ID in their markets field
-      .filter((token: YCToken) => token.isInMarket(this.ID()));
+    // // Find all tokens that are included in this protocol's markets
+    // let tokens = _context.tokens
+    //   // Filter to include tokens that have the ID in their markets field
+    //   .filter((token: YCToken) => token.isInMarket(this.ID()));
 
-    // Set tokens field
-    this.#tokens = tokens;
+    // // Set tokens field
+    // this.#tokens = tokens;
 
-    // Find all networks this protocol is on
-    this.#networks = _context.networks.filter((network: YCNetwork) =>
-      network.protocols.find(
-        (_protocol: YCProtocol) => _protocol.ID() == this.ID()
-      )
-    );
+    // // Find all networks this protocol is on
+    // this.#networks = _context.networks.filter((network: YCNetwork) =>
+    //   network.protocols.find(
+    //     (_protocol: YCProtocol) => _protocol.ID() == this.ID()
+    //   )
+    // );
 
-    // Find all addresses where the parent protocol is this protocol
-    this.#addresses = _context.addresses.filter(
-      (address: YCAddress) => address.protocol()?.ID() == this.ID()
-    );
+    // // Find all addresses where the parent protocol is this protocol
+    // this.#addresses = _context.addresses.filter(
+    //   (address: YCAddress) => address.protocol()?.ID() == this.ID()
+    // );
   }
 
   // =======================
@@ -98,12 +98,12 @@ export class YCProtocol {
   };
 
   // Returns the networks this protocol is available on
-  networks = () => {
-    return this.#networks;
-  };
+  // networks = () => {
+  //   return this.#networks;
+  // };
 
-  // Returns the tokens that are available on this protocol as a market (i.e tokens that r liquid on this protocol)
-  tokens = () => {
-    return this.#tokens;
-  };
+  // // Returns the tokens that are available on this protocol as a market (i.e tokens that r liquid on this protocol)
+  // tokens = () => {
+  //   return this.#tokens;
+  // };
 }

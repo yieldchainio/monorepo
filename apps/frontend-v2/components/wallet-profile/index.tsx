@@ -1,3 +1,4 @@
+"use client";
 /**
  * @notice
  * A modal component for the user's profile w web3 functionality

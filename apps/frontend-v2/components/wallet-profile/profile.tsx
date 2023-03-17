@@ -1,6 +1,6 @@
 "use client";
 import { useDisconnect } from "wagmi";
-import useYCUser, { YCUserHookReturn } from "utilities/hooks/yc/useYCUser";
+import { YCUserHookReturn } from "utilities/hooks/yc/useYCUser";
 import WrappedImage from "components/wrappers/image";
 import Icon from "components/icons/camera";
 import WrappedText from "components/wrappers/text";
@@ -58,7 +58,7 @@ const ProfileSection = ({
           </div>
         </div>
       </div>
-      <div className="flex flex-row items-center gap-2 pb-5">
+      <div className="flex flex-row items-center gap-2 pb-5 ml-auto">
         <Switch
           handler={(on: boolean) => setTheme(on ? Themes.LIGHT : Themes.DARK)}
           images={{

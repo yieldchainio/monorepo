@@ -10,7 +10,7 @@ import WrappedImage from "components/wrappers/image";
 
 const Dropdown = ({
   options,
-  choice = options[0],
+  choice,
   children,
   onClick,
   choiceHandler,
@@ -19,11 +19,15 @@ const Dropdown = ({
   const [menuOpen, setMenuOpen] = useState<boolean | DropdownOption[]>(false);
 
   // State tracking the choice
-  const [currentChoice, setCurrentChoice] = useState<DropdownOption>(choice);
+  const [currentChoice, setCurrentChoice] = useState<DropdownOption>(
+    choice || [...options][0]
+  );
+
+  // Change the choice each time choice is changed
 
   useEffect(() => {
-    if (!currentChoice) setCurrentChoice(options[0]);
-  }, [options]);
+    setCurrentChoice([...options][0]);
+  }, [JSON.stringify(options)]);
 
   // A state keeping track of this component's UUID, for event listening purpoes
   const [UUID] = useState<string>(uuid());

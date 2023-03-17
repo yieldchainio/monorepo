@@ -30,14 +30,35 @@ const useYCUser = (): YCUserHookReturn => {
   const { data: ensName } = useEnsName({ address, chainId: 1 });
 
   // ENS Avater of the user
-  const { data: ensAvater } = useEnsAvatar({ address, chainId: 1 });
+  const { data: ensAvatar } = useEnsAvatar({ address, chainId: 1 });
+
+  // The YCUser instnace
+  const [user, setUser] = useState<YCUser | null>(null);
 
   // Jazzicon PFP
   const [jazziconPFP, setJazzicon] = useState<string | null>(
     address ? buildDataUrl(address) : null
   );
 
-  const [user, setUser] = useState<YCUser | null>(null);
+  /**
+   * User's username
+   */
+  const [userName, setUsername] = useState<string>(
+    user?.username || ensName || "Anon"
+  );
+
+  /**
+   * profile pic of the user,
+   * return priorities:
+   *
+   * 1) User's profile pic from the database
+   * 2) User's ENS avater
+   * 3) User's MM Jazzicon
+   */
+  const [profilePic, setProfilePic] = useState<string | null>(
+    user?.profilePic ||
+      (ensAvatar ? ensAvatar : address ? buildDataUrl(address) : null)
+  );
 
   // Get the current YC User
   const users: YCUser[] = useYCStore((state) => {
@@ -97,31 +118,21 @@ const useYCUser = (): YCUserHookReturn => {
   }, [users]);
 
   /**
-   * @notice
-   * useEffect that handles a user that has not yet been registered.
-   * If we got an address and the user is nullish (we didnt find any),
-   * we sign them up.
+   * useEffect for handling an address change (i.e new user)
    */
 
-  /**
-   * User's username
-   */
-  const [userName, setUsername] = useState<string>(
-    user?.username || ensName || "Anon"
-  );
+  useEffect(() => {
+    if (user?.address !== address) {
+      // Find an existing user in our users array
+      // @notice if user was just registered, we wont find it and the signup useEffect will handle this update instead
+      const _user = users.find(
+        (user_) => user_.address.toLowerCase() === address?.toLowerCase()
+      );
 
-  /**
-   * profile pic of the user,
-   * return priorities:
-   *
-   * 1) User's profile pic from the database
-   * 2) User's ENS avater
-   * 3) User's MM Jazzicon
-   */
-  const [profilePic, setProfilePic] = useState<string | null>(
-    user?.profilePic ||
-      (ensAvater ? ensAvater : address ? buildDataUrl(address) : null)
-  );
+      // Set the new user
+      if (_user) setUser(_user);
+    }
+  }, [address]);
 
   // Some more details about the user
   const [createdVaults, setCreatedVaults] = useState<YCStrategy[]>([]);
@@ -134,14 +145,23 @@ const useYCUser = (): YCUserHookReturn => {
   // useEffect for the username
   useEffect(() => {
     // Set the username with the usual priority
-    setUsername(user?.username || ensName || "Anon");
+    setUsername(
+      user?.username && user.username !== "Anon"
+        ? user?.username
+        : ensName || "Anon"
+    );
   }, [user?.username, ensName]);
 
   // useEffect for the profile pic
   useEffect(() => {
     // Set the profile picture with the usual priority
-    setProfilePic(user?.profilePic || ensAvater || jazziconPFP);
-  }, [user?.profilePic, ensAvater, jazziconPFP]);
+    setProfilePic(ensAvatar || jazziconPFP);
+  }, [user?.profilePic, ensAvatar, jazziconPFP]);
+
+  // Jazzicon useEffect (listens to address)
+  useEffect(() => {
+    if (address) setJazzicon(buildDataUrl(address));
+  }, [address]);
 
   // useEffect for the created vaults
   useEffect(() => {

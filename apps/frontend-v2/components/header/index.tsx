@@ -6,7 +6,6 @@ import "../../css/globals.css";
 import { YCNetwork } from "@yc/yc-models";
 import { DropdownOption } from "../dropdown/types";
 import { useYCStore } from "utilities/stores/yc-data";
-import { useEffect, useState } from "react";
 import { Switch } from "components/buttons/switch";
 import WrappedImage from "components/wrappers/image";
 import { ProfileModal } from "components/wallet-profile";
@@ -35,7 +34,7 @@ export const Header = () => {
 
   const { switchNetwork } = useChainSwitch();
 
-  const { address, userName, profilePic } = useYCUser();
+  const { address, userName, profilePic, createdVaults } = useYCUser();
 
   return (
     <div
@@ -94,20 +93,31 @@ export const Header = () => {
         {address ? (
           <Dropdown
             options={[
-              {
-                text:
-                  !userName || userName == "Anon"
-                    ? address?.slice(0, 4) +
+              ...[
+                {
+                  text:
+                    userName ||
+                    address?.slice(0, 4) +
                       "..." +
-                      address?.slice(address.length - 4, address.length)
-                    : userName,
-
-                image: profilePic || "",
-                data: {
-                  name: "Ethereum",
+                      address?.slice(address.length - 4, address.length),
+                  image: profilePic || "",
+                  data: {
+                    name: "Ethereum",
+                  },
                 },
-              },
+              ],
             ]}
+            choice={{
+              text:
+                userName ||
+                address?.slice(0, 4) +
+                  "..." +
+                  address?.slice(address.length - 4, address.length),
+              image: profilePic || "",
+              data: {
+                name: "Ethereum",
+              },
+            }}
           >
             <ProfileModal />
           </Dropdown>

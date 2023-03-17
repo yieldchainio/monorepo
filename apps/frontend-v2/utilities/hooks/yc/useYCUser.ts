@@ -73,49 +73,32 @@ const useYCUser = (): YCUserHookReturn => {
    * and optionally sign them up if they are new
    */
   useEffect(() => {
-    // We attempt to find the user in the users array
-    console.log("All Users ser", users);
-    if (!users.length)
+    // We attempt to find the user in the users array, we sign them up if they do not exist.
+    // Note that we also require the array to be populated with users already, to avoid signing up the user
+    // when the array was not yet initiated.
+    if (
+      address &&
+      !users.find(
+        (_user) => _user.address.toLowerCase() === address?.toLowerCase()
+      ) &&
+      users.length &&
+      user?.address.toLowerCase() !== address?.toLowerCase()
+    ) {
+      // An async function for signing the user up
       (async () => {
-        await refresher(Endpoints.USERS);
-      })();
-    let _user =
-      users.find(
-        (user) => user.address.toLowerCase() === address?.toLowerCase()
-      ) || null;
+        const newUser = await signUserUp(
+          address,
+          YCClassifications.getInstance()
+        );
 
-    let dbUser: DBUser | null = null;
-
-    // If the user was not found (and the address exists)
-    if (!_user && address) {
-      // We call an async function to sign them up
-      (async () => {
-        console.log("Calling signup with this UUID:", uuidv4());
-        // Sign the user up using their address
-        // dbUser = await YCUser.signUp({
-        //   address,
-        // });
+        if (newUser) setUser(newUser);
       })();
     }
-
-    // If user exists, set the user
-    if (_user) setUser(_user);
-    // Else if DBUser exists (we got it from signing up)
-    else if (dbUser) {
-      // Set the user to a new YCUser instantiated with that dbUser
-      setUser(new YCUser(dbUser, YCClassifications.getInstance()));
-
-      // Refresh the context
-      (async () => {
-        await refresher(Endpoints.USERS);
-      })();
-    }
-
     // Cleanup
     return () => {
       setUser(null);
     };
-  }, [users]);
+  }, [JSON.stringify(users)]);
 
   /**
    * useEffect for handling an address change (i.e new user)
@@ -144,7 +127,6 @@ const useYCUser = (): YCUserHookReturn => {
 
   // useEffect for the username
   useEffect(() => {
-    // Set the username with the usual priority
     setUsername(
       user?.username && user.username !== "Anon"
         ? user?.username
@@ -154,7 +136,6 @@ const useYCUser = (): YCUserHookReturn => {
 
   // useEffect for the profile pic
   useEffect(() => {
-    // Set the profile picture with the usual priority
     setProfilePic(ensAvatar || jazziconPFP);
   }, [user?.profilePic, ensAvatar, jazziconPFP]);
 
@@ -179,6 +160,24 @@ export default useYCUser;
  */
 
 // builds an image data url for embedding
-function buildDataUrl(address: string): string {
-  return "data:image/svg+xml;base64," + btoa(Jazzicon(address));
+function buildDataUrl(_address: string): string {
+  return "data:image/svg+xml;base64," + btoa(Jazzicon(_address));
 }
+
+/**
+ * Utility function to sign the user up
+ */
+
+const signUserUp = async (
+  _address: address,
+  _context: YCClassifications
+): Promise<YCUser | null> => {
+  // Attempt to sign the user up
+  const user = await YCUser.signUp({ address: _address });
+
+  // If the user is null, return null.
+  if (!user) return null;
+
+  // Else, create a new instance of the YCUser and return it
+  return new YCUser(user, _context);
+};

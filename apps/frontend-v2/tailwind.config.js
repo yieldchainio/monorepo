@@ -7,8 +7,9 @@ module.exports = {
     },
 
     screens: {
-      mobile: { max: "576px" },
+      mobile: { max: "640px" },
       tablet: { max: "768px" },
+      smallLaptop: { max: "1000px" },
       laptop: { max: "1150px" },
       pc: { max: "1920px" },
       largepc: { max: "2400px" },
@@ -93,6 +94,14 @@ module.exports = {
           },
           "100%": {
             transform: "translateX(-100px) scale(1)",
+          },
+        },
+        modalAppear: {
+          "0%": {
+            transform: "translateY(100vw)",
+          },
+          "100%": {
+            transform: "translateY(0px)",
           },
         },
       },

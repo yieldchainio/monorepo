@@ -95,7 +95,7 @@ const Dropdown = ({
               className=" rounded-full"
             />
           )}
-          {currentChoice?.text}
+          <span className="laptop:hidden">{currentChoice?.text}</span>
         </div>
         <WrappedImage src="/icons/dropdown-arrow.svg" width={24} height={24} />
       </RegulerButton>

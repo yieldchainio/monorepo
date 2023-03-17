@@ -65,13 +65,15 @@ export const Header = () => {
         </div>
       </div>
       <div className="flex items-center justify-end w-[100%] h-[10vh] pr-10 blur-none gap-6">
-        <Switch
-          handler={(on: boolean) => setTheme(on ? Themes.LIGHT : Themes.DARK)}
-          images={{
-            offImage: "/icons/moon.svg",
-            onImage: "/icons/sun.svg",
-          }}
-        />
+        <span className="smallLaptop:hidden">
+          <Switch
+            handler={(on: boolean) => setTheme(on ? Themes.LIGHT : Themes.DARK)}
+            images={{
+              offImage: "/icons/moon.svg",
+              onImage: "/icons/sun.svg",
+            }}
+          />
+        </span>
         <Dropdown
           options={networks.map((network: YCNetwork): DropdownOption => {
             return {
@@ -129,9 +131,9 @@ export const Header = () => {
 
         <div className="relative">
           <Button
-            text="Create Vault"
+            text={window.innerWidth < 1000 ? "+" : "Create Vault"}
             onClick={() => null}
-            className="relative font-semibold"
+            className=" relative font-semibold"
           />
         </div>
       </div>

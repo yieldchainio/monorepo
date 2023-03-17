@@ -68,6 +68,15 @@ const useYCUser = (): YCUserHookReturn => {
   // Refresher function for the context
   const refresher = useYCStore((state) => state.refresh);
 
+  // useEffect for refreshing
+  useEffect(() => {
+    if (!users.length) {
+      (async () => {
+        await refresher(Endpoints.USERS);
+      })();
+    }
+  }, [JSON.stringify(users)]);
+
   /**
    * useEffect running every time the @users update, in an attempt to update our @user,
    * and optionally sign them up if they are new
@@ -76,6 +85,20 @@ const useYCUser = (): YCUserHookReturn => {
     // We attempt to find the user in the users array, we sign them up if they do not exist.
     // Note that we also require the array to be populated with users already, to avoid signing up the user
     // when the array was not yet initiated.
+    console.log("useEffect ran");
+    console.log("address", !!address);
+    console.log(
+      "find",
+      !users.find(
+        (_user) => _user.address.toLowerCase() === address?.toLowerCase()
+      )
+    );
+
+    console.log("Users length", users);
+    console.log(
+      "address user comparison",
+      user?.address.toLowerCase() !== address?.toLowerCase()
+    );
     if (
       address &&
       !users.find(
@@ -84,10 +107,16 @@ const useYCUser = (): YCUserHookReturn => {
       users.length &&
       user?.address.toLowerCase() !== address?.toLowerCase()
     ) {
+      {
+        console.log("useEffect if statement true");
+      }
       // An async function for signing the user up
       (async () => {
         const newUser = await signUserUp(
-          address,
+          {
+            address,
+            username: ensName || undefined,
+          },
           YCClassifications.getInstance()
         );
 
@@ -98,7 +127,7 @@ const useYCUser = (): YCUserHookReturn => {
     return () => {
       setUser(null);
     };
-  }, [JSON.stringify(users)]);
+  }, [address, JSON.stringify(users)]);
 
   /**
    * useEffect for handling an address change (i.e new user)
@@ -127,17 +156,13 @@ const useYCUser = (): YCUserHookReturn => {
 
   // useEffect for the username
   useEffect(() => {
-    setUsername(
-      user?.username && user.username !== "Anon"
-        ? user?.username
-        : ensName || "Anon"
-    );
-  }, [user?.username, ensName]);
+    setUsername(user?.username || ensName || "Anon");
+  }, [user?.username, ensName, address]);
 
   // useEffect for the profile pic
   useEffect(() => {
     setProfilePic(ensAvatar || jazziconPFP);
-  }, [user?.profilePic, ensAvatar, jazziconPFP]);
+  }, [JSON.stringify(user), ensAvatar, jazziconPFP]);
 
   // Jazzicon useEffect (listens to address)
   useEffect(() => {
@@ -147,7 +172,7 @@ const useYCUser = (): YCUserHookReturn => {
   // useEffect for the created vaults
   useEffect(() => {
     if (user) setCreatedVaults(user.createdVaults);
-  }, [user?.createdVaults]);
+  }, [JSON.stringify(user)]);
 
   // Return our states
   return { address, profilePic, userName, createdVaults };
@@ -169,11 +194,11 @@ function buildDataUrl(_address: string): string {
  */
 
 const signUserUp = async (
-  _address: address,
+  _props: SignupProps,
   _context: YCClassifications
 ): Promise<YCUser | null> => {
   // Attempt to sign the user up
-  const user = await YCUser.signUp({ address: _address });
+  const user = await YCUser.signUp(_props);
 
   // If the user is null, return null.
   if (!user) return null;
@@ -181,3 +206,8 @@ const signUserUp = async (
   // Else, create a new instance of the YCUser and return it
   return new YCUser(user, _context);
 };
+
+interface SignupProps {
+  address: address;
+  username?: string;
+}

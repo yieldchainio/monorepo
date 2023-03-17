@@ -191,11 +191,20 @@ export class YCUser {
     YCUser.instances.push(this);
 
     // We only set the following propreties if the context has been initiallized
-    console.log("All strategies from coontext ser", _context.strategies);
-    // if (_context.initiallized)
-    //   this.#createdVaults = _context.strategies.filter(
-    //     (strategy) => strategy.creator?.id == this.id
-    //   );
+    console.log(
+      "All Strategies That match our id",
+      _context.strategies.filter((strategy) => strategy.creator?.id == this.id)
+    );
+    if (_context.initiallized)
+      this.#createdVaults = _context.strategies.filter(
+        (strategy) => strategy.creator?.id == this.id
+      );
+
+    console.log(
+      "Our created vaults ser, is context initiallized?",
+      _context.initiallized,
+      this.#createdVaults
+    );
   }
   // =======================
   //        METHODS

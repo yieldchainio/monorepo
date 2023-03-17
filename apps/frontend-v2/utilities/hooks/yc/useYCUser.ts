@@ -27,10 +27,10 @@ const useYCUser = (): YCUserHookReturn => {
   const { address, connector, status } = useAccount();
 
   // ENS Name of the user
-  const { data: ensName } = useEnsName({ address });
+  const { data: ensName } = useEnsName({ address, chainId: 1 });
 
   // ENS Avater of the user
-  const { data: ensAvater } = useEnsAvatar({ address });
+  const { data: ensAvater } = useEnsAvatar({ address, chainId: 1 });
 
   // Jazzicon PFP
   const [jazziconPFP, setJazzicon] = useState<string | null>(
@@ -41,7 +41,7 @@ const useYCUser = (): YCUserHookReturn => {
 
   // Get the current YC User
   const users: YCUser[] = useYCStore((state) => {
-    return state.context.users;
+    return state.context.YCusers;
   });
 
   // Refresher function for the context
@@ -53,6 +53,11 @@ const useYCUser = (): YCUserHookReturn => {
    */
   useEffect(() => {
     // We attempt to find the user in the users array
+    console.log("All Users ser", users);
+    if (!users.length)
+      (async () => {
+        await refresher(Endpoints.USERS);
+      })();
     let _user =
       users.find(
         (user) => user.address.toLowerCase() === address?.toLowerCase()

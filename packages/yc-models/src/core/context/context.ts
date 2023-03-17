@@ -71,23 +71,23 @@ class YCClassificationsInternal {
   protected Actions: DBAction[] = [];
   protected Users: DBUser[] = [];
 
-  protected YCaddresses: YCAddress[] = [];
-  protected YCfunctions: YCFunc[] = [];
-  protected YCtokens: YCToken[] = [];
-  protected YCparameters: YCArgument[] = []; // TODO: Change name to arguments
-  protected YCflows: YCFlow[] = [];
-  protected YCprotocols: YCProtocol[] = [];
-  protected YCstrategies: YCStrategy[] = [];
-  protected YCnetworks: YCNetwork[] = [];
-  protected YCactions: YCAction[] = [];
-  protected YCusers: YCUser[] = [];
+  YCaddresses: YCAddress[] = [];
+  YCfunctions: YCFunc[] = [];
+  YCtokens: YCToken[] = [];
+  YCparameters: YCArgument[] = []; // TODO: Change name to arguments
+  YCflows: YCFlow[] = [];
+  YCprotocols: YCProtocol[] = [];
+  YCstrategies: YCStrategy[] = [];
+  YCnetworks: YCNetwork[] = [];
+  YCactions: YCAction[] = [];
+  YCusers: YCUser[] = [];
 
   // Prisma Client
   protected Client: PrismaClient | null = null;
 
   /**
    * @notice
-   * Loading array indiciating whether 
+   * Loading array indiciating whether
    */
 
   // =======================
@@ -440,6 +440,8 @@ export class YCClassifications extends YCClassificationsInternal {
    * Initiate the context class using a JSON object
    */
   fromJSON = (jsonContext: ClassificationContext) => {
+    if (!this.initiallized) this.initiallized = true;
+
     this.Addresses = jsonContext.addresses;
     this.Actions = jsonContext.actions;
     this.Flows = jsonContext.flows;

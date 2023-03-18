@@ -272,25 +272,15 @@ app.post(
   "/signup",
   async (
     req: {
-      body: {
-        id: string;
-        username?: string;
-        description?: string;
-        twitter?: string;
-        telegram?: string;
-        discord?: string;
-        profile_picture?: string;
-      };
+      body: Omit<SignupArguments, "context">;
     },
     res: any
   ) => {
-    const data: UserUpdateArguments = req.body;
-    const result = await prisma.usersv2.update({
-      where: {
-        id: data.id,
-      },
+    const data: Omit<SignupArguments, "context"> = req.body;
+    const result = await prisma.usersv2.create({
       data: {
-        username: data.username,
+        address: data.address,
+        username: data.username || "Anon",
         description: data.description,
         twitter: data.twitter,
         telegram: data.telegram,
@@ -306,17 +296,40 @@ app.post(
 
 app.post(
   "/update-user",
-  async (req: { body: Omit<SignupArguments, "context"> }, res: any) => {
-    const data: Omit<SignupArguments, "context"> = req.body;
-    const result = await prisma.usersv2.create({
+  async (
+    req: {
+      body: {
+        id: string;
+        username?: string;
+        description?: string;
+        twitter?: string;
+        telegram?: string;
+        discord?: string;
+        profile_picture?: string;
+      };
+    },
+    res: any
+  ) => {
+    const data: {
+      id: string;
+      username?: string;
+      description?: string;
+      twitter?: string;
+      telegram?: string;
+      discord?: string;
+      profile_picture?: string;
+    } = req.body;
+    const result = await prisma.usersv2.update({
+      where: {
+        id: data.id,
+      },
       data: {
-        address: data.address,
-        username: data.username || "Anon",
+        username: data.username,
         description: data.description,
         twitter: data.twitter,
         telegram: data.telegram,
         discord: data.discord,
-        profile_picture: data.profilePicture,
+        profile_picture: data.profile_picture,
       },
     });
 

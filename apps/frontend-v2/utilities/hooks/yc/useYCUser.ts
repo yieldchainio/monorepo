@@ -10,7 +10,7 @@ import { useYCStore } from "utilities/stores/yc-data";
 import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 import Jazzicon from "@raugfer/jazzicon";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useInternalYCUser } from "utilities/stores/yc-data";
 
 export interface YCUserHookReturn {
   address: address | undefined;
@@ -81,37 +81,38 @@ const useYCUser = (): YCUserHookReturn => {
    * useEffect running every time the @users update, in an attempt to update our @user,
    * and optionally sign them up if they are new
    */
+
+  // A small state to lock the signup process, to avoid multiple parallel processes
+  const isSigningUp = useInternalYCUser((state) => state.isSigningUp);
+  const setIsSigningUp = useInternalYCUser((state) => state.setIsSigningUp);
+
   useEffect(() => {
     // We attempt to find the user in the users array, we sign them up if they do not exist.
     // Note that we also require the array to be populated with users already, to avoid signing up the user
     // when the array was not yet initiated.
-    console.log("useEffect ran");
-    console.log("address", !!address);
-    console.log(
-      "find",
-      !users.find(
-        (_user) => _user.address.toLowerCase() === address?.toLowerCase()
-      )
-    );
-
-    console.log("Users length", users);
-    console.log(
-      "address user comparison",
-      user?.address.toLowerCase() !== address?.toLowerCase()
-    );
     if (
       address &&
       !users.find(
         (_user) => _user.address.toLowerCase() === address?.toLowerCase()
       ) &&
-      users.length &&
-      user?.address.toLowerCase() !== address?.toLowerCase()
+      users.length > 0 &&
+      user?.address.toLowerCase() !== address?.toLowerCase() &&
+      !isSigningUp
     ) {
-      {
-        console.log("useEffect if statement true");
-      }
+      // We set the globally-stored "isSigningUp" variable to true, to avoid parallel execution of the signup
+      setIsSigningUp(true);
+
       // An async function for signing the user up
       (async () => {
+        console.log(
+          "Signing up the user... Conditions:",
+          address,
+          users.find(
+            (_user) => _user.address.toLowerCase() === address?.toLowerCase()
+          ),
+          users,
+          user?.address.toLowerCase()
+        );
         const newUser = await signUserUp(
           {
             address,
@@ -121,8 +122,12 @@ const useYCUser = (): YCUserHookReturn => {
         );
 
         if (newUser) setUser(newUser);
+        await refresher(Endpoints.USERS);
       })();
+
+      setIsSigningUp(false);
     }
+
     // Cleanup
     return () => {
       setUser(null);

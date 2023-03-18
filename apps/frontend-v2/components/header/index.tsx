@@ -61,10 +61,10 @@ export const Header = () => {
 
   return (
     <div
-      className={`fixed flex w-[100vw] h-[9vh] items-center  justify-between drop-shadow-sm pointer-events-auto z-100 rounded-xl`}
+      className={`fixed flex w-[100vw] h-[9vh] items-center  justify-between pointer-events-auto z-100 rounded-xl`}
     >
-      <div className="absolute w-full h-full overflow-hidden bg-transparent z-0 opacity-100 rounded-xl drop-shadow-lg">
-        <div className="absolute w-[100vw] h-[100%] bg-custom-header backdrop-blur-xl z-1 pointer-events-auto overflow-hidden rounded-xl"></div>
+      <div className="absolute w-full h-full overflow-hidden bg-transparent z-0 opacity-100 rounded-xl">
+        <div className="absolute w-[100vw] h-[100%] bg-custom-header backdrop-blur-xl bg-opacity-100 z-1 pointer-events-auto overflow-hidden rounded-xl drop-shadow-3xl"></div>
       </div>
 
       <div className="relative">

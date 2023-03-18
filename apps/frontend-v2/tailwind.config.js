@@ -27,7 +27,8 @@ module.exports = {
             `rgba(var(--text), ${opacityValue || 1})`,
 
           // Unrelated
-          header: "var(--header)",
+          header: ({ opacityValue }) =>
+            `rgba(var(--header), ${opacityValue || 1})`,
 
           // Text Colors
           off: "var(--off)",

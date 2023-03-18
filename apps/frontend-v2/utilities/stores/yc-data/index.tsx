@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { ClassificationContext } from "@yc/yc-models";
 import { YCClassifications, Endpoints } from "@yc/yc-models";
 
 export interface YCContextStore {

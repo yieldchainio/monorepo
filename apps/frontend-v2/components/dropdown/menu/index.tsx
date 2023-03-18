@@ -1,12 +1,9 @@
-import { DropdownOption, data } from "../types";
-import Image from "next/image";
+import { DropdownOption } from "../types";
 import { BaseComponentProps } from "components/types";
-import { MutableRefObject, RefObject, useState } from "react";
-import { useRef } from "react";
+import { RefObject, useState } from "react";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 import SmallLoader from "components/loaders/small";
-import { hexColors } from "configs/styles/colors";
 /**
  * @notice
  * A component for the dropdown menu,

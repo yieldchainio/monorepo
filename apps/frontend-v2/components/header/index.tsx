@@ -6,14 +6,17 @@ import "../../css/globals.css";
 import { YCNetwork } from "@yc/yc-models";
 import { DropdownOption } from "../dropdown/types";
 import { useYCStore } from "utilities/stores/yc-data";
-import { Switch } from "components/switches/base";
 import WrappedImage from "components/wrappers/image";
 import { ProfileModal } from "components/wallet-profile";
 import ConnectWalletButton from "components/buttons/connect";
 import { useChainSwitch } from "../../utilities/hooks/web3/useChainSwitch";
 import useYCUser from "utilities/hooks/yc/useYCUser";
-import { Themes, useTheme } from "utilities/stores/theme";
+import { useTheme } from "utilities/stores/theme";
 import { ThemeSwitch } from "components/switches/theme";
+import {
+  MediaScreenSizes,
+  useMediaBreakpoints,
+} from "utilities/hooks/styles/useMediaBreakpoints";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",
@@ -37,6 +40,25 @@ export const Header = () => {
 
   const { address, userName, profilePic, createdVaults } = useYCUser();
 
+  const { proprety: logo } = useMediaBreakpoints<{
+    light: string;
+    dark: string;
+  }>({
+    [MediaScreenSizes.LAPTOP]: {
+      light: "/brand/yc-logo-dark.png",
+      dark: "/brand/yc-logo-light.png",
+    },
+    [MediaScreenSizes.ANY]: {
+      light: "/brand/yc-full-dark.png",
+      dark: "/brand/yc-full-light.svg",
+    },
+  });
+
+  const { proprety: createVaultText } = useMediaBreakpoints<string>({
+    [MediaScreenSizes.LAPTOP]: "+",
+    [MediaScreenSizes.ANY]: "Create Vault",
+  });
+
   return (
     <div
       className={`fixed flex w-[100vw] h-[9vh] items-center  justify-between drop-shadow-sm pointer-events-auto z-100 rounded-xl`}
@@ -46,12 +68,9 @@ export const Header = () => {
       </div>
 
       <div className="relative">
-        <div className="flex w-[35vw] h-[100%] gap-10 blur-none pl-10">
+        <div className="flex w-[35vw] h-[100%] gap-10 blur-none pl-10 items-center">
           <WrappedImage
-            src={{
-              light: "/brand/yc-full-dark.png",
-              dark: "/brand/yc-full-light.svg",
-            }}
+            src={logo}
             alt=""
             width={150}
             height={100}
@@ -126,7 +145,7 @@ export const Header = () => {
 
         <div className="relative">
           <Button
-            text={window.innerWidth < 1000 ? "+" : "Create Vault"}
+            text={createVaultText}
             onClick={() => null}
             className=" relative font-semibold"
           />

@@ -57,7 +57,7 @@ export const HeaderCatagoryText = ({ text, page }: HeaderCatagoryTextProps) => {
           fontColor={"custom-off"}
           select={Selection.disallow}
           className={
-            "cursor-pointer z-100 hover:text-custom-offhover transition duration-200 ease-in-out active:scale-[0.98] truncate"
+            "cursor-pointer z-100 hover:text-custom-offhover transition duration-200 ease-in-out active:scale-[0.98]"
           }
         >
           {text}

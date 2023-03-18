@@ -1,4 +1,3 @@
-import { FormEvent, ReactPropTypes } from "react";
 import { TextSkeleton } from "./skeleton";
 /**
  * @notice
@@ -6,19 +5,14 @@ import { TextSkeleton } from "./skeleton";
  * for ease of use with skeletons and global styling
  */
 
-interface TextProps {
-  children: string | undefined;
+interface InputProps {
   fontSize: number;
   fontStyle: string;
   fontColor?: string;
-  contentEditable?: "true" | "false";
   select?: Selection;
   onClick?: (e: React.MouseEvent<HTMLElement>) => any | void | null;
   fontFamily?: string;
   className?: string;
-  id?: string;
-  props?: Record<any, any>;
-  onInput?: (e: FormEvent<HTMLDivElement>) => any;
 }
 
 export enum Selection {
@@ -26,23 +20,17 @@ export enum Selection {
   disallow = "select-none",
 }
 
-const WrappedText = ({
-  children,
+const WrappedInput = ({
   fontSize = 14,
   fontStyle = "reguler",
   fontFamily = "athletics",
   fontColor = "custom-textColor",
   onClick,
   select = Selection.allow,
-  contentEditable = "false",
   className = "",
-  id,
-  onInput,
-}: TextProps) => {
-  if (children === undefined)
-    return <TextSkeleton fontSize={fontSize} className={className} />;
+}: InputProps) => {
   return (
-    <div
+    <input
       className={`${
         "text-" +
         `[${fontSize.toString()}px]` +
@@ -53,21 +41,18 @@ const WrappedText = ({
         " text-" +
         fontColor +
         " " +
-        "select-none focus:outline-none truncate" +
+        "select-none" +
+        " w-[60%]" +
+        " focus:outline-none" +
+        " h-min" +
         " " +
         className
       } `}
       onClick={(e: React.MouseEvent<HTMLElement>) =>
         onClick ? onClick(e) : null
       }
-      contentEditable={contentEditable}
-      suppressContentEditableWarning={true}
-      id={id}
-      onInput={(e) => onInput && onInput(e)}
-    >
-      {children}
-    </div>
+    />
   );
 };
 
-export default WrappedText;
+export default WrappedInput;

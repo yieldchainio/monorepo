@@ -1,16 +1,4 @@
 import { IconProps } from "./types";
-const dd = ({ className, iconClassname }: IconProps) => {
-  return (
-    <svg width={11} height={13} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M9.918 2.714v-.631c0-.698-.565-1.263-1.262-1.263H2.345c-.697 0-1.262.565-1.262 1.263v8.835c0 .697.565 1.262 1.262 1.262h6.31c.698 0 1.263-.565 1.263-1.262v-.631"
-        stroke="#fff"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-};
 
 const DisconnectIcon = ({ className, iconClassname }: IconProps) => {
   return (

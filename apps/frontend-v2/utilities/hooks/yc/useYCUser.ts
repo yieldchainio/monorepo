@@ -2,6 +2,7 @@ import {
   address,
   DBUser,
   Endpoints,
+  UserUpdateArguments,
   YCClassifications,
   YCStrategy,
   YCUser,
@@ -11,12 +12,15 @@ import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 import Jazzicon from "@raugfer/jazzicon";
 import { useEffect, useState } from "react";
 import { useInternalYCUser } from "utilities/stores/yc-data";
-
+import { shallow } from "zustand/shallow";
 export interface YCUserHookReturn {
   address: address | undefined;
   profilePic: string | null;
   userName: string;
   createdVaults: YCStrategy[];
+  updateDetails: (
+    newDetails: Partial<UserUpdateArguments>
+  ) => Promise<DBUser | null>;
 }
 
 /**
@@ -25,6 +29,8 @@ export interface YCUserHookReturn {
 const useYCUser = (): YCUserHookReturn => {
   // Current connected wallet's details
   const { address, connector, status } = useAccount();
+
+  const [causeRerender, setCauseRerender] = useState<boolean>(false);
 
   // ENS Name of the user
   const { data: ensName } = useEnsName({ address, chainId: 1 });
@@ -39,6 +45,22 @@ const useYCUser = (): YCUserHookReturn => {
   const [jazziconPFP, setJazzicon] = useState<string | null>(
     address ? buildDataUrl(address) : null
   );
+
+  // Function to update user's details
+  const updateDetails = async (newDetails: Partial<UserUpdateArguments>) => {
+    if (!user) return null;
+    // We call the update details function, spread out the new details
+    // and make sure we input the current user's ID
+    const res = await YCUser.updateDetails({ ...newDetails, id: user.id });
+
+    setCauseRerender(true);
+    if (res) await refresher(Endpoints.USERS);
+    return res;
+  };
+
+  useEffect(() => {
+    console.log("Cause rerender run");
+  }, [causeRerender]);
 
   /**
    * User's username
@@ -60,10 +82,21 @@ const useYCUser = (): YCUserHookReturn => {
       (ensAvatar ? ensAvatar : address ? buildDataUrl(address) : null)
   );
 
+  
+
   // Get the current YC User
-  const users: YCUser[] = useYCStore((state) => {
-    return state.context.YCusers;
-  });
+  const users: YCUser[] = useYCStore(
+    (state) => {
+      return state.context.YCusers;
+    },
+    (oldUsers, newUsers) => {
+      const eq =
+        JSON.stringify(oldUsers.map((usr) => usr.toString())) ===
+        JSON.stringify(newUsers.map((usr) => usr.toString()));
+      console.log("Is equal in comparison", eq);
+      return eq;
+    }
+  );
 
   // Refresher function for the context
   const refresher = useYCStore((state) => state.refresh);
@@ -75,7 +108,7 @@ const useYCUser = (): YCUserHookReturn => {
         await refresher(Endpoints.USERS);
       })();
     }
-  }, [JSON.stringify(users)]);
+  }, [JSON.stringify(users.map((usr) => usr.toString()))]);
 
   /**
    * useEffect running every time the @users update, in an attempt to update our @user,
@@ -132,7 +165,7 @@ const useYCUser = (): YCUserHookReturn => {
     return () => {
       setUser(null);
     };
-  }, [address, JSON.stringify(users)]);
+  }, [address, JSON.stringify(users.map((usr) => usr.toString()))]);
 
   /**
    * useEffect for handling an address change (i.e new user)
@@ -151,6 +184,19 @@ const useYCUser = (): YCUserHookReturn => {
     }
   }, [address]);
 
+  /**
+   * useEffect handling users refresh (potential user details update)
+   */
+  useEffect(() => {
+    console.log("users changed bro");
+    const currUser = users.find((usr) => usr.id === user?.id);
+
+    if (currUser && JSON.stringify(currUser) !== JSON.stringify(user)) {
+      console.log("Condition true");
+      setUser(currUser);
+    }
+  }, [JSON.stringify(users.map((usr) => usr.toString()))]);
+
   // Some more details about the user
   const [createdVaults, setCreatedVaults] = useState<YCStrategy[]>([]);
 
@@ -161,13 +207,14 @@ const useYCUser = (): YCUserHookReturn => {
 
   // useEffect for the username
   useEffect(() => {
+    console.log("User string", user?.toString());
     setUsername(user?.username || ensName || "Anon");
-  }, [user?.username, ensName, address]);
+  }, [user?.toString(), ensName, address]);
 
   // useEffect for the profile pic
   useEffect(() => {
     setProfilePic(ensAvatar || jazziconPFP);
-  }, [JSON.stringify(user), ensAvatar, jazziconPFP]);
+  }, [user?.toString(), ensAvatar, jazziconPFP]);
 
   // Jazzicon useEffect (listens to address)
   useEffect(() => {
@@ -177,10 +224,10 @@ const useYCUser = (): YCUserHookReturn => {
   // useEffect for the created vaults
   useEffect(() => {
     if (user) setCreatedVaults(user.createdVaults);
-  }, [JSON.stringify(user)]);
+  }, [user?.createdVaults.length]);
 
   // Return our states
-  return { address, profilePic, userName, createdVaults };
+  return { address, profilePic, userName, createdVaults, updateDetails };
 };
 
 export default useYCUser;
@@ -216,3 +263,20 @@ interface SignupProps {
   address: address;
   username?: string;
 }
+
+const stringifyCircularJSON = (obj: any) => {
+  // start with an empty object (see other alternatives below)
+  const jsonObj: any = {};
+
+  // add all properties
+  const proto = Object.getPrototypeOf(obj);
+  for (const key of Object.getOwnPropertyNames(proto)) {
+    const desc = Object.getOwnPropertyDescriptor(proto, key);
+    const hasGetter = desc && typeof desc.get === "function";
+    if (hasGetter) {
+      jsonObj[key] = desc?.get?.();
+    }
+  }
+
+  return jsonObj;
+};

@@ -10,7 +10,6 @@ export interface ProfileStatsProps {
  * Subsection for the stats of the profile modal
  */
 const ProfileStats = ({ createdVaults }: ProfileStatsProps) => {
-  console.log("Created vaults num ser", createdVaults);
   return (
     <div className="">
       <Section

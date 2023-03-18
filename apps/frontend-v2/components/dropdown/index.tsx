@@ -27,7 +27,7 @@ const Dropdown = ({
 
   useEffect(() => {
     setCurrentChoice([...options][0]);
-  }, [JSON.stringify(options)]);
+  }, [JSON.stringify(options.map((opt) => JSON.stringify(opt)))]);
 
   // A state keeping track of this component's UUID, for event listening purpoes
   const [UUID] = useState<string>(uuid());
@@ -69,8 +69,6 @@ const Dropdown = ({
     // Set the choice
     setCurrentChoice(_choice);
   };
-
-  console.log(options, "Options ser");
 
   return (
     <div className="relative">

@@ -42,9 +42,9 @@ const Section = ({
         )}
         <Divisor className={title ? " mt-2 mb-5" : ""} />
         <div className="flex w-full flex-col gap-5">
-          {Object.entries(fields).map((field: Record<string, any>) => {
+          {Object.entries(fields).map((field: Record<string, any>, i) => {
             return (
-              <div className="flex flex-row justify-between">
+              <div className="flex flex-row justify-between" key={i}>
                 <WrappedText
                   fontSize={15}
                   fontStyle="[150]"

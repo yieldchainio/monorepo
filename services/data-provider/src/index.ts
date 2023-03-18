@@ -15,6 +15,7 @@ import {
   DBAction,
   address,
   SignupArguments,
+  UserUpdateArguments,
 } from "@yc/yc-models";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
@@ -269,6 +270,42 @@ app.post(
 
 app.post(
   "/signup",
+  async (
+    req: {
+      body: {
+        id: string;
+        username?: string;
+        description?: string;
+        twitter?: string;
+        telegram?: string;
+        discord?: string;
+        profile_picture?: string;
+      };
+    },
+    res: any
+  ) => {
+    const data: UserUpdateArguments = req.body;
+    const result = await prisma.usersv2.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        username: data.username,
+        description: data.description,
+        twitter: data.twitter,
+        telegram: data.telegram,
+        discord: data.discord,
+        profile_picture: data.profilePicture,
+      },
+    });
+
+    if (result) res.status(200).json({ user: data });
+    else res.status(400);
+  }
+);
+
+app.post(
+  "/update-user",
   async (req: { body: Omit<SignupArguments, "context"> }, res: any) => {
     const data: Omit<SignupArguments, "context"> = req.body;
     const result = await prisma.usersv2.create({

@@ -1,4 +1,3 @@
-
 /* Loader */
 .ldsripple {
   display: inline-block;
@@ -45,4 +44,26 @@
     height: 72px;
     opacity: 0;
   }
+}
+
+.sliderHandle {
+  color: none;
+}
+
+.sliderHandle:active {
+  border-color: red !important;
+  border-width: 0px !important;
+}
+
+.sliderHandle:focus-visible {
+  box-shadow: none !important;
+  border: 0px solid transparent !important;
+}
+.sliderHandle:focus {
+  box-shadow: none !important;
+  border: 0px solid transparent !important;
+}
+.sliderHandle:focus-within {
+  box-shadow: none !important;
+  border: 0px solid transparent !important;
 }

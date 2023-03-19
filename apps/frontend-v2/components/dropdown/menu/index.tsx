@@ -11,11 +11,18 @@ import SmallLoader from "components/loaders/small";
  * @param handler - the function to call when an option is chosen
  */
 
+// Dropdown option props
+interface DropdownOptionProps {
+  wrapperClassname?: string;
+  className?: string;
+  textClassname?: string;
+}
 // Props Interface
 interface DropdownMenuOptions extends BaseComponentProps {
   options: DropdownOption[];
   handler: (_option: DropdownOption) => any;
   parentRef: RefObject<HTMLElement | undefined>;
+  optionProps?: DropdownOptionProps;
 }
 
 // Colors
@@ -34,6 +41,7 @@ const DropdownMenu = ({
   handler,
   parentRef,
   className,
+  optionProps,
 }: DropdownMenuOptions) => {
   // IF we are loading a choice rn or not
   const [loading, setLoading] = useState<boolean | DropdownOption>(false);
@@ -47,15 +55,30 @@ const DropdownMenu = ({
 
   return (
     <div
-      className={`${
-        "w-[" + `${parentRef.current?.getBoundingClientRect().width}` + "px]"
-      } bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 absolute top-[60px] left-[0px] z-100 border-1 border-[#2D2D31] animate-popup overflow-hidden`}
+      className={
+        `${
+          "w-[" + `${parentRef.current?.getBoundingClientRect().width}` + "px]"
+        } bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 absolute top-[60px] left-[0px] z-100 border-1 border-custom-border animate-popup overflow-hidden` +
+        " " +
+        `left-[${parentRef.current?.getBoundingClientRect().left}` +
+        (" " + className || "")
+      }
     >
       {options.map((option: DropdownOption) => {
         return (
-          <div className="flex flex-row items-center gap-3 bg-custom-dropdown bg-opacity-[0] rounded-lg hover:bg-opacity-50 hover:scale-[1.03] cursor-pointer transition duration-200 ease-in-out">
+          <div
+            className={
+              "flex flex-row items-center gap-3 bg-custom-dropdown bg-opacity-[0] rounded-lg hover:bg-opacity-50 hover:scale-[1.03] cursor-pointer transition duration-200 ease-in-out" +
+              " " +
+              (optionProps?.wrapperClassname || "")
+            }
+          >
             <div
-              className="flex items-center w-full py-2.5 px-2.5 gap-2 laptop:justify-center"
+              className={
+                "flex items-center w-full py-2.5 px-2.5 gap-2 laptop:justify-center" +
+                  " " +
+                  optionProps?.className || ""
+              }
               onClick={async () => await choiceHandler(option)}
             >
               {option.image && (
@@ -70,13 +93,16 @@ const DropdownMenu = ({
 
               <span className="laptop:hidden">
                 <WrappedText
-                  className="truncate"
+                  className={
+                    "truncate" + " " + (optionProps?.textClassname || "")
+                  }
                   fontStyle="reguler"
                   fontSize={16}
                 >
                   {option.text}
                 </WrappedText>
               </span>
+              {option.children}
             </div>
             {typeof loading !== "boolean" &&
               JSON.stringify(loading.data) == JSON.stringify(option.data) && (

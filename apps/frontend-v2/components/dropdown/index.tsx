@@ -14,6 +14,7 @@ const Dropdown = ({
   children,
   onClick,
   choiceHandler,
+  closeOnChoice,
 }: DropdownProps) => {
   // Track whether or not the (default) dropdown menu is open
   const [menuOpen, setMenuOpen] = useState<boolean | DropdownOption[]>(false);
@@ -64,7 +65,7 @@ const Dropdown = ({
     if (choiceHandler) await choiceHandler(_choice);
 
     // Close the menu
-    setMenuOpen(false);
+    if (closeOnChoice !== false) setMenuOpen(false);
 
     // Set the choice
     setCurrentChoice(_choice);

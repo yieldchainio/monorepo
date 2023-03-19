@@ -13,7 +13,7 @@ export const ProfileModal = () => {
     useYCUser();
 
   return (
-    <div className="fixed w-[400px] h-max bg-custom-bcomponentbg top-[80px] translate-x-[-100px] flex flex-col rounded-3xl border-custom-themedBorder border-2 bg-opacity-100 py-10 px-5 gap-3 animate-accountPopup">
+    <div className="fixed w-[400px] h-max bg-custom-bcomponentbg top-[80px] translate-x-[-100px] flex flex-col rounded-3xl border-custom-themedBorder border-2 bg-opacity-100 py-10 px-5 gap-3 animate-accountPopup backdrop-blur-xl ">
       <ProfileSection
         address={address}
         userName={userName}

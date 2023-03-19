@@ -82,8 +82,6 @@ const useYCUser = (): YCUserHookReturn => {
       (ensAvatar ? ensAvatar : address ? buildDataUrl(address) : null)
   );
 
-  
-
   // Get the current YC User
   const users: YCUser[] = useYCStore(
     (state) => {
@@ -191,7 +189,7 @@ const useYCUser = (): YCUserHookReturn => {
     console.log("users changed bro");
     const currUser = users.find((usr) => usr.id === user?.id);
 
-    if (currUser && JSON.stringify(currUser) !== JSON.stringify(user)) {
+    if (currUser && currUser.toString() !== user?.toString()) {
       console.log("Condition true");
       setUser(currUser);
     }

@@ -4,6 +4,7 @@
 export type data = any;
 export interface DropdownOption<T = any> {
   text: string;
+  children?: Array<React.ReactElement | null>;
   image?: string;
   data: T;
 }
@@ -22,4 +23,5 @@ export interface DropdownProps {
   choiceHandler?:
     | ((_choice: DropdownOption) => Promise<any>)
     | ((_choice: DropdownOption) => any);
+  closeOnChoice?: boolean;
 }

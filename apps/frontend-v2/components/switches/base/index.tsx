@@ -44,14 +44,14 @@ export const Switch = ({
   };
   return (
     <div
-      className="flex w-[60px] h-[28.2px] rounded-full border-custom-border border-2 bg-custom-bg bg-opacity-[10%] drop-shadow-sm py-1 px-1.5 cursor-pointer"
+      className="flex w-[60px] h-[28.2px] rounded-full border-custom-border border-1 bg-custom-bcomponentbg bg-opacity-[100%] drop-shadow-sm py-1 px-1.5 cursor-pointer"
       onClick={() => handleClick()}
       style={{
         justifyContent: on ? "end" : "start",
       }}
     >
       <motion.div
-        className="flex items-center justify-center w-[40.5%] h-full bg-custom-componentbg rounded-full hover:scale-[1.01] border-2 border-custom-themedBorder drop-shadow-xl"
+        className="flex items-center justify-center w-[40.5%] h-full bg-custom-componentbg rounded-full hover:scale-[1.01] border-1 border-custom-border drop-shadow-xl"
         layout
         transition={{
           type: "spring",

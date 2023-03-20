@@ -1,6 +1,5 @@
 import { ChangeEvent } from "react";
 import WrappedImage from "./image";
-import { TextSkeleton } from "./skeleton";
 /**
  * @notice
  * Wrapper image component,
@@ -45,7 +44,7 @@ const WrappedInput = ({
     <div className="w-2/3 flex justify-end items-center relative">
       <input
         className={`${
-          "w-full focus:outline-none h-min py-3 bg-custom-bg border-1 border-custom-themedBorder rounded-lg border-opacity-40 focus:border-[2px] pl-5 " +
+          "w-full focus:outline-none h-min py-3 bg-custom-bg border-1 border-custom-themedBorder rounded-lg border-opacity-40 focus:border-[2px] pl-5 transition duration-200 ease-in-out " +
           "text-" +
           `[${fontSize.toString()}px]` +
           " font-" +

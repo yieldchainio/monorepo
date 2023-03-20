@@ -27,9 +27,10 @@ export interface RangeFilter<T> extends BaseFilter<T> {
   bottom: number;
 }
 
-export interface OptionsFilter<T> extends BaseFilter<T> {
+export interface OptionsFilter<T, OPT = any> extends BaseFilter<T> {
   type: FilterTypes.OPTIONS;
-  callback: (item: T, selectedOptions: any[]) => any;
+  callback: (item: T, config: OptionsFilter<T>) => any;
+  selectedOptions: OPT[];
 }
 
 export interface StringFilter<T> extends BaseFilter<T> {

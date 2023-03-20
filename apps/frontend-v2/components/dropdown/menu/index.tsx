@@ -68,7 +68,7 @@ const DropdownMenu = ({
         return (
           <div
             className={
-              "flex flex-row items-center gap-3 bg-custom-dropdown bg-opacity-[0] rounded-lg hover:bg-opacity-50 hover:scale-[1.03] cursor-pointer transition duration-200 ease-in-out" +
+              "flex flex-row items-center gap-5 bg-custom-dropdown bg-opacity-[0] rounded-lg hover:bg-opacity-50 hover:scale-[1.03] cursor-pointer transition duration-200 ease-in-out justify-between" +
               " " +
               (optionProps?.wrapperClassname || "")
             }
@@ -107,9 +107,7 @@ const DropdownMenu = ({
             </div>
             {typeof loading !== "boolean" &&
               JSON.stringify(loading.data) == JSON.stringify(option.data) && (
-                <SmallLoader
-                  color={loaderColors[option.data.color] || "fill-custom-ycy"}
-                />
+                <SmallLoader color={option.data.color} className="mb-1" />
               )}
           </div>
         );

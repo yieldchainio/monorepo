@@ -9,7 +9,6 @@
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 import { useEffect, useState } from "react";
-import { hexColors } from "configs/styles/colors";
 
 export interface ChipProps {
   className?: string;
@@ -43,26 +42,28 @@ export const Chip = ({
   onDeselect,
 }: ChipProps) => {
   // Keeping track of whether we are toggled or not
-  const [toggled, setToggled] = useState<"border-[2px]" | "border-0">(
-    selected ? "border-[2px]" : "border-0"
+  const [toggled, setToggled] = useState<"border-[2px]" | "border-1">(
+    selected ? "border-[2px]" : "border-1"
   );
 
   // Set the toggle based on the provided selected
   useEffect(() => {
     if (!!selected) setToggled("border-[2px]");
-    else if (selected === false) setToggled("border-0");
+    else if (selected === false) setToggled("border-1");
   }, [selected]);
 
   // Handle a selection/de-selection
   const handleSelection = () => {
     if (toggled === "border-[2px]") {
       onDeselect && onDeselect(id);
-      setToggled("border-0");
+      setToggled("border-1");
     } else {
       onSelect && onSelect(id);
       setToggled("border-[2px]");
     }
   };
+
+  const [usedColor, setUsedColor] = useState(color);
 
   return (
     <div
@@ -75,7 +76,7 @@ export const Chip = ({
       }
       onClick={handleSelection}
       style={{
-        borderColor: color && borderColors[color],
+        borderColor: toggled == "border-[2px]" ? usedColor : "var(--border)",
       }}
     >
       <WrappedImage
@@ -83,6 +84,14 @@ export const Chip = ({
         width={32}
         height={32}
         className="rounded-full"
+        setColors={
+          !color
+            ? (colors) => {
+                setUsedColor(colors.vibrant);
+                console.log(`${text}'s Color: ${colors.vibrant}`);
+              }
+            : undefined
+        }
       />
       <WrappedText
         fontSize={14}

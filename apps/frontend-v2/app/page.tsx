@@ -1,7 +1,7 @@
 "use client";
 
 import WrappedText from "components/wrappers/text";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import WrappedInput from "components/wrappers/input";
 import { Sticky } from "components/wrappers/sticky";
 import { ChipsSection } from "components/chips-section";
@@ -77,7 +77,31 @@ export default function Home() {
     useState<FilterInstance<any, any>[]>(STRATEGIES_FILTERS);
 
   // Keeping track of selected networks for filtering (not in dropdown)
-  const [selectedNetworks, setSelectedNetworks] = useState<YCNetwork[]>([]);
+  const [selectedNetworks, setSelectedNetworks] =
+    useState<YCNetwork[]>(networks);
+
+  // useEffect updating the filters when the selected networks are update
+  useEffect(() => {
+    const newArr = [...filters].filter(
+      (filter) => filter.id !== "dashboard_selected_networks"
+    );
+    newArr.push(
+      new FilterInstance<YCStrategy, OptionsFilter<YCStrategy, YCNetwork>>({
+        id: "dashboard_selected_networks",
+        name: "dashboard_selected_networks",
+        hidden: true,
+        defaultAdded: true,
+        loose: true,
+        type: FilterTypes.OPTIONS,
+        callback: (item: YCStrategy, config: OptionsFilter<YCStrategy>) =>
+          config.selectedOptions.find(
+            (network: YCNetwork) => network.chainid == item.network?.chainid
+          ),
+        selectedOptions: selectedNetworks,
+      })
+    );
+    setFilters(newArr);
+  }, [selectedNetworks]);
   return (
     <div className="w-full h-full bg-custom-bg absolute text-custom-textColor flex flex-col">
       <div
@@ -85,7 +109,7 @@ export default function Home() {
           "absolute w-[30vw] h-[30vh] blur-[200px] top-[20vh] left-[100%] bg-[#3BC7F4] dark:bg-[#FFF576]"
         }
       ></div>
-      <div className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-full h-auto">
+      <div className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-full h-full">
         <div className="flex flex-col items-center">
           <WrappedText fontSize={78} fontStyle="black">
             Browse
@@ -168,6 +192,7 @@ export default function Home() {
             <div className="w-[100px] bg-custom-subbg bg-opacity-100 h-[100px] flex flex-col gap-2">
               <WrappedText>{strategy.title}</WrappedText>
               <WrappedText>{strategy.tvl.toString()}</WrappedText>
+              <WrappedText>{strategy.network?.name}</WrappedText>
             </div>
           ))}
         </div>

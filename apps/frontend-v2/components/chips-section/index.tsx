@@ -37,6 +37,10 @@ export const ChipsSection = <T extends BaseChipProps>({
     setInitiated(true);
   }, [items]);
 
+  useEffect(() => {
+    setter([...items.filter((item, i) => selectedChips.indexOf(i) !== -1)]);
+  }, [selectedChips]);
+
   // Function to add a chip
   const addChip = (key: number) => {
     const newArr = [...selectedChips];

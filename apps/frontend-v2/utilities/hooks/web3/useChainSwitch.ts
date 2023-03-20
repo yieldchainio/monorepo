@@ -2,7 +2,7 @@ import { useNetwork, useProvider, useSwitchNetwork, Chain } from "wagmi";
 
 export const useChainSwitch = () => {
   // Get all chains
-  const { chains }: { chains: Chain[] } = useNetwork();
+  const { chains, chain }: { chains: Chain[]; chain?: Chain } = useNetwork();
 
   // Get the switchNetworkAsync function, set it to call addChain on error
   const { switchNetworkAsync } = useSwitchNetwork({
@@ -73,7 +73,7 @@ export const useChainSwitch = () => {
     else throw new Error("switchNetworkAsync Does not Exist!!");
   };
 
-  return { switchNetwork };
+  return { switchNetwork, chain };
 };
 
 /**

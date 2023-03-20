@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { useCustomEventListener } from "react-custom-events";
+import { BaseEventData, EventTypes } from "types/events";
 import { useFilters } from "utilities/hooks/general/useFilters";
 import {
   BaseFilter,
@@ -29,6 +31,7 @@ export const Filter = <V, T extends BaseFilter<V>>({
 
   useEffect(() => {
     const newArr = [...usedFilters];
+    console.log("Old Filters ARR:", newArr);
     for (const filter of filters) {
       if (filter.defaultAdded) {
         const existingIndex = usedFilters.findIndex(
@@ -40,6 +43,7 @@ export const Filter = <V, T extends BaseFilter<V>>({
         }
       }
     }
+    console.log("New Filters ARR:", newArr);
     setUsedFilters(newArr);
   }, [filters]);
 
@@ -56,6 +60,14 @@ export const Filter = <V, T extends BaseFilter<V>>({
 
   // Track whether the dropdown is open or not
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
+
+  // UUID for the menu logic
+  const UUID = useId();
+
+  useCustomEventListener<BaseEventData>(
+    EventTypes.MENU_OPEN,
+    (data: BaseEventData) => data.id !== UUID && setMenuOpen(false)
+  );
 
   // Ref of the filter box, for the menu to be appended underneath it
   const boxRef = useRef<HTMLDivElement>(null);

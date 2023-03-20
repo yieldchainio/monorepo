@@ -11,7 +11,6 @@ import { ProfileModal } from "components/wallet-profile";
 import ConnectWalletButton from "components/buttons/connect";
 import { useChainSwitch } from "../../utilities/hooks/web3/useChainSwitch";
 import useYCUser from "utilities/hooks/yc/useYCUser";
-import { useTheme } from "utilities/stores/theme";
 import { ThemeSwitch } from "components/switches/theme";
 import {
   MediaScreenSizes,
@@ -30,16 +29,23 @@ enum HeaderLocation {
  */
 export const Header = () => {
   // Use the networks from the context
-  const networks = useYCStore((state) => state.context.networks);
+  const networks = useYCStore(
+    (state) => state.context.networks,
+    (a, b) => {
+      return (
+        JSON.stringify(a.map((network) => network.toString())) ==
+        JSON.stringify(b.map((network) => network.toString()))
+      );
+    }
+  );
 
-  // Use the theme
-  const theme = useTheme((state) => state.theme);
-  const setTheme = useTheme((state) => state.setTheme);
+  // Getting the switchNetwork function and the current connected chain
+  const { switchNetwork, chain } = useChainSwitch();
 
-  const { switchNetwork } = useChainSwitch();
-
+  // Getting the user's address, username, profilepic & others to display for them
   const { address, userName, profilePic, createdVaults } = useYCUser();
 
+  // Media breakpoints for some stuff
   const { proprety: logo } = useMediaBreakpoints<{
     light: string;
     dark: string;
@@ -59,6 +65,7 @@ export const Header = () => {
     [MediaScreenSizes.ANY]: "Create Vault",
   });
 
+  // Return the component
   return (
     <div
       className={`fixed flex w-[100vw] h-[9vh] items-center  justify-between pointer-events-auto z-100 rounded-sm shadow-md`}
@@ -105,6 +112,28 @@ export const Header = () => {
           ) => {
             return await switchNetwork(_choice.data.chain_id);
           }}
+          choice={
+            networks.length
+              ? (() => {
+                  const network =
+                    chain &&
+                    networks.find((network) => network.chainid == chain.id);
+                  if (network)
+                    return {
+                      text: network.name,
+                      image: network.logo,
+                      data: {
+                        json_rpc: network.jsonrpc,
+                        chain_id: network.chainid,
+                        color: network.color,
+                      },
+                    };
+
+                  console.log("Default network", chain, networks);
+                  return undefined;
+                })()
+              : undefined
+          }
         />
         {address ? (
           <Dropdown

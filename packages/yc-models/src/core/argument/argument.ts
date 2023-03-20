@@ -2,7 +2,7 @@ import { YCClassifications } from "../context/context";
 import { DBArgument } from "../../types/db";
 import { bytes } from "../../types/global";
 import { YCFunc } from "../function/function";
-import { YCStep } from "../step/step";
+import { BaseClass } from "../base";
 
 export interface CustomArgument {
   value: any;
@@ -16,7 +16,7 @@ export interface CustomArgument {
  * @dev When arguments r considered dynamic, their type is a 'function' - which means we
  * encode a FunctionCall struct eventually and use the return value of it as the value.
  */
-export class YCArgument {
+export class YCArgument extends BaseClass {
   // =======================
   //    PRIVATE VARIABLES
   // =======================
@@ -36,6 +36,7 @@ export class YCArgument {
     _context: YCClassifications,
     _customArgument?: CustomArgument | CustomArgument[]
   ) {
+    super();
     // Init private variables
     this.#solidityType = _argument.solidity_type;
     this.#isArray = _argument.solidity_type.includes("[");

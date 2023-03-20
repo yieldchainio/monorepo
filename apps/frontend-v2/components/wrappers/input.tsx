@@ -12,7 +12,7 @@ interface InputProps {
   fontStyle: string;
   placeholder?: string;
   placeholderClassname?: string;
-  onChange: (e: ChangeEvent<HTMLDivElement>) => any;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => any;
   icon?: string;
   showGlass?: boolean;
   fontColor?: string;
@@ -33,7 +33,7 @@ const WrappedInput = ({
   fontFamily = "athletics",
   fontColor = "custom-textColor",
   onClick,
-  onChange = (e: ChangeEvent<HTMLDivElement>) => null,
+  onChange = (e: ChangeEvent<HTMLDivElement>) => console.log("Default"),
   icon = "/icons/search-glass.svg",
   showGlass = true,
   placeholder = "Your input goes here:",

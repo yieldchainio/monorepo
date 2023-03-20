@@ -53,14 +53,9 @@ const useYCUser = (): YCUserHookReturn => {
     // and make sure we input the current user's ID
     const res = await YCUser.updateDetails({ ...newDetails, id: user.id });
 
-    setCauseRerender(true);
     if (res) await refresher(Endpoints.USERS);
     return res;
   };
-
-  useEffect(() => {
-    console.log("Cause rerender run");
-  }, [causeRerender]);
 
   /**
    * User's username
@@ -91,7 +86,6 @@ const useYCUser = (): YCUserHookReturn => {
       const eq =
         JSON.stringify(oldUsers.map((usr) => usr.toString())) ===
         JSON.stringify(newUsers.map((usr) => usr.toString()));
-      console.log("Is equal in comparison", eq);
       return eq;
     }
   );
@@ -135,15 +129,6 @@ const useYCUser = (): YCUserHookReturn => {
 
       // An async function for signing the user up
       (async () => {
-        console.log(
-          "Signing up the user... Conditions:",
-          address,
-          users.find(
-            (_user) => _user.address.toLowerCase() === address?.toLowerCase()
-          ),
-          users,
-          user?.address.toLowerCase()
-        );
         const newUser = await signUserUp(
           {
             address,
@@ -186,11 +171,9 @@ const useYCUser = (): YCUserHookReturn => {
    * useEffect handling users refresh (potential user details update)
    */
   useEffect(() => {
-    console.log("users changed bro");
     const currUser = users.find((usr) => usr.id === user?.id);
 
     if (currUser && currUser.toString() !== user?.toString()) {
-      console.log("Condition true");
       setUser(currUser);
     }
   }, [JSON.stringify(users.map((usr) => usr.toString()))]);
@@ -205,7 +188,6 @@ const useYCUser = (): YCUserHookReturn => {
 
   // useEffect for the username
   useEffect(() => {
-    console.log("User string", user?.toString());
     setUsername(user?.username || ensName || "Anon");
   }, [user?.toString(), ensName, address]);
 

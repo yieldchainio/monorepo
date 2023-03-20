@@ -64,7 +64,7 @@ const DropdownMenu = ({
         (" " + className || "")
       }
     >
-      {options.map((option: DropdownOption) => {
+      {options.map((option: DropdownOption, i: number) => {
         return (
           <div
             className={
@@ -72,6 +72,7 @@ const DropdownMenu = ({
               " " +
               (optionProps?.wrapperClassname || "")
             }
+            key={i}
           >
             <div
               className={

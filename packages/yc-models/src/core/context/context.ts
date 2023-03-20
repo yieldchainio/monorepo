@@ -528,7 +528,6 @@ export class YCClassifications extends YCClassificationsInternal {
 
       return true;
     } catch (e: any) {
-      const err = e as Error;
       console.error(
         "Error while refreshing YC Context. Endpoint:",
         endpoints,
@@ -600,9 +599,7 @@ export class YCClassifications extends YCClassificationsInternal {
   }
 
   get strategies() {
-    console.log("YC strategies ser:", this.YCstrategies);
     if (!this.YCstrategies.length) {
-      console.log("Not YC strategies length!!!");
       this.YCstrategies = this.Strategies.map(
         (strategy: DBStrategy) => new YCStrategy(strategy, this)
       );

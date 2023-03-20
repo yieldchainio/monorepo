@@ -61,6 +61,14 @@ export class YCToken {
     return ethers.getAddress(this.#address);
   }
 
+  get name() {
+    return this.#name;
+  }
+
+  get symbol() {
+    return this.#symbol;
+  }
+
   get id() {
     return this.#id;
   }

@@ -10,12 +10,12 @@ export interface FilterBoxProps {
   className?: string;
 }
 export interface FiltersMenuProps<V, T extends BaseFilter<V>> {
-  filters: FilterConfig<V, T>[];
+  filters: Array<FilterConfig<V, T> & T>;
   parentRef: RefObject<HTMLElement | undefined>;
-  addFilter: (filter: FilterConfig<V, T>) => any;
+  addFilter: (filter: FilterConfig<V, T> & T) => any;
   modifyFilter: (
-    filter: FilterConfig<V, T>,
-    newFilter?: FilterConfig<V, T>
+    filter: FilterConfig<V, T> & T,
+    newFilter?: FilterConfig<V, T> & T
   ) => any;
   usedFilters: FilterConfig<V, T>[];
 }

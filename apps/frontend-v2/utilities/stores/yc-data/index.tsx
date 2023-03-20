@@ -3,7 +3,7 @@ import { YCClassifications, Endpoints } from "@yc/yc-models";
 
 export interface YCContextStore {
   context: YCClassifications;
-  refresh: (endpoint: Endpoints) => Promise<boolean>;
+  refresh: (endpoint: Endpoints) => void;
 }
 /**
  * The actual YC Store hook
@@ -12,8 +12,12 @@ export const useYCStore = create<YCContextStore>((set, get) => ({
   // The context (YCClassifications instance)
   context: YCClassifications.getInstance(),
   // Refresh function to refresh
-  refresh: async (endpoints: Endpoints[] | Endpoints) =>
-    await get().context.refresh(endpoints),
+  refresh: async (endpoints: Endpoints[] | Endpoints) => {
+    await get().context.refresh(endpoints);
+    set({
+      context: get().context,
+    });
+  },
 }));
 
 /**

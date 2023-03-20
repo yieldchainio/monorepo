@@ -8,8 +8,8 @@ import { TextSkeleton } from "./skeleton";
 
 interface TextProps {
   children: string | undefined;
-  fontSize: number;
-  fontStyle: string;
+  fontSize?: number;
+  fontStyle?: string;
   fontColor?: string;
   contentEditable?: "true" | "false";
   select?: Selection;
@@ -56,7 +56,7 @@ const WrappedText = ({
         "select-none focus:outline-none truncate" +
         " " +
         className
-      } `}
+      }`}
       onClick={(e: React.MouseEvent<HTMLElement>) =>
         onClick ? onClick(e) : null
       }

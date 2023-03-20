@@ -1,29 +1,30 @@
 "use client";
 
 import WrappedText from "components/wrappers/text";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import WrappedInput from "components/wrappers/input";
 import { Sticky } from "components/wrappers/sticky";
-import { NetworksChipsSection } from "components/networks-section";
+import { ChipsSection } from "components/chips-section";
 import { Filter } from "components/filters";
 import {
   BooleanFilter,
   FilterInstance,
   FilterTypes,
+  OptionsFilter,
   RangeFilter,
+  StringFilter,
 } from "utilities/hooks/general/useFilters/types";
-import { YCStrategy } from "@yc/yc-models";
+import { YCNetwork, YCStrategy } from "@yc/yc-models";
 import { useYCStore } from "utilities/stores/yc-data";
-import Slider from "rc-slider";
 
 /**
- * Filters for the strategies
+ * Static filters for the strategies
  */
 const ONLY_VERIFIED_VAULTS: FilterInstance<
   YCStrategy,
   BooleanFilter<YCStrategy>
 > = new FilterInstance<YCStrategy, BooleanFilter<YCStrategy>>({
-  callback: (item: YCStrategy, bool: boolean) => item.verified,
+  callback: (item: YCStrategy) => item.verified,
   name: "Verified Vaults",
   type: FilterTypes.BOOLEAN,
 });
@@ -32,7 +33,7 @@ const ONLY_VERIFIED_CREATORS: FilterInstance<
   YCStrategy,
   BooleanFilter<YCStrategy>
 > = new FilterInstance<YCStrategy, BooleanFilter<YCStrategy>>({
-  callback: (item: YCStrategy, bool: boolean) => item.creator?.isVerified,
+  callback: (item: YCStrategy) => item.creator?.isVerified,
   name: "Verified Creators",
   type: FilterTypes.BOOLEAN,
 });
@@ -41,11 +42,17 @@ const TVL_RANGE: FilterInstance<
   YCStrategy,
   RangeFilter<YCStrategy>
 > = new FilterInstance<YCStrategy, RangeFilter<YCStrategy>>({
-  callback: (item: YCStrategy, bottom: number, top: number) =>
-    item.tvl <= top && item.tvl >= bottom,
+  callback: (item: YCStrategy, config: RangeFilter<YCStrategy>) =>
+    item.tvl <= config.top && item.tvl >= config.bottom,
+  id: "tvl_range",
   name: "TVL Range",
   type: FilterTypes.RANGE,
+  top: 1000000,
+  bottom: 0,
+  defaultAdded: true,
 });
+
+const STRATEGIES_SEARCHBOX_INPUT_NAME = "strategies_searchbox_input";
 
 const STRATEGIES_FILTERS = [
   ONLY_VERIFIED_CREATORS,
@@ -54,7 +61,23 @@ const STRATEGIES_FILTERS = [
 ];
 
 export default function Home() {
+  // Retreive the strategies from the context
   const strategies = useYCStore((state) => state.context.YCstrategies);
+
+  // Retreive the networks to spread into the chips section, for filtering
+  const networks = useYCStore((state) => state.context.YCnetworks);
+
+  // A state for the filtered strategies
+  const [filteredStrategies, setFilteredStrategies] = useState<YCStrategy[]>(
+    []
+  );
+
+  // All of the filters - the static ones and the dynamic ones
+  const [filters, setFilters] =
+    useState<FilterInstance<any, any>[]>(STRATEGIES_FILTERS);
+
+  // Keeping track of selected networks for filtering (not in dropdown)
+  const [selectedNetworks, setSelectedNetworks] = useState<YCNetwork[]>([]);
   return (
     <div className="w-full h-full bg-custom-bg absolute text-custom-textColor flex flex-col">
       <div
@@ -82,21 +105,72 @@ export default function Home() {
           <WrappedInput
             fontSize={16}
             fontStyle={"reguler"}
-            onChange={(e: ChangeEvent) => null}
+            // We add a filter onchange to filter by the input
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              const newArr = [...filters].filter(
+                (filter: FilterInstance<any, any>) =>
+                  filter.id !== STRATEGIES_SEARCHBOX_INPUT_NAME
+              );
+              newArr.push(
+                new FilterInstance<YCStrategy, StringFilter<YCStrategy>>({
+                  id: STRATEGIES_SEARCHBOX_INPUT_NAME,
+                  type: FilterTypes.STRING,
+                  name: STRATEGIES_SEARCHBOX_INPUT_NAME,
+                  hidden: true,
+                  input: e.target.value,
+                  defaultAdded: true,
+                  loose: true,
+                  callback: (
+                    item: YCStrategy,
+                    config: StringFilter<YCStrategy>
+                  ) => {
+                    const lowerCasedInput = config.input.toLowerCase();
+                    return (
+                      item.address.toLowerCase().includes(lowerCasedInput) ||
+                      item.creator?.username
+                        .toLowerCase()
+                        .includes(lowerCasedInput) ||
+                      item.title.toLowerCase().includes(lowerCasedInput) ||
+                      item.depositToken?.symbol
+                        .toLowerCase()
+                        .includes(lowerCasedInput) ||
+                      item.depositToken?.name
+                        .toLowerCase()
+                        .includes(lowerCasedInput)
+                    );
+                  },
+                })
+              );
+              setFilters(newArr);
+            }}
             className="w-full"
             placeholder="Search for a vault ID, token, or protocol name"
           />
           <div className=" w-full h-[100px] flex flex-row items-center justify-start">
-            <NetworksChipsSection />
+            <ChipsSection<YCNetwork>
+              setter={setSelectedNetworks}
+              items={networks}
+            />
             <Filter
-              filters={STRATEGIES_FILTERS}
+              filters={filters}
               items={strategies}
               stringifier={(items) =>
                 JSON.stringify(items.map((item) => item.toString()))
               }
+              setter={setFilteredStrategies}
             />
           </div>
         </Sticky>
+      </div>
+      <div className="flex flex-col gap-10 px-10 w-full h-full">
+        <div className="flex flex-row w-full h-full gap-2">
+          {filteredStrategies.map((strategy) => (
+            <div className="w-[100px] bg-custom-subbg bg-opacity-100 h-[100px] flex flex-col gap-2">
+              <WrappedText>{strategy.title}</WrappedText>
+              <WrappedText>{strategy.tvl.toString()}</WrappedText>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

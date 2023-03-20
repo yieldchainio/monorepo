@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFilters } from "utilities/hooks/general/useFilters";
 import {
   BaseFilter,
@@ -23,7 +23,25 @@ export const Filter = <V, T extends BaseFilter<V>>({
 }: UseFilterProps<V, T>) => {
   // The used filters. We get a list of filters which the user
   // can choose from, add / remove as they wish
-  const [usedFilters, setUsedFilters] = useState<FilterConfig<V, T>[]>([]);
+  const [usedFilters, setUsedFilters] = useState<Array<FilterConfig<V, T> & T>>(
+    filters.filter((filter) => filter.defaultAdded === true)
+  );
+
+  useEffect(() => {
+    const newArr = [...usedFilters];
+    for (const filter of filters) {
+      if (filter.defaultAdded) {
+        const existingIndex = usedFilters.findIndex(
+          (_filter) => _filter.id == filter.id
+        );
+        if (existingIndex == undefined) newArr.push(filter);
+        else if (filter.loose) {
+          newArr.splice(existingIndex, 1, filter);
+        }
+      }
+    }
+    setUsedFilters(newArr);
+  }, [filters]);
 
   /**
    * @uses useFilters() custom hook.
@@ -43,23 +61,16 @@ export const Filter = <V, T extends BaseFilter<V>>({
   const boxRef = useRef<HTMLDivElement>(null);
 
   // Function to add a filter
-  const addFilter = (filter: FilterConfig<V, T>) => {
-    console.log(
-      "New filter being added:",
-      filter,
-      "Prev used filters:",
-      usedFilters
-    );
+  const addFilter = (filter: FilterConfig<V, T> & T) => {
     const newArr = [...usedFilters];
     newArr.push(filter);
-    console.log("new newFilters", newArr);
     setUsedFilters(newArr);
   };
 
   // Function to modify/remove a filter
   const modifyFilter = (
-    filter: FilterConfig<V, T>,
-    newFilter?: FilterConfig<V, T>
+    filter: FilterConfig<V, T> & T,
+    newFilter?: FilterConfig<V, T> & T
   ) => {
     // Find the index of it within the array of used filters
     const existingIndex = usedFilters.findIndex(
@@ -79,7 +90,7 @@ export const Filter = <V, T extends BaseFilter<V>>({
     // if not new filter, remove
     if (!newFilter) newArr.splice(existingIndex, 1);
     // else, remove & append new filter
-    else newArr.splice(existingIndex, 1, newFilter);
+    else newArr.splice(existingIndex, 1, { ...newFilter });
 
     // set the new used filters array
     setUsedFilters(newArr);
@@ -91,7 +102,6 @@ export const Filter = <V, T extends BaseFilter<V>>({
       <FilterBox
         filters={usedFilters.length}
         onClick={(e) => {
-          console.log("Clic");
           setMenuOpen(!menuOpen);
         }}
         ref={boxRef}

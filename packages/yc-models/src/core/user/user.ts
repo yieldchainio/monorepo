@@ -1,6 +1,7 @@
 import { PrismaClient } from "@yc/yc-data";
 import axios from "axios";
 import { DBUser } from "../../types/db";
+import { BaseClass } from "../base";
 import { YCClassifications } from "../context/context";
 import { YCSocialMedia } from "../social-media/social-media";
 import { YCStrategy } from "../strategy/strategy";
@@ -11,7 +12,7 @@ import { fetchRouter } from "../utils/fetch-router";
  * YCToken
  * A class representing an on-chain token
  */
-export class YCUser {
+export class YCUser extends BaseClass {
   // =================
   //   SINGLETON REF
   // =================
@@ -51,21 +52,17 @@ export class YCUser {
 
     // Try to find the user if it exists already
     const userExists = context.users.find(
-      (user: YCUser) => user.address == address
+      (user: YCUser) => user.address.toLowerCase() == address.toLowerCase()
     );
 
     // If the user exists, we return false to indicate the signup failed
     if (userExists) return null;
 
-    const client = context.client;
-
-    console.log("Gonna sign up the user, frontend window:", typeof window);
-
     // Send the request to the backend
     const res = await fetchRouter<DBUser | undefined>({
       backend: {
         fetcher: async () =>
-          await client?.usersv2?.create({
+          await context.client?.usersv2?.create({
             data: {
               address: address,
               username: username,
@@ -88,6 +85,7 @@ export class YCUser {
             discord: discord,
             description: description,
           }),
+        parser: (value: any | undefined) => (value ? value.data.user : null),
       },
     });
 
@@ -149,6 +147,7 @@ export class YCUser {
       frontend: {
         fetcher: async () =>
           await axios.post(YCClassifications.apiURL + "/update-user", {
+            id: id,
             address: address || doesUserExist?.address,
             username: username || doesUserExist?.username,
             profile_picture: profilePicture || doesUserExist?.profilePic,
@@ -167,6 +166,7 @@ export class YCUser {
   //      CONSTRUCTOR
   // =======================
   constructor(_user: DBUser, _context: YCClassifications) {
+    super();
     this.#address = _user.address;
     this.#id = _user.id;
     this.#username = _user.username;
@@ -184,27 +184,32 @@ export class YCUser {
     // We try to find an existing instance of this user
     const existingUser = YCUser.instances.find((user) => user.id === _user.id);
 
-    // If it exists, we return it
-    if (existingUser) return existingUser;
+    // If we have an existing user and it has the same fields as this one, we return the singleton of it
+    if (existingUser && this.compare(existingUser)) {
+      return existingUser;
 
-    // Else we push this instance into the array
-    YCUser.instances.push(this);
+      // Else, if we do have an existing users and the fields are different, we replace it with the current instance
+    } else if (existingUser) {
+      // The index of the old singleton
+      const oldUserIndex = YCUser.instances.findIndex(
+        (usr) => usr.id === existingUser.id
+      );
+
+      // Sufficient check, we replace it with this instance using .splice
+      if (oldUserIndex !== undefined)
+        YCUser.instances.splice(oldUserIndex, 1, this);
+
+      // Else, if there's no existing singleton at all, we push this one into the array
+    } else {
+      // Else we push this instance into the array
+      YCUser.instances.push(this);
+    }
 
     // We only set the following propreties if the context has been initiallized
-    console.log(
-      "All Strategies That match our id",
-      _context.strategies.filter((strategy) => strategy.creator?.id == this.id)
-    );
     if (_context.initiallized)
       this.#createdVaults = _context.strategies.filter(
         (strategy) => strategy.creator?.id == this.id
       );
-
-    console.log(
-      "Our created vaults ser, is context initiallized?",
-      _context.initiallized,
-      this.#createdVaults
-    );
   }
   // =======================
   //        METHODS

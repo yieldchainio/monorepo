@@ -31,12 +31,12 @@ export const useFilters = <V, T extends BaseFilter<V>>({
     // Filter the array through an iteration on each one of the callbacks
     for (const filter of filters) {
       // Invoke the filter's callback
-      newArr = newArr.filter(filter.callback);
+      newArr = newArr.filter((item) => filter.callback(item, filter));
     }
 
     // Finally, set the states
     setFilteredItems(newArr);
-    if (setter) setter(filteredItems);
+    if (setter) setter(newArr);
 
     // We stringify them all so that we actually detect a change in them
   }, [stringifier(items), JSON.stringify(filters), JSON.stringify(setter)]);

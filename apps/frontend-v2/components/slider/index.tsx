@@ -2,55 +2,65 @@
  * A Range Slider allowing the user to choose a minimum and
  * maximum values
  */
-import { ChangeEvent, useState } from "react";
+import Slider from "rc-slider";
+import { useState } from "react";
+import "rc-slider/assets/index.css";
+import WrappedText from "components/wrappers/text";
+import { formatMoney } from "utilities/general/format-money";
 
 // Props
 export interface RangeSliderProps {
   range: [number, number];
-  className?: string;
-  onChange?: (min: number, max: number) => any;
-  width: number;
+  defaultValues?: [number, number];
+  onChange?: (arg: number[]) => any;
 }
 
 // The component
 export const RangeSlider = ({
   range,
-  className,
+  defaultValues = range,
   onChange,
-  width,
 }: RangeSliderProps) => {
-  const [minVal, setMinVal] = useState<number>(range[0]);
-  const [max, setMaxVal] = useState<number>(range[1]);
+  const [minVal, setMinVal] = useState<number>(defaultValues[0]);
+  const [maxVal, setMaxVal] = useState<number>(defaultValues[1]);
 
-  const changeHandler = (
-    e: ChangeEvent<HTMLInputElement>,
-    type: "min" | "max"
-  ) => {
-    if (type === "min") setMinVal(parseInt(e.target.value));
-    if (type === "max") setMaxVal(parseInt(e.target.value));
+  const changeHandler = (_range: number[] | number) => {
+    if (typeof _range == "number") return;
+    setMinVal(_range[0]);
+    setMaxVal(_range[1]);
+    onChange && onChange(_range);
   };
+
   return (
-    <>
-      <div className=" bg-blue-900 top-[500px] relative left-[200px] w-[400px] ">
-        {/* <input
-          type="range"
-          min="0"
-          max="1000"
-          className="bg-red-500 text-red-900 absolute w-full apperance-none z-100"
-          onChange={(e) => changeHandler(e, "min")}
-        /> */}
-        <input
-          type="range"
-          min="0"
-          max="1000"
-          className="transform rotate-180 w-full absolute  apperance-none z-200 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-black/25 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-[50px] [&::-webkit-slider-thumb]:w-[50px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple-500"
-          onChange={(e) => changeHandler(e, "max")}
-        />
+    <div className="flex flex-col items-end w-full">
+      <Slider
+        range
+        trackStyle={{
+          backgroundColor: "var(--lightcomponent)",
+        }}
+        railStyle={{
+          backgroundColor: "var(--componentbg)",
+        }}
+        handleStyle={{
+          backgroundColor: "var(--componentbg)",
+          borderColor: "var(--border)",
+        }}
+        min={range[0]}
+        max={range[1]}
+        defaultValue={defaultValues}
+        onChange={changeHandler}
+        style={{
+          width: "full",
+        }}
+      />
+      <div className="flex flex-row justify-between items-center w-full">
+        <WrappedText fontSize={12} fontStyle={"reguler"}>
+          {"Min: " + formatMoney(minVal) + " "}
+        </WrappedText>
+        <WrappedText fontSize={12} fontStyle={"reguler"}>
+          {"Max: " + formatMoney(maxVal) + " "}
+        </WrappedText>
       </div>
-      <div className="bg-blue-900 w-max">
-        <div className="slider__track" />
-        <div className="slider__range" />
-      </div>
-    </>
+    </div>
   );
 };

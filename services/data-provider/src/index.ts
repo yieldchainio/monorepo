@@ -18,8 +18,8 @@ import {
   UserUpdateArguments,
 } from "@yc/yc-models";
 import dotenv from "dotenv";
-import { FlowDirection, PrismaClient } from "@prisma/client";
 dotenv.config();
+import { FlowDirection, PrismaClient } from "@prisma/client";
 
 console.log("DAtabase URL", process.env.DATABASE_URL);
 

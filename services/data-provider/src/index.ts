@@ -18,7 +18,7 @@ import {
   UserUpdateArguments,
 } from "@yc/yc-models";
 import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
+import { FlowDirection, PrismaClient } from "@prisma/client";
 dotenv.config();
 
 console.log("DAtabase URL", process.env.DATABASE_URL);
@@ -225,6 +225,8 @@ app.get("/address-flows/:address_id", async (req: any, res: any) => {
   )) as DBAddress[];
 
   const functions_arr: DBFunction[] = [];
+
+  // @ts-ignore
   for await (const funcid of address_function_ids[0].functions) {
     let res: DBFunction[] = (await genericQuery(
       "*",
@@ -237,6 +239,7 @@ app.get("/address-flows/:address_id", async (req: any, res: any) => {
 
   let address_flows: DBFlow[] = [];
   for await (const funcid of functions_arr) {
+    // @ts-ignore
     for await (const flowid of funcid.flows) {
       let flow: DBFlow[] = (await genericQuery(
         "*",
@@ -341,6 +344,95 @@ app.post(
 app.get("/waitlist", async (req: any, res: any) => {
   const waitlist: any = await genericQuery("*", "waitlist");
   res.status(200).json({ waitlist });
+});
+
+// ======================
+//      V2 ENDPOINTS
+// ======================
+
+app.get("/v2", async (req: any, res: any) => {
+  res.status(200).send("Wassup Brah");
+});
+
+/**
+ * @dev Tokens (e.g. DAI, USDC, etc...)
+ */
+app.get("/v2/tokens", async (req: any, res: any) => {
+  const tokens: DBToken[] = await prisma.tokensv2.findMany();
+  res.status(200).json({ tokens });
+});
+
+/**
+ * @dev Networks (e.g. Ethereum, Binance, etc...)
+ */
+app.get("/v2/networks", async (req: any, res: any) => {
+  const networks: DBNetwork[] = await prisma.networksv2.findMany();
+  res.status(200).json({ networks });
+});
+
+/**
+ * @dev Strategies made by users.
+ */
+app.get("/v2/strategies", async (req: any, res: any) => {
+  // @ts-ignore
+  const strategies: DBStrategy[] = await prisma.strategiesv2.findMany(); // TODO: Change strategiesv2 token id to string, migrate
+  res.status(200).json({ strategies });
+});
+
+/**
+ * @dev Protocols (e.g. Aave, Yearn, etc...)
+ */
+app.get("/v2/protocols", async (req: any, res: any) => {
+  const protocols: DBProtocol[] = await prisma.protocolsv2.findMany();
+  res.status(200).json({ protocols });
+});
+
+/**
+ * @dev Addresses (e.g. 0x1234...),
+ */
+app.get("/v2/addresses", async (req: any, res: any) => {
+  const addresses: DBAddress[] = await prisma.addressesv2.findMany();
+  res.status(200).json({ addresses });
+});
+
+/**
+ * @dev Token flows - Token ID & Whether it is an inflow or an outflow (boolean)
+ */
+app.get("/v2/flows", async (req: any, res: any) => {
+  const flows: DBFlow[] = await prisma.flowsv2.findMany();
+  res.status(200).json({ flows });
+});
+
+/**
+ * @dev Parameters/Arguments to use in raw function calls
+ */
+app.get("/v2/parameters", async (req: any, res: any) => {
+  const parameters: DBArgument[] = await prisma.argumentsv2.findMany();
+  res.status(200).json({ parameters });
+});
+
+/**
+ * @dev Users (e.g. Ofir, Eden, etc...)
+ */
+app.get("/v2/users", async (req: any, res: any) => {
+  const users: DBUser[] = await prisma.usersv2.findMany();
+  res.status(200).json({ users });
+});
+
+/**
+ * @dev Functions (raw function classifications)
+ */
+app.get("/v2/functions", async (req: any, res: any) => {
+  const functions: DBFunction[] = await prisma.functionsv2.findMany();
+  res.status(200).json({ functions });
+});
+
+/**
+ * @dev Actions (e.g Stake, Swap, Harvest, Add Liquidity...),
+ */
+app.get("/v2/actions", async (req: any, res: any) => {
+  const actions: DBAction[] = await prisma.actionsv2.findMany();
+  res.status(200).json({ actions });
 });
 
 // ====================

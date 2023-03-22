@@ -22,6 +22,7 @@ dotenv.config();
 import { FlowDirection, PrismaClient } from "@prisma/client";
 
 console.log("DAtabase URL", process.env.DATABASE_URL);
+console.log("dotenv obj ser", dotenv);
 
 // Instantitate PG Client
 const { Client } = pg;

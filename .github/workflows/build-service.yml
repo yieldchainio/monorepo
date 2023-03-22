@@ -26,6 +26,10 @@ jobs:
       id-token: write
 
     steps:
+      - name: Create Enviorment Variables
+        run: |
+          touch .env
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
       - name: Checkout Code
         uses: actions/checkout@v3
 

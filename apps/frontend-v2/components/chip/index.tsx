@@ -34,24 +34,24 @@ export const Chip = ({
   onDeselect,
 }: ChipProps) => {
   // Keeping track of whether we are toggled or not
-  const [toggled, setToggled] = useState<"border-[2px]" | "border-1">(
-    selected ? "border-[2px]" : "border-1"
+  const [toggled, setToggled] = useState<"border-[1px]" | "border-1">(
+    selected ? "border-[1px]" : "border-1"
   );
 
   // Set the toggle based on the provided selected
   useEffect(() => {
-    if (!!selected) setToggled("border-[2px]");
+    if (!!selected) setToggled("border-[1px]");
     else if (selected === false) setToggled("border-1");
   }, [selected]);
 
   // Handle a selection/de-selection
   const handleSelection = () => {
-    if (toggled === "border-[2px]") {
+    if (toggled === "border-[1px]") {
       onDeselect && onDeselect(id);
       setToggled("border-1");
     } else {
       onSelect && onSelect(id);
-      setToggled("border-[2px]");
+      setToggled("border-[1px]");
     }
   };
 
@@ -68,7 +68,7 @@ export const Chip = ({
       }
       onClick={handleSelection}
       style={{
-        borderColor: toggled == "border-[2px]" ? usedColor : "var(--border)",
+        borderColor: toggled == "border-[1px]" ? usedColor : "var(--border)",
       }}
     >
       <WrappedImage
@@ -89,7 +89,7 @@ export const Chip = ({
         fontStyle={"reguler"}
         className="text-custom-textColor smallLaptop:hidden"
         style={{
-          color: toggled === "border-[2px]" ? "var(--text)" : "var(--off)",
+          color: toggled === "border-[1px]" ? "var(--text)" : "var(--off)",
         }}
       >
         {text}

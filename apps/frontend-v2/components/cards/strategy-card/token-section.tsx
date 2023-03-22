@@ -45,13 +45,13 @@ interface StrategyTokenLogoProps {
 }
 const StrategyTokenLogo = ({ logo, networkLogo }: StrategyTokenLogoProps) => {
   return (
-    <div className="w-max h-max p-0.5 bg-gradient-to-r from-custom-yclb to-custom-ycly rounded-full flex">
-      <div className="relative bg-red-500 left-[78%] top-[85%] w-max h-max">
-        <div className="w-max h-max rounded-full absolute top-[-0.1rem]">
+    <div className="w-max h-max p-0.5 bg-gradient-to-r from-custom-yclb to-custom-ycy rounded-full flex">
+      <div className="relative bg-red-500 left-[78%] top-[15%] w-max h-max">
+        <div className="w-max h-max rounded-full absolute top-[2.6rem]">
           <WrappedImage
             src={networkLogo}
-            width={16}
-            height={16}
+            width={22}
+            height={22}
             className="rounded-full shadow-md border-[0.01rem] border-custom-themedBorder"
           />
         </div>
@@ -60,8 +60,8 @@ const StrategyTokenLogo = ({ logo, networkLogo }: StrategyTokenLogoProps) => {
         <div className="bg-custom-bcomponentbg w-max h-max rounded-full p-1">
           <WrappedImage
             src={logo}
-            width={32}
-            height={32}
+            width={40}
+            height={40}
             className="rounded-full"
           />
         </div>

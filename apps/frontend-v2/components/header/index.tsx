@@ -170,11 +170,9 @@ export const Header = () => {
         )}
 
         <div className="relative">
-          <Button
-            text={createVaultText}
-            onClick={() => null}
-            className=" relative font-semibold"
-          />
+          <Button onClick={() => null} className=" relative font-semibold">
+            Create Vault
+          </Button>
         </div>
       </div>
     </div>

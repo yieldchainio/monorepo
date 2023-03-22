@@ -14,6 +14,8 @@ interface SectionProps {
   fontSize?: number;
   titlesClassname?: string;
   valuesClassname?: string;
+  sectionsClassname?: string;
+  divisorClassname?: string;
 }
 const Section = ({
   title,
@@ -25,6 +27,8 @@ const Section = ({
   fontSize,
   titlesClassname,
   valuesClassname,
+  sectionsClassname,
+  divisorClassname = "",
 }: SectionProps) => {
   const router = useRouter();
   return (
@@ -48,8 +52,16 @@ const Section = ({
             )}
           </div>
         )}
-        {showLines && <Divisor className={title ? " mt-2 mb-5" : ""} />}
-        <div className="flex w-full flex-col gap-5">
+        {showLines && (
+          <Divisor
+            className={(title ? " mt-2 mb-5" : "") + " " + divisorClassname}
+          />
+        )}
+        <div
+          className={
+            "flex w-full flex-col  " + " " + (sectionsClassname || " ")
+          }
+        >
           {Object.entries(fields).map((field: Record<string, any>, i) => {
             return (
               <div className="flex flex-row justify-between" key={i}>
@@ -78,7 +90,7 @@ const Section = ({
         {!Children.toArray(children).some((child: any) =>
           isSectionComponent(child)
         ) &&
-          showLines && <Divisor className=" mb-2 mt-5" />}
+          showLines && <Divisor className={" mb-2 mt-5" + divisorClassname} />}
       </div>
     </>
   );

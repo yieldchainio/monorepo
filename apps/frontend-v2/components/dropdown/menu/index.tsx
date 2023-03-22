@@ -98,7 +98,7 @@ const DropdownMenu = ({
                     "truncate" + " " + (optionProps?.textClassname || "")
                   }
                   fontStyle="reguler"
-                  fontSize={16}
+                  fontSize={24}
                 >
                   {option.text}
                 </WrappedText>

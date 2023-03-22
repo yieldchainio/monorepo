@@ -71,6 +71,7 @@ const ProfileSection = ({
                     e.currentTarget.textContent &&
                     setNewUsername(e.currentTarget.textContent)
                   }
+                  truncate="truncate"
                 >
                   {userName}
                 </WrappedText>

@@ -30,6 +30,7 @@
     "global": "^4.4.0",
     "next": "13.2.3",
     "postcss": "^8.4.21",
+    "random-hex-color-generator": "^1.0.12",
     "rc-slider": "10.1.0",
     "react": "18.2.0",
     "react-custom-events": "^1.1.1",

@@ -35,6 +35,7 @@ export interface ImageProps {
   getColor?: boolean;
   setColors?: (colors: ExtractedColors) => any;
   onClick?: () => any;
+  style?: React.CSSProperties;
 }
 
 const WrappedImage = ({
@@ -45,6 +46,7 @@ const WrappedImage = ({
   className,
   onClick,
   setColors,
+  style,
 }: ImageProps) => {
   if (!src) return <ImageSkeleton width={width} height={height} />;
 
@@ -74,6 +76,7 @@ const WrappedImage = ({
         alt={alt || ""}
         className={className ? "select-none" + " " + className : "select-none"}
         onClick={() => onClick && onClick()}
+        style={style || {}}
       />
     </>
   );

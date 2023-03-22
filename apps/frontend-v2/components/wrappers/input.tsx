@@ -37,7 +37,7 @@ const WrappedInput = ({
   showGlass = true,
   placeholder = "Your input goes here:",
   placeholderClassname = "text-opacity-50",
-  select = Selection.allow,
+  select = Selection.disallow,
   className = "",
 }: InputProps) => {
   return (
@@ -53,7 +53,7 @@ const WrappedInput = ({
           fontStyle +
           " text-" +
           fontColor +
-          " " +
+          "select-none " +
           className
         } `}
         onClick={(e: React.MouseEvent<HTMLElement>) =>

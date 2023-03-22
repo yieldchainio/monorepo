@@ -42,7 +42,6 @@ export const FiltersMenu = <V, T extends BaseFilter<V>>({
       options={filters
         .filter((filter) => filter.hidden !== true)
         .map((filter) => {
-          console.log("filter ser", filter);
           return {
             text: filter.name + ":",
             data: {
@@ -80,7 +79,7 @@ export const FiltersMenu = <V, T extends BaseFilter<V>>({
       optionProps={{
         wrapperClassname:
           " bg-blue-900 justify-start hover:bg-opacity-[5%] hover:scale-[1] will-change-transform",
-        textClassname: "text-[12px]",
+        textClassname: "text-[14px]",
         className: " gap-5 justify-between w-full",
       }}
       handler={() => null}

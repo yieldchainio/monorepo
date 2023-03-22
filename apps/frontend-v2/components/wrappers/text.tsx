@@ -20,6 +20,7 @@ interface TextProps {
   id?: string;
   props?: Record<any, any>;
   onInput?: (e: FormEvent<HTMLDivElement>) => any;
+  truncate?: "truncate" | "";
 }
 
 export enum Selection {
@@ -35,6 +36,7 @@ const WrappedText = ({
   fontColor = "custom-textColor",
   onClick,
   select = Selection.allow,
+  truncate = "",
   contentEditable = "false",
   className = "",
   id,
@@ -55,7 +57,8 @@ const WrappedText = ({
         " text-" +
         fontColor +
         " " +
-        "select-none focus:outline-none truncate" +
+        "select-none focus:outline-none whitespace-nowrap " +
+        truncate +
         " " +
         className
       }`}

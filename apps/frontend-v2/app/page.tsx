@@ -171,34 +171,41 @@ export default function Home() {
             className="w-full"
             placeholder="Search for a vault ID, token, or protocol name"
           />
-          <div className="w-full h-[100px] flex flex-row items-center justify-between z-1">
-            <ChipsSection<YCNetwork>
-              setter={setSelectedNetworks}
-              items={networks}
-            />
-            <Filter
-              filters={filters}
-              items={strategies}
-              stringifier={(items) =>
-                JSON.stringify(items.map((item) => item.toString()))
-              }
-              setter={setFilteredStrategies}
-            />
+          <div className="w-[70%] h-max flex flex-row items-center justify-between z-1">
+            <div className="">
+              <ChipsSection<YCNetwork>
+                setter={setSelectedNetworks}
+                items={networks}
+              />
+            </div>
+            <div className="">
+              <Filter
+                filters={filters}
+                items={strategies}
+                stringifier={(items) =>
+                  JSON.stringify(items.map((item) => item.toString()))
+                }
+                setter={setFilteredStrategies}
+              />
+            </div>
           </div>
         </Sticky>
       </div>
       <div className="flex flex-col gap-10 px-10 w-full h-full z-10">
-        <div className="flex flex-row w-full h-full gap-2 justify-between px-5">
-          {filteredStrategies.map((strategy, i) => (
-            <>
-              {i < 4 && <StrategyCard strategy={strategy} />}
-              {/* <div className="w-[100px] bg-custom-subbg bg-opacity-100 h-[100px] flex flex-col gap-2">
-                <WrappedText>{strategy.title}</WrappedText>
-                <WrappedText>{strategy.tvl.toString()}</WrappedText>
-                <WrappedText>{strategy.network?.name}</WrappedText>
-              </div> */}
-            </>
-          ))}
+        <div className="flex flex-row w-full h-full gap-7 justify-start px-5 pt-16">
+          {filteredStrategies.map((strategy, i) => {
+            console.log("strategy's steps", strategy.rawSteps);
+            return (
+              <>
+                {i < 4 && <StrategyCard strategy={strategy} />}
+                {/* <div className="w-[100px] bg-custom-subbg bg-opacity-100 h-[100px] flex flex-col gap-2">
+            <WrappedText>{strategy.title}</WrappedText>
+            <WrappedText>{strategy.tvl.toString()}</WrappedText>
+            <WrappedText>{strategy.network?.name}</WrappedText>
+          </div> */}
+              </>
+            );
+          })}
         </div>
       </div>
     </div>

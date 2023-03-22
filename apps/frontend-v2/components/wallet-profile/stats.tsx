@@ -22,6 +22,7 @@ const ProfileStats = ({ createdVaults }: ProfileStatsProps) => {
           Royalties: "$1,112.55",
         }}
         key="SectionComponent"
+        sectionsClassname="gap-4"
       >
         <div className="w-full">
           <Section fields={{ "Awesome Web3 Protection": "OFF" }}>

@@ -3,14 +3,17 @@
  */
 
 import { YCStrategy } from "@yc/yc-models";
+import { RegulerButton } from "components/buttons/reguler";
 import Section from "components/section";
 import { SmallVerified } from "components/verified/circle";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 import { formatMoney } from "utilities/general/format-money";
+import { filterDupes } from "utilities/general/remove-dupes";
 import { sliceAddress } from "utilities/general/slice-address";
 import useYCUser from "utilities/hooks/yc/useYCUser";
 import { StrategyTokenSection } from "./token-section";
+import GradientButton from "components/buttons/gradient";
 
 export interface StrategyCardProps {
   strategy: YCStrategy;
@@ -22,10 +25,10 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
     userAddress: strategy.creator?.address as `0x${string}`,
   });
   return (
-    <div className="w-max h-[350px] bg-custom-bcomponentbg rounded-3xl flex flex-col items-center justify-start">
+    <div className="w-max h-max bg-custom-bcomponentbg rounded-[2rem] flex flex-col items-center justify-start border-1 border-custom-themedBorder shadow-sm">
       {verified && <SmallVerified />}
-      <div className="bg-gradient-to-r from-custom-yclb/10 to-custom-ycy/10 w-full h-[22%] rounded-t-3xl flex flex-row gap-5 pl-4 pr-5">
-        <div className="flex flex-row items-center w-full justify-between px-1 gap-5">
+      <div className="bg-gradient-to-r from-custom-yclb/10 to-custom-ycy/10 w-max h-[30%] rounded-t-[2rem] flex flex-row gap-5 pl-4 pr-5 py-4">
+        <div className="flex flex-row items-center w-full justify-between px-1 gap-10">
           <div className="flex flex-row items-center gap-1.5">
             <WrappedImage
               src={profilePic}
@@ -49,19 +52,63 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
           </WrappedText>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-startw-full h-full py-6 w-full px-6 gap-4">
+      <div className="flex flex-col items-center justify-start w-full h-full py-6 px-6 gap-1">
         <StrategyTokenSection
           token={strategy.depositToken}
           network={strategy.network}
         />
-        <Section
-          fields={{
-            "Total Value Locked": formatMoney(strategy.tvl),
-            Title: strategy.title,
-          }}
-          showLines={false}
-          fontSize={12}
-        ></Section>
+        <div className="gap-2 w-full flex flex-col justify-center items-center">
+          <Section
+            fields={{
+              "Total Value Locked": formatMoney(strategy.tvl),
+              Title: strategy.title,
+              Created: "5 Days Ago",
+              Protocols: (
+                <div className="flex flex-row items-center  gap-[0.05rem]">
+                  <div className="flex flex-row items-center justify-center pl-[20px]">
+                    {filterDupes(strategy.steps).map((step, i, arr) => {
+                      return i <= 1 ? (
+                        <WrappedImage
+                          src={step.protocol.logo}
+                          width={22}
+                          height={22}
+                          className="rounded-full ml-[-6px] border-[2px] border-custom-bcomponentbg"
+                          style={{
+                            zIndex: arr.length - i,
+                          }}
+                        />
+                      ) : null;
+                    })}
+                  </div>
+                  {filterDupes(strategy.steps).length > 2 ? (
+                    <WrappedText fontSize={14}>
+                      {"+" +
+                        (filterDupes(strategy.steps).length - 2).toString()}
+                    </WrappedText>
+                  ) : null}
+                </div>
+              ),
+            }}
+            showLines={true}
+            fontSize={12}
+            sectionsClassname={"gap-3 mb-0"}
+            titlesClassname={"text-opacity-25"}
+            divisorClassname=" mb-[0.5rem] mt-[0.5rem]"
+          ></Section>
+          <GradientButton className="mt-4 rounded-[0.9rem] pl-[6rem] pr-[6rem] pt-[0.5rem] pb-[0.5rem] ml-[0px] ">
+            <WrappedText
+              fontSize={14}
+              fontColor={"inherit"}
+              fontStyle={"bold"}
+              className="text-elipsis overflow-visible"
+              style={{
+                textOverflow: "visible",
+              }}
+            >
+              Enter Vault
+            </WrappedText>
+          </GradientButton>
+        </div>
       </div>
     </div>
   );

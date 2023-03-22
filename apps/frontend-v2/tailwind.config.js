@@ -1,4 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+const {
+  randomHexColor,
+  randomHexColorStartWith,
+  randomHexColorEndWith,
+  randomHexColorStartAndEndWith,
+  randomHexColorWithArray,
+  randomHexColorWithArrayOfObject,
+  randomHexColorArrayStartWith,
+  randomHexColorArrayEndWith,
+} = require("random-hex-color-generator");
 module.exports = {
   darkMode: "class",
   theme: {
@@ -65,6 +75,23 @@ module.exports = {
 
           button: "var(--button)",
           buttonHover: "var(--buttonHover)",
+
+          // A random color
+          randomBlueish: ({ opacityValue }) => {
+            const arr = [
+              `rgba(104, 218, 25 ${opacityValue})`,
+              `rgba(0, 178, 236 ${opacityValue})`,
+              `rgba(0, 236, 193 ${opacityValue})`,
+              `rgba(175, 27, 255 ${opacityValue})`,
+            ];
+
+            return arr[Math.floor(Math.random() * arr.length - 1)];
+          },
+
+          randomYellowish: () => {
+            const arr = ["#d9ca0f", "#fef464", "#ffa375", "#f84f4f"];
+            return arr[Math.floor(Math.random() * arr.length - 1)];
+          },
         },
       },
       animation: {
@@ -105,6 +132,13 @@ module.exports = {
             transform: "translateY(0px)",
           },
         },
+      },
+      backgroundSize: {
+        "size-200": "200% 200%",
+      },
+      backgroundPosition: {
+        "pos-0": "0% 0%",
+        "pos-100": "100% 100%",
       },
     },
     fontFamily: {

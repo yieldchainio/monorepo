@@ -116,6 +116,8 @@ html {
   --buttonHover: var(--light-button-hover);
 
   --scrollbar: var(--light-scrollbar);
+
+  --main-gradient: var(--light-gradient);
 }
 
 html.dark {
@@ -151,6 +153,7 @@ html.dark {
   --buttonHover: var(--dark-button-hover);
 
   --scrollbar: var(--dark-scrollbar);
+  --main-gradient: var(--gradient);
 }
 
 /*Other Global Variables*/

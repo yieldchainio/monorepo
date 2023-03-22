@@ -7,8 +7,8 @@ import {
   FilterConfig,
   UseFilterProps,
 } from "utilities/hooks/general/useFilters/types";
-import { FilterBox } from "./filter-box";
-import { FiltersMenu } from "./filter-menu";
+import { FilterBox } from "./box";
+import { FiltersMenu } from "./menu";
 
 export interface FilterModification {}
 
@@ -117,7 +117,7 @@ export const Filter = <V, T extends BaseFilter<V>>({
           setMenuOpen(!menuOpen);
         }}
         ref={boxRef}
-        className={"bg-custom-bg border-custom-themedBorder mr-[200px]"}
+        className={"bg-custom-bg border-custom-themedBorder"}
       />
       {menuOpen && (
         <FiltersMenu

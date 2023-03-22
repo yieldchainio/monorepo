@@ -122,7 +122,7 @@ class YCClassificationsInternal {
         frontend: {
           fetcher: async () =>
             await (
-              await axios.get(YCClassifications.apiURL + "/networks")
+              await axios.get(YCClassifications.apiURL + "/v2/networks")
             ).data.networks,
           setter: (value: DBNetwork[]) => (this.Networks = value),
         },
@@ -140,7 +140,7 @@ class YCClassificationsInternal {
         frontend: {
           fetcher: async () =>
             await (
-              await axios.get(YCClassifications.apiURL + "/protocols")
+              await axios.get(YCClassifications.apiURL + "/v2/protocols")
             ).data.protocols,
           setter: (value: DBProtocol[]) => (this.Protocols = value),
         },
@@ -157,7 +157,7 @@ class YCClassificationsInternal {
         frontend: {
           fetcher: async () =>
             await (
-              await axios.get(YCClassifications.apiURL + "/tokens")
+              await axios.get(YCClassifications.apiURL + "/v2/tokens")
             ).data.tokens,
           setter: (value: DBToken[]) => (this.Tokens = value),
         },
@@ -166,25 +166,25 @@ class YCClassificationsInternal {
 
   protected fetchAddresses = async () => {
     this.Addresses = await (
-      await axios.get(YCClassifications.apiURL + "/addresses")
+      await axios.get(YCClassifications.apiURL + "/v2/addresses")
     ).data.addresses;
   };
 
   protected fetchFunctions = async () => {
     this.Functions = await (
-      await axios.get(YCClassifications.apiURL + "/functions")
+      await axios.get(YCClassifications.apiURL + "/v2/functions")
     ).data.functions;
   };
 
   protected fetchArguments = async () => {
     this.Parameters = await (
-      await axios.get(YCClassifications.apiURL + "/parameters")
+      await axios.get(YCClassifications.apiURL + "/v2/parameters")
     ).data.parameters;
   };
 
   protected fetchFlows = async () => {
     this.Flows = await (
-      await axios.get(YCClassifications.apiURL + "/flows")
+      await axios.get(YCClassifications.apiURL + "/v2/flows")
     ).data.flows;
   };
 
@@ -198,7 +198,7 @@ class YCClassificationsInternal {
         frontend: {
           fetcher: async () =>
             await (
-              await axios.get(YCClassifications.apiURL + "/users")
+              await axios.get(YCClassifications.apiURL + "/v2/users")
             ).data.users,
           setter: (value: DBUser[]) => (this.Users = value),
         },
@@ -217,7 +217,7 @@ class YCClassificationsInternal {
       frontend: {
         fetcher: async () =>
           await (
-            await axios.get(YCClassifications.apiURL + "/strategies")
+            await axios.get(YCClassifications.apiURL + "/v2/strategies")
           ).data.strategies,
         setter: (value: DBStrategy[]) => (this.Strategies = value),
       },
@@ -226,7 +226,7 @@ class YCClassificationsInternal {
 
   protected fetchActions = async () => {
     this.Actions = await (
-      await axios.get(YCClassifications.apiURL + "/actions")
+      await axios.get(YCClassifications.apiURL + "/v2/actions")
     ).data.actions;
   };
 
@@ -313,10 +313,10 @@ class YCClassificationsInternal {
       await config.fetch();
     }
   };
+
   /**
    * Refresh all class endpoints
    */
-
   protected refreshAll = async () => {
     for (const [endpointKey, config] of Object.entries(this.ENDPOINT_CONFIGS)) {
       // Skip the "ALL" endpoint (we dont want an infinite limbo ser)
@@ -646,41 +646,39 @@ export class YCClassifications extends YCClassificationsInternal {
   // ==============
 
   // Get an address instance using an address / it's DB identifier
-  getAddressYC = (_address_or_id: number | string): DBAddress | null => {
+  getAddressYC = (_address_or_id: string): DBAddress | null => {
     // Find the address
     return (
       this.Addresses.find((_address: DBAddress) => {
         // If it's an address (string), find an address obj w the same contract address
         if (typeof _address_or_id == "string")
-          return _address.contract_address == _address_or_id;
+          return _address.address == _address_or_id;
         // Else, it means it is an ID - find the correpsonding address
-        else return _address.address_identifier == _address_or_id;
+        else return _address.id == _address_or_id;
       }) || null
     );
   };
 
   // Get a function instance using a function ID
-  getFunction = (_function_id: number): YCFunc | null => {
+  getFunction = (_function_id: string): YCFunc | null => {
     let func =
-      this.Functions.find(
-        (_func: DBFunction) => _func.function_identifier == _function_id
-      ) || null;
+      this.Functions.find((_func: DBFunction) => _func.id == _function_id) ||
+      null;
 
     return func ? new YCFunc(func, this) : null;
   };
 
   // Get an argument instance using an argument ID
-  getArgument = (_argument_id: number): YCArgument | null => {
+  getArgument = (_argument_id: string): YCArgument | null => {
     let arg =
-      this.Parameters.find(
-        (_arg: DBArgument) => _arg.parameter_identifier == _argument_id
-      ) || null;
+      this.Parameters.find((_arg: DBArgument) => _arg.id == _argument_id) ||
+      null;
 
     return arg ? new YCArgument(arg, this) : null;
   };
 
   // Get a full flow instance with a flow ID
-  getFlow = (_flow_id: number): YCFlow | null => {
+  getFlow = (_flow_id: string): YCFlow | null => {
     let flow = this.Flows.find((_flow: DBFlow) => _flow.id == _flow_id);
     if (flow) return new YCFlow(flow, this);
     return null;

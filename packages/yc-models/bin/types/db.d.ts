@@ -2,13 +2,16 @@
  * @notice
  * Yieldchain's Database Models / Interfaces
  */
+import { JsonValue } from "@yc/yc-data";
 import { address, ChainID } from "./global";
-import { BaseVariableTypes, CallTypes } from "./yc";
+import { FlowDirection, VariableTypes, BaseVariableTypes, CallType } from "@prisma/client";
 export interface DBAction {
-    action_identifier: number;
+    id: string;
     name: string;
     popularity: number;
-    hidden: boolean;
+    available: boolean;
+    table_name: string | null;
+    functions_ids: string[];
 }
 export interface DBStrategy {
     id: string;
@@ -31,35 +34,39 @@ export interface DBNetwork {
     block_explorer: string | null;
 }
 export interface DBFunction {
-    function_identifier: number;
-    function_name: string;
-    number_of_parameters: number;
-    flows: number[];
-    arguments: number[];
-    is_callback: boolean;
-    callType: CallTypes;
-    return_type: string;
-    return_base_type: BaseVariableTypes;
-    counter_function_identifier?: number;
-    unlocked_by?: number;
-    index?: number;
+    id: string;
+    name: string;
+    callback: boolean;
+    inverse_function_id: string | null;
+    dependancy_function_id: string | null;
+    call_type: CallType;
+    return_value_type: VariableTypes;
+    return_value_base_type: BaseVariableTypes;
+    address_id: string;
+    flows_ids: string[];
+    arguments_ids: string[];
+    actions_ids: string[];
 }
 export interface DBArgument {
-    parameter_identifier: number;
+    id: string;
     index: number;
     solidity_type: string;
     value: string;
-    name: string;
+    name: string | null;
+    custom: boolean;
+    variable_type: VariableTypes;
+    base_type: BaseVariableTypes;
+    function_id: string;
 }
 export interface DBFlow {
-    id: number;
+    id: string;
     token_id: string;
-    outflow0_or_inflow1: number;
+    direction: FlowDirection;
 }
 export interface DBToken {
     id: string;
     name: string;
-    address: address;
+    address: string;
     symbol: string;
     logo: string;
     decimals: number;
@@ -79,11 +86,12 @@ export interface DBProtocol {
     discord: string | null;
 }
 export interface DBAddress {
-    address_identifier: number;
-    contract_address: address;
-    chain_id: number;
-    abi: JSON;
-    functions: number[];
+    id: string;
+    address: string;
+    chain_id: ChainID;
+    abi: JsonValue;
+    functions_ids: string[];
+    protocol_id: string;
 }
 export interface DBUser {
     id: string;

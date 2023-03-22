@@ -24,9 +24,9 @@ export class YCArgument extends BaseClass {
   #solidityType: string;
   #isCustom: boolean;
   #isArray: boolean;
-  #identifier: number;
+  #identifier: string;
   #index: number;
-  #name: string;
+  #name: string | null;
 
   // =======================
   //      CONSTRUCTOR
@@ -40,7 +40,7 @@ export class YCArgument extends BaseClass {
     // Init private variables
     this.#solidityType = _argument.solidity_type;
     this.#isArray = _argument.solidity_type.includes("[");
-    this.#identifier = _argument.parameter_identifier;
+    this.#identifier = _argument.id;
     this.#index = _argument.index;
     this.#name = _argument.name;
     this.#isCustom = _argument.value.includes("custom_argument");
@@ -60,7 +60,7 @@ export class YCArgument extends BaseClass {
       let iterations: CustomArgument[] = [];
 
       Array.isArray(_customArgument)
-        ? _customArgument.forEach((arg: CustomArgument) => iterations.push(arg))
+        ? iterations.push(..._customArgument)
         : iterations.push(_customArgument);
 
       // Init value
@@ -74,7 +74,7 @@ export class YCArgument extends BaseClass {
         if (!currentArgPart.isFunction) value[i] = currentArgPart.value;
         // If it is a function, set the value to the function using the value as an ID
         else {
-          let func = _context.getFunction(parseInt(currentArgPart.value));
+          let func = _context.getFunction(currentArgPart.value);
           if (!func)
             throw new Error(
               "YCArgument ERR: Unable to set argument value - Argument is a custom function, but was unable to retreive function by ID - funcID: " +
@@ -101,7 +101,7 @@ export class YCArgument extends BaseClass {
     // If the solidity type is a function, the value is refering to the identifier of the function.
     // We want to use it when encoding this argument so that it can be evaluated at runtime
     // Get the YCFunc object
-    let func = _context.getFunction(parseInt(_argument.value));
+    let func = _context.getFunction(_argument.value);
 
     // Throw an error if we got a null back
     if (!func) {

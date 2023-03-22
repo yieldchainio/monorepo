@@ -1,5 +1,6 @@
 import { DBToken, DBFlow } from "../../types/db";
 import { YCClassifications } from "../context/context";
+import { FlowDirection } from "@prisma/client";
 
 /**
  * @notice
@@ -12,7 +13,7 @@ export class YCFlow {
   //    PRIVATE VARIABLES
   // =======================
   #token: DBToken; // Init in constructor
-  #direction: FlowDirections; // Init in constructor
+  #direction: FlowDirection; // Init in constructor
   #native: boolean = false; // Init to false
 
   // =======================
@@ -20,10 +21,7 @@ export class YCFlow {
   // =======================
   constructor(_flow: DBFlow, _context: YCClassifications) {
     // Set static variables
-    this.#direction =
-      _flow.outflow0_or_inflow1 == 0
-        ? FlowDirections.outflow
-        : FlowDirections.inflow;
+    this.#direction = _flow.direction;
 
     // Get token class
     let token = _context.getToken(_flow.token_id);

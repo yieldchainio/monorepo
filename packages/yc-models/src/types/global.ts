@@ -7,7 +7,7 @@ export type bytes4 = string;
 export type bytes5 = string;
 export type bytes6 = string;
 export type ABI = JSON;
-export type address = string;
+export type address = `0x${string}`;
 export type data = string;
 
 // Available chain IDs

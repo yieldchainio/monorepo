@@ -1,5 +1,4 @@
 import { ethers } from "ethers";
-import { BaseVariableTypes } from "../../types/yc";
 import {
   DBAddress,
   DBFlow,
@@ -15,6 +14,7 @@ import { YCArgument } from "../argument/argument";
 import { YCFlow } from "../flow/flow";
 import { YCStep } from "../step/step";
 import { FunctionCall, CallTypes } from "../../types/yc";
+import { CallType, VariableTypes, BaseVariableTypes } from "@prisma/client";
 
 const addFlags = (arg: any, _arg: any, arg_: any, arg__: any, _arg_: any) => {
   return arg;
@@ -31,17 +31,16 @@ export class YCFunc {
   // ====================
   //    PRIVATE FIELDS
   // ====================
-  #identifier: number;
+  #identifier: string;
   #name: string;
   #address: YCAddress | null;
-  #argumentsAmt: number;
   #isCallback: boolean;
   #counterFunction: YCFunc | null;
   #unlockedByFunction: YCFunc | null;
   #flows: YCFlow[];
 
   #signature: string;
-  #calltype: CallTypes;
+  #calltype: CallType;
   #arguments: YCArgument[];
   #returnType: string;
   #returnBaseType: BaseVariableTypes;
@@ -51,21 +50,20 @@ export class YCFunc {
   // ====================
   constructor(_function: DBFunction, _context: YCClassifications) {
     // Static variables
-    this.#identifier = _function.function_identifier;
-    this.#name = _function.function_name;
-    this.#argumentsAmt = _function.arguments.length;
-    this.#returnType = _function.return_type;
-    this.#returnBaseType = _function.return_base_type;
-    this.#counterFunction = _function.counter_function_identifier
-      ? _context.getFunction(_function.counter_function_identifier)
+    this.#identifier = _function.id;
+    this.#name = _function.name;
+    this.#returnType = _function.return_value_type;
+    this.#returnBaseType = _function.return_value_base_type;
+    this.#counterFunction = _function.inverse_function_id
+      ? _context.getFunction(_function.inverse_function_id)
       : null;
-    this.#isCallback = _function.is_callback;
-    this.#unlockedByFunction = _function.unlocked_by
-      ? _context.getFunction(_function.unlocked_by)
+    this.#isCallback = _function.callback;
+    this.#unlockedByFunction = _function.dependancy_function_id
+      ? _context.getFunction(_function.dependancy_function_id)
       : null;
-    this.#calltype = _function.callType;
+    this.#calltype = _function.call_type;
     let address: YCAddress | undefined = _context.addresses.find(
-      (address: YCAddress) => address.hasFunction(this.ID())
+      (address: YCAddress) => address.hasFunction(this.#identifier)
     );
 
     if (!address)
@@ -74,7 +72,7 @@ export class YCFunc {
     this.#address = address;
 
     // Mapping arg identifiers => Full argument instances
-    let fullArgs = _function.arguments.map((_arg: number) =>
+    let fullArgs = _function.arguments_ids.map((_arg: string) =>
       _context.getArgument(_arg)
     );
 
@@ -102,7 +100,7 @@ export class YCFunc {
     this.#signature = tempSig;
 
     // Mapping flow identifiers => Full Flows intances
-    this.#flows = _function.flows.flatMap((_flow: number) => {
+    this.#flows = _function.flows_ids.flatMap((_flow: string) => {
       let flow = _context.getFlow(_flow);
       if (flow) return [flow];
       return [];
@@ -175,7 +173,7 @@ export class YCFunc {
       );
 
     // Ethers interface for encoding
-    let iface = this.#address.interface();
+    let iface = this.#address.interface;
 
     // FunctionCall struct that will be ncoded
     let functionCall: FunctionCall = this.FunctionCallStruct(_step);
@@ -211,7 +209,7 @@ export class YCFunc {
         "YCFuncERR: Cannot Create FunctionCall - Function Does Not Have An Address."
       );
     let struct: FunctionCall = {
-      target_address: this.#address.address(),
+      target_address: this.#address.address,
       args: this.#arguments.map((arg: YCArgument) => arg.encode()),
       signature: this.#signature,
       is_callback: this.#isCallback,

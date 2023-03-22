@@ -82,6 +82,10 @@ export class YCToken {
     return this.network?.chainid;
   }
 
+  get logo() {
+    return this.#logoURI;
+  }
+
   // Parse a formatted number by the decimals
   parseDecimals = (_number: string | number | bigint) => {
     _number = BigInt(_number);

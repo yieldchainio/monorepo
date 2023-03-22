@@ -106,7 +106,7 @@ app.get("/", async (req: any, res: any) => {
  * @dev Tokens (e.g. DAI, USDC, etc...)
  */
 app.get("/tokens", async (req: any, res: any) => {
-  const tokens: DBToken[] = await prisma.tokensv2.findMany();
+  const tokens: DBToken[] = await genericQuery("*", "tokens");
   res.status(200).json({ tokens });
 });
 
@@ -114,7 +114,7 @@ app.get("/tokens", async (req: any, res: any) => {
  * @dev Networks (e.g. Ethereum, Binance, etc...)
  */
 app.get("/networks", async (req: any, res: any) => {
-  const networks: DBNetwork[] = await prisma.networksv2.findMany();
+  const networks: DBNetwork[] = await genericQuery("*", "networks");
   res.status(200).json({ networks });
 });
 
@@ -123,7 +123,7 @@ app.get("/networks", async (req: any, res: any) => {
  */
 app.get("/strategies", async (req: any, res: any) => {
   // @ts-ignore
-  const strategies: DBStrategy[] = await prisma.strategiesv2.findMany(); // TODO: Change strategiesv2 token id to string, migrate
+  const strategies: DBStrategy[] = await genericQuery("*", "strategies");
   res.status(200).json({ strategies });
 });
 
@@ -271,76 +271,6 @@ app.post(
   }
 );
 
-app.post(
-  "/signup",
-  async (
-    req: {
-      body: Omit<SignupArguments, "context">;
-    },
-    res: any
-  ) => {
-    const data: Omit<SignupArguments, "context"> = req.body;
-    const result = await prisma.usersv2.create({
-      data: {
-        address: data.address,
-        username: data.username || "Anon",
-        description: data.description,
-        twitter: data.twitter,
-        telegram: data.telegram,
-        discord: data.discord,
-        profile_picture: data.profilePicture,
-      },
-    });
-
-    if (result) res.status(200).json({ user: data });
-    else res.status(400);
-  }
-);
-
-app.post(
-  "/update-user",
-  async (
-    req: {
-      body: {
-        id: string;
-        username?: string;
-        description?: string;
-        twitter?: string;
-        telegram?: string;
-        discord?: string;
-        profile_picture?: string;
-      };
-    },
-    res: any
-  ) => {
-    const data: {
-      id: string;
-      username?: string;
-      description?: string;
-      twitter?: string;
-      telegram?: string;
-      discord?: string;
-      profile_picture?: string;
-    } = req.body;
-    const result = await prisma.usersv2.update({
-      where: {
-        id: data.id,
-      },
-      data: {
-        username: data.username,
-        description: data.description,
-        twitter: data.twitter,
-        telegram: data.telegram,
-        discord: data.discord,
-        profile_picture: data.profile_picture,
-      },
-    });
-
-    if (result) res.status(200).json({ user: data });
-    else res.status(400);
-  }
-);
-
 app.get("/waitlist", async (req: any, res: any) => {
   const waitlist: any = await genericQuery("*", "waitlist");
   res.status(200).json({ waitlist });
@@ -434,6 +364,76 @@ app.get("/v2/actions", async (req: any, res: any) => {
   const actions: DBAction[] = await prisma.actionsv2.findMany();
   res.status(200).json({ actions });
 });
+
+app.post(
+  "/signup",
+  async (
+    req: {
+      body: Omit<SignupArguments, "context">;
+    },
+    res: any
+  ) => {
+    const data: Omit<SignupArguments, "context"> = req.body;
+    const result = await prisma.usersv2.create({
+      data: {
+        address: data.address,
+        username: data.username || "Anon",
+        description: data.description,
+        twitter: data.twitter,
+        telegram: data.telegram,
+        discord: data.discord,
+        profile_picture: data.profilePicture,
+      },
+    });
+
+    if (result) res.status(200).json({ user: data });
+    else res.status(400);
+  }
+);
+
+app.post(
+  "/update-user",
+  async (
+    req: {
+      body: {
+        id: string;
+        username?: string;
+        description?: string;
+        twitter?: string;
+        telegram?: string;
+        discord?: string;
+        profile_picture?: string;
+      };
+    },
+    res: any
+  ) => {
+    const data: {
+      id: string;
+      username?: string;
+      description?: string;
+      twitter?: string;
+      telegram?: string;
+      discord?: string;
+      profile_picture?: string;
+    } = req.body;
+    const result = await prisma.usersv2.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        username: data.username,
+        description: data.description,
+        twitter: data.twitter,
+        telegram: data.telegram,
+        discord: data.discord,
+        profile_picture: data.profile_picture,
+      },
+    });
+
+    if (result) res.status(200).json({ user: data });
+    else res.status(400);
+  }
+);
 
 // ====================
 //        YCAPI

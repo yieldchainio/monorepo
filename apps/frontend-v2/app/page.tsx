@@ -16,6 +16,7 @@ import {
 } from "utilities/hooks/general/useFilters/types";
 import { YCNetwork, YCStrategy } from "@yc/yc-models";
 import { useYCStore } from "utilities/stores/yc-data";
+import { StrategyCard } from "components/cards/strategy-card";
 
 /**
  * Static filters for the strategies
@@ -103,10 +104,10 @@ export default function Home() {
     setFilters(newArr);
   }, [selectedNetworks]);
   return (
-    <div className="w-full h-full bg-custom-bg absolute text-custom-textColor flex flex-col">
+    <div className="w-full h-full bg-custom-bg absolute text-custom-textColor flex flex-col z-0">
       <div
         className={
-          "absolute w-[30vw] h-[30vh] blur-[200px] top-[20vh] left-[100%] bg-[#3BC7F4] dark:bg-[#FFF576]"
+          "absolute w-[100vw] h-[50vh] blur-[200px] top-[12vh] left-[100%] bg-[#3BC7F4] dark:bg-[#FFF576] z-0"
         }
       ></div>
       <div className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-full h-full">
@@ -124,7 +125,7 @@ export default function Home() {
         </div>
         <Sticky
           heightToFix={{ viewportHeight: 15 }}
-          className="w-full items-center flex flex-col top-[10vh] gap-5"
+          className="w-full items-center flex flex-col top-[10vh] gap-5 z-20"
         >
           <WrappedInput
             fontSize={16}
@@ -170,7 +171,7 @@ export default function Home() {
             className="w-full"
             placeholder="Search for a vault ID, token, or protocol name"
           />
-          <div className=" w-full h-[100px] flex flex-row items-center justify-start">
+          <div className="w-full h-[100px] flex flex-row items-center justify-between z-1">
             <ChipsSection<YCNetwork>
               setter={setSelectedNetworks}
               items={networks}
@@ -186,14 +187,17 @@ export default function Home() {
           </div>
         </Sticky>
       </div>
-      <div className="flex flex-col gap-10 px-10 w-full h-full">
-        <div className="flex flex-row w-full h-full gap-2">
-          {filteredStrategies.map((strategy) => (
-            <div className="w-[100px] bg-custom-subbg bg-opacity-100 h-[100px] flex flex-col gap-2">
-              <WrappedText>{strategy.title}</WrappedText>
-              <WrappedText>{strategy.tvl.toString()}</WrappedText>
-              <WrappedText>{strategy.network?.name}</WrappedText>
-            </div>
+      <div className="flex flex-col gap-10 px-10 w-full h-full z-10">
+        <div className="flex flex-row w-full h-full gap-2 justify-between px-5">
+          {filteredStrategies.map((strategy, i) => (
+            <>
+              {i < 4 && <StrategyCard strategy={strategy} />}
+              {/* <div className="w-[100px] bg-custom-subbg bg-opacity-100 h-[100px] flex flex-col gap-2">
+                <WrappedText>{strategy.title}</WrappedText>
+                <WrappedText>{strategy.tvl.toString()}</WrappedText>
+                <WrappedText>{strategy.network?.name}</WrappedText>
+              </div> */}
+            </>
           ))}
         </div>
       </div>

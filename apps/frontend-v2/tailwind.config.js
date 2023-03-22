@@ -40,8 +40,8 @@ module.exports = {
             `rgba(var(--dimmed), ${opacityValue || 1})`,
 
           // General Colors
-          yclb: "#00B2EC",
-          ycy: "#D9CA0F",
+          yclb: ({ opacityValue }) => `rgba(0, 178, 236, ${opacityValue || 1})`,
+          ycy: ({ opacityValue }) => `rgba(217, 202, 15, ${opacityValue || 1})`,
 
           ycllb: "#68DAFF",
           ycly: "#fef464",

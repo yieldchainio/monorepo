@@ -16,6 +16,7 @@ interface TextProps {
   onClick?: (e: React.MouseEvent<HTMLElement>) => any | void | null;
   fontFamily?: string;
   className?: string;
+  style?: React.CSSProperties;
   id?: string;
   props?: Record<any, any>;
   onInput?: (e: FormEvent<HTMLDivElement>) => any;
@@ -37,6 +38,7 @@ const WrappedText = ({
   contentEditable = "false",
   className = "",
   id,
+  style,
   onInput,
 }: TextProps) => {
   if (children === undefined)
@@ -64,6 +66,7 @@ const WrappedText = ({
       suppressContentEditableWarning={true}
       id={id}
       onInput={(e) => onInput && onInput(e)}
+      style={style || {}}
     >
       {children}
     </div>

@@ -4,6 +4,7 @@ import {
   Endpoints,
   UserUpdateArguments,
   YCClassifications,
+  YCSocialMedia,
   YCStrategy,
   YCUser,
 } from "@yc/yc-models";
@@ -12,7 +13,8 @@ import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 import Jazzicon from "@raugfer/jazzicon";
 import { useEffect, useState } from "react";
 import { useInternalYCUser } from "utilities/stores/yc-data";
-import { shallow } from "zustand/shallow";
+
+// Interface for return value of the YCUser hook
 export interface YCUserHookReturn {
   address: address | undefined;
   profilePic: string | null;
@@ -21,30 +23,60 @@ export interface YCUserHookReturn {
   updateDetails: (
     newDetails: Partial<UserUpdateArguments>
   ) => Promise<DBUser | null>;
+  socialMedia: YCSocialMedia;
+  verified: boolean;
+}
+
+// Interface for the useYCUser's props
+export interface UseYCUserProps {
+  userAddress?: address;
 }
 
 /**
  * A hook for accessing a YC User's details
  */
-const useYCUser = (): YCUserHookReturn => {
+const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
   // Current connected wallet's details
-  const { address, connector, status } = useAccount();
+  const { address } = useAccount();
 
-  const [causeRerender, setCauseRerender] = useState<boolean>(false);
+  // The global address variable that will be used
+  const [userAddress, setUserAddress] = useState<`0x${string}` | undefined>(
+    address
+  );
+
+  // useEffect for setting the global address variable
+  useEffect(() => {
+    if (props?.userAddress) {
+      setUserAddress(props?.userAddress);
+    } else if (address) {
+      setUserAddress(address);
+    }
+  }, [address, props?.userAddress]);
 
   // ENS Name of the user
-  const { data: ensName } = useEnsName({ address, chainId: 1 });
+  const { data: ensName } = useEnsName({ address: userAddress, chainId: 1 });
 
   // ENS Avater of the user
-  const { data: ensAvatar } = useEnsAvatar({ address, chainId: 1 });
+  const { data: ensAvatar } = useEnsAvatar({
+    address: userAddress,
+    chainId: 1,
+  });
 
   // The YCUser instnace
   const [user, setUser] = useState<YCUser | null>(null);
 
   // Jazzicon PFP
   const [jazziconPFP, setJazzicon] = useState<string | null>(
-    address ? buildDataUrl(address) : null
+    userAddress ? buildDataUrl(userAddress) : null
   );
+
+  // User's social media
+  const [socialMedia, setSocialMedia] = useState<YCSocialMedia>(
+    user?.socialMedia || new YCSocialMedia()
+  );
+
+  // Whether the user is verified or not
+  const [verified, setVerified] = useState<boolean>(false);
 
   // Function to update user's details
   const updateDetails = async (newDetails: Partial<UserUpdateArguments>) => {
@@ -74,7 +106,7 @@ const useYCUser = (): YCUserHookReturn => {
    */
   const [profilePic, setProfilePic] = useState<string | null>(
     user?.profilePic ||
-      (ensAvatar ? ensAvatar : address ? buildDataUrl(address) : null)
+      (ensAvatar ? ensAvatar : userAddress ? buildDataUrl(userAddress) : null)
   );
 
   // Get the current YC User
@@ -116,9 +148,9 @@ const useYCUser = (): YCUserHookReturn => {
     // Note that we also require the array to be populated with users already, to avoid signing up the user
     // when the array was not yet initiated.
     if (
-      address &&
+      userAddress &&
       !users.find(
-        (_user) => _user.address.toLowerCase() === address?.toLowerCase()
+        (_user) => _user.address.toLowerCase() === userAddress?.toLowerCase()
       ) &&
       users.length > 0 &&
       user?.address.toLowerCase() !== address?.toLowerCase() &&
@@ -131,7 +163,7 @@ const useYCUser = (): YCUserHookReturn => {
       (async () => {
         const newUser = await signUserUp(
           {
-            address,
+            address: userAddress,
             username: ensName || undefined,
           },
           YCClassifications.getInstance()
@@ -148,24 +180,24 @@ const useYCUser = (): YCUserHookReturn => {
     return () => {
       setUser(null);
     };
-  }, [address, JSON.stringify(users.map((usr) => usr.toString()))]);
+  }, [userAddress, JSON.stringify(users.map((usr) => usr.toString()))]);
 
   /**
    * useEffect for handling an address change (i.e new user)
    */
 
   useEffect(() => {
-    if (user?.address !== address) {
+    if (user?.address !== userAddress) {
       // Find an existing user in our users array
       // @notice if user was just registered, we wont find it and the signup useEffect will handle this update instead
       const _user = users.find(
-        (user_) => user_.address.toLowerCase() === address?.toLowerCase()
+        (user_) => user_.address.toLowerCase() === userAddress?.toLowerCase()
       );
 
       // Set the new user
       if (_user) setUser(_user);
     }
-  }, [address]);
+  }, [userAddress]);
 
   /**
    * useEffect handling users refresh (potential user details update)
@@ -189,7 +221,7 @@ const useYCUser = (): YCUserHookReturn => {
   // useEffect for the username
   useEffect(() => {
     setUsername(user?.username || ensName || "Anon");
-  }, [user?.toString(), ensName, address]);
+  }, [user?.toString(), ensName, userAddress]);
 
   // useEffect for the profile pic
   useEffect(() => {
@@ -198,16 +230,34 @@ const useYCUser = (): YCUserHookReturn => {
 
   // Jazzicon useEffect (listens to address)
   useEffect(() => {
-    if (address) setJazzicon(buildDataUrl(address));
-  }, [address]);
+    if (userAddress) setJazzicon(buildDataUrl(userAddress));
+  }, [userAddress]);
 
   // useEffect for the created vaults
   useEffect(() => {
     if (user) setCreatedVaults(user.createdVaults);
   }, [user?.createdVaults.length]);
 
+  // useEffect for user's social media
+  useEffect(() => {
+    if (user?.socialMedia) setSocialMedia(user?.socialMedia);
+  }, [user?.toString()]);
+
+  // useEffect for whether the user is verified or not
+  useEffect(() => {
+    if (user?.isVerified) setVerified(true);
+  }, [user?.toString()]);
+
   // Return our states
-  return { address, profilePic, userName, createdVaults, updateDetails };
+  return {
+    address: userAddress,
+    profilePic,
+    userName,
+    createdVaults,
+    updateDetails,
+    socialMedia,
+    verified,
+  };
 };
 
 export default useYCUser;
@@ -243,20 +293,3 @@ interface SignupProps {
   address: address;
   username?: string;
 }
-
-const stringifyCircularJSON = (obj: any) => {
-  // start with an empty object (see other alternatives below)
-  const jsonObj: any = {};
-
-  // add all properties
-  const proto = Object.getPrototypeOf(obj);
-  for (const key of Object.getOwnPropertyNames(proto)) {
-    const desc = Object.getOwnPropertyDescriptor(proto, key);
-    const hasGetter = desc && typeof desc.get === "function";
-    if (hasGetter) {
-      jsonObj[key] = desc?.get?.();
-    }
-  }
-
-  return jsonObj;
-};

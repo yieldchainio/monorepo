@@ -22,14 +22,6 @@ export interface ChipProps {
   id: number;
 }
 
-const borderColors: Record<string, string> = {
-  border: "var(--border)",
-  "#0000FF": "rgba(0, 0, 255, 1)",
-  "#FF0000": "rgba(255, 0, 0, 1)",
-  "#FFFF00": "rgba(255, 255, 0, 1)",
-  "#A020F0": "rgba(160, 32, 240, 1)",
-  "#00FFFF": "rgba(0, 255, 255, 1)",
-};
 export const Chip = ({
   className,
   children,
@@ -68,7 +60,7 @@ export const Chip = ({
   return (
     <div
       className={
-        "h-max w-max pl-1 pr-6 py-1 bg-custom-bcomponentbg rounded-3xl flex flex-row items-center gap-2 justify-center cursor-pointer border-opacity-[50%] active:scale-[0.99] hover:scale-[1.05] transition duration-200 ease-in-out will-change-transform" +
+        "h-max w-max pl-1 pr-6 py-1 bg-custom-bcomponentbg rounded-3xl flex flex-row items-center gap-2 justify-center cursor-pointer border-opacity-[50%] active:scale-[0.99] hover:scale-[1.05] transition duration-200 ease-in-out will-change-transform smallLaptop:pl-1.5 smallLaptop:pr-1.5 smallLaptop:py-1.5 smallLaptop:rounded-full" +
           " " +
           toggled +
           " " +
@@ -88,7 +80,6 @@ export const Chip = ({
           !color
             ? (colors) => {
                 setUsedColor(colors.vibrant);
-                console.log(`${text}'s Color: ${colors.vibrant}`);
               }
             : undefined
         }
@@ -96,7 +87,10 @@ export const Chip = ({
       <WrappedText
         fontSize={14}
         fontStyle={"reguler"}
-        className="text-custom-textColor"
+        className="text-custom-textColor smallLaptop:hidden"
+        style={{
+          color: toggled === "border-[2px]" ? "var(--text)" : "var(--off)",
+        }}
       >
         {text}
       </WrappedText>

@@ -20,4 +20,14 @@ for (const network of networks) {
   });
 }
 
+client.flowsv2.findMany({
+  where: {
+    token: {
+      symbol: "ETH",
+    },
+  },
+});
+
+
+
 console.log("Networks after ser!!", await client.networksv2.findMany());

@@ -139,7 +139,7 @@ app.get("/protocols", async (req: any, res: any) => {
  * @dev Addresses (e.g. 0x1234...),
  */
 app.get("/addresses", async (req: any, res: any) => {
-  const addresses: DBAddress[] = await genericQuery("*", "addresses");
+  const addresses: any = await genericQuery("*", "addresses");
   res.status(200).json({ addresses });
 });
 
@@ -217,12 +217,12 @@ app.get("/address-relations", async (req: any, res: any) => {
 });
 
 app.get("/address-flows/:address_id", async (req: any, res: any) => {
-  const address_function_ids: DBAddress[] = (await genericQuery(
+  const address_function_ids: any = await genericQuery(
     "*",
     "addresses",
     "address_identifier",
     `${req.params.address_id}`
-  )) as DBAddress[];
+  );
 
   const functions_arr: DBFunction[] = [];
 

@@ -16,6 +16,7 @@ import {
   MediaScreenSizes,
   useMediaBreakpoints,
 } from "utilities/hooks/styles/useMediaBreakpoints";
+import { sliceAddress } from "utilities/general/slice-address";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",
@@ -68,7 +69,7 @@ export const Header = () => {
   // Return the component
   return (
     <div
-      className={`fixed flex w-[100vw] h-[9vh] items-center  justify-between pointer-events-auto z-100 rounded-sm shadow-md`}
+      className={`fixed flex w-[100vw] h-[9vh] items-center  justify-between pointer-events-auto z-1000 rounded-sm shadow-md`}
     >
       <div className="absolute w-full h-full overflow-hidden bg-transparent z-0 opacity-100 rounded-b-lg">
         <div className="absolute w-[100vw] h-[100%] bg-custom-header backdrop-blur-3xl bg-opacity-100 z-1 pointer-events-auto overflow-hidden"></div>
@@ -140,11 +141,7 @@ export const Header = () => {
             options={[
               ...[
                 {
-                  text:
-                    userName ||
-                    address?.slice(0, 4) +
-                      "..." +
-                      address?.slice(address.length - 4, address.length),
+                  text: userName || sliceAddress(address),
                   image: profilePic || "",
                   data: {
                     name: "Ethereum",

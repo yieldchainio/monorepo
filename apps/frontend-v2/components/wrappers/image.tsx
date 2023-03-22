@@ -21,12 +21,13 @@ export interface ExtractedColors {
 }
 
 export interface ImageProps {
-  src:
+  src?:
     | string
     | {
         light: string;
         dark: string;
-      };
+      }
+    | null;
   width: number;
   height: number;
   className?: string;

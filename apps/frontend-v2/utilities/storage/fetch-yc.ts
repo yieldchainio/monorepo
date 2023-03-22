@@ -18,16 +18,16 @@ export const fetchYC = async (
     _actions,
     _users,
   ] = await Promise.all([
-    axios.get(baseApi + "/addresses"),
-    axios.get(baseApi + "/functions"),
-    axios.get(baseApi + "/tokens"),
-    axios.get(baseApi + "/parameters"),
-    axios.get(baseApi + "/flows"),
-    axios.get(baseApi + "/protocols"),
-    axios.get(baseApi + "/strategies"),
-    axios.get(baseApi + "/networks"),
-    axios.get(baseApi + "/actions"),
-    axios.get(baseApi + "/users"),
+    axios.get(baseApi + "/v2/addresses"),
+    axios.get(baseApi + "/v2/functions"),
+    axios.get(baseApi + "/v2/tokens"),
+    axios.get(baseApi + "/v2/parameters"),
+    axios.get(baseApi + "/v2/flows"),
+    axios.get(baseApi + "/v2/protocols"),
+    axios.get(baseApi + "/v2/strategies"),
+    axios.get(baseApi + "/v2/networks"),
+    axios.get(baseApi + "/v2/actions"),
+    axios.get(baseApi + "/v2/users"),
   ]);
 
   // Set all of the DB info

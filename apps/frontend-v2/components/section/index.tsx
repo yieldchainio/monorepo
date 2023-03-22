@@ -10,6 +10,10 @@ interface SectionProps {
   id?: string;
   fields: Record<string, any>;
   children?: JSX.Element;
+  showLines?: boolean;
+  fontSize?: number;
+  titlesClassname?: string;
+  valuesClassname?: string;
 }
 const Section = ({
   title,
@@ -17,6 +21,10 @@ const Section = ({
   fields,
   children,
   id = "SectionComponent",
+  showLines = true,
+  fontSize,
+  titlesClassname,
+  valuesClassname,
 }: SectionProps) => {
   const router = useRouter();
   return (
@@ -40,20 +48,26 @@ const Section = ({
             )}
           </div>
         )}
-        <Divisor className={title ? " mt-2 mb-5" : ""} />
+        {showLines && <Divisor className={title ? " mt-2 mb-5" : ""} />}
         <div className="flex w-full flex-col gap-5">
           {Object.entries(fields).map((field: Record<string, any>, i) => {
             return (
               <div className="flex flex-row justify-between" key={i}>
                 <WrappedText
-                  fontSize={15}
+                  fontSize={fontSize || 15}
                   fontStyle="[150]"
                   fontColor="custom-textColor"
-                  className="text-opacity-[50%]"
+                  className={
+                    "text-opacity-[50%]" + " " + (titlesClassname || "")
+                  }
                 >
                   {field[0] + ":"}
                 </WrappedText>
-                <WrappedText fontSize={17} fontStyle="medium">
+                <WrappedText
+                  fontSize={fontSize || 17}
+                  fontStyle="medium"
+                  className={valuesClassname || ""}
+                >
                   {field[1]}
                 </WrappedText>
               </div>
@@ -63,7 +77,8 @@ const Section = ({
         {children}
         {!Children.toArray(children).some((child: any) =>
           isSectionComponent(child)
-        ) && <Divisor className=" mb-2 mt-5" />}
+        ) &&
+          showLines && <Divisor className=" mb-2 mt-5" />}
       </div>
     </>
   );

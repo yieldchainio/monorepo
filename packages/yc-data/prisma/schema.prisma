@@ -12,29 +12,35 @@ datasource db {
 model functionsv2 {
   id                     String            @id @default(uuid())
   name                   String
-  is_callback            Boolean           @default(false)
+  callback               Boolean           @default(false)
   inverse_function_id    String?
   dependancy_function_id String?
   call_type              CallType
   return_value_type      VariableTypes
   return_value_base_type BaseVariableTypes
   address_id             String
-  arguments              argumentsv2[]
-  flows_ids              flowsv2[]
+  arguments_ids          String[]
+  flows_ids              String[]
+  actions_ids            String[]
   address                addressesv2       @relation(fields: [address_id], references: [id])
   actions                actionsv2[]       @relation("actionsv2Tofunctionsv2")
+  argumentsv2            argumentsv2[]
+  flows                  flowsv2[]
 
   @@map("functions")
   @@schema("YieldchainV2")
 }
 
 model flowsv2 {
-  id          String        @id @default(uuid())
-  direction   FlowDirection
-  token_id    String
-  function_id String
-  function    functionsv2   @relation(fields: [function_id], references: [id])
-  token       tokensv2      @relation(fields: [token_id], references: [id])
+  id           String        @id @default(uuid())
+  direction    FlowDirection
+  token_id     String
+  function_id  String
+  function     functionsv2   @relation(fields: [function_id], references: [id])
+  token        tokensv2      @relation(fields: [token_id], references: [id])
+  old_id       Int?
+  old_func_id  Int?
+  old_token_id Int?
 
   @@map("flows")
   @@schema("YieldchainV2")
@@ -57,27 +63,29 @@ model tokensv2 {
 }
 
 model actionsv2 {
-  id         String        @id @default(uuid())
-  name       String
-  popularity Int
-  available  Boolean
-  table_name String?
-  function   functionsv2[] @relation("actionsv2Tofunctionsv2")
-  protocols  protocolsv2[] @relation("actionsv2Toprotocolsv2")
+  id            String        @id @default(uuid())
+  name          String
+  popularity    Int
+  available     Boolean
+  table_name    String?
+  functions_ids String[]
+  function      functionsv2[] @relation("actionsv2Tofunctionsv2")
+  protocols     protocolsv2[] @relation("actionsv2Toprotocolsv2")
 
   @@map("actions")
   @@schema("YieldchainV2")
 }
 
 model addressesv2 {
-  id          String        @id @default(uuid())
-  address     String
-  abi         Json          @db.Json
-  chain_id    Int
-  protocol_id String
-  network     networksv2    @relation(fields: [chain_id], references: [id])
-  protocol    protocolsv2   @relation(fields: [protocol_id], references: [id])
-  functions   functionsv2[]
+  id            String        @id @default(uuid())
+  address       String
+  abi           Json          @db.Json
+  chain_id      Int
+  protocol_id   String
+  network       networksv2    @relation(fields: [chain_id], references: [id])
+  protocol      protocolsv2   @relation(fields: [protocol_id], references: [id])
+  functions_ids String[]
+  functions     functionsv2[]
 
   @@map("addresses")
   @@schema("YieldchainV2")
@@ -109,8 +117,8 @@ model argumentsv2 {
   base_type     BaseVariableTypes
   name          String?
   dev_notes     String?
-  function_id   String
   function      functionsv2       @relation(fields: [function_id], references: [id])
+  function_id   String
 
   @@map("arguments")
   @@schema("YieldchainV2")

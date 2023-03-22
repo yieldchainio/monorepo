@@ -42,6 +42,7 @@ export const FiltersMenu = <V, T extends BaseFilter<V>>({
       options={filters
         .filter((filter) => filter.hidden !== true)
         .map((filter) => {
+          console.log("filter ser", filter);
           return {
             text: filter.name + ":",
             data: {

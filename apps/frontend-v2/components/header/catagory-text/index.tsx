@@ -1,21 +1,23 @@
 "use client";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import WrappedText, { Selection } from "components/wrappers/text";
+import WrappedText, { Selection, TextProps } from "components/wrappers/text";
+import { RegulerButtonProps } from "components/buttons/reguler";
 
-export interface HeaderCatagoryTextProps {
+export interface HeaderCatagoryTextProps
+  extends RegulerButtonProps,
+    Omit<Omit<TextProps, "children">, "onClick"> {
   text: string;
   page: string;
+  fontSize?: number;
+  fontColor?: string;
 }
-
 // Enum for the text styles for this component
 enum CatagoryTextStyles {
   OFF = "text-custom-off font-reguler",
   HOVER = "text-custom-offhover font-medium",
   ON = "text-transparent bg-gradient-to-r bg-clip-text from-custom-yclb to-custom-ycy font-bold",
 }
-
 /**
  * @notice
  * A text component for a catagory's text in the header
@@ -23,7 +25,14 @@ enum CatagoryTextStyles {
  * @param page - The page of this catagory
  * @returns A text that when clicked, routes to the path.
  */
-export const HeaderCatagoryText = ({ text, page }: HeaderCatagoryTextProps) => {
+export const HeaderCatagoryText = ({
+  text,
+  page,
+  className,
+  onClick,
+  fontSize,
+  fontColor,
+}: HeaderCatagoryTextProps) => {
   // The name of the current path
   const pathname = usePathname();
 
@@ -35,13 +44,14 @@ export const HeaderCatagoryText = ({ text, page }: HeaderCatagoryTextProps) => {
           onClick={(e: React.MouseEvent<HTMLElement>) =>
             pathname == page ? e.preventDefault() : null
           }
-          fontSize={16}
+          fontSize={fontSize || 16}
           fontStyle={"bold"}
           fontFamily={"athletics"}
-          fontColor={"transparent"}
+          fontColor={fontColor || "transparent"}
           select={Selection.disallow}
           className={
-            "bg-gradient-to-r bg-clip-text from-custom-yclb to-custom-ycy cursor-pointer z-100 hover:scale-[1.01] truncate"
+            "bg-gradient-to-r bg-clip-text from-custom-yclb to-custom-ycy cursor-pointer z-100 hover:scale-[1.01] truncate " +
+            className
           }
         >
           {text}
@@ -51,10 +61,10 @@ export const HeaderCatagoryText = ({ text, page }: HeaderCatagoryTextProps) => {
           onClick={(e: React.MouseEvent<HTMLElement>) =>
             pathname == page ? e.preventDefault() : null
           }
-          fontSize={16}
+          fontSize={fontSize || 16}
           fontStyle={"reguler"}
           fontFamily={"athletics"}
-          fontColor={"custom-off"}
+          fontColor={fontColor || "custom-off"}
           select={Selection.disallow}
           className={
             "cursor-pointer z-100 hover:text-custom-offhover transition duration-200 ease-in-out active:scale-[0.98]"

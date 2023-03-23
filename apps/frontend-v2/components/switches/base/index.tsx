@@ -44,7 +44,7 @@ export const Switch = ({
   };
   return (
     <div
-      className="flex w-[60px] h-[28.2px] rounded-full border-custom-border border-1 bg-custom-bcomponentbg bg-opacity-[100%] drop-shadow-sm py-1 px-1.5 cursor-pointer"
+      className="flex w-[60px] h-[28.2px] rounded-full border-custom-border border-1 bg-custom-bcomponentbg bg-opacity-[100%] drop-shadow-sm py-1 px-1.5 cursor-pointer hover:bg-custom-componentbg transition duration-200 ease-in-out"
       onClick={() => handleClick()}
       style={{
         justifyContent: on ? "end" : "start",

@@ -14,16 +14,21 @@ export const StrategyTokenSection = ({
   network,
 }: StrategyTokenSectionProps) => {
   return (
-    <div className="flex flex-col items-center justify-center gap-2.5">
+    <div className="flex flex-col items-center justify-center gap-2.5 mobile:gap-2">
       <StrategyTokenLogo logo={token?.logo} networkLogo={network?.logo} />
       <div className="flex flex-col gap-0 items-center justify-center">
-        <WrappedText fontSize={21} fontStyle={"bold"}>
+        <WrappedText
+          fontSize={21}
+          fontStyle={"bold"}
+          className="mobile:hidden "
+        >
           {token?.symbol}
         </WrappedText>
         <WrappedText
           fontSize={13}
           fontStyle={"reguler"}
           fontColor={"custom-off"}
+          className="smallLaptop:hidden"
         >
           {network?.name}
         </WrappedText>

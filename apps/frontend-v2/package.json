@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@bit/mui-org.material-ui.slider": "^4.9.10",
-    "@rainbow-me/rainbowkit": "^0.12.1",
+    "@rainbow-me/rainbowkit": "^0.12.3",
     "@raugfer/jazzicon": "^1.0.6",
     "@s-ui/react-sticky-content": "^1.8.0",
     "@tailwindcss/forms": "^0.5.3",
@@ -25,7 +25,7 @@
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.3",
     "eslint-import-resolver-typescript": "^3.5.3",
-    "ethers": "^6.1.0",
+    "ethers": "^6.2.0",
     "framer-motion": "^10.2.3",
     "global": "^4.4.0",
     "next": "13.2.3",
@@ -36,6 +36,8 @@
     "react-custom-events": "^1.1.1",
     "react-dom": "18.2.0",
     "react-palette": "^1.0.2",
+    "react-slick": "^0.29.0",
+    "slick-carousel": "1.8.1",
     "tailwindcss": "^3.2.7",
     "twind": "^0.16.19",
     "typescript": "4.9.5",
@@ -47,6 +49,7 @@
   "devDependencies": {
     "@babel/core": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
+    "@types/react-slick": "^0.23.10",
     "babel-loader": "^9.1.2",
     "ts-loader": "^9.4.2"
   }

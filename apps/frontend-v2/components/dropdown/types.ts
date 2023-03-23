@@ -1,3 +1,7 @@
+import { RegulerButtonProps } from "components/buttons/reguler";
+import { TextProps } from "components/wrappers/text";
+import { DropdownMenuOptions } from "./menu";
+
 /**
  * @types for the dropdown's components and it's users.
  */
@@ -24,4 +28,7 @@ export interface DropdownProps {
     | ((_choice: DropdownOption) => Promise<any>)
     | ((_choice: DropdownOption) => any);
   closeOnChoice?: boolean;
+  buttonProps?: RegulerButtonProps;
+  menuProps?: Partial<DropdownMenuOptions>;
+  textProps?: Omit<TextProps, "children">;
 }

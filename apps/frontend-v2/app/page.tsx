@@ -17,6 +17,9 @@ import {
 import { YCNetwork, YCStrategy } from "@yc/yc-models";
 import { useYCStore } from "utilities/stores/yc-data";
 import { StrategyCard } from "components/cards/strategy-card";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 /**
  * Static filters for the strategies
@@ -110,7 +113,7 @@ export default function Home() {
           "absolute w-[100vw] h-[50vh] blur-[200px] top-[12vh] left-[100%] bg-[#3BC7F4] dark:bg-[#FFF576] z-0"
         }
       ></div>
-      <div className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-full h-full">
+      <div className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-[100%] h-full bg-red-500">
         <div className="flex flex-col items-center">
           <WrappedText fontSize={78} fontStyle="black">
             Browse
@@ -171,7 +174,7 @@ export default function Home() {
             className="w-full"
             placeholder="Search for a vault ID, token, or protocol name"
           />
-          <div className="w-[70%] h-max flex flex-row items-center justify-between z-1">
+          <div className="w-[70%] h-max flex flex-row items-center justify-between z-1 ">
             <div className="">
               <ChipsSection<YCNetwork>
                 setter={setSelectedNetworks}
@@ -191,23 +194,73 @@ export default function Home() {
           </div>
         </Sticky>
       </div>
-      <div className="flex flex-col gap-10 px-10 w-full h-full z-10">
-        <div className="flex flex-row w-full h-full gap-7 justify-start px-5 pt-16">
+      <div className="flex flex-col gap-4 pl-20 pr-12 w-full h-max z-10 ">
+        <WrappedText fontSize={22}>Verified Vaults</WrappedText>
+        <Slider
+          slidesToShow={
+            filteredStrategies.length < 6 ? filteredStrategies.length : 6
+          }
+          slidesPerRow={1}
+          slidesToScroll={1}
+          arrows={true}
+          dots={true}
+          customPaging={function (i) {
+            if (i % 2 === 0)
+              return (
+                <div
+                  className="w-[20px] h-[6px] mt-10"
+                  style={{
+                    backgroundColor: "rgba(255,255,255)",
+                  }}
+                ></div>
+              );
+            else return <></>;
+          }}
+          dotsClass={"slick-dots slick-thumb"}
+          nextArrow={<CustomArrow />}
+          className="items-center justify-center"
+          responsive={[
+            {
+              breakpoint: 1760,
+              settings: {
+                slidesToShow: 4,
+                slidesToScroll: 4,
+                infinite: true,
+                dots: true,
+              },
+            },
+            {
+              breakpoint: 1183,
+              settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+                infinite: true,
+                dots: true,
+              },
+            },
+            {
+              breakpoint: 890,
+              settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+                infinite: true,
+                dots: true,
+              },
+            },
+          ]}
+        >
           {filteredStrategies.map((strategy, i) => {
-            console.log("strategy's steps", strategy.rawSteps);
-            return (
-              <>
-                {i < 4 && <StrategyCard strategy={strategy} />}
-                {/* <div className="w-[100px] bg-custom-subbg bg-opacity-100 h-[100px] flex flex-col gap-2">
-            <WrappedText>{strategy.title}</WrappedText>
-            <WrappedText>{strategy.tvl.toString()}</WrappedText>
-            <WrappedText>{strategy.network?.name}</WrappedText>
-          </div> */}
-              </>
-            );
+            return <StrategyCard strategy={strategy} key={i} />;
           })}
-        </div>
+        </Slider>
+
+        {/* <div className="flex flex-row w-full h-full gap-7 justify-start px-5 pt-16"></div> */}
       </div>
     </div>
   );
 }
+
+const CustomArrow = (props: any) => {
+  const { className, style, onClick } = props;
+  return <div className={className} style={style} onClick={onClick} />;
+};

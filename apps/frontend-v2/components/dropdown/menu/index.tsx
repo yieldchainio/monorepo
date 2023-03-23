@@ -2,7 +2,7 @@ import { DropdownOption } from "../types";
 import { BaseComponentProps } from "components/types";
 import { RefObject, useState } from "react";
 import WrappedImage from "components/wrappers/image";
-import WrappedText from "components/wrappers/text";
+import WrappedText, { TextProps } from "components/wrappers/text";
 import SmallLoader from "components/loaders/small";
 /**
  * @notice
@@ -11,18 +11,22 @@ import SmallLoader from "components/loaders/small";
  * @param handler - the function to call when an option is chosen
  */
 
+("justify-start");
 // Dropdown option props
 interface DropdownOptionProps {
   wrapperClassname?: string;
   className?: string;
   textClassname?: string;
+  textProps: Partial<TextProps>;
 }
 // Props Interface
-interface DropdownMenuOptions extends BaseComponentProps {
+export interface DropdownMenuOptions extends BaseComponentProps {
   options: DropdownOption[];
   handler: (_option: DropdownOption) => any;
   parentRef: RefObject<HTMLElement | undefined>;
   optionProps?: DropdownOptionProps;
+  optionText?: (_option: DropdownOption, i?: number) => React.ReactNode;
+  hideOptionText?: "laptop:hidden" | "";
 }
 
 // Colors
@@ -42,6 +46,8 @@ const DropdownMenu = ({
   parentRef,
   className,
   optionProps,
+  optionText,
+  hideOptionText = "laptop:hidden",
 }: DropdownMenuOptions) => {
   // IF we are loading a choice rn or not
   const [loading, setLoading] = useState<boolean | DropdownOption>(false);
@@ -92,16 +98,25 @@ const DropdownMenu = ({
                 />
               )}
 
-              <span className="laptop:hidden">
-                <WrappedText
-                  className={
-                    "truncate" + " " + (optionProps?.textClassname || "")
-                  }
-                  fontStyle="reguler"
-                  fontSize={24}
-                >
-                  {option.text}
-                </WrappedText>
+              <span className="">
+                {optionText ? (
+                  optionText(option, i)
+                ) : (
+                  <WrappedText
+                    className={
+                      "truncate" +
+                      " " +
+                      hideOptionText +
+                      " " +
+                      (optionProps?.textClassname || "")
+                    }
+                    fontStyle="reguler"
+                    fontSize={16}
+                    {...optionProps?.textProps}
+                  >
+                    {option.text}
+                  </WrappedText>
+                )}
               </span>
               {option.children}
             </div>

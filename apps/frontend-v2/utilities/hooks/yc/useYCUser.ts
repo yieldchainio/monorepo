@@ -13,6 +13,7 @@ import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 import Jazzicon from "@raugfer/jazzicon";
 import { useEffect, useState } from "react";
 import { useInternalYCUser } from "utilities/stores/yc-data";
+import { useIsMounted } from "../general/useIsMounted";
 
 // Interface for return value of the YCUser hook
 export interface YCUserHookReturn {
@@ -46,6 +47,8 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
 
   // useEffect for setting the global address variable
   useEffect(() => {
+    console.log("usEffect Run:", 1);
+
     if (props?.userAddress) {
       setUserAddress(props?.userAddress);
     } else if (address) {
@@ -127,6 +130,8 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
 
   // useEffect for refreshing
   useEffect(() => {
+    console.log("usEffect Run:", 2);
+
     if (!users.length) {
       (async () => {
         await refresher(Endpoints.USERS);
@@ -144,6 +149,8 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
   const setIsSigningUp = useInternalYCUser((state) => state.setIsSigningUp);
 
   useEffect(() => {
+    console.log("usEffect Run:", 3);
+
     // We attempt to find the user in the users array, we sign them up if they do not exist.
     // Note that we also require the array to be populated with users already, to avoid signing up the user
     // when the array was not yet initiated.
@@ -187,6 +194,8 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
    */
 
   useEffect(() => {
+    console.log("usEffect Run:", 4);
+
     if (user?.address !== userAddress) {
       // Find an existing user in our users array
       // @notice if user was just registered, we wont find it and the signup useEffect will handle this update instead
@@ -203,6 +212,8 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
    * useEffect handling users refresh (potential user details update)
    */
   useEffect(() => {
+    console.log("usEffect Run:", 5);
+
     const currUser = users.find((usr) => usr.id === user?.id);
 
     if (currUser && currUser.toString() !== user?.toString()) {
@@ -220,43 +231,69 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
 
   // useEffect for the username
   useEffect(() => {
+    console.log("usEffect Run:", 6);
+
     setUsername(user?.username || ensName || "Anon");
   }, [user?.toString(), ensName, userAddress]);
 
   // useEffect for the profile pic
   useEffect(() => {
+    console.log("usEffect Run:", 7);
+
     setProfilePic(ensAvatar || jazziconPFP);
   }, [user?.toString(), ensAvatar, jazziconPFP]);
 
   // Jazzicon useEffect (listens to address)
   useEffect(() => {
+    console.log("usEffect Run:", 8);
+
     if (userAddress) setJazzicon(buildDataUrl(userAddress));
   }, [userAddress]);
 
   // useEffect for the created vaults
   useEffect(() => {
+    console.log("usEffect Run:", 9);
+
     if (user) setCreatedVaults(user.createdVaults);
   }, [user?.createdVaults.length]);
 
   // useEffect for user's social media
   useEffect(() => {
+    console.log("usEffect Run:", 10);
+
     if (user?.socialMedia) setSocialMedia(user?.socialMedia);
   }, [user?.toString()]);
 
   // useEffect for whether the user is verified or not
   useEffect(() => {
+    console.log("usEffect Run:", 11);
+
     if (user?.isVerified) setVerified(true);
   }, [user?.toString()]);
 
+  // Final useEffect checking if we're mounted to avoid hydration
+  const mounted = useIsMounted();
   // Return our states
+
+  if (mounted)
+    return {
+      address: userAddress,
+      profilePic,
+      userName,
+      createdVaults,
+      updateDetails,
+      socialMedia,
+      verified,
+    };
+
   return {
-    address: userAddress,
-    profilePic,
-    userName,
-    createdVaults,
-    updateDetails,
-    socialMedia,
-    verified,
+    address: "0x0",
+    profilePic: "",
+    userName: "Anon",
+    createdVaults: [],
+    updateDetails: updateDetails,
+    socialMedia: socialMedia,
+    verified: false,
   };
 };
 

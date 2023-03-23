@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useTheme } from "utilities/stores/theme";
 import { ImageSkeleton } from "./skeleton";
 import { Palette } from "react-palette";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 /**
  * @notice
  * Wrapper image component,
@@ -57,7 +57,7 @@ const WrappedImage = ({
 
   return (
     <>
-      {setColors && !fetchedColor && (
+      {/* {setColors && !fetchedColor && (
         <Palette src={typeof src == "string" ? src : src[theme]}>
           {({ data, loading, error }) => {
             if (!loading) {
@@ -68,7 +68,7 @@ const WrappedImage = ({
             return <></>;
           }}
         </Palette>
-      )}
+      )} */}
       <Image
         width={width}
         height={height}

@@ -6,7 +6,7 @@ import { TextSkeleton } from "./skeleton";
  * for ease of use with skeletons and global styling
  */
 
-interface TextProps {
+export interface TextProps {
   children: string | undefined;
   fontSize?: number;
   fontStyle?: string;
@@ -33,7 +33,7 @@ const WrappedText = ({
   fontSize = 14,
   fontStyle = "reguler",
   fontFamily = "athletics",
-  fontColor = "custom-textColor",
+  fontColor,
   onClick,
   select = Selection.allow,
   truncate = "",
@@ -55,7 +55,7 @@ const WrappedText = ({
         " font-" +
         fontStyle +
         " text-" +
-        fontColor +
+        (fontColor || "custom-textColor") +
         " " +
         "select-none focus:outline-none whitespace-nowrap " +
         truncate +

@@ -27,8 +27,8 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
   return (
     <div className="w-max h-max bg-custom-bcomponentbg rounded-[2rem] flex flex-col items-center justify-start border-1 border-custom-themedBorder shadow-sm">
       {verified && <SmallVerified />}
-      <div className="bg-gradient-to-r from-custom-yclb/10 to-custom-ycy/10 w-max h-[30%] rounded-t-[2rem] flex flex-row gap-5 pl-4 pr-5 py-4">
-        <div className="flex flex-row items-center w-full justify-between px-1 gap-10">
+      <div className="bg-gradient-to-r from-custom-yclb/10 to-custom-ycy/10 w-full h-[30%] rounded-t-[2rem] flex flex-row gap-5 pl-4 pr-5 py-4 mobile:py-2.5">
+        <div className="flex flex-row items-center w-full justify-between px-1 gap-4 mobile:justify-start mobile:gap-4 smallLaptop:gap-12">
           <div className="flex flex-row items-center gap-1.5">
             <WrappedImage
               src={profilePic}
@@ -36,10 +36,10 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
               height={38}
               className="rounded-full border-2 border-custom-border"
             />
-            <div className="flex flex-col w-[50%] mt-0.5">
-              <WrappedText>{userName}</WrappedText>
+            <div className="flex flex-col w-[100%] mt-0.5">
+              <WrappedText className="mobile:hidden">{userName}</WrappedText>
               <WrappedText
-                fontColor="custom-off cursor-pointer hover:text-custom-offhover transition duration-200 ease-in-out mt-[-3px]"
+                fontColor="custom-off cursor-pointer hover:text-custom-offhover transition duration-200 ease-in-out mt-[-3px] laptop:hidden overflow-hidden truncate "
                 fontSize={10}
               >
                 {(socialMedia.twitter && socialMedia.twitter) ||
@@ -57,10 +57,10 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
           token={strategy.depositToken}
           network={strategy.network}
         />
-        <div className="gap-2 w-full flex flex-col justify-center items-center">
+        <div className="gap-0 w-full flex flex-col justify-center items-center">
           <Section
             fields={{
-              "Total Value Locked": formatMoney(strategy.tvl),
+              "TVL ": formatMoney(strategy.tvl),
               Title: strategy.title,
               Created: "5 Days Ago",
               Protocols: (
@@ -91,7 +91,7 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
             }}
             showLines={true}
             fontSize={12}
-            sectionsClassname={"gap-3 mb-0"}
+            sectionsClassname={"gap-3 mb-0 justify-start "}
             titlesClassname={"text-opacity-25"}
             divisorClassname=" mb-[0.5rem] mt-[0.5rem]"
           ></Section>

@@ -66,6 +66,70 @@ export const Header = () => {
     [MediaScreenSizes.ANY]: "Create Vault",
   });
 
+  const { proprety: catagoryTexts } = useMediaBreakpoints<any>(
+    {
+      [MediaScreenSizes.ANY]: (
+        <div className="flex gap-4 w-[100%] h-[100%] items-center z-100">
+          <HeaderCatagoryText text="Earn" page="/" />
+          <HeaderCatagoryText text="Portfolio" page="/portfolio" />
+          <HeaderCatagoryText text="My Vaults" page="/creator-dashboard" />
+          <HeaderCatagoryText text="Stake YC" page="/stake-yc" />
+        </div>
+      ),
+      [MediaScreenSizes.TABLET]: (
+        <Dropdown
+          options={[
+            {
+              text: "Earn",
+              data: {},
+            },
+            {
+              text: "Portfolio",
+              data: {},
+            },
+            {
+              text: "My Vaults",
+              data: {},
+            },
+            {
+              text: "Stake YC",
+              data: {},
+            },
+          ]}
+          choice={{
+            text: "Earn",
+            data: {},
+          }}
+          buttonProps={{
+            className:
+              "px-0 py-0 bg-transparent border-0 hover:bg-transparent gap-0 border-transparent hover:border-transparent hover:border-0  ",
+          }}
+          menuProps={{
+            hideOptionText: "",
+            optionProps: {
+              wrapperClassname: "",
+              textProps: {
+                fontSize: 12,
+              },
+            },
+            optionText(_option, i) {
+              return (
+                <HeaderCatagoryText
+                  text="Stake YC"
+                  page="/stake-yc"
+                  fontSize={14}
+                  fontColor={"custom-textColor"}
+                />
+              );
+            },
+          }}
+          choiceHandler={(choice: DropdownOption) => null}
+        ></Dropdown>
+      ),
+    },
+    (item: any) => item
+  );
+
   // Return the component
   return (
     <div
@@ -76,7 +140,7 @@ export const Header = () => {
       </div>
 
       <div className="relative">
-        <div className="flex w-[35vw] h-[100%] gap-10 blur-none pl-10 items-center">
+        <div className="flex w-[35%] h-[100%] gap-10 blur-none pl-10 items-center">
           <WrappedImage
             src={logo}
             alt=""
@@ -84,12 +148,7 @@ export const Header = () => {
             height={100}
             className="z-100 blue-none"
           ></WrappedImage>
-          <div className="flex gap-4 w-[100%] h-[100%] items-center z-100">
-            <HeaderCatagoryText text="Earn" page="/" />
-            <HeaderCatagoryText text="Portfolio" page="/portfolio" />
-            <HeaderCatagoryText text="My Vaults" page="/creator-dashboard" />
-            <HeaderCatagoryText text="Stake YC" page="/stake-yc" />
-          </div>
+          {catagoryTexts}
         </div>
       </div>
       <div className="flex items-center justify-end h-[10vh] pr-10 blur-none gap-6">
@@ -113,6 +172,7 @@ export const Header = () => {
           ) => {
             return await switchNetwork(_choice.data.chain_id);
           }}
+          textProps={{ className: "laptop:hidden" }}
           choice={
             networks.length
               ? (() => {
@@ -149,6 +209,7 @@ export const Header = () => {
                 },
               ],
             ]}
+            textProps={{ className: "laptop:hidden" }}
             choice={{
               text:
                 userName ||
@@ -171,7 +232,7 @@ export const Header = () => {
 
         <div className="relative">
           <Button onClick={() => null} className=" relative font-semibold">
-            Create Vault
+            {createVaultText}
           </Button>
         </div>
       </div>

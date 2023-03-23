@@ -17,7 +17,7 @@ export const Sticky = ({ heightToFix, children, className }: StickyProps) => {
         if (
           document &&
           document.documentElement.scrollTop >=
-            window.innerWidth * (heightToFix.viewportHeight / 100)
+            window.innerHeight * (heightToFix.viewportHeight / 100)
         )
           setPosition("fixed");
         else setPosition("");

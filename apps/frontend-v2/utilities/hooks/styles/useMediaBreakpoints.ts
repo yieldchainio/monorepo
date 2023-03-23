@@ -29,9 +29,14 @@ export const MediaScreenSizes = {
  * which we return.
  * @param propreties @
  */
-export const useMediaBreakpoints = <T>(_propreties: {
-  [key in MediaScreens]?: T;
-}): { proprety: T } => {
+export const useMediaBreakpoints = <T>(
+  _propreties: {
+    [key in MediaScreens]?: T;
+  },
+  stringifier: (item: { [key in MediaScreens]?: T }) => string = (item: {
+    [key in MediaScreens]?: T;
+  }) => JSON.stringify(item)
+): { proprety: T } => {
   // We initiate the state
   const [proprety, setProprety] = useState<T>();
 
@@ -49,7 +54,7 @@ export const useMediaBreakpoints = <T>(_propreties: {
         .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
         .map((prop) => [parseInt(prop[0]), prop[1]])
     );
-  }, [JSON.stringify(_propreties)]);
+  }, [stringifier(_propreties)]);
 
   // A useEffect listening for window size change
   useEffect(() => {

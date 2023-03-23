@@ -7,6 +7,7 @@ import { BaseEventData, EventTypes } from "types/events";
 import uuid from "uuid-random";
 import { RegulerButton } from "components/buttons/reguler";
 import WrappedImage from "components/wrappers/image";
+import WrappedText from "components/wrappers/text";
 
 const Dropdown = ({
   options,
@@ -15,6 +16,9 @@ const Dropdown = ({
   onClick,
   choiceHandler,
   closeOnChoice,
+  buttonProps,
+  menuProps,
+  textProps,
 }: DropdownProps) => {
   // Track whether or not the (default) dropdown menu is open
   const [menuOpen, setMenuOpen] = useState<boolean | DropdownOption[]>(false);
@@ -81,10 +85,15 @@ const Dropdown = ({
             options={options}
             handler={handleChoice}
             parentRef={dropdownBtnRef}
+            {...menuProps}
           />
         ))}
 
-      <RegulerButton onClick={handleClick} className=" " ref={dropdownBtnRef}>
+      <RegulerButton
+        onClick={handleClick}
+        ref={dropdownBtnRef}
+        {...buttonProps}
+      >
         <div className="flex flex-row gap-2">
           {currentChoice?.image !== undefined && (
             <WrappedImage
@@ -94,7 +103,11 @@ const Dropdown = ({
               className=" rounded-full"
             />
           )}
-          <span className="laptop:hidden">{currentChoice?.text}</span>
+          {!buttonProps?.children ? (
+            <WrappedText {...textProps}>{currentChoice?.text}</WrappedText>
+          ) : (
+            buttonProps.children
+          )}
         </div>
         <WrappedImage
           src={{

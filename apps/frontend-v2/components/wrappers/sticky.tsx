@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type heightToFix = number | { viewportHeight: number };
 interface StickyProps {
@@ -9,6 +9,21 @@ interface StickyProps {
 export const Sticky = ({ heightToFix, children, className }: StickyProps) => {
   // Tracking the position as a state
   const [position, setPosition] = useState<"fixed" | "">();
+
+  // Ref for the child, so we can append a transparent placeholder of the same size
+  const childrenRef = useRef<HTMLDivElement>(null);
+
+  // Size for it (sets once on mount)
+  const [placeholderSize, setPlaceholderSize] = useState<{
+    width: number;
+    height: number;
+  }>();
+
+  // Set the dimensions on mount
+  useEffect(() => {
+    if (childrenRef.current)
+      setPlaceholderSize(childrenRef.current.getBoundingClientRect());
+  }, [childrenRef.current]);
 
   // useEffect listening for scrolls
   useEffect(() => {
@@ -28,9 +43,24 @@ export const Sticky = ({ heightToFix, children, className }: StickyProps) => {
         else setPosition("");
       }
     };
+    console.log("Sticky childrenm", children);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  return <div className={className + " " + position}>{children}</div>;
+  return (
+    <>
+      {position === "fixed" && (
+        <div
+          style={{
+            width: placeholderSize?.width,
+            height: placeholderSize?.height,
+          }}
+        ></div>
+      )}
+      <div ref={childrenRef} className={className + " " + position}>
+        {children}
+      </div>
+    </>
+  );
 };

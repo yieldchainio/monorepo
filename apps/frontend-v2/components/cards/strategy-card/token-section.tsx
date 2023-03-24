@@ -57,11 +57,11 @@ const StrategyTokenLogo = ({ logo, networkLogo }: StrategyTokenLogoProps) => {
             src={networkLogo}
             width={22}
             height={22}
-            className="rounded-full shadow-md border-[0.01rem] border-custom-themedBorder"
+            className="rounded-full border-[0.3rem] border-custom-bcomponentbg"
           />
         </div>
       </div>
-      <div className="w-max h-max bg-custom-componentbg rounded-full p-[0.3rem]">
+      <div className="w-max h-max bg-custom-bcomponentbg rounded-full p-[0.3rem]">
         <div className="bg-custom-bcomponentbg w-max h-max rounded-full p-1">
           <WrappedImage
             src={logo}

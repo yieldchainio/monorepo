@@ -66,74 +66,21 @@ export const Header = () => {
     [MediaScreenSizes.ANY]: "Create Vault",
   });
 
-  const { proprety: catagoryTexts } = useMediaBreakpoints<any>(
-    {
-      [MediaScreenSizes.ANY]: (
-        <div className="flex gap-4 w-[100%] h-[100%] items-center z-100">
-          <HeaderCatagoryText text="Earn" page="/" />
-          <HeaderCatagoryText text="Portfolio" page="/portfolio" />
-          <HeaderCatagoryText text="My Vaults" page="/creator-dashboard" />
-          <HeaderCatagoryText text="Stake YC" page="/stake-yc" />
-        </div>
-      ),
-      [MediaScreenSizes.TABLET]: (
-        <Dropdown
-          options={[
-            {
-              text: "Earn",
-              data: {},
-            },
-            {
-              text: "Portfolio",
-              data: {},
-            },
-            {
-              text: "My Vaults",
-              data: {},
-            },
-            {
-              text: "Stake YC",
-              data: {},
-            },
-          ]}
-          choice={{
-            text: "Earn",
-            data: {},
-          }}
-          buttonProps={{
-            className:
-              "px-0 py-0 bg-transparent border-0 hover:bg-transparent gap-0 border-transparent hover:border-transparent hover:border-0  ",
-          }}
-          menuProps={{
-            hideOptionText: "",
-            optionProps: {
-              wrapperClassname: "",
-              textProps: {
-                fontSize: 12,
-              },
-            },
-            optionText(_option, i) {
-              return (
-                <HeaderCatagoryText
-                  text="Stake YC"
-                  page="/stake-yc"
-                  fontSize={14}
-                  fontColor={"custom-textColor"}
-                />
-              );
-            },
-          }}
-          choiceHandler={(choice: DropdownOption) => null}
-        ></Dropdown>
-      ),
-    },
-    (item: any) => item
-  );
+  const { proprety: catagoryTexts } = {
+    proprety: (
+      <div className="flex gap-4 w-[100%] h-[100%] items-center z-100">
+        <HeaderCatagoryText text="Earn" page="/" />
+        <HeaderCatagoryText text="Portfolio" page="/portfolio" />
+        <HeaderCatagoryText text="My Vaults" page="/creator-dashboard" />
+        <HeaderCatagoryText text="Stake YC" page="/stake-yc" />
+      </div>
+    ),
+  };
 
   // Return the component
   return (
     <div
-      className={`fixed flex w-[100vw] h-[9vh] items-center  justify-between pointer-events-auto z-1000 rounded-sm shadow-md`}
+      className={`fixed flex w-[100vw] h-[9vh] min-h-[67px] items-center  justify-between pointer-events-auto z-1000 rounded-sm shadow-md`}
     >
       <div className="absolute w-full h-full overflow-hidden bg-transparent z-0 opacity-100 rounded-b-lg">
         <div className="absolute w-[100vw] h-[100%] bg-custom-header backdrop-blur-3xl bg-opacity-100 z-1 pointer-events-auto overflow-hidden"></div>
@@ -172,7 +119,7 @@ export const Header = () => {
           ) => {
             return await switchNetwork(_choice.data.chain_id);
           }}
-          textProps={{ className: "laptop:hidden" }}
+          textProps={{ className: "laptop:hidden", fontSize: 16 }}
           choice={
             networks.length
               ? (() => {
@@ -209,7 +156,7 @@ export const Header = () => {
                 },
               ],
             ]}
-            textProps={{ className: "laptop:hidden" }}
+            textProps={{ className: "laptop:hidden", fontSize: 16 }}
             choice={{
               text:
                 userName ||

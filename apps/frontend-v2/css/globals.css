@@ -69,8 +69,9 @@
   --light-scrollbar: #c3c9d4;
 }
 
-:global(.slick-active) {
-  background-color: red;
+:global(slick-active) {
+  opacity: 0.75;
+  color: #000;
 }
 
 /**

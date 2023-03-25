@@ -20,7 +20,7 @@ export const BackdropColor = ({
   return (
     <div
       className={
-        "absolute w-[100vw] h-[50vh] dark:bg-[#FFF576] z-0 " +
+        "absolute w-[100vw] h-[50vh] dark:bg-[#FFF576] z-[-1] " +
         top +
         " " +
         left +

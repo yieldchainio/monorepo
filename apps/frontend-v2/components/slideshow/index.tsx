@@ -35,12 +35,12 @@ export const SlideShow = (sliderProps: Settings) => {
         {...sliderProps}
         nextArrow={<NextArrow />}
         prevArrow={<PrevArrow />}
-        className="z-1 pl-10 tablet:pl-20 m-0 flex flex-row justify-center items-center w-[75%]  relative"
+        className="z-1 pl-10 tablet:pl-20 m-0 flex flex-row justify-center items-center w-[75%]  relative ]"
         customPaging={(i) => {
           return (
             <div
               className={
-                "w-[20px] h-[6px] bg-custom-textColor transition-all duration-200 ease-in-out mt-8 tablet:hidden "
+                "w-[20px] h-[6px] bg-custom-textColor transition-all duration-200 ease-in-out mt-8 tablet:hidden  "
               }
             ></div>
           );

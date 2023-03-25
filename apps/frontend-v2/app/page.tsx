@@ -94,7 +94,7 @@ export default function Home() {
           networks={networks}
           setFilters={setFilters}
         />
-        <div className="flex flex-col gap-[100px] mt-16 items-start">
+        <div className="flex flex-col gap-[300px] mt-16 items-start pb-12">
           <StrategySlideshow
             strategies={filteredStrategies}
             title={"Verified Vaults"}
@@ -104,6 +104,12 @@ export default function Home() {
               (strategy) => strategy.tvl > 30000
             )}
             title={"Trending Vaults"}
+          />
+          <StrategiesGrid
+            strategies={filteredStrategies.filter(
+              (strategy) => strategy.tvl > 30000
+            )}
+            title={"All Vaults"}
           />
         </div>
       </div>
@@ -290,6 +296,35 @@ const StrategySlideshow = ({
             return <StrategyCard strategy={strategy} key={i} />;
           })}
       </SlideShow>
+    </div>
+  );
+};
+
+/**
+ * A grid  section for the strategy cards
+ */
+
+const StrategiesGrid = ({
+  strategies,
+  title,
+}: {
+  strategies: YCStrategy[];
+  title: string;
+}) => {
+  return (
+    <div className="w-full h-max flex flex-col items-center justify-center z-1 gap-6">
+      <div className=" flex flex-row items-center justify-center">
+        <WrappedText fontSize={22} className="">
+          {title}
+        </WrappedText>
+      </div>
+      <div className="grid grid-cols-4 gap-32 laptop:grid-cols-3">
+        {strategies
+          // .filter((strategy, i) => strategy.verified === true)
+          .map((strategy, i, arr) => {
+            return <StrategyCard strategy={strategy} key={i} />;
+          })}
+      </div>
     </div>
   );
 };

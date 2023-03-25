@@ -186,7 +186,6 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
   /**
    * useEffect for handling an address change (i.e new user)
    */
-
   useEffect(() => {
     if (user?.address !== userAddress) {
       // Find an existing user in our users array
@@ -198,17 +197,25 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
       // Set the new user
       if (_user) setUser(_user);
     }
+
+    // Cleanup
+    return () => setUser(null);
   }, [userAddress]);
 
   /**
    * useEffect handling users refresh (potential user details update)
    */
   useEffect(() => {
+    // Find the current user in the array
     const currUser = users.find((usr) => usr.id === user?.id);
 
+    // If we found it and it does not equal to the current user - we set the state
     if (currUser && currUser.toString() !== user?.toString()) {
       setUser(currUser);
     }
+
+    // Cleanup
+    return () => setUser(null);
   }, [JSON.stringify(users.map((usr) => usr.toString()))]);
 
   // Some more details about the user
@@ -222,37 +229,55 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
   // useEffect for the username
   useEffect(() => {
     setUsername(user?.username || ensName || "Anon");
+    // Cleanup
+    return () => setUsername("Anon");
   }, [user?.toString(), ensName, userAddress]);
 
   // useEffect for the profile pic
   useEffect(() => {
-    setProfilePic(ensAvatar || jazziconPFP);
+    // Set the profile pic based on this priority
+    setProfilePic(user?.profilePic || ensAvatar || jazziconPFP);
+
+    // Cleanup
+    return () => setProfilePic(null);
   }, [user?.toString(), ensAvatar, jazziconPFP]);
 
   // Jazzicon useEffect (listens to address)
   useEffect(() => {
     if (userAddress) setJazzicon(buildDataUrl(userAddress));
+
+    // Cleanup
+    return () => setJazzicon(null);
   }, [userAddress]);
 
   // useEffect for the created vaults
   useEffect(() => {
     if (user) setCreatedVaults(user.createdVaults);
+
+    // Cleanup
+    return () => setCreatedVaults([]);
   }, [user?.createdVaults.length]);
 
   // useEffect for user's social media
   useEffect(() => {
     if (user?.socialMedia) setSocialMedia(user?.socialMedia);
-  }, [user?.toString()]);
+
+    // Cleanup
+    return () => setSocialMedia(new YCSocialMedia());
+  }, [user?.socialMedia.toString()]);
 
   // useEffect for whether the user is verified or not
   useEffect(() => {
     if (user?.isVerified) setVerified(true);
-  }, [user?.toString()]);
+
+    // Cleanup
+    return () => setVerified(false);
+  }, [user?.isVerified]);
 
   // Final useEffect checking if we're mounted to avoid hydration
   const mounted = useIsMounted();
-  // Return our states
 
+  // Return our states
   if (mounted)
     return {
       address: userAddress,
@@ -289,7 +314,6 @@ function buildDataUrl(_address: string): string {
 /**
  * Utility function to sign the user up
  */
-
 const signUserUp = async (
   _props: SignupProps,
   _context: YCClassifications

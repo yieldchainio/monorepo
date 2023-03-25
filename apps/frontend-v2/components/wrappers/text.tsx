@@ -28,6 +28,36 @@ export enum Selection {
   disallow = "select-none",
 }
 
+("text-[1px]");
+("text-[2px]");
+("text-[3px]");
+("text-[4px]");
+("text-[5px]");
+("text-[6px]");
+("text-[7px]");
+("text-[8px]");
+("text-[9px]");
+("text-[10px]");
+("text-[11px]");
+("text-[12px]");
+("text-[13px]");
+("text-[14px]");
+("text-[15px]");
+("text-[14px]");
+("text-[16px]");
+("text-[15px]");
+("text-[17px]");
+("text-[18px]");
+("text-[19px]");
+("text-[20px]");
+("text-[21px]");
+("text-[22px]");
+("text-[72px]");
+
+("font-bold");
+("font-black");
+("font-bold");
+
 const WrappedText = ({
   children,
   fontSize = 14,

@@ -31,7 +31,6 @@ export const Filter = <V, T extends BaseFilter<V>>({
 
   useEffect(() => {
     const newArr = [...usedFilters];
-    console.log("Old Filters ARR:", newArr);
     for (const filter of filters) {
       if (filter.defaultAdded) {
         const existingIndex = usedFilters.findIndex(
@@ -43,7 +42,6 @@ export const Filter = <V, T extends BaseFilter<V>>({
         }
       }
     }
-    console.log("New Filters ARR:", newArr);
     setUsedFilters(newArr);
   }, [filters]);
 

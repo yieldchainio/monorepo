@@ -14,7 +14,7 @@
 
 // Imports
 import { BaseComponentProps, BreakPoint } from "components/types";
-import React, { ReactElement, useEffect, useState } from "react";
+import React from "react";
 import { MediaScreens } from "types/styles/media-breakpoints";
 
 import Slider, { Settings } from "react-slick";
@@ -27,53 +27,47 @@ export interface SlideshowProps<T extends React.ReactNode = React.ReactNode>
 }
 
 // The component itself
-export const SlideShow = <T extends React.ReactNode>(sliderProps: Settings) => {
-  // Keeping track of the current slide for custom paging
-  const [currentSlide, setCurrentSlide] = useState<number>(0);
-
+export const SlideShow = (sliderProps: Settings) => {
   // Return the JSX component
   return (
-    <div className="w-full bg-transparent">
-      <div>
-        <Slider
-          {...sliderProps}
-          nextArrow={<NextArrow />}
-          prevArrow={<PrevArrow />}
-          className="z-1 pl-10 pr-10"
-          customPaging={function (i) {
-            console.log("PAge", i, "Curr slide", currentSlide);
-            return (
-              <div
-                className={
-                  "w-[20px] h-[6px] mt-10 bg-custom-textColor transition-all duration-200 ease-in-out "
-                }
-              ></div>
-            );
-          }}
-          afterChange={(next: number) => {
-            console.log(
-              "Next",
-              next,
-              "Slides to show",
-              sliderProps.slidesToShow,
-              "Equals",
-              next / (sliderProps.slidesToShow || 4)
-            );
-            setCurrentSlide(next / (sliderProps.slidesToShow || 4));
-          }}
-          onLazyLoad={(slidesTLoad: number[]) =>
-            console.log("Slides to load:", slidesTLoad)
-          }
-          lazyLoad="ondemand"
-          appendDots={(dots) => {
-            return (
-              <ul className="flex flex-row justify-start bg-red-500">
+    <div className="w-full flex flex-row items-center justify-center ">
+      <Slider
+        {...sliderProps}
+        nextArrow={<NextArrow />}
+        prevArrow={<PrevArrow />}
+        className="z-1 pl-10 tablet:pl-20 m-0 flex flex-row justify-center items-center w-[75%]  relative"
+        customPaging={(i) => {
+          return (
+            <div
+              className={
+                "w-[20px] h-[6px] bg-custom-textColor transition-all duration-200 ease-in-out mt-8 tablet:hidden "
+              }
+            ></div>
+          );
+        }}
+        dotsClass="slick-dots w-[110vw]"
+        appendDots={(dots) => {
+          return (
+            <div className="bg-red-500 p-4 w-full h-full">
+              <ul
+                className="w-full flex flex-row justify-end  relative pr-0 bg-transparent"
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  flexWrap: "wrap",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  left: "-80px",
+                }}
+              >
                 {React.Children.map(dots, (dot) => {
                   if (React.isValidElement(dot)) {
                     return (
                       <dot.type
                         {...dot.props}
                         key={dot.key}
+                        className={dot.props.className}
                         children={React.Children.map(
                           dot.props.children,
                           (child) => {
@@ -98,46 +92,33 @@ export const SlideShow = <T extends React.ReactNode>(sliderProps: Settings) => {
                   return dot;
                 })}
               </ul>
-            );
-          }}
-        >
-          {sliderProps.children}
-        </Slider>
-      </div>
+            </div>
+          );
+        }}
+      >
+        {sliderProps.children}
+      </Slider>
     </div>
   );
 };
 
 const NextArrow = (props: any) => {
-  console.log(
-    "Current Slide In Arrow:",
-    props.currentSlide,
-    "Slide Count",
-    props.slideCount
-  );
-
-  useEffect(() => {
-    // props.setCurrentSlide(props.currentSlide);
-  }, [props.currentSlide]);
-
-  const { onClick } = props;
+  const { onClick, className, style } = props;
   return (
     <div
       className={
-        "w-[16px] h-[16px] border-custom-textColor rounded-sm absolute border-opacity-100 top-[50%] translate-y-[-50%] left-[98%] border-t-4 border-r-4 rotate-[45deg] hover:scale-[1.05] cursor-pointer transition duration-200 ease-in-out hover:border-opacity-70 active:scale-[0.98] z-1000 "
+        "w-[16px] h-[16px] border-custom-textColor rounded-sm border-opacity-100 top-[50%] translate-y-[-50%] left-[100%] border-t-4 border-r-4 rotate-[45deg] hover:scale-[1.05] cursor-pointer transition duration-200 ease-in-out hover:border-opacity-70 active:scale-[0.98] z-1000 absolute "
       }
-      style={{}}
       onClick={onClick}
     />
   );
 };
 const PrevArrow = (props: any) => {
   const { onClick } = props;
-  console.log("Current Slide In Arrow:", props.currentSlide);
   return (
     <div
       className={
-        "w-[16px] h-[16px] border-custom-textColor rounded-sm absolute border-opacity-100 top-[50%] translate-y-[-50%] left-[0%] border-t-4 border-l-4 rotate-[-45deg] hover:scale-[1.05] cursor-pointer transition duration-200 ease-in-out hover:border-opacity-70 active:scale-[0.98] "
+        "w-[16px] h-[16px] border-custom-textColor rounded-sm absolute border-opacity-100 top-[50%] translate-y-[-50%] left-[-2%] border-t-4 border-l-4 rotate-[-45deg] hover:scale-[1.05] cursor-pointer transition duration-200 ease-in-out hover:border-opacity-70 active:scale-[0.98] "
       }
       style={{}}
       onClick={onClick}

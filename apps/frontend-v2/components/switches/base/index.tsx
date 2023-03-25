@@ -4,7 +4,6 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import "twind/shim";
 import WrappedImage from "components/wrappers/image";
 
 export interface SwitchProps {
@@ -44,14 +43,14 @@ export const Switch = ({
   };
   return (
     <div
-      className="flex w-[60px] h-[28.2px] rounded-full border-custom-border border-1 bg-custom-bcomponentbg bg-opacity-[100%] drop-shadow-sm py-1 px-1.5 cursor-pointer hover:bg-custom-componentbg transition duration-200 ease-in-out"
+      className="flex w-[60px] h-[28.2px] rounded-full border-custom-border border-[1px] bg-custom-bcomponentbg bg-opacity-[100%] drop-shadow-sm py-1 px-1.5 cursor-pointer hover:bg-custom-componentbg transition duration-200 ease-in-out"
       onClick={() => handleClick()}
       style={{
         justifyContent: on ? "end" : "start",
       }}
     >
       <motion.div
-        className="flex items-center justify-center w-[40.5%] h-full bg-custom-componentbg rounded-full hover:scale-[1.01] border-1 border-custom-border drop-shadow-xl"
+        className="flex items-center justify-center w-[40.5%] h-full bg-custom-componentbg rounded-full hover:scale-[1.01] border-[1px] border-custom-border drop-shadow-xl"
         layout
         transition={{
           type: "spring",

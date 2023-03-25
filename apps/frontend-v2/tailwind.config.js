@@ -1,19 +1,16 @@
 /** @type {import('tailwindcss').Config} */
-const {
-  randomHexColor,
-  randomHexColorStartWith,
-  randomHexColorEndWith,
-  randomHexColorStartAndEndWith,
-  randomHexColorWithArray,
-  randomHexColorWithArrayOfObject,
-  randomHexColorArrayStartWith,
-  randomHexColorArrayEndWith,
-} = require("random-hex-color-generator");
+
 module.exports = {
   darkMode: "class",
   theme: {
     borderRadius: {
       lg: "18px",
+      xl: "0.75rem",
+      "2xl": "1rem",
+      "3xl": "1.5rem",
+      md: "0.375rem",
+      full: "9999px",
+      large: "12px",
     },
 
     screens: {
@@ -145,6 +142,11 @@ module.exports = {
       athletics: "Athletics",
     },
   },
-  content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+    "!./node_modules",
+  ],
+  mode: "jit",
   plugins: [require("@tailwindcss/forms")],
 };

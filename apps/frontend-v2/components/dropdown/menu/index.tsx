@@ -17,7 +17,7 @@ interface DropdownOptionProps {
   wrapperClassname?: string;
   className?: string;
   textClassname?: string;
-  textProps: Partial<TextProps>;
+  textProps?: Partial<TextProps>;
 }
 // Props Interface
 export interface DropdownMenuOptions extends BaseComponentProps {

@@ -2,23 +2,12 @@
 import Image from "next/image";
 import { useTheme } from "utilities/stores/theme";
 import { ImageSkeleton } from "./skeleton";
-import { Palette } from "react-palette";
 import { useState } from "react";
 /**
  * @notice
  * Wrapper image component,
  * for ease of use with skeletons and global styling
  */
-
-export type HexColor = string;
-export interface ExtractedColors {
-  darkMuted?: HexColor;
-  darkVibrant?: HexColor;
-  lightMuted?: HexColor;
-  lightVibrant?: HexColor;
-  muted?: HexColor;
-  vibrant?: HexColor;
-}
 
 export interface ImageProps {
   src?:
@@ -33,7 +22,6 @@ export interface ImageProps {
   className?: string;
   alt?: string;
   getColor?: boolean;
-  setColors?: (colors: ExtractedColors) => any;
   onClick?: () => any;
   style?: React.CSSProperties;
 }
@@ -45,7 +33,6 @@ const WrappedImage = ({
   height,
   className,
   onClick,
-  setColors,
   style,
 }: ImageProps) => {
   if (!src) return <ImageSkeleton width={width} height={height} />;

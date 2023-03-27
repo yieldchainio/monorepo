@@ -1,6 +1,7 @@
-import { RegulerButtonProps } from "components/buttons/reguler";
-import { TextProps } from "components/wrappers/text";
-import { DropdownMenuOptions } from "./menu";
+import { RegulerButtonProps } from "components/buttons/reguler/types";
+import { BaseComponentProps } from "components/types";
+import { TextProps } from "components/wrappers/types";
+import { RefObject } from "react";
 
 /**
  * @types for the dropdown's components and it's users.
@@ -31,4 +32,20 @@ export interface DropdownProps {
   buttonProps?: RegulerButtonProps;
   menuProps?: Partial<DropdownMenuOptions>;
   textProps?: Omit<TextProps, "children">;
+}
+
+export interface DropdownOptionProps {
+  wrapperClassname?: string;
+  className?: string;
+  textClassname?: string;
+  textProps?: Partial<TextProps>;
+}
+// Props Interface
+export interface DropdownMenuOptions extends BaseComponentProps {
+  options: DropdownOption[];
+  handler: (_option: DropdownOption) => any;
+  parentRef: RefObject<HTMLElement | undefined>;
+  optionProps?: DropdownOptionProps;
+  optionText?: (_option: DropdownOption, i?: number) => React.ReactNode;
+  hideOptionText?: "laptop:hidden" | "";
 }

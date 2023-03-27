@@ -1,32 +1,10 @@
-import { FormEvent, ReactPropTypes } from "react";
 import { TextSkeleton } from "./skeleton";
+import { TextProps, Selection } from "./types";
 /**
  * @notice
  * Wrapper image component,
  * for ease of use with skeletons and global styling
  */
-
-export interface TextProps {
-  children: string | undefined;
-  fontSize?: number;
-  fontStyle?: string;
-  fontColor?: string;
-  contentEditable?: "true" | "false";
-  select?: Selection;
-  onClick?: (e: React.MouseEvent<HTMLElement>) => any | void | null;
-  fontFamily?: string;
-  className?: string;
-  style?: React.CSSProperties;
-  id?: string;
-  props?: Record<any, any>;
-  onInput?: (e: FormEvent<HTMLDivElement>) => any;
-  truncate?: "truncate" | "";
-}
-
-export enum Selection {
-  allow = "select-text",
-  disallow = "select-none",
-}
 
 ("text-[1px]");
 ("text-[2px]");

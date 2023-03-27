@@ -2,7 +2,7 @@
 import { RegulerButton } from "components/buttons/reguler";
 import Section from "components/section";
 
-export interface ProfileStatsProps {
+interface ProfileStatsProps {
   createdVaults: number;
 }
 

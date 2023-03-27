@@ -14,3 +14,7 @@ export type ReactChildrenArray = (
   | React.ReactFragment
   | React.ReactPortal
 )[];
+
+export interface BaseModalProps {
+  modalKey: number;
+}

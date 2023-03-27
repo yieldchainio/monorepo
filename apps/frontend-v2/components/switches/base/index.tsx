@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import WrappedImage from "components/wrappers/image";
 
-export interface SwitchProps {
+interface SwitchProps {
   // A handler function for handling the switch turn on/off
   handler: (on: boolean) => any;
   // Optional styling

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
  * This is the main button used across the app
  */
 
-export interface ButtonProps {
+interface ButtonProps {
   children?: React.ReactNode;
   onClick?: (e?: React.MouseEvent<HTMLElement>) => any;
   className?: string;
@@ -32,6 +32,7 @@ const GradientButton = ({ children, onClick, className }: ButtonProps) => {
           "linear-gradient(var(--bg), var(--bg)) padding-box, var(--main-gradient) border-box",
         border: "2px solid transparent",
       }}
+      onClick={onClick}
     >
       {children}
     </motion.div>

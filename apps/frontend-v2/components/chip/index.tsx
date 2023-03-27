@@ -10,7 +10,7 @@ import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 import { useEffect, useState } from "react";
 
-export interface ChipProps {
+ interface ChipProps {
   className?: string;
   image: string;
   text: string;

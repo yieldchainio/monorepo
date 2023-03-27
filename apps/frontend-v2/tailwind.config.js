@@ -142,11 +142,6 @@ module.exports = {
       athletics: "Athletics",
     },
   },
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "!./node_modules",
-  ],
-  mode: "jit",
+  content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   plugins: [require("@tailwindcss/forms")],
 };

@@ -1,30 +1,11 @@
 import { ChangeEvent } from "react";
 import WrappedImage from "./image";
+import { InputProps, Selection } from "./types";
 /**
  * @notice
  * Wrapper image component,
  * for ease of use with skeletons and global styling
  */
-
-interface InputProps {
-  fontSize: number;
-  fontStyle: string;
-  placeholder?: string;
-  placeholderClassname?: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => any;
-  icon?: string;
-  showGlass?: boolean;
-  fontColor?: string;
-  select?: Selection;
-  onClick?: (e: React.MouseEvent<HTMLElement>) => any | void | null;
-  fontFamily?: string;
-  className?: string;
-}
-
-export enum Selection {
-  allow = "select-text",
-  disallow = "select-none",
-}
 
 const WrappedInput = ({
   fontSize = 14,

@@ -1,7 +1,7 @@
 import { Switch } from "components/switches/base";
 import { useEffect, useState } from "react";
 
-import { useTheme, Themes } from "utilities/stores/theme";
+import { useTheme, Themes } from "utilities/hooks/stores/theme";
 
 /**
  * A switch compoennt for the theme, with shared state

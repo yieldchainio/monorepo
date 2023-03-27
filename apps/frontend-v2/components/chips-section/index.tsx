@@ -1,14 +1,14 @@
 import { Chip } from "components/chip";
 import { useEffect, useState } from "react";
-import { useYCStore } from "utilities/stores/yc-data";
+import { useYCStore } from "utilities/hooks/stores/yc-data";
 
-export interface ChipsSectionProps<T> {
+ interface ChipsSectionProps<T> {
   setter: (items: T[]) => any;
   items: T[];
   defaultChip?: T | BaseChipProps;
 }
 
-export interface BaseChipProps {
+ interface BaseChipProps {
   logo: string;
   name: string;
   color?: string;

@@ -1,5 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { RegulerButton, RegulerButtonProps } from "../reguler";
+import { RegulerButton } from "../reguler";
+import { RegulerButtonProps } from "../reguler/types";
 
 /**
  * A custom connect wallet button

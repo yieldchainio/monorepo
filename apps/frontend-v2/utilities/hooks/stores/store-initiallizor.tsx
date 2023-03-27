@@ -61,7 +61,7 @@ const StoreInitiallizor = ({ context }: StoreInitiallizorProps) => {
 };
 
 // Interface for the props, only takes in a context instance
-export interface StoreInitiallizorProps {
+interface StoreInitiallizorProps {
   context: ClassificationContext;
 }
 

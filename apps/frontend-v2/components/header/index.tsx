@@ -5,7 +5,7 @@ import Dropdown from "../dropdown";
 import "../../css/globals.css";
 import { YCNetwork } from "@yc/yc-models";
 import { DropdownOption } from "../dropdown/types";
-import { useYCStore } from "utilities/stores/yc-data";
+import { useYCStore } from "utilities/hooks/stores/yc-data";
 import WrappedImage from "components/wrappers/image";
 import { ProfileModal } from "components/wallet-profile";
 import ConnectWalletButton from "components/buttons/connect";
@@ -137,7 +137,6 @@ export const Header = () => {
                       },
                     };
 
-                  console.log("Default network", chain, networks);
                   return undefined;
                 })()
               : undefined

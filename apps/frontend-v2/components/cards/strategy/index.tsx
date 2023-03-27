@@ -14,8 +14,11 @@ import { sliceAddress } from "utilities/general/slice-address";
 import useYCUser from "utilities/hooks/yc/useYCUser";
 import { StrategyTokenSection } from "./token-section";
 import GradientButton from "components/buttons/gradient";
+import { useModals } from "utilities/hooks/stores/modal";
+import { ModalWrapper } from "components/modal-wrapper";
+import { usePathname, useRouter } from "next/navigation";
 
-export interface StrategyCardProps {
+interface StrategyCardProps {
   strategy: YCStrategy;
 }
 
@@ -24,8 +27,15 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
   const { address, userName, profilePic, socialMedia, verified } = useYCUser({
     userAddress: strategy.creator?.address as `0x${string}`,
   });
+
+  // Modal provider
+  const router = useRouter();
+  const routeToStrategy = () => {
+    router.push(`/strategy/${strategy.id}`);
+  };
+
   return (
-    <div className="w-max h-max bg-custom-bcomponentbg rounded-[2rem] flex flex-col items-center justify-start border-1 border-custom-themedBorder shadow-sm">
+    <div className="w-max h-max bg-custom-bcomponentbg rounded-[2rem] flex flex-col items-center justify-start border-[1px] border-custom-themedBorder shadow-sm">
       {verified && <SmallVerified />}
       <div className="bg-gradient-to-r from-custom-yclb/10 to-custom-ycy/10 w-full h-[30%] rounded-t-[2rem] flex flex-row gap-5 pl-4 pr-5 py-4 mobile:py-2.5">
         <div className="flex flex-row items-center w-full justify-between px-1 gap-4 mobile:justify-start mobile:gap-4 smallLaptop:gap-12">
@@ -34,7 +44,7 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
               src={profilePic}
               width={38}
               height={38}
-              className="rounded-full border-2 border-custom-border"
+              className="rounded-full border-[2px] border-custom-border"
             />
             <div className="flex flex-col w-[100%] mt-0.5">
               <WrappedText className="mobile:hidden">{userName}</WrappedText>
@@ -42,7 +52,7 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
                 fontColor="custom-off cursor-pointer hover:text-custom-offhover transition duration-200 ease-in-out mt-[-3px] laptop:hidden overflow-hidden truncate "
                 fontSize={10}
               >
-                {(socialMedia.twitter && socialMedia.twitter) ||
+                {(socialMedia.twitter && socialMedia.twitter.handle) ||
                   (address && sliceAddress(address))}
               </WrappedText>
             </div>
@@ -76,6 +86,7 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
                           style={{
                             zIndex: arr.length - i,
                           }}
+                          key={i}
                         />
                       ) : null;
                     })}
@@ -95,7 +106,12 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
             titlesClassname={"text-opacity-25"}
             divisorClassname=" mb-[0.5rem] mt-[0.5rem]"
           ></Section>
-          <GradientButton className="mt-4 rounded-[0.9rem] pl-[6rem] pr-[6rem] pt-[0.5rem] pb-[0.5rem] ml-[0px] ">
+          <GradientButton
+            className="mt-4 rounded-[0.9rem] pl-[6rem] pr-[6rem] pt-[0.5rem] pb-[0.5rem] ml-[0px] "
+            onClick={() => {
+              routeToStrategy();
+            }}
+          >
             <WrappedText
               fontSize={14}
               fontColor={"inherit"}

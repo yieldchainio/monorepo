@@ -20,7 +20,7 @@ import { MediaScreens } from "types/styles/media-breakpoints";
 import Slider, { Settings } from "react-slick";
 
 // Interface for the props
-export interface SlideshowProps<T extends React.ReactNode = React.ReactNode>
+interface SlideshowProps<T extends React.ReactNode = React.ReactNode>
   extends BaseComponentProps<SlideshowProps<T>> {
   exhibitedAmount: number | BreakPoint<{ [key in MediaScreens]?: number }>;
   children: NonNullable<T>;

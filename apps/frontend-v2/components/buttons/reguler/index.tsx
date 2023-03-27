@@ -4,12 +4,8 @@
 
 import { forwardRef, useState } from "react";
 import { hexColors } from "configs/styles/colors";
+import {RegulerButtonProps} from "./types"
 
-export interface RegulerButtonProps {
-  onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => any;
-  className?: string;
-  children?: React.ReactNode;
-}
 export const RegulerButton = forwardRef<HTMLDivElement, RegulerButtonProps>(
   ({ onClick, children, className }: RegulerButtonProps, ref) => {
     // If we are loading, we display some loading spinner

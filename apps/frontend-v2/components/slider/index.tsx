@@ -9,7 +9,7 @@ import WrappedText from "components/wrappers/text";
 import { formatMoney } from "utilities/general/format-money";
 
 // Props
-export interface RangeSliderProps {
+interface RangeSliderProps {
   range: [number, number];
   defaultValues?: [number, number];
   onChange?: (arg: number[]) => any;

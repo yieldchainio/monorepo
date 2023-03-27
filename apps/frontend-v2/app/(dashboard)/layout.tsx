@@ -1,6 +1,5 @@
 "use client";
-import "../css/globals.css";
-
+import "../../css/globals.css";
 import WrappedText from "components/wrappers/text";
 import { ChangeEvent, useEffect, useState } from "react";
 import WrappedInput from "components/wrappers/input";
@@ -14,16 +13,20 @@ import {
   StringFilter,
 } from "utilities/hooks/general/useFilters/types";
 import { YCNetwork, YCStrategy } from "@yc/yc-models";
-import { useYCStore } from "utilities/stores/yc-data";
+import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { StrategyCard } from "components/cards/strategy";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {
   STRATEGIES_FILTERS,
   STRATEGIES_SEARCHBOX_INPUT_NAME,
-} from "./constants";
+} from "../constants";
 import { BackdropColor } from "components/backdrop-color";
 import { SlideShow } from "components/slideshow";
+
+import { useModals } from "utilities/hooks/stores/modal";
+import { StrategyModal } from "components/strategy-modal";
+import { useShallowRouter } from "utilities/hooks/general/useShallowRouter";
 
 export default function Home() {
   // Retreive the strategies from the context
@@ -67,6 +70,40 @@ export default function Home() {
     );
     setFilters(newArr);
   }, [selectedNetworks]);
+
+  /**
+   * Use the ``useShallowRouter`` hook in order to mimic routing
+   * for strategies' pages.
+   * // TODO: Fucking make that shit work in its own dynamic path.
+   * // TODO: IT shouldnt be here. This is an unfortunate last resort
+   */
+
+  // The modals state for us to push into
+  const modals = useModals();
+
+  useShallowRouter((pathname: string) => {
+    // Return immediatly if the pathname does not include the word strategy
+    if (!pathname.includes("strategy")) return;
+
+    // Get the ID
+    const stratID = pathname.split("/strategy")[1];
+
+    // Push a strategy modal into the root if it does not exist already
+    if (stratID && !modals.exists(stratID))
+      modals.push((modalKey: number) => {
+        return {
+          id: stratID,
+          activeOn: [`/${stratID}`],
+          component: (
+            <StrategyModal
+              strategyID={stratID.split("/")[1]}
+              modalKey={modalKey}
+              callbackRoute={"/"}
+            ></StrategyModal>
+          ),
+        };
+      });
+  });
 
   // Return the component
   return (
@@ -229,7 +266,6 @@ const BrowseHeroSection = ({
 /**
  * A slideshow strategies section
  */
-
 const StrategySlideshow = ({
   strategies,
   title,
@@ -318,7 +354,7 @@ const StrategiesGrid = ({
           {title}
         </WrappedText>
       </div>
-      <div className="grid grid-cols-4 gap-32 laptop:grid-cols-3">
+      <div className="grid grid-cols-4 gap-32  laptop:grid-cols-3 mobile:grid-cols-1 tablet:grid-cols-2">
         {strategies
           // .filter((strategy, i) => strategy.verified === true)
           .map((strategy, i, arr) => {

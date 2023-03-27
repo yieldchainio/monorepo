@@ -10,7 +10,6 @@ import {
 import { FilterBox } from "./box";
 import { FiltersMenu } from "./menu";
 
-export interface FilterModification {}
 
 /**
  * The main Filter component, renders our @uses FilterBox, @uses FilterMenu.

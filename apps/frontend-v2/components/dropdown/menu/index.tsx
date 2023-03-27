@@ -1,8 +1,9 @@
-import { DropdownOption } from "../types";
+import { DropdownMenuOptions, DropdownOption } from "../types";
 import { BaseComponentProps } from "components/types";
 import { RefObject, useState } from "react";
 import WrappedImage from "components/wrappers/image";
-import WrappedText, { TextProps } from "components/wrappers/text";
+import WrappedText from "components/wrappers/text";
+import { TextProps } from "components/wrappers/types";
 import SmallLoader from "components/loaders/small";
 /**
  * @notice
@@ -12,32 +13,6 @@ import SmallLoader from "components/loaders/small";
  */
 
 ("justify-start");
-// Dropdown option props
-interface DropdownOptionProps {
-  wrapperClassname?: string;
-  className?: string;
-  textClassname?: string;
-  textProps?: Partial<TextProps>;
-}
-// Props Interface
-export interface DropdownMenuOptions extends BaseComponentProps {
-  options: DropdownOption[];
-  handler: (_option: DropdownOption) => any;
-  parentRef: RefObject<HTMLElement | undefined>;
-  optionProps?: DropdownOptionProps;
-  optionText?: (_option: DropdownOption, i?: number) => React.ReactNode;
-  hideOptionText?: "laptop:hidden" | "";
-}
-
-// Colors
-
-const loaderColors: Record<string, `fill-${string}`> = {
-  "#FF0000": "fill-[#FF0000]",
-  "#0000FF": "fill-[#0000FF]",
-  "#FFFF00": "fill-[#FFFF00]",
-  "#A020F0": "fill-[#A020F0]",
-  "#00FFFF": "fill-[#00FFFF]",
-};
 
 // The component
 const DropdownMenu = ({

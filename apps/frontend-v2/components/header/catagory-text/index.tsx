@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import WrappedText, { Selection, TextProps } from "components/wrappers/text";
-import { RegulerButtonProps } from "components/buttons/reguler";
+import WrappedText from "components/wrappers/text";
+import { Selection, TextProps } from "components/wrappers/types";
+import { RegulerButtonProps } from "components/buttons/reguler/types";
 
-export interface HeaderCatagoryTextProps
+interface HeaderCatagoryTextProps
   extends RegulerButtonProps,
     Omit<Omit<TextProps, "children">, "onClick"> {
   text: string;

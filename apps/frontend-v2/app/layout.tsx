@@ -1,9 +1,11 @@
 import "../css/globals.css";
 import { Header } from "../components/header";
 import { ClassificationContext } from "@yc/yc-models";
-import { DataVersions, fetchYC } from "utilities/storage/fetch-yc";
-import StoreInitiallizor from "utilities/stores/store-initiallizor";
+import { DataVersions, fetchYC } from "utilities/general/storage/fetch-yc";
+import StoreInitiallizor from "utilities/hooks/stores/store-initiallizor";
 import WrappedWagmi from "configs/wagmi";
+import { ModalProvider } from "components/modal-provider";
+import { ShallowRouter } from "components/internal/shallow-router";
 
 export const metadata = {
   title: "Yieldchain",
@@ -24,12 +26,16 @@ export default async function RootLayout({
       <head></head>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <StoreInitiallizor context={data} />
-      <body className="bg-custom-bg h-[200vh] z-100">
-        <WrappedWagmi>
+      <ShallowRouter />
+      <WrappedWagmi>
+        <ModalProvider />
+        {/* <div className="w-[100vw] h-[100vh] bg-white/80 fixed z-10000000000000"></div> */}
+
+        <body className="h-max z-100 bg-custom-bg">
           {children}
           <Header />
-        </WrappedWagmi>
-      </body>
+        </body>
+      </WrappedWagmi>
     </html>
   );
 }

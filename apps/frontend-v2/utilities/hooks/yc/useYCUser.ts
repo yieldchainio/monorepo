@@ -8,11 +8,11 @@ import {
   YCStrategy,
   YCUser,
 } from "@yc/yc-models";
-import { useYCStore } from "utilities/stores/yc-data";
+import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 import Jazzicon from "@raugfer/jazzicon";
 import { useEffect, useState } from "react";
-import { useInternalYCUser } from "utilities/stores/yc-data";
+import { useInternalYCUser } from "utilities/hooks/stores/yc-data";
 import { useIsMounted } from "../general/useIsMounted";
 
 // Interface for return value of the YCUser hook
@@ -26,6 +26,7 @@ export interface YCUserHookReturn {
   ) => Promise<DBUser | null>;
   socialMedia: YCSocialMedia;
   verified: boolean;
+  description: string | undefined;
 }
 
 // Interface for the useYCUser's props
@@ -69,6 +70,11 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
   // Jazzicon PFP
   const [jazziconPFP, setJazzicon] = useState<string | null>(
     userAddress ? buildDataUrl(userAddress) : null
+  );
+
+  // User's description
+  const [description, setDescription] = useState<string | undefined>(
+    user?.description
   );
 
   // User's social media
@@ -266,6 +272,14 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     return () => setSocialMedia(new YCSocialMedia());
   }, [user?.socialMedia.toString()]);
 
+  // useEffect for user's description
+  useEffect(() => {
+    if (user?.description) setDescription(user?.description);
+
+    // Cleanup
+    return () => setDescription(undefined);
+  }, [user?.description]);
+
   // useEffect for whether the user is verified or not
   useEffect(() => {
     if (user?.isVerified) setVerified(true);
@@ -287,6 +301,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
       updateDetails,
       socialMedia,
       verified,
+      description,
     };
 
   return {
@@ -297,6 +312,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     updateDetails: updateDetails,
     socialMedia: socialMedia,
     verified: false,
+    description: undefined,
   };
 };
 

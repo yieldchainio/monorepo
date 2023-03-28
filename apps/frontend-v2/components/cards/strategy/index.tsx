@@ -13,7 +13,7 @@ import { sliceAddress } from "utilities/general/slice-address";
 import useYCUser from "utilities/hooks/yc/useYCUser";
 import { StrategyTokenSection } from "./token-section";
 import GradientButton from "components/buttons/gradient";
-import {  useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface StrategyCardProps {
   strategy: YCStrategy;

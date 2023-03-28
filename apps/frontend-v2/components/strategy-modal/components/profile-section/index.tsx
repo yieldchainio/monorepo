@@ -18,7 +18,7 @@ export const ProfileSection = ({ user }: { user?: YCUser | null }) => {
     });
 
   return (
-    <div className="flex flex-row gap-2 items-start justify-between w-[35%] h-[10%]  self-start truncate ">
+    <div className="flex flex-row gap-2 items-start justify-between w-[35%] h-[10%]  self-start truncate  ">
       <div className="flex flex-row gap-2 items-center justify-start w-[20%] h-full ">
         <WrappedImage
           src={profilePic}
@@ -48,7 +48,7 @@ const SocialMediaSection = ({
   socialMedia: YCSocialMedia;
 }) => {
   return (
-    <div className="flex flex-row gap-3 w-max h-max p-1 mt-10">
+    <div className="flex flex-row gap-3 w-max h-max p-1 items-center mt-2">
       {socialMedia.twitter?.link && (
         <SocialMediaButton
           logo={{

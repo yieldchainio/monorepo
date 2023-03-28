@@ -3,7 +3,7 @@
  * A provider that is used to render global modals
  */
 
-import { Children, cloneElement, isValidElement } from "react";
+import { Children, isValidElement } from "react";
 import { useModals } from "../../utilities/hooks/stores/modal";
 
 // The component
@@ -13,7 +13,7 @@ export const ModalProvider = () => {
 
   // Return the modals
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full z-100000000000000 isolate">
       {Children.map(
         modals.map((modal) => modal.component),
         (modal, i) => {

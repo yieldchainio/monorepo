@@ -3,7 +3,6 @@
  */
 
 import { YCStrategy } from "@yc/yc-models";
-import { RegulerButton } from "components/buttons/reguler";
 import Section from "components/section";
 import { SmallVerified } from "components/verified/circle";
 import WrappedImage from "components/wrappers/image";
@@ -14,9 +13,7 @@ import { sliceAddress } from "utilities/general/slice-address";
 import useYCUser from "utilities/hooks/yc/useYCUser";
 import { StrategyTokenSection } from "./token-section";
 import GradientButton from "components/buttons/gradient";
-import { useModals } from "utilities/hooks/stores/modal";
-import { ModalWrapper } from "components/modal-wrapper";
-import { usePathname, useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 
 interface StrategyCardProps {
   strategy: YCStrategy;

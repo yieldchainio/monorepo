@@ -9,6 +9,7 @@ import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, bsc } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import { useIsMounted } from "utilities/hooks/general/useIsMounted";
 
 const { chains, provider } = configureChains(
   [bsc, arbitrum, polygon, optimism, mainnet],
@@ -32,6 +33,10 @@ interface WrappedWagmiProps {
   children: React.ReactNode;
 }
 const WrappedWagmi = ({ children }: WrappedWagmiProps) => {
+  const isMounted = useIsMounted();
+
+  if (!isMounted) return null
+
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={darkTheme()}>

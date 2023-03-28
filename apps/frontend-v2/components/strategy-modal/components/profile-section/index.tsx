@@ -48,7 +48,7 @@ const SocialMediaSection = ({
   socialMedia: YCSocialMedia;
 }) => {
   return (
-    <div className="flex flex-row gap-3 w-max h-max p-1">
+    <div className="flex flex-row gap-3 w-max h-max p-1 mt-10">
       {socialMedia.twitter?.link && (
         <SocialMediaButton
           logo={{

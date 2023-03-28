@@ -26,16 +26,14 @@ export default async function RootLayout({
       <head></head>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <StoreInitiallizor context={data} />
-      <ShallowRouter />
-      <WrappedWagmi>
-        <ModalProvider />
-        {/* <div className="w-[100vw] h-[100vh] bg-white/80 fixed z-10000000000000"></div> */}
-
-        <body className="h-max z-100 bg-custom-bg">
+      <body className="h-max z-100 bg-custom-bg">
+        <WrappedWagmi>
+          <ShallowRouter />
           {children}
           <Header />
-        </body>
-      </WrappedWagmi>
+          <ModalProvider />
+        </WrappedWagmi>
+      </body>
     </html>
   );
 }

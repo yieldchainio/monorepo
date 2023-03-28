@@ -22,5 +22,6 @@ export const ShallowRouter = () => {
     // have the current path in their persistance dependencies
     purge(path as `/${string}`);
   }, [path]);
+
   return <></>;
 };

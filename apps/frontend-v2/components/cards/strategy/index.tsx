@@ -67,7 +67,9 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
         <div className="gap-0 w-full flex flex-col justify-center items-center">
           <Section
             fields={{
-              "TVL ": formatMoney(strategy.tvl),
+              "TVL ": formatMoney(
+                strategy.depositToken?.formatDecimals(strategy.tvl) || 0
+              ),
               Title: strategy.title,
               Created: "5 Days Ago",
               Protocols: (

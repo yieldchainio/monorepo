@@ -8,6 +8,7 @@ interface ButtonProps {
   children?: React.ReactNode;
   onClick?: (e?: React.MouseEvent<HTMLElement>) => any;
   className?: string;
+  width?: `w-${string}`;
 }
 
 /**
@@ -15,11 +16,18 @@ interface ButtonProps {
  * @param onClick - what to execute onClick
  * @param className - @optional tailwindcss class
  */
-const GradientButton = ({ children, onClick, className }: ButtonProps) => {
+const GradientButton = ({
+  children,
+  onClick,
+  className,
+  width = "w-max",
+}: ButtonProps) => {
   return (
     <motion.div
       className={
-        "w-max max-w-[200px] h-max font-athletics font-bold text-[14.5px] flex items-center justify-center cursor-pointer z-100 hover:text-custom-textColor select-none blur-none text-black transition duration-200 ease-in-out active:scale-[0.99] py-2 px-5 tablet:px-3.5 tablet:py-1.5 " +
+        width +
+        " " +
+        " max-w-[400px] h-max font-athletics font-bold text-[14.5px] flex items-center justify-center cursor-pointer z-100 hover:text-custom-textColor select-none blur-none text-black transition duration-200 ease-in-out active:scale-[0.99] py-2 px-5 tablet:px-3.5 tablet:py-1.5 " +
         (className || "")
       }
       style={{

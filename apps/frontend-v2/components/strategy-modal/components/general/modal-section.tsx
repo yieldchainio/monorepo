@@ -7,18 +7,29 @@
 
 import { BaseComponentProps } from "components/types";
 
+("justify-start");
+("items-start");
+("justify-end");
+("items-end");
+
 export const InterModalSection = ({
   height,
   width = `w-full`,
   className,
+  children,
+  paddingX = `px-10`,
 }: {
   height: `h-${string}`;
   width?: `w-${string}`;
+  children?: React.ReactNode;
+  paddingX?: `px-${string}`;
 } & BaseComponentProps) => {
   return (
     <div
       className={
-        "bg-custom-componentbg rounded-xl " +
+        "bg-custom-componentbg rounded-xl flex flex-row " +
+        " " +
+        paddingX +
         " " +
         height +
         " " +
@@ -26,6 +37,8 @@ export const InterModalSection = ({
         " " +
         (className || "")
       }
-    ></div>
+    >
+      {children}
+    </div>
   );
 };

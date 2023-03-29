@@ -23,18 +23,21 @@ export enum Selection {
 }
 
 export interface InputProps {
-  fontSize: number;
-  fontStyle: string;
+  fontSize?: number;
+  fontStyle?: string;
   placeholder?: string;
   placeholderClassname?: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => any;
-  icon?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => any;
+  icon?: string | React.ReactNode;
+  iconProps?: ImageProps;
   showGlass?: boolean;
   fontColor?: string;
   select?: Selection;
   onClick?: (e: React.MouseEvent<HTMLElement>) => any | void | null;
   fontFamily?: string;
   className?: string;
+  width?: `w-${string}`;
+  type?: "text" | "number";
 }
 
 export type ImageSrc =

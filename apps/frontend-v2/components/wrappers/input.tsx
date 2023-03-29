@@ -13,19 +13,24 @@ const WrappedInput = ({
   fontFamily = "athletics",
   fontColor = "custom-textColor",
   onClick,
-  onChange = (e: ChangeEvent<HTMLDivElement>) => console.log("Default"),
+  onChange = (e: ChangeEvent<HTMLDivElement>) => null,
   icon = "/icons/search-glass.svg",
   showGlass = true,
   placeholder = "Your input goes here:",
   placeholderClassname = "text-opacity-50",
   select = Selection.disallow,
   className = "",
+  iconProps,
+  width = `w-full`,
+  type,
 }: InputProps) => {
   return (
-    <div className="w-2/3 flex justify-end items-center relative">
+    <div className="w-full flex justify-end items-center relative ">
       <input
         className={`${
-          "w-full focus:outline-none h-min py-3 bg-custom-bg border-[1px] border-custom-themedBorder rounded-lg border-opacity-40 focus:border-custom-border pl-5 transition duration-200 ease-in-out pr-[12vw] " +
+          width +
+          " " +
+          "focus:outline-none h-min py-3 bg-custom-bg border-[1px] border-custom-themedBorder rounded-lg border-opacity-40 focus:border-custom-border pl-5 transition duration-200 ease-in-out pr-[12vw] " +
           "text-" +
           `[${fontSize.toString()}px]` +
           " font-" +
@@ -34,7 +39,7 @@ const WrappedInput = ({
           fontStyle +
           " text-" +
           fontColor +
-          "select-none " +
+          "select-none focus:ring-0 focus:ring-offset-0" +
           className
         } `}
         onClick={(e: React.MouseEvent<HTMLElement>) =>
@@ -42,13 +47,18 @@ const WrappedInput = ({
         }
         onChange={onChange}
         placeholder={placeholder}
+        type={type}
       />
-      <WrappedImage
-        src={icon}
-        width={32}
-        height={32}
-        className="absolute pointer-events-none mr-6"
-      />
+      {typeof icon == "string" ? (
+        <WrappedImage
+          src={icon}
+          width={iconProps?.width || 32}
+          height={iconProps?.height || 32}
+          className="absolute pointer-events-none mr-6"
+        />
+      ) : (
+        icon
+      )}
     </div>
   );
 };

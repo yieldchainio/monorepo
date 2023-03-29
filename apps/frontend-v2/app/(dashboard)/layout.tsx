@@ -191,55 +191,58 @@ const BrowseHeroSection = ({
         heightToFix={{ viewportHeight: 24 }}
         className="w-full items-center flex flex-col top-[10vh] gap-5 z-20"
       >
-        <WrappedInput
-          fontSize={16}
-          fontStyle={"reguler"}
-          // We add a filter onchange to filter by the input
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const newArr = [...filters].filter(
-              (filter: FilterInstance<any, any>) =>
-                filter.id !== STRATEGIES_SEARCHBOX_INPUT_NAME
-            );
-            newArr.push(
-              new FilterInstance<YCStrategy, StringFilter<YCStrategy>>({
-                id: STRATEGIES_SEARCHBOX_INPUT_NAME,
-                type: FilterTypes.STRING,
-                name: STRATEGIES_SEARCHBOX_INPUT_NAME,
-                hidden: true,
-                input: e.target.value,
-                defaultAdded: true,
-                loose: true,
-                callback: (
-                  item: YCStrategy,
-                  config: StringFilter<YCStrategy>
-                ) => {
-                  const lowerCasedInput = config.input.toLowerCase();
-                  return (
-                    item.address.toLowerCase().includes(lowerCasedInput) ||
-                    item.creator?.username
-                      .toLowerCase()
-                      .includes(lowerCasedInput) ||
-                    item.title.toLowerCase().includes(lowerCasedInput) ||
-                    item.depositToken?.symbol
-                      .toLowerCase()
-                      .includes(lowerCasedInput) ||
-                    item.depositToken?.name
-                      .toLowerCase()
-                      .includes(lowerCasedInput) ||
-                    item.rawSteps
-                      .map((step) => step.protocol_details)
-                      .find((protocol) =>
-                        protocol.name.toLowerCase().includes(lowerCasedInput)
-                      )
-                  );
-                },
-              })
-            );
-            setFilters(newArr);
-          }}
-          className="w-full"
-          placeholder="Search for a vault ID, token, or protocol name"
-        />
+        <div className="w-2/3">
+          <WrappedInput
+            fontSize={16}
+            fontStyle={"reguler"}
+            width="w-2/3"
+            // We add a filter onchange to filter by the input
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              const newArr = [...filters].filter(
+                (filter: FilterInstance<any, any>) =>
+                  filter.id !== STRATEGIES_SEARCHBOX_INPUT_NAME
+              );
+              newArr.push(
+                new FilterInstance<YCStrategy, StringFilter<YCStrategy>>({
+                  id: STRATEGIES_SEARCHBOX_INPUT_NAME,
+                  type: FilterTypes.STRING,
+                  name: STRATEGIES_SEARCHBOX_INPUT_NAME,
+                  hidden: true,
+                  input: e.target.value,
+                  defaultAdded: true,
+                  loose: true,
+                  callback: (
+                    item: YCStrategy,
+                    config: StringFilter<YCStrategy>
+                  ) => {
+                    const lowerCasedInput = config.input.toLowerCase();
+                    return (
+                      item.address.toLowerCase().includes(lowerCasedInput) ||
+                      item.creator?.username
+                        .toLowerCase()
+                        .includes(lowerCasedInput) ||
+                      item.title.toLowerCase().includes(lowerCasedInput) ||
+                      item.depositToken?.symbol
+                        .toLowerCase()
+                        .includes(lowerCasedInput) ||
+                      item.depositToken?.name
+                        .toLowerCase()
+                        .includes(lowerCasedInput) ||
+                      item.rawSteps
+                        .map((step) => step.protocol_details)
+                        .find((protocol) =>
+                          protocol.name.toLowerCase().includes(lowerCasedInput)
+                        )
+                    );
+                  },
+                })
+              );
+              setFilters(newArr);
+            }}
+            className="w-full"
+            placeholder="Search for a vault ID, token, or protocol name"
+          />
+        </div>
         <div className="w-[70%] h-max flex flex-row items-center justify-between z-1 ">
           <div className="">
             <ChipsSection<YCNetwork>

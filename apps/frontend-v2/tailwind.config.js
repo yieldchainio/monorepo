@@ -16,8 +16,10 @@ module.exports = {
     screens: {
       mobile: { max: "640px" },
       tablet: { max: "768px" },
+      smallMobile: { max: "510px" },
       smallLaptop: { max: "1000px" },
       laptop: { max: "1150px" },
+      largeLaptop: { max: "1550px" },
       pc: { max: "1920px" },
       largepc: { max: "2400px" },
     },

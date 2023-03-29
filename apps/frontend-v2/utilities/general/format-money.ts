@@ -20,15 +20,24 @@ export const formatMoney = (
     thousandsString.splice(1, 0, ",");
     return `$${thousandsString.join("")}`;
   } else {
-    const base = value.toFixed(0).toString();
-    if (stringified.length === 5) return `$${base.slice(0, 2)}K`;
-    if (stringified.length === 6) return `$${base.slice(0, 3)}K`;
-    if (stringified.length === 7) return `$${base[0]}M`;
-    if (stringified.length === 8) return `$${base.slice(0, 1)}M`;
-    if (stringified.length === 9) return `$${base.slice(0, 2)}M`;
-    if (stringified.length === 10) return `$${base[0]}B`;
-    if (stringified.length === 11) return `$${base.slice(0, 1)}B`;
-    if (stringified.length === 12) return `$${base.slice(0, 2)}B`;
+    try {
+      const base = value.toFixed(0).toString();
+      if (stringified.length === 5) return `$${base.slice(0, 2)}K`;
+      if (stringified.length === 6) return `$${base.slice(0, 3)}K`;
+      if (stringified.length === 7) return `$${base[0]}M`;
+      if (stringified.length === 8) return `$${base.slice(0, 1)}M`;
+      if (stringified.length === 9) return `$${base.slice(0, 2)}M`;
+      if (stringified.length === 10) return `$${base[0]}B`;
+      if (stringified.length === 11) return `$${base.slice(0, 1)}B`;
+      if (stringified.length === 12) return `$${base.slice(0, 2)}B`;
+      return `$${value.toFixed(0)}`;
+    } catch (e) {
+      console.error(
+        "Caught Error Formatting Money, value :" + typeof value + " error:",
+        e
+      );
+
+      return value.toString();
+    }
   }
-  return `$${value.toFixed(0)}`;
 };

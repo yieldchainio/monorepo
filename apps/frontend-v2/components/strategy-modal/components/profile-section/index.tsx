@@ -18,7 +18,7 @@ export const ProfileSection = ({ user }: { user?: YCUser | null }) => {
     });
 
   return (
-    <div className="flex flex-row gap-2 items-start justify-between w-[35%] h-[10%]  self-start truncate  ">
+    <div className="flex flex-row gap-2 items-start justify-between w-[35%] h-[10%]  self-start truncate tablet:w-[70%] tablet:mt-8 ">
       <div className="flex flex-row gap-2 items-center justify-start w-[20%] h-full ">
         <WrappedImage
           src={profilePic}
@@ -29,11 +29,7 @@ export const ProfileSection = ({ user }: { user?: YCUser | null }) => {
         <div className="flex flex-col gap-1 items-start justify-center w-[20%] h-max overflow-visible ">
           <WrappedText fontSize={28}>{userName}</WrappedText>
           <WrappedText fontSize={14} className="text-opacity-50 truncate">
-            {(description || "") +
-              (description || "") +
-              (description || "") +
-              (description || "") +
-              (description || "")}
+            {description}
           </WrappedText>
         </div>
       </div>
@@ -90,7 +86,7 @@ const SocialMediaButton = ({
   return (
     <RegulerButton
       onClick={() => window.open(link, "_blank", "noreferrer")}
-      className=" pt-[0.25rem] pb-[0.25rem] pr-1 pl-1 rounded-full "
+      className=" pt-[0.25rem] pb-[0.25rem] pr-1 pl-1 rounded-full mobile:pr-1 mobile:pl-1 "
     >
       <WrappedImage src={logo} width={13} height={13} />
     </RegulerButton>

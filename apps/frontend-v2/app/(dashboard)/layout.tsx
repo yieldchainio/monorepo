@@ -27,6 +27,7 @@ import { SlideShow } from "components/slideshow";
 import { useModals } from "utilities/hooks/stores/modal";
 import { StrategyModal } from "components/strategy-modal";
 import { useShallowRouter } from "utilities/hooks/general/useShallowRouter";
+import useDebounce from "utilities/hooks/general/useDebounce";
 
 export default function Home() {
   // Retreive the strategies from the context
@@ -70,6 +71,44 @@ export default function Home() {
     );
     setFilters(newArr);
   }, [selectedNetworks]);
+
+  // useDebounce updating the strategies' filter based on the input
+  const [inputValue, setInputValue] = useState<string>("");
+  const debouncedValue = useDebounce(inputValue, 1000);
+
+  useEffect(() => {
+    const newArr = [...filters].filter(
+      (filter: FilterInstance<any, any>) =>
+        filter.id !== STRATEGIES_SEARCHBOX_INPUT_NAME
+    );
+    newArr.push(
+      new FilterInstance<YCStrategy, StringFilter<YCStrategy>>({
+        id: STRATEGIES_SEARCHBOX_INPUT_NAME,
+        type: FilterTypes.STRING,
+        name: STRATEGIES_SEARCHBOX_INPUT_NAME,
+        hidden: true,
+        input: debouncedValue,
+        defaultAdded: true,
+        loose: true,
+        callback: (item: YCStrategy, config: StringFilter<YCStrategy>) => {
+          const lowerCasedInput = config.input.toLowerCase();
+          return (
+            item.address.toLowerCase().includes(lowerCasedInput) ||
+            item.creator?.username.toLowerCase().includes(lowerCasedInput) ||
+            item.title.toLowerCase().includes(lowerCasedInput) ||
+            item.depositToken?.symbol.toLowerCase().includes(lowerCasedInput) ||
+            item.depositToken?.name.toLowerCase().includes(lowerCasedInput) ||
+            item.rawSteps
+              .map((step) => step.protocol_details)
+              .find((protocol) =>
+                protocol.name.toLowerCase().includes(lowerCasedInput)
+              )
+          );
+        },
+      })
+    );
+    setFilters(newArr);
+  }, [debouncedValue]);
 
   /**
    * Use the ``useShallowRouter`` hook in order to mimic routing
@@ -130,6 +169,7 @@ export default function Home() {
           setSelectedNetworks={setSelectedNetworks}
           networks={networks}
           setFilters={setFilters}
+          setInput={setInputValue}
         />
         <div className="flex flex-col gap-[300px] mt-16 items-start pb-12">
           <StrategySlideshow
@@ -164,6 +204,7 @@ interface BrowseSectionProps {
   setSelectedNetworks: (networks: YCNetwork[]) => void;
   networks: YCNetwork[];
   setFilteredStrategies: (filteredStrategies: YCStrategy[]) => void;
+  setInput: (val: string) => void;
 }
 const BrowseHeroSection = ({
   filters,
@@ -172,6 +213,7 @@ const BrowseHeroSection = ({
   setSelectedNetworks,
   networks,
   setFilteredStrategies,
+  setInput,
 }: BrowseSectionProps) => {
   return (
     <div className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-[100%] h-full ">
@@ -198,46 +240,7 @@ const BrowseHeroSection = ({
             width="w-full"
             // We add a filter onchange to filter by the input
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              const newArr = [...filters].filter(
-                (filter: FilterInstance<any, any>) =>
-                  filter.id !== STRATEGIES_SEARCHBOX_INPUT_NAME
-              );
-              newArr.push(
-                new FilterInstance<YCStrategy, StringFilter<YCStrategy>>({
-                  id: STRATEGIES_SEARCHBOX_INPUT_NAME,
-                  type: FilterTypes.STRING,
-                  name: STRATEGIES_SEARCHBOX_INPUT_NAME,
-                  hidden: true,
-                  input: e.target.value,
-                  defaultAdded: true,
-                  loose: true,
-                  callback: (
-                    item: YCStrategy,
-                    config: StringFilter<YCStrategy>
-                  ) => {
-                    const lowerCasedInput = config.input.toLowerCase();
-                    return (
-                      item.address.toLowerCase().includes(lowerCasedInput) ||
-                      item.creator?.username
-                        .toLowerCase()
-                        .includes(lowerCasedInput) ||
-                      item.title.toLowerCase().includes(lowerCasedInput) ||
-                      item.depositToken?.symbol
-                        .toLowerCase()
-                        .includes(lowerCasedInput) ||
-                      item.depositToken?.name
-                        .toLowerCase()
-                        .includes(lowerCasedInput) ||
-                      item.rawSteps
-                        .map((step) => step.protocol_details)
-                        .find((protocol) =>
-                          protocol.name.toLowerCase().includes(lowerCasedInput)
-                        )
-                    );
-                  },
-                })
-              );
-              setFilters(newArr);
+              setInput(e.target.value);
             }}
             className="w-full"
             placeholder="Search for a vault ID, token, or protocol name"

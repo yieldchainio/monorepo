@@ -13,13 +13,13 @@ import { YCToken } from "../token/token";
  */
 export class YCProtocol {
   // =======================
-  //     GENERIC FIELDS
+  //      FIELDS
   // ======================
-  #identifier: string;
-  #name: string;
-  #website: String;
-  #logo: string;
-  #socialMedia: YCSocialMedia;
+  readonly id: string;
+  readonly name: string;
+  readonly website: String;
+  readonly logo: string;
+  readonly socialMedia: YCSocialMedia;
 
   // =======================
   //     UNIQUE FIELDS
@@ -33,19 +33,19 @@ export class YCProtocol {
   // ======================
   constructor(_protocol: DBProtocol, _context: YCClassifications) {
     // Set static
-    this.#socialMedia = new YCSocialMedia(
+    this.socialMedia = new YCSocialMedia(
       _protocol.twitter,
       _protocol.telegram,
       _protocol.discord
     );
 
-    this.#name = _protocol.name;
+    this.name = _protocol.name;
 
-    this.#website = _protocol.website;
+    this.website = _protocol.website;
 
-    this.#logo = _protocol.logo;
+    this.logo = _protocol.logo;
 
-    this.#identifier = _protocol.id;
+    this.id = _protocol.id;
 
     // // Find all tokens that are included in this protocol's markets
     // let tokens = _context.tokens
@@ -67,43 +67,4 @@ export class YCProtocol {
     //   (address: YCAddress) => address.protocol()?.ID() == this.ID()
     // );
   }
-
-  // =======================
-  //        METHODS
-  // ======================
-
-  // Returns the identifier of the protocol
-  ID = () => {
-    return this.#identifier;
-  };
-
-  // Returns the name of the protocol
-  name = () => {
-    return this.#name;
-  };
-
-  // Returns the website of the protocol
-  website = () => {
-    return this.#website;
-  };
-
-  // Returns a YCSocialMedia instance with the protocol's social medias
-  socialMedia = () => {
-    return this.#socialMedia;
-  };
-
-  // Returns the logo of the protocol
-  logo = () => {
-    return this.#logo;
-  };
-
-  // Returns the networks this protocol is available on
-  // networks = () => {
-  //   return this.#networks;
-  // };
-
-  // // Returns the tokens that are available on this protocol as a market (i.e tokens that r liquid on this protocol)
-  // tokens = () => {
-  //   return this.#tokens;
-  // };
 }

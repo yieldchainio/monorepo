@@ -5,13 +5,15 @@ import { YCProtocol } from "../protocol/protocol";
 import { YCToken } from "../token/token";
 
 export class YCStep {
-  // #protocol: YCProtocol;
-  // #inflows: YCToken[] = [];
-  // #outflows: YCToken[] = [];
-  // #children: YCStep[] = [];
-  // #parent: YCStep;
-  // #percentage: number;
-  // #action: YCAction;
+  protocol: YCProtocol;
+  inflows: YCToken[] = [];
+  outflows: YCToken[] = [];
+  children: YCStep[] = [];
+  // parent: YCStep;
+  // percentage: number;
+  // action: YCAction;
 
-  constructor(_step: Step, _context: YCClassifications) {}
+  constructor(_step: Step, _context: YCClassifications) {
+    this.protocol = new YCProtocol(_step.protocol_details, _context);
+  }
 }

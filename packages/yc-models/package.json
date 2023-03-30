@@ -13,8 +13,9 @@
   "author": "Ofir Smolinsky",
   "license": "ISC",
   "dependencies": {
+    "@yc/yc-data": "*",
     "axios": "^1.3.4",
-    "ethers": "^6.1.0",
-    "@yc/yc-data": "*"
+    "ethers": "6.2.3",
+    "flatted": "^3.2.7"
   }
 }

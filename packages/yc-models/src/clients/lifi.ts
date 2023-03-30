@@ -13,13 +13,16 @@ export class LiFi {
   // ====================
   static instance: LiFi;
 
+  static getInstance = () => {
+    if (!this.instance) this.instance = new LiFi();
+    return this.instance;
+  };
+
   // ====================
   //     CONSTRUCTOR
   // ====================
   constructor() {
     this.#apiURL = "https://li.quest/v1";
-    if (!LiFi.instance) LiFi.instance = new LiFi();
-    return LiFi.instance;
   }
 
   // ====================
@@ -51,7 +54,8 @@ export class LiFi {
     _amount?: string,
     _sender?: string,
     _toChain?: number,
-    _receiver?: string
+    _receiver?: string,
+    _currentTry: number = 0
   ): Promise<FullQuoteResponse | null> => {
     let fromChainId = _fromToken.network?.chainid;
     let toChainId = _toToken.network?.chainid;
@@ -60,7 +64,6 @@ export class LiFi {
     let quote: FullQuoteResponse | null = null;
 
     // Sometimes the amount is too low and we gotta retry a couple of times
-    let retries = 0;
     try {
       quote = await (
         await axios.get(
@@ -75,15 +78,16 @@ export class LiFi {
         )
       ).data;
     } catch (e: any) {
-      retries++;
-      return this.getFullQuote(
-        _fromToken,
-        _toToken,
-        _amount,
-        _sender,
-        _toChain,
-        _receiver
-      );
+      if (_currentTry < 5)
+        return this.getFullQuote(
+          _fromToken,
+          _toToken,
+          _amount,
+          _sender,
+          _toChain,
+          _receiver,
+          _currentTry + 1
+        );
     }
 
     return quote;

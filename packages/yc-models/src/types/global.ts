@@ -1,3 +1,6 @@
+import { ContractTransaction, TransactionRequest } from "ethers";
+import { EthersExecutor } from "./ethers";
+
 // Re-typing generic types for more explicitness
 export type uint256 = number;
 export type uint = number;
@@ -19,3 +22,11 @@ export enum ChainID {
   Avalanche = 43114,
   Arbitrum = 42161,
 }
+
+// A signing method to the web3 classes
+export type SignerMethod =
+  | EthersExecutor
+  | (Partial<TransactionRequest> & {
+      from: string;
+      executionCallback: (req: ContractTransaction) => Promise<any>;
+    });

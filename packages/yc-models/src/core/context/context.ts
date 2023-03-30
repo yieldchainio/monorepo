@@ -617,11 +617,25 @@ export class YCClassifications extends YCClassificationsInternal {
   }
 
   get tokens(): YCToken[] {
-    if (!this.YCtokens.length)
+    if (!this.YCtokens.length) {
+      console.log(
+        "YC Tokens Length is 0, so i am mapping our tokens, which are of length: ",
+        this.Tokens.length
+      );
       this.YCtokens = this.Tokens.map(
         (token: DBToken) => new YCToken(token, this)
       );
+
+      console.log(
+        "I am done mapping, our YCTokens length is",
+        this.YCtokens.length
+      );
+    }
     return this.YCtokens;
+  }
+
+  get rawTokens(): DBToken[] {
+    return this.Tokens;
   }
 
   get actions(): YCAction[] {
@@ -687,18 +701,27 @@ export class YCClassifications extends YCClassificationsInternal {
   // Get the full Token instance with a token ID
   getToken = (
     _token_id_or_address: string,
-    _chain_id?: number | string,
+    _chain_id?: number | YCNetwork,
     _dbToken?: DBToken
   ): YCToken | null => {
+    console.log(
+      "I am here in get token, yc tokens length",
+      this.YCtokens.length,
+      "actual tokens length",
+      this.Tokens.length
+    );
     return (
       this.tokens.find((_token: YCToken) => {
         // User inputted an address & a chain ID
-        if (_chain_id && typeof _token_id_or_address == "string")
+        if (_chain_id)
           try {
+            console.log("IN try, is true");
             let address = getAddress(_token_id_or_address);
             return (
               getAddress(_token.address) == address &&
-              _token.chainId == _chain_id
+              (typeof _chain_id == "number"
+                ? _token.network?.chainid == _chain_id
+                : _token.network?.chainid == _chain_id.chainid)
             );
           } catch (err: any) {
             throw new Error(

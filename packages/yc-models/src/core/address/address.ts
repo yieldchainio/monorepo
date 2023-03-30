@@ -68,7 +68,7 @@ export class YCAddress {
   // ====================
 
   // Return the identifier of the current address
-  get ID(): string {
+  get id(): string {
     return this.#identifier;
   }
 
@@ -110,7 +110,7 @@ export class YCAddress {
     return new ethers.Contract(
       this.address,
       this.ABI(),
-      this.#network.provider()
+      this.#network.provider
     );
   }
 

@@ -1,13 +1,4 @@
-import { ethers } from "ethers";
-import {
-  DBAddress,
-  DBFlow,
-  DBFunction,
-  DBToken,
-  DBArgument,
-  DBStrategy,
-  DBProtocol,
-} from "../../types/db";
+import { DBFunction } from "../../types/db";
 import { YCClassifications } from "../context/context";
 import { YCAddress } from "../address/address";
 import { YCArgument } from "../argument/argument";

@@ -27,7 +27,7 @@ export class YCFlow {
     let token = _context.getToken(_flow.token_id);
 
     // Determine whether this is a native currency
-    if (token && token.isNative) this.#native = true;
+    if (token && token.native) this.#native = true;
 
     // @err-handlings
     if (!token) throw new Error("Flow's Token Cannot Be Found!");
@@ -47,14 +47,14 @@ export class YCFlow {
   // =======================
 
   // Retreive flow direction
-  direction = () => {
+  get direction() {
     return this.#direction;
-  };
+  }
 
   // Retreive YCToken class
-  token = () => {
+  get token() {
     return this.#token;
-  };
+  }
 }
 
 // Flow Directions, either

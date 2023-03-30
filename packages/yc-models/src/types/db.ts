@@ -122,4 +122,7 @@ export interface DBUser {
   verified: boolean;
 }
 
-export interface Step {}
+export interface Step {
+  type: string;
+  protocol_details: DBProtocol
+}

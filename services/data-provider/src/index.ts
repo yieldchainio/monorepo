@@ -375,6 +375,18 @@ app.post(
     res: any
   ) => {
     const data: Omit<SignupArguments, "context"> = req.body;
+    if (
+      await prisma.usersv2.findFirst({
+        where: {
+          address: {
+            equals: data.address,
+            mode: "insensitive",
+          },
+        },
+      })
+    )
+      res.status(400).send("USER ALREADY EXISTS");
+
     const result = await prisma.usersv2.create({
       data: {
         address: data.address,

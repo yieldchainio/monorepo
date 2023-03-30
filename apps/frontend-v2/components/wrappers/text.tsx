@@ -52,7 +52,6 @@ const WrappedText = ({
   onInput,
 }: TextProps) => {
   if (children === undefined) {
-    console.log("returning skeeltoon serrr, className:", className);
     return <TextSkeleton fontSize={fontSize} className={className} />;
   }
 

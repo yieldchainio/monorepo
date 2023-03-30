@@ -48,7 +48,7 @@ export const StrategyModal = ({
       callbackRoute={callbackRoute || "/"}
       closeFunction={closeFunction}
     >
-      <div className=" w-[80vw] h-[200vh] bg-custom-bcomponentbg mt-8 rounded-lg flex flex-col items-center justify-start p-8 gap-6">
+      <div className=" w-[80vw] h-[300vh] bg-custom-bcomponentbg mt-8 rounded-lg flex flex-col items-center justify-start p-8 gap-6">
         <TitleSection
           logo={strategy?.depositToken?.logo}
           symbol={strategy?.depositToken?.symbol}

@@ -9,13 +9,14 @@ import GradientButton from "components/buttons/gradient";
 import WrappedImage from "components/wrappers/image";
 import WrappedInput from "components/wrappers/input";
 import WrappedText from "components/wrappers/text";
-import { useCallback, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import useYCUser from "utilities/hooks/yc/useYCUser";
 import { InterModalSection } from "../../general/modal-section";
 import { getProvider } from "@wagmi/core";
 import { ethers } from "ethers";
 import { Web3Provider } from "@ethersproject/providers";
-import { useContractWrite } from "wagmi";
+import { useContractWrite, useSendTransaction, useSigner } from "wagmi";
+import useDebounce from "utilities/hooks/general/useDebounce";
 
 export const StrategyOperationsBox = ({
   strategy,
@@ -27,17 +28,42 @@ export const StrategyOperationsBox = ({
 
   // Keep track of the input box value on the operation box
   const [valueInput, setValueInput] = useState<number>(0);
+  const debouncedValue = useDebounce(valueInput, 500);
+
+  useEffect(() => {
+    console.log("Value Changed ser", valueInput);
+  }, [valueInput]);
+
+  // User's details
+  const { address } = useYCUser();
+
+  const { data: signer, isLoading, isError } = useSigner();
 
   // Handle an operation (Deposit/Withdraw)
-  // TODO:
-  //   const handleOperation = useCallback(
-  //     async (amount: bigint) => {
-  //       const provider = getProvider();
-  //       if (operation == "Deposit")
-  //         await strategy?.deposit(amount, new Web3Provider(window.ethereum));
-  //     },
-  //     [operation, strategy?.toString()]
-  //   );
+  const handleOperation = useCallback(async () => {
+    console.log("Value im gonna input from FE", valueInput);
+    if (!signer) {
+      console.error(
+        "Signer Undefined! data:",
+        signer,
+        "Loading:",
+        isLoading,
+        "Error:",
+        isError
+      );
+    }
+    if (operation == "Deposit")
+      await strategy?.fullDeposit(parseFloat(valueInput.toString()), {
+        from: address as unknown as string,
+        executionCallback: async (req) => {
+          await signer?.provider?.waitForTransaction(
+            (
+              await signer?.sendTransaction(req as any)
+            ).hash
+          );
+        },
+      });
+  }, [operation, strategy?.toString(), debouncedValue]);
 
   return (
     <InterModalSection
@@ -51,8 +77,16 @@ export const StrategyOperationsBox = ({
         setter={setOperation as (status: string) => void}
       />
       <div className="flex flex-col w-full h-full items-center justify-center gap-6">
-        <InputSection strategy={strategy} state={operation} />
-        <GradientButton className="py-3 max-w-[300px]" width={"w-[80%]"}>
+        <InputSection
+          strategy={strategy}
+          state={operation}
+          onChange={(value: number) => setValueInput(value)}
+        />
+        <GradientButton
+          className="py-3 max-w-[300px]"
+          width={"w-[80%]"}
+          onClick={async () => await handleOperation()}
+        >
           {"Confirm" + " " + operation}
         </GradientButton>
       </div>
@@ -67,9 +101,11 @@ export const StrategyOperationsBox = ({
 const InputSection = ({
   strategy,
   state,
+  onChange,
 }: {
   strategy?: YCStrategy;
   state: "Deposit" | "Withdraw";
+  onChange: (value: number) => any;
 }) => {
   return (
     <div className="flex flex-col items-center justify-start gap-2 w-full">
@@ -93,6 +129,9 @@ const InputSection = ({
           type={"number"}
           placeholder="0.00"
           className="w-max pr-[2vw]"
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            onChange(e.target.value as unknown as number)
+          }
         ></WrappedInput>
       </div>
     </div>
@@ -119,10 +158,15 @@ const OperationsHeader = <T extends string[]>({
   }, [state]);
 
   return (
-    <div className="w-full h-[20%] bg-custom-bg rounded-t-xl flex flex-col gap-0">
+    <div className="w-full h-[20%] bg-custom-bg rounded-t-xl flex flex-col gap-0 border-[1px] border-custom-border dark:border-[0px]">
       <div className="flex flex-row w-full h-full  ">
-        {titles.map((title) => (
-          <OperationTitle<string> title={title} setter={setter} state={state} />
+        {titles.map((title, i) => (
+          <OperationTitle<string>
+            title={title}
+            setter={setter}
+            state={state}
+            key={i}
+          />
         ))}
       </div>
       <div

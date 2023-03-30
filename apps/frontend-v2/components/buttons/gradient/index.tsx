@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { CSSProperties } from "react";
 /**
  * @notice
  * This is the main button used across the app
@@ -9,6 +10,7 @@ interface ButtonProps {
   onClick?: (e?: React.MouseEvent<HTMLElement>) => any;
   className?: string;
   width?: `w-${string}`;
+  style?: CSSProperties
 }
 
 /**
@@ -21,6 +23,7 @@ const GradientButton = ({
   onClick,
   className,
   width = "w-max",
+  style
 }: ButtonProps) => {
   return (
     <motion.div
@@ -34,6 +37,7 @@ const GradientButton = ({
         background: "var(--main-gradient)",
         border: "2px solid var(--subbg)",
         borderRadius: "12px",
+        ...style
       }}
       whileHover={{
         background:

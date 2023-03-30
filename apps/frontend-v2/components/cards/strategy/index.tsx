@@ -106,9 +106,12 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
             divisorClassname=" mb-[0.5rem] mt-[0.5rem]"
           ></Section>
           <GradientButton
-            className="mt-4 rounded-[0.9rem] pl-[6rem] pr-[6rem] pt-[0.5rem] pb-[0.5rem] ml-[0px] "
+            className="mt-4 rounded-[0.9rem] pl-[6rem] pr-[6rem] pt-[0.5rem] pb-[0.5rem] ml-[0px] max-w-[100px] "
             onClick={() => {
               routeToStrategy();
+            }}
+            style={{
+              maxWidth: "200px"
             }}
           >
             <WrappedText

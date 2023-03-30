@@ -195,7 +195,7 @@ const BrowseHeroSection = ({
           <WrappedInput
             fontSize={16}
             fontStyle={"reguler"}
-            width="w-2/3"
+            width="w-full"
             // We add a filter onchange to filter by the input
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               const newArr = [...filters].filter(

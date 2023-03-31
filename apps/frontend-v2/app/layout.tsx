@@ -19,7 +19,7 @@ export default async function RootLayout({
 }) {
   // First return the data initiallizor, then the entire app
   // Fetch the initial data
-  const data: ClassificationContext = await fetchYC(DataVersions.V1);
+  const data: ClassificationContext = await fetchYC(DataVersions.V2);
 
   return (
     <html lang="en" className="dark">

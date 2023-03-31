@@ -17,6 +17,7 @@ export const fetchYC = async (
     _networks,
     _actions,
     _users,
+    _statistics,
   ] = await Promise.all([
     axios.get(baseApi + "/v2/addresses"),
     axios.get(baseApi + "/v2/functions"),
@@ -28,6 +29,7 @@ export const fetchYC = async (
     axios.get(baseApi + "/v2/networks"),
     axios.get(baseApi + "/v2/actions"),
     axios.get(baseApi + "/v2/users"),
+    axios.get(baseApi + "/v2/statistics"),
   ]);
 
   // Set all of the DB info
@@ -41,6 +43,8 @@ export const fetchYC = async (
   const networks = _networks.data.networks;
   const actions = _actions.data.actions;
   const users = _users.data.users;
+  const statistics = _statistics.data.statistics;
+
 
   return {
     addresses,
@@ -53,6 +57,7 @@ export const fetchYC = async (
     users,
     parameters,
     tokens,
+    statistics,
   };
 };
 

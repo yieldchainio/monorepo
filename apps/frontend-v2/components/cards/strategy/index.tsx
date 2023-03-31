@@ -14,6 +14,7 @@ import useYCUser from "utilities/hooks/yc/useYCUser";
 import { StrategyTokenSection } from "./token-section";
 import GradientButton from "components/buttons/gradient";
 import { useRouter } from "next/navigation";
+import { InfoProvider } from "components/info-provider";
 
 interface StrategyCardProps {
   strategy: YCStrategy;
@@ -105,27 +106,29 @@ export const StrategyCard = ({ strategy }: StrategyCardProps) => {
             titlesClassname={"text-opacity-25"}
             divisorClassname=" mb-[0.5rem] mt-[0.5rem]"
           ></Section>
-          <GradientButton
-            className="mt-4 rounded-[0.9rem] pl-[6rem] pr-[6rem] pt-[0.5rem] pb-[0.5rem] ml-[0px] max-w-[100px] "
-            onClick={() => {
-              routeToStrategy();
-            }}
-            style={{
-              maxWidth: "200px"
-            }}
-          >
-            <WrappedText
-              fontSize={14}
-              fontColor={"inherit"}
-              fontStyle={"bold"}
-              className="text-elipsis overflow-visible"
+          <InfoProvider contents="Enter Vault">
+            <GradientButton
+              className="mt-4 rounded-[0.9rem] pl-[6rem] pr-[6rem] pt-[0.5rem] pb-[0.5rem] ml-[0px] max-w-[100px] "
+              onClick={() => {
+                routeToStrategy();
+              }}
               style={{
-                textOverflow: "visible",
+                maxWidth: "200px",
               }}
             >
-              Enter Vault
-            </WrappedText>
-          </GradientButton>
+              <WrappedText
+                fontSize={14}
+                fontColor={"inherit"}
+                fontStyle={"bold"}
+                className="text-elipsis overflow-visible"
+                style={{
+                  textOverflow: "visible",
+                }}
+              >
+                Enter Vault
+              </WrappedText>
+            </GradientButton>
+          </InfoProvider>
         </div>
       </div>
     </div>

@@ -97,14 +97,23 @@ module.exports = {
         accountPopup: "accountPopup 0.2s ease-in-out",
         popup: "popup 0.2s ease-in-out",
         dropdown: "dropdown 0.2s ease-in-out",
+        toolTip: "toolTip 0.2s ease-in-out",
       },
-      keyframes: {
+      keyframes: (theme) => ({
         popup: {
           "0%": {
             transform: "scale(0.5)",
           },
           "100%": {
             transform: "scale(1)",
+          },
+        },
+        toolTip: {
+          "0%": {
+            transform: "translate(-50%, -50%) scale(0.25)",
+          },
+          "100%": {
+            transform: "translate(-50%, -50%) scale(1)",
           },
         },
         dropdown: {
@@ -131,7 +140,7 @@ module.exports = {
             transform: "translateY(0px)",
           },
         },
-      },
+      }),
       backgroundSize: {
         "size-200": "200% 200%",
       },

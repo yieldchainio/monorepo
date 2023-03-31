@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CSSProperties } from "react";
+import { CSSProperties, forwardRef } from "react";
 /**
  * @notice
  * This is the main button used across the app
@@ -10,7 +10,7 @@ interface ButtonProps {
   onClick?: (e?: React.MouseEvent<HTMLElement>) => any;
   className?: string;
   width?: `w-${string}`;
-  style?: CSSProperties
+  style?: CSSProperties;
 }
 
 /**
@@ -18,37 +18,39 @@ interface ButtonProps {
  * @param onClick - what to execute onClick
  * @param className - @optional tailwindcss class
  */
-const GradientButton = ({
-  children,
-  onClick,
-  className,
-  width = "w-max",
-  style
-}: ButtonProps) => {
-  return (
-    <motion.div
-      className={
-        width +
-        " " +
-        " max-w-[400px] h-max font-athletics font-bold text-[14.5px] flex items-center justify-center cursor-pointer z-100 hover:text-custom-textColor select-none blur-none text-black transition duration-200 ease-in-out active:scale-[0.99] py-2 px-5 tablet:px-3.5 tablet:py-1.5 " +
-        (className || "")
-      }
-      style={{
-        background: "var(--main-gradient)",
-        border: "2px solid var(--subbg)",
-        borderRadius: "12px",
-        ...style
-      }}
-      whileHover={{
-        background:
-          "linear-gradient(var(--bg), var(--bg)) padding-box, var(--main-gradient) border-box",
-        border: "2px solid transparent",
-      }}
-      onClick={onClick}
-    >
-      {children}
-    </motion.div>
-  );
-};
+
+const GradientButton = forwardRef<HTMLDivElement, ButtonProps>(
+  (
+    { children, onClick, className, width = "w-max", style, ...props }: ButtonProps,
+    ref
+  ) => {
+    return (
+      <motion.div
+        ref={ref}
+        className={
+          width +
+          " " +
+          " max-w-[400px] h-max font-athletics font-bold text-[14.5px] flex items-center justify-center cursor-pointer z-100 hover:text-custom-textColor select-none blur-none text-black transition duration-200 ease-in-out active:scale-[0.99] py-2 px-5 tablet:px-3.5 tablet:py-1.5 " +
+          (className || "")
+        }
+        style={{
+          background: "var(--main-gradient)",
+          border: "2px solid var(--subbg)",
+          borderRadius: "12px",
+          ...style,
+        }}
+        whileHover={{
+          background:
+            "linear-gradient(var(--bg), var(--bg)) padding-box, var(--main-gradient) border-box",
+          border: "2px solid transparent",
+        }}
+        onClick={onClick}
+        {...props}
+      >
+        {children}
+      </motion.div>
+    );
+  }
+);
 
 export default GradientButton;

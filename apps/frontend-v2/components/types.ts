@@ -1,6 +1,7 @@
 export interface BaseComponentProps<T = any> {
   className?: string;
   breakpoints?: BreakPoint<T>;
+  children?: React.ReactNode;
 }
 
 export type BreakPoint<T> = T & {

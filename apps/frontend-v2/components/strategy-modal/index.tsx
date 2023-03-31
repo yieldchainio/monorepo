@@ -55,8 +55,8 @@ export const StrategyModal = ({
           title={strategy?.title}
         />
         <div className="w-full h-full flex flex-col items-center justify-start gap-3 max-w-[1250px] ">
-          <ApyChart />
-          <div className="flex flex-row w-full h-[40%] tablet:h-[50%] gap-3 items-end justify-between ">
+          <ApyChart strategy={strategy} />
+          <div className="flex flex-row w-full h-[40%] tablet:h-[40%] gap-3 items-end justify-between ">
             <div
               className="flex flex-col w-[100%] h-full gap-3 smallMobile:w-[35%] tablet:w-[40%] flex-wrap tablet:flex-row tablet:gap-3 justify-start items-start "
               onClick={() =>

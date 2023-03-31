@@ -140,5 +140,5 @@ export interface DBStatistic {
   strategy_id: string;
   timestamp: Date;
   apy: number;
-  gasFee: bigint;
+  gasFee: string;
 }

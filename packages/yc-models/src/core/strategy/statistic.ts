@@ -16,6 +16,6 @@ export class YCStatistic {
     this.strategyId = statistic.strategy_id;
     this.timestamp = statistic.timestamp;
     this.apy = statistic.apy;
-    this.gasFee = statistic.gasFee;
+    this.gasFee = BigInt(statistic.gasFee);
   }
 }

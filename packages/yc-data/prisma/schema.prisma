@@ -189,7 +189,7 @@ model statistics {
   strategy_id String
   timestamp   DateTime     @default(now())
   apy         Int
-  gasFee      BigInt
+  gasFee      String
   strategy    strategiesv2 @relation(fields: [strategy_id], references: [id])
 
   @@schema("YieldchainV2")

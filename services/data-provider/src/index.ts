@@ -22,7 +22,15 @@ dotenv.config();
 import { FlowDirection, PrismaClient } from "@prisma/client";
 
 console.log("DAtabase URL", process.env.DATABASE_URL);
-console.log("dotenv obj ser", dotenv);
+
+/**
+ * Patches
+ */
+// =====================
+
+// @ts-ignore
+BigInt.prototype.toJSON = () => this?.toString();
+// =====================
 
 // Instantitate PG Client
 const { Client } = pg;
@@ -362,13 +370,8 @@ app.get("/v2/functions", async (req: any, res: any) => {
  * @dev statistics about strategies (apy, gas fees in timestamps. To generate charts and etc)
  */
 app.get("/v2/statistics", async (req: any, res: any) => {
-  try {
-    const statistics = await prisma.statistics.findMany();
-    res.status(200).json({ statistics });
-  } catch (e: any) {
-    console.error("Err while getting v2 statistics, error:", e);
-    res.status(400).json({ error: e });
-  }
+  const statistics = await prisma.statistics.findMany();
+  res.status(200).json({ statistics });
 });
 
 /**

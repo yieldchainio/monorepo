@@ -26,7 +26,9 @@ import {
   DBAction,
   DBUser,
   fetchRouter,
+  DBStatistic,
 } from "@yc/yc-models";
+import { YCStatistic } from "../strategy/statistic";
 
 /**
  * @notice
@@ -69,6 +71,7 @@ class YCClassificationsInternal {
   protected Strategies: DBStrategy[] = [];
   protected Networks: DBNetwork[] = [];
   protected Actions: DBAction[] = [];
+  protected Statistics: DBStatistic[] = [];
   protected Users: DBUser[] = [];
 
   YCaddresses: YCAddress[] = [];
@@ -81,6 +84,7 @@ class YCClassificationsInternal {
   YCnetworks: YCNetwork[] = [];
   YCactions: YCAction[] = [];
   YCusers: YCUser[] = [];
+  YCStatistics: YCStatistic[] = [];
 
   // Prisma Client
   protected Client: PrismaClient | null = null;
@@ -230,6 +234,22 @@ class YCClassificationsInternal {
     ).data.actions;
   };
 
+  protected fetchStatistics = async () => {
+    this.Statistics =
+      (await fetchRouter<DBStatistic[]>({
+        backend: {
+          fetcher: async () =>
+            <DBStatistic[]>((await this?.Client?.statistics.findMany()) || []),
+        },
+        frontend: {
+          fetcher: async () =>
+            await (
+              await axios.get(YCClassifications.apiURL + "/v2/statistics")
+            ).data.statistics,
+        },
+      })) || [];
+  };
+
   // All of the fetching functions
   protected refreshNetworks = async () => {
     this.YCnetworks = this.Networks.map(
@@ -298,6 +318,12 @@ class YCClassificationsInternal {
     this.YCactions = this.Actions.map(
       (action: DBAction) =>
         new YCAction(action, YCClassificationsInternal.getInstance())
+    );
+  };
+
+  protected refreshStatistics = async () => {
+    this.YCStatistics = this.Statistics.map(
+      (statistic: DBStatistic) => new YCStatistic(statistic)
     );
   };
 
@@ -400,6 +426,11 @@ class YCClassificationsInternal {
       refresh: this.refreshFunctions,
       get: () => YCClassificationsInternal.Instance.Functions,
     },
+    [Endpoints.STATISTICS]: {
+      fetch: this.fetchStatistics,
+      refresh: this.refreshStatistics,
+      get: () => YCClassificationsInternal.Instance.Statistics,
+    },
   };
 
   /**
@@ -414,10 +445,6 @@ class YCClassificationsInternal {
     return true;
   };
 }
-
-/**
- * Configs for them
- */
 
 // A class representing Yieldchain's classifications. Constructs itself with DB info and has retreival methods/"Indexes"
 export class YCClassifications extends YCClassificationsInternal {

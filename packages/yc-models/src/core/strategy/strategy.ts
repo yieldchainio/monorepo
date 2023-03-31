@@ -5,7 +5,7 @@ import {
   EthersTransactionResponse,
   SignerMethod,
 } from "../../types";
-import { DBStrategy, Step } from "../../types/db";
+import { DBStrategy, DBStep } from "../../types/db";
 import { BaseClass, BaseWeb3Class } from "../base";
 import { YCClassifications } from "../context/context";
 import { YCNetwork } from "../network/network";
@@ -19,6 +19,7 @@ import {
   getAddress,
   TransactionRequest,
 } from "ethers";
+import { YCStatistic } from "./statistic";
 
 export class YCStrategy extends BaseClass {
   // =================================
@@ -39,6 +40,7 @@ export class YCStrategy extends BaseClass {
   readonly verified: boolean;
   readonly network: YCNetwork | null;
   readonly executionInterval: number;
+  readonly statistics: YCStatistic[] = [];
 
   /**
    * Public getters/methods
@@ -371,7 +373,7 @@ export class YCStrategy extends BaseClass {
     ) as YCToken;
     this.creator = _context.getUser(_strategy.creator_id) || null;
     this.steps = _strategy.steps.map(
-      (step) => new YCStep(step as unknown as Step, _context)
+      (step) => new YCStep(step as unknown as DBStep, _context)
     );
     this.verified = _strategy.verified;
     this.network = _context.getNetwork(_strategy.chain_id);

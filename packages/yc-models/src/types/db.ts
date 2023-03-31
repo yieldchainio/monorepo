@@ -122,7 +122,23 @@ export interface DBUser {
   verified: boolean;
 }
 
-export interface Step {
-  type: string;
-  protocol_details: DBProtocol
+export interface DBStep {
+  id: string | "root";
+  parentId: string | null;
+  protocol: DBProtocol;
+  percentage: number;
+  inflows: DBFlow[];
+  outflows: DBFlow[];
+  action: DBAction;
+  function: DBFunction;
+  customArgs: DBArgument[];
+  children: DBStep[];
+}
+
+export interface DBStatistic {
+  id: string;
+  strategy_id: string;
+  timestamp: Date;
+  apy: number;
+  gasFee: bigint;
 }

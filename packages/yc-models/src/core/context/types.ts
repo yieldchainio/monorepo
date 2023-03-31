@@ -13,4 +13,5 @@ export enum Endpoints {
   ARGUMENTS = "arguments",
   ADDRESSES = "addresses",
   ACTIONS = "actions",
+  STATISTICS = "statistics",
 }

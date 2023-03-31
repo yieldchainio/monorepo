@@ -6,7 +6,7 @@ dotenv.config();
 
 const provider = new ethers.JsonRpcProvider(
   // Arbitrum RPC
-  "https://arb1.arbitrum.io/rpc"
+  "https://rpc.ankr.com/arbitrum"
 );
 
 let wallet: Wallet = new ethers.Wallet(

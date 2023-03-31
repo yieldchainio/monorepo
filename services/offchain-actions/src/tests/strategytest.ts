@@ -7,7 +7,7 @@ const abi = await getABI();
 
 const provider = new ethers.JsonRpcProvider(
   // Arbitrum RPC URL
-  "https://arb1.arbitrum.io/rpc"
+  "https://rpc.ankr.com/arbitrum"
 );
 
 let wallet: Wallet = new ethers.Wallet(

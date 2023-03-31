@@ -41,7 +41,7 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY],
     },
     arbitrum: {
-      url: "https://arb1.arbitrum.io/rpc",
+      url: "https://rpc.ankr.com/arbitrum",
       accounts: [process.env.PRIVATE_KEY],
     },
     ganache: {

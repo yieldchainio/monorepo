@@ -58,7 +58,7 @@ class EventQueue {
   // Add initial provider(s) to listen to when running the app
   constructor() {
     this.addProvider("https://bsc-dataseed.binance.org/");
-    this.addProvider("https://arb1.arbitrum.io/rpc");
+    this.addProvider("https://rpc.ankr.com/arbitrum");
     this.listen();
   }
 

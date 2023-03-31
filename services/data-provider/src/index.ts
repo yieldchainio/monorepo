@@ -359,6 +359,18 @@ app.get("/v2/functions", async (req: any, res: any) => {
 });
 
 /**
+ * @dev statistics about strategies (apy, gas fees in timestamps. To generate charts and etc)
+ */
+app.get("/v2/statistics", async (req: any, res: any) => {
+  try {
+    const statistics = await prisma.statistics.findMany();
+    res.status(200).json({ statistics });
+  } catch (e: any) {
+    res.status(400).json({ error: e });
+  }
+});
+
+/**
  * @dev Actions (e.g Stake, Swap, Harvest, Add Liquidity...),
  */
 app.get("/v2/actions", async (req: any, res: any) => {

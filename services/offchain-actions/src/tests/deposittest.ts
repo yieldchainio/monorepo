@@ -7,7 +7,7 @@ dotenv.config();
 
 const provider = new ethers.JsonRpcProvider(
   // Arbitrum RPC
-  "https://arb1.arbitrum.io/rpc"
+  "https://rpc.ankr.com/arbitrum"
 );
 const wallet = new ethers.Wallet("0x" + process.env.PRIVATE_KEY, provider);
 

@@ -12,7 +12,6 @@ datasource db {
 model functionsv2 {
   id                     String            @id @default(uuid())
   name                   String
-  callback               Boolean           @default(false)
   inverse_function_id    String?
   dependancy_function_id String?
   call_type              CallType
@@ -20,12 +19,13 @@ model functionsv2 {
   return_value_base_type BaseVariableTypes
   address_id             String
   arguments_ids          String[]
+  callback               Boolean           @default(false)
   flows_ids              String[]
   actions_ids            String[]
-  address                addressesv2       @relation(fields: [address_id], references: [id])
-  actions                actionsv2[]       @relation("actionsv2Tofunctionsv2")
   argumentsv2            argumentsv2[]
   flows                  flowsv2[]
+  address                addressesv2       @relation(fields: [address_id], references: [id])
+  actions                actionsv2[]       @relation("actionsv2Tofunctionsv2")
 
   @@map("functions")
   @@schema("YieldchainV2")
@@ -36,11 +36,11 @@ model flowsv2 {
   direction    FlowDirection
   token_id     String
   function_id  String
-  function     functionsv2   @relation(fields: [function_id], references: [id])
-  token        tokensv2      @relation(fields: [token_id], references: [id])
   old_id       Int?
   old_func_id  Int?
   old_token_id Int?
+  function     functionsv2   @relation(fields: [function_id], references: [id])
+  token        tokensv2      @relation(fields: [token_id], references: [id])
 
   @@map("flows")
   @@schema("YieldchainV2")
@@ -55,8 +55,8 @@ model tokensv2 {
   decimals     Int
   chain_id     Int
   flows        flowsv2[]
-  markets      protocolsv2[]  @relation("protocolsv2Totokensv2")
   strategiesv2 strategiesv2[]
+  markets      protocolsv2[]  @relation("protocolsv2Totokensv2")
 
   @@map("tokens")
   @@schema("YieldchainV2")
@@ -82,9 +82,9 @@ model addressesv2 {
   abi           Json          @db.Json
   chain_id      Int
   protocol_id   String
+  functions_ids String[]
   network       networksv2    @relation(fields: [chain_id], references: [id])
   protocol      protocolsv2   @relation(fields: [protocol_id], references: [id])
-  functions_ids String[]
   functions     functionsv2[]
 
   @@map("addresses")
@@ -117,8 +117,8 @@ model argumentsv2 {
   base_type     BaseVariableTypes
   name          String?
   dev_notes     String?
-  function      functionsv2       @relation(fields: [function_id], references: [id])
   function_id   String
+  function      functionsv2       @relation(fields: [function_id], references: [id])
 
   @@map("arguments")
   @@schema("YieldchainV2")
@@ -157,11 +157,11 @@ model strategiesv2 {
   execution_interval Int
   steps              Json[]        @db.Json
   deposit_token_id   String
+  statistics         statistics[]
   network            networksv2    @relation(fields: [chain_id], references: [id])
   creator            usersv2       @relation(fields: [creator_id], references: [id])
+  token              tokensv2      @relation(fields: [deposit_token_id], references: [id])
   protocols          protocolsv2[] @relation("protocolsv2Tostrategiesv2")
-  token              tokensv2      @relation(references: [id], fields: [deposit_token_id])
-  statistics         statistics[]
 
   @@map("strategies")
   @@schema("YieldchainV2")
@@ -185,12 +185,12 @@ model usersv2 {
 }
 
 model statistics {
-  statistic_id String       @id @default(uuid())
-  strategy_id  String
-  timestamp    DateTime     @default(now())
-  apy          Int
-  gasFee       BigInt
-  strategy     strategiesv2 @relation(fields: [strategy_id], references: [id])
+  id          String       @id
+  strategy_id String
+  timestamp   DateTime     @default(now())
+  apy         Int
+  gasFee      BigInt
+  strategy    strategiesv2 @relation(fields: [strategy_id], references: [id])
 
   @@schema("YieldchainV2")
 }

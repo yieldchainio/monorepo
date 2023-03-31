@@ -386,6 +386,7 @@ export class YCStrategy extends BaseClass {
 
     this.executionInterval = _strategy.execution_interval;
 
+    this.statistics = _context.getStrategyStats(this.id);
     this.#setTVL();
     this.#setGasBalance();
   }

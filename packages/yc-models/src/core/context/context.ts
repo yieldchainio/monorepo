@@ -682,6 +682,13 @@ export class YCClassifications extends YCClassificationsInternal {
     return this.YCusers;
   }
 
+  get statistics() {
+    if (!this.YCStatistics.length) {
+      this.YCStatistics = this.Statistics.map((stat) => new YCStatistic(stat));
+    }
+    return this.YCStatistics;
+  }
+
   // ==============
   //    METHODS
   // ==============
@@ -798,5 +805,9 @@ export class YCClassifications extends YCClassificationsInternal {
 
   getUser = (_userID: string): YCUser | null => {
     return this.users.find((_user: YCUser) => _user.id == _userID) || null;
+  };
+
+  getStrategyStats = (_strategyID: string): YCStatistic[] => {
+    return this.statistics.filter((stat) => stat.strategyId == _strategyID);
   };
 }

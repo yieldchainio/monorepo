@@ -161,6 +161,7 @@ model strategiesv2 {
   creator            usersv2       @relation(fields: [creator_id], references: [id])
   protocols          protocolsv2[] @relation("protocolsv2Tostrategiesv2")
   token              tokensv2      @relation(references: [id], fields: [deposit_token_id])
+  statistics         statistics[]
 
   @@map("strategies")
   @@schema("YieldchainV2")
@@ -180,6 +181,17 @@ model usersv2 {
   created_strategiesv2 strategiesv2[]
 
   @@map("users")
+  @@schema("YieldchainV2")
+}
+
+model statistics {
+  statistic_id String       @id @default(uuid())
+  strategy_id  String
+  timestamp    DateTime     @default(now())
+  apy          Int
+  gasFee       BigInt
+  strategy     strategiesv2 @relation(fields: [strategy_id], references: [id])
+
   @@schema("YieldchainV2")
 }
 

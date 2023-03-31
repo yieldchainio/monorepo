@@ -366,6 +366,7 @@ app.get("/v2/statistics", async (req: any, res: any) => {
     const statistics = await prisma.statistics.findMany();
     res.status(200).json({ statistics });
   } catch (e: any) {
+    console.error("Err while getting v2 statistics, error:", e);
     res.status(400).json({ error: e });
   }
 });

@@ -1,7 +1,10 @@
+import { CSSProperties } from "react";
+
 export interface BaseComponentProps<T = any> {
   className?: string;
   breakpoints?: BreakPoint<T>;
   children?: React.ReactNode;
+  style?: CSSProperties
 }
 
 export type BreakPoint<T> = T & {

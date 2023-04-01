@@ -5,6 +5,7 @@ export enum FilterTypes {
   RANGE,
   OPTIONS,
   STRING,
+  CHOICE,
 }
 
 // The base filter (has a type + callback)
@@ -29,8 +30,14 @@ export interface RangeFilter<T> extends BaseFilter<T> {
 
 export interface OptionsFilter<T, OPT = any> extends BaseFilter<T> {
   type: FilterTypes.OPTIONS;
-  callback: (item: T, config: OptionsFilter<T>) => any;
+  callback: (item: T, config: OptionsFilter<T, OPT>) => any;
   selectedOptions: OPT[];
+}
+
+export interface ChoiceFilter<T, OPT = any> extends BaseFilter<T> {
+  type: FilterTypes.CHOICE;
+  callback: (item: T, config: ChoiceFilter<T, OPT>) => any;
+  choice: OPT;
 }
 
 export interface StringFilter<T> extends BaseFilter<T> {

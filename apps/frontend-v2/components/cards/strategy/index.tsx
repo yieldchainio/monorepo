@@ -34,7 +34,6 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
       router.push(`/strategy/${strategy.id}`);
     };
 
-
     return (
       <div
         className="w-max h-max bg-custom-bcomponentbg rounded-[2rem] flex flex-col items-center justify-start border-[1px] border-custom-themedBorder shadow-sm"
@@ -66,7 +65,7 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
               </div>
             </div>
             <WrappedText fontStyle="medium" fontSize={16} className="">
-              APY: 200%
+              {`APY: ${strategy.apy}%`}
             </WrappedText>
           </div>
         </div>

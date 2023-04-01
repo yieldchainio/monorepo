@@ -30,10 +30,6 @@ export const StrategyOperationsBox = ({
   const [valueInput, setValueInput] = useState<number>(0);
   const debouncedValue = useDebounce(valueInput, 500);
 
-  useEffect(() => {
-    console.log("Value Changed ser", valueInput);
-  }, [valueInput]);
-
   // User's details
   const { address } = useYCUser();
 

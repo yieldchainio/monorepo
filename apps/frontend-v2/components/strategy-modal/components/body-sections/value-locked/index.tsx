@@ -54,13 +54,6 @@ export const ValueLocked = ({ strategy }: { strategy?: YCStrategy }) => {
           );
           setUserUSDDeposit(formatMoney(usdValue));
         }
-      } else {
-        console.error(
-          "Ser Strategy aNad address not defined, strategy:",
-          strategy,
-          "address",
-          address
-        );
       }
     })();
   }, [strategy?.toString(), address]);

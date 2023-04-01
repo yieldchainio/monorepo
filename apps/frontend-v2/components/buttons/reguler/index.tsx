@@ -4,10 +4,10 @@
 
 import { forwardRef, useState } from "react";
 import { hexColors } from "configs/styles/colors";
-import {RegulerButtonProps} from "./types"
+import { RegulerButtonProps } from "./types";
 
 export const RegulerButton = forwardRef<HTMLDivElement, RegulerButtonProps>(
-  ({ onClick, children, className }: RegulerButtonProps, ref) => {
+  ({ onClick, children, className, style }: RegulerButtonProps, ref) => {
     // If we are loading, we display some loading spinner
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -31,6 +31,7 @@ export const RegulerButton = forwardRef<HTMLDivElement, RegulerButtonProps>(
           onClick && clickHandler(e).then((res: any) => res)
         }
         ref={ref}
+        style={style || {}}
       >
         {children}
         {loading && (

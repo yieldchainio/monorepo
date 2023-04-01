@@ -16,7 +16,16 @@ export const useFilters = <V, T extends BaseFilter<V>>({
   filters,
   setter,
   stringifier = (_items: V[]) =>
-    JSON.stringify(_items.map((_item) => JSON.stringify(_item))),
+    JSON.stringify(
+      _items.map((_item) =>
+        JSON.stringify(_item, (key, value) => {
+          return typeof value === "bigint" ? value.toString() : value;
+        })
+      ),
+      (key, value) => {
+        return typeof value === "bigint" ? value.toString() : value;
+      }
+    ),
 }: UseFilterProps<V, T>) => {
   // A state for the filtered array
   const [filteredItems, setFilteredItems] = useState<V[]>([]);

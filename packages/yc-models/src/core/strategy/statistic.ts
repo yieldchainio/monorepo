@@ -8,13 +8,13 @@ import { DBStatistic } from "../../types";
 export class YCStatistic {
   readonly id: string;
   readonly strategyId: string;
-  readonly timestamp: Date;
+  readonly timestamp: string;
   readonly apy: number;
   readonly gasFee: bigint;
   constructor(statistic: DBStatistic) {
     this.id = statistic.id;
     this.strategyId = statistic.strategy_id;
-    this.timestamp = statistic.timestamp;
+    this.timestamp = statistic.timestamp as string;
     this.apy = statistic.apy;
     this.gasFee = BigInt(statistic.gasFee);
   }

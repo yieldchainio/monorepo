@@ -210,6 +210,7 @@ class YCClassificationsInternal {
   };
 
   protected fetchStrategies = async () => {
+
     (await fetchRouter<DBStrategy[]>({
       backend: {
         fetcher: async () =>
@@ -235,6 +236,8 @@ class YCClassificationsInternal {
   };
 
   protected fetchStatistics = async () => {
+    console.log("Fetched statistics! it is:", this.Statistics);
+
     this.Statistics =
       (await fetchRouter<DBStatistic[]>({
         backend: {
@@ -246,6 +249,8 @@ class YCClassificationsInternal {
             await (
               await axios.get(YCClassifications.apiURL + "/v2/statistics")
             ).data.statistics,
+
+          setter: (value: DBStatistic[]) => (this.Statistics = value),
         },
       })) || [];
   };
@@ -479,6 +484,7 @@ export class YCClassifications extends YCClassificationsInternal {
     this.Protocols = jsonContext.protocols;
     this.Strategies = jsonContext.strategies;
     this.Users = jsonContext.users;
+    this.Statistics = jsonContext.statistics;
   };
 
   /**
@@ -527,7 +533,6 @@ export class YCClassifications extends YCClassificationsInternal {
   public refresh = async (
     _endpoints: Endpoints[] | Endpoints
   ): Promise<boolean> => {
-    console.log("Refresh is called!");
     // Shove em into an array
     const endpoints = Array.isArray(_endpoints) ? _endpoints : [_endpoints];
 
@@ -541,7 +546,6 @@ export class YCClassifications extends YCClassificationsInternal {
 
       // Iterate over each endpoint
       for (const endpoint of endpoints) {
-        console.log("Refreshing this endpoint:", endpoint);
         // get the config
         const config = this.ENDPOINT_CONFIGS[endpoint];
 
@@ -645,17 +649,8 @@ export class YCClassifications extends YCClassificationsInternal {
 
   get tokens(): YCToken[] {
     if (!this.YCtokens.length) {
-      console.log(
-        "YC Tokens Length is 0, so i am mapping our tokens, which are of length: ",
-        this.Tokens.length
-      );
       this.YCtokens = this.Tokens.map(
         (token: DBToken) => new YCToken(token, this)
-      );
-
-      console.log(
-        "I am done mapping, our YCTokens length is",
-        this.YCtokens.length
       );
     }
     return this.YCtokens;
@@ -738,18 +733,11 @@ export class YCClassifications extends YCClassificationsInternal {
     _chain_id?: number | YCNetwork,
     _dbToken?: DBToken
   ): YCToken | null => {
-    console.log(
-      "I am here in get token, yc tokens length",
-      this.YCtokens.length,
-      "actual tokens length",
-      this.Tokens.length
-    );
     return (
       this.tokens.find((_token: YCToken) => {
         // User inputted an address & a chain ID
         if (_chain_id)
           try {
-            console.log("IN try, is true");
             let address = getAddress(_token_id_or_address);
             return (
               getAddress(_token.address) == address &&

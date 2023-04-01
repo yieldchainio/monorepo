@@ -14,6 +14,7 @@ import {
   DBProtocol,
   DBNetwork,
   DBUser,
+  DBStatistic,
 } from "./db";
 export interface ClassificationContext {
   addresses: DBAddress[];
@@ -26,6 +27,7 @@ export interface ClassificationContext {
   actions: DBAction[];
   networks: DBNetwork[];
   users: DBUser[];
+  statistics: DBStatistic[]
 }
 
 // A step inputted from the frontend

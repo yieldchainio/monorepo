@@ -41,6 +41,7 @@ export class YCStrategy extends BaseClass {
   readonly network: YCNetwork | null;
   readonly executionInterval: number;
   readonly statistics: YCStatistic[] = [];
+  readonly apy: number;
 
   /**
    * Public getters/methods
@@ -388,7 +389,12 @@ export class YCStrategy extends BaseClass {
 
     this.statistics = _context
       .getStrategyStats(this.id)
-      .sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
+      .sort(
+        (a, b) =>
+          new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf()
+      );
+
+    this.apy = this.statistics[this.statistics.length - 1].apy;
     this.#setTVL();
     this.#setGasBalance();
   }

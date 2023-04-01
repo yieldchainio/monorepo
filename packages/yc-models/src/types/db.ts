@@ -138,7 +138,7 @@ export interface DBStep {
 export interface DBStatistic {
   id: string;
   strategy_id: string;
-  timestamp: Date;
+  timestamp: string | Date;
   apy: number;
   gasFee: string;
 }

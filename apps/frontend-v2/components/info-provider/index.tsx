@@ -15,6 +15,7 @@ import {
 import { createPortal } from "react-dom";
 import { InfoProviderProps, ToolTipDirection } from "./types";
 import { positionTooltip } from "./utils";
+import { ChildrenProvider } from "components/internal/render-children";
 
 /**
  * Mapping directions to corresponding animation strings
@@ -145,23 +146,16 @@ export const InfoProvider = ({
             onMouseEnter={(e) => handleHover(activeConsumerIndex)}
             onMouseLeave={(e) => handleClose()}
           >
-            {Children.map(children, (child) => {
-              if (typeof child === "string")
-                return (
-                  <WrappedText
-                    style={{
-                      fontSize: "12px",
-                    }}
-                    fontStyle="bold"
-                  >
-                    {child}
-                  </WrappedText>
-                );
-              if (isValidElement(child)) {
-                return child;
-              }
-              return child;
-            })}
+            <ChildrenProvider
+              textProps={{
+                style: {
+                  fontSize: "12px",
+                },
+                fontStyle: "bold",
+              }}
+            >
+              {children}
+            </ChildrenProvider>
           </div>,
           document.body
         )}
@@ -175,7 +169,9 @@ export const InfoProvider = ({
           <consumer.type
             {...consumer.props}
             ref={(node: any) => {
-              !node ? setRefs.delete(i) : setRefs.set(i, node);
+              !node
+                ? setRefs.delete(i)
+                : setRefs.set(i, consumer.props.ref || node);
             }}
             onMouseEnter={async (e: MouseEvent<HTMLDivElement, MouseEvent>) => {
               e.stopPropagation();

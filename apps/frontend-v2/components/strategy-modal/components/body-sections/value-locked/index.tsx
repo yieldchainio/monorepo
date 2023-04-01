@@ -60,9 +60,9 @@ export const ValueLocked = ({ strategy }: { strategy?: YCStrategy }) => {
 
   return (
     <InterModalSection
-      height="h-[55%] flex-row items-center justify-between tablet:h-max tablet:py-3 smallMobile:flex-col  "
+      height="h-[55%] flex-row items-center justify-between tablet:h-max tablet:py-3 tablet:flex-col  "
       width={
-        "w-[55%] tablet:w-[100%] smallMobile:px-10 smallMobile:gap-0 smallMobile:py-5"
+        "w-[55%] tablet:w-[100%] tablet:px-10 tablet:gap-0 tablet:py-5"
       }
       className="overflow-hidden"
     >
@@ -80,7 +80,7 @@ export const ValueLocked = ({ strategy }: { strategy?: YCStrategy }) => {
         </div>
       </InfoSection>
       <Divisor
-        className="rotate-90 w-[23%] border-custom-textColor smallMobile:rotate-0"
+        className="rotate-90 w-[23%] border-custom-textColor tablet:rotate-0"
         style={{
           borderColor: "rgba(var(--text), 0.1)",
           width: "18%",

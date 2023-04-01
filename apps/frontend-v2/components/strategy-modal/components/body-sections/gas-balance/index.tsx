@@ -22,6 +22,8 @@ import {
 } from "utilities/hooks/styles/useMediaBreakpoints";
 import { InfoSection } from "../../general/info-section";
 import { InterModalSection } from "../../general/modal-section";
+import { InfoProvider } from "components/info-provider";
+import { ToolTipDirection } from "components/info-provider/types";
 
 export const GasBalance = ({ strategy }: { strategy?: YCStrategy }) => {
   // A state for the formatted interval (e.g "5 Days", "8 Hours")
@@ -59,8 +61,8 @@ export const GasBalance = ({ strategy }: { strategy?: YCStrategy }) => {
   return (
     <InterModalSection
       height="h-[100%] tablet:h-[40%]"
-      className="tablet:h-[45%] flex-col py-6 smallMobile:items-center  justify-start items-start gap-4 tablet:gap-2"
-      width="w-[40%] tablet:w-max smallMobile:w-full"
+      className="flex-col pt-4 pb-2 tablet:items-center  justify-start items-start gap-4 tablet:gap-2"
+      width="w-[40%] tablet:w-full"
     >
       <InfoSection title="Runs Every" className="tablet:hidden">
         {formattedInterval}
@@ -87,18 +89,20 @@ export const GasBalance = ({ strategy }: { strategy?: YCStrategy }) => {
         </div>
       </InfoSection>
       <div className="flex flex-col gap-1">
-        <RegulerButton className=" bg-custom-textColor hover:bg-custom-textColor laptop:pt-[0.5px] laptop:pb-[0.5px] smallLaptop:px-2 laptop:px-2 ">
-          <WrappedText
-            className=" text-custom-bg "
-            fontStyle="bold"
-            style={{
-              fontSize: "16px",
-              color: "var(--bg)",
-            }}
-          >
-            {addGasText}
-          </WrappedText>
-        </RegulerButton>
+        <InfoProvider contents="Add Gas" direction={ToolTipDirection.BOTTOM}>
+          <RegulerButton className=" bg-custom-textColor hover:bg-custom-textColor laptop:pt-[0.5px] laptop:pb-[0.5px] smallLaptop:px-2 laptop:px-2 ">
+            <WrappedText
+              className=" text-custom-bg "
+              fontStyle="bold"
+              style={{
+                fontSize: "16px",
+                color: "var(--bg)",
+              }}
+            >
+              {addGasText}
+            </WrappedText>
+          </RegulerButton>
+        </InfoProvider>
         <WrappedText
           className="text-opacity-30 smallLaptop: hidden"
           fontSize={12}

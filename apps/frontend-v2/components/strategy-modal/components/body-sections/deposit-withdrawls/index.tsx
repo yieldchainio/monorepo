@@ -37,7 +37,6 @@ export const StrategyOperationsBox = ({
 
   // Handle an operation (Deposit/Withdraw)
   const handleOperation = useCallback(async () => {
-    console.log("Value im gonna input from FE", valueInput);
     if (!signer) {
       console.error(
         "Signer Undefined! data:",
@@ -64,7 +63,7 @@ export const StrategyOperationsBox = ({
   return (
     <InterModalSection
       height="h-[100%]"
-      width="w-[40%] tablet:w-[50%] smallMobile:w-[100%] flex flex-col items-center justify-center"
+      width="w-[40%] tablet:w-[100%] flex flex-col items-center justify-center"
       paddingX="px-0"
     >
       <OperationsHeader

@@ -1,3 +1,4 @@
+import { ChildrenProvider } from "components/internal/render-children";
 import { motion } from "framer-motion";
 import { CSSProperties, forwardRef } from "react";
 /**
@@ -21,7 +22,14 @@ interface ButtonProps {
 
 const GradientButton = forwardRef<HTMLDivElement, ButtonProps>(
   (
-    { children, onClick, className, width = "w-max", style, ...props }: ButtonProps,
+    {
+      children,
+      onClick,
+      className,
+      width = "w-max",
+      style,
+      ...props
+    }: ButtonProps,
     ref
   ) => {
     return (
@@ -47,7 +55,13 @@ const GradientButton = forwardRef<HTMLDivElement, ButtonProps>(
         onClick={onClick}
         {...props}
       >
-        {children}
+        <ChildrenProvider
+          textProps={{
+            fontColor: "inherit",
+          }}
+        >
+          {children}
+        </ChildrenProvider>
       </motion.div>
     );
   }

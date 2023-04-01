@@ -39,7 +39,7 @@ export const GasThroughput = ({
 
   return (
     <InterModalSection
-      height="h-[40%] flex-row items-center justify-between tablet:w-max tablet:mb-20 tablet:px-4 mobile:hidden tablet:h-[45%]"
+      height="h-[40%] flex-row items-center justify-between tablet:hidden "
       width={"w-[55%]"}
     >
       <InfoSection title="Gas In /run" className="smallLaptop:hidden">

@@ -97,7 +97,10 @@ module.exports = {
         accountPopup: "accountPopup 0.2s ease-in-out",
         popup: "popup 0.2s ease-in-out",
         dropdown: "dropdown 0.2s ease-in-out",
-        toolTip: "toolTip 0.2s ease-in-out",
+        toolTipTop: "toolTipTop 0.2s ease-in-out",
+        toolTipBottom: "toolTipBottom 0.2s ease-in-out",
+        toolTipLeft: "toolTipLeft 0.2s ease-in-out",
+        toolTipRight: "toolTipRight 0.2s ease-in-out",
       },
       keyframes: (theme) => ({
         popup: {
@@ -108,12 +111,36 @@ module.exports = {
             transform: "scale(1)",
           },
         },
-        toolTip: {
+        toolTipTop: {
           "0%": {
-            transform: "translate(-50%, -50%) scale(0.25)",
+            transform: "translate(-50%, -150%) scale(0.25)",
           },
           "100%": {
-            transform: "translate(-50%, -50%) scale(1)",
+            transform: "translate(-50%, -150%) scale(1)",
+          },
+        },
+        toolTipBottom: {
+          "0%": {
+            transform: "translate(-50%, +50%) scale(0.25)",
+          },
+          "100%": {
+            transform: "translate(-50%, +50%) scale(1)",
+          },
+        },
+        toolTipLeft: {
+          "0%": {
+            transform: "translate(-125%, -50%) scale(0.25)",
+          },
+          "100%": {
+            transform: "translate(-125%, -50%) scale(1)",
+          },
+        },
+        toolTipRight: {
+          "0%": {
+            transform: "translate(+50%, -50%) scale(0.25)",
+          },
+          "100%": {
+            transform: "translate(+50%, -50%) scale(1)",
           },
         },
         dropdown: {

@@ -23,11 +23,11 @@ import {
 } from "../constants";
 import { BackdropColor } from "components/backdrop-color";
 import { SlideShow } from "components/slideshow";
-
 import { useModals } from "utilities/hooks/stores/modal";
 import { StrategyModal } from "components/strategy-modal";
 import { useShallowRouter } from "utilities/hooks/general/useShallowRouter";
 import useDebounce from "utilities/hooks/general/useDebounce";
+
 
 export default function Home() {
   // Retreive the strategies from the context

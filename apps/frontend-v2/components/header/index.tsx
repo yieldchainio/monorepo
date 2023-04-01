@@ -17,6 +17,8 @@ import {
   useMediaBreakpoints,
 } from "utilities/hooks/styles/useMediaBreakpoints";
 import { sliceAddress } from "utilities/general/slice-address";
+import { InfoProvider } from "components/info-provider";
+import { ToolTipDirection } from "components/info-provider/types";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",
@@ -177,9 +179,14 @@ export const Header = () => {
         )}
 
         <div className="relative">
-          <Button onClick={() => null} className=" relative font-semibold">
-            {createVaultText}
-          </Button>
+          <InfoProvider
+            contents="Create A Vault"
+            direction={ToolTipDirection.BOTTOM}
+          >
+            <Button onClick={() => null} className=" relative font-semibold">
+              {createVaultText}
+            </Button>
+          </InfoProvider>
         </div>
       </div>
     </div>

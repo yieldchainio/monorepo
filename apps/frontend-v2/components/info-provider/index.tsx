@@ -2,36 +2,45 @@
  * The base tooltop "Info provider" component
  */
 
-import { BaseComponentProps } from "components/types";
 import WrappedText from "components/wrappers/text";
-import { dir } from "console";
 import {
   Children,
-  cloneElement,
-  createRef,
+  CSSProperties,
   isValidElement,
   MouseEvent,
-  MouseEventHandler,
   useEffect,
   useRef,
   useState,
 } from "react";
-import { createPortal, findDOMNode } from "react-dom";
+import { createPortal } from "react-dom";
+import { InfoProviderProps, ToolTipDirection } from "./types";
+import { positionTooltip } from "./utils";
 
-enum ToolTipDirection {
-  LEFT = 0,
-  BELOW = 1,
-  ABOVE = 2,
-  RIGHT = 3,
-}
-interface InfoProviderProps extends BaseComponentProps {
-  contents: React.ReactNode;
-  direction: ToolTipDirection;
-}
+/**
+ * Mapping directions to corresponding animation strings
+ */
+export const TOOLTIP_ANIMATION: {
+  [key in ToolTipDirection]: string;
+} = {
+  [ToolTipDirection.LEFT]: "animate-toolTipLeft",
+  [ToolTipDirection.RIGHT]: "animate-toolTipRight",
+  [ToolTipDirection.TOP]: "animate-toolTipTop",
+  [ToolTipDirection.BOTTOM]: "animate-toolTipBottom",
+};
+
+/**
+ * A generic "Info" provider (AKA a Tooltip)
+ * @param children - The children which we wrap around and provide the info to on hover
+ * @param className - base props proprety, for styling
+ * @param contents - The tooltip's actual children, what it displays within it (the "Info")
+ */
 export const InfoProvider = ({
   children: consumers,
   className,
   contents: children,
+  direction = ToolTipDirection.TOP,
+  visibilityOverride = false,
+  style,
 }: InfoProviderProps) => {
   // We set a ref for all of our consumers ( The elements which we wrap around and trigger on hover )
   const setRefs = useRef(new Map()).current;
@@ -42,9 +51,14 @@ export const InfoProvider = ({
   );
 
   // The state that triggers visiblity & positioning
-  const [visible, setVisible] = useState<
-    { x: number; y: number; width: number; height: number } | false
-  >(false);
+  const [visible, setVisible] = useState<DOMRect | false>(false);
+
+  // a useEffect to set our state to visible (On the FIRST child),
+  // if we got a visibillity override prop
+  useEffect(() => {
+    if (visibilityOverride == true) setActiveConsumerIndex(0);
+    else setActiveConsumerIndex(null);
+  }, [visibilityOverride]);
 
   useEffect(() => {
     // We set visiblity to false if active index is null
@@ -52,6 +66,7 @@ export const InfoProvider = ({
       setVisible(false);
       return;
     }
+
     // Get the ref of the consumer
     const consumer = setRefs.get(activeConsumerIndex);
 
@@ -67,29 +82,17 @@ export const InfoProvider = ({
       return;
     }
 
-    // Get its rects
-    console.log(
-      "Gonna get recs for this consumer with this index:",
-      activeConsumerIndex,
-      consumer
-    );
+    // get it's rects
     const rects = consumer.getBoundingClientRect();
 
     // Sufficient check
     if (!rects) throw new Error("Tooltip Error: Rects Are Undefined!");
 
     // Set the X and Y positions
-    console.log("Consumer rracts", rects);
-    setVisible({
-      x: rects.left,
-      y: rects.top,
-      width: rects.width,
-      height: rects.height,
-    });
+    setVisible(rects);
   }, [activeConsumerIndex]);
 
-  const toolTipRef = useRef<HTMLDivElement>(null);
-
+  // A state for whether a close operation shall complete itself
   const [shouldClose, setShouldClose] = useState<boolean>(true);
 
   // Handle hover over the children
@@ -131,35 +134,31 @@ export const InfoProvider = ({
       {visible &&
         createPortal(
           <div
-            ref={toolTipRef}
             className={
-              "flex flex-col bg-custom-componentbg shadow-md absolute p-2 z-[100000] w-max h-max rounded-xl animate-toolTip " +
+              "flex flex-col bg-custom-componentbg shadow-md absolute px-3 py-1.5 z-[100000] w-max h-max rounded-xl " +
+              TOOLTIP_ANIMATION[direction] +
               " " +
               className
             }
-            style={{
-              left: `${visible.x + visible.width / 2}px`,
-              top: `${visible.y + window.scrollY - visible.height}px`,
-              transform: "translate(-50%, -50%)",
-            }}
+            style={style || positionTooltip(direction, visible)}
             id="Tooltip"
             onMouseEnter={(e) => handleHover(activeConsumerIndex)}
             onMouseLeave={(e) => handleClose()}
           >
             {Children.map(children, (child) => {
+              if (typeof child === "string")
+                return (
+                  <WrappedText
+                    style={{
+                      fontSize: "12px",
+                    }}
+                    fontStyle="bold"
+                  >
+                    {child}
+                  </WrappedText>
+                );
               if (isValidElement(child)) {
-                // if we got a string we return a wrapped text version of it
-                if (typeof child === "string")
-                  return (
-                    <WrappedText
-                      style={{
-                        fontSize: "4px",
-                      }}
-                      fontStyle="bold"
-                    >
-                      {child}
-                    </WrappedText>
-                  );
+                return child;
               }
               return child;
             })}
@@ -193,61 +192,4 @@ export const InfoProvider = ({
       })}
     </>
   );
-};
-
-/**
- * A helper to get the positioning of the tooltip
- */
-
-type rects = { width: number; height: number; left: number; top: number };
-const calcPosition = (
-  direction: ToolTipDirection,
-  childRects: rects
-): {
-  top: number;
-  left: number;
-  transform: string;
-} => {
-  // The base positioning
-  const returnObj = {
-    left: childRects.left,
-    top: childRects.top,
-    transform: "translate(",
-  };
-
-  /**
-   * A switch case for the directions, adding/substracting corresponding positions for the tooltip
-   */
-
-  // If its to the left or right, do the followi g
-  if (direction === 0 || 3) {
-    // If its left, move it to the left by the its own (tooltip) width + margin
-    if (direction == 0) returnObj.transform += "-150%";
-    // If its right, move it to the right by the child's width + margin
-    else {
-      returnObj.left += childRects.width;
-      returnObj.transform += "+50%";
-    }
-    // For both, move them downwards by half of the child's width
-    returnObj.top += childRects.height / 2;
-
-    // For both, transform 50% to the top
-    returnObj.transform += "-50%)";
-    return returnObj;
-  }
-
-  // Both top and bottom need the following left position
-  returnObj.left += childRects.width / 2;
-  returnObj.transform += "-50%,";
-
-  // If its top, add this transform to move it to the top by its own height + margin
-  if (direction === 2) {
-    returnObj.transform += "-150%)";
-    return returnObj;
-  }
-
-  // If its bottom, add the child's height to top position + 50% y tra nsformation
-  returnObj.top += childRects.height;
-  returnObj.transform += "+50%)";
-  return returnObj;
 };

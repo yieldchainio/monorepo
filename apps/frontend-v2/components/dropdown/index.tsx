@@ -8,6 +8,13 @@ import uuid from "uuid-random";
 import { RegulerButton } from "components/buttons/reguler";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
+import {
+  MediaScreenSizes,
+  useMediaBreakpoints,
+} from "utilities/hooks/styles/useMediaBreakpoints";
+import { MediaScreens } from "types/styles/media-breakpoints";
+import { ModalWrapper } from "components/modal-wrapper";
+import { useModals } from "utilities/hooks/stores/modal";
 
 const Dropdown = ({
   options,
@@ -28,8 +35,10 @@ const Dropdown = ({
     choice || [...options][0]
   );
 
-  // Change the choice each time choice is changed
+  // Keep track of global modals state and push into it
+  const modals = useModals();
 
+  // Change the choice each time choice is changed
   useEffect(() => {
     setCurrentChoice([...options][0]);
   }, [JSON.stringify(options.map((opt) => JSON.stringify(opt)))]);
@@ -60,6 +69,25 @@ const Dropdown = ({
       });
 
     // We then set the menu open to equal to true
+
+    if (window.innerWidth <= MediaScreenSizes.TABLET)
+      modals.push((id: number) => ({
+        component: (
+          <ModalWrapper modalKey={id}>
+            {children || (
+              <DropdownMenu
+                options={options}
+                handler={async (choice: DropdownOption) => {
+                  await handleChoice(choice);
+                  modals.remove(id);
+                }}
+                parentRef={dropdownBtnRef}
+                {...menuProps}
+              />
+            )}
+          </ModalWrapper>
+        ),
+      }));
     setMenuOpen((prev: any) => !prev);
   };
 
@@ -78,16 +106,17 @@ const Dropdown = ({
   return (
     <div className="relative">
       {menuOpen &&
-        (children ? (
-          children
-        ) : (
-          <DropdownMenu
-            options={options}
-            handler={handleChoice}
-            parentRef={dropdownBtnRef}
-            {...menuProps}
-          />
-        ))}
+        (window.innerWidth <= MediaScreenSizes.TABLET
+          ? null
+          : children || (
+              <DropdownMenu
+                options={options}
+                handler={handleChoice}
+                parentRef={dropdownBtnRef}
+                {...menuProps}
+                className="static"
+              />
+            ))}
 
       <RegulerButton
         onClick={handleClick}

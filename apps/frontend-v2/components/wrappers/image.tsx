@@ -27,24 +27,14 @@ const WrappedImage = ({
   if (!src) return <ImageSkeleton width={width} height={height} />;
   return (
     <>
-      {/* {setColors && !fetchedColor && (
-        <Palette src={typeof src == "string" ? src : src[theme]}>
-          {({ data, loading, error }) => {
-            if (!loading) {
-              console.log("Data ser", data);
-              setColors(data);
-              setFetchedColor(true);
-            }
-            return <></>;
-          }}
-        </Palette>
-      )} */}
       <Image
         width={width}
         height={height}
         src={typeof src == "string" ? src : src[theme]}
         alt={alt || ""}
-        className={className ? "select-none" + " " + className : "select-none"}
+        className={
+          "select-none text-custom-textColor" + (" " + className || "")
+        }
         onClick={() => onClick && onClick()}
         style={style || {}}
       />

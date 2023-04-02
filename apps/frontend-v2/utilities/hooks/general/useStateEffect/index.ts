@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 export const useStateEffect = <T>(
   initialState: T,
   callback: (state?: T) => any,
-  stateHook: (initialState: T) => [state]
 ) => {
   const [state, setState] = useState<T>(initialState);
   useEffect(() => {

@@ -19,6 +19,9 @@ import {
 import { sliceAddress } from "utilities/general/slice-address";
 import { InfoProvider } from "components/info-providers";
 import { ToolTipDirection } from "components/info-providers/types";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Accordion } from "./accordion";
+import { useStateEffect } from "utilities/hooks/general/useStateEffect";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",
@@ -97,7 +100,7 @@ export const Header = () => {
             height={100}
             className="z-100 blue-none"
           ></WrappedImage>
-          {catagoryTexts}
+          <HeaderRoutes />
         </div>
       </div>
       <div className="flex items-center justify-end h-[10vh] pr-10 blur-none gap-6">
@@ -191,4 +194,64 @@ export const Header = () => {
       </div>
     </div>
   );
+};
+
+/**
+ * A component wrapping the catagories of the header
+ */
+
+const HeaderRoutes = () => {
+  const { proprety: component }: { proprety: React.ReactNode } =
+    useMediaBreakpoints<React.ReactNode>(
+      {
+        [MediaScreenSizes.TABLET]: (
+          <Accordion
+            catagories={[
+              {
+                label: "Earn",
+                page: "/",
+                icon: {
+                  light: "/icons/earn-dark.svg",
+                  dark: "/icons/earn-light.svg",
+                },
+              },
+              {
+                label: "Portfolio",
+                page: "/portfolio",
+                icon: {
+                  dark: "/icons/portfolio-light.svg",
+                  light: "/icons/portfolio-dark.svg",
+                },
+              },
+              {
+                label: "My Vaults",
+                page: "/creator-dashboard",
+                icon: {
+                  dark: "/icons/creator-light.svg",
+                  light: "/icons/creator-dark.svg",
+                },
+              },
+              {
+                label: "Stake YC",
+                page: "/stake-yc",
+                icon: {
+                  dark: "/icons/stake-light.svg",
+                  light: "/icons/stake-dark.svg",
+                },
+              },
+            ]}
+          />
+        ),
+        [MediaScreenSizes.ANY]: (
+          <div className="flex gap-4 w-[100%] h-[100%] items-center z-100">
+            <HeaderCatagoryText text="Earn" page="/" />
+            <HeaderCatagoryText text="Portfolio" page="/portfolio" />
+            <HeaderCatagoryText text="My Vaults" page="/creator-dashboard" />
+            <HeaderCatagoryText text="Stake YC" page="/stake-yc" />
+          </div>
+        ),
+      },
+      (item) => item.toString()
+    );
+  return <>{component}</>;
 };

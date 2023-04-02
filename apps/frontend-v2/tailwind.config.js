@@ -101,6 +101,7 @@ module.exports = {
         toolTipBottom: "toolTipBottom 0.2s ease-in-out",
         toolTipLeft: "toolTipLeft 0.2s ease-in-out",
         toolTipRight: "toolTipRight 0.2s ease-in-out",
+        modal: "modal 0.2s ease-in-out",
       },
       keyframes: (theme) => ({
         popup: {
@@ -109,6 +110,14 @@ module.exports = {
           },
           "100%": {
             transform: "scale(1)",
+          },
+        },
+        modal: {
+          "0%": {
+            transform: "translateY(200%)",
+          },
+          "100%": {
+            transform: "translateY(0%)",
           },
         },
         toolTipTop: {

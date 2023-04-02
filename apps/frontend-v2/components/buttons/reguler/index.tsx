@@ -5,6 +5,7 @@
 import { forwardRef, useState } from "react";
 import { hexColors } from "configs/styles/colors";
 import { RegulerButtonProps } from "./types";
+import { ChildrenProvider } from "components/internal/render-children";
 
 export const RegulerButton = forwardRef<HTMLDivElement, RegulerButtonProps>(
   (
@@ -37,7 +38,7 @@ export const RegulerButton = forwardRef<HTMLDivElement, RegulerButtonProps>(
         style={style || {}}
         {...props}
       >
-        {children}
+        <ChildrenProvider>{children}</ChildrenProvider>
         {loading && (
           <div role="status">
             <svg

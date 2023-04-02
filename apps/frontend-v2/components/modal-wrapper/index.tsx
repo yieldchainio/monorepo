@@ -49,6 +49,7 @@ export const ModalWrapper = ({
                 e.stopPropagation();
               })
             }
+            className={child.props.className + " " + "animate-modal "}
           />
         );
       })}

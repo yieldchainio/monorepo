@@ -70,10 +70,16 @@ const Dropdown = ({
 
     // We then set the menu open to equal to true
 
-    if (window.innerWidth <= MediaScreenSizes.TABLET)
+    if (!menuOpen && window.innerWidth <= MediaScreenSizes.TABLET)
       modals.push((id: number) => ({
         component: (
-          <ModalWrapper modalKey={id}>
+          <ModalWrapper
+            modalKey={id}
+            closeFunction={(modalKey: number) => {
+              modals.remove(modalKey);
+              setMenuOpen((prev) => !prev);
+            }}
+          >
             {children || (
               <DropdownMenu
                 options={options}

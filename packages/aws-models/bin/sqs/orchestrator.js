@@ -3,6 +3,10 @@ dotenv.config();
 import AWS from "aws-sdk";
 export default class GenericOrchestrator extends AWS.SQS {
     // ======================
+    //         FIELDS
+    // ======================
+    queue;
+    // ======================
     //      CONSTRUCTOR
     // ======================
     constructor(_queueUrl, _sqsProps = {

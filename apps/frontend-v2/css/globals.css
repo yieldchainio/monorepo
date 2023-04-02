@@ -14,8 +14,8 @@
   --light-bigcomponentbg: 255, 255, 255;
   --dark-bigcomponentbg: 32, 32, 35;
 
-  --light-componentbg: rgb(242, 242, 244);
-  --dark-componentbg: #2d2d31;
+  --light-componentbg: 242, 242, 244;
+  --dark-componentbg: 45, 45, 49;
 
   --light-turnedoff-text: #676771;
   --dark-turnedoff-text: #676771;

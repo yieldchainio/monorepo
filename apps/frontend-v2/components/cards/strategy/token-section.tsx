@@ -5,8 +5,8 @@
 import { YCNetwork, YCToken } from "@yc/yc-models";
 
 interface StrategyTokenSectionProps {
-  token: YCToken | null;
-  network: YCNetwork | null;
+  token?: YCToken | null;
+  network?: YCNetwork | null;
 }
 
 export const StrategyTokenSection = ({

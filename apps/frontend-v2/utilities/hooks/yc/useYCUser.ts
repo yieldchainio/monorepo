@@ -50,6 +50,8 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
   useEffect(() => {
     if (props?.userAddress) {
       setUserAddress(props?.userAddress);
+    } else if (props?.userAddress === null) {
+      setUserAddress(undefined);
     } else if (address) {
       setUserAddress(address);
     }

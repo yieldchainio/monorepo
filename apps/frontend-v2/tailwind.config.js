@@ -31,7 +31,7 @@ module.exports = {
           // Background colors
           bg: "var(--bg)",
           subbg: "var(--subbg)",
-          componentbg: "var(--componentbg)",
+          componentbg: ({opacityValue}) => `rgba(var(--componentbg), ${opacityValue || 1})`,
           textColor: ({ opacityValue }) =>
             `rgba(var(--text), ${opacityValue || 1})`,
 
@@ -103,6 +103,7 @@ module.exports = {
         toolTipRight: "toolTipRight 0.2s ease-in-out",
         modal: "modal 0.2s ease-in-out",
         sidebar: "sidebar 0.2s ease-in-out",
+        log: "log 0.1s ease-in-out",
       },
       keyframes: (theme) => ({
         popup: {
@@ -127,6 +128,14 @@ module.exports = {
           },
           "100%": {
             transform: "translateX(0%)",
+          },
+        },
+        log: {
+          "0%": {
+            transform: "translateY(-20%)",
+          },
+          "100%": {
+            transform: "translateY(0%)",
           },
         },
         toolTipTop: {

@@ -6,6 +6,7 @@ import StoreInitiallizor from "utilities/hooks/stores/store-initiallizor";
 import WrappedWagmi from "configs/wagmi";
 import { ModalProvider } from "components/modal-provider";
 import { ShallowRouter } from "components/internal/shallow-router";
+import { LoggerProvider } from "components/logger";
 
 export const metadata = {
   title: "Yieldchain",
@@ -32,6 +33,7 @@ export default async function RootLayout({
           {children}
           <Header />
           <ModalProvider />
+          <LoggerProvider />
         </WrappedWagmi>
       </body>
     </html>

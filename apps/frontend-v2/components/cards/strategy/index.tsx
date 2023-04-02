@@ -19,26 +19,26 @@ import { forwardRef, useMemo } from "react";
 import { ProtocolsProvider } from "components/info-providers/protocols";
 
 interface StrategyCardProps {
-  strategy: YCStrategy;
+  strategy?: YCStrategy;
 }
 
 export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
   ({ strategy, ...props }: StrategyCardProps, ref) => {
     // The user that created the strategy
     const { address, userName, profilePic, socialMedia, verified } = useYCUser({
-      userAddress: strategy.creator?.address as `0x${string}`,
+      userAddress: (strategy?.creator?.address as `0x${string}`) || null,
     });
 
     // Modal provider
     const router = useRouter();
     const routeToStrategy = () => {
-      router.push(`/strategy/${strategy.id}`);
+      router.push(`/strategy/${strategy?.id || ""}`);
     };
 
     // Some memoization
     const protocolsNoDupes = useMemo(() => {
-      return filterDupes(strategy.steps.map((step) => step.protocol));
-    }, [strategy.steps]);
+      return filterDupes(strategy?.steps.map((step) => step.protocol) || []);
+    }, [strategy?.steps]);
 
     return (
       <div
@@ -71,22 +71,24 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
               </div>
             </div>
             <WrappedText fontStyle="medium" fontSize={16} className="">
-              {`APY: ${strategy.apy}%`}
+              {strategy?.apy ? `APY: ${strategy?.apy}%` : undefined}
             </WrappedText>
           </div>
         </div>
         <div className="flex flex-col items-center justify-start w-full h-full py-6 px-6 gap-1">
           <StrategyTokenSection
-            token={strategy.depositToken}
-            network={strategy.network}
+            token={strategy?.depositToken}
+            network={strategy?.network}
           />
           <div className="gap-0 w-full flex flex-col justify-center items-center">
             <Section
               fields={{
-                "TVL ": formatMoney(
-                  strategy.depositToken?.formatDecimals(strategy.tvl) || 0
-                ),
-                Title: strategy.title,
+                "TVL ": !strategy
+                  ? undefined
+                  : formatMoney(
+                      strategy?.depositToken?.formatDecimals(strategy.tvl) || 0
+                    ),
+                Title: strategy?.title,
                 Created: "5 Days Ago",
                 Protocols: (
                   <ProtocolsProvider protocols={protocolsNoDupes}>

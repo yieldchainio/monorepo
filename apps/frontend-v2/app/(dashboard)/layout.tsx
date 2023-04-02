@@ -1,7 +1,7 @@
 "use client";
 import "../../css/globals.css";
 import WrappedText from "components/wrappers/text";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import WrappedInput from "components/wrappers/input";
 import { Sticky } from "components/wrappers/sticky";
 import { ChipsSection } from "components/chips-section";
@@ -27,7 +27,11 @@ import { useModals } from "utilities/hooks/stores/modal";
 import { StrategyModal } from "components/strategy-modal";
 import { useShallowRouter } from "utilities/hooks/general/useShallowRouter";
 import useDebounce from "utilities/hooks/general/useDebounce";
-
+import { useLogs } from "utilities/hooks/stores/logger";
+import { InfoMessage } from "components/logger/components/info";
+import { InfoProvider } from "components/info-providers";
+import { ErrorMessage } from "components/logger/components/error";
+import { SuccessMessage } from "components/logger/components/success";
 
 export default function Home() {
   // Retreive the strategies from the context
@@ -178,14 +182,12 @@ export default function Home() {
           />
           <StrategySlideshow
             strategies={filteredStrategies.filter(
-              (strategy) => strategy.tvl > 30000
+              (strategy) => strategy.tvl > 0
             )}
             title={"Trending Vaults"}
           />
           <StrategiesGrid
-            strategies={filteredStrategies.filter(
-              (strategy) => strategy.tvl > 30000
-            )}
+            strategies={filteredStrategies}
             title={"All Vaults"}
           />
         </div>
@@ -215,8 +217,29 @@ const BrowseHeroSection = ({
   setFilteredStrategies,
   setInput,
 }: BrowseSectionProps) => {
+  const logs = useLogs();
+
   return (
-    <div className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-[100%] h-full ">
+    <div
+      className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-[100%] h-full "
+      onClick={() => {
+        console.log("Clickieeeekng");
+        logs.push((id: string) => ({
+          component:
+            logs.logs.length % 3 === 0 ? (
+              <InfoMessage id={id}>Some Very Helpful Info</InfoMessage>
+            ) : logs.logs.length % 2 === 0 ? (
+              <ErrorMessage id={id}>ERROR - you gay asf</ErrorMessage>
+            ) : (
+              <SuccessMessage id={id}>
+                You are so gud successfull
+              </SuccessMessage>
+            ),
+          lifespan: 7000,
+          id: id,
+        }));
+      }}
+    >
       <div className="flex flex-col items-center">
         <WrappedText fontSize={72} fontStyle="black">
           Browse
@@ -279,6 +302,11 @@ const StrategySlideshow = ({
   strategies: YCStrategy[];
   title: string;
 }) => {
+  const strategiesToMap = useMemo(() => {
+    return strategies.length > 0
+      ? strategies
+      : [undefined, undefined, undefined, undefined];
+  }, [strategies]);
   return (
     <div className="flex flex-col gap-4 pl-0 w-full h-max z-10 ">
       <div className=" flex flex-row items-center justify-center">
@@ -332,7 +360,7 @@ const StrategySlideshow = ({
           },
         ]}
       >
-        {strategies
+        {strategiesToMap
           // .filter((strategy, i) => strategy.verified === true)
           .map((strategy, i, arr) => {
             return <StrategyCard strategy={strategy} key={i} />;

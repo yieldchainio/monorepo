@@ -71,17 +71,6 @@ export const Header = () => {
     [MediaScreenSizes.ANY]: "Create Vault",
   });
 
-  const { proprety: catagoryTexts } = {
-    proprety: (
-      <div className="flex gap-4 w-[100%] h-[100%] items-center z-100">
-        <HeaderCatagoryText text="Earn" page="/" />
-        <HeaderCatagoryText text="Portfolio" page="/portfolio" />
-        <HeaderCatagoryText text="My Vaults" page="/creator-dashboard" />
-        <HeaderCatagoryText text="Stake YC" page="/stake-yc" />
-      </div>
-    ),
-  };
-
   // Return the component
   return (
     <div

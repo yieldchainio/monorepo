@@ -25,6 +25,7 @@ const DropdownMenu = ({
   optionText,
   children,
   hideOptionText = "",
+  modalBehaviour = "auto",
   ...props
 }: DropdownMenuOptions) => {
   // IF we are loading a choice rn or not
@@ -39,7 +40,11 @@ const DropdownMenu = ({
 
   // Memoize the classname
   const baseClass: string = useMemo(() => {
-    if (window.innerWidth <= MediaScreenSizes.TABLET)
+    if (
+      (window.innerWidth <= MediaScreenSizes.TABLET ||
+        modalBehaviour == "always") &&
+      modalBehaviour !== "never"
+    )
       return (
         `${
           "w-[" + `${parentRef.current?.getBoundingClientRect().width}` + "px]"

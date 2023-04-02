@@ -10,7 +10,6 @@ import {
 import { FilterBox } from "./box";
 import { FiltersMenu } from "./menu";
 
-
 /**
  * The main Filter component, renders our @uses FilterBox, @uses FilterMenu.
  * Responsible for sharing filter state
@@ -123,6 +122,9 @@ export const Filter = <V, T extends BaseFilter<V>>({
           addFilter={addFilter}
           modifyFilter={modifyFilter}
           usedFilters={usedFilters}
+          onClick={(e) => {
+            setMenuOpen(!menuOpen);
+          }}
         />
       )}
     </div>

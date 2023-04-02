@@ -48,4 +48,5 @@ export interface DropdownMenuOptions extends BaseComponentProps {
   optionProps?: DropdownOptionProps;
   optionText?: (_option: DropdownOption, i?: number) => React.ReactNode;
   hideOptionText?: "laptop:hidden" | "";
+  modalBehaviour?: "always" | "never" | "auto";
 }

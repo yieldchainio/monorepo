@@ -39,13 +39,20 @@ export const FiltersMenu = <V, T extends BaseFilter<V>>({
   filters,
   parentRef,
   usedFilters,
+  onClick,
 }: FiltersMenuProps<V, T>) => {
   const modals = useModals();
   useEffect(() => {
     modals.push((id: number) => {
       return {
         component: (
-          <ModalWrapper modalKey={id}>
+          <ModalWrapper
+            modalKey={id}
+            closeFunction={() => {
+              modals.remove(id);
+              onClick?.();
+            }}
+          >
             <DropdownMenu
               options={filters
                 .filter((filter) => filter.hidden !== true)
@@ -100,7 +107,8 @@ export const FiltersMenu = <V, T extends BaseFilter<V>>({
               }}
               handler={() => null}
               parentRef={parentRef}
-              className="w-[80%] "
+              className="w-[80%] max-w-[1000px] "
+              modalBehaviour="always"
             >
               <RegulerButton
                 className="mx-auto pt-1.5 pb-1.5"

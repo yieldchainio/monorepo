@@ -1,3 +1,4 @@
+import { BaseComponentProps } from "components/types";
 import { MouseEvent, RefObject } from "react";
 import {
   FilterConfig,
@@ -9,7 +10,7 @@ export interface FilterBoxProps {
   onClick?: (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => any;
   className?: string;
 }
-export interface FiltersMenuProps<V, T extends BaseFilter<V>> {
+export interface FiltersMenuProps<V, T extends BaseFilter<V>> extends BaseComponentProps {
   filters: Array<FilterConfig<V, T> & T>;
   parentRef: RefObject<HTMLElement | undefined>;
   addFilter: (filter: FilterConfig<V, T> & T) => any;

@@ -1,10 +1,11 @@
-import { CSSProperties } from "react";
+import { CSSProperties, MouseEvent } from "react";
 
 export interface BaseComponentProps<T = any> {
   className?: string;
   breakpoints?: BreakPoint<T>;
   children?: React.ReactNode;
-  style?: CSSProperties
+  style?: CSSProperties;
+  onClick?: (e?: MouseEvent<any, any>) => any;
 }
 
 export type BreakPoint<T> = T & {

@@ -1,3 +1,4 @@
+import { YCProtocol } from "@yc/yc-models";
 import { BaseComponentProps } from "components/types";
 import { CSSProperties } from "react";
 
@@ -14,5 +15,10 @@ export interface InfoProviderProps extends BaseComponentProps {
   contents: React.ReactNode;
   direction?: ToolTipDirection;
   visibilityOverride?: boolean;
-  style?: CSSProperties
+  style?: CSSProperties;
+}
+
+// Protocols Provider props
+export interface ProtocolsProviderProps extends BaseComponentProps {
+  protocols: YCProtocol[];
 }

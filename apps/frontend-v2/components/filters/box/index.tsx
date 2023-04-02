@@ -2,8 +2,8 @@ import { RegulerButton } from "components/buttons/reguler";
 import WrappedText from "components/wrappers/text";
 import { forwardRef, MouseEvent } from "react";
 import { FilterBoxProps } from "../types";
-import { InfoProvider } from "components/info-provider";
-import { ToolTipDirection } from "components/info-provider/types";
+import { InfoProvider } from "components/info-providers";
+import { ToolTipDirection } from "components/info-providers/types";
 
 /**
  * A Component for the filter box,

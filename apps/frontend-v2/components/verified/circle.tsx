@@ -2,8 +2,8 @@
  * Small, circled verified tag
  */
 
-import { InfoProvider } from "components/info-provider";
-import { ToolTipDirection } from "components/info-provider/types";
+import { InfoProvider } from "components/info-providers";
+import { ToolTipDirection } from "components/info-providers/types";
 import WrappedImage from "components/wrappers/image";
 
 export const SmallVerified = () => {

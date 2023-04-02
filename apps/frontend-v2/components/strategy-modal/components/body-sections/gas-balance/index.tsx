@@ -22,8 +22,8 @@ import {
 } from "utilities/hooks/styles/useMediaBreakpoints";
 import { InfoSection } from "../../general/info-section";
 import { InterModalSection } from "../../general/modal-section";
-import { InfoProvider } from "components/info-provider";
-import { ToolTipDirection } from "components/info-provider/types";
+import { InfoProvider } from "components/info-providers";
+import { ToolTipDirection } from "components/info-providers/types";
 
 export const GasBalance = ({ strategy }: { strategy?: YCStrategy }) => {
   // A state for the formatted interval (e.g "5 Days", "8 Hours")

@@ -17,8 +17,8 @@ import {
   useMediaBreakpoints,
 } from "utilities/hooks/styles/useMediaBreakpoints";
 import { sliceAddress } from "utilities/general/slice-address";
-import { InfoProvider } from "components/info-provider";
-import { ToolTipDirection } from "components/info-provider/types";
+import { InfoProvider } from "components/info-providers";
+import { ToolTipDirection } from "components/info-providers/types";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",

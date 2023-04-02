@@ -14,8 +14,9 @@ import useYCUser from "utilities/hooks/yc/useYCUser";
 import { StrategyTokenSection } from "./token-section";
 import GradientButton from "components/buttons/gradient";
 import { useRouter } from "next/navigation";
-import { InfoProvider } from "components/info-provider";
-import { forwardRef } from "react";
+import { InfoProvider } from "components/info-providers";
+import { forwardRef, useMemo } from "react";
+import { ProtocolsProvider } from "components/info-providers/protocols";
 
 interface StrategyCardProps {
   strategy: YCStrategy;
@@ -33,6 +34,11 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
     const routeToStrategy = () => {
       router.push(`/strategy/${strategy.id}`);
     };
+
+    // Some memoization
+    const protocolsNoDupes = useMemo(() => {
+      return filterDupes(strategy.steps.map((step) => step.protocol));
+    }, [strategy.steps]);
 
     return (
       <div
@@ -83,30 +89,31 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
                 Title: strategy.title,
                 Created: "5 Days Ago",
                 Protocols: (
-                  <div className="flex flex-row items-center  gap-[0.05rem]">
-                    <div className="flex flex-row items-center justify-center pl-[20px]">
-                      {filterDupes(strategy.steps).map((step, i, arr) => {
-                        return i <= 1 ? (
-                          <WrappedImage
-                            src={step.protocol.logo}
-                            width={22}
-                            height={22}
-                            className="rounded-full ml-[-6px] border-[2px] border-custom-bcomponentbg"
-                            style={{
-                              zIndex: arr.length - i,
-                            }}
-                            key={i}
-                          />
-                        ) : null;
-                      })}
+                  <ProtocolsProvider protocols={protocolsNoDupes}>
+                    <div className="flex flex-row items-center  gap-[0.05rem]">
+                      <div className="flex flex-row items-center justify-center pl-[20px]">
+                        {protocolsNoDupes.map((protocol, i, arr) => {
+                          return i <= 1 ? (
+                            <WrappedImage
+                              src={protocol.logo}
+                              width={22}
+                              height={22}
+                              className="rounded-full ml-[-6px] border-[2px] border-custom-bcomponentbg"
+                              style={{
+                                zIndex: arr.length - i,
+                              }}
+                              key={i}
+                            />
+                          ) : null;
+                        })}
+                      </div>
+                      {protocolsNoDupes.length > 2 ? (
+                        <WrappedText fontSize={14}>
+                          {"+" + (protocolsNoDupes.length - 2).toString()}
+                        </WrappedText>
+                      ) : null}
                     </div>
-                    {filterDupes(strategy.steps).length > 2 ? (
-                      <WrappedText fontSize={14}>
-                        {"+" +
-                          (filterDupes(strategy.steps).length - 2).toString()}
-                      </WrappedText>
-                    ) : null}
-                  </div>
+                  </ProtocolsProvider>
                 ),
               }}
               showLines={true}

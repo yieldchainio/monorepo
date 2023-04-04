@@ -50,9 +50,16 @@ const WrappedText = ({
   id,
   style,
   onInput,
+  skeletonDimensions,
 }: TextProps) => {
-  if (children === undefined) {
-    return <TextSkeleton fontSize={fontSize} className={className} />;
+  if (children === undefined && skeletonDimensions?.width !== 0) {
+    return (
+      <TextSkeleton
+        fontSize={fontSize}
+        className={className}
+        dimensions={skeletonDimensions}
+      />
+    );
   }
 
   return (

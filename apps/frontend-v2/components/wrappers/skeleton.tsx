@@ -2,6 +2,8 @@
  * A skeleton component
  */
 
+import { Dimensions } from "utilities/classes/step/types";
+
 interface ImageProps {
   width: number;
   height: number;
@@ -50,16 +52,18 @@ const getTextWidth = (fontSize: number): string => {
   return width;
 };
 
-export const TextSkeleton = ({ fontSize, className }: TextProps) => {
+export const TextSkeleton = ({
+  fontSize,
+  className,
+  dimensions,
+}: TextProps & { dimensions?: Dimensions }) => {
   return (
     <div
-      className={
-        `bg-custom-skeleton rounded-xl overflow-hidden animate-pulse truncate w-[100px] h-[20px] px-10` +
-        " " +
-        (getTextWidth(fontSize) || "w-[0.5rem]")
-      }
+      className={`bg-custom-skeleton rounded-xl overflow-hidden animate-pulse truncate w-[100px] h-[20px] px-10`}
       style={{
-        height: `${fontSize}px`,
+        height: `${dimensions?.height || fontSize}px`,
+        width:
+          `${dimensions?.height}px` || getTextWidth(fontSize) || "w-[0.5rem]",
         marginTop: `${fontSize / 7}px`,
         marginBottom: `${fontSize / 7}px`,
       }}

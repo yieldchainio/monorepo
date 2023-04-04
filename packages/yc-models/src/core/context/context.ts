@@ -210,7 +210,6 @@ class YCClassificationsInternal {
   };
 
   protected fetchStrategies = async () => {
-
     (await fetchRouter<DBStrategy[]>({
       backend: {
         fetcher: async () =>
@@ -636,6 +635,10 @@ export class YCClassifications extends YCClassificationsInternal {
       );
     }
     return this.YCstrategies;
+  }
+
+  get rawStrategies() {
+    return this.Strategies;
   }
 
   get protocols() {

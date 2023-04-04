@@ -1,6 +1,6 @@
 import { PrismaClient } from "@yc/yc-data";
 import axios from "axios";
-import { DBUser } from "../../types/db";
+import { DBStrategy, DBUser } from "../../types/db";
 import { BaseClass } from "../base";
 import { YCClassifications } from "../context/context";
 import { YCSocialMedia } from "../social-media/social-media";
@@ -13,11 +13,6 @@ import { fetchRouter } from "../utils/fetch-router";
  * A class representing an on-chain token
  */
 export class YCUser extends BaseClass {
-  // =================
-  //   SINGLETON REF
-  // =================
-  static instances: YCUser[] = [];
-
   // =======================
   //    PRIVATE VARIABLES
   // =======================
@@ -181,35 +176,25 @@ export class YCUser extends BaseClass {
 
     this.#context = _context;
 
-    // We try to find an existing instance of this user
-    const existingUser = YCUser.instances.find((user) => user.id === _user.id);
+    const vaults = _context.rawStrategies
+      .filter((strategy) => strategy.creator_id == this.id)
+      .map((vault) => vault.id);
 
-    // If we have an existing user and it has the same fields as this one, we return the singleton of it
-    if (existingUser && this.compare(existingUser)) {
-      return existingUser;
+    /**
+     * @notice
+     * We set an array of strings (the IDs) initially to the global object,
+     * this is done to prevent an infinite circular check with the strategies that refernece to this user,
+     * when comparing (Since, the stringifier of the comparison function would have converted the strategies
+     * into IDs anyway to avoid a massive memory leak)
+     */
+    this.#createdVaults = vaults as unknown as YCStrategy[];
 
-      // Else, if we do have an existing users and the fields are different, we replace it with the current instance
-    } else if (existingUser) {
-      // The index of the old singleton
-      const oldUserIndex = YCUser.instances.findIndex(
-        (usr) => usr.id === existingUser.id
-      );
+    const existingUser = this.getInstance(_user.id);
+    if (existingUser) return existingUser;
 
-      // Sufficient check, we replace it with this instance using .splice
-      if (oldUserIndex !== undefined)
-        YCUser.instances.splice(oldUserIndex, 1, this);
-
-      // Else, if there's no existing singleton at all, we push this one into the array
-    } else {
-      // Else we push this instance into the array
-      YCUser.instances.push(this);
-    }
-
-    // We only set the following propreties if the context has been initiallized
-    if (_context.initiallized)
-      this.#createdVaults = _context.strategies.filter(
-        (strategy) => strategy.creator?.id == this.id
-      );
+    this.#createdVaults = _context.strategies.filter(
+      (strat) => strat.creator?.id == this.id
+    );
   }
   // =======================
   //        METHODS
@@ -245,6 +230,25 @@ export class YCUser extends BaseClass {
   get isVerified() {
     return this.#verified;
   }
+
+  // =================
+  //   SINGLETON REF
+  // =================
+  getInstance = (id: string): YCUser | null => {
+    // We try to find an existing instance of this user
+    const existingUser = YCUser.instances.get(id);
+
+    // If we have an existing user and it has the same fields as this one, we return the singleton of it
+    if (existingUser) {
+      if (this.compare(existingUser)) return existingUser;
+    }
+
+    YCUser.instances.set(id, this);
+
+    return existingUser || null;
+  };
+
+  static instances: Map<string, YCUser> = new Map();
 }
 
 // Different type of tokens - Native token (e.g ETH), ERC20, ERC721, etc

@@ -395,8 +395,11 @@ export class YCStrategy extends BaseClass {
       );
 
     this.apy = this.statistics[this.statistics.length - 1].apy;
+
     this.#setTVL();
     this.#setGasBalance();
+    const existingStrategy = this.getInstance(this.id);
+    if (existingStrategy) return existingStrategy;
   }
 
   // ===================================
@@ -404,7 +407,8 @@ export class YCStrategy extends BaseClass {
   // ===================================
 
   // Fetches the TVL From the strategy's contract and sets it
-  #setTVL = async (): Promise<bigint> => {
+  #setTVL = async (retry: number = 0): Promise<bigint> => {
+    if (retry >= 5) return 0n;
     try {
       // Get the data from our contract object
       const tvl: bigint = await this.contract.totalVaultShares();
@@ -412,13 +416,19 @@ export class YCStrategy extends BaseClass {
       // Set the global field
       if (tvl) this.#tvl = tvl;
 
+      console.log("Ethers TVL contract", this.contract);
+      console.log("Ethers Provider", this.network?.provider);
       // Return the TVL
       return tvl;
     } catch (e) {
       console.error(
         "Caught error with ethers TVL. Strategy Link:",
-        this.network?.blockExplorer + `/address/${this.address}`
+        this.network?.blockExplorer + `/address/${this.address}`,
+        e,
+        this.network?.provider._getConnection().url
       );
+
+      if (retry < 5) return await this.#setTVL(retry + 1);
 
       // We return 0 if an error was caught
       return 0n;
@@ -472,4 +482,23 @@ export class YCStrategy extends BaseClass {
 
     return _token instanceof YCToken;
   };
+
+  getInstance = (id: string): YCStrategy | null => {
+    // We try to find an existing instance of this user
+    const existingUser = YCStrategy.instances.get(id);
+
+    // If we have an existing user and it has the same fields as this one, we return the singleton of it
+    if (existingUser) {
+      if (this.compare(existingUser)) return existingUser;
+    }
+
+    YCStrategy.instances.set(id, this);
+
+    return existingUser || null;
+  };
+
+  // =================
+  //   SINGLETON REF
+  // =================
+  static instances: Map<string, YCStrategy> = new Map();
 }

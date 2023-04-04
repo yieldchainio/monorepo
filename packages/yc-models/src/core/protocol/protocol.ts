@@ -5,13 +5,14 @@ import { YCAddress } from "../address/address";
 import { YCNetwork } from "../network/network";
 import { YCSocialMedia } from "../social-media/social-media";
 import { YCToken } from "../token/token";
+import { BaseClass } from "../base";
 
 /**
  * @notice
  * YCProtocol
  * A class representing a Yieldchain protocol
  */
-export class YCProtocol {
+export class YCProtocol extends BaseClass {
   // =======================
   //      FIELDS
   // ======================
@@ -32,6 +33,7 @@ export class YCProtocol {
   //     CONSTRUCTOR
   // ======================
   constructor(_protocol: DBProtocol, _context: YCClassifications) {
+    super();
     // Set static
     this.socialMedia = new YCSocialMedia(
       _protocol.twitter,
@@ -46,6 +48,9 @@ export class YCProtocol {
     this.logo = _protocol.logo;
 
     this.id = _protocol.id;
+
+    const existingProtocol = this.getInstance(_protocol.id);
+    if (existingProtocol) return existingProtocol;
 
     // // Find all tokens that are included in this protocol's markets
     // let tokens = _context.tokens
@@ -67,4 +72,23 @@ export class YCProtocol {
     //   (address: YCAddress) => address.protocol()?.ID() == this.ID()
     // );
   }
+
+  // =================
+  //   SINGLETON REF
+  // =================
+  getInstance = (id: string): YCProtocol | null => {
+    // We try to find an existing instance of this user
+    const existingProtocol = YCProtocol.instances.get(id);
+
+    // If we have an existing user and it has the same fields as this one, we return the singleton of it
+    if (existingProtocol) {
+      if (this.compare(existingProtocol)) return existingProtocol;
+    }
+
+    YCProtocol.instances.set(id, this);
+
+    return existingProtocol || null;
+  };
+
+  static instances: Map<string, YCProtocol> = new Map();
 }

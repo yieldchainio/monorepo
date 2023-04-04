@@ -61,11 +61,15 @@ export class YCToken extends BaseClass {
     this.decimals = _token.decimals;
     this.logo = _token.logo;
     this.native = this.address == ethers.ZeroAddress ? true : false;
+
     this.contract = new Contract(
       this.address,
       erc20ABI,
       this.network?.provider
     );
+
+    const existingToken = this.getInstance(_token.id);
+    if (existingToken) return existingToken;
 
     // Getting the token's available "markets" (i.e protocols where the token is liquid)
     // let markets: Array<YCProtocol | null> = _token.markets.map(
@@ -211,4 +215,23 @@ export class YCToken extends BaseClass {
   // ========================
   //    INTERNAL FUNCTIONS
   // ========================
+
+  // =================
+  //   SINGLETON REF
+  // =================
+  getInstance = (id: string): YCToken | null => {
+    // We try to find an existing instance of this user
+    const existingToken = YCToken.instances.get(id);
+
+    // If we have an existing user and it has the same fields as this one, we return the singleton of it
+    if (existingToken) {
+      if (this.compare(existingToken)) return existingToken;
+    }
+
+    YCToken.instances.set(id, this);
+
+    return existingToken || null;
+  };
+
+  static instances: Map<string, YCToken> = new Map();
 }

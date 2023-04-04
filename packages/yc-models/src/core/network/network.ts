@@ -140,6 +140,9 @@ export class YCNetwork extends BaseClass {
     // Init our native token
     if (_context) this.#initToken(_context);
 
+    const existingNetwork = this.getInstance(_network.id);
+    if (existingNetwork) return existingNetwork;
+
     // // Get all protocols that r available on this network
     // this.#protocols = _context
     //   .protocolsNetworks()
@@ -191,4 +194,23 @@ export class YCNetwork extends BaseClass {
     if (signer instanceof EthersExecutor)
       this.assertSameChainID((await signer?.provider?.getNetwork())?.chainId);
   };
+
+  // =================
+  //   SINGLETON REF
+  // =================
+  getInstance = (id: number): YCNetwork | null => {
+    // We try to find an existing instance of this user
+    const existingNetwork = YCNetwork.instances.get(id);
+
+    // If we have an existing user and it has the same fields as this one, we return the singleton of it
+    if (existingNetwork) {
+      if (this.compare(existingNetwork)) return existingNetwork;
+    }
+
+    YCNetwork.instances.set(id, this);
+
+    return existingNetwork || null;
+  };
+
+  static instances: Map<number, YCNetwork> = new Map();
 }

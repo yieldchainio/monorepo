@@ -56,14 +56,12 @@ export const ValueLocked = ({ strategy }: { strategy?: YCStrategy }) => {
         }
       }
     })();
-  }, [strategy?.stringify(), address]);
+  }, [strategy?.tvl, address]);
 
   return (
     <InterModalSection
       height="h-[55%] flex-row items-center justify-between tablet:h-max tablet:py-3 tablet:flex-col  "
-      width={
-        "w-[55%] tablet:w-[100%] tablet:px-10 tablet:gap-0 tablet:py-5"
-      }
+      width={"w-[55%] tablet:w-[100%] tablet:px-10 tablet:gap-0 tablet:py-5"}
       className="overflow-hidden"
     >
       <InfoSection title="TVL">
@@ -74,6 +72,7 @@ export const ValueLocked = ({ strategy }: { strategy?: YCStrategy }) => {
           <WrappedText
             fontSize={12}
             className="text-opacity-40 mb-0.5 largeLaptop:hidden"
+            skeletonDimensions={{ width: 0, height: 0 }}
           >
             {usdTVL}
           </WrappedText>

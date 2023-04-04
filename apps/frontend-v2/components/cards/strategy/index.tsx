@@ -71,7 +71,7 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
               </div>
             </div>
             <WrappedText fontStyle="medium" fontSize={16} className="">
-              {strategy?.apy ? `APY: ${strategy?.apy}%` : undefined}
+              {strategy?.apy != undefined ? `APY: ${strategy?.apy}%` : undefined}
             </WrappedText>
           </div>
         </div>

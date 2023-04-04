@@ -24,6 +24,7 @@ import { InfoSection } from "../../general/info-section";
 import { InterModalSection } from "../../general/modal-section";
 import { InfoProvider } from "components/info-providers";
 import { ToolTipDirection } from "components/info-providers/types";
+import Divisor from "components/general/divisor-line";
 
 export const GasBalance = ({ strategy }: { strategy?: YCStrategy }) => {
   // A state for the formatted interval (e.g "5 Days", "8 Hours")
@@ -61,12 +62,18 @@ export const GasBalance = ({ strategy }: { strategy?: YCStrategy }) => {
   return (
     <InterModalSection
       height="h-[100%] tablet:h-[40%]"
-      className="flex-col pt-4 pb-2 tablet:items-center  justify-start items-start gap-4 tablet:gap-2"
+      className="flex-col pt-8 tablet:pt-4 pb-2 tablet:items-center  justify-start items-start gap-4 tablet:gap-2"
       width="w-[40%] tablet:w-full"
     >
       <InfoSection title="Runs Every" className="tablet:hidden">
         {formattedInterval}
       </InfoSection>
+      {/* <Divisor
+        className="w-[90%] border-custom-textColor smallLaptop:hidden "
+        style={{
+          borderColor: "rgba(var(--text), 0.1)",
+        }}
+      /> */}
       <InfoSection title="Gas Balance">
         <div className="flex flex-row gap-2 items-end">
           <WrappedText fontSize={20} className="tablet:text-[16px]">

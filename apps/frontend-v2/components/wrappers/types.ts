@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent } from "react";
+import { Dimensions } from "utilities/classes/step/types";
 
 export interface TextProps {
   children: string | undefined | null;
@@ -15,6 +16,7 @@ export interface TextProps {
   props?: Record<any, any>;
   onInput?: (e: FormEvent<HTMLDivElement>) => any;
   truncate?: "truncate" | "";
+  skeletonDimensions?: Dimensions
 }
 
 export enum Selection {

@@ -21,6 +21,7 @@
     "@yc/yc-models": "*",
     "autoprefixer": "^10.4.13",
     "axios": "^1.3.4",
+    "d3-flextree": "^2.1.2",
     "encoding": "^0.1.13",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.3",
@@ -48,6 +49,7 @@
   "devDependencies": {
     "@babel/core": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
+    "@types/d3-flextree": "^2.1.0",
     "@types/react-slick": "^0.23.10",
     "babel-loader": "^9.1.2",
     "ts-loader": "^9.4.2"

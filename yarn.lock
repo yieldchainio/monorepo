@@ -3816,7 +3816,14 @@
   resolved "https://registry.yarnpkg.com/@types/d3-ease/-/d3-ease-3.0.0.tgz#c29926f8b596f9dadaeca062a32a45365681eae0"
   integrity sha512-aMo4eaAOijJjA6uU+GIeW018dvy9+oH5Y2VPPzjjfxevvGQ/oRDs+tfYC9b50Q4BygRR8yE2QCLsrT0WtAVseA==
 
-"@types/d3-hierarchy@^3.1.0":
+"@types/d3-flextree@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/d3-flextree/-/d3-flextree-2.1.0.tgz#b2afecdecb05973a9a7926e6b271d031c7886965"
+  integrity sha512-EKMI8B/lU1y75YMEoAGXMKmmK4e8Zg84hD6HZNStY6tkejMtT7ALI1rAPi+1CnDJf+p1RTTF29rtwop4NGWTbQ==
+  dependencies:
+    "@types/d3-hierarchy" "*"
+
+"@types/d3-hierarchy@*", "@types/d3-hierarchy@^3.1.0":
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@types/d3-hierarchy/-/d3-hierarchy-3.1.2.tgz#b3a446b5437faededb30ac32b7cc0486559ab1e2"
   integrity sha512-9hjRTVoZjRFR6xo8igAJyNXQyPX6Aq++Nhb5ebrUF414dv4jr2MitM2fWiOY475wa3Za7TOS2Gh9fmqEhLTt0A==

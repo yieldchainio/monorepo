@@ -58,3 +58,15 @@ export interface IStep<T extends IStep<T>> {
   children: T[];
   parent: T | null;
 }
+
+export interface JSONStep {
+  id: string;
+  size: StepSizing;
+  action?: string;
+  protocol?: string;
+  dimensions: Dimensions;
+  inflows: string[];
+  outflow: string[];
+  children: JSONStep[];
+  parent: JSONStep | null;
+}

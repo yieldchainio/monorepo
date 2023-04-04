@@ -6,20 +6,20 @@ export class YCAction {
   // =====================
   //    PRIVATE FIELDS
   // =====================
-  #name: string;
-  #identifier: string;
-  #popularity: number;
-  #available: boolean;
-  #functions: YCFunc[] = [];
+  readonly name: string;
+  readonly id: string;
+  readonly popularity: number;
+  readonly available: boolean;
+  readonly functions: YCFunc[] = [];
 
   // =====================
   //     CONSTRUCTOR
   // =====================
   constructor(_action: DBAction, _context: YCClassifications) {
-    this.#name = _action.name;
-    this.#identifier = _action.id;
-    this.#popularity = _action.popularity;
-    this.#available = _action.available;
+    this.name = _action.name;
+    this.id = _action.id;
+    this.popularity = _action.popularity;
+    this.available = _action.available;
 
     // Iterate over each function id
     for (const funcid of _action.functions_ids) {
@@ -36,7 +36,7 @@ export class YCAction {
         );
 
       // Push the function into our global array
-      this.#functions.push(fullFunc);
+      this.functions.push(fullFunc);
     }
   }
 }

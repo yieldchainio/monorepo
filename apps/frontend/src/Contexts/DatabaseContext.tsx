@@ -419,7 +419,7 @@ export const StrategyContextProvider = (props: any) => {
     // });
 
     hierarchy.each((d: any, index: any) => {
-      isNaN(d.data.width)
+      isNaN(d. data.width)
         ? (d.data.width = 327)
         : (d.data.width = d.data.width);
 

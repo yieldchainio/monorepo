@@ -14,7 +14,6 @@ import useYCUser from "utilities/hooks/yc/useYCUser";
 import { StrategyTokenSection } from "./token-section";
 import GradientButton from "components/buttons/gradient";
 import { useRouter } from "next/navigation";
-import { InfoProvider } from "components/info-providers";
 import { forwardRef, useMemo } from "react";
 import { ProtocolsProvider } from "components/info-providers/protocols";
 

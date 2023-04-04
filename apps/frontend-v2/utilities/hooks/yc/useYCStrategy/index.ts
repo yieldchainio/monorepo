@@ -7,7 +7,7 @@
 
 import { YCNetwork, YCStep, YCStrategy, YCToken, YCUser } from "@yc/yc-models";
 import { useEffect, useState } from "react";
-import { useYCStore } from "../stores/yc-data";
+import { useYCStore } from "../../stores/yc-data";
 
 interface UseYCStrategyReturn {
   address?: string;

@@ -13,26 +13,8 @@ import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 import Jazzicon from "@raugfer/jazzicon";
 import { useEffect, useState } from "react";
 import { useInternalYCUser } from "utilities/hooks/stores/yc-data";
-import { useIsMounted } from "../general/useIsMounted";
-
-// Interface for return value of the YCUser hook
-export interface YCUserHookReturn {
-  address: address | undefined;
-  profilePic: string | null;
-  userName: string;
-  createdVaults: YCStrategy[];
-  updateDetails: (
-    newDetails: Partial<UserUpdateArguments>
-  ) => Promise<DBUser | null>;
-  socialMedia: YCSocialMedia;
-  verified: boolean;
-  description: string | undefined;
-}
-
-// Interface for the useYCUser's props
-export interface UseYCUserProps {
-  userAddress?: address;
-}
+import { useIsMounted } from "../../general/useIsMounted";
+import { UseYCUserProps, YCUserHookReturn } from "./types";
 
 /**
  * A hook for accessing a YC User's details
@@ -239,7 +221,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     setUsername(user?.username || ensName || "Anon");
     // Cleanup
     return () => setUsername("Anon");
-  }, [user?.stringify(), ensName, userAddress]);
+  }, [user?.username, ensName, userAddress]);
 
   // useEffect for the profile pic
   useEffect(() => {
@@ -248,7 +230,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
 
     // Cleanup
     return () => setProfilePic(null);
-  }, [user?.stringify(), ensAvatar, jazziconPFP]);
+  }, [user?.profilePic, ensAvatar, jazziconPFP]);
 
   // Jazzicon useEffect (listens to address)
   useEffect(() => {

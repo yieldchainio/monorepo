@@ -20,8 +20,7 @@ export const useLogs = create<LogsStore>((set, get) => ({
     set((state) => {
       const id = uuid();
       const log = logCallback(id);
-      log.data && get().instance.log(log.data);
-
+      log.data && get().instance.log(log.data);      
       log.lifespan !== "immortal" &&
         setTimeout(() => {
           state.remove(id);

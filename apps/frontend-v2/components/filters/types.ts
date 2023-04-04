@@ -5,12 +5,11 @@ import {
   BaseFilter,
 } from "utilities/hooks/general/useFilters/types";
 
-export interface FilterBoxProps {
+export interface FilterBoxProps extends BaseComponentProps {
   filters: number;
-  onClick?: (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => any;
-  className?: string;
 }
-export interface FiltersMenuProps<V, T extends BaseFilter<V>> extends BaseComponentProps {
+export interface FiltersMenuProps<V, T extends BaseFilter<V>>
+  extends BaseComponentProps {
   filters: Array<FilterConfig<V, T> & T>;
   parentRef: RefObject<HTMLElement | undefined>;
   addFilter: (filter: FilterConfig<V, T> & T) => any;

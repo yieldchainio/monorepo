@@ -220,26 +220,7 @@ const BrowseHeroSection = ({
   const logs = useLogs();
 
   return (
-    <div
-      className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-[100%] h-full "
-      onClick={() => {
-        console.log("Clickieeeekng");
-        logs.push((id: string) => ({
-          component:
-            logs.logs.length % 3 === 0 ? (
-              <InfoMessage id={id}>Some Very Helpful Info</InfoMessage>
-            ) : logs.logs.length % 2 === 0 ? (
-              <ErrorMessage id={id}>ERROR - you gay asf</ErrorMessage>
-            ) : (
-              <SuccessMessage id={id}>
-                You are so gud successfull
-              </SuccessMessage>
-            ),
-          lifespan: 7000,
-          id: id,
-        }));
-      }}
-    >
+    <div className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-[100%] h-full ">
       <div className="flex flex-col items-center">
         <WrappedText fontSize={72} fontStyle="black">
           Browse
@@ -281,7 +262,11 @@ const BrowseHeroSection = ({
               filters={filters}
               items={strategies}
               stringifier={(items) =>
-                JSON.stringify(items.map((item) => item.toString()))
+                JSON.stringify(
+                  items.map((item) =>
+                    item.stringify ? item.stringify() : item.toString()
+                  )
+                )
               }
               setter={setFilteredStrategies}
             />

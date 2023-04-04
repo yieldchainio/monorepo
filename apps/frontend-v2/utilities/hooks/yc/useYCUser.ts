@@ -125,8 +125,8 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     },
     (oldUsers, newUsers) => {
       const eq =
-        JSON.stringify(oldUsers.map((usr) => usr.toString())) ===
-        JSON.stringify(newUsers.map((usr) => usr.toString()));
+        JSON.stringify(oldUsers.map((usr) => usr.stringify())) ===
+        JSON.stringify(newUsers.map((usr) => usr.stringify()));
       return eq;
     }
   );
@@ -141,7 +141,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
         await refresher(Endpoints.USERS);
       })();
     }
-  }, [JSON.stringify(users.map((usr) => usr.toString()))]);
+  }, [JSON.stringify(users.map((usr) => usr.stringify()))]);
 
   /**
    * useEffect running every time the @users update, in an attempt to update our @user,
@@ -189,7 +189,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     return () => {
       setUser(null);
     };
-  }, [userAddress, JSON.stringify(users.map((usr) => usr.toString()))]);
+  }, [userAddress, JSON.stringify(users.map((usr) => usr.stringify()))]);
 
   /**
    * useEffect for handling an address change (i.e new user)
@@ -218,13 +218,13 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     const currUser = users.find((usr) => usr.id === user?.id);
 
     // If we found it and it does not equal to the current user - we set the state
-    if (currUser && currUser.toString() !== user?.toString()) {
+    if (currUser && currUser.stringify() !== user?.stringify()) {
       setUser(currUser);
     }
 
     // Cleanup
     return () => setUser(null);
-  }, [JSON.stringify(users.map((usr) => usr.toString()))]);
+  }, [JSON.stringify(users.map((usr) => usr.stringify()))]);
 
   // Some more details about the user
   const [createdVaults, setCreatedVaults] = useState<YCStrategy[]>([]);
@@ -239,7 +239,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     setUsername(user?.username || ensName || "Anon");
     // Cleanup
     return () => setUsername("Anon");
-  }, [user?.toString(), ensName, userAddress]);
+  }, [user?.stringify(), ensName, userAddress]);
 
   // useEffect for the profile pic
   useEffect(() => {
@@ -248,7 +248,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
 
     // Cleanup
     return () => setProfilePic(null);
-  }, [user?.toString(), ensAvatar, jazziconPFP]);
+  }, [user?.stringify(), ensAvatar, jazziconPFP]);
 
   // Jazzicon useEffect (listens to address)
   useEffect(() => {
@@ -272,7 +272,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
 
     // Cleanup
     return () => setSocialMedia(new YCSocialMedia());
-  }, [user?.socialMedia.toString()]);
+  }, [user?.socialMedia.stringify()]);
 
   // useEffect for user's description
   useEffect(() => {

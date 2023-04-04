@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { BaseFilter, UseFilterProps } from "./types";
+import { safeToJSON } from "@yc/yc-models";
 
 /**
  * A custom hook for using filters,
@@ -34,6 +35,7 @@ export const useFilters = <V, T extends BaseFilter<V>>({
   // Responsible for filtering the array of items using the callback, setting our state
   // and (if provided) setting it through the setter as well
   useEffect(() => {
+    console.log("Change!!!!! Filters: ", safeToJSON(filters));
     // Init the new array
     let newArr = [...items];
 
@@ -48,7 +50,11 @@ export const useFilters = <V, T extends BaseFilter<V>>({
     if (setter) setter(newArr);
 
     // We stringify them all so that we actually detect a change in them
-  }, [stringifier(items), JSON.stringify(filters), JSON.stringify(setter)]);
+  }, [
+    stringifier(items),
+    JSON.stringify(filters.map((filter) => JSON.stringify(safeToJSON(filter)))),
+    JSON.stringify(setter),
+  ]);
 
   // Return our filtlered items
   return filteredItems;

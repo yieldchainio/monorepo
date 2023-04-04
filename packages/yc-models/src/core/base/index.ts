@@ -8,6 +8,7 @@ import {
   EthersTransactionResponse,
   SignerMethod,
 } from "../../types";
+import { safeToJSON } from "../../utils";
 
 /**
  * Another base class which has base web3 functionality to support bothbackends and frontneds
@@ -34,7 +35,7 @@ export class BaseWeb3Class {
   // Send multiple transactions
   signTransactions = async (
     signingMethod: SignerMethod,
-    transactions: ContractTransaction[] | ContractTransaction
+    transactions: ContractTransaction[]
   ) => {
     // If we got a callback as the signing method, we call it with the requests. Otherwise,
     // we got a signer so we make a function that sends the transaction to it
@@ -47,7 +48,6 @@ export class BaseWeb3Class {
     // An array of all the respones
     const receipts: EthersTransactionResponse[] = [];
 
-    transactions = Array.isArray(transactions) ? transactions : [transactions];
     // Iterate and call our function, push each receipt to an array
     for (const transactionRequest of transactions) {
       const txn = await _signTransaction(transactionRequest);
@@ -69,31 +69,17 @@ export class BaseWeb3Class {
 export class BaseClass extends BaseWeb3Class {
   // Method to convert the class ,including it's getters - to JSON.
   toJSON() {
-    const jsonObj: any = Object.assign({}, this);
-    const proto = Object.getPrototypeOf(this);
-    for (const key of Object.getOwnPropertyNames(proto)) {
-      const desc = Object.getOwnPropertyDescriptor(proto, key);
-      const hasGetter = desc && typeof desc.get === "function";
-      if (hasGetter) {
-        // @ts-ignore
-        jsonObj[key] = this[key];
-      }
-    }
-    return jsonObj;
+    return safeToJSON(this);
   }
 
   // Method to turn the object into a stringified version
-  toString() {
-    try {
-      return JSON.stringify(this.toJSON());
-    } catch (e) {
-      return "";
-    }
+  stringify() {
+    JSON.stringify(this.toJSON());
   }
 
   // Method to compare an instance of this class with another one
   compare(_instance: BaseClass): boolean {
-    return this.toString() == _instance.toString();
+    return this.stringify() == _instance.stringify();
   }
 
   // An assertion function that checks a condition and throws an error if it's not met

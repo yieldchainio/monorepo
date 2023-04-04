@@ -56,7 +56,7 @@ export const ValueLocked = ({ strategy }: { strategy?: YCStrategy }) => {
         }
       }
     })();
-  }, [strategy?.toString(), address]);
+  }, [strategy?.stringify(), address]);
 
   return (
     <InterModalSection

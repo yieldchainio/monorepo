@@ -9,7 +9,7 @@ import { RegulerButton } from "components/buttons/reguler";
 import DisconnectIcon from "components/icons/disconnect";
 import { ThemeSwitch } from "components/switches/theme";
 import EditIcon from "components/icons/edit";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, MouseEvent, useEffect, useState } from "react";
 import CheckmarkIcon from "components/icons/checkmark";
 import SmallLoader from "components/loaders/small";
 
@@ -125,7 +125,7 @@ const ProfileSection = ({
       <div className="flex flex-row items-center gap-2 pb-5 ml-auto">
         <ThemeSwitch />
         <RegulerButton
-          onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+          onClick={(e?: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) =>
             disconnect()
           }
           className="py-[8px] px-[10px] ml-auto items-center justify-center my-1"

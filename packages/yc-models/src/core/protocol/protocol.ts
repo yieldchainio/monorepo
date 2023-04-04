@@ -17,7 +17,7 @@ export class YCProtocol {
   // ======================
   readonly id: string;
   readonly name: string;
-  readonly website: String;
+  readonly website: string;
   readonly logo: string;
   readonly socialMedia: YCSocialMedia;
 

@@ -22,15 +22,7 @@ dotenv.config();
 import { FlowDirection, PrismaClient } from "@prisma/client";
 
 console.log("DAtabase URL", process.env.DATABASE_URL);
-
-/**
- * Patches
- */
-// =====================
-
-// @ts-ignore
-BigInt.prototype.toJSON = () => this?.toString();
-// =====================
+console.log("dotenv", dotenv);
 
 // Instantitate PG Client
 const { Client } = pg;

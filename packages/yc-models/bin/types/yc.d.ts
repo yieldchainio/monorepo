@@ -2,7 +2,7 @@
  * @notice
  * A complete context of Yieldchain's current classified Database.
  */
-import { DBAddress, DBAction, DBFunction, DBFlow, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBUser } from "./db";
+import { DBAddress, DBAction, DBFunction, DBFlow, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBUser, DBStatistic } from "./db";
 export interface ClassificationContext {
     addresses: DBAddress[];
     funcs: DBFunction[];
@@ -14,6 +14,7 @@ export interface ClassificationContext {
     actions: DBAction[];
     networks: DBNetwork[];
     users: DBUser[];
+    statistics: DBStatistic[];
 }
 export interface IFunction {
     target_address: string;

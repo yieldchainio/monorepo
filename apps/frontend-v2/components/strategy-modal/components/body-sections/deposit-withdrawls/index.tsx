@@ -58,7 +58,7 @@ export const StrategyOperationsBox = ({
           );
         },
       });
-  }, [operation, strategy?.toString(), debouncedValue]);
+  }, [operation, strategy?.stringify(), debouncedValue]);
 
   return (
     <InterModalSection

@@ -46,8 +46,8 @@ export const useYCStrategy = (strategyID: string): UseYCStrategyReturn => {
     (state) => state.context.YCstrategies,
     (prevStrats, currStrats) => {
       return (
-        JSON.stringify(prevStrats.map((strat) => strat.toString())) ===
-        JSON.stringify(currStrats.map((strat) => strat.toString()))
+        JSON.stringify(prevStrats.map((strat) => strat.stringify())) ===
+        JSON.stringify(currStrats.map((strat) => strat.stringify()))
       );
     }
   );
@@ -67,7 +67,7 @@ export const useYCStrategy = (strategyID: string): UseYCStrategyReturn => {
    * useEffect to update the strategy object every time strategies are updated, since the details may change
    */
   useEffect(() => {}, [
-    JSON.stringify(YCStrategies.map((strat) => strat.toString())),
+    JSON.stringify(YCStrategies.map((strat) => strat.stringify())),
   ]);
 
   /**
@@ -87,12 +87,12 @@ export const useYCStrategy = (strategyID: string): UseYCStrategyReturn => {
   // Update the address
   useEffect(() => {
     setCreator(strategy?.creator || undefined);
-  }, [strategy?.creator?.toString()]);
+  }, [strategy?.creator?.stringify()]);
 
   // Update the address
   useEffect(() => {
     setNetwork(strategy?.network || undefined);
-  }, [strategy?.network?.toString()]);
+  }, [strategy?.network?.stringify()]);
 
   // Update the address
   useEffect(() => {

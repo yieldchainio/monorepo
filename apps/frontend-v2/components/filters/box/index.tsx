@@ -21,7 +21,7 @@ export const FilterBox = forwardRef<HTMLDivElement, FilterBoxProps>(
             " " +
             (className || "")
           }
-          onClick={(e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) =>
+          onClick={(e?: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) =>
             onClick && onClick(e)
           }
           ref={ref}

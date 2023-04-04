@@ -2,10 +2,11 @@ import { YCToken } from "../core/token/token";
 export declare class LiFi {
     #private;
     static instance: LiFi;
+    static getInstance: () => LiFi;
     constructor();
     tokenInfo: (_token: YCToken) => Promise<TokenInfo | null>;
     getUSDPrice: (_token: YCToken) => Promise<number | null>;
-    getFullQuote: (_fromToken: YCToken, _toToken: YCToken, _amount?: string, _sender?: string, _toChain?: number, _receiver?: string) => Promise<FullQuoteResponse | null>;
+    getFullQuote: (_fromToken: YCToken, _toToken: YCToken, _amount?: string, _sender?: string, _toChain?: number, _receiver?: string, _currentTry?: number) => Promise<FullQuoteResponse | null>;
     getTokenPrice: (_fromToken: YCToken, _toToken: YCToken) => Promise<number | null>;
 }
 interface FullQuoteResponse {

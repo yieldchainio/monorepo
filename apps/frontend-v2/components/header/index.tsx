@@ -39,8 +39,8 @@ export const Header = () => {
     (state) => state.context.networks,
     (a, b) => {
       return (
-        JSON.stringify(a.map((network) => network.toString())) ==
-        JSON.stringify(b.map((network) => network.toString()))
+        JSON.stringify(a.map((network) => network.stringify())) ==
+        JSON.stringify(b.map((network) => network.stringify()))
       );
     }
   );

@@ -1,3 +1,5 @@
+import { ContractTransaction, TransactionRequest } from "ethers";
+import { EthersExecutor } from "./ethers";
 export type uint256 = number;
 export type uint = number;
 export type bytes = string;
@@ -16,3 +18,7 @@ export declare enum ChainID {
     Avalanche = 43114,
     Arbitrum = 42161
 }
+export type SignerMethod = EthersExecutor | (Partial<TransactionRequest> & {
+    from: string;
+    executionCallback: (req: ContractTransaction) => Promise<any>;
+});

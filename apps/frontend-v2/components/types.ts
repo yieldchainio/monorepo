@@ -5,7 +5,7 @@ export interface BaseComponentProps<T = any> {
   breakpoints?: BreakPoint<T>;
   children?: React.ReactNode;
   style?: CSSProperties;
-  onClick?: (e?: MouseEvent<any, any>) => any;
+  onClick?: (e?: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => any;
 }
 
 export type BreakPoint<T> = T & {

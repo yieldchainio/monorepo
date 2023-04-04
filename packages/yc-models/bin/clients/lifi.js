@@ -9,14 +9,16 @@ export class LiFi {
     //     SINGLETON
     // ====================
     static instance;
+    static getInstance = () => {
+        if (!this.instance)
+            this.instance = new LiFi();
+        return this.instance;
+    };
     // ====================
     //     CONSTRUCTOR
     // ====================
     constructor() {
         this.#apiURL = "https://li.quest/v1";
-        if (!LiFi.instance)
-            LiFi.instance = new LiFi();
-        return LiFi.instance;
     }
     // ====================
     //     READ METHODS
@@ -36,21 +38,20 @@ export class LiFi {
         return parseFloat(info.priceUSD);
     };
     // Get a quote
-    getFullQuote = async (_fromToken, _toToken, _amount, _sender, _toChain, _receiver) => {
+    getFullQuote = async (_fromToken, _toToken, _amount, _sender, _toChain, _receiver, _currentTry = 0) => {
         let fromChainId = _fromToken.network?.chainid;
         let toChainId = _toToken.network?.chainid;
         if (!fromChainId || !toChainId)
             return null;
         let quote = null;
         // Sometimes the amount is too low and we gotta retry a couple of times
-        let retries = 0;
         try {
             quote = await (await axios.get(this.#apiURL +
                 `/quote?fromChain=${fromChainId}&toChain=${toChainId}&fromToken=${_fromToken.address}&toToken=${_toToken.address}&fromAddress=${_sender || ethers.ZeroAddress}&toAddress=${_receiver || _sender || ethers.ZeroAddress}&fromAmount=${_amount || _fromToken.parseDecimals(1)}`)).data;
         }
         catch (e) {
-            retries++;
-            return this.getFullQuote(_fromToken, _toToken, _amount, _sender, _toChain, _receiver);
+            if (_currentTry < 5)
+                return this.getFullQuote(_fromToken, _toToken, _amount, _sender, _toChain, _receiver, _currentTry + 1);
         }
         return quote;
     };

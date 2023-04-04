@@ -45,12 +45,12 @@ export const GasBalance = ({ strategy }: { strategy?: YCStrategy }) => {
       );
       setUSDGasBalance(formatMoney(usdValue || 0));
     })();
-  }, [strategy?.toString()]);
+  }, [strategy?.stringify()]);
 
   useEffect(() => {
     const { interval, unit } = strategy?.formattedInterval || {};
     if (interval && unit) setFormattedInterval(`${interval} ${unit}`);
-  }, [strategy?.toString()]);
+  }, [strategy?.stringify()]);
 
   // Breakpoints for responsiveness
   const { proprety: addGasText } = useMediaBreakpoints({

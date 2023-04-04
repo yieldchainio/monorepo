@@ -18,54 +18,27 @@ import {
   SignerMethod,
 } from "../../types";
 import erc20ABI from "../../ABIs/erc20.json" assert { type: "json" };
-import { BaseWeb3Class } from "../base";
+import { BaseClass } from "../base";
 
 /**
  * @notice
  * YCToken
  * A class representing an on-chain token
  */
-export class YCToken extends BaseWeb3Class {
+export class YCToken extends BaseClass {
   // =========================
   //       FIELDS/GETTERS
   // =========================
-  #name: string;
-  #id: string;
-  #symbol: string;
-  #address: string;
-  #logo: string | null = null; // Init to null (Optional field)
-  #decimals: number;
-  #markets: YCProtocol[] = [];
-  #native: boolean = false; // Init to false
-  #network: YCNetwork | null;
-  #contract: Contract;
-  get name(): string {
-    return this.#name;
-  }
-  get id(): string {
-    return this.#id;
-  }
-  get symbol(): string {
-    return this.#symbol;
-  }
-  get address(): string {
-    return this.#address;
-  }
-  get logo(): string | null {
-    return this.#logo;
-  } // Init to null (Optional field)
-  get decimals(): number {
-    return this.#decimals;
-  }
-  get markets(): YCProtocol[] {
-    return this.#markets;
-  }
-  get native(): boolean {
-    return this.#native;
-  } // Init to false
-  get network(): YCNetwork | null {
-    return this.#network;
-  }
+  readonly name: string;
+  readonly id: string;
+  readonly symbol: string;
+  readonly address: string;
+  readonly logo: string | null = null; // Init to null (Optional field)
+  readonly decimals: number;
+  readonly markets: YCProtocol[] = [];
+  readonly native: boolean = false; // Init to false
+  readonly network: YCNetwork | null;
+  readonly contract: Contract;
 
   // =======================
   //      CONSTRUCTOR
@@ -77,18 +50,18 @@ export class YCToken extends BaseWeb3Class {
   ) {
     super();
     // Init static fields
-    this.#name = _token.name;
-    this.#id = _token.id;
-    this.#symbol = _token.symbol;
-    this.#network =
+    this.name = _token.name;
+    this.id = _token.id;
+    this.symbol = _token.symbol;
+    this.network =
       _network && _network.chainid == _token.chain_id
         ? _network
         : _context.getNetwork(_token.chain_id);
-    this.#address = ethers.getAddress(_token.address);
-    this.#decimals = _token.decimals;
-    this.#logo = _token.logo;
-    this.#native = this.address == ethers.ZeroAddress ? true : false;
-    this.#contract = new Contract(
+    this.address = ethers.getAddress(_token.address);
+    this.decimals = _token.decimals;
+    this.logo = _token.logo;
+    this.native = this.address == ethers.ZeroAddress ? true : false;
+    this.contract = new Contract(
       this.address,
       erc20ABI,
       this.network?.provider
@@ -189,7 +162,7 @@ export class YCToken extends BaseWeb3Class {
     // Only approve just enough for it to be sufficient ontop of existing allownace
     const amountToApprove =
       amount -
-      (await this.#contract.allowance(
+      (await this.contract.allowance(
         signer instanceof EthersExecutor ? signer.address : signer.from,
         spender
       ));
@@ -214,7 +187,7 @@ export class YCToken extends BaseWeb3Class {
     spender: string,
     args: Partial<TransactionRequest> & { from: string }
   ): Promise<ContractTransaction> => {
-    return await this.#contract.approve.populateTransaction(
+    return await this.contract.approve.populateTransaction(
       spender,
       this.getParsed(amount),
       args
@@ -229,7 +202,7 @@ export class YCToken extends BaseWeb3Class {
     // Only approve just enough for it to be sufficient ontop of existing allownace
     const amountToApprove =
       this.getParsed(amount) -
-      (await this.#contract.allowance(args.from, spender, args));
+      (await this.contract.allowance(args.from, spender, args));
 
     if (amountToApprove <= 0n) return true;
     return await this.populateApproval(amountToApprove, spender, args);

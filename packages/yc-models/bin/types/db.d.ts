@@ -105,5 +105,22 @@ export interface DBUser {
     whitelisted: boolean;
     verified: boolean;
 }
-export interface Step {
+export interface DBStep {
+    id: string | "root";
+    parentId: string | null;
+    protocol: DBProtocol;
+    percentage: number;
+    inflows: DBFlow[];
+    outflows: DBFlow[];
+    action: DBAction;
+    function: DBFunction;
+    customArgs: DBArgument[];
+    children: DBStep[];
+}
+export interface DBStatistic {
+    id: string;
+    strategy_id: string;
+    timestamp: string | Date;
+    apy: number;
+    gasFee: string;
 }

@@ -2,7 +2,7 @@
  * A reguler button
  */
 
-import { forwardRef, useState } from "react";
+import { MouseEvent, forwardRef, useState } from "react";
 import { hexColors } from "configs/styles/colors";
 import { RegulerButtonProps } from "./types";
 import { ChildrenProvider } from "components/internal/render-children";
@@ -16,7 +16,7 @@ export const RegulerButton = forwardRef<HTMLDivElement, RegulerButtonProps>(
     const [loading, setLoading] = useState<boolean>(false);
 
     const clickHandler = async (
-      e: React.MouseEvent<HTMLDivElement, MouseEvent>
+      e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
     ) => {
       setLoading(true);
       onClick && (await onClick(e));
@@ -31,7 +31,7 @@ export const RegulerButton = forwardRef<HTMLDivElement, RegulerButtonProps>(
           " " +
           "w-max overflow-hidden h-max bg-custom-bcomponentbg bg-opacity-100 flex items-center justify-between border-custom-border border-[1px] rounded-xl pt-3 pb-3 px-4 gap-4 select-none cursor-pointer hover:border-custom-borderHover hover:bg-custom-buttonHover transition duration-200 ease-in-out font-athletics text-custom-textColor mobile:gap-1 mobile:px-3 active:scale-[0.99]"
         }
-        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+        onClick={(e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) =>
           onClick && clickHandler(e).then((res: any) => res)
         }
         ref={ref}

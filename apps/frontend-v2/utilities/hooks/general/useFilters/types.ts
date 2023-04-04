@@ -104,6 +104,7 @@ export class FilterInstance<V, T extends BaseFilter<V>>
       }
     }
   }
+  
 }
 
 export const isRangeFilter = (

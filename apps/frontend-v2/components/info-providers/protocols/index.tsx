@@ -16,6 +16,7 @@ export const ProtocolsProvider = ({
 }: ProtocolsProviderProps) => {
   return (
     <InfoProvider
+      delay={500}
       contents={
         <Table<YCProtocol>
           items={protocols}

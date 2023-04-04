@@ -40,6 +40,12 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
       return filterDupes(strategy?.steps.map((step) => step.protocol) || []);
     }, [strategy?.steps]);
 
+    const userSubtitle = useMemo(() => {
+      return socialMedia.twitter.handle || address !== undefined
+        ? sliceAddress(address || "")
+        : undefined;
+    }, [socialMedia.twitter.handle, address]);
+
     return (
       <div
         className="w-max h-max bg-custom-bcomponentbg rounded-[2rem] flex flex-col items-center justify-start border-[1px] border-custom-themedBorder shadow-sm"
@@ -65,8 +71,7 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
                   fontColor="custom-off cursor-pointer hover:text-custom-offhover transition duration-200 ease-in-out mt-[-3px] laptop:hidden overflow-hidden truncate "
                   fontSize={10}
                 >
-                  {(socialMedia.twitter && socialMedia.twitter.handle) ||
-                    (address && sliceAddress(address))}
+                  {userSubtitle}
                 </WrappedText>
               </div>
             </div>
@@ -94,7 +99,7 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
                 Created: "5 Days Ago",
                 Protocols: (
                   <ProtocolsProvider protocols={protocolsNoDupes}>
-                    <div className="flex flex-row items-center  gap-[0.05rem]">
+                    <div className="flex flex-row items-center  gap-[0.05rem] cursor-pointer">
                       <div className="flex flex-row items-center justify-center pl-[20px]">
                         {protocolsNoDupes.map((protocol, i, arr) => {
                           return i <= 1 ? (

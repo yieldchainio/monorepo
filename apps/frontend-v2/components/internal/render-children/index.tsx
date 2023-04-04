@@ -22,9 +22,9 @@ export const ChildrenProvider = ({
 }: ChildrenProviderProps) => {
   return (
     <>
-      {Children.map(children, (child) => {
+      {Children.map(children, (child, i) => {
         if (typeof child === "string")
-          return <WrappedText {...textProps}>{child}</WrappedText>;
+          return <WrappedText {...textProps} key={i}>{child}</WrappedText>;
 
         return callback(child);
       })}

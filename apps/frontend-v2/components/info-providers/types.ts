@@ -16,6 +16,7 @@ export interface InfoProviderProps extends BaseComponentProps {
   direction?: ToolTipDirection;
   visibilityOverride?: boolean;
   style?: CSSProperties;
+  delay?: number;
 }
 
 // Protocols Provider props

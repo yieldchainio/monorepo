@@ -42,6 +42,7 @@ export const InfoProvider = ({
   direction = ToolTipDirection.TOP,
   visibilityOverride = false,
   style,
+  delay,
 }: InfoProviderProps) => {
   // We set a ref for all of our consumers ( The elements which we wrap around and trigger on hover )
   const setRefs = useRef(new Map()).current;
@@ -73,12 +74,6 @@ export const InfoProvider = ({
 
     // If not correct index, set visiblity to false
     if (!consumer) {
-      console.log(
-        "Consumer Non Accessible - Consumer:",
-        consumer,
-        "refs:",
-        setRefs
-      );
       setVisible(false);
       return;
     }
@@ -97,16 +92,19 @@ export const InfoProvider = ({
   const [shouldClose, setShouldClose] = useState<boolean>(true);
 
   // Handle hover over the children
-  const handleHover = (
+  const handleHover = async (
     consumerIndex: number | null,
     close: boolean = false
   ) => {
     if (consumerIndex !== null) {
-      console.log("Consumer index isnt null");
+      if (delay)
+        await new Promise((res, rej) =>
+          setTimeout(() => {
+            res(true);
+          }, delay)
+        );
       setActiveConsumerIndex(consumerIndex);
       setShouldClose(close);
-    } else {
-      console.log("Inputted consumer index is null");
     }
   };
 
@@ -120,8 +118,6 @@ export const InfoProvider = ({
         res(true);
       }, 100)
     );
-
-    console.log("Awaited delay", shouldClose);
 
     // If shouldClose is true, set active consumer index to null (closes the tooltip).
     // Note that whilst we are awaiting the delay, shouldClose may be set to false

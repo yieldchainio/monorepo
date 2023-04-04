@@ -254,7 +254,11 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
 
     // Cleanup
     return () => setSocialMedia(new YCSocialMedia());
-  }, [user?.socialMedia.stringify()]);
+  }, [
+    user?.socialMedia.twitter.handle,
+    user?.socialMedia.telegram.handle,
+    user?.socialMedia.discord.handle,
+  ]);
 
   // useEffect for user's description
   useEffect(() => {

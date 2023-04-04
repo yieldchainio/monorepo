@@ -125,13 +125,13 @@ export interface DBUser {
 export interface DBStep {
   id: string | "root";
   parentId: string | null;
-  protocol: DBProtocol;
+  protocol: string;
   percentage: number;
-  inflows: DBFlow[];
-  outflows: DBFlow[];
-  action: DBAction;
-  function: DBFunction;
-  customArgs: DBArgument[];
+  inflows: string[];
+  outflows: string[];
+  action: string;
+  function: string;
+  customArgs: any[];
   children: DBStep[];
 }
 

@@ -40,9 +40,7 @@ const strategies = await client.strategiesv2.findMany();
 //   }
 // }
 for (const strat of strategies) {
-    console.log(strat.steps.map((step) => {
-        return { inflows: step.inflows[0], outflows: step.outflows[0] };
-    }));
+    console.log(strat.steps);
     break;
 }
 // Migrate the steps

@@ -155,8 +155,8 @@ model strategiesv2 {
   chain_id           Int
   verified           Boolean       @default(false)
   execution_interval Int
-  steps              Json[]        @db.Json
   deposit_token_id   String
+  steps              Json?         @db.Json
   statistics         statistics[]
   network            networksv2    @relation(fields: [chain_id], references: [id])
   creator            usersv2       @relation(fields: [creator_id], references: [id])

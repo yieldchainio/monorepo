@@ -2,7 +2,7 @@
  * A component for a strategy's vault card.
  */
 
-import { YCStrategy } from "@yc/yc-models";
+import { YCProtocol, YCStep, YCStrategy } from "@yc/yc-models";
 import Section from "components/section";
 import { SmallVerified } from "components/verified/circle";
 import WrappedImage from "components/wrappers/image";
@@ -36,8 +36,19 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
 
     // Some memoization
     const protocolsNoDupes = useMemo(() => {
-      return filterDupes(strategy?.steps.map((step) => step.protocol) || []);
-    }, [strategy?.steps]);
+      const protocols: YCProtocol[] = [];
+      if (strategy?.rootStep.children.length) {
+        strategy.rootStep.each((step: YCStep) => {
+          const stepProtocol = step.protocol;
+          if (
+            stepProtocol &&
+            !protocols.some((protocol) => protocol.id === stepProtocol.id)
+          )
+            protocols.push(stepProtocol);
+        });
+      }
+      return protocols;
+    }, [strategy?.rootStep.children.length]);
 
     const userSubtitle = useMemo(() => {
       return socialMedia.twitter.handle || address !== undefined

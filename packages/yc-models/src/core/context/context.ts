@@ -705,22 +705,25 @@ export class YCClassifications extends YCClassificationsInternal {
     );
   };
 
+  // Get an action instance using an ID
+  getAction = (actionId: string): YCAction | null => {
+    return (
+      this.actions.find((action: YCAction) => action.id === actionId) || null
+    );
+  };
+
   // Get a function instance using a function ID
   getFunction = (_function_id: string): YCFunc | null => {
-    let func =
-      this.Functions.find((_func: DBFunction) => _func.id == _function_id) ||
-      null;
-
-    return func ? new YCFunc(func, this) : null;
+    return (
+      this.functions.find((_func: YCFunc) => _func.id == _function_id) || null
+    );
   };
 
   // Get an argument instance using an argument ID
   getArgument = (_argument_id: string): YCArgument | null => {
-    let arg =
-      this.Parameters.find((_arg: DBArgument) => _arg.id == _argument_id) ||
-      null;
-
-    return arg ? new YCArgument(arg, this) : null;
+    return (
+      this.arguments.find((_arg: YCArgument) => _arg.id == _argument_id) || null
+    );
   };
 
   // Get a full flow instance with a flow ID

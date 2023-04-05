@@ -46,11 +46,15 @@ const circularReplacer = (
   }
   const proto = Object.getPrototypeOf(obj);
   for (const key of Object.getOwnPropertyNames(proto)) {
-    const desc = Object.getOwnPropertyDescriptor(proto, key);
-    const hasGetter = desc && typeof desc.get === "function";
-    if (hasGetter) {
-      // @ts-ignore
-      jsonObj[key] = obj[key];
+    try {
+      const desc = Object.getOwnPropertyDescriptor(proto, key);
+      const hasGetter = desc && typeof desc.get === "function";
+      if (hasGetter) {
+        // @ts-ignore
+        jsonObj[key] = obj[key];
+      }
+    } catch (e: any) {
+      throw "Caught Erorr In Getter. Key: " + key + " Obj Provided: " + obj;
     }
   }
 

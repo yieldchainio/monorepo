@@ -1,15 +1,10 @@
 /**
  * A modal for the strategies
  */
-import { YCStrategy } from "@yc/yc-models";
 import { ModalWrapperProps } from "components/modal-wrapper/types";
 import { ModalWrapper } from "components/modal-wrapper";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import "../../css/globals.css";
-import WrappedImage from "components/wrappers/image";
-import WrappedText from "components/wrappers/text";
-import { TokenLogo } from "components/token-logo";
-import { InterModalSection } from "./components/general/modal-section";
 import { TitleSection } from "./components/title-section";
 import { ProfileSection } from "./components/profile-section";
 import { ValueLocked } from "./components/body-sections/value-locked";
@@ -18,6 +13,11 @@ import { useYCStrategy } from "utilities/hooks/yc/useYCStrategy";
 import { GasBalance } from "./components/body-sections/gas-balance";
 import { ApyChart } from "./components/body-sections/apy-chart";
 import { StrategyOperationsBox } from "./components/body-sections/deposit-withdrawls";
+import { useSteps } from "utilities/hooks/stores/steps";
+import { Step } from "utilities/classes/step";
+import { useEffect } from "react";
+import { useDynamicStore } from "utilities/hooks/stores/dynamic";
+import { useLogs } from "utilities/hooks/stores/logger";
 
 /**
  * @param strategyID - The ID of the strategy to display
@@ -38,8 +38,25 @@ export const StrategyModal = ({
     state.context.YCstrategies.find((strat) => strat.id === strategyID)
   );
 
-  // Get the stateful strategy details
-  const { address, depositToken, network, creator } = useYCStrategy(strategyID);
+  // Context
+  const context = useYCStore((state) => state.context);
+
+  // Get the steps store
+  const stepsStore = useDynamicStore(
+    useSteps,
+    strategy?.rootStep
+      ? Step.fromDBStep({ step: strategy.rootStep.toJSON(), context: context })
+      : null
+  );
+
+  // useEffect to set the steps when rootStep is ready
+  useEffect(() => {
+    if (strategy?.rootStep) {
+      stepsStore.setRootStep(
+        Step.fromDBStep({ step: strategy.rootStep.toJSON(), context: context })
+      );
+    }
+  }, [JSON.stringify(stepsStore.rootStep?.toJSON())]);
 
   // Return the JSX
   return (

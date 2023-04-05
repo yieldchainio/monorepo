@@ -30,7 +30,7 @@ export interface DBStrategy {
   creator_id: string;
   verified: boolean;
   execution_interval: number;
-  steps: JSON[];
+  steps: JSON;
 }
 
 // A DB Model representing a network

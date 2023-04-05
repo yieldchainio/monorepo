@@ -27,6 +27,7 @@ export class YCArgument extends BaseClass {
   #identifier: string;
   #index: number;
   #name: string | null;
+  readonly id: string;
 
   // =======================
   //      CONSTRUCTOR
@@ -34,7 +35,10 @@ export class YCArgument extends BaseClass {
   constructor(
     _argument: DBArgument,
     _context: YCClassifications,
-    _customArgument?: CustomArgument | CustomArgument[]
+    _customArgument: CustomArgument | CustomArgument[] = {
+      value: "TODO: Get actual value lmao",
+      isFunction: false,
+    }
   ) {
     super();
     // Init private variables
@@ -44,6 +48,7 @@ export class YCArgument extends BaseClass {
     this.#index = _argument.index;
     this.#name = _argument.name;
     this.#isCustom = _argument.value.includes("custom_argument");
+    this.id = _argument.id;
 
     // Set Fields For The Custom Argument
     if (this.#isCustom) {
@@ -96,6 +101,8 @@ export class YCArgument extends BaseClass {
       this.#value = _argument.value;
       return this;
     }
+
+    console.log("Some function value");
 
     // @notice
     // If the solidity type is a function, the value is refering to the identifier of the function.

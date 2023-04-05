@@ -35,8 +35,7 @@ export class YCStrategy extends BaseClass {
   readonly title: string;
   readonly depositToken: YCToken;
   readonly creator: YCUser | null = null;
-  readonly steps: YCStep[];
-  readonly rawSteps: any[];
+  readonly rootStep: YCStep;
   readonly verified: boolean;
   readonly network: YCNetwork | null;
   readonly executionInterval: number;
@@ -373,12 +372,9 @@ export class YCStrategy extends BaseClass {
       _strategy.deposit_token_id
     ) as YCToken;
     this.creator = _context.getUser(_strategy.creator_id) || null;
-    this.steps = _strategy.steps.map(
-      (step) => new YCStep(step as unknown as DBStep, _context)
-    );
+    this.rootStep = new YCStep(_strategy.steps as unknown as DBStep, _context);
     this.verified = _strategy.verified;
     this.network = _context.getNetwork(_strategy.chain_id);
-    this.rawSteps = _strategy.steps;
     this.contract = new Contract(
       getAddress(this.address),
       abi,
@@ -416,8 +412,6 @@ export class YCStrategy extends BaseClass {
       // Set the global field
       if (tvl) this.#tvl = tvl;
 
-      console.log("Ethers TVL contract", this.contract);
-      console.log("Ethers Provider", this.network?.provider);
       // Return the TVL
       return tvl;
     } catch (e) {

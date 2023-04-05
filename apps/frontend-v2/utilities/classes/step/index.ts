@@ -3,8 +3,11 @@
  */
 
 import {
+  DBStep,
   YCAction,
   YCArgument,
+  YCClassifications,
+  YCFlow,
   YCFunc,
   YCProtocol,
   YCToken,
@@ -12,6 +15,7 @@ import {
 } from "@yc/yc-models";
 import {
   ActionConfigs,
+  DBStepConstructionProps,
   DefaultDimensions,
   Dimensions,
   IStep,
@@ -98,11 +102,12 @@ export class Step implements IStep<Step> {
    * Step-related variables
    */
   protocol: YCProtocol | null = null;
-  inflows: YCToken[] = [];
-  outflows: YCToken[] = [];
+  inflows: YCFlow[] = [];
+  outflows: YCFlow[] = [];
   action: YCAction | null = null;
   function: YCFunc | null = null;
   customArguments: YCArgument[] = [];
+  percentage: number;
 
   /**
    * Utility variables
@@ -127,8 +132,40 @@ export class Step implements IStep<Step> {
     this.customArguments = config?.customArguments || [];
 
     this.children = config?.children || [];
-    this.parent = config?.parent || null;
+    this.percentage = config?.percentage || 0;
   }
+
+  // ========================================
+  //    CONSTRUCT USING DBSTEP + CONTEXT
+  // ========================================
+  static fromDBStep = ({
+    step,
+    context,
+    iStepConfigs,
+  }: DBStepConstructionProps<Step>) => {
+    const stepConfig: IStep<Step> = {
+      protocol: context.getProtocol(step.protocol),
+      inflows: step.inflows.flatMap((flowId: string) => {
+        const flow = context.getFlow(flowId);
+        return flow ? [flow] : [];
+      }),
+      outflows: step.outflows.flatMap((flowId: string) => {
+        const flow = context.getFlow(flowId);
+        return flow ? [flow] : [];
+      }),
+      percentage: step.percentage,
+      action: context.getAction(step.action),
+      function: context.getFunction(step.function),
+      children: step.children.map((child: DBStep) =>
+        Step.fromDBStep({
+          step: child,
+          context: context,
+          iStepConfigs: iStepConfigs,
+        })
+      ),
+    };
+    return new Step(stepConfig);
+  };
 
   // ========================
   //      UTILITY METHODS
@@ -214,10 +251,9 @@ export class Step implements IStep<Step> {
   };
 
   // ===================
-  //     D3 FIELDS
+  //     TREE FIELDS
   // ===================
   children: Step[];
-  parent: Step | null = null; // This will be null if this step is a root
 
   // ===================
   //    TREE METHODS
@@ -253,6 +289,29 @@ export class Step implements IStep<Step> {
   };
 
   /**
+   * find
+   * Iterates over the tree to find a step corresponding to a callback check, and returns it (or null if not found)
+   */
+  find = (condition: (step: Step) => boolean): Step | null => {
+    // Create a stack array
+    const stack: Step[] = [this];
+
+    // While it's length is bigger than 0, pop a step,
+    // invoke the condition on it. If true, return the node - otherwise, add all of it's children to the stack (to keep looping)
+    while (stack.length > 0) {
+      const node = stack.pop() as Step;
+      const res = condition(node);
+      if (res) return node;
+
+      for (const child of node.children) {
+        stack.push(child);
+      }
+    }
+    // return null if we found none that answer our condition
+    return null;
+  };
+
+  /**
    * A function for the frontend to compare for changes and rerun the graph
    * function (in order to proprely and efficiently rerender)
    */
@@ -285,7 +344,6 @@ export class Step implements IStep<Step> {
             if (jsonChild !== null) return [jsonChild];
             return [];
           }),
-        parent: this.parent?.toJSON() || null,
         // customArguments: this.customArguments.map((arg) => arg.) // TODO
       };
 

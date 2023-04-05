@@ -13,6 +13,7 @@ import {
 } from "@yc/yc-models";
 import {
   ActionConfigs,
+  BaseStepStates,
   DBStepConstructionProps,
   DefaultDimensions,
   Dimensions,
@@ -54,7 +55,7 @@ export class Step implements IStep<Step> {
    */
   changeState = (newState: StepState, actionConf?: ActionConfigs) => {
     assert(
-      newState !== StepState.CONFIG || actionConf !== undefined,
+      !(newState in ActionConfigs) || actionConf !== undefined,
       "Step ERR: An Action config must be provided if chosen state is 'ActionConfig'."
     );
     this.state = newState;
@@ -119,7 +120,7 @@ export class Step implements IStep<Step> {
   constructor(config?: IStep<Step>) {
     // We construct the gloal variables from the config
     this.id = config?.id || uuid();
-    this.state = config?.state || StepState.INIT;
+    this.state = config?.state || "initial";
     this.size = config?.size || StepSizing.MEDIUM;
     this.actionConfig = config?.actionConfig || null;
 
@@ -365,7 +366,7 @@ export class Step implements IStep<Step> {
    */
 
   toJSON = (onlyCompleted: boolean = true): JSONStep | null => {
-    if ((this.state === StepState.COMPLETE && onlyCompleted) || !onlyCompleted)
+    if ((this.state === "complete" && onlyCompleted) || !onlyCompleted)
       return {
         id: this.id,
         size: this.size,
@@ -376,7 +377,7 @@ export class Step implements IStep<Step> {
         outflow: this.outflows.map((outflow) => outflow.id),
         children: this.children
           .filter((child) =>
-            onlyCompleted ? child.state === StepState.COMPLETE : true
+            onlyCompleted ? child.state === "complete" : true
           )
           .flatMap((child) => {
             const jsonChild = child.toJSON();

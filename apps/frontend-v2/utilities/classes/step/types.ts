@@ -15,18 +15,18 @@ import {
 } from "@yc/yc-models";
 
 // The state of the step - whether you are choosing an action (INIT), configuring (Any action config, CONFIG), or if it is complete
-export enum StepState {
-  INIT,
-  COMPLETE,
-  CONFIG,
+export enum BaseStepStates {
+  INITIAL = "initial",
+  COMPLETE = "complete"
 }
+export type StepState = "initial" | "complete" | ActionConfigs;
 
 // The different types of action configs.
 export enum ActionConfigs {
-  STAKE,
-  SWAP,
-  LP,
-  HARVEST,
+  STAKE = "STAKE",
+  SWAP = "SWAP",
+  LP = "LP",
+  HARVEST = "HARVEST",
 }
 
 // The different sizing for nodes

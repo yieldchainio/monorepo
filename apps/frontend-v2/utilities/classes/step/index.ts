@@ -6,11 +6,9 @@ import {
   DBStep,
   YCAction,
   YCArgument,
-  YCClassifications,
   YCFlow,
   YCFunc,
   YCProtocol,
-  YCToken,
   assert,
 } from "@yc/yc-models";
 import {
@@ -25,7 +23,7 @@ import {
   StepState,
 } from "./types";
 import { v4 as uuid } from "uuid";
-import { FlextreeNode, FlextreeOptions, flextree } from "d3-flextree";
+import { FlextreeNode, flextree } from "d3-flextree";
 import { HierarchyNode } from "d3-hierarchy";
 
 export class Step implements IStep<Step> {
@@ -194,6 +192,7 @@ export class Step implements IStep<Step> {
        * a spacing worth of the parent's width. Otherwise, we give it a base spacing
        * of 80
        */
+      // spacing: 80,
       spacing: (aNode, bNode) => {
         const aParent = aNode.parent;
         const bParent = bNode.parent;
@@ -226,24 +225,22 @@ export class Step implements IStep<Step> {
     );
 
     // Convert our steps hierarchy to D3-compatible hierarchy
-    const tree: FlextreeNode<Step> = layout.hierarchy(this);
+    const tree = layout.hierarchy(this);
 
     // Create the positions
     layout(tree);
 
-    // iterate over the steps tree
-    this.each((step) => {
-      // Find the corresponding d3 node from the layouting
-      const d3Node = tree.find((node) => node.id === step.id);
-      if (!d3Node)
+    // Iterate over each d3 node, find it's corresponding step, and set the positioning on it
+    tree.each((node: FlextreeNode<Step>) => {
+      const ycNode = this.find((step) => step.id == node.data.id);
+      if (!ycNode)
         throw new Error(
-          "Step Layouting Err - Cannot find corresponding D3 node in hierarchy."
+          "D3 Step ERR: Cannot find corresponding YCStep - ID: " + node.data.id
         );
 
-      // Set the positions on the instance
-      step.position = {
-        x: d3Node.x,
-        y: d3Node.y,
+      ycNode.position = {
+        x: node.x,
+        y: node.y,
       };
     });
 
@@ -312,11 +309,38 @@ export class Step implements IStep<Step> {
   };
 
   /**
+   * Map
+   * standard mapping function for the tree
+   */
+
+  map = <T>(callback: (step: Step) => T): T[] => {
+    // Create a stack array
+    const stack: Step[] = [this];
+    const result: T[] = [];
+
+    // While it's length is bigger than 0, pop a step,
+    // invoke the callback on it, and then add all of it's children to the stack
+    while (stack.length > 0) {
+      const node = stack.pop() as Step;
+      result.push(callback(node));
+
+      for (const child of node.children) {
+        stack.push(child);
+      }
+    }
+
+    return result;
+  };
+
+  /**
    * A function for the frontend to compare for changes and rerun the graph
    * function (in order to proprely and efficiently rerender)
    */
-  shouldGraph = (prevTree: Step): boolean => {
-    return JSON.stringify(prevTree.toJSON()) !== JSON.stringify(this.toJSON());
+  shouldGraph = (prevTree: Step | null): boolean => {
+    return (
+      prevTree == null ||
+      JSON.stringify(prevTree.toJSON()) !== JSON.stringify(this.toJSON())
+    );
   };
 
   /**

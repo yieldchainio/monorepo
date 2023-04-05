@@ -9,15 +9,13 @@ import { TitleSection } from "./components/title-section";
 import { ProfileSection } from "./components/profile-section";
 import { ValueLocked } from "./components/body-sections/value-locked";
 import { GasThroughput } from "./components/body-sections/gas-throughput";
-import { useYCStrategy } from "utilities/hooks/yc/useYCStrategy";
 import { GasBalance } from "./components/body-sections/gas-balance";
 import { ApyChart } from "./components/body-sections/apy-chart";
 import { StrategyOperationsBox } from "./components/body-sections/deposit-withdrawls";
-import { useSteps } from "utilities/hooks/stores/steps";
 import { Step } from "utilities/classes/step";
+import { useSteps } from "utilities/hooks/yc/useSteps";
 import { useEffect } from "react";
-import { useDynamicStore } from "utilities/hooks/stores/dynamic";
-import { useLogs } from "utilities/hooks/stores/logger";
+import { StepSizing } from "utilities/classes/step/types";
 
 /**
  * @param strategyID - The ID of the strategy to display
@@ -41,22 +39,22 @@ export const StrategyModal = ({
   // Context
   const context = useYCStore((state) => state.context);
 
-  // Get the steps store
-  const stepsStore = useDynamicStore(
-    useSteps,
+  const { stepsState, setRootStep, prevState, triggerComparison } = useSteps(
     strategy?.rootStep
-      ? Step.fromDBStep({ step: strategy.rootStep.toJSON(), context: context })
-      : null
+      ? Step.fromDBStep({ step: strategy.rootStep.toJSON(), context })
+      : null,
+    strategy,
+    context
   );
 
-  // useEffect to set the steps when rootStep is ready
+  // Graphing
   useEffect(() => {
-    if (strategy?.rootStep) {
-      stepsStore.setRootStep(
-        Step.fromDBStep({ step: strategy.rootStep.toJSON(), context: context })
-      );
+    console.log("RootStep useEffect ran, ", stepsState.rootStep);
+    if (stepsState.rootStep) {
+      stepsState.rootStep.graph(StepSizing.SMALL);
+      triggerComparison();
     }
-  }, [JSON.stringify(stepsStore.rootStep?.toJSON())]);
+  }, [stepsState.rootStep?.shouldGraph(prevState.current.rootStep)]);
 
   // Return the JSX
   return (
@@ -65,6 +63,29 @@ export const StrategyModal = ({
       callbackRoute={callbackRoute || "/"}
       closeFunction={closeFunction}
     >
+      <div className="absolute w-[80%] h-[50%] bg-red-500">
+        <div className="relative w-max h-max mx-auto">
+          {stepsState.rootStep?.map<React.ReactNode>((step: Step) => {
+            return (
+              <div
+                className="absolute"
+                style={{
+                  width: step.dimensions.width,
+                  height: step.dimensions.height,
+                  left: step.position.x,
+                  top: step.position.y,
+                  backgroundColor: "blue",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+                key={step.id}
+              >
+                {step.action?.name || "Deposit"}
+              </div>
+            );
+          })}
+        </div>
+      </div>
       <div className=" w-[80vw] h-[300vh] bg-custom-bcomponentbg mt-8 rounded-lg flex flex-col items-center justify-start p-8 gap-6">
         <TitleSection
           logo={strategy?.depositToken?.logo}

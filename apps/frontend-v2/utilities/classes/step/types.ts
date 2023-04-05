@@ -40,7 +40,7 @@ export type Dimensions = { width: number; height: number };
 
 // Mapping default dimensions of the step sizing
 export const DefaultDimensions: { [key in StepSizing]: Dimensions } = {
-  [StepSizing.SMALL]: { width: 126, height: 58 },
+  [StepSizing.SMALL]: { width: 176, height: 78 },
   [StepSizing.MEDIUM]: { width: 327, height: 128 },
 };
 
@@ -68,7 +68,7 @@ export type Position = { x: number; y: number };
 export interface DBStepConstructionProps<T extends IStep<T>> {
   step: DBStep;
   context: YCClassifications;
-  iStepConfigs?: IStepOnlyFE<T>
+  iStepConfigs?: IStepOnlyFE<T>;
 }
 
 // An interface for the IStep propreties which are frontend-related

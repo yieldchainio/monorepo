@@ -111,6 +111,7 @@ export class Step implements IStep<Step> {
    * Utility variables
    */
   manuallyResized: boolean = false;
+  edgelength: number = 80;
 
   // ====================
   //     CONSTRUCTOR
@@ -142,6 +143,7 @@ export class Step implements IStep<Step> {
     iStepConfigs,
   }: DBStepConstructionProps<Step>) => {
     const stepConfig: IStep<Step> = {
+      id: step.id,
       protocol: context.getProtocol(step.protocol),
       inflows: step.inflows.flatMap((flowId: string) => {
         const flow = context.getFlow(flowId);
@@ -181,7 +183,7 @@ export class Step implements IStep<Step> {
     const layout = flextree({
       nodeSize: (node: HierarchyNode<Step>) => [
         node.data.dimensions.width,
-        node.data.dimensions.height,
+        node.data.dimensions.height + node.data.edgelength,
       ],
 
       /**
@@ -199,16 +201,29 @@ export class Step implements IStep<Step> {
         // if none of them are defined we just return 80
         if (!aParent || !bParent) return 80;
 
+        const aChildren = aParent.children;
+
+        if (!aChildren) return 80;
+
         // If the mentioned requirements are true, we add the parent's width
         if (
           aParent.id === bParent.id &&
-          (aParent.children?.length || 1) % 2 === 0 &&
-          aParent.children?.findIndex((child) => child.id === aNode.id) ===
-            (aParent.children?.length || 0) / 2
+          aChildren.length % 2 === 0 &&
+          aChildren.findIndex((child) => child.id === aNode.id) ===
+            aChildren.length / 2 - 1
         )
-          return aParent.data.dimensions.width || 80;
+          return aParent.data.dimensions.width || 40;
 
         // otherwise we return base spacing
+        if (aNode.data.id === "bfd0e43d-35c1-4ad6-ade3-1a21012c71f6")
+          console.log(
+            "Found Problematic node. Conditions:",
+            aChildren.length,
+            aParent.id === bParent.id,
+            aChildren.length % 2 === 0,
+            aChildren.findIndex((child) => child.id === aNode.id) ===
+              aChildren.length / 2 - 1
+          );
         return 80;
       },
     });

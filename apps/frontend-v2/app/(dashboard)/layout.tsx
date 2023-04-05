@@ -28,10 +28,6 @@ import { StrategyModal } from "components/strategy-modal";
 import { useShallowRouter } from "utilities/hooks/general/useShallowRouter";
 import useDebounce from "utilities/hooks/general/useDebounce";
 import { useLogs } from "utilities/hooks/stores/logger";
-import { InfoMessage } from "components/logger/components/info";
-import { InfoProvider } from "components/info-providers";
-import { ErrorMessage } from "components/logger/components/error";
-import { SuccessMessage } from "components/logger/components/success";
 
 export default function Home() {
   // Retreive the strategies from the context
@@ -102,10 +98,10 @@ export default function Home() {
             item.title.toLowerCase().includes(lowerCasedInput) ||
             item.depositToken?.symbol.toLowerCase().includes(lowerCasedInput) ||
             item.depositToken?.name.toLowerCase().includes(lowerCasedInput) ||
-            item.rawSteps
-              .map((step) => step.protocol_details)
+            item.rootStep
+              .map((step) => step.protocol)
               .find((protocol) =>
-                protocol.name.toLowerCase().includes(lowerCasedInput)
+                protocol?.name.toLowerCase().includes(lowerCasedInput)
               )
           );
         },

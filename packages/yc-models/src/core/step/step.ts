@@ -115,4 +115,28 @@ export class YCStep extends BaseClass {
     // return null if we found none that answer our condition
     return null;
   };
+
+  /**
+   * Map
+   * standard mapping function for the tree
+   */
+
+  map = <T>(callback: (step: YCStep) => T): T[] => {
+    // Create a stack array
+    const stack: YCStep[] = [this];
+    const result: T[] = [];
+
+    // While it's length is bigger than 0, pop a step,
+    // invoke the callback on it, and then add all of it's children to the stack
+    while (stack.length > 0) {
+      const node = stack.pop() as YCStep;
+      result.push(callback(node));
+
+      for (const child of node.children) {
+        stack.push(child);
+      }
+    }
+
+    return result;
+  };
 }

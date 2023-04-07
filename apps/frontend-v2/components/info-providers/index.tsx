@@ -96,15 +96,17 @@ export const InfoProvider = ({
     consumerIndex: number | null,
     close: boolean = false
   ) => {
-    if (consumerIndex !== null) {
+    if (consumerIndex !== null && shouldClose !== false) {
+      setShouldClose(close);
+
       if (delay)
         await new Promise((res, rej) =>
           setTimeout(() => {
             res(true);
           }, delay)
         );
-      setActiveConsumerIndex(consumerIndex);
-      setShouldClose(close);
+
+      if (shouldClose === close) setActiveConsumerIndex(consumerIndex);
     }
   };
 

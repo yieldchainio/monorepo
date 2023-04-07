@@ -25,7 +25,10 @@ export default async function RootLayout({
   return (
     <html lang="en" className="dark">
       <head></head>
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
+      />
       <StoreInitiallizor context={data} />
       <body className="h-max z-100 bg-custom-bg">
         <WrappedWagmi>

@@ -28,6 +28,7 @@ import { StrategyModal } from "components/strategy-modal";
 import { useShallowRouter } from "utilities/hooks/general/useShallowRouter";
 import useDebounce from "utilities/hooks/general/useDebounce";
 import { useLogs } from "utilities/hooks/stores/logger";
+import { Canvas } from "components/canvas";
 
 export default function Home() {
   // Retreive the strategies from the context
@@ -187,6 +188,21 @@ export default function Home() {
             title={"All Vaults"}
           />
         </div>
+      </div>
+      <div className="w-[70vw] h-[80vh] absolute z-1000 top-[200px]">
+        <Canvas>
+          <div className="flex flex-col gap-2">
+            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
+            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
+            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
+            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
+            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
+            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
+            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
+            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
+            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
+          </div>
+        </Canvas>
       </div>
     </>
   );

@@ -125,6 +125,18 @@ html {
   --main-gradient: var(--light-gradient);
 }
 
+.canvas {
+  background: linear-gradient(
+        90deg,
+        hsl(256, 33, 10) (22px - 1px),
+        transparent 1%
+      )
+      center,
+    linear-gradient(hsl(256, 33, 10) (22px - 1px), transparent 1%) center,
+    hsl(256, 33, 10);
+  background-size: 22px 22px;
+}
+
 html.dark {
   --bg: var(--dark-bg);
   --subbg: var(--dark-subbg);

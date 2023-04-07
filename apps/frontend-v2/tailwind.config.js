@@ -2,6 +2,8 @@
 
 module.exports = {
   darkMode: "class",
+  mode: "jit",
+
   theme: {
     borderRadius: {
       lg: "18px",
@@ -31,7 +33,8 @@ module.exports = {
           // Background colors
           bg: "var(--bg)",
           subbg: "var(--subbg)",
-          componentbg: ({opacityValue}) => `rgba(var(--componentbg), ${opacityValue || 1})`,
+          componentbg: ({ opacityValue }) =>
+            `rgba(var(--componentbg), ${opacityValue || 1})`,
           textColor: ({ opacityValue }) =>
             `rgba(var(--text), ${opacityValue || 1})`,
 
@@ -208,5 +211,8 @@ module.exports = {
     },
   },
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [
+    require("@tailwindcss/forms"),
+    require("tailwindcss-dotted-background"),
+  ],
 };

@@ -66,7 +66,7 @@ export const ApyChart = ({ strategy }: { strategy?: YCStrategy }) => {
                 <stop
                   offset={"0%"}
                   stopColor={chartColor}
-                  stopOpacity={0.4}
+                  stopOpacity={0.7}
                 ></stop>
                 <stop
                   offset={"75%"}

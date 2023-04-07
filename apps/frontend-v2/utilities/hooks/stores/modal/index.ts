@@ -30,7 +30,6 @@ export const useModals = create<ModalsStore>((set, get) => ({
   push: (modalCallback: (length: number) => GlobalModal) => {
     if (typeof window !== "undefined")
       document.documentElement.style.overflow = "hidden";
-    else alert("Window undefine blalblavla");
     set((state) => {
       return {
         modals: [...state.modals, modalCallback(length)],

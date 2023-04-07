@@ -46,8 +46,13 @@ export const ChartTimeframes = <T extends { timestamp: string }>({
         const itemDate = new Date(item.timestamp);
 
         // Our desired date
+        // TODO: When you add real data, update this to use date at time
+        // TODO: Of watching chart. Here i used time of last timestamp for
+        // TODO: The data to not fuck up when demoing
         const msPerDay = 24 * 60 * 60 * 1000;
-        const desiredTime = new Date().getTime() - config.choice * msPerDay;
+        const desiredTime =
+          new Date(items[items.length - 1].timestamp).getTime() -
+          config.choice * msPerDay;
 
         // If it happened on/after the date which is the current date
         // minute the "daysBack", it is valid

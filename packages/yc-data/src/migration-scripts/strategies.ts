@@ -4,32 +4,18 @@ import { v4 as uuidv4 } from "uuid";
 
 const client = new PrismaClient();
 
-// const oldStrategies = await client.strategies.findMany();
-// const newActions = await client.actionsv2.findMany();
-// const oldFunctions = await client.functions.findMany();
-// const oldFlows = await client.flows.findMany();
-// const newFlows = await client.flowsv2.findMany();
-// const newAddresses = await client.addressesv2.findMany();
-// const oldAddresses = await client.addresses.findMany();
-// const newFunctions = await client.functionsv2.findMany();
+const oldStrategies = await client.strategies.findMany();
+const newActions = await client.actionsv2.findMany();
+const oldFunctions = await client.functions.findMany();
+const newProtocols = await client.protocolsv2.findMany();
+const newAddresses = await client.addressesv2.findMany();
+const oldAddresses = await client.addresses.findMany();
+const newFunctions = await client.functionsv2.findMany();
 const strategies = await client.strategiesv2.findMany();
-// const newTokens = await client.tokensv2.findMany();
+const newTokens = await client.tokensv2.findMany();
 
 for (const strategy of strategies) {
-  console.log(
-    // @ts-ignore
-
-    strategy.steps.children[0].inflows,
-    // @ts-ignore
-
-    strategy.steps.children[0].outflows,
-    // @ts-ignore
-
-    strategy.steps.children[1].inflows,
-    // @ts-ignore
-
-    strategy.steps.children[1].outflows
-  );
+  console.log(strategy.steps);
   break;
 }
 
@@ -121,10 +107,18 @@ for (const strategy of strategies) {
 
 //     if (!newFunction) throw "New Function Undefined!";
 
+//     const oldProtocol = oldStep.protocol_details;
+//     const newProtocol = newProtocols.find(
+//       (protocol) => protocol.name == oldProtocol.name
+//     );
+
+//     if (!newProtocol || !newProtocol.id) throw "Protocol Undefined";
+//     console.log("new Protocol", newProtocol.id);
+
 //     const newStep: Omit<DBStep, "children"> = {
 //       parentId: newParentId as string,
 //       id: newId,
-//       protocol: oldStep.protocol_details.id,
+//       protocol: newProtocol.id,
 //       action: newAction.id,
 //       percentage: oldStep.percentage,
 //       inflows: oldStep.inflows.map((flow: any) => {
@@ -152,7 +146,7 @@ for (const strategy of strategies) {
 //           throw "New Token in Inflow not found!";
 //         }
 
-//          return newToken
+//         return newToken;
 //       }),
 //       outflows: oldStep.outflows.map((flow: any) => {
 //         const newToken = newTokens.find(

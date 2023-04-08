@@ -38,6 +38,7 @@
     "react-custom-events": "^1.1.1",
     "react-dom": "18.2.0",
     "react-slick": "^0.29.0",
+    "react-spring": "^9.7.1",
     "recharts": "^2.5.0",
     "slick-carousel": "1.8.1",
     "tailwindcss": "^3.2.7",
@@ -54,6 +55,7 @@
     "@types/d3-flextree": "^2.1.0",
     "@types/react-slick": "^0.23.10",
     "babel-loader": "^9.1.2",
-    "ts-loader": "^9.4.2"
+    "ts-loader": "^9.4.2",
+    "webpack-cli": "^5.0.1"
   }
 }

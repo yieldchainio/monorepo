@@ -85,28 +85,29 @@ export const StrategyModal = ({
       </div> */}
 
       <div className="w-[70vw] h-[80vh]  z-1000">
-        <Canvas size={canvasDimensions}>
-          <div className="relative w-max h-max mx-auto">
-            {stepsState.rootStep?.map<React.ReactNode>((step: Step) => {
-              return (
-                <div
-                  className="absolute"
-                  style={{
-                    width: step.dimensions.width,
-                    height: step.dimensions.height,
-                    left: step.position.x,
-                    top: step.position.y,
-                    backgroundColor: "blue",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                  }}
-                  key={step.id}
-                >
-                  {step.action?.name || "Deposit"}
-                </div>
-              );
-            })}
-          </div>
+        <Canvas
+          size={canvasDimensions}
+          childrenWrapper={<div className="relative w-max h-max mx-auto"></div>}
+        >
+          {stepsState.rootStep?.map<React.ReactNode>((step: Step) => {
+            return (
+              <div
+                className="absolute"
+                style={{
+                  width: step.dimensions.width,
+                  height: step.dimensions.height,
+                  left: step.position.x,
+                  top: step.position.y,
+                  backgroundColor: "blue",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+                key={step.id}
+              >
+                {step.action?.name || "Deposit"}
+              </div>
+            );
+          })}
         </Canvas>
       </div>
     </ModalWrapper>

@@ -1,5 +1,4 @@
 import { useGesture } from "@use-gesture/react";
-import { off } from "process";
 import { useMemo, useState } from "react";
 
 /**
@@ -103,6 +102,15 @@ export const useDraggableCanvas = (
         : requestedY < -yLimit
         ? -yLimit
         : requestedY;
+
+    console.log(
+      "DesiredX & DesiredY: ",
+      desiredX,
+      desiredY,
+      "RequestX & RequestY:",
+      requestedX,
+      requestedY
+    );
     setPositioning((prev: any) => ({
       ...prev,
       x: desiredX,
@@ -129,6 +137,7 @@ export const useDraggableCanvas = (
         : requestedY < -yLimit
         ? -yLimit
         : requestedY;
+
     setPositioning((prev: any) => ({
       ...prev,
       x: desiredX,
@@ -147,6 +156,54 @@ export const useDraggableCanvas = (
       }));
   };
 
+  // Handle manual movement (used by child focus)
+  const handleAbsoluteMovement = (e: { deltaY: number; deltaX: number }) => {
+    const requestedX = -e.deltaX;
+    const requestedY = -e.deltaY;
+
+    const desiredX =
+      requestedX > xLimit
+        ? xLimit
+        : requestedX < -xLimit
+        ? -xLimit
+        : requestedX;
+    const desiredY =
+      requestedY > 0
+        ? 0
+        : requestedY > yLimit
+        ? yLimit
+        : requestedY < -yLimit
+        ? -yLimit
+        : requestedY;
+
+    setPositioning((prev: any) => ({
+      ...prev,
+      x: desiredX,
+      y: desiredY,
+    }));
+  };
+
+  // Handle child click ("Focus")
+  // (Scrolls to best position to center the child)
+  const handleChildFocus = (childRef: HTMLDivElement | null) => {
+    // Make sure both are defined
+    if (!canvasRef || !childRef) return;
+
+    // Get the rects of the node
+    const nodeRect = childRef.getBoundingClientRect();
+    const nodeLeft = parseInt(childRef.style.left);
+    const nodeTop = parseInt(childRef.style.top);
+
+    // Calculate the ABSOLUTE transfrom diff.
+    const deltaX = nodeLeft + nodeRect.width / 2;
+    const deltaY = nodeTop - nodeRect.height / 2;
+
+    handleAbsoluteMovement({
+      deltaY,
+      deltaX,
+    });
+  };
+
   // Return interactvity variable and positioning
   return {
     interactivity,
@@ -154,5 +211,7 @@ export const useDraggableCanvas = (
       transform: `translate(${x}px, ${y}px) `,
       scale: zoom,
     },
+    handleChildFocus,
+    setPositioning
   };
 };

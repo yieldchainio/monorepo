@@ -12,7 +12,7 @@ import { Children, isValidElement } from "react";
 
 interface ChildrenProviderProps {
   children: React.ReactNode;
-  callback?: (child: React.ReactNode) => React.ReactNode;
+  callback?: (child: React.ReactNode, i: number) => React.ReactNode;
   textProps?: Omit<TextProps, "children">;
 }
 export const ChildrenProvider = ({
@@ -26,7 +26,7 @@ export const ChildrenProvider = ({
         if (typeof child === "string")
           return <WrappedText {...textProps} key={i}>{child}</WrappedText>;
 
-        return callback(child);
+        return callback(child, i);
       })}
     </>
   );

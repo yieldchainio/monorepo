@@ -1,10 +1,12 @@
 import { BaseComponentProps } from "components/types";
-import { ForwardedRef } from "react";
+import { ForwardedRef, ReactElement } from "react";
 
 /**
  * CanvasProps
  * @param setters - Optional, an object of setters for the position & zoom propreties of the canvas - When these change, the setters are invoked.
  * @param size - Optional, the size of the canvas. Defaults to flex-like sizing, with min dimensions of it's parent container
+ * @param childrenWrapper - Optional, a wrapper element for the children. This is set as a seperate prop since we want the canvas
+ * to have direct access to it's child nodes in order for it to have all of it's features
  */
 export interface CanvasProps extends BaseComponentProps {
   setters?: {
@@ -12,6 +14,7 @@ export interface CanvasProps extends BaseComponentProps {
     position?: (position: { x: number; y: number }) => void;
   };
   size?: [number, number]; // x, y
+  childrenWrapper?: ReactElement<any, any>;
 }
 export interface DraggableCanvasProps extends BaseComponentProps {
   parentRef: ForwardedRef<HTMLDivElement>;
@@ -20,4 +23,5 @@ export interface DraggableCanvasProps extends BaseComponentProps {
     position?: (position: { x: number; y: number }) => void;
   };
   size?: [number, number]; // x, y
+  childrenWrapper?: ReactElement<any, any>;
 }

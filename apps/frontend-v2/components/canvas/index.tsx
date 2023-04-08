@@ -64,10 +64,6 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
       parentRef.current as unknown as HTMLDivElement,
       {
         zoom: (_zoom: number) => {
-          console.log(
-            "Setting Dummy Zoom to:",
-            _zoom < 1 ? 0.99 : _zoom > 1.5 ? 1.501 : _zoom
-          );
           setZoom(_zoom < 1 ? 0.99 : _zoom > 1.5 ? 1.501 : _zoom);
         },
       }

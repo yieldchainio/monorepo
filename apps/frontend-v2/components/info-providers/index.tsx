@@ -107,6 +107,11 @@ export const InfoProvider = ({
         );
 
       if (shouldClose === close) setActiveConsumerIndex(consumerIndex);
+
+      await new Promise((res) => {
+        setTimeout(() => res(true), 500);
+        if (shouldClose !== close) setActiveConsumerIndex(null);
+      });
     }
   };
 
@@ -118,7 +123,7 @@ export const InfoProvider = ({
     await new Promise((res, rej) =>
       setTimeout(() => {
         res(true);
-      }, 100)
+      }, delay)
     );
 
     // If shouldClose is true, set active consumer index to null (closes the tooltip).
@@ -178,7 +183,6 @@ export const InfoProvider = ({
             onMouseLeave={async (e: any) => {
               e.stopPropagation();
               setShouldClose(true);
-              console.log("Gonna close the tooltip, shouldClose:", shouldClose);
               await handleClose();
             }}
           ></consumer.type>

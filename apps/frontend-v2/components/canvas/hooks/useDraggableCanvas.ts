@@ -122,7 +122,9 @@ export const useDraggableCanvas = (
         ? -xLimit
         : requestedX;
     const desiredY =
-      requestedY > yLimit
+      requestedY > 0
+        ? 0
+        : requestedY > yLimit
         ? yLimit
         : requestedY < -yLimit
         ? -yLimit

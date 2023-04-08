@@ -1,15 +1,40 @@
-import { PrismaClient, strategiesv2 } from "@prisma/client";
+import { FlowDirection, PrismaClient, strategiesv2 } from "@prisma/client";
+import { DBStep } from "@yc/yc-models";
+import { v4 as uuidv4 } from "uuid";
 
-const prisma = new PrismaClient();
+const client = new PrismaClient();
 
-const strategies = await prisma.strategiesv2.findMany();
+// const oldStrategies = await client.strategies.findMany();
+// const newActions = await client.actionsv2.findMany();
+// const oldFunctions = await client.functions.findMany();
+// const oldFlows = await client.flows.findMany();
+// const newFlows = await client.flowsv2.findMany();
+// const newAddresses = await client.addressesv2.findMany();
+// const oldAddresses = await client.addresses.findMany();
+// const newFunctions = await client.functionsv2.findMany();
+const strategies = await client.strategiesv2.findMany();
+// const newTokens = await client.tokensv2.findMany();
 
 for (const strategy of strategies) {
-  console.log(strategy.steps);
+  console.log(
+    // @ts-ignore
+
+    strategy.steps.children[0].inflows,
+    // @ts-ignore
+
+    strategy.steps.children[0].outflows,
+    // @ts-ignore
+
+    strategy.steps.children[1].inflows,
+    // @ts-ignore
+
+    strategy.steps.children[1].outflows
+  );
+  break;
 }
 
 // const strategiesAndSteps: Array<[string, DBStep]> = [];
-// for (const strategy of strategies) {
+// for (const newStrat of strategies) {
 //   // Mapping old IDs to new UUIDS
 //   const oldToNewIDs = new Map<number, string>();
 
@@ -27,10 +52,16 @@ for (const strategy of strategies) {
 //     children: [],
 //   };
 
+//   const strategy = oldStrategies.find(
+//     (strat) => strat.address?.toLowerCase() === newStrat.address.toLowerCase()
+//   );
+
+//   if (!strategy) throw "Cannot find old strategy!";
+
 //   // iterate over each step and map the ID
-//   for (const step of strategy.steps) {
+//   // @ts-ignore
+//   for (const step of strategy.strategy_object.steps_array) {
 //     const oldStep = { ...(step as any) } as any;
-//     const newStep = {} as DBStep;
 
 //     const newID = uuidv4();
 //     oldToNewIDs.set(oldStep.step_identifier, newID);
@@ -38,7 +69,8 @@ for (const strategy of strategies) {
 
 //   const newSteps: Omit<DBStep, "children">[] = [rootStep];
 //   // Another iteration where we now change the details
-//   for (const step of strategy.steps) {
+//   // @ts-ignore
+//   for (const step of strategy.strategy_object.steps_array) {
 //     const oldStep = { ...(step as any) } as any;
 
 //     const newParentId = oldToNewIDs.get(oldStep.parent_step_identifier);
@@ -95,20 +127,71 @@ for (const strategy of strategies) {
 //       protocol: oldStep.protocol_details.id,
 //       action: newAction.id,
 //       percentage: oldStep.percentage,
-//       inflows: newFlows
-//         .filter((flow) =>
-//           oldStep.inflows.find((oldFlow: number) => oldFlow === flow.old_id)
-//         )
-//         .map((flow) => flow.id),
-//       outflows: newFlows
-//         .filter((flow) =>
-//           oldStep.outflows.find((oldFlow: number) => oldFlow === flow.old_id)
-//         )
-//         .map((flow) => flow.id),
+//       inflows: oldStep.inflows.map((flow: any) => {
+//         const newToken =
+//           newTokens.find(
+//             (token) =>
+//               token.chain_id?.toString() ===
+//                 flow.token_details?.chain_id?.toString() &&
+//               token.address.toLowerCase() ===
+//                 flow.token_details.address.toLowerCase()
+//           ) ||
+//           newTokens.find(
+//             (token) =>
+//               flow.token_details.name.includes(token.name) &&
+//               token.symbol == flow.token_details.symbol
+//           );
 
+//         if (!newToken) {
+//           console.error(flow);
+//           console.log(
+//             newTokens.find(
+//               (token) => token.name === "DAI-WETH LP-Token zyberSwap "
+//             )
+//           );
+//           throw "New Token in Inflow not found!";
+//         }
+
+//          return newToken
+//       }),
+//       outflows: oldStep.outflows.map((flow: any) => {
+//         const newToken = newTokens.find(
+//           (token) =>
+//             token.chain_id.toString() ===
+//               flow.token_details.chain_id.toString() &&
+//             token.address.toLowerCase() ===
+//               flow.token_details.address.toLowerCase()
+//         );
+
+//         if (!newToken) {
+//           console.error(flow);
+//           throw "New Token in Outflow not found!";
+//         }
+//         return newToken;
+//       }),
 //       function: newFunction.id,
 //       customArgs: oldStep.additional_args,
 //     };
+
+//     if (newStep.inflows.length !== oldStep.inflows.length) {
+//       console.error(
+//         "Old inflows",
+//         oldStep.inflows,
+//         "new Inflows",
+//         newStep.inflows
+//       );
+//       throw "Inflows length does not match";
+//     }
+//     if (newStep.outflows.length !== oldStep.outflows.length) {
+//       console.error(
+//         "Old outflows",
+//         oldStep.outflows,
+//         "new outflows",
+//         newStep.outflows
+//       );
+//       throw "Outflows length does not match";
+//     }
+
 //     if (oldStep.parent_step_identifier === undefined)
 //       newStep.parentId = rootStep.id;
 
@@ -147,7 +230,7 @@ for (const strategy of strategies) {
 //     }
 //   };
 
-//   strategiesAndSteps.push([strategy.id, rootStep]);
+//   strategiesAndSteps.push([newStrat.id, rootStep]);
 //   // each(rootStep);
 //   // break;
 // }

@@ -103,14 +103,6 @@ export const useDraggableCanvas = (
         ? -yLimit
         : requestedY;
 
-    console.log(
-      "DesiredX & DesiredY: ",
-      desiredX,
-      desiredY,
-      "RequestX & RequestY:",
-      requestedX,
-      requestedY
-    );
     setPositioning((prev: any) => ({
       ...prev,
       x: desiredX,
@@ -147,7 +139,6 @@ export const useDraggableCanvas = (
 
   // Handle zooming
   const handleZoom = (offset: [number, number]) => {
-    console.log("Handling zoom", offset[0]);
     setters?.zoom?.(offset[0]);
     if (offset[0] < limits.zoom.max.value && offset[0] > limits.zoom.min.value)
       setPositioning((prev) => ({
@@ -186,6 +177,7 @@ export const useDraggableCanvas = (
   // Handle child click ("Focus")
   // (Scrolls to best position to center the child)
   const handleChildFocus = (childRef: HTMLDivElement | null) => {
+    console.log("Handling Child Focus..");
     // Make sure both are defined
     if (!canvasRef || !childRef) return;
 
@@ -212,6 +204,6 @@ export const useDraggableCanvas = (
       scale: zoom,
     },
     handleChildFocus,
-    setPositioning
+    setPositioning,
   };
 };

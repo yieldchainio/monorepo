@@ -27,12 +27,16 @@ module.exports = {
     },
 
     extend: {
+      boxShadow: {
+        centeredXL: "0 2px 5px 8px rgba(0, 0, 0, 0.1)",
+      },
       colors: {
         current: "currentColor",
         custom: {
           // Background colors
           bg: "var(--bg)",
           subbg: "var(--subbg)",
+          darkSubbg: "var(--darkerSubbg)",
           componentbg: ({ opacityValue }) =>
             `rgba(var(--componentbg), ${opacityValue || 1})`,
           textColor: ({ opacityValue }) =>

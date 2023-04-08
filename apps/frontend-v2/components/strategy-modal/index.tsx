@@ -17,6 +17,7 @@ import { useSteps } from "utilities/hooks/yc/useSteps";
 import { useEffect } from "react";
 import { StepSizing } from "utilities/classes/step/types";
 import { Canvas } from "components/canvas";
+import { SmallCompleteStep } from "components/steps/complete/small";
 
 /**
  * @param strategyID - The ID of the strategy to display
@@ -55,7 +56,7 @@ export const StrategyModal = ({
       callbackRoute={callbackRoute || "/"}
       closeFunction={closeFunction}
     >
-      {/* <div className=" w-[80vw] h-[300vh] bg-custom-bcomponentbg mt-8 rounded-lg flex flex-col items-center justify-start p-8 gap-6">
+      {/* <div className=" w-[80vw] h-[180vh] bg-custom-bcomponentbg rounded-lg flex flex-col items-center justify-start p-8 gap-6 relative overflow-visible">
         <TitleSection
           logo={strategy?.depositToken?.logo}
           symbol={strategy?.depositToken?.symbol}
@@ -91,21 +92,31 @@ export const StrategyModal = ({
         >
           {stepsState.rootStep?.map<React.ReactNode>((step: Step) => {
             return (
-              <div
-                className="absolute"
+              <SmallCompleteStep
+                step={step}
                 style={{
-                  width: step.dimensions.width,
-                  height: step.dimensions.height,
                   left: step.position.x,
                   top: step.position.y,
-                  backgroundColor: "blue",
                   marginLeft: "auto",
                   marginRight: "auto",
+                  
                 }}
-                key={step.id}
-              >
-                {step.action?.name || "Deposit"}
-              </div>
+              />
+              // <div
+              //   className="absolute"
+              //   style={{
+              //     width: step.dimensions.width,
+              //     height: step.dimensions.height,
+              //     left: step.position.x,
+              //     top: step.position.y,
+              //     backgroundColor: "blue",
+              //     marginLeft: "auto",
+              //     marginRight: "auto",
+              //   }}
+              //   key={step.id}
+              // >
+              //   {step.action?.name || "Deposit"}
+              // </div>
             );
           })}
         </Canvas>

@@ -29,7 +29,7 @@ export const useModals = create<ModalsStore>((set, get) => ({
   modals: [],
   push: (modalCallback: (length: number) => GlobalModal) => {
     if (typeof window !== "undefined")
-      document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.overflowY = "hidden";
     set((state) => {
       return {
         modals: [...state.modals, modalCallback(length)],
@@ -38,7 +38,7 @@ export const useModals = create<ModalsStore>((set, get) => ({
   },
   remove: (index: number) => {
     if (typeof window !== "undefined")
-      document.documentElement.style.overflow = "visible";
+      document.documentElement.style.overflowY = "scroll";
     set((state) => {
       const newArr = [...state.modals];
       newArr.splice(index, 1);

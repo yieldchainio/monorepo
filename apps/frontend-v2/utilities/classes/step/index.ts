@@ -3,7 +3,9 @@
  */
 
 import {
+  DBFlow,
   DBStep,
+  DBToken,
   YCAction,
   YCArgument,
   YCFlow,
@@ -26,6 +28,7 @@ import {
 import { v4 as uuid } from "uuid";
 import { FlextreeNode, flextree } from "d3-flextree";
 import { HierarchyNode } from "d3-hierarchy";
+import { FlowDirection } from "@prisma/client";
 
 export class Step implements IStep<Step> {
   // ====================
@@ -146,13 +149,25 @@ export class Step implements IStep<Step> {
     const stepConfig: IStep<Step> = {
       id: step.id,
       protocol: context.getProtocol(step.protocol),
-      inflows: step.inflows.flatMap((flowId: string) => {
-        const flow = context.getFlow(flowId);
-        return flow ? [flow] : [];
+      inflows: step.inflows.map((dbflow: DBToken) => {
+        return new YCFlow(
+          {
+            token_id: dbflow.id,
+            direction: FlowDirection.INFLOW,
+            id: uuid(),
+          },
+          context
+        );
       }),
-      outflows: step.outflows.flatMap((flowId: string) => {
-        const flow = context.getFlow(flowId);
-        return flow ? [flow] : [];
+      outflows: step.outflows.map((dbflow: DBToken) => {
+        return new YCFlow(
+          {
+            token_id: dbflow.id,
+            direction: FlowDirection.OUTFLOW,
+            id: uuid(),
+          },
+          context
+        );
       }),
       percentage: step.percentage,
       action: context.getAction(step.action),
@@ -165,6 +180,7 @@ export class Step implements IStep<Step> {
         })
       ),
     };
+    console.log("Doing step in fromDbStep, inflows & outflows: ", step);
     return new Step(stepConfig);
   };
 
@@ -290,7 +306,10 @@ export class Step implements IStep<Step> {
      * If positive width is 500, min width is -300 (there are 5 nodes to the right and 3 to the left),
      * end result would be 800 total width (500 - (-300)), so all of them would fit
      */
-    return [positiveWidth - negativeWidth, positiveHeight - negativeHeight] as [number, number]
+    return [positiveWidth - negativeWidth, positiveHeight - negativeHeight] as [
+      number,
+      number
+    ];
   };
 
   /**

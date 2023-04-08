@@ -13,7 +13,7 @@ export const ModalProvider = () => {
 
   // Return the modals
   return (
-    <div className="w-full h-full z-100000000000000 isolate">
+    <div className="w-full z-100000000000000">
       {Children.map(
         modals.map((modal) => modal.component),
         (modal, i) => {

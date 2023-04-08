@@ -67,11 +67,9 @@
 
   --dark-scrollbar: #383838;
   --light-scrollbar: #c3c9d4;
-}
 
-:global(slick-active) {
-  opacity: 0.75;
-  color: #000;
+  --dark-darkerSubbg: #171718;
+  --light-darkerSubbg: #f7f7f7;
 }
 
 /**
@@ -123,6 +121,8 @@ html {
   --scrollbar: var(--light-scrollbar);
 
   --main-gradient: var(--light-gradient);
+
+  --darkerSubbg: var(--light-darkerSubbg);
 }
 
 .canvas {
@@ -171,6 +171,8 @@ html.dark {
 
   --scrollbar: var(--dark-scrollbar);
   --main-gradient: var(--gradient);
+
+  --darkerSubbg: var(--dark-darkerSubbg);
 }
 
 /*Other Global Variables*/
@@ -228,4 +230,16 @@ body::-webkit-scrollbar-thumb {
 
 body::-webkit-scrollbar-track-piece:disabled {
   height: 20%;
+}
+
+:global(slick-active) {
+  opacity: 0.75;
+  color: #000;
+}
+
+.font-outline-2 {
+  -webkit-text-stroke: 2px var(--textColor);
+}
+.font-outline-4 {
+  -webkit-text-stroke: 4px var(--textColor);
 }

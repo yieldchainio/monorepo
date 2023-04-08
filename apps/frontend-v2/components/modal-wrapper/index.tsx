@@ -32,7 +32,7 @@ export const ModalWrapper = ({
   // Return the wrapper & render the children
   return (
     <div
-      className="w-[100vw] h-[100vh] bg-black/60 fixed z-10000000000000 backdrop-blur-sm flex flex-col items-center justify-center overflow-scroll "
+      className=" min-h-screen fixed inset-0 overflow-y-scroll bg-black/50 py-20 backdrop-blur-md  "
       onClick={onClose}
     >
       {Children.map(children, (child) => {
@@ -49,7 +49,7 @@ export const ModalWrapper = ({
                 e.stopPropagation();
               })
             }
-            className={"animate-modal" + " " + child.props.className}
+            className={"animate-modal mx-auto" + " " + child.props.className}
           />
         );
       })}

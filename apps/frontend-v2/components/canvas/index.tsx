@@ -103,7 +103,7 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
     return (
       <>
         <div
-          className="min-w-[150%] min-h-[150%] bg-custom-bcomponentbg h-max bg-dotted-spacing-6 bg-dotted-custom-border cursor-grab active:cursor-grabbing flex flex-row items-start justify-center  touch-pinch-zoom py-10 "
+          className="min-w-[150%] min-h-[150%] bg-custom-darkSubbg h-max bg-dotted-spacing-6 bg-dotted-custom-border cursor-grab active:cursor-grabbing flex flex-row items-start justify-center  touch-pinch-zoom py-10 "
           style={{
             ...style,
             width: !size ? undefined : `${size[0] * 5}px`,
@@ -133,6 +133,8 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
                             !node
                               ? childRefs.delete(i)
                               : childRefs.set(i, child.props.ref || node);
+
+                            // console.log("Ref of this child", childRefs.get(i));
                           }}
                           onClick={(
                             e: MouseEvent<HTMLDivElement, MouseEvent>

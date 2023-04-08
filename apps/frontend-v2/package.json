@@ -30,7 +30,7 @@
     "ethers": "5.7.2",
     "framer-motion": "^10.2.3",
     "global": "^4.4.0",
-    "next": "^13.2.5-canary.19",
+    "next": "13.3",
     "postcss": "^8.4.21",
     "random-hex-color-generator": "^1.0.12",
     "rc-slider": "10.1.0",

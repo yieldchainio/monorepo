@@ -189,21 +189,6 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="w-[70vw] h-[80vh] absolute z-1000 top-[200px]">
-        <Canvas>
-          <div className="flex flex-col gap-2">
-            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
-            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
-            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
-            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
-            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
-            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
-            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
-            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
-            <div className="w-[150px] h-[90px] bg-red-500/80"></div>
-          </div>
-        </Canvas>
-      </div>
     </>
   );
 }

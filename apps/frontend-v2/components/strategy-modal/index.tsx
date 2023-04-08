@@ -16,6 +16,7 @@ import { Step } from "utilities/classes/step";
 import { useSteps } from "utilities/hooks/yc/useSteps";
 import { useEffect } from "react";
 import { StepSizing } from "utilities/classes/step/types";
+import { Canvas } from "components/canvas";
 
 /**
  * @param strategyID - The ID of the strategy to display
@@ -39,22 +40,13 @@ export const StrategyModal = ({
   // Context
   const context = useYCStore((state) => state.context);
 
-  const { stepsState, setRootStep, prevState, triggerComparison } = useSteps(
+  const { stepsState, canvasDimensions } = useSteps(
     strategy?.rootStep
       ? Step.fromDBStep({ step: strategy.rootStep.toJSON(), context })
       : null,
     strategy,
     context
   );
-
-  // Graphing
-  useEffect(() => {
-    console.log("RootStep useEffect ran, ", stepsState.rootStep);
-    if (stepsState.rootStep) {
-      stepsState.rootStep.graph(StepSizing.SMALL);
-      triggerComparison();
-    }
-  }, [stepsState.rootStep?.shouldGraph(prevState.current.rootStep)]);
 
   // Return the JSX
   return (
@@ -63,30 +55,7 @@ export const StrategyModal = ({
       callbackRoute={callbackRoute || "/"}
       closeFunction={closeFunction}
     >
-      <div className="absolute w-[80%] h-[50%] bg-red-500">
-        <div className="relative w-max h-max mx-auto">
-          {stepsState.rootStep?.map<React.ReactNode>((step: Step) => {
-            return (
-              <div
-                className="absolute"
-                style={{
-                  width: step.dimensions.width,
-                  height: step.dimensions.height,
-                  left: step.position.x,
-                  top: step.position.y,
-                  backgroundColor: "blue",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-                key={step.id}
-              >
-                {step.action?.name || "Deposit"}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div className=" w-[80vw] h-[300vh] bg-custom-bcomponentbg mt-8 rounded-lg flex flex-col items-center justify-start p-8 gap-6">
+      {/* <div className=" w-[80vw] h-[300vh] bg-custom-bcomponentbg mt-8 rounded-lg flex flex-col items-center justify-start p-8 gap-6">
         <TitleSection
           logo={strategy?.depositToken?.logo}
           symbol={strategy?.depositToken?.symbol}
@@ -113,6 +82,32 @@ export const StrategyModal = ({
           </div>
           <ProfileSection user={strategy?.creator} />
         </div>
+      </div> */}
+
+      <div className="w-[70vw] h-[80vh]  z-1000">
+        <Canvas size={canvasDimensions}>
+          <div className="relative w-max h-max mx-auto">
+            {stepsState.rootStep?.map<React.ReactNode>((step: Step) => {
+              return (
+                <div
+                  className="absolute"
+                  style={{
+                    width: step.dimensions.width,
+                    height: step.dimensions.height,
+                    left: step.position.x,
+                    top: step.position.y,
+                    backgroundColor: "blue",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                  key={step.id}
+                >
+                  {step.action?.name || "Deposit"}
+                </div>
+              );
+            })}
+          </div>
+        </Canvas>
       </div>
     </ModalWrapper>
   );

@@ -48,7 +48,7 @@ export const useDraggableCanvas = (
     const parentRects = parentRef.getBoundingClientRect();
     const limits = {
       xLimit: (canvasRects.width / zoom - parentRects.width) / 2,
-      yLimit: (canvasRects.height / zoom - parentRects.height) / 2,
+      yLimit: canvasRects.height / zoom - parentRects.height,
     };
 
     return limits;
@@ -96,7 +96,9 @@ export const useDraggableCanvas = (
         ? -xLimit
         : requestedX;
     const desiredY =
-      requestedY > yLimit
+      requestedY > 0
+        ? 0
+        : requestedY > yLimit
         ? yLimit
         : requestedY < -yLimit
         ? -yLimit

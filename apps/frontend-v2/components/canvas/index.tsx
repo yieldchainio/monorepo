@@ -7,9 +7,8 @@ import { CanvasProps, DraggableCanvasProps } from "./types";
 import { forwardRef, isValidElement, useRef, useState } from "react";
 
 import { useDraggableCanvas } from "./hooks/useDraggableCanvas";
-import { ChildrenProvider } from "components/internal/render-children";
 
-export const Canvas = ({ children, setters }: CanvasProps) => {
+export const Canvas = ({ children, setters, size }: CanvasProps) => {
   // Saving refs for both the parent container & the canvas
   const parentRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -17,7 +16,12 @@ export const Canvas = ({ children, setters }: CanvasProps) => {
   // Return the component JSX
   return (
     <ParentContainer ref={parentRef}>
-      <DraggableCanvas parentRef={parentRef} ref={canvasRef} setters={setters}>
+      <DraggableCanvas
+        parentRef={parentRef}
+        ref={canvasRef}
+        setters={setters}
+        size={size}
+      >
         {children}
       </DraggableCanvas>
     </ParentContainer>
@@ -37,7 +41,7 @@ const ParentContainer = forwardRef<HTMLDivElement, BaseComponentProps>(
   ({ children }: BaseComponentProps, ref) => {
     return (
       <div
-        className="w-full h-full border-[2px] border-lime-500 flex flex-col items-center justify-center overflow-hidden "
+        className="w-full h-full border-[2px] border-lime-500 flex flex-col items-center justify-start overflow-hidden "
         ref={ref}
       >
         {children}
@@ -51,7 +55,7 @@ const ParentContainer = forwardRef<HTMLDivElement, BaseComponentProps>(
  */
 
 const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
-  ({ children, parentRef, setters }: DraggableCanvasProps, ref) => {
+  ({ children, parentRef, setters, size }: DraggableCanvasProps, ref) => {
     // Use the useDraggableCanvas hook to get the styling and ref to spread
     const { interactivity, style } = useDraggableCanvas(
       // @ts-ignore
@@ -71,10 +75,15 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
 
     const [zoom, setZoom] = useState(1);
 
+    console.log("Size in canvas ser", size);
     return (
       <div
-        className="min-w-full min-h-full  bg-custom-bcomponentbg w-[150vw] h-[calc(max-content+300px)] bg-dotted-spacing-6 bg-dotted-custom-border cursor-grab active:cursor-grabbing flex flex-row items-center justify-center  touch-pinch-zoom  "
-        style={{ ...style }}
+        className="min-w-[150%] min-h-[150%] bg-custom-bcomponentbg h-max bg-dotted-spacing-6 bg-dotted-custom-border cursor-grab active:cursor-grabbing flex flex-row items-start justify-center  touch-pinch-zoom py-10"
+        style={{
+          ...style,
+          width: !size ? undefined : `${size[0] * 5}px`,
+          height: !size ? undefined : `${size[1] * 5}px`,
+        }}
         ref={ref}
         {...interactivity()}
       >

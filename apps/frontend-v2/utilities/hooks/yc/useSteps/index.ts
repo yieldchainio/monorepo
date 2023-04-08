@@ -8,7 +8,7 @@ import { create } from "zustand";
 import { Step } from "utilities/classes/step";
 import { StepsStore, UseStepsActions } from "./types";
 import { Dimensions, StepSizing } from "utilities/classes/step/types";
-import { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { useStepsReducer } from "./reducer";
 import { YCClassifications, YCStrategy } from "@yc/yc-models";
 
@@ -25,8 +25,19 @@ export const useSteps = (
   /**
    * The state
    */
-  const [stepsState, dispatch] = useReducer(useStepsReducer, { rootStep: root });
+  const [stepsState, dispatch] = useReducer(useStepsReducer, {
+    rootStep: root,
+  });
 
+  /**
+   * State for canvas sizing
+   */
+
+  const [canvasDimensions, setCanvasDimensions] = useState<
+    undefined | [number, number]
+  >();
+
+  // Keeping track of the previous state for comparison reasons (rerender effiency)
   const prevState = useRef<{ rootStep: Step | null }>({ rootStep: null });
 
   // Initiating the step
@@ -39,6 +50,17 @@ export const useSteps = (
       );
     }
   }, [strategy?.rootStep?.children?.length]);
+
+  /**
+   * A useEffect that triggers the ``graph()`` function on our tree when it should.
+   * Also, sets the canvas dimensions (the function's return value)
+   */
+  useEffect(() => {
+    if (stepsState.rootStep) {
+      setCanvasDimensions(stepsState.rootStep.graph(StepSizing.SMALL));
+      triggerComparison();
+    }
+  }, [stepsState.rootStep?.shouldGraph(prevState.current.rootStep)]);
 
   /**
    * Wrapping actions for ease
@@ -81,6 +103,7 @@ export const useSteps = (
 
   return {
     stepsState,
+    canvasDimensions,
     prevState,
     setRootStep,
     resizeAll,

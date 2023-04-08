@@ -127,8 +127,8 @@ export interface DBStep {
   parentId: string | null;
   protocol: string;
   percentage: number;
-  inflows: string[];
-  outflows: string[];
+  inflows: DBToken[];
+  outflows: DBToken[];
   action: string;
   function: string;
   customArgs: any[];

@@ -727,10 +727,20 @@ export class YCClassifications extends YCClassificationsInternal {
   };
 
   // Get a full flow instance with a flow ID
-  getFlow = (_flow_id: string): YCFlow | null => {
-    let flow = this.Flows.find((_flow: DBFlow) => _flow.id == _flow_id);
-    if (flow) return new YCFlow(flow, this);
-    return null;
+  getFlow = (_flow_id: string | DBFlow): YCFlow | null => {
+    return this.flows.find(
+      (_flow: YCFlow) =>
+        _flow.id == (typeof _flow_id === "string" ? _flow_id : _flow_id.id)
+    ) || typeof _flow_id === "string"
+      ? null
+      : new YCFlow(
+          {
+            id: typeof _flow_id == "string" ? _flow_id : _flow_id.id,
+            token_id: _flow_id.token_id,
+            direction: _flow_id.direction,
+          },
+          this
+        );
   };
 
   // Get the full Token instance with a token ID

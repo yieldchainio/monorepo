@@ -1,10 +1,12 @@
-import { DBStep } from "../../types";
+import { DBFlow, DBStep, DBToken } from "../../types";
 import { YCAction } from "../action/action";
 import { BaseClass } from "../base";
 import { YCClassifications } from "../context/context";
 import { YCFlow } from "../flow/flow";
 import { YCFunc } from "../function/function";
 import { YCProtocol } from "../protocol/protocol";
+import { FlowDirection } from "@prisma/client";
+import { v4 as uuid } from "uuid";
 
 export class YCStep extends BaseClass {
   id: string;
@@ -23,13 +25,25 @@ export class YCStep extends BaseClass {
     this.id = _step.id;
     this.parentId = _step.parentId;
     this.protocol = _context.getProtocol(_step.protocol);
-    this.inflows = _step.inflows.flatMap((flowId: string) => {
-      const flow = _context.getFlow(flowId);
-      return flow ? [flow] : [];
+    this.inflows = _step.inflows.map((dbflow: DBToken) => {
+      return new YCFlow(
+        {
+          token_id: dbflow.id,
+          direction: FlowDirection.INFLOW,
+          id: uuid(),
+        },
+        _context
+      );
     });
-    this.outflows = _step.outflows.flatMap((flowId: string) => {
-      const flow = _context.getFlow(flowId);
-      return flow ? [flow] : [];
+    this.outflows = _step.outflows.map((dbflow: DBToken) => {
+      return new YCFlow(
+        {
+          token_id: dbflow.id,
+          direction: FlowDirection.OUTFLOW,
+          id: uuid(),
+        },
+        _context
+      );
     });
     this.children = _step.children.map(
       (child: DBStep) => new YCStep(child, _context)
@@ -44,7 +58,6 @@ export class YCStep extends BaseClass {
   /**
    * Convert the step into a JSON step
    */
-
   toJSON = (): DBStep => {
     return {
       id: this.id,
@@ -52,8 +65,8 @@ export class YCStep extends BaseClass {
       action: this.action?.id || "",
       protocol: this.protocol?.id || "",
       percentage: this.percentage,
-      inflows: this.inflows.map((flow) => flow.id),
-      outflows: this.outflows.map((flow) => flow.id),
+      inflows: this.inflows.map((flow) => flow.token.toJSON()),
+      outflows: this.outflows.map((flow) => flow.token.toJSON()),
       function: this.function?.id || "",
       customArgs: this.customArguments,
       children: this.children.map((child) => child.toJSON()),

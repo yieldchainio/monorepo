@@ -38,6 +38,18 @@ export class YCFlow {
 
     this.id = _flow.id;
   }
+
+  // ==============
+  //    METHODS
+  // ==============
+  toJSON = (): DBFlow => {
+    return {
+      id: this.id,
+      direction: this.direction,
+      token_id: this.token.id,
+      
+    };
+  };
 }
 
 // Flow Directions, either

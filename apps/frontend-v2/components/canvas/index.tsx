@@ -17,12 +17,16 @@ import { ChildrenProvider } from "components/internal/render-children";
 import { animated } from "react-spring";
 import { RegulerButton } from "components/buttons/reguler";
 import WrappedImage from "components/wrappers/image";
+import { InfoProvider } from "components/info-providers";
 
 export const Canvas = ({
   children,
   setters,
   size,
   childrenWrapper = <></>,
+  style,
+  parentStyle,
+  utilityButtons,
 }: CanvasProps) => {
   // Saving refs for both the parent container & the canvas
   const parentRef = useRef<HTMLDivElement>(null);
@@ -30,13 +34,15 @@ export const Canvas = ({
 
   // Return the component JSX
   return (
-    <ParentContainer ref={parentRef}>
+    <ParentContainer ref={parentRef} style={parentStyle}>
       <DraggableCanvas
         parentRef={parentRef}
         ref={canvasRef}
         setters={setters}
         size={size}
         childrenWrapper={childrenWrapper}
+        style={style}
+        utilityButtons={utilityButtons}
       >
         {children}
       </DraggableCanvas>
@@ -54,11 +60,12 @@ export const Canvas = ({
  * when constraining drag positions
  */
 const ParentContainer = forwardRef<HTMLDivElement, BaseComponentProps>(
-  ({ children }: BaseComponentProps, ref) => {
+  ({ children, style }: BaseComponentProps, ref) => {
     return (
       <div
-        className="relative w-full h-full  flex flex-col items-center justify-start overflow-hidden rounded-xl border-[2px] border-custom-border "
+        className="relative w-full flex flex-col items-center justify-start overflow-hidden rounded-xl border-[2px] border-custom-border "
         ref={ref}
+        style={style}
       >
         {children}
       </div>
@@ -78,6 +85,8 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
       setters,
       size,
       childrenWrapper,
+      utilityButtons,
+      style: propStyle,
     }: DraggableCanvasProps,
     ref
   ) => {
@@ -108,6 +117,7 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
             ...style,
             width: !size ? undefined : `${size[0] * 5}px`,
             height: !size ? undefined : `${size[1] * 5}px`,
+            ...propStyle,
           }}
           ref={ref}
           {...interactivity()}
@@ -156,30 +166,45 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
             {childrenWrapper}
           </ChildrenProvider>
         </div>
-        {/* <div className=""></div> */}
-        <div className="absolute w-[100%] h-[50px]  z-1000 flex flex-row justify-end items-center pr-4 ">
-          <RegulerButton
-            style={{
-              paddingLeft: "6px",
-              paddingRight: "6px",
-              paddingTop: "6px",
-              paddingBottom: "5px",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onClick={() => {
-              setPositioning({ x: 0, y: 0, zoom: 1 });
-            }}
-          >
-            <WrappedImage
-              src={{
-                dark: "/icons/center-light.svg",
-                light: "/icons/center-dark.svg",
-              }}
-              width={14}
-              height={14}
-            />
-          </RegulerButton>
+        <div className="absolute w-max left-[100%] translate-x-[-100%] h-[50px]  z-10000000000000000 flex flex-row justify-end items-center pr-4 gap-2">
+          {(utilityButtons || [])
+            .concat([
+              {
+                onClick: () => {
+                  setPositioning({ x: 0, y: 0, zoom: 1 });
+                },
+                children: (
+                  <WrappedImage
+                    src={{
+                      dark: "/icons/center-light.svg",
+                      light: "/icons/center-dark.svg",
+                    }}
+                    width={14}
+                    height={14}
+                  />
+                ),
+                label: "Center View",
+              },
+            ])
+            .map((utilButton) => {
+              return (
+                <InfoProvider contents={utilButton.label}>
+                  <RegulerButton
+                    style={{
+                      paddingLeft: "6px",
+                      paddingRight: "6px",
+                      paddingTop: "6px",
+                      paddingBottom: "5px",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onClick={utilButton.onClick}
+                  >
+                    {utilButton.children}
+                  </RegulerButton>
+                </InfoProvider>
+              );
+            })}
         </div>
       </>
     );

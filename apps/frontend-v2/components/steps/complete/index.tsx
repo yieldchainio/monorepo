@@ -11,11 +11,11 @@ import { MediumCompleteStep } from "./medium";
 import { forwardRef } from "react";
 
 export const CompleteStep = forwardRef<HTMLDivElement, CompleteStepProps>(
-  ({ step, size, ...props }: CompleteStepProps, ref) => {
+  ({ step, ...props }: CompleteStepProps, ref) => {
     /**
      * Switch case to return corresponding step depending on size
      */
-    switch (size) {
+    switch (step.size) {
       case StepSizing.SMALL:
         return <SmallCompleteStep step={step} ref={ref} {...props} />;
 

@@ -8,7 +8,6 @@ import { StepSizing } from "utilities/classes/step/types";
 
 export interface CompleteStepProps extends BaseComponentProps {
   step: Step;
-  size: StepSizing;
 }
 
 export interface CompleteStepSizedProps extends BaseComponentProps {

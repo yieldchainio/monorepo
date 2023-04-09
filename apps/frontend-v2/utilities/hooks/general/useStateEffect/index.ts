@@ -9,12 +9,12 @@ import { useEffect, useState } from "react";
 
 export const useStateEffect = <T>(
   initialState: T,
-  callback: (state?: T) => any,
+  callback: (state?: T) => any
 ) => {
   const [state, setState] = useState<T>(initialState);
   useEffect(() => {
     callback(state);
   }, [state]);
 
-  return [state, setState];
+  return [state, setState] as [T, (arg: T) => void];
 };

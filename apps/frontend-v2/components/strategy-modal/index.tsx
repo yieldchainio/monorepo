@@ -14,10 +14,16 @@ import { ApyChart } from "./components/body-sections/apy-chart";
 import { StrategyOperationsBox } from "./components/body-sections/deposit-withdrawls";
 import { Step } from "utilities/classes/step";
 import { useSteps } from "utilities/hooks/yc/useSteps";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StepSizing } from "utilities/classes/step/types";
 import { Canvas } from "components/canvas";
 import { SmallCompleteStep } from "components/steps/complete/small";
+import { StepsModal } from "components/steps-modal";
+import { ToggleExpandText } from "./components/utility/toggleExpand";
+import { useStateEffect } from "utilities/hooks/general/useStateEffect";
+import exp from "constants";
+import WrappedImage from "components/wrappers/image";
+import { useModals } from "utilities/hooks/stores/modal";
 
 /**
  * @param strategyID - The ID of the strategy to display
@@ -38,9 +44,10 @@ export const StrategyModal = ({
     state.context.YCstrategies.find((strat) => strat.id === strategyID)
   );
 
-  // Context
+  // Context (passed onto Steps hook)
   const context = useYCStore((state) => state.context);
 
+  // Use the steps hook to graph them
   const { stepsState, canvasDimensions } = useSteps(
     strategy?.rootStep
       ? Step.fromDBStep({ step: strategy.rootStep.toJSON(), context })
@@ -49,6 +56,20 @@ export const StrategyModal = ({
     context
   );
 
+  // Head state keeping track of whether the steps are expanded or not
+  const [expanded, setExpanded] = useStateEffect<boolean>(false, (state) =>
+    setModalHeight(state ? "180vh" : "110vh")
+  );
+
+  // Utility steps based on the expanded state
+  const [height, setModalHeight] = useState(() => {
+    if (expanded === true) return "180vh";
+    return "110vh";
+  });
+
+  // We consume the global modals state to push utility modals (Fund gas, steps fullscreen, etc)
+  const modals = useModals();
+
   // Return the JSX
   return (
     <ModalWrapper
@@ -56,18 +77,21 @@ export const StrategyModal = ({
       callbackRoute={callbackRoute || "/"}
       closeFunction={closeFunction}
     >
-      {/* <div className=" w-[80vw] h-[180vh] bg-custom-bcomponentbg rounded-lg flex flex-col items-center justify-start p-8 gap-6 relative overflow-visible">
+      <div
+        className=" w-[80vw]  bg-custom-darkSubbg rounded-lg flex flex-col items-center justify-start p-8 gap-6 relative overflow-hidden"
+        style={{
+          height: height,
+        }}
+      >
         <TitleSection
           logo={strategy?.depositToken?.logo}
           symbol={strategy?.depositToken?.symbol}
           title={strategy?.title}
         />
-        <div className="w-full h-full flex flex-col items-center justify-start gap-3 max-w-[1250px] ">
+        <div className="w-full h-[150%] flex flex-col items-center justify-start gap-3 max-w-[1250px] ">
           <ApyChart strategy={strategy} />
           <div className="flex flex-row w-full h-[40%] tablet:h-[40%] gap-3 items-end justify-between ">
-            <div
-              className="flex flex-col w-[100%] h-full gap-3 tablet :w-[35%] flex-wrap tablet:flex-row tablet:gap-3 justify-start items-start "
-            >
+            <div className="flex flex-col w-[100%] h-full gap-3 tablet :w-[35%] flex-wrap tablet:flex-row tablet:gap-3 justify-start items-start ">
               <ValueLocked strategy={strategy} />
               <GasThroughput
                 gasIn={10000000000000000n}
@@ -80,43 +104,91 @@ export const StrategyModal = ({
           </div>
           <ProfileSection user={strategy?.creator} />
         </div>
-      </div> */}
-
-      <div className="w-[70vw] h-[80vh]  z-1000">
-        <Canvas
-          size={canvasDimensions}
-          childrenWrapper={<div className="relative w-max h-max mx-auto"></div>}
+        {!expanded && (
+          <div className="w-[80vw] absolute h-[15%] z-1000000000000 bg-gradient-to-t from-custom-bcomponentbg/100 to-custom-bcomponentbg/10  flex flex-row items-end justify-center pb-10 top-[100%] translate-y-[-100%]">
+            {" "}
+            <ToggleExpandText
+              state={expanded}
+              setState={setExpanded}
+              style={{ zIndex: 100000 }}
+            ></ToggleExpandText>
+          </div>
+        )}
+        <div
+          className="w-full relative z-10  "
+          style={{
+            bottom: !expanded ? "13%" : "12%",
+            height: !expanded ? "1%" : "40%",
+          }}
         >
-          {stepsState.rootStep?.map<React.ReactNode>((step: Step) => {
-            return (
-              <SmallCompleteStep
-                step={step}
-                style={{
-                  left: step.position.x,
-                  top: step.position.y,
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-                key={step.id}
-              />
-              // <div
-              //   className="absolute"
-              //   style={{
-              //     width: step.dimensions.width,
-              //     height: step.dimensions.height,
-              //     left: step.position.x,
-              //     top: step.position.y,
-              //     backgroundColor: "blue",
-              //     marginLeft: "auto",
-              //     marginRight: "auto",
-              //   }}
-              //   key={step.id}
-              // >
-              //   {step.action?.name || "Deposit"}
-              // </div>
-            );
-          })}
-        </Canvas>
+          {expanded && (
+            <div className="w-[80vw] top-[100%]  absolute z-1000 left-[-2.3vw] flex flex-row items-center justify-center  ">
+              {" "}
+              <ToggleExpandText
+                state={expanded}
+                setState={setExpanded}
+                style={{ zIndex: 100000 }}
+              ></ToggleExpandText>
+            </div>
+          )}
+
+          <div
+            style={{
+              pointerEvents: expanded ? "auto" : "none",
+            }}
+          >
+            <StepsModal
+              rootStep={stepsState?.rootStep}
+              canvasDimensions={canvasDimensions}
+              style={{
+                background: "none",
+                zIndex: 0,
+              }}
+              parentStyle={{
+                borderWidth: "0px",
+                borderColor: "transparent",
+              }}
+              utilityButtons={[
+                {
+                  children: (
+                    <WrappedImage
+                      src={{
+                        dark: "/icons/expand-light.svg",
+                        light: "/icons/expand-dark.svg",
+                      }}
+                      width={14}
+                      height={14}
+                    />
+                  ),
+
+                  label: "Full Screen",
+                  onClick: () =>
+                    modals.push((id: number) => {
+                      return {
+                        component: (
+                          <ModalWrapper modalKey={id}>
+                            <StepsModal
+                              rootStep={stepsState?.rootStep}
+                              canvasDimensions={canvasDimensions}
+                              wrapperProps={{
+                                style: {
+                                  width: "80vw",
+                                  height: "80vh",
+                                },
+                              }}
+                              parentStyle={{
+                                height: "80vh",
+                              }}
+                            />
+                          </ModalWrapper>
+                        ),
+                      };
+                    }),
+                },
+              ]}
+            />
+          </div>
+        </div>
       </div>
     </ModalWrapper>
   );

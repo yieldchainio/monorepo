@@ -18,6 +18,7 @@
 import WrappedImage from "components/wrappers/image";
 import { TokensBundleProps } from "./types";
 import WrappedText from "components/wrappers/text";
+import { TokensProvider } from "components/info-providers/tokens/tokens";
 
 export const TokensBundle = ({
   tokens,
@@ -28,41 +29,43 @@ export const TokensBundle = ({
   return (
     <div className="flex flex-row items-center justify-start gap-0.5">
       {children}
-      <div className="flex flex-row items-center justify-start">
-        {tokens.map((token, i) => {
-          // We do not want to move it to the left with negative margin if it's the first one to not mess up the container's flex
-          if (i === 0)
-            return (
-              <WrappedImage
-                src={token.logo}
-                style={{
-                  borderRadius: `100%`,
-                  ...(imageProps.style || {}),
-                }}
-                width={imageProps.width}
-                height={imageProps.height}
-                className={imageProps.className}
-                key={i}
-              />
-            );
+      <TokensProvider tokens={tokens}>
+        <div className="flex flex-row items-center justify-start">
+          {tokens.map((token, i) => {
+            // We do not want to move it to the left with negative margin if it's the first one to not mess up the container's flex
+            if (i === 0)
+              return (
+                <WrappedImage
+                  src={token.logo}
+                  style={{
+                    borderRadius: `100%`,
+                    ...(imageProps.style || {}),
+                  }}
+                  width={imageProps.width}
+                  height={imageProps.height}
+                  className={imageProps.className}
+                  key={i}
+                />
+              );
 
-          if (i < maxImages)
-            return (
-              <WrappedImage
-                src={token.logo}
-                style={{
-                  marginLeft: `-${imageProps.width / 2}px`,
-                  borderRadius: `100%`,
-                  ...(imageProps.style || {}),
-                }}
-                width={imageProps.width}
-                height={imageProps.height}
-                className={imageProps.className}
-                key={i}
-              />
-            );
-        })}
-      </div>
+            if (i < maxImages)
+              return (
+                <WrappedImage
+                  src={token.logo}
+                  style={{
+                    marginLeft: `-${imageProps.width / 2}px`,
+                    borderRadius: `100%`,
+                    ...(imageProps.style || {}),
+                  }}
+                  width={imageProps.width}
+                  height={imageProps.height}
+                  className={imageProps.className}
+                  key={i}
+                />
+              );
+          })}
+        </div>
+      </TokensProvider>
       {tokens.length > maxImages && (
         <WrappedText fontSize={12} fontStyle="bold">
           {" " + "+" + (tokens.length - maxImages).toString()}

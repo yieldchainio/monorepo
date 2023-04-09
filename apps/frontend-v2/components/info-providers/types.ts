@@ -1,4 +1,4 @@
-import { YCProtocol } from "@yc/yc-models";
+import { YCProtocol, YCToken } from "@yc/yc-models";
 import { BaseComponentProps } from "components/types";
 import { CSSProperties } from "react";
 
@@ -22,4 +22,9 @@ export interface InfoProviderProps extends BaseComponentProps {
 // Protocols Provider props
 export interface ProtocolsProviderProps extends BaseComponentProps {
   protocols: YCProtocol[];
+}
+
+// Tokens provider props
+export interface TokensProviderProps extends BaseComponentProps {
+  tokens: YCToken[];
 }

@@ -1,11 +1,8 @@
 /**
  * The base tooltop "Info provider" component
  */
-
-import WrappedText from "components/wrappers/text";
 import {
   Children,
-  CSSProperties,
   isValidElement,
   MouseEvent,
   useEffect,
@@ -17,6 +14,7 @@ import { InfoProviderProps, ToolTipDirection } from "./types";
 import { positionTooltip } from "./utils";
 import { ChildrenProvider } from "components/internal/render-children";
 
+("bg-custom-bcomponentbg");
 /**
  * Mapping directions to corresponding animation strings
  */
@@ -144,7 +142,7 @@ export const InfoProvider = ({
               " " +
               className
             }
-            style={style || positionTooltip(direction, visible)}
+            style={{ ...positionTooltip(direction, visible), ...(style || {}) }}
             id="Tooltip"
             onMouseEnter={(e) => handleHover(activeConsumerIndex)}
             onMouseLeave={(e) => handleClose()}

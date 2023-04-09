@@ -17,6 +17,12 @@ export interface InfoProviderProps extends BaseComponentProps {
   visibilityOverride?: boolean;
   style?: CSSProperties;
   delay?: number;
+  trigger?: "onHover" | "onClick";
+  overrideDefaultComponent?: boolean;
+  setVisibilityHandler?: (visibilityHandler: () => void) => void;
+  handleCustomOpen?: () => void;
+  handleCustomClose?: () => void;
+  setCloseHandler?: (closeHandler: () => void) => void;
 }
 
 // Protocols Provider props

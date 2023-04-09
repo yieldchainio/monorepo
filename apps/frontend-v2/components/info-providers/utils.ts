@@ -1,3 +1,4 @@
+import { MouseEvent } from "react";
 import { ToolTipDirection } from "./types";
 
 /**
@@ -33,13 +34,13 @@ export const positionTooltip = (
   switch (direction) {
     case ToolTipDirection.TOP:
       returnObj.left += childRects.width / 2;
-      returnObj.transform = "translate(-50%, -150%)";
+      returnObj.transform = "translate(-50%, -125%)";
       return returnObj;
 
     case ToolTipDirection.BOTTOM:
       returnObj.left += childRects.width / 2;
       returnObj.top += childRects.height;
-      returnObj.transform = "translate(-50%, +50%)";
+      returnObj.transform = "translate(-50%, +25%)";
       return returnObj;
 
     case ToolTipDirection.LEFT:
@@ -50,7 +51,38 @@ export const positionTooltip = (
     case ToolTipDirection.RIGHT:
       returnObj.left += childRects.width;
       returnObj.top += childRects.height / 2;
-      returnObj.transform = "translate(+50%, -50%)";
+      returnObj.transform = "translate(+25%, -50%)";
       return returnObj;
   }
+};
+
+/**
+ * Apply arguments to triggers
+ */
+
+export const applyTriggerArgs = (
+  triggers: Record<
+    string,
+    (e: MouseEvent<HTMLDivElement, MouseEvent>, i: number | null) => void
+  >,
+  key: number | null,
+  consumerProps: Record<string, any>
+): Record<string, (e: MouseEvent<HTMLDivElement, MouseEvent>) => void> => {
+  console.log("Consumer triggers", consumerProps);
+  // Initiate a result object
+  const res: Record<
+    string,
+    (e: MouseEvent<HTMLDivElement, MouseEvent>) => void
+  > = {};
+
+  // We iterate over each trigger, and assigning to our result object a function that takes in only
+  // the mouse event, then calls the trigger's function with that event + our constant inputted key (the index)
+  for (const trigger in triggers) {
+    res[trigger] = (e: MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (consumerProps[trigger]) consumerProps[trigger](e, key);
+      triggers[trigger](e, key);
+    };
+  }
+
+  return res;
 };

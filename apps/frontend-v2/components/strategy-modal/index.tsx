@@ -99,8 +99,8 @@ export const StrategyModal = ({
                   top: step.position.y,
                   marginLeft: "auto",
                   marginRight: "auto",
-                  
                 }}
+                key={step.id}
               />
               // <div
               //   className="absolute"

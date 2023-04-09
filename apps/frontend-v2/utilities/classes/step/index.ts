@@ -116,11 +116,12 @@ export class Step implements IStep<Step> {
    */
   manuallyResized: boolean = false;
   edgelength: number = 80;
+  writeable: boolean = false;
 
   // ====================
   //     CONSTRUCTOR
   // ====================
-  constructor(config?: IStep<Step>) {
+  constructor(config?: IStep<Step>, writeable: boolean = false) {
     // We construct the gloal variables from the config
     this.id = config?.id || uuid();
     this.state = config?.state || "initial";
@@ -136,6 +137,7 @@ export class Step implements IStep<Step> {
 
     this.children = config?.children || [];
     this.percentage = config?.percentage || 0;
+    this.writeable = writeable;
   }
 
   // ========================================
@@ -180,7 +182,6 @@ export class Step implements IStep<Step> {
         })
       ),
     };
-    console.log("Doing step in fromDbStep, inflows & outflows: ", step);
     return new Step(stepConfig);
   };
 

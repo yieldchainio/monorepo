@@ -5,13 +5,15 @@ import {
   Children,
   isValidElement,
   MouseEvent,
+  useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
 import { InfoProviderProps, ToolTipDirection } from "./types";
-import { positionTooltip } from "./utils";
+import { applyTriggerArgs, positionTooltip } from "./utils";
 import { ChildrenProvider } from "components/internal/render-children";
 
 ("bg-custom-bcomponentbg");
@@ -34,6 +36,8 @@ export const TOOLTIP_ANIMATION: {
  * @param contents - The tooltip's actual children, what it displays within it (the "Info")
  */
 export const InfoProvider = ({
+  handleCustomClose,
+  handleCustomOpen,
   children: consumers,
   className,
   contents: children,
@@ -41,6 +45,9 @@ export const InfoProvider = ({
   visibilityOverride = false,
   style,
   delay,
+  trigger = "onHover",
+  overrideDefaultComponent = false,
+  setCloseHandler,
 }: InfoProviderProps) => {
   // We set a ref for all of our consumers ( The elements which we wrap around and trigger on hover )
   const setRefs = useRef(new Map()).current;
@@ -90,13 +97,19 @@ export const InfoProvider = ({
   const [shouldClose, setShouldClose] = useState<boolean>(true);
 
   // Handle hover over the children
-  const handleHover = async (
+  const handleTrigger = async (
     consumerIndex: number | null,
     close: boolean = false
   ) => {
     if (consumerIndex !== null && shouldClose !== false) {
       setShouldClose(close);
 
+      console.log("JEUUUU");
+
+      if (handleCustomOpen) {
+        console.log("Handling open");
+        handleCustomOpen();
+      } else [console.log("Not open handler", handleCustomOpen)];
       if (delay)
         await new Promise((res, rej) =>
           setTimeout(() => {
@@ -104,7 +117,9 @@ export const InfoProvider = ({
           }, delay)
         );
 
-      if (shouldClose === close) setActiveConsumerIndex(consumerIndex);
+      if (shouldClose === close) {
+        setActiveConsumerIndex(consumerIndex);
+      }
 
       await new Promise((res) => {
         setTimeout(() => res(true), 500);
@@ -116,6 +131,8 @@ export const InfoProvider = ({
   // Handle closing the children
   const handleClose = async () => {
     setShouldClose(true);
+
+    if (handleCustomClose) handleCustomClose();
 
     // Set "Should close to true" before awaiting the delay
     await new Promise((res, rej) =>
@@ -131,33 +148,74 @@ export const InfoProvider = ({
     shouldClose ? setActiveConsumerIndex(null) : null;
   };
 
+  useEffect(() => {
+    if (setCloseHandler) setCloseHandler(() => handleClose);
+  }, []);
+
+  // Constants
+  const triggers = useMemo(() => {
+    return {
+      onClick: {
+        onClick: (
+          e: MouseEvent<HTMLDivElement, MouseEvent>,
+          i: number | null
+        ) => {
+          e.stopPropagation();
+          if (visible) setActiveConsumerIndex(null);
+          else handleTrigger(i, true);
+        },
+      },
+      onHover: {
+        onMouseEnter: async (
+          e: MouseEvent<HTMLDivElement, MouseEvent>,
+          i: number | null
+        ) => {
+          e.stopPropagation();
+          handleTrigger(i, true);
+        },
+        onMouseLeave: async (e: any) => {
+          e.stopPropagation();
+          handleClose();
+        },
+      },
+    };
+  }, [visible, activeConsumerIndex]);
+
   return (
     <>
       {visible &&
         createPortal(
-          <div
-            className={
-              "flex flex-col bg-custom-componentbg shadow-md absolute px-3 py-1.5 z-[100000] w-max h-max rounded-xl " +
-              TOOLTIP_ANIMATION[direction] +
-              " " +
-              className
-            }
-            style={{ ...positionTooltip(direction, visible), ...(style || {}) }}
-            id="Tooltip"
-            onMouseEnter={(e) => handleHover(activeConsumerIndex)}
-            onMouseLeave={(e) => handleClose()}
-          >
-            <ChildrenProvider
-              textProps={{
-                style: {
-                  fontSize: "12px",
-                },
-                fontStyle: "bold",
-              }}
-            >
-              {children}
-            </ChildrenProvider>
-          </div>,
+          <>
+            {!overrideDefaultComponent ? (
+              <div
+                className={
+                  "flex flex-col bg-custom-componentbg shadow-md absolute px-3 py-1.5 z-[100000] w-max h-max rounded-xl " +
+                  TOOLTIP_ANIMATION[direction] +
+                  " " +
+                  className
+                }
+                style={{
+                  ...positionTooltip(direction, visible),
+                  ...(style || {}),
+                }}
+                id="Tooltip"
+                {...applyTriggerArgs(triggers[trigger], activeConsumerIndex, {})}
+              >
+                <ChildrenProvider
+                  textProps={{
+                    style: {
+                      fontSize: "12px",
+                    },
+                    fontStyle: "bold",
+                  }}
+                >
+                  {children}
+                </ChildrenProvider>
+              </div>
+            ) : (
+              <ChildrenProvider>{children}</ChildrenProvider>
+            )}
+          </>,
           document.body
         )}
       {Children.map(consumers, (consumer, i) => {
@@ -174,15 +232,7 @@ export const InfoProvider = ({
                 ? setRefs.delete(i)
                 : setRefs.set(i, consumer.props.ref || node);
             }}
-            onMouseEnter={async (e: MouseEvent<HTMLDivElement, MouseEvent>) => {
-              e.stopPropagation();
-              handleHover(i, true);
-            }}
-            onMouseLeave={async (e: any) => {
-              e.stopPropagation();
-              setShouldClose(true);
-              await handleClose();
-            }}
+            {...applyTriggerArgs(triggers[trigger], i, consumer.props)}
           ></consumer.type>
         );
       })}

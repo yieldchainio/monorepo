@@ -31,8 +31,8 @@ export const TokensProvider = ({ children, tokens }: TokensProviderProps) => {
                   {"Symbol"}
                 </WrappedText>
               ),
-              callback: (token: YCToken) => (
-                <div className="flex flex-row gap-4">
+              callback: (token: YCToken, i: number) => (
+                <div className="flex flex-row gap-4" key={i}>
                   <WrappedImage
                     src={token.logo}
                     width={20}
@@ -45,10 +45,11 @@ export const TokensProvider = ({ children, tokens }: TokensProviderProps) => {
             },
             {
               label: "Address",
-              callback: (token: YCToken) => (
+              callback: (token: YCToken, i: number) => (
                 <WrappedText
                   fontSize={12}
                   className="text-opacity-100 hover:text-opacity-100 hover:underline transition duration-200 ease-in-out w-full h-full "
+                  key={i}
                 >
                   {sliceAddress(token.address)}
                 </WrappedText>
@@ -56,10 +57,11 @@ export const TokensProvider = ({ children, tokens }: TokensProviderProps) => {
             },
             {
               label: "Network",
-              callback: (token: YCToken) => (
+              callback: (token: YCToken, i: number) => (
                 <WrappedText
                   fontSize={12}
                   className="text-opacity-100 hover:text-opacity-100 hover:underline transition duration-200 ease-in-out w-full h-full "
+                  key={i}
                 >
                   {token.network?.name}
                 </WrappedText>

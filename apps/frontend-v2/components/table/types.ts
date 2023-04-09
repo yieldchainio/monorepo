@@ -1,6 +1,6 @@
 export interface Section<T> {
   label: string | React.ReactNode;
-  callback: (arg: T) => any;
+  callback: (arg: T, i: number) => any;
   labelCallback?: (label: string) => React.ReactNode
 }
 export interface TableProps<T> {

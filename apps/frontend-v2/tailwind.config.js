@@ -147,18 +147,18 @@ module.exports = {
         },
         toolTipTop: {
           "0%": {
-            transform: "translate(-50%, -150%) scale(0.25)",
+            transform: "translate(-50%, -125%) scale(0.25)",
           },
           "100%": {
-            transform: "translate(-50%, -150%) scale(1)",
+            transform: "translate(-50%, -125%) scale(1)",
           },
         },
         toolTipBottom: {
           "0%": {
-            transform: "translate(-50%, +50%) scale(0.25)",
+            transform: "translate(-50%, +25%) scale(0.25)",
           },
           "100%": {
-            transform: "translate(-50%, +50%) scale(1)",
+            transform: "translate(-50%, +25%) scale(1)",
           },
         },
         toolTipLeft: {
@@ -171,10 +171,10 @@ module.exports = {
         },
         toolTipRight: {
           "0%": {
-            transform: "translate(+50%, -50%) scale(0.25)",
+            transform: "translate(+25%, -50%) scale(0.25)",
           },
           "100%": {
-            transform: "translate(+50%, -50%) scale(1)",
+            transform: "translate(+25%, -50%) scale(1)",
           },
         },
         dropdown: {

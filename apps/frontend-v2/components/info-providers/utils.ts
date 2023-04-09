@@ -68,7 +68,6 @@ export const applyTriggerArgs = (
   key: number | null,
   consumerProps: Record<string, any>
 ): Record<string, (e: MouseEvent<HTMLDivElement, MouseEvent>) => void> => {
-  console.log("Consumer triggers", consumerProps);
   // Initiate a result object
   const res: Record<
     string,

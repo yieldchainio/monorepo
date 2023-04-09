@@ -67,9 +67,6 @@ export const StrategyModal = ({
           <div className="flex flex-row w-full h-[40%] tablet:h-[40%] gap-3 items-end justify-between ">
             <div
               className="flex flex-col w-[100%] h-full gap-3 tablet :w-[35%] flex-wrap tablet:flex-row tablet:gap-3 justify-start items-start "
-              onClick={() =>
-                console.log("Strategy Network", strategy?.network?.nativeToken)
-              }
             >
               <ValueLocked strategy={strategy} />
               <GasThroughput

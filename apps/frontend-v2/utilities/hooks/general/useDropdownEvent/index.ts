@@ -16,16 +16,10 @@ export const useDropdownEvent = () => {
   // A state for the function that handles the consumer's actual visual closing
   const [handleMenuClose, setHandleMenuClose] = useState<any>(null);
 
-  useEffect(() => {
-    if (handleMenuClose)
-      console.log(handleMenuClose, "Handle menu close changed");
-  }, [handleMenuClose]);
-
   // We listen for other events of the MENU_OPEN type and close ourselves if its not from us
   useCustomEventListener<BaseEventData>(
     EventTypes.MENU_OPEN,
     (data: BaseEventData) => {
-      console.log("Got Menu Open event! ID:  ", data, "MY ID:", UUID);
       data.id !== UUID && handleMenuClose && handleMenuClose();
     }
   );

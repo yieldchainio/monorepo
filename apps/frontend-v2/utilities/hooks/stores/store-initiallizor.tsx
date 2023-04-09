@@ -40,7 +40,6 @@ const StoreInitiallizor = ({ context }: StoreInitiallizorProps) => {
 
   // Hydrate the store hooks
   if (!initiallized) {
-    // console.log("Running hydration babyyy!!!");
     // const contextInstance = YCClassifications.getInstance(context);
     // // An array of all the datapoints,
     // // feel free to add to here / remove as needed.

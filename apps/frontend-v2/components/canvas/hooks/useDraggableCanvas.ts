@@ -177,7 +177,6 @@ export const useDraggableCanvas = (
   // Handle child click ("Focus")
   // (Scrolls to best position to center the child)
   const handleChildFocus = (childRef: HTMLDivElement | null) => {
-    console.log("Handling Child Focus..");
     // Make sure both are defined
     if (!canvasRef || !childRef) return;
 

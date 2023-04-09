@@ -35,7 +35,6 @@ export const useFilters = <V, T extends BaseFilter<V>>({
   // Responsible for filtering the array of items using the callback, setting our state
   // and (if provided) setting it through the setter as well
   useEffect(() => {
-    console.log("Change!!!!! Filters: ", safeToJSON(filters));
     // Init the new array
     let newArr = [...items];
 

@@ -133,8 +133,6 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
                             !node
                               ? childRefs.delete(i)
                               : childRefs.set(i, child.props.ref || node);
-
-                            // console.log("Ref of this child", childRefs.get(i));
                           }}
                           onClick={(
                             e: MouseEvent<HTMLDivElement, MouseEvent>

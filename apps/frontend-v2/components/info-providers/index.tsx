@@ -93,23 +93,17 @@ export const InfoProvider = ({
     setVisible(rects);
   }, [activeConsumerIndex]);
 
-  // A state for whether a close operation shall complete itself
-  const [shouldClose, setShouldClose] = useState<boolean>(true);
-
   // Handle hover over the children
   const handleTrigger = async (
     consumerIndex: number | null,
     close: boolean = false
   ) => {
-    if (consumerIndex !== null && shouldClose !== false) {
-      setShouldClose(close);
+    // If we got a trigger and our inputted consumer index is not nullish
+    if (consumerIndex !== null) {
+      // If we got a custom open handler, invoke that
+      if (handleCustomOpen) handleCustomOpen();
 
-      console.log("JEUUUU");
-
-      if (handleCustomOpen) {
-        console.log("Handling open");
-        handleCustomOpen();
-      } else [console.log("Not open handler", handleCustomOpen)];
+      // If we got a delay, await it first
       if (delay)
         await new Promise((res, rej) =>
           setTimeout(() => {
@@ -117,42 +111,34 @@ export const InfoProvider = ({
           }, delay)
         );
 
-      if (shouldClose === close) {
-        setActiveConsumerIndex(consumerIndex);
-      }
-
-      await new Promise((res) => {
-        setTimeout(() => res(true), 500);
-        if (shouldClose !== close) setActiveConsumerIndex(null);
-      });
+      // Set the active consumer index to our inputted index
+      setActiveConsumerIndex(consumerIndex);
     }
   };
 
   // Handle closing the children
   const handleClose = async () => {
-    setShouldClose(true);
-
+    // If we got a custom close handler, invoke that
     if (handleCustomClose) handleCustomClose();
 
-    // Set "Should close to true" before awaiting the delay
-    await new Promise((res, rej) =>
-      setTimeout(() => {
-        res(true);
-      }, delay)
-    );
+    // Await a delay if we got one
+    if (delay)
+      await new Promise((res, rej) =>
+        setTimeout(() => {
+          res(true);
+        }, delay)
+      );
 
-    // If shouldClose is true, set active consumer index to null (closes the tooltip).
-    // Note that whilst we are awaiting the delay, shouldClose may be set to false
-    // by another function (e.g the tooltip being hovered over), in which case we will not
-    // set the active consumer index to null
-    shouldClose ? setActiveConsumerIndex(null) : null;
+    // Set the active consumer index to null
+    setActiveConsumerIndex(null);
   };
 
+  // Set the close handler using the optionallu provided prop (used for dropdowns and such)
   useEffect(() => {
     if (setCloseHandler) setCloseHandler(() => handleClose);
   }, []);
 
-  // Constants
+  // Mapping triggers to their corresponding props that we should spread
   const triggers = useMemo(() => {
     return {
       onClick: {
@@ -199,7 +185,11 @@ export const InfoProvider = ({
                   ...(style || {}),
                 }}
                 id="Tooltip"
-                {...applyTriggerArgs(triggers[trigger], activeConsumerIndex, {})}
+                {...applyTriggerArgs(
+                  triggers[trigger],
+                  activeConsumerIndex,
+                  {}
+                )}
               >
                 <ChildrenProvider
                   textProps={{

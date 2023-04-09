@@ -232,16 +232,6 @@ export class Step implements IStep<Step> {
         )
           return aParent.data.dimensions.width || 40;
 
-        // otherwise we return base spacing
-        if (aNode.data.id === "bfd0e43d-35c1-4ad6-ade3-1a21012c71f6")
-          console.log(
-            "Found Problematic node. Conditions:",
-            aChildren.length,
-            aParent.id === bParent.id,
-            aChildren.length % 2 === 0,
-            aChildren.findIndex((child) => child.id === aNode.id) ===
-              aChildren.length / 2 - 1
-          );
         return 80;
       },
     });

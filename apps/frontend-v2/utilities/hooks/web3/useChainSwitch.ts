@@ -12,7 +12,6 @@ export const useChainSwitch = () => {
         chainId: number;
       }
     ) => {
-      console.log("Caught error ser!!");
       // Get our chain
       const chain = chains.find((chain: Chain) => chain.id == args.chainId);
 
@@ -39,12 +38,10 @@ export const useChainSwitch = () => {
    * @param chainId - Chain ID of the chain
    */
   const switchNetwork = async (_chainId: number) => {
-    console.log("Got Request To Swtich Network To:", _chainId);
     if (switchNetworkAsync)
       try {
         await switchNetworkAsync(_chainId);
       } catch (e: any) {
-        console.log("Caught error ser!!");
         // Get our chain
         const chain = chains.find((chain: Chain) => chain.id == _chainId);
 

@@ -43,7 +43,6 @@ export const Sticky = ({ heightToFix, children, className }: StickyProps) => {
         else setPosition("");
       }
     };
-    console.log("Sticky childrenm", children);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);

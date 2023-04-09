@@ -51,7 +51,6 @@ export const ChipsSection = <T extends BaseChipProps>({
 
   const removeChip = (key: number) => {
     const index = selectedChips.indexOf(key);
-    console.log("index of key:", key, "Is:", index);
     if (index === undefined) return;
     const newArr = [...selectedChips];
     newArr.splice(index, 1);

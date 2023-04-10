@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { useInternalYCUser } from "utilities/hooks/stores/yc-data";
 import { useIsMounted } from "../../general/useIsMounted";
 import { UseYCUserProps, YCUserHookReturn } from "./types";
+export * from "./types";
 
 /**
  * A hook for accessing a YC User's details

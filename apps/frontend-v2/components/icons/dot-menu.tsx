@@ -2,7 +2,7 @@
  * A dot menu icon
  */
 
-import { forwardRef } from "react";
+import { MouseEventHandler, forwardRef } from "react";
 import { IconProps } from "./types";
 
 export const DotMenuIcon = forwardRef<SVGSVGElement, IconProps>(
@@ -14,7 +14,7 @@ export const DotMenuIcon = forwardRef<SVGSVGElement, IconProps>(
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className={className}
-        onClick={onClick}
+        onClick={onClick as unknown as MouseEventHandler<SVGSVGElement>}
         {...props}
         ref={ref}
       >

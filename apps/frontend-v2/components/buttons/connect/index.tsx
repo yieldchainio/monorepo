@@ -39,7 +39,14 @@ const ConnectWalletButton = ({ className, children }: RegulerButtonProps) => {
             {(() => {
               if (!connected) {
                 return (
-                  <RegulerButton onClick={openConnectModal}>
+                  <RegulerButton
+                    onClick={openConnectModal}
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      paddingLeft: "0px",
+                    }}
+                  >
                     {" "}
                     Connect Wallet
                   </RegulerButton>

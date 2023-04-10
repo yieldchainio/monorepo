@@ -63,6 +63,20 @@ export const SmallCompleteStep = forwardRef<
 
     return newOptions;
   }, [step.writeable]);
+
+  /**
+   * Memoizing for performance
+   */
+
+  const inflowsComponent = useMemo(() => {
+    if (!step.inflows.length) return null;
+    return <InflowTokenBundle tokens={step.inflows} />;
+  }, [step.inflows, step.inflows.length]);
+
+  const outflowsComponent = useMemo(() => {
+    if (!step.outflows.length) return null;
+    return <OutflowTokenBundle tokens={step.outflows} />;
+  }, [step.outflows, step.outflows.length]);
   return (
     <div
       className="w-[246px] h-[56px] flex flex-row items-center justify-start gap-2 px-4 bg-custom-bcomponentbg absolute shadow-sm rounded-xl"
@@ -81,16 +95,8 @@ export const SmallCompleteStep = forwardRef<
           {step.action?.name}
         </WrappedText>
         <div className="flex flex-row items-center justify-between w-full ">
-          {!step.inflows.length ? null : (
-            <InflowTokenBundle
-              tokens={step.inflows.map((flow) => flow.token)}
-            />
-          )}
-          {!step.outflows.length ? null : (
-            <OutflowTokenBundle
-              tokens={step.outflows.map((flow) => flow.token)}
-            />
-          )}
+          {inflowsComponent}
+          {outflowsComponent}
         </div>
       </div>
       <TooltipDropdown options={options} handleChoice={(choice: data) => null}>

@@ -32,6 +32,8 @@ export const TokensBundle = ({
       <TokensProvider tokens={tokens}>
         <div className="flex flex-row items-center justify-start">
           {tokens.map((token, i) => {
+            console.log("Mapping token");
+            if (!token) return null;
             // We do not want to move it to the left with negative margin if it's the first one to not mess up the container's flex
             if (i === 0)
               return (

@@ -22,6 +22,7 @@ import { ToolTipDirection } from "components/info-providers/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Accordion } from "./accordion";
 import { useStateEffect } from "utilities/hooks/general/useStateEffect";
+import { useRouter } from "next/navigation";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",
@@ -70,6 +71,9 @@ export const Header = () => {
     [MediaScreenSizes.LAPTOP]: "+",
     [MediaScreenSizes.ANY]: "Create Vault",
   });
+
+  // next router
+  const router = useRouter();
 
   // Return the component
   return (
@@ -175,7 +179,10 @@ export const Header = () => {
             contents="Create A Vault"
             direction={ToolTipDirection.BOTTOM}
           >
-            <Button onClick={() => null} className=" relative font-semibold">
+            <Button
+              onClick={() => router.push("/create/strategy")}
+              className=" relative font-semibold"
+            >
               {createVaultText}
             </Button>
           </InfoProvider>

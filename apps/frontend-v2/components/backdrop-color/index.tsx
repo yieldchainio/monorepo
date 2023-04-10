@@ -16,6 +16,7 @@ export const BackdropColor = ({
   left = `left-[100%]`,
   top = `top-[12vh]`,
   blur = `blur-[200px]`,
+  style,
 }: BackdropColorProps) => {
   return (
     <div
@@ -31,6 +32,7 @@ export const BackdropColor = ({
       }
       style={{
         backgroundColor: color,
+        ...(style || {}),
       }}
     ></div>
   );

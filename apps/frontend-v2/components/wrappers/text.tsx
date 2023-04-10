@@ -30,6 +30,10 @@ import { TextProps, Selection } from "./types";
 ("text-[20px]");
 ("text-[21px]");
 ("text-[22px]");
+("text-[32px]");
+("text-[42px]");
+("text-[52px]");
+("text-[62px]");
 ("text-[72px]");
 
 ("font-bold");

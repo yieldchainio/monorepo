@@ -27,9 +27,9 @@ export const RegulerButton = forwardRef<HTMLDivElement, RegulerButtonProps>(
     return (
       <div
         className={
-          (className || "") +
+          "w-max overflow-hidden h-max bg-custom-bcomponentbg bg-opacity-100 flex items-center justify-between border-custom-border border-[1px] rounded-xl pt-3 pb-3 px-4 gap-4 select-none cursor-pointer hover:border-custom-borderHover hover:bg-custom-buttonHover transition duration-200 ease-in-out font-athletics text-custom-textColor mobile:gap-1 mobile:px-3 active:scale-[0.99]" +
           " " +
-          "w-max overflow-hidden h-max bg-custom-bcomponentbg bg-opacity-100 flex items-center justify-between border-custom-border border-[1px] rounded-xl pt-3 pb-3 px-4 gap-4 select-none cursor-pointer hover:border-custom-borderHover hover:bg-custom-buttonHover transition duration-200 ease-in-out font-athletics text-custom-textColor mobile:gap-1 mobile:px-3 active:scale-[0.99]"
+          (className || "")
         }
         onClick={(e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) =>
           onClick && clickHandler(e).then((res: any) => res)

@@ -1,6 +1,7 @@
 import { ChangeEvent } from "react";
 import WrappedImage from "./image";
 import { InputProps, Selection } from "./types";
+import WrappedText from "./text";
 /**
  * @notice
  * Wrapper image component,
@@ -23,9 +24,17 @@ const WrappedInput = ({
   iconProps,
   width = `w-full`,
   type,
+  style,
+  title,
+  value,
 }: InputProps) => {
   return (
-    <div className="w-full flex justify-end items-center relative ">
+    <div className="w-full flex flex-col justify-center items-end relative gap-1">
+      {title && (
+        <WrappedText className="self-start ml-2" fontSize={14}>
+          {title}
+        </WrappedText>
+      )}
       <input
         className={`${
           width +
@@ -48,17 +57,20 @@ const WrappedInput = ({
         onChange={onChange}
         placeholder={placeholder}
         type={type}
+        style={style || {}}
+        value={value}
       />
-      {typeof icon == "string" ? (
-        <WrappedImage
-          src={icon}
-          width={iconProps?.width || 32}
-          height={iconProps?.height || 32}
-          className="absolute pointer-events-none mr-6"
-        />
-      ) : (
-        icon
-      )}
+      {showGlass &&
+        (typeof icon == "string" ? (
+          <WrappedImage
+            src={icon}
+            width={iconProps?.width || 32}
+            height={iconProps?.height || 32}
+            className="absolute pointer-events-none mr-6"
+          />
+        ) : (
+          icon
+        ))}
     </div>
   );
 };

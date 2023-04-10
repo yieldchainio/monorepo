@@ -1,3 +1,4 @@
+import { BaseComponentProps } from "components/types";
 import { ChangeEvent, FormEvent } from "react";
 import { Dimensions } from "utilities/classes/step/types";
 
@@ -16,7 +17,7 @@ export interface TextProps {
   props?: Record<any, any>;
   onInput?: (e: FormEvent<HTMLDivElement>) => any;
   truncate?: "truncate" | "";
-  skeletonDimensions?: Dimensions
+  skeletonDimensions?: Dimensions;
 }
 
 export enum Selection {
@@ -24,7 +25,7 @@ export enum Selection {
   disallow = "select-none",
 }
 
-export interface InputProps {
+export interface InputProps extends Omit<BaseComponentProps, "onClick"> {
   fontSize?: number;
   fontStyle?: string;
   placeholder?: string;
@@ -40,6 +41,8 @@ export interface InputProps {
   className?: string;
   width?: `w-${string}`;
   type?: "text" | "number";
+  title?: string;
+  value?: string;
 }
 
 export type ImageSrc =

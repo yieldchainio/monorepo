@@ -13,8 +13,8 @@ import { ImageProps } from "./types";
 const WrappedImage = ({
   src,
   alt,
-  width,
-  height,
+  width = 24,
+  height = 24,
   className,
   onClick,
   style,

@@ -29,6 +29,12 @@ import { useShallowRouter } from "utilities/hooks/general/useShallowRouter";
 import useDebounce from "utilities/hooks/general/useDebounce";
 import { useLogs } from "utilities/hooks/stores/logger";
 import { Canvas } from "components/canvas";
+import { InfoMessage } from "components/logger/components/info";
+import { useStrategyStore } from "utilities/hooks/stores/strategies";
+import {
+  seriallizeStrategyStore,
+  strategiesLocalStorage,
+} from "utilities/hooks/stores/strategies/constants";
 
 export default function Home() {
   // Retreive the strategies from the context
@@ -215,9 +221,24 @@ const BrowseHeroSection = ({
   setInput,
 }: BrowseSectionProps) => {
   const logs = useLogs();
+  const strategy = useStrategyStore();
 
+  // useEffect(() => {
+  //   const seriallized = seriallizeStrategyStore(strategy);
+  //   strategiesLocalStorage.setItem(strategy.id, strategy as unknown as string);
+  // }, [strategy]);
   return (
-    <div className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-[100%] h-full ">
+    <div
+      className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-[100%] h-full "
+      onClick={() =>
+        logs.push((id: string) => ({
+          component: <InfoMessage id={id}>Hello Kind Ser</InfoMessage>,
+          lifespan: "immortal",
+          data: "hello ser",
+          id,
+        }))
+      }
+    >
       <div className="flex flex-col items-center">
         <WrappedText fontSize={72} fontStyle="black">
           Browse

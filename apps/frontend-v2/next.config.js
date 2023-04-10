@@ -1,22 +1,27 @@
 /** @type {import('next').NextConfig} */
+const withPlugins = require("next-compose-plugins");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: true,
+});
 const nextConfig = {
   experimental: {
     appDir: true,
   },
   reactStrictMode: false,
   webpack: (config, options) => {
-    config.module.rules.push({
-      test: /\.m?js$/,
-      exclude: /node_modules/,
-      use: [
-        {
-          loader: "babel-loader",
-          options: {
-            presets: [["@babel/preset-env", { targets: "defaults" }]],
+    (config.experiments = { ...config.experiments, topLevelAwait: true }),
+      config.module.rules.push({
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: [["@babel/preset-env", { targets: "defaults" }]],
+            },
           },
-        },
-      ],
-    });
+        ],
+      });
 
     return config;
   },
@@ -31,4 +36,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withPlugins([[withBundleAnalyzer], nextConfig]);

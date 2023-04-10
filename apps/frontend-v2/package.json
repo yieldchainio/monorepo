@@ -30,6 +30,7 @@
     "ethers": "5.7.2",
     "framer-motion": "^10.2.3",
     "global": "^4.4.0",
+    "idb": "^7.1.1",
     "next": "13.3",
     "postcss": "^8.4.21",
     "random-hex-color-generator": "^1.0.12",
@@ -52,9 +53,11 @@
   "devDependencies": {
     "@babel/core": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
+    "@next/bundle-analyzer": "^13.3.0",
     "@types/d3-flextree": "^2.1.0",
     "@types/react-slick": "^0.23.10",
     "babel-loader": "^9.1.2",
+    "next-compose-plugins": "^2.2.1",
     "ts-loader": "^9.4.2",
     "webpack-cli": "^5.0.1"
   }

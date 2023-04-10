@@ -16,6 +16,7 @@ export const LoggerProvider = () => {
         {Children.map(
           logs.map((log) => log.component),
           (component) => {
+            if (component === null) return component;
             return (
               <component.type
                 {...component.props}

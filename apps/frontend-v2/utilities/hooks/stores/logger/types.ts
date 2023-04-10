@@ -7,7 +7,7 @@ export interface UserLog {
 }
 // The interface for this store
 export interface LogsStore {
-  instance: AWSLogger;
+  id: string;
   logs: UserLog[];
   push: (logCallback: (id: string) => UserLog) => void;
   remove: (id: string) => void;

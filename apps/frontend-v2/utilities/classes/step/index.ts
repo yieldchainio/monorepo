@@ -8,9 +8,11 @@ import {
   DBToken,
   YCAction,
   YCArgument,
+  YCClassifications,
   YCFlow,
   YCFunc,
   YCProtocol,
+  YCToken,
   assert,
 } from "@yc/yc-models";
 import {
@@ -104,8 +106,8 @@ export class Step implements IStep<Step> {
    * Step-related variables
    */
   protocol: YCProtocol | null = null;
-  inflows: YCFlow[] = [];
-  outflows: YCFlow[] = [];
+  inflows: YCToken[] = [];
+  outflows: YCToken[] = [];
   action: YCAction | null = null;
   function: YCFunc | null = null;
   customArguments: YCArgument[] = [];
@@ -151,25 +153,11 @@ export class Step implements IStep<Step> {
     const stepConfig: IStep<Step> = {
       id: step.id,
       protocol: context.getProtocol(step.protocol),
-      inflows: step.inflows.map((dbflow: DBToken) => {
-        return new YCFlow(
-          {
-            token_id: dbflow.id,
-            direction: FlowDirection.INFLOW,
-            id: uuid(),
-          },
-          context
-        );
+      inflows: step.inflows.map((dbtoken: DBToken) => {
+        return new YCToken(dbtoken, context);
       }),
-      outflows: step.outflows.map((dbflow: DBToken) => {
-        return new YCFlow(
-          {
-            token_id: dbflow.id,
-            direction: FlowDirection.OUTFLOW,
-            id: uuid(),
-          },
-          context
-        );
+      outflows: step.outflows.map((dbtoken: DBToken) => {
+        return new YCToken(dbtoken, context);
       }),
       percentage: step.percentage,
       action: context.getAction(step.action),
@@ -183,6 +171,44 @@ export class Step implements IStep<Step> {
       ),
     };
     return new Step(stepConfig);
+  };
+
+  /**
+   * From JSONStep construction
+   */
+  static fromJSONStep = ({
+    step,
+    context,
+  }: {
+    step: JSONStep;
+    context: YCClassifications;
+  }): Step => {
+    const config = {
+      id: step.id,
+      protocol: step.protocol ? context.getProtocol(step.protocol) : null,
+      inflows: step.inflows
+        ? step.inflows.flatMap((dbtoken: string) => {
+            const token = context.getToken(dbtoken);
+            return token ? [token] : [];
+          })
+        : [],
+      outflows: step.outflows
+        ? step.outflows.flatMap((dbtoken: string) => {
+            const token = context.getToken(dbtoken);
+            return token ? [token] : [];
+          })
+        : [],
+      percentage: step.percentage,
+      action: step.action ? context.getAction(step.action) : null,
+      function: step.function ? context.getFunction(step.function) : null,
+      children: step.children.map((child: JSONStep) =>
+        Step.fromJSONStep({
+          step: child,
+          context: context,
+        })
+      ),
+    };
+    return new Step(config);
   };
 
   // ========================
@@ -319,39 +345,6 @@ export class Step implements IStep<Step> {
         negative: this.position.y,
       },
     };
-
-    // // iterate over each step, reassign to our variables as needed depending on the sizing & position of each node
-    // this.each((step: Step) => {
-    //   // Shortand for mem efficieny
-    //   const stepPosition = step.position;
-    //   const stepDimensions = step.dimensions;
-
-    //   // If the X position is smaller then our min width (i.e negetive width), we use it instead
-    //   if (stepPosition.x < minWidth) minWidth = stepPosition.x;
-
-    //   // If the X position + the width is bigger than max width (positive width), we use it instead
-    //   if (stepPosition.x + stepDimensions.width > maxWidth)
-    //     maxWidth = stepPosition.x + stepDimensions.width;
-
-    //   // Same thing for y axis
-    //   if (stepPosition.y < minHeight) minHeight = stepPosition.y;
-    //   if (stepPosition.y + stepDimensions.height > maxHeight)
-    //     maxHeight = stepPosition.y + stepDimensions.height;
-    // });
-
-    // /**
-    //  * Return the dimensions of the canvas.
-    //  *
-    //  * logic:
-    //  *
-    //  * If positive width is 500, min width is -300 (there are 5 nodes to the right and 3 to the left),
-    //  * end result would be 800 total width (500 - (-300)), so all of them would fit
-    //  */
-
-    // return {
-    //   width: maxWidth - minWidth,
-    //   height: maxHeight - minHeight,
-    // };
   };
 
   // ===================
@@ -464,8 +457,10 @@ export class Step implements IStep<Step> {
         action: this.action?.id,
         protocol: this.protocol?.id,
         dimensions: this.dimensions,
-        inflows: this.inflows.map((inflow) => inflow.id),
-        outflow: this.outflows.map((outflow) => outflow.id),
+        inflows: this.inflows.map((token) => token.id),
+        outflows: this.outflows.map((token) => token.id),
+        percentage: this.percentage,
+        state: this.state,
         children: this.children
           .filter((child) =>
             onlyCompleted ? child.state === "complete" : true
@@ -480,4 +475,6 @@ export class Step implements IStep<Step> {
 
     return null;
   };
+
+  // TODO: toDBStep()
 }

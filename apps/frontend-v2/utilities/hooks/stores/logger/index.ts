@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { LogsStore, UserLog } from "./types";
 import { v4 as uuid } from "uuid";
 import { AWSLogger } from "@yc/aws-models/bin/logger";
+import { persist } from "zustand/middleware";
 
 /**
  * @notice
@@ -14,13 +15,14 @@ import { AWSLogger } from "@yc/aws-models/bin/logger";
 
 // The actual store hook
 export const useLogs = create<LogsStore>((set, get) => ({
-  instance: new AWSLogger(uuid()),
-  logs: [],
+  id: uuid(),
+  logs: [] as UserLog[],
   push: (logCallback: (length: string) => UserLog) => {
     set((state) => {
       const id = uuid();
       const log = logCallback(id);
-      log.data && get().instance.log(log.data);      
+      console.log(get());
+      log.data && AWSLogger.log(get().id, log.data);
       log.lifespan !== "immortal" &&
         setTimeout(() => {
           state.remove(id);

@@ -12,12 +12,14 @@ import {
   YCClassifications,
   DBStep,
   YCFlow,
+  DBFunction,
+  DBArgument,
 } from "@yc/yc-models";
 
 // The state of the step - whether you are choosing an action (INIT), configuring (Any action config, CONFIG), or if it is complete
 export enum BaseStepStates {
   INITIAL = "initial",
-  COMPLETE = "complete"
+  COMPLETE = "complete",
 }
 export type StepState = "initial" | "complete" | ActionConfigs;
 
@@ -82,8 +84,8 @@ export interface IStepOnlyFE<T extends IStep<T>> {
 export interface IStep<T extends IStep<T>> extends IStepOnlyFE<T> {
   id?: string;
   protocol?: YCProtocol | null;
-  inflows?: YCFlow[];
-  outflows?: YCFlow[];
+  inflows?: YCToken[];
+  outflows?: YCToken[];
   action?: YCAction | null;
   function?: YCFunc | null;
   customArguments?: YCArgument[];
@@ -94,11 +96,15 @@ export interface IStep<T extends IStep<T>> extends IStepOnlyFE<T> {
 
 export interface JSONStep {
   id: string;
-  size: StepSizing;
-  action?: string;
   protocol?: string;
-  dimensions: Dimensions;
   inflows: string[];
-  outflow: string[];
+  outflows: string[];
+  action?: string;
+  function?: string;
+  customArguments?: any[];
   children: JSONStep[];
+  percentage: number;
+  size: StepSizing;
+  dimensions: Dimensions;
+  state: StepState;
 }

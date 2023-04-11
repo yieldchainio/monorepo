@@ -54,7 +54,7 @@ const DropdownMenu = ({
           "w-[" +
           `${(parentRef.current?.getBoundingClientRect().width || 0) + 2}` +
           "px]"
-        } bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5  z-100 border-1 border-custom-border animate-popup overflow-hidden border-[1px] border-custom-border ` +
+        } bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5  z-100 border-1 border-custom-border animate-popup overflow-hidden overflow-y-scroll border-[1px] border-custom-border scrollbar-hide ` +
         (" " + (className || ""))
       );
     else

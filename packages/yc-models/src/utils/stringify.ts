@@ -22,14 +22,21 @@ const circularReplacer = (
   if (Array.isArray(obj))
     return obj.map((_obj) => circularReplacer(_obj, maxDepth, depth));
 
+  // If its a function we do not want it
+  if (typeof obj === "function") return "function";
+
   // If its a reguler proprety we just return it
-  if (typeof obj !== "object") return obj;
+  if (typeof obj !== "object") {
+    return obj;
+  }
 
   // If its null just return
-  if (obj === null) return obj;
+  if (obj === null) {
+    return obj;
+  }
 
   // If it's an object and we're beyond our max depth, return either ID if exists or an empty string
-  if (maxDepth <= depth) {
+  if (depth >= maxDepth) {
     try {
       return obj["id"] || "";
     } catch (e: any) {
@@ -51,7 +58,7 @@ const circularReplacer = (
       const hasGetter = desc && typeof desc.get === "function";
       if (hasGetter) {
         // @ts-ignore
-        jsonObj[key] = obj[key];
+        jsonObj[key] = circularReplacer(obj[key], maxDepth, depth + 1);
       }
     } catch (e: any) {
       throw "Caught Erorr In Getter. Key: " + key + " Obj Provided: " + obj;

@@ -14,89 +14,59 @@ export class YCNetwork extends BaseClass {
   // =====================
   //    PRIVATE FIELDS
   // =====================
-  #chainid: number;
-  #name: string;
-  #logo: string;
-  #color: string | undefined;
-  #json_rpc: string | null = null; // init to null - network may not be integrated
+  readonly chainid: number;
+  readonly name: string;
+  readonly logo: string;
+  readonly color: string | undefined;
+  readonly json_rpc: string | null = null; // init to null - network may not be integrated
   #provider: EthersJsonRpcProvider | null = null; // Init to null ^^^^
-  #diamondAddress: string | null = null; // Init to null ^^^^^^^^^^
-  #available: boolean = false;
-  #protocols: YCProtocol[] = [];
+  readonly diamondAddress: string | null = null; // Init to null ^^^^^^^^^^
+  readonly available: boolean = false;
+  readonly protocols: YCProtocol[] = [];
   #fork: EthersJsonRpcProvider | null = null;
   #nativeToken: YCToken | null = null;
-  #blockExplorer: string | null;
+  readonly blockExplorer: string | null;
 
   // =====================
   //       METHODS
   // =====================
 
-  get name(): string {
-    return this.#name;
-  }
+  // get current block number
+  blocknumber = async (): Promise<number | null> => {
+    if (!this.available) {
+      throw new Error(
+        "YCNetwork ERROR: Cannot Get Block Number (Network Is Not Integrated - JSON RPC UNAVAILABLE)"
+      );
+    }
 
-  get logo(): string {
-    return this.#logo;
+    return (await this.provider?.getBlockNumber()) || null;
+  };
+
+  // Get the YC Diamond address on this chain
+  ycDiamond = (): string | null => {
+    return this.diamondAddress || null;
+  };
+
+  // Ethers provider
+  get provider(): EthersJsonRpcProvider {
+    if (!this.#provider) {
+      if (!this.json_rpc)
+        throw new Error(
+          "YCNetwork ERR: Cannot Get Provider (Network Is Not Integrated - JSON RPC UNAVAILABLE). Network ID:" +
+            this.chainid
+        );
+      return new ethers.JsonRpcProvider(this.json_rpc);
+    }
+    return this.#provider;
   }
 
   get nativeToken(): YCToken | null {
     return this.#nativeToken;
   }
 
-  get color(): string | undefined {
-    return this.#color;
-  }
-
-  get blockExplorer(): string | undefined {
-    return this.#blockExplorer || undefined;
-  }
-
-  // Get the chain ID
-  get chainid(): number {
-    return this.#chainid;
-  }
-
-  // Get all supported protocols that r on this chain
-  get protocols(): YCProtocol[] {
-    return this.#protocols;
-  }
-
-  get jsonrpc(): string | null {
-    return this.#json_rpc;
-  }
-
-  // get current block number
-  blocknumber = async (): Promise<number | null> => {
-    if (!this.#available) {
-      throw new Error(
-        "YCNetwork ERROR: Cannot Get Block Number (Network Is Not Integrated - JSON RPC UNAVAILABLE)"
-      );
-    }
-
-    return (await this.#provider?.getBlockNumber()) || null;
-  };
-
-  // Get the YC Diamond address on this chain
-  ycDiamond = (): string | null => {
-    return this.#diamondAddress || null;
-  };
-
-  // Ethers provider
-  get provider(): EthersJsonRpcProvider {
-    if (!this.#provider) {
-      if (!this.#json_rpc)
-        throw new Error(
-          "YCNetwork ERR: Cannot Get Provider (Network Is Not Integrated - JSON RPC UNAVAILABLE). Network ID:" +
-            this.chainid
-        );
-      return new ethers.JsonRpcProvider(this.#json_rpc);
-    }
-    return this.#provider;
-  }
-
   // Fork the current chain
   fork = () => {
-    if (!this.#available)
+    if (!this.available)
       throw new Error(
         "YCNetwork ERROR: Cannot Fork (Network Is Not Integrated - JSON RPC UNAVAILABLE)"
       );
@@ -108,7 +78,7 @@ export class YCNetwork extends BaseClass {
 
   // Kill the current fork
   killFork = () => {
-    if (!this.#available)
+    if (!this.available)
       throw new Error(
         "YCNetwork ERROR: Fork Non-Existent (Network Is Not Integrated - JSON RPC UNAVAILABLE)"
       );
@@ -124,17 +94,17 @@ export class YCNetwork extends BaseClass {
   constructor(_network: DBNetwork, _context?: YCClassifications) {
     super();
     // Init static fields
-    this.#chainid = _network.id;
-    this.#name = _network.name;
-    this.#json_rpc = _network.json_rpc;
-    this.#logo = _network.logo;
-    this.#color = _network.color || undefined;
-    this.#blockExplorer = _network.block_explorer || null;
+    this.chainid = _network.id;
+    this.name = _network.name;
+    this.json_rpc = _network.json_rpc;
+    this.logo = _network.logo;
+    this.color = _network.color || undefined;
+    this.blockExplorer = _network.block_explorer || null;
 
     // Create new ethers provider
-    if (this.#json_rpc) {
-      this.#provider = new ethers.JsonRpcProvider(this.#json_rpc);
-      this.#available = true;
+    if (this.json_rpc) {
+      this.#provider = new ethers.JsonRpcProvider(this.json_rpc);
+      this.available = true;
     }
 
     // Init our native token

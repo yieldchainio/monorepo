@@ -5,10 +5,7 @@
  */
 
 export class AWSLogger {
-  #id: string;
-  constructor(id: string) {
-    this.#id = id;
-  }
+  constructor() {}
 
   // ===================
   //       METHODS
@@ -18,7 +15,7 @@ export class AWSLogger {
    * Log a message to the session console
    * @param message - The message to log
    */
-  log = (message: any) => {
+  static log = (id: string, message: any) => {
     console.log(message);
   };
 }

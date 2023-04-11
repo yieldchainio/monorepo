@@ -51,7 +51,7 @@ model tokensv2 {
   name         String
   address      String
   symbol       String
-  logo         String
+  logo         String         @default("https://etherscan.io/images/main/empty-token.png")
   decimals     Int
   chain_id     Int
   flows        flowsv2[]

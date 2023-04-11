@@ -9,7 +9,7 @@ const neededtokens: tokensv2[] = [];
 await prisma.tokensv2.updateMany({
   where: {
     logo: {
-      equals: "undefined",
+      contains: "ipfs",
     },
   },
   data: {

@@ -18,7 +18,7 @@ export class YCNetwork extends BaseClass {
   readonly name: string;
   readonly logo: string;
   readonly color: string | undefined;
-  readonly json_rpc: string | null = null; // init to null - network may not be integrated
+  readonly jsonRpc: string | null = null; // init to null - network may not be integrated
   #provider: EthersJsonRpcProvider | null = null; // Init to null ^^^^
   readonly diamondAddress: string | null = null; // Init to null ^^^^^^^^^^
   readonly available: boolean = false;
@@ -50,12 +50,12 @@ export class YCNetwork extends BaseClass {
   // Ethers provider
   get provider(): EthersJsonRpcProvider {
     if (!this.#provider) {
-      if (!this.json_rpc)
+      if (!this.jsonRpc)
         throw new Error(
           "YCNetwork ERR: Cannot Get Provider (Network Is Not Integrated - JSON RPC UNAVAILABLE). Network ID:" +
             this.chainid
         );
-      return new ethers.JsonRpcProvider(this.json_rpc);
+      return new ethers.JsonRpcProvider(this.jsonRpc);
     }
     return this.#provider;
   }
@@ -96,14 +96,14 @@ export class YCNetwork extends BaseClass {
     // Init static fields
     this.chainid = _network.id;
     this.name = _network.name;
-    this.json_rpc = _network.json_rpc;
+    this.jsonRpc = _network.json_rpc;
     this.logo = _network.logo;
     this.color = _network.color || undefined;
     this.blockExplorer = _network.block_explorer || null;
 
     // Create new ethers provider
-    if (this.json_rpc) {
-      this.#provider = new ethers.JsonRpcProvider(this.json_rpc);
+    if (this.jsonRpc) {
+      this.#provider = new ethers.JsonRpcProvider(this.jsonRpc);
       this.available = true;
     }
 

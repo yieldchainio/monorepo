@@ -10,6 +10,7 @@ import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import { useEffect, useState } from "react";
 import useDebounce from "utilities/hooks/general/useDebounce";
 import { useBackdropColorChange } from "utilities/hooks/general/useBackdropColorChange";
+import { StrategyConfigWrapper } from "components/strategy-config-wrapper";
 
 const TitleConfig = () => {
   // Title setter for current strategy config
@@ -33,16 +34,18 @@ const TitleConfig = () => {
         </WrappedText>{" "}
       </ConfigTitle>
 
-      <WrappedInput
-        type="text"
-        className=""
-        showGlass={false}
-        placeholder='e.g: "Non-dev did smth" '
-        onChange={(e) => setInput(e.target.value)}
-        width="w-[100%]"
-        title="Strategy Title"
-        value={globalTitle || undefined}
-      ></WrappedInput>
+      <StrategyConfigWrapper>
+        <WrappedInput
+          type="text"
+          className=""
+          showGlass={false}
+          placeholder='e.g: "Non-dev did smth" '
+          onChange={(e) => setInput(e.target.value)}
+          width="w-[100%]"
+          title="Strategy Title"
+          value={globalTitle || undefined}
+        ></WrappedInput>
+      </StrategyConfigWrapper>
     </div>
   );
 };

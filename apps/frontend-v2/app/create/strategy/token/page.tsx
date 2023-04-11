@@ -16,6 +16,7 @@ import Dropdown from "components/dropdown";
 import { YCToken } from "@yc/yc-models";
 import { ModalWrapper } from "components/modal-wrapper";
 import WrappedImage from "components/wrappers/image";
+import { StrategyConfigWrapper } from "components/strategy-config-wrapper";
 
 const TokenConfig = () => {
   // Set the colors
@@ -63,42 +64,44 @@ const TokenConfig = () => {
           The token that you & others will deposit into the vault
         </WrappedText>{" "}
       </ConfigTitle>
-      <Dropdown
-        options={[]}
-        choice={
-          chosenToken
-            ? {
-                text: chosenToken?.symbol,
-                image: chosenToken?.logo,
-                data: chosenToken,
-              }
-            : undefined
-        }
-        manualModal={true}
-        buttonProps={{
-          children: (
-            <>
-              <WrappedImage
-                className="rounded-full"
-                src={chosenToken?.logo}
-                width={32}
-                height={32}
-              />
-              <WrappedText fontSize={18} className="leading-none">
-                {chosenToken?.symbol}
-              </WrappedText>
-            </>
-          ),
-          style: {
-            width: "300px",
-          },
-        }}
-      >
-        <TokensModal
-          handleChoice={setToken}
-          allowedNetworks={chosenNetwork ? [chosenNetwork] : undefined}
-        />
-      </Dropdown>
+      <StrategyConfigWrapper>
+        <Dropdown
+          options={[]}
+          choice={
+            chosenToken
+              ? {
+                  text: chosenToken?.symbol,
+                  image: chosenToken?.logo,
+                  data: chosenToken,
+                }
+              : undefined
+          }
+          manualModal={true}
+          buttonProps={{
+            children: (
+              <>
+                <WrappedImage
+                  className="rounded-full"
+                  src={chosenToken?.logo}
+                  width={32}
+                  height={32}
+                />
+                <WrappedText fontSize={18} className="leading-none">
+                  {chosenToken?.symbol}
+                </WrappedText>
+              </>
+            ),
+            style: {
+              width: "300px",
+            },
+          }}
+        >
+          <TokensModal
+            handleChoice={setToken}
+            allowedNetworks={chosenNetwork ? [chosenNetwork] : undefined}
+          />
+        </Dropdown>
+      </StrategyConfigWrapper>
       {/* <TokensModal
         handleChoice={setToken}
         allowedNetworks={chosenNetwork ? [chosenNetwork] : undefined}

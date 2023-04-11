@@ -218,5 +218,6 @@ module.exports = {
   plugins: [
     require("@tailwindcss/forms"),
     require("tailwindcss-dotted-background"),
+    require("tailwind-scrollbar-hide"),
   ],
 };

@@ -76,13 +76,7 @@ export const useStrategyStore = create<StrategyStore>()(
     {
       // Saved under this UUID as the key
       name: startingID,
-      storage: createJSONStorage<StrategyStoreState, any>(
-        () => strategiesLocalStorage,
-        {
-          serialize: (value) => value,
-          deserialize: (value) => value,
-        }
-      ),
+      storage: createJSONStorage(() => strategiesLocalStorage),
 
       partialize: (state) => {
         console.log("PArtiaillizing this state", state);

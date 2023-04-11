@@ -6,11 +6,11 @@ import { IDBPDatabase } from "idb";
 import { StateStorage } from "zustand/middleware";
 import { IDBOption } from "./types";
 
-export const idbStorage: <T = any, R = T, SS = string>(
+export const idbStorage: <T = any, R = T>(
   dbInstance: IDBPDatabase | Promise<IDBPDatabase>,
   storeName: string,
   options?: IDBOption<any>
-) => StateStorage<SS> = <T = any, R = T>(
+) => StateStorage = <T = any, R = T>(
   dbInstance: IDBPDatabase | Promise<IDBPDatabase>,
   storeName: string,
   options: IDBOption<T> = {

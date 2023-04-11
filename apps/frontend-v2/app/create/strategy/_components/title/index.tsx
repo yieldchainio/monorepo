@@ -8,7 +8,7 @@ import { BaseComponentProps } from "components/types";
 
 export const ConfigTitle = ({ children }: BaseComponentProps) => {
   return (
-    <div className="mx-auto flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <ChildrenProvider
         textProps={{
           fontSize: 42,

@@ -28,7 +28,7 @@ const TitleConfig = () => {
   );
 
   return (
-    <div className="flex flex-col items-center justify-between  w-[50%] h-[40%]">
+    <div className="flex flex-col items-center justify-between  w-[50%] h-[55%]">
       <ConfigTitle>
         {"Let's Get started 👋"}{" "}
         <WrappedText fontSize={16} className="text-opacity-50">

@@ -26,10 +26,14 @@ const DropdownMenu = ({
   children,
   hideOptionText = "",
   modalBehaviour = "auto",
+  choiceFocusClass,
   ...props
 }: DropdownMenuOptions) => {
   // IF we are loading a choice rn or not
   const [loading, setLoading] = useState<boolean | DropdownOption>(false);
+
+  // Choice focus state
+  const [focusedChoice, setFocusedChoice] = useState<number>();
 
   // Called when a choice is made
   const choiceHandler = async (option: DropdownOption) => {
@@ -47,16 +51,18 @@ const DropdownMenu = ({
     )
       return (
         `${
-          "w-[" + `${parentRef.current?.getBoundingClientRect().width}` + "px]"
+          "w-[" +
+          `${(parentRef.current?.getBoundingClientRect().width || 0) + 2}` +
+          "px]"
         } bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5  z-100 border-1 border-custom-border animate-popup overflow-hidden border-[1px] border-custom-border ` +
-        (" " + className || "")
+        (" " + (className || ""))
       );
     else
       return (
         `${"w-max"} bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 absolute top-[60px] left-[0px] z-100 border-1 border-custom-border animate-popup overflow-hidden border-[1px] border-custom-border` +
         " " +
         `left-[${parentRef.current?.getBoundingClientRect().left}` +
-        (" " + className || "")
+        (" " + (className || ""))
       );
   }, [window.innerWidth]);
 
@@ -68,7 +74,9 @@ const DropdownMenu = ({
             className={
               "flex flex-row items-center gap-5 bg-custom-dropdown bg-opacity-[0] rounded-lg hover:bg-opacity-50 hover:scale-[1.03] cursor-pointer transition duration-200 ease-in-out justify-between" +
               " " +
-              (optionProps?.wrapperClassname || "")
+              (optionProps?.wrapperClassname || "") +
+              " " +
+              (focusedChoice === i && choiceFocusClass ? choiceFocusClass : " ")
             }
             key={i}
           >
@@ -78,7 +86,10 @@ const DropdownMenu = ({
                   " " +
                   optionProps?.className || ""
               }
-              onClick={async () => await choiceHandler(option)}
+              onClick={async () => {
+                setFocusedChoice(i);
+                await choiceHandler(option);
+              }}
             >
               {option.image && (
                 <WrappedImage

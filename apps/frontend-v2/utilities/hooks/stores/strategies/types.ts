@@ -73,6 +73,7 @@ export interface StrategyStoreActions {
   setDepositToken: (depositToken: YCToken) => void;
 
   // Set the strategy's network
+  setNetwork: (network: YCNetwork) => void;
 }
 
 export interface StrategyStore

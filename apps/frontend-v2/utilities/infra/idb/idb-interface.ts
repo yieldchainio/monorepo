@@ -6,11 +6,11 @@ import { IDBPDatabase } from "idb";
 import { StateStorage } from "zustand/middleware";
 import { IDBOption } from "./types";
 
-export const idbStorage: <T = any, R = T>(
+export const idbStorage: <T = any, R = T, SS = string>(
   dbInstance: IDBPDatabase | Promise<IDBPDatabase>,
   storeName: string,
   options?: IDBOption<any>
-) => StateStorage = <T = any, R = T>(
+) => StateStorage<SS> = <T = any, R = T>(
   dbInstance: IDBPDatabase | Promise<IDBPDatabase>,
   storeName: string,
   options: IDBOption<T> = {
@@ -28,13 +28,14 @@ export const idbStorage: <T = any, R = T>(
     );
   },
   setItem: async (key: string, value: T): Promise<any> => {
+    console.log("Setting IndexedDB Item... Provided Value:", value);
     // Await it if not already
     if (dbInstance instanceof Promise) {
       await dbInstance.then((res) => {
         dbInstance = res;
       });
     }
-
+    console.log("Seriallized Value", options.serialize(value));
     return await (dbInstance as IDBPDatabase).put(
       storeName,
       options.serialize(value),

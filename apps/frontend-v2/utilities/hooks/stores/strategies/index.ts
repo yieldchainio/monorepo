@@ -7,9 +7,13 @@
 
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { StrategyStore, StrategyStoreState } from "./types";
+import {
+  JSONStrategyStoreState,
+  StrategyStore,
+  StrategyStoreState,
+} from "./types";
 import { v4 as uuid } from "uuid";
-import { YCToken } from "@yc/yc-models";
+import { YCNetwork, YCToken } from "@yc/yc-models";
 
 // Initiate the DB storage to the strategies store
 import { strategiesLocalStorage } from "./constants";
@@ -40,7 +44,6 @@ export const useStrategyStore = create<StrategyStore>()(
 
       // Step of the strategy (tree)
       step: null,
-
       /**
        * @methods
        */
@@ -64,21 +67,34 @@ export const useStrategyStore = create<StrategyStore>()(
       setDepositToken: (token: YCToken) => {
         set({ depositToken: token });
       },
+      // Set the network
+      setNetwork: (network: YCNetwork) => {
+        set({ network });
+        console.log("Strategy Store", get());
+      },
     }),
     {
       // Saved under this UUID as the key
       name: startingID,
+      storage: createJSONStorage<StrategyStoreState, any>(
+        () => strategiesLocalStorage,
+        {
+          serialize: (value) => value,
+          deserialize: (value) => value,
+        }
+      ),
 
-      storage: createJSONStorage(() => strategiesLocalStorage),
-
-      partialize: (state) => ({
-        id: state.id,
-        isPublic: state.isPublic,
-        depositToken: state.depositToken,
-        network: state.network,
-        title: state.title,
-        step: state.step,
-      }),
+      partialize: (state) => {
+        console.log("PArtiaillizing this state", state);
+        return {
+          id: state.id,
+          isPublic: state.isPublic,
+          depositToken: state.depositToken,
+          network: state.network,
+          title: state.title,
+          step: state.step,
+        };
+      },
     }
   )
 );

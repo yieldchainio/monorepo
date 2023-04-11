@@ -22,11 +22,14 @@ const db = openDB("yieldchain", 1, {
  * Seriallization and de-seriallization functions of the strategy store (To / From JSON)
  */
 
-export const seriallizeStrategyStore = (
-  statefulStore: StrategyStoreState
-): JSONStrategyStoreState => {
+export const seriallizeStrategyStore = (statefulStoreObject: {
+  state: StrategyStoreState;
+}): JSONStrategyStoreState => {
   // Return a JSON store from a stateful stores
-  return {
+
+  const statefulStore = statefulStoreObject.state;
+
+  const serialized = {
     id: statefulStore.id,
     isPublic: statefulStore.isPublic,
     depositToken: statefulStore.depositToken?.toJSON(),
@@ -34,6 +37,8 @@ export const seriallizeStrategyStore = (
     title: statefulStore.title,
     step: statefulStore?.step?.toJSON() || null,
   };
+  console.log("Seriallized Store:", serialized);
+  return serialized;
 };
 
 export const deseriallizeStrategyStore = (
@@ -63,10 +68,12 @@ export const deseriallizeStrategyStore = (
 /**
  * An object with functions to insert to localStorage using idb
  */
-export const strategiesLocalStorage: StateStorage = idbStorage<
-  StrategyStoreState,
-  JSONStrategyStoreState
->(db as unknown as IDBPDatabase, "strategies", {
-  serialize: seriallizeStrategyStore,
-  deserialize: deseriallizeStrategyStore,
-});
+export const strategiesLocalStorage: StateStorage<JSONStrategyStoreState> =
+  idbStorage<
+    StrategyStoreState,
+    JSONStrategyStoreState,
+    JSONStrategyStoreState
+  >(db as unknown as IDBPDatabase, "strategies", {
+    serialize: seriallizeStrategyStore,
+    deserialize: deseriallizeStrategyStore,
+  });

@@ -1,7 +1,7 @@
 import { RegulerButtonProps } from "components/buttons/reguler/types";
 import { BaseComponentProps } from "components/types";
 import { TextProps } from "components/wrappers/types";
-import { RefObject } from "react";
+import { CSSProperties, RefObject } from "react";
 
 /**
  * @types for the dropdown's components and it's users.
@@ -49,4 +49,5 @@ export interface DropdownMenuOptions extends BaseComponentProps {
   optionText?: (_option: DropdownOption, i?: number) => React.ReactNode;
   hideOptionText?: "laptop:hidden" | "";
   modalBehaviour?: "always" | "never" | "auto";
+  choiceFocusClass?: string;
 }

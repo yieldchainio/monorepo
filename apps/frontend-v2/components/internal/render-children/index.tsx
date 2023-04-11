@@ -24,8 +24,13 @@ export const ChildrenProvider = ({
     <>
       {Children.map(children, (child, i) => {
         if (typeof child === "string")
-          return <WrappedText {...textProps} key={i}>{child}</WrappedText>;
+          return (
+            <WrappedText {...textProps} key={i}>
+              {child}
+            </WrappedText>
+          );
 
+        if (!isValidElement(child)) return child;
         return callback(child, i);
       })}
     </>

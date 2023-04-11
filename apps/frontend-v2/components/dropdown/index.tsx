@@ -26,6 +26,7 @@ const Dropdown = ({
   buttonProps,
   menuProps,
   textProps,
+  manualModal,
 }: DropdownProps) => {
   // Track whether or not the (default) dropdown menu is open
   const [menuOpen, setMenuOpen] = useState<boolean | DropdownOption[]>(false);
@@ -40,7 +41,16 @@ const Dropdown = ({
 
   // Change the choice each time choice is changed
   useEffect(() => {
-    setCurrentChoice([...options][0]);
+    console.log("Choice changed...", choice, manualModal);
+    if (choice && manualModal) {
+      setCurrentChoice(choice);
+      setMenuOpen(!menuOpen);
+    }
+  }, [choice]);
+
+  // Change the choice each time choice is changed
+  useEffect(() => {
+    !manualModal && setCurrentChoice([...options][0]);
   }, [JSON.stringify(options.map((opt) => JSON.stringify(opt)))]);
 
   // A state keeping track of this component's UUID, for event listening purpoes
@@ -69,8 +79,12 @@ const Dropdown = ({
       });
 
     // We then set the menu open to equal to true
+    setMenuOpen((prev: any) => !prev);
 
-    if (!menuOpen && window.innerWidth <= MediaScreenSizes.TABLET)
+    if (
+      (!menuOpen && window.innerWidth <= MediaScreenSizes.TABLET) ||
+      manualModal
+    )
       modals.push((id: number) => ({
         component: (
           <ModalWrapper
@@ -78,6 +92,11 @@ const Dropdown = ({
             closeFunction={(modalKey: number) => {
               modals.remove(modalKey);
               setMenuOpen((prev) => !prev);
+            }}
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             {children || (
@@ -93,8 +112,8 @@ const Dropdown = ({
             )}
           </ModalWrapper>
         ),
+        id: UUID,
       }));
-    setMenuOpen((prev: any) => !prev);
   };
 
   // The choice handler we pass on, accepts DropdownOption's data (any)
@@ -112,7 +131,7 @@ const Dropdown = ({
   return (
     <div className="relative">
       {menuOpen &&
-        (window.innerWidth <= MediaScreenSizes.TABLET
+        (window.innerWidth <= MediaScreenSizes.TABLET || manualModal
           ? null
           : children || (
               <DropdownMenu
@@ -129,17 +148,19 @@ const Dropdown = ({
         ref={dropdownBtnRef}
         {...buttonProps}
       >
-        <div className="flex flex-row gap-2">
-          {currentChoice?.image !== undefined && (
-            <WrappedImage
-              src={currentChoice.image}
-              width={24}
-              height={24}
-              className=" rounded-full"
-            />
-          )}
+        <div className="flex flex-row gap-2 items-center">
           {!buttonProps?.children ? (
-            <WrappedText {...textProps}>{currentChoice?.text}</WrappedText>
+            <>
+              {currentChoice?.image !== undefined && (
+                <WrappedImage
+                  src={currentChoice.image}
+                  width={24}
+                  height={24}
+                  className=" rounded-full"
+                />
+              )}
+              <WrappedText {...textProps}>{currentChoice?.text}</WrappedText>
+            </>
           ) : (
             buttonProps.children
           )}

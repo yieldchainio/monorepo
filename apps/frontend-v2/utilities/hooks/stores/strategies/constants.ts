@@ -11,12 +11,15 @@ import { Step } from "utilities/classes/step";
 import { useYCStore } from "../yc-data";
 
 // Initiate the DB connection
-const db = openDB("yieldchain", 1, {
-  // Create a strategies store
-  upgrade: (newDB) => {
-    newDB.createObjectStore("strategies");
-  },
-});
+const db =
+  typeof window === "undefined"
+    ? null
+    : openDB("yieldchain", 1, {
+        // Create a strategies store
+        upgrade: (newDB) => {
+          newDB.createObjectStore("strategies");
+        },
+      });
 
 /**
  * Seriallization and de-seriallization functions of the strategy store (To / From JSON)
@@ -31,9 +34,11 @@ export const seriallizeStrategyStore = (
 
 export const deseriallizeStrategyStore = (
   jsonStore: JSONStrategyStoreState
-): StrategyStoreState => {
+): StrategyStoreState | null => {
   // We retreive the global context
   const context: YCClassifications = useYCStore.getState().context;
+
+  if (typeof window !== undefined) return null;
 
   // Return the Stateful store from the JSON Store
   return {

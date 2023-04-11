@@ -8,9 +8,9 @@ import { CSSProperties, RefObject } from "react";
  */
 export type data = any;
 export interface DropdownOption<T = any> {
-  text: string;
+  text?: string;
   children?: Array<React.ReactElement | null>;
-  image?: string;
+  image?: string | null;
   data: T;
 }
 
@@ -32,6 +32,7 @@ export interface DropdownProps {
   buttonProps?: RegulerButtonProps;
   menuProps?: Partial<DropdownMenuOptions>;
   textProps?: Omit<TextProps, "children">;
+  manualModal?: boolean
 }
 
 export interface DropdownOptionProps {

@@ -35,6 +35,9 @@ import {
   seriallizeStrategyStore,
   strategiesLocalStorage,
 } from "utilities/hooks/stores/strategies/constants";
+import { ModalWrapper } from "components/modal-wrapper";
+import { TokensModal } from "components/tokens-modal";
+import WrappedImage from "components/wrappers/image";
 
 export default function Home() {
   // Retreive the strategies from the context

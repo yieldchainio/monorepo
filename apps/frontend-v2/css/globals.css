@@ -17,8 +17,8 @@
   --light-componentbg: 242, 242, 244;
   --dark-componentbg: 45, 45, 49;
 
-  --light-turnedoff-text: #676771;
-  --dark-turnedoff-text: #676771;
+  --light-turnedoff-text: 103, 103, 113;
+  --dark-turnedoff-text: 103, 103, 113;
 
   --light-turnedoff-text-hover: #808086;
   --dark-turnedoff-text-hover: #808086;

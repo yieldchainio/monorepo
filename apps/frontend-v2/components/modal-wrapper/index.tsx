@@ -14,6 +14,7 @@ export const ModalWrapper = ({
   closeFunction,
   children,
   callbackRoute,
+  style,
 }: ModalWrapperProps) => {
   // Get the removal function of the global modals state
   const removeModal = useModals((state) => state.remove);
@@ -32,8 +33,9 @@ export const ModalWrapper = ({
   // Return the wrapper & render the children
   return (
     <div
-      className=" min-h-screen fixed inset-0 overflow-y-scroll bg-black/50 py-20 backdrop-blur-md  "
+      className=" min-h-screen fixed inset-0 overflow-y-scroll bg-black/50 py-20 backdrop-blur-md flex "
       onClick={onClose}
+      style={style}
     >
       {Children.map(children, (child) => {
         // Typeguard
@@ -50,6 +52,9 @@ export const ModalWrapper = ({
               })
             }
             className={"animate-modal mx-auto" + " " + child.props.className}
+            closeModal={() => {
+              closeFunction && closeFunction(modalKey);
+            }}
           />
         );
       })}

@@ -27,6 +27,7 @@ const DropdownMenu = ({
   hideOptionText = "",
   modalBehaviour = "auto",
   choiceFocusClass,
+  style,
   ...props
 }: DropdownMenuOptions) => {
   // IF we are loading a choice rn or not
@@ -67,7 +68,7 @@ const DropdownMenu = ({
   }, [window.innerWidth]);
 
   return (
-    <div className={baseClass} {...props}>
+    <div className={baseClass} {...props} style={style}>
       {options.map((option: DropdownOption, i: number) => {
         return (
           <div

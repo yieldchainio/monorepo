@@ -55,8 +55,8 @@ export type ImageSrc =
 
 export interface ImageProps {
   src?: ImageSrc;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   className?: string;
   alt?: string;
   getColor?: boolean;

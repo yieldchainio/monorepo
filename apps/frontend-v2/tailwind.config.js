@@ -47,7 +47,7 @@ module.exports = {
             `rgba(var(--header), ${opacityValue || 1})`,
 
           // Text Colors
-          off: "var(--off)",
+          off: ({ opacityValue }) => `rgba(var(--off), ${opacityValue || 1})`,
           offhover: "var(--offhover)",
           gradient: "var(--gradient)",
           lgradient: "var(--light-gradient)",

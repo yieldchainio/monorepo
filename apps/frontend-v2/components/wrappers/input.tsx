@@ -46,8 +46,8 @@ const WrappedInput = ({
           fontFamily +
           " font-" +
           fontStyle +
-          " text-" +
-          fontColor +
+          " text-custom-textColor" +
+          " " +
           "select-none focus:ring-0 focus:ring-offset-0" +
           className
         } `}

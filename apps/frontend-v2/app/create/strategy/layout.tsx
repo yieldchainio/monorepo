@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useConfigRouting } from "../_hooks/useConfigRouting";
+import { useConfigRouting } from "utilities/hooks/general/useConfigRouting";
 import { configRoutes } from "./constants";
 /**
  * Main layout for the strategy config
@@ -9,18 +9,10 @@ import { configRoutes } from "./constants";
 import { StrategyCreationLayoutProps } from "./types";
 import { BackdropColor } from "components/backdrop-color";
 import { useDisableScroll } from "utilities/hooks/styles/useDisableScroll";
+import { Navigators } from "../../../components/navigators";
+import { useStrategyConfigColors } from "utilities/hooks/stores/colors";
 
-import { Navigators } from "./_components/navigators";
-
-const StrategyConfigLayout = ({
-  children,
-  title,
-  network,
-  token,
-  privacy,
-  base,
-  steps,
-}: StrategyCreationLayoutProps) => {
+const StrategyConfigLayout = ({ children }: StrategyCreationLayoutProps) => {
   /**
    * Get the next and prev functions for our configs (Assinging to buttons)
    */
@@ -40,13 +32,7 @@ const StrategyConfigLayout = ({
   /**
    * Styling store, set the colors of the backdrops
    */
-  const [backdropColors, setBackdropColors] = useState<{
-    top: string;
-    bottom: string;
-  }>({
-    top: "#44F",
-    bottom: "#3EEB",
-  });
+  const { top, bottom } = useStrategyConfigColors();
 
   // Disable scrolling on the config page
   useDisableScroll();
@@ -55,16 +41,16 @@ const StrategyConfigLayout = ({
   return (
     <div className="flex flex-col items-center justify-start bg-custom-bg w-[100vw] h-[100vh] overflow-hidden z-0 absolute pt-[20vh] pb-[20vh]">
       <BackdropColor
-        color={backdropColors.top}
-        style={{ zIndex: 1, top: "-20%", left: "80%", width: "50vw" }}
+        color={top}
+        style={{ zIndex: -1, top: "-20%", left: "80%", width: "50vw" }}
       />
       <BackdropColor
-        color={backdropColors.bottom}
+        color={bottom}
         style={{
           top: "75%",
           left: "-30%",
           width: "50vw",
-          zIndex: 1,
+          zIndex: -1,
         }}
       />
 

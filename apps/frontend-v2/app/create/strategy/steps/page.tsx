@@ -21,8 +21,15 @@ const TitleConfig = () => {
   // The onChange'ed value
   const [input, setInput] = useState<string | null>(globalTitle);
 
+  // The debounced input (We dont wanna rerender globally all the time)
+  const debouncedInput = useDebounce(
+    input,
+    500,
+    (title) => title && setTitle(title)
+  );
+
   // Set the colors
-  useBackdropColorChange("#2aa", "#16a");
+  useBackdropColorChange("#2aa", "#e6a");
 
   return (
     <div className="flex flex-col items-center justify-between  w-[50%] h-[55%]">

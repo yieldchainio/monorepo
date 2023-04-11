@@ -28,14 +28,14 @@ export const useConfigRouting = (baseRoute: string, routes: string[]) => {
   const next = useCallback(() => {
     if (currentIndex == routes.length - 1) return;
     setCurrentIndex((state) => ++state);
-    router.push(`${baseRoute}${routes[currentIndex]}`);
+    router.replace(`${baseRoute}${routes[currentIndex]}`);
   }, [currentIndex]);
 
   // Prev
   const prev = useCallback(() => {
     if (currentIndex == 0) return;
     setCurrentIndex((state) => --state);
-    router.back();
+    router.replace(`${baseRoute}${routes[currentIndex]}`);
   }, [currentIndex]);
 
   /**
@@ -43,7 +43,7 @@ export const useConfigRouting = (baseRoute: string, routes: string[]) => {
    */
 
   useEffect(() => {
-    router.push(`${baseRoute}${routes[currentIndex]}`);
+    router.replace(`${baseRoute}${routes[currentIndex]}`);
   }, []);
 
   return { prev, next };

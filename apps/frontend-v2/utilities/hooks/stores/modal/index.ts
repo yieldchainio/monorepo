@@ -22,6 +22,7 @@ interface ModalsStore {
   purge: (pathName: `/${string}`) => void;
   destroy: () => void;
   exists: (id: string) => boolean;
+  findIndexByID: (id: string) => number;
 }
 
 // The actual store hook
@@ -71,5 +72,9 @@ export const useModals = create<ModalsStore>((set, get) => ({
 
   exists: (id: string): boolean => {
     return get().modals.some((modal) => modal.id === id);
+  },
+
+  findIndexByID: (id: string) => {
+    return get().modals.findIndex((modal) => modal.id == id);
   },
 }));

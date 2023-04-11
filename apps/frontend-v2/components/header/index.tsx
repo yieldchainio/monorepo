@@ -36,12 +36,12 @@ enum HeaderLocation {
  */
 export const Header = () => {
   // Use the networks from the context
-  const networks = useYCStore(
+  const networks: YCNetwork[] = useYCStore(
     (state) => state.context.networks,
     (a, b) => {
       return (
-        JSON.stringify(a.map((network) => network.stringify())) ==
-        JSON.stringify(b.map((network) => network.stringify()))
+        JSON.stringify(a.map((network: YCNetwork) => network.stringify())) ==
+        JSON.stringify(b.map((network: YCNetwork) => network.stringify()))
       );
     }
   );
@@ -106,7 +106,7 @@ export const Header = () => {
               text: network.name,
               image: network.logo,
               data: {
-                json_rpc: network.jsonrpc,
+                json_rpc: network.jsonRpc,
                 chain_id: network.chainid,
                 color: network.color,
               },
@@ -129,7 +129,7 @@ export const Header = () => {
                       text: network.name,
                       image: network.logo,
                       data: {
-                        json_rpc: network.jsonrpc,
+                        json_rpc: network.jsonRpc,
                         chain_id: network.chainid,
                         color: network.color,
                       },

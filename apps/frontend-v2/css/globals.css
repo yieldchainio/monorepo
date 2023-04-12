@@ -243,3 +243,15 @@ body::-webkit-scrollbar-track-piece:disabled {
 .font-outline-4 {
   -webkit-text-stroke: 4px var(--textColor);
 }
+
+.gradient-border-mask {
+  display: flow-root;
+  border: 5px solid transparent;
+  background: linear-gradient(45deg, currentColor, currentColor) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  border-radius: 20px;
+  width: 300px;
+  height: 200px;
+}

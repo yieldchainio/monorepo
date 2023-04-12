@@ -108,7 +108,7 @@ module.exports = {
         toolTipBottom: "toolTipBottom 0.2s ease-in-out",
         toolTipLeft: "toolTipLeft 0.2s ease-in-out",
         toolTipRight: "toolTipRight 0.2s ease-in-out",
-        modal: "modal 0.2s ease-in-out",
+        modal: "modal 0.3s ease-in-out",
         sidebar: "sidebar 0.2s ease-in-out",
         log: "log 0.1s ease-in-out",
         configSlide: "configSlide 0.3s ease-in-out",

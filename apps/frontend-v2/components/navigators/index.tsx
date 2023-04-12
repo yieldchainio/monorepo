@@ -10,7 +10,7 @@ import GradientButton from "components/buttons/gradient";
 
 export const Navigators = ({ next, prev }: NavigatorsProps) => {
   return (
-    <div className="absolute top-[85%] w-[40%] flex flex-row gap-10 ">
+    <div className="absolute top-[85%] w-[40%] flex flex-row gap-10 z-10 ">
       <PrevButton prev={prev} />
       <NextButton next={next} />
     </div>

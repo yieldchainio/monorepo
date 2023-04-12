@@ -10,3 +10,11 @@ export const StrategyConfigWrapper = ({
 }) => {
   return <div className="animate-configSlide">{children}</div>;
 };
+
+export const StrategyConfigVerticalWrapper = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  return <div className="animate-[modal_0.5s_ease-in-out]">{children}</div>;
+};

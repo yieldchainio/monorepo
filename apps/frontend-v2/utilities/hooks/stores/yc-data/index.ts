@@ -3,7 +3,7 @@ import { YCClassifications, Endpoints } from "@yc/yc-models";
 
 export interface YCContextStore {
   context: YCClassifications;
-  refresh: (endpoint: Endpoints) => void;
+  refresh: (endpoint: Endpoints) => Promise<void>;
 }
 /**
  * The actual YC Store hook

@@ -73,6 +73,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
   // Function to update user's details
   const updateDetails = async (newDetails: Partial<UserUpdateArguments>) => {
     if (!user) return null;
+
     // We call the update details function, spread out the new details
     // and make sure we input the current user's ID
     const res = await YCUser.updateDetails({ ...newDetails, id: user.id });
@@ -107,10 +108,11 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
       return state.context.YCusers;
     },
     (oldUsers, newUsers) => {
-      const eq =
+      const res =
         JSON.stringify(oldUsers.map((usr) => usr.stringify())) ===
         JSON.stringify(newUsers.map((usr) => usr.stringify()));
-      return eq;
+      console.log("Users are equal", res);
+      return res;
     }
   );
 
@@ -200,6 +202,13 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     // Find the current user in the array
     const currUser = users.find((usr) => usr.id === user?.id);
 
+    console.log(
+      "Triggered Users List Update!!",
+      currUser,
+
+      currUser && user && currUser?.compare(user)
+    );
+
     // If we found it and it does not equal to the current user - we set the state
     if (currUser && currUser.stringify() !== user?.stringify()) {
       setUser(currUser);
@@ -271,11 +280,11 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
 
   // useEffect for whether the user is verified or not
   useEffect(() => {
-    if (user?.isVerified) setVerified(true);
+    if (user?.verified) setVerified(true);
 
     // Cleanup
     return () => setVerified(false);
-  }, [user?.isVerified]);
+  }, [user?.verified]);
 
   // Final useEffect checking if we're mounted to avoid hydration
   const mounted = useIsMounted();

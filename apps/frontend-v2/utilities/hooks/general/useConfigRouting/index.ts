@@ -27,15 +27,15 @@ export const useConfigRouting = (baseRoute: string, routes: string[]) => {
   // next
   const next = useCallback(() => {
     if (currentIndex == routes.length - 1) return;
-    setCurrentIndex((state) => ++state);
-    router.replace(`${baseRoute}${routes[currentIndex]}`);
+    router.replace(`${baseRoute}${routes[currentIndex + 1]}`);
+    setCurrentIndex(currentIndex + 1);
   }, [currentIndex]);
 
   // Prev
   const prev = useCallback(() => {
     if (currentIndex == 0) return;
-    setCurrentIndex((state) => --state);
-    router.replace(`${baseRoute}${routes[currentIndex]}`);
+    router.replace(`${baseRoute}${routes[currentIndex - 1]}`);
+    setCurrentIndex(currentIndex - 1);
   }, [currentIndex]);
 
   /**

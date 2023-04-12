@@ -38,6 +38,10 @@ import {
 import { ModalWrapper } from "components/modal-wrapper";
 import { TokensModal } from "components/tokens-modal";
 import WrappedImage from "components/wrappers/image";
+import {
+  Direction,
+  useScrollDirection,
+} from "utilities/hooks/styles/useHideScroll";
 
 export default function Home() {
   // Retreive the strategies from the context
@@ -230,18 +234,10 @@ const BrowseHeroSection = ({
   //   const seriallized = seriallizeStrategyStore(strategy);
   //   strategiesLocalStorage.setItem(strategy.id, strategy as unknown as string);
   // }, [strategy]);
+
+  const scrollDirection = useScrollDirection();
   return (
-    <div
-      className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-[100%] h-full "
-      onClick={() =>
-        logs.push((id: string) => ({
-          component: <InfoMessage id={id}>Hello Kind Ser</InfoMessage>,
-          lifespan: "immortal",
-          data: "hello ser",
-          id,
-        }))
-      }
-    >
+    <div className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-[100%] h-full ">
       <div className="flex flex-col items-center">
         <WrappedText fontSize={72} fontStyle="black">
           Browse
@@ -256,7 +252,11 @@ const BrowseHeroSection = ({
       </div>
       <Sticky
         heightToFix={{ viewportHeight: 24 }}
-        className="w-full items-center flex flex-col top-[10vh] gap-5 z-20"
+        className={
+          "w-full items-center flex flex-col top-[10vh] gap-5 z-20" +
+          " " +
+          (scrollDirection == Direction.DOWN ? "top-[3vh]" : "")
+        }
       >
         <div className="w-2/3">
           <WrappedInput

@@ -5,4 +5,5 @@ export interface ModalWrapperProps extends BaseComponentProps {
   children: React.ReactNode;
   closeFunction?: (modalKey: number) => any;
   callbackRoute?: `/${string}`;
+  align?: boolean;
 }

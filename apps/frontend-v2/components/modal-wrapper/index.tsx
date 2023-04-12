@@ -15,6 +15,7 @@ export const ModalWrapper = ({
   children,
   callbackRoute,
   style,
+  align = true,
 }: ModalWrapperProps) => {
   // Get the removal function of the global modals state
   const removeModal = useModals((state) => state.remove);
@@ -51,7 +52,13 @@ export const ModalWrapper = ({
                 e.stopPropagation();
               })
             }
-            className={"animate-modal mx-auto" + " " + child.props.className}
+            className={
+              "animate-modal " +
+              " " +
+              child.props.className +
+              " " +
+              (align ? "mx-auto" : "")
+            }
             closeModal={() => {
               closeFunction && closeFunction(modalKey);
             }}

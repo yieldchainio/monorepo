@@ -41,7 +41,6 @@ const Dropdown = ({
 
   // Change the choice each time choice is changed
   useEffect(() => {
-    console.log("Choice changed...", choice, manualModal);
     if (choice && manualModal) {
       setCurrentChoice(choice);
       setMenuOpen(!menuOpen);

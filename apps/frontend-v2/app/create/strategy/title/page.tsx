@@ -26,7 +26,7 @@ const TitleConfig = () => {
   useBackdropColorChange("#2aa", "#16a");
 
   return (
-    <div className="flex flex-col items-center justify-between  w-[50%] h-[55%]">
+    <div className="flex flex-col items-center justify-between  w-[50%] h-[50%]">
       <ConfigTitle>
         {"Let's Get started 👋"}{" "}
         <WrappedText fontSize={16} className="text-opacity-50">

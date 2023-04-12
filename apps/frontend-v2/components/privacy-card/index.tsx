@@ -53,19 +53,23 @@ export const PrivacyCard = ({
         }
       >
         <div className="w-full h-full bg-custom-bcomponentbg bg-opacity-50 backdrop-blur-xl flex flex-col items-center justify-start py-20 gap-14">
-          <div className="flex flex-col gap-2 items-center justify-center  w-[50%]  ">
-            <WrappedText fontSize={42} fontStyle="bold">
+          <div className="flex flex-col gap-2 items-center justify-center  w-[50%] mobile:w-[60%]  ">
+            <WrappedText
+              fontSize={42}
+              fontStyle="bold"
+              className="tablet:whitespace-pre-wrap text-center "
+            >
               {title + " " + emojies}
             </WrappedText>
             <WrappedText
-              className="text-opacity-30 w-[110%] whitespace-pre-wrap text-center"
+              className="text-opacity-30 w-[110%] whitespace-pre-wrap text-center mobile:text-[15px]"
               fontSize={18}
             >
               {subtitle}
             </WrappedText>
           </div>
-          <div className="flex flex-col gap-2 items-start justify-center ">
-            <div className="flex flex-row gap-1.5">
+          <div className="flex flex-col gap-2 items-start justify-center mobile:hidden">
+            <div className="flex flex-row gap-1.5 ">
               <WrappedText fontSize={26} className="text-opacity-50">
                 {"Why Choose"}
               </WrappedText>

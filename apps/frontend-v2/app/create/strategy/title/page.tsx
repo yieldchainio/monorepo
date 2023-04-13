@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import useDebounce from "utilities/hooks/general/useDebounce";
 import { useBackdropColorChange } from "utilities/hooks/general/useBackdropColorChange";
 import { StrategyConfigWrapper } from "components/strategy-config-wrapper";
+import { useStateEffect } from "utilities/hooks/general/useStateEffect";
 
 const TitleConfig = () => {
   // Title setter for current strategy config
@@ -20,7 +21,10 @@ const TitleConfig = () => {
   const globalTitle = useStrategyStore((state) => state.title);
 
   // The onChange'ed value
-  const [input, setInput] = useState<string | null>(globalTitle);
+  const [input, setInput] = useStateEffect<string | null>(
+    globalTitle,
+    (title: string | null) => typeof title === "string" && setTitle(title)
+  );
 
   // Set the colors
   useBackdropColorChange("#2aa", "#16a");

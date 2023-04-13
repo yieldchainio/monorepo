@@ -3,6 +3,7 @@
  */
 
 import { DBNetwork, DBToken, YCNetwork, YCToken } from "@yc/yc-models";
+import { ImageSrc } from "components/wrappers/types";
 import { Step } from "utilities/classes/step";
 import { JSONStep } from "utilities/classes/step/types";
 /**
@@ -29,6 +30,34 @@ export interface StrategyStoreState {
 }
 
 /**
+ * UX-related state of the configs experience
+ */
+export type configProgressStep = {
+  // The page routeo the config i.e "/network"
+  route: string;
+
+  // The progress step object, including an image, a label, and a state (complete, incomplete, active)
+  progressStep: {
+    image: ImageSrc;
+    label: string;
+    state: "complete" | "not_complete" | "active";
+  };
+
+  // The condition of whether the user can continue at this step (i.e, for /token - () => !!state.token)
+  condition: () => true | string;
+};
+export interface StrategyStoreConfigsUtilityState {
+  // The strategy configs' routes state. I.e which one is completed or not and etc
+  strategyConfigs: configProgressStep[];
+
+  // Change some details about the above
+  changeConfigRouteState: (
+    index: number,
+    newState: "complete" | "not_complete" | "active"
+  ) => void;
+}
+
+/**
  * The state in JSON (What is persisted)
  */
 
@@ -50,6 +79,9 @@ export interface JSONStrategyStoreState {
 
   // Steps of the strategy (Tree)
   step: JSONStep | null;
+
+  // The configs stuff (for UX purposes)
+  strategyConfigs: configProgressStep[];
 }
 
 /**
@@ -57,7 +89,9 @@ export interface JSONStrategyStoreState {
  */
 export interface StrategyStoreActions {
   // Load a strategy store into the store
-  setStrategy: (configs: StrategyStoreState) => void;
+  setStrategy: (
+    configs?: StrategyStoreState & StrategyStoreConfigsUtilityState
+  ) => void;
 
   /**
    * Set states individually
@@ -78,4 +112,5 @@ export interface StrategyStoreActions {
 
 export interface StrategyStore
   extends StrategyStoreActions,
-    StrategyStoreState {}
+    StrategyStoreState,
+    StrategyStoreConfigsUtilityState {}

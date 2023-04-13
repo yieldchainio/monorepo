@@ -10,7 +10,7 @@ export const idbStorage: <T = any, R = T>(
   dbInstance: IDBPDatabase | Promise<IDBPDatabase>,
   storeName: string,
   options?: IDBOption<any>
-) => StateStorage = <T = any, R = T>(
+) => StateStorage & { getAll: () => Promise<R[]> } = <T = any, R = T>(
   dbInstance: IDBPDatabase | Promise<IDBPDatabase>,
   storeName: string,
   options: IDBOption<T> = {
@@ -48,5 +48,13 @@ export const idbStorage: <T = any, R = T>(
       await dbInstance.then((res) => (dbInstance = res));
     }
     return await (dbInstance as IDBPDatabase).delete(storeName, key);
+  },
+
+  getAll: async (): Promise<R[]> => {
+    if (dbInstance instanceof Promise) {
+      await dbInstance.then((res) => (dbInstance = res));
+    }
+
+    return await (dbInstance as IDBPDatabase).getAll(storeName);
   },
 });

@@ -28,16 +28,19 @@ interface ModalsStore {
 // The actual store hook
 export const useModals = create<ModalsStore>((set, get) => ({
   modals: [],
-  push: (modalCallback: (length: number) => GlobalModal) => {
-    if (typeof window !== "undefined")
-      document.documentElement.style.overflowY = "hidden";
+  push: (modalCallback: (len: number) => GlobalModal) => {
+    // if (typeof window !== "undefined")
+    //   document.documentElement.style.overflowY = "hidden";
     set((state) => {
       return {
-        modals: [...state.modals, modalCallback(length)],
+        modals: [...state.modals, modalCallback(state.modals.length)],
       };
     });
   },
   remove: (index: number) => {
+    console.log("Modals Before Removing:", get().modals);
+    console.log("Requested Index", index);
+    console.log("Request Modal: ", get().modals[index]);
     if (typeof window !== "undefined")
       document.documentElement.style.overflowY = "scroll";
     set((state) => {

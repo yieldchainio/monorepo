@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { TextSkeleton } from "./skeleton";
 import { TextProps, Selection } from "./types";
 /**
@@ -81,61 +82,69 @@ import { TextProps, Selection } from "./types";
 ("font-black");
 ("font-bold");
 
-const WrappedText = ({
-  children,
-  fontSize = 14,
-  fontStyle = "reguler",
-  fontFamily = "athletics",
-  fontColor,
-  onClick,
-  select = Selection.allow,
-  truncate = "",
-  contentEditable = "false",
-  className = "",
-  id,
-  style,
-  onInput,
-  skeletonDimensions,
-}: TextProps) => {
-  if (children === undefined && skeletonDimensions?.width !== 0) {
+const WrappedText = forwardRef<HTMLDivElement, TextProps>(
+  (
+    {
+      children,
+      fontSize = 14,
+      fontStyle = "reguler",
+      fontFamily = "athletics",
+      fontColor,
+      onClick,
+      select = Selection.allow,
+      truncate = "",
+      contentEditable = "false",
+      className = "",
+      id,
+      style,
+      onInput,
+      skeletonDimensions,
+      ...props
+    }: TextProps,
+    ref
+  ) => {
+    if (children === undefined && skeletonDimensions?.width !== 0) {
+      return (
+        <TextSkeleton
+          fontSize={fontSize}
+          className={className}
+          dimensions={skeletonDimensions}
+        />
+      );
+    }
+
     return (
-      <TextSkeleton
-        fontSize={fontSize}
-        className={className}
-        dimensions={skeletonDimensions}
-      />
+      <div
+        ref={ref}
+        className={`${
+          "text-" +
+          `[${fontSize.toString()}px]` +
+          " font-" +
+          fontFamily +
+          " font-" +
+          fontStyle +
+          " text-" +
+          (fontColor || "custom-textColor") +
+          " " +
+          "select-none focus:outline-none whitespace-nowrap " +
+          truncate +
+          " " +
+          className
+        }`}
+        onClick={(e: React.MouseEvent<HTMLElement>) =>
+          onClick ? onClick(e) : null
+        }
+        contentEditable={contentEditable}
+        suppressContentEditableWarning={true}
+        id={id}
+        onInput={(e) => onInput && onInput(e)}
+        style={style || {}}
+        {...props}
+      >
+        {children}
+      </div>
     );
   }
-
-  return (
-    <div
-      className={`${
-        "text-" +
-        `[${fontSize.toString()}px]` +
-        " font-" +
-        fontFamily +
-        " font-" +
-        fontStyle +
-        " text-" +
-        (fontColor || "custom-textColor") +
-        " " +
-        "select-none focus:outline-none whitespace-nowrap " +
-        truncate +
-        " " +
-        className
-      }`}
-      onClick={(e: React.MouseEvent<HTMLElement>) =>
-        onClick ? onClick(e) : null
-      }
-      contentEditable={contentEditable}
-      suppressContentEditableWarning={true}
-      id={id}
-      onInput={(e) => onInput && onInput(e)}
-      style={style || {}}
-    >
-      {children}
-    </div>
-  );
-};
+);
 
 export default WrappedText;

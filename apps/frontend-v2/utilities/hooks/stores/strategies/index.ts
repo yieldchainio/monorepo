@@ -10,6 +10,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import {
   JSONStrategyStoreState,
   StrategyStore,
+  StrategyStoreConfigsUtilityState,
   StrategyStoreState,
 } from "./types";
 import { v4 as uuid } from "uuid";
@@ -44,13 +45,19 @@ export const useStrategyStore = create<StrategyStore>()(
 
       // Step of the strategy (tree)
       step: null,
-      /**
-       * @methods
-       */
 
+      /**
+       * @Methods
+       */
       // Set the entire config (useful for loading from local storage)
-      setStrategy: (configs: StrategyStoreState) => {
-        set(configs);
+      setStrategy: (
+        configs?: StrategyStoreState & StrategyStoreConfigsUtilityState
+      ) => {
+        // We might get undefined if consumer's intent is to load the existing strategy
+        if (configs) {
+          changeStoreID(configs.id);
+          set(configs);
+        }
       },
 
       // Set the title
@@ -67,19 +74,111 @@ export const useStrategyStore = create<StrategyStore>()(
       setDepositToken: (token: YCToken) => {
         set({ depositToken: token });
       },
+
       // Set the network
       setNetwork: (network: YCNetwork) => {
         set({ network });
         console.log("Strategy Store", get());
       },
+
+      /**
+       * @UX States & Methods
+       */
+      strategyConfigs: [
+        {
+          route: "/title",
+          progressStep: {
+            image: {
+              dark: "/icons/title-light.svg",
+              light: "/icons/title-dark.svg",
+            },
+            label: "Choose Title",
+            state: "active",
+          },
+          condition: () =>
+            !!get().title ? true : "Please Choose A Title To Continue",
+        },
+        {
+          route: "/network",
+          progressStep: {
+            image: {
+              dark: "/icons/network-light.svg",
+              light: "/icons/network-dark.svg",
+            },
+            label: "Choose Network",
+            state: "not_complete",
+          },
+          condition: () =>
+            !!get().network ? true : "Please Choose A Network To Continue!",
+        },
+        {
+          route: "/token",
+          progressStep: {
+            image: {
+              dark: "/icons/token-light.svg",
+              light: "/icons/token-dark.svg",
+            },
+            label: "Choose Token",
+            state: "not_complete",
+          },
+          condition: () =>
+            !!get().depositToken
+              ? true
+              : "Please Choose A Deposit Token To Continue",
+        },
+        {
+          route: "/privacy",
+          progressStep: {
+            image: "",
+            label: "Choose Privacy",
+            state: "not_complete",
+          },
+          condition: () =>
+            get().isPublic == true || get().isPublic === false
+              ? true
+              : "Please Choose Your Privacy To Continue",
+        },
+        {
+          route: "/base",
+          progressStep: {
+            image: "",
+            label: "Assemble Base Steps",
+            state: "not_complete",
+          },
+          condition: () =>
+            !!get().step
+              ? true
+              : "Please Choose Atleast One Base Step To Continue",
+        },
+        {
+          route: "/steps",
+          progressStep: {
+            image: "",
+            label: "Build Steps",
+            state: "not_complete",
+          },
+          condition: () =>
+            !!get().step ? true : "Please Choose Atleast One Step To Continue",
+        },
+      ],
+
+      // Change hte state of a config route
+      changeConfigRouteState: (
+        index: number,
+        newState: "complete" | "not_complete" | "active"
+      ) => {
+        const arr = get().strategyConfigs;
+        arr[index].progressStep.state = newState;
+        set({ strategyConfigs: arr });
+      },
     }),
+
     {
       // Saved under this UUID as the key
       name: startingID,
       storage: createJSONStorage(() => strategiesLocalStorage),
 
       partialize: (state) => {
-        console.log("PArtiaillizing this state", state);
         return {
           id: state.id,
           isPublic: state.isPublic,
@@ -87,8 +186,16 @@ export const useStrategyStore = create<StrategyStore>()(
           network: state.network,
           title: state.title,
           step: state.step,
+          strategyConfigs: state.strategyConfigs,
         };
       },
     }
   )
 );
+
+/**
+ * A function used to manipulate the store's key (ID) programatically
+ */
+const changeStoreID = (newID: string) => {
+  useStrategyStore.persist.setOptions({ name: newID });
+};

@@ -25,6 +25,7 @@ export const Table = <T,>({
             key={i}
             style={{
               gap: rowsGap || "0.5rem",
+              ...(section.style || {}),
             }}
           >
             <ChildrenProvider
@@ -35,7 +36,9 @@ export const Table = <T,>({
             >
               {section.label}
             </ChildrenProvider>
-            <ChildrenProvider>{items.map(section.callback)}</ChildrenProvider>
+            <ChildrenProvider textProps={{ className: "truncate" }}>
+              {items.map(section.callback)}
+            </ChildrenProvider>
           </div>
         );
       })}

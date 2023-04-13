@@ -8,7 +8,7 @@ export interface BaseComponentProps<T = any> {
   onClick?: (e?: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => any;
 }
 
-export interface BaseModalChildProps {
+export interface BaseModalChildProps extends BaseComponentProps {
   closeModal?: () => void
 }
 

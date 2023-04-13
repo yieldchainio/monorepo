@@ -10,10 +10,14 @@
  * @method prev - Goes to the prev config
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { configProgressStep } from "utilities/hooks/stores/strategies/types";
 
-export const useConfigRouting = (baseRoute: string, routes: string[]) => {
+export const useConfigRouting = (
+  baseRoute: string,
+  routes: configProgressStep[]
+) => {
   // Keep a state of the current index
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
@@ -25,26 +29,54 @@ export const useConfigRouting = (baseRoute: string, routes: string[]) => {
    */
 
   // next
-  const next = useCallback(() => {
+  const next = (callback?: (index: number) => void) => {
     if (currentIndex == routes.length - 1) return;
-    router.replace(`${baseRoute}${routes[currentIndex + 1]}`);
+    if (callback) callback(currentIndex);
+    router.replace(`${baseRoute}${routes[currentIndex + 1].route}`);
     setCurrentIndex(currentIndex + 1);
-  }, [currentIndex]);
+  };
 
   // Prev
-  const prev = useCallback(() => {
+  const prev = (callback?: (index: number) => void) => {
     if (currentIndex == 0) return;
-    router.replace(`${baseRoute}${routes[currentIndex - 1]}`);
+    if (callback) callback(currentIndex);
+
+    router.replace(`${baseRoute}${routes[currentIndex - 1].route}`);
     setCurrentIndex(currentIndex - 1);
-  }, [currentIndex]);
+  };
 
+  // toRoute
+  const toRoute = (route: string) => {
+    // Get the index of it
+    const index = routes.findIndex((_route) => _route.route === route);
+    if (index == -1) return;
+    // Route to it
+    router.replace(`${baseRoute}${routes[index]}`);
+    setCurrentIndex(index);
+  };
+
+  // Route by index
+  const routeByIndex = (index: number) => {
+    if (index < 0 || index >= routes.length) return;
+    router.replace(`${baseRoute}${routes[index].route}`);
+    setCurrentIndex(index);
+  };
+  // Initiate the routes (Routes to nearest step route marked "Complete")
+  const initRoute = () => {
+    const latestCompleteRoute =
+      routes.findLastIndex(
+        (config) => config.progressStep.state === "active"
+      ) || 0;
+
+    routeByIndex(latestCompleteRoute);
+    setCurrentIndex(latestCompleteRoute);
+  };
   /**
-   * UseEffect going to index 0 on mount
+   * We memoize the progress and return it
    */
+  const progress = useMemo(() => {
+    return routes.length / currentIndex; // 50% progress == 0.5
+  }, [currentIndex, routes, routes.length]);
 
-  useEffect(() => {
-    router.replace(`${baseRoute}${routes[currentIndex]}`);
-  }, []);
-
-  return { prev, next };
+  return { prev, next, toRoute, routeByIndex, progress, initRoute };
 };

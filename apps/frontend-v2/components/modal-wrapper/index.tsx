@@ -60,7 +60,8 @@ export const ModalWrapper = ({
               (align ? "mx-auto" : "")
             }
             closeModal={() => {
-              closeFunction && closeFunction(modalKey);
+              if (closeFunction) closeFunction(modalKey);
+              else removeModal(modalKey);
             }}
           />
         );

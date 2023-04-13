@@ -3,7 +3,11 @@
  */
 
 import { IDBPDatabase, openDB } from "idb";
-import { JSONStrategyStoreState, StrategyStoreState } from "./types";
+import {
+  JSONStrategyStoreState,
+  StrategyStoreConfigsUtilityState,
+  StrategyStoreState,
+} from "./types";
 import { idbStorage } from "utilities/infra/idb/idb-interface";
 import { StateStorage } from "zustand/middleware";
 import { YCClassifications, YCNetwork, YCToken } from "@yc/yc-models";
@@ -34,11 +38,9 @@ export const seriallizeStrategyStore = (
 
 export const deseriallizeStrategyStore = (
   jsonStore: JSONStrategyStoreState
-): StrategyStoreState | null => {
+): StrategyStoreState & StrategyStoreConfigsUtilityState => {
   // We retreive the global context
   const context: YCClassifications = useYCStore.getState().context;
-
-  if (typeof window !== undefined) return null;
 
   // Return the Stateful store from the JSON Store
   return {
@@ -55,16 +57,21 @@ export const deseriallizeStrategyStore = (
       jsonStore.step == null
         ? null
         : Step.fromJSONStep({ step: jsonStore.step, context: context }),
+
+    strategyConfigs: jsonStore.strategyConfigs,
   };
 };
 
 /**
  * An object with functions to insert to localStorage using idb
  */
-export const strategiesLocalStorage: StateStorage = idbStorage<
-  StrategyStoreState,
-  JSONStrategyStoreState
->(db as unknown as IDBPDatabase, "strategies", {
-  serialize: seriallizeStrategyStore,
-  deserialize: deseriallizeStrategyStore,
-});
+export const strategiesLocalStorage: StateStorage & {
+  getAll: () => Promise<JSONStrategyStoreState[]>;
+} = idbStorage<StrategyStoreState, JSONStrategyStoreState>(
+  db as unknown as IDBPDatabase,
+  "strategies",
+  {
+    serialize: seriallizeStrategyStore,
+    deserialize: deseriallizeStrategyStore,
+  }
+);

@@ -112,6 +112,7 @@ module.exports = {
         sidebar: "sidebar 0.2s ease-in-out",
         log: "log 0.1s ease-in-out",
         configSlide: "configSlide 0.3s ease-in-out",
+        fill: "fill 0.4s ease-in-out",
       },
       keyframes: (theme) => ({
         popup: {
@@ -120,6 +121,14 @@ module.exports = {
           },
           "100%": {
             transform: "scale(1)",
+          },
+        },
+        fill: {
+          "0%": {
+            width: "0%",
+          },
+          "100%": {
+            width: "100%",
           },
         },
         modal: {

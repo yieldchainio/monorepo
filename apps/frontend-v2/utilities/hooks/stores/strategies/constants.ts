@@ -13,6 +13,8 @@ import { StateStorage } from "zustand/middleware";
 import { YCClassifications, YCNetwork, YCToken } from "@yc/yc-models";
 import { Step } from "utilities/classes/step";
 import { useYCStore } from "../yc-data";
+import { useYCStrategy } from "utilities/hooks/yc/useYCStrategy";
+import { useStrategyStore } from ".";
 
 // Initiate the DB connection
 const db =
@@ -33,6 +35,8 @@ export const seriallizeStrategyStore = (
   statefulStoreObject: string
 ): JSONStrategyStoreState => {
   // Return a JSON store from a stateful stores
+  const seriallizeres = JSON.parse(statefulStoreObject).state;
+  console.log("Seriallization Res", seriallizeres);
   return JSON.parse(statefulStoreObject).state;
 };
 
@@ -58,7 +62,17 @@ export const deseriallizeStrategyStore = (
         ? null
         : Step.fromJSONStep({ step: jsonStore.step, context: context }),
 
-    strategyConfigs: jsonStore.strategyConfigs,
+    strategyConfigs: useStrategyStore
+      .getState()
+      .strategyConfigs.map((defaultConfig, i) => {
+        return {
+          ...defaultConfig,
+          progressStep: {
+            ...defaultConfig.progressStep,
+            state: jsonStore.strategyConfigs[i].progressStep.state,
+          },
+        };
+      }),
   };
 };
 
@@ -75,3 +89,7 @@ export const strategiesLocalStorage: StateStorage & {
     deserialize: deseriallizeStrategyStore,
   }
 );
+
+/**
+ * Our strategy configs array - We save this here as a constant to add our conditions when serializng
+ */

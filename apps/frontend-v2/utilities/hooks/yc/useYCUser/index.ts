@@ -111,7 +111,6 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
       const res =
         JSON.stringify(oldUsers.map((usr) => usr.stringify())) ===
         JSON.stringify(newUsers.map((usr) => usr.stringify()));
-      console.log("Users are equal", res);
       return res;
     }
   );
@@ -201,13 +200,6 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
   useEffect(() => {
     // Find the current user in the array
     const currUser = users.find((usr) => usr.id === user?.id);
-
-    console.log(
-      "Triggered Users List Update!!",
-      currUser,
-
-      currUser && user && currUser?.compare(user)
-    );
 
     // If we found it and it does not equal to the current user - we set the state
     if (currUser && currUser.stringify() !== user?.stringify()) {

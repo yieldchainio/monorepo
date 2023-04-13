@@ -49,12 +49,6 @@ export type configProgressStep = {
 export interface StrategyStoreConfigsUtilityState {
   // The strategy configs' routes state. I.e which one is completed or not and etc
   strategyConfigs: configProgressStep[];
-
-  // Change some details about the above
-  changeConfigRouteState: (
-    index: number,
-    newState: "complete" | "not_complete" | "active"
-  ) => void;
 }
 
 /**
@@ -108,6 +102,12 @@ export interface StrategyStoreActions {
 
   // Set the strategy's network
   setNetwork: (network: YCNetwork) => void;
+
+  // Change some details about the above
+  changeConfigRouteState: (
+    index: number,
+    newState: "complete" | "not_complete" | "active"
+  ) => void;
 }
 
 export interface StrategyStore

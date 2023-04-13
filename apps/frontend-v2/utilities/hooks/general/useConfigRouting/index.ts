@@ -62,12 +62,12 @@ export const useConfigRouting = (
     setCurrentIndex(index);
   };
   // Initiate the routes (Routes to nearest step route marked "Complete")
-  const initRoute = () => {
+  const initRoute = (optionalRoutes?: configProgressStep[]) => {
     const latestCompleteRoute =
-      routes.findLastIndex(
+      (optionalRoutes || routes).findLastIndex(
         (config) => config.progressStep.state === "active"
       ) || 0;
-
+    console.log("Latest COmplete Route Ser", latestCompleteRoute);
     routeByIndex(latestCompleteRoute);
     setCurrentIndex(latestCompleteRoute);
   };
@@ -78,5 +78,13 @@ export const useConfigRouting = (
     return routes.length / currentIndex; // 50% progress == 0.5
   }, [currentIndex, routes, routes.length]);
 
-  return { prev, next, toRoute, routeByIndex, progress, initRoute };
+  return {
+    prev,
+    next,
+    toRoute,
+    routeByIndex,
+    progress,
+    initRoute,
+    currentIndex,
+  };
 };

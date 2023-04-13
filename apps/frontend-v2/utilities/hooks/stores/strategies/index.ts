@@ -49,6 +49,7 @@ export const useStrategyStore = create<StrategyStore>()(
       /**
        * @Methods
        */
+
       // Set the entire config (useful for loading from local storage)
       setStrategy: (
         configs?: StrategyStoreState & StrategyStoreConfigsUtilityState
@@ -129,7 +130,10 @@ export const useStrategyStore = create<StrategyStore>()(
         {
           route: "/privacy",
           progressStep: {
-            image: "",
+            image: {
+              dark: "privacy-light.svg",
+              light: "privacy-dark.svg",
+            },
             label: "Choose Privacy",
             state: "not_complete",
           },

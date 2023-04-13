@@ -38,10 +38,8 @@ const StrategyConfigLayout = ({ children }: StrategyCreationLayoutProps) => {
   /**
    * Get the next and prev functions for our configs (Assinging to buttons)
    */
-  const { next, prev, routeByIndex, progress, initRoute } = useConfigRouting(
-    "/create/strategy",
-    configRoutesState
-  );
+  const { next, prev, routeByIndex, progress, initRoute, currentIndex } =
+    useConfigRouting("/create/strategy", configRoutesState);
 
   /**
    * Styling store, set the colors of the backdrops
@@ -77,7 +75,6 @@ const StrategyConfigLayout = ({ children }: StrategyCreationLayoutProps) => {
           await strategiesLocalStorage.removeItem(draft.id);
       }
       if (drafts.length) {
-        console.log("Drafts Lenght SEr!!!");
         modals.push((id: number) => {
           return {
             component: (

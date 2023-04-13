@@ -42,7 +42,7 @@ export const StrategiesDraftsModal = ({
       setStrategy(strategyDraft);
 
       // We route to the strategy's correct config
-      initStrategy();
+      initStrategy(strategyDraft?.strategyConfigs);
 
       console.log("Our Close Modal Function", closeModal);
       // And close our modal

@@ -68,7 +68,7 @@ const NextButton = ({
           style={{
             width: "50%",
           }}
-          className="py-4"
+          className="py-4 tablet:px-5  tablet:py-4"
           onClick={() => {
             next(callback);
           }}
@@ -90,7 +90,7 @@ const NextButton = ({
             style={{
               width: "100%",
             }}
-            className="py-4 opacity-40 pointer-events-none"
+            className="py-4 tablet:px-5 opacity-40 pointer-events-none tablet:py-4"
           >
             Next Step
             <WrappedImage

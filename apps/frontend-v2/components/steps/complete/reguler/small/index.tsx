@@ -4,7 +4,7 @@
  */
 
 import WrappedImage from "components/wrappers/image";
-import { CompleteStepSizedProps } from "../types";
+import { CompleteStepSizedProps } from "../../types";
 import WrappedText from "components/wrappers/text";
 import {
   InflowTokenBundle,
@@ -52,13 +52,14 @@ export const SmallCompleteStep = forwardRef<
               // TODO:
             },
           },
+        },
+        {
+          text: "Delete",
+          data: {
+            description: "Delete This Step",
+            handler: () => {},
+          },
         }
-        // {
-        //   text: "Delete",
-        //   data: {
-        //     description: "Delete This Step",
-        //   },
-        // }
       );
 
     return newOptions;
@@ -67,7 +68,6 @@ export const SmallCompleteStep = forwardRef<
   /**
    * Memoizing for performance
    */
-
   const inflowsComponent = useMemo(() => {
     if (!step.inflows.length) return null;
     return <InflowTokenBundle tokens={step.inflows} />;
@@ -77,6 +77,8 @@ export const SmallCompleteStep = forwardRef<
     if (!step.outflows.length) return null;
     return <OutflowTokenBundle tokens={step.outflows} />;
   }, [step.outflows, step.outflows.length]);
+
+  // Return the component
   return (
     <div
       className="w-[246px] h-[56px] flex flex-row items-center justify-start gap-2 px-4 bg-custom-bcomponentbg absolute shadow-sm rounded-xl"

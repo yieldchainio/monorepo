@@ -3,7 +3,7 @@
  */
 
 import { forwardRef } from "react";
-import { CompleteStepProps, CompleteStepSizedProps } from "../types";
+import { CompleteStepProps, CompleteStepSizedProps } from "../../types";
 
 export const MediumCompleteStep = forwardRef<
   HTMLDivElement,

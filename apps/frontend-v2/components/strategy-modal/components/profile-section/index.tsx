@@ -27,7 +27,7 @@ export const ProfileSection = ({ user }: { user?: YCUser | null }) => {
           className="rounded-full"
         />
         <div className="flex flex-col gap-1 items-start justify-center w-[20%] h-max overflow-visible ">
-          <WrappedText fontSize={28}>{userName}</WrappedText>
+          <WrappedText fontSize={20}>{userName}</WrappedText>
           <WrappedText fontSize={14} className="text-opacity-50 truncate">
             {description}
           </WrappedText>

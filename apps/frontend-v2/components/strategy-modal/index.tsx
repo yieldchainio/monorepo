@@ -14,14 +14,10 @@ import { ApyChart } from "./components/body-sections/apy-chart";
 import { StrategyOperationsBox } from "./components/body-sections/deposit-withdrawls";
 import { Step } from "utilities/classes/step";
 import { useSteps } from "utilities/hooks/yc/useSteps";
-import { useEffect, useMemo, useState } from "react";
-import { StepSizing } from "utilities/classes/step/types";
-import { Canvas } from "components/canvas";
-import { SmallCompleteStep } from "components/steps/complete/small";
+import { useState } from "react";
 import { StepsModal } from "components/steps-modal";
 import { ToggleExpandText } from "./components/utility/toggleExpand";
 import { useStateEffect } from "utilities/hooks/general/useStateEffect";
-import exp from "constants";
 import WrappedImage from "components/wrappers/image";
 import { useModals } from "utilities/hooks/stores/modal";
 

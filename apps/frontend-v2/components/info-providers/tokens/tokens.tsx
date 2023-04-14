@@ -9,6 +9,7 @@ import { YCToken } from "@yc/yc-models";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 import { sliceAddress } from "utilities/general/slice-address";
+import { TokenAddress } from "components/tokens/address";
 
 export const TokensProvider = ({ children, tokens }: TokensProviderProps) => {
   return (
@@ -46,26 +47,23 @@ export const TokensProvider = ({ children, tokens }: TokensProviderProps) => {
             {
               label: "Address",
               callback: (token: YCToken, i: number) => (
-                <WrappedText
-                  fontSize={12}
-                  className="text-opacity-100 hover:text-opacity-100 hover:underline transition duration-200 ease-in-out w-full h-full "
-                  key={i}
-                >
-                  {sliceAddress(token.address)}
-                </WrappedText>
+                <TokenAddress token={token} />
               ),
             },
             {
               label: "Network",
-              callback: (token: YCToken, i: number) => (
-                <WrappedText
-                  fontSize={12}
-                  className="text-opacity-100 hover:text-opacity-100 hover:underline transition duration-200 ease-in-out w-full h-full "
-                  key={i}
-                >
-                  {token.network?.name}
-                </WrappedText>
-              ),
+              callback: (token: YCToken, i: number) => {
+                console.log("Token ser", token);
+                return (
+                  <WrappedText
+                    fontSize={12}
+                    className="text-opacity-100 hover:text-opacity-100 hover:underline transition duration-200 ease-in-out w-full h-full "
+                    key={i}
+                  >
+                    {token.network?.name}
+                  </WrappedText>
+                );
+              },
             },
           ]}
         ></Table>

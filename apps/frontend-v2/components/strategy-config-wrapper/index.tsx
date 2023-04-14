@@ -16,7 +16,5 @@ export const StrategyConfigVerticalWrapper = ({
 }: {
   children: React.ReactNode;
 }) => {
-  return (
-    <div className="w-full animate-[modal_0.5s_ease-in-out]">{children}</div>
-  );
+  return <div className=" animate-[modal_0.5s_ease-in-out]">{children}</div>;
 };

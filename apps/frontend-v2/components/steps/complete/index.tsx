@@ -6,8 +6,8 @@
 
 import { StepSizing } from "utilities/classes/step/types";
 import { CompleteStepProps } from "./types";
-import { SmallCompleteStep } from "./small";
-import { MediumCompleteStep } from "./medium";
+import { SmallCompleteStep } from "./reguler/small";
+import { MediumCompleteStep } from "./reguler/medium";
 import { forwardRef } from "react";
 
 export const CompleteStep = forwardRef<HTMLDivElement, CompleteStepProps>(

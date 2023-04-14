@@ -55,7 +55,7 @@ export const TokensBundle = ({
                 <WrappedImage
                   src={token.logo}
                   style={{
-                    marginLeft: `-${imageProps.width / 2}px`,
+                    marginLeft: `-${(imageProps.width || 0) / 2}px`,
                     borderRadius: `100%`,
                     ...(imageProps.style || {}),
                   }}

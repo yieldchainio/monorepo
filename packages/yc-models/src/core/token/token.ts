@@ -54,9 +54,10 @@ export class YCToken extends BaseClass {
     this.id = _token.id;
     this.symbol = _token.symbol;
     this.network =
-      _network && _network.chainid == _token.chain_id
+      _network && _network.id == _token.chain_id
         ? _network
         : _context.getNetwork(_token.chain_id);
+
     this.address = ethers.getAddress(_token.address);
     this.decimals = _token.decimals;
     this.logo = _token.logo;
@@ -144,7 +145,7 @@ export class YCToken extends BaseClass {
   ): Promise<EthersTransactionResponse> => {
     // Assert the chain ID to match ours
     if (signer instanceof EthersExecutor)
-      this.network?.assertSameChainID(
+      this.network?.assertSameid(
         (await signer.provider?.getNetwork())?.chainId
       );
 
@@ -234,4 +235,19 @@ export class YCToken extends BaseClass {
   };
 
   static instances: Map<string, YCToken> = new Map();
+
+  // =====================
+  //    UTILITY METHODS
+  // =====================
+  toJSON = (): DBToken => {
+    return {
+      id: this.id,
+      symbol: this.symbol,
+      chain_id: this?.network?.id as number,
+      address: this.address,
+      logo: this.logo as string,
+      decimals: this.decimals,
+      name: this.name,
+    };
+  };
 }

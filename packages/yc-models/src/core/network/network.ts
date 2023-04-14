@@ -14,7 +14,7 @@ export class YCNetwork extends BaseClass {
   // =====================
   //    PRIVATE FIELDS
   // =====================
-  readonly chainid: number;
+  readonly id: number;
   readonly name: string;
   readonly logo: string;
   readonly color: string | undefined;
@@ -53,7 +53,7 @@ export class YCNetwork extends BaseClass {
       if (!this.jsonRpc)
         throw new Error(
           "YCNetwork ERR: Cannot Get Provider (Network Is Not Integrated - JSON RPC UNAVAILABLE). Network ID:" +
-            this.chainid
+            this.id
         );
       return new ethers.JsonRpcProvider(this.jsonRpc);
     }
@@ -94,7 +94,7 @@ export class YCNetwork extends BaseClass {
   constructor(_network: DBNetwork, _context?: YCClassifications) {
     super();
     // Init static fields
-    this.chainid = _network.id;
+    this.id = _network.id;
     this.name = _network.name;
     this.jsonRpc = _network.json_rpc;
     this.logo = _network.logo;
@@ -121,7 +121,7 @@ export class YCNetwork extends BaseClass {
     //       protocol_identifier: number;
     //       chain_id: number;
     //     }) => {
-    //       if (protocolNetwork.chain_id == this.chainid()) {
+    //       if (protocolNetwork.chain_id == this.id()) {
     //         let protocolInstance = _context.getProtocol(
     //           protocolNetwork.protocol_identifier
     //         );
@@ -141,7 +141,7 @@ export class YCNetwork extends BaseClass {
     // Find our native token by inputting the 0x00..00 address and our chain id
     const token = _context.rawTokens.find(
       (token_) =>
-        token_.chain_id == this.chainid && token_.address == ethers.ZeroAddress
+        token_.chain_id == this.id && token_.address == ethers.ZeroAddress
     );
     // Set it globally
     if (token) this.#nativeToken = new YCToken(token, _context, this) || null;
@@ -150,19 +150,19 @@ export class YCNetwork extends BaseClass {
   // ============================
   //      ERRORS / ASSERTIONS
   // ============================
-  assertSameChainID = (chainID?: bigint | SignerMethod): void => {
-    if (!chainID || chainID !== BigInt(this.chainid || 0))
+  assertSameid = (id?: bigint | SignerMethod): void => {
+    if (!id || id !== BigInt(this.id || 0))
       throw new Error(
         "YCNetwork ERR: Inputted Chain ID does not match network's. Expected Chain ID: " +
-          this.chainid +
+          this.id +
           " Inputted Chain ID: " +
-          chainID
+          id
       );
   };
 
-  assertSignerChainID = async (signer?: SignerMethod): Promise<void> => {
+  assertSignerid = async (signer?: SignerMethod): Promise<void> => {
     if (signer instanceof EthersExecutor)
-      this.assertSameChainID((await signer?.provider?.getNetwork())?.chainId);
+      this.assertSameid((await signer?.provider?.getNetwork())?.chainId);
   };
 
   // =================

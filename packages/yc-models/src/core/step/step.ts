@@ -1,3 +1,4 @@
+import { YCToken } from "..";
 import { DBFlow, DBStep, DBToken } from "../../types";
 import { YCAction } from "../action/action";
 import { BaseClass } from "../base";
@@ -11,8 +12,8 @@ import { v4 as uuid } from "uuid";
 export class YCStep extends BaseClass {
   id: string;
   protocol: YCProtocol | null;
-  inflows: YCFlow[] = [];
-  outflows: YCFlow[] = [];
+  inflows: YCToken[] = [];
+  outflows: YCToken[] = [];
   children: YCStep[] = [];
   percentage: number;
   action: YCAction | null;
@@ -25,25 +26,11 @@ export class YCStep extends BaseClass {
     this.id = _step.id;
     this.parentId = _step.parentId;
     this.protocol = _context.getProtocol(_step.protocol);
-    this.inflows = _step.inflows.map((dbflow: DBToken) => {
-      return new YCFlow(
-        {
-          token_id: dbflow.id,
-          direction: FlowDirection.INFLOW,
-          id: uuid(),
-        },
-        _context
-      );
+    this.inflows = _step.inflows.map((dbtoken: DBToken) => {
+      return new YCToken(dbtoken, _context);
     });
-    this.outflows = _step.outflows.map((dbflow: DBToken) => {
-      return new YCFlow(
-        {
-          token_id: dbflow.id,
-          direction: FlowDirection.OUTFLOW,
-          id: uuid(),
-        },
-        _context
-      );
+    this.outflows = _step.outflows.map((dbbtoken: DBToken) => {
+      return new YCToken(dbbtoken, _context);
     });
     this.children = _step.children.map(
       (child: DBStep) => new YCStep(child, _context)
@@ -65,8 +52,8 @@ export class YCStep extends BaseClass {
       action: this.action?.id || "",
       protocol: this.protocol?.id || "",
       percentage: this.percentage,
-      inflows: this.inflows.map((flow) => flow.token.toJSON()),
-      outflows: this.outflows.map((flow) => flow.token.toJSON()),
+      inflows: this.inflows.map((token) => token.toJSON()),
+      outflows: this.outflows.map((token) => token.toJSON()),
       function: this.function?.id || "",
       customArgs: this.customArguments,
       children: this.children.map((child) => child.toJSON()),

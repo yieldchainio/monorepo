@@ -235,8 +235,6 @@ class YCClassificationsInternal {
   };
 
   protected fetchStatistics = async () => {
-    console.log("Fetched statistics! it is:", this.Statistics);
-
     this.Statistics =
       (await fetchRouter<DBStatistic[]>({
         backend: {
@@ -758,8 +756,8 @@ export class YCClassifications extends YCClassificationsInternal {
             return (
               getAddress(_token.address) == address &&
               (typeof _chain_id == "number"
-                ? _token.network?.chainid == _chain_id
-                : _token.network?.chainid == _chain_id.chainid)
+                ? _token.network?.id == _chain_id
+                : _token.network?.id == _chain_id.id)
             );
           } catch (err: any) {
             throw new Error(
@@ -794,17 +792,10 @@ export class YCClassifications extends YCClassificationsInternal {
   };
 
   // Get a network
-  getNetwork = (_chainID: number) => {
-    // Search for the network
-    let network = this.Networks.find(
-      (network: DBNetwork) => network.id == _chainID
+  getNetwork = (_id: number) => {
+    return (
+      this.networks.find((network: YCNetwork) => network.id == _id) || null
     );
-
-    // If network was not found
-    if (!network) return null;
-
-    // Return YCNetwork instance
-    return new YCNetwork(network, this);
   };
 
   getUser = (_userID: string): YCUser | null => {

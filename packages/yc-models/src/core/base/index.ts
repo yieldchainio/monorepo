@@ -74,12 +74,12 @@ export class BaseClass extends BaseWeb3Class {
 
   // Method to turn the object into a stringified version
   stringify() {
-    JSON.stringify(this.toJSON());
+    return JSON.stringify(this.toJSON());
   }
 
   // Method to compare an instance of this class with another one
   compare(_instance: BaseClass): boolean {
-    return this.stringify() == _instance.stringify();
+    return this.stringify() === _instance.stringify();
   }
 
   // An assertion function that checks a condition and throws an error if it's not met

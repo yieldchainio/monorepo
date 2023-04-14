@@ -16,15 +16,14 @@ export class YCUser extends BaseClass {
   // =======================
   //    PRIVATE VARIABLES
   // =======================
-  #username: string;
-  #id: string;
-  #address: string;
-  #profilePic: string;
-  #description: string;
-  #verified: boolean;
-  #socialMedia: YCSocialMedia;
-  #context: YCClassifications;
-  #createdVaults: YCStrategy[] = [];
+  username: string;
+  id: string;
+  address: string;
+  profilePic: string;
+  description: string;
+  verified: boolean;
+  socialMedia: YCSocialMedia;
+  createdVaults: YCStrategy[] = [];
 
   // =======================
   //    STATIC  METHODS
@@ -41,7 +40,6 @@ export class YCUser extends BaseClass {
   }: SignupArguments): Promise<null | DBUser> => {
     // Init the context if it wasnt already
     if (!context.initiallized) {
-      console.log("Initiallizing Context Inside Signup...");
       await context.initiallize();
     }
 
@@ -104,15 +102,21 @@ export class YCUser extends BaseClass {
     // Sufficient check, does user exist?
     const doesUserExist = context.users.find((user: YCUser) => user.id == id);
 
+    // getting the SM  links
+    const twitterToUse = typeof twitter == "string" ? twitter : twitter?.link;
+    const telegramToUse =
+      typeof telegram == "string" ? telegram : telegram?.link;
+    const discordToUse = typeof discord == "string" ? discord : discord?.link;
+
     // If they arent, we forwrd them to .signUp()
     if ((id == (undefined || null) || !doesUserExist) && address)
       return YCUser.signUp({
         address,
         username,
         profilePicture,
-        twitter,
-        discord,
-        telegram,
+        twitter: twitterToUse,
+        discord: discordToUse,
+        telegram: telegramToUse,
         description,
         context,
       });
@@ -132,9 +136,12 @@ export class YCUser extends BaseClass {
               address: address || doesUserExist?.address,
               username: username || doesUserExist?.username,
               profile_picture: profilePicture || doesUserExist?.profilePic,
-              twitter: twitter || doesUserExist?.socialMedia.twitter.handle,
-              telegram: telegram || doesUserExist?.socialMedia.telegram.handle,
-              discord: discord || doesUserExist?.socialMedia.discord.handle,
+              twitter:
+                twitterToUse || doesUserExist?.socialMedia.twitter.handle,
+              telegram:
+                telegramToUse || doesUserExist?.socialMedia.telegram.handle,
+              discord:
+                discordToUse || doesUserExist?.socialMedia.discord.handle,
               description: description || doesUserExist?.description,
             },
           }),
@@ -146,9 +153,10 @@ export class YCUser extends BaseClass {
             address: address || doesUserExist?.address,
             username: username || doesUserExist?.username,
             profile_picture: profilePicture || doesUserExist?.profilePic,
-            twitter: twitter || doesUserExist?.socialMedia.twitter,
-            telegram: telegram || doesUserExist?.socialMedia.telegram,
-            discord: discord || doesUserExist?.socialMedia.discord,
+            twitter: twitterToUse || doesUserExist?.socialMedia.twitter.handle,
+            telegram:
+              telegramToUse || doesUserExist?.socialMedia.telegram.handle,
+            discord: discordToUse || doesUserExist?.socialMedia.discord.handle,
             description: description || doesUserExist?.description,
           }),
       },
@@ -162,19 +170,17 @@ export class YCUser extends BaseClass {
   // =======================
   constructor(_user: DBUser, _context: YCClassifications) {
     super();
-    this.#address = _user.address;
-    this.#id = _user.id;
-    this.#username = _user.username;
-    this.#description = _user.description;
-    this.#profilePic = _user.profile_picture || "";
-    this.#socialMedia = new YCSocialMedia(
+    this.address = _user.address;
+    this.id = _user.id;
+    this.username = _user.username;
+    this.description = _user.description;
+    this.profilePic = _user.profile_picture || "";
+    this.socialMedia = new YCSocialMedia(
       _user.twitter,
       _user.telegram,
       _user.discord
     );
-    this.#verified = _user.verified;
-
-    this.#context = _context;
+    this.verified = _user.verified;
 
     const vaults = _context.rawStrategies
       .filter((strategy) => strategy.creator_id == this.id)
@@ -187,48 +193,14 @@ export class YCUser extends BaseClass {
      * when comparing (Since, the stringifier of the comparison function would have converted the strategies
      * into IDs anyway to avoid a massive memory leak)
      */
-    this.#createdVaults = vaults as unknown as YCStrategy[];
+    this.createdVaults = vaults as unknown as YCStrategy[];
 
     const existingUser = this.getInstance(_user.id);
     if (existingUser) return existingUser;
 
-    this.#createdVaults = _context.strategies.filter(
+    this.createdVaults = _context.strategies.filter(
       (strat) => strat.creator?.id == this.id
     );
-  }
-  // =======================
-  //        METHODS
-  // =======================
-  get socialMedia() {
-    return this.#socialMedia;
-  }
-
-  get id() {
-    return this.#id;
-  }
-
-  get createdVaults() {
-    return this.#createdVaults;
-  }
-
-  get address() {
-    return this.#address;
-  }
-
-  get username() {
-    return this.#username;
-  }
-
-  get profilePic() {
-    return this.#profilePic;
-  }
-
-  get description() {
-    return this.#description;
-  }
-
-  get isVerified() {
-    return this.#verified;
   }
 
   // =================
@@ -277,9 +249,9 @@ export type UserUpdateArguments =
       context: YCClassifications;
       description?: string;
       profilePicture?: string;
-      twitter?: string;
-      discord?: string;
-      telegram?: string;
+      twitter?: string | { handle: string; link: string };
+      discord?: string | { handle: string; link: string };
+      telegram?: string | { handle: string; link: string };
     }
   | {
       id: string;
@@ -288,7 +260,7 @@ export type UserUpdateArguments =
       context?: YCClassifications;
       description?: string;
       profilePicture?: string;
-      twitter?: string;
-      discord?: string;
-      telegram?: string;
+      twitter?: string | { handle: string; link: string };
+      discord?: string | { handle: string; link: string };
+      telegram?: string | { handle: string; link: string };
     };

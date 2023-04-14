@@ -2,6 +2,8 @@
  * A safe stringify function that is able to stringify circular classes
  */
 
+import { YCUser } from "../core";
+
 export const safeToJSON = <T>(obj: T) => {
   return circularReplacer(obj, 1);
 };
@@ -18,7 +20,6 @@ const circularReplacer = (
   maxDepth: number,
   depth: number = 0
 ): any => {
-  // If its an array, run this on each item
   if (Array.isArray(obj))
     return obj.map((_obj) => circularReplacer(_obj, maxDepth, depth));
 
@@ -61,7 +62,11 @@ const circularReplacer = (
         jsonObj[key] = circularReplacer(obj[key], maxDepth, depth + 1);
       }
     } catch (e: any) {
-      throw "Caught Erorr In Getter. Key: " + key + " Obj Provided: " + obj;
+      console.error(
+        "Caught Erorr In Getter. Key: " + key + " Obj Provided: " + obj,
+        "Error: ",
+        e
+      );
     }
   }
 

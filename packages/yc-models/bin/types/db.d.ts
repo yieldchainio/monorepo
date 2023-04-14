@@ -22,7 +22,7 @@ export interface DBStrategy {
     creator_id: string;
     verified: boolean;
     execution_interval: number;
-    steps: JSON[];
+    steps: JSON;
 }
 export interface DBNetwork {
     id: number;
@@ -108,13 +108,13 @@ export interface DBUser {
 export interface DBStep {
     id: string | "root";
     parentId: string | null;
-    protocol: DBProtocol;
+    protocol: string;
     percentage: number;
-    inflows: DBFlow[];
-    outflows: DBFlow[];
-    action: DBAction;
-    function: DBFunction;
-    customArgs: DBArgument[];
+    inflows: DBToken[];
+    outflows: DBToken[];
+    action: string;
+    function: string;
+    customArgs: any[];
     children: DBStep[];
 }
 export interface DBStatistic {

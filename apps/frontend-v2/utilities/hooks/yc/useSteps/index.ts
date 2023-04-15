@@ -63,11 +63,15 @@ export const useSteps = (
    * Also, sets the canvas dimensions (the function's return value)
    */
   useEffect(() => {
+    console.log("UseEffect Should graph rerender");
     if (stepsState.rootStep) {
+      console.log("Gonna Run Graph");
       setCanvasDimensions(stepsState.rootStep.graph(StepSizing.SMALL));
       triggerComparison();
+    } else {
+      console.log("Step state root step is undefined!", stepsState.rootStep);
     }
-  }, [stepsState.rootStep?.shouldGraph(prevState.current.rootStep)]);
+  }, [JSON.stringify(stepsState.rootStep?.toJSON(false))]);
 
   /**
    * Wrapping actions for ease

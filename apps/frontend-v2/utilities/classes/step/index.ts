@@ -82,7 +82,7 @@ export class Step implements IStep<Step> {
     if (manual || !this.manuallyResized) {
       // We set the new dimensions & Sizing
       this.size = newSize;
-      if (dimensions != null) this.dimensions = dimensions;
+      this.dimensions = dimensions || DefaultDimensions[newSize];
 
       // If it's a manual resize we set the global variable specifying the user manually resized this step
       if (manual) this.manuallyResized = true;
@@ -222,6 +222,7 @@ export class Step implements IStep<Step> {
     this.id = config?.id || uuid();
     this.state = config?.state || "initial";
     this.size = config?.size || StepSizing.MEDIUM;
+    this.dimensions = DefaultDimensions[this.size];
     this.type = config?.type || StepType.STEP;
     this.actionConfig = config?.actionConfig || null;
 
@@ -536,9 +537,15 @@ export class Step implements IStep<Step> {
    */
   shouldGraph = (prevTree: Step | null): boolean => {
     console.log("Runnign Should Graph");
+    const prevString = JSON.stringify(prevTree?.toJSON(false));
+    const currString = JSON.stringify(this.toJSON(false));
+    console.log("Prev String", prevString);
+    console.log("Current String", currString);
+    console.log("Are Equal: ", prevString === currString);
     return (
       prevTree == null ||
-      JSON.stringify(prevTree.toJSON()) !== JSON.stringify(this.toJSON())
+      JSON.stringify(prevTree.toJSON(false)) !==
+        JSON.stringify(this.toJSON(false))
     );
   };
 

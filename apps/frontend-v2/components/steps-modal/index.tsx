@@ -59,10 +59,6 @@ export const StepsModal = ({
       resizeAll(StepSizing.SMALL, DefaultDimensions[StepSizing.SMALL], false);
   };
 
-  console.log(
-    "Steps Modal ReRenderered!",
-    stepsState.rootStep?.children[0].position
-  );
 
   return (
     <div

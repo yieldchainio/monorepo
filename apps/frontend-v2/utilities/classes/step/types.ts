@@ -8,12 +8,8 @@ import {
   YCFunc,
   YCProtocol,
   YCToken,
-  YCStep,
   YCClassifications,
   DBStep,
-  YCFlow,
-  DBFunction,
-  DBArgument,
 } from "@yc/yc-models";
 
 // The state of the step - whether you are choosing an action (INIT), configuring (Any action config, CONFIG), or if it is complete
@@ -21,6 +17,14 @@ export enum BaseStepStates {
   INITIAL = "initial",
   COMPLETE = "complete",
 }
+
+// the differnt types of steps.
+export enum StepType {
+  STEP = "step",
+  TRIGGER = "trigger",
+  CONDITION = "condition",
+}
+
 export type StepState = "initial" | "complete" | ActionConfigs;
 
 // The different types of action configs.
@@ -78,6 +82,7 @@ export interface IStepOnlyFE<T extends IStep<T>> {
   state?: StepState;
   actionConfig?: ActionConfigs | null;
   size?: StepSizing;
+  type?: StepType
 }
 
 // An interface for all of the step data (which the class implements)

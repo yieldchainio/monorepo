@@ -14,57 +14,13 @@ import { forwardRef, useMemo } from "react";
 import { DotMenuIcon } from "components/icons/dot-menu";
 import { TooltipDropdown } from "components/tooltip-dropdown";
 import { data } from "@yc/yc-models";
-import {
-  DefaultDimensions,
-  StepSizing,
-  StepState,
-} from "utilities/classes/step/types";
+import { useStepOptions } from "utilities/hooks/yc/useSteps/useStepsOptions";
+import { CompleteStepOptions } from "../../components/options";
 
 export const SmallCompleteStep = forwardRef<
   HTMLDivElement,
   CompleteStepSizedProps
 >(({ step, style, ...props }: CompleteStepSizedProps, ref) => {
-  // Memoize this step's options, depending on it's writeability
-  const options = useMemo(() => {
-    const newOptions = [
-      {
-        text: "Expand",
-        data: {
-          description: "Expand This Step",
-          handler: () => {
-            step.resize(
-              StepSizing.MEDIUM,
-              DefaultDimensions[StepSizing.MEDIUM],
-              true
-            );
-          },
-        },
-      },
-    ];
-    if (step.writeable)
-      newOptions.push(
-        {
-          text: "Edit",
-          data: {
-            description: "Edit This Step",
-            handler: () => {
-              // step.changeState(Ste);
-              // TODO:
-            },
-          },
-        },
-        {
-          text: "Delete",
-          data: {
-            description: "Delete This Step",
-            handler: () => {},
-          },
-        }
-      );
-
-    return newOptions;
-  }, [step.writeable]);
-
   /**
    * Memoizing for performance
    */
@@ -81,7 +37,7 @@ export const SmallCompleteStep = forwardRef<
   // Return the component
   return (
     <div
-      className="w-[246px] h-[56px] flex flex-row items-center justify-start gap-2 px-4 bg-custom-bcomponentbg absolute shadow-sm rounded-xl"
+      className="w-[246px] h-[56px] flex flex-row items-center justify-start gap-2 px-4 bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder transition duration-200 ease-in-out animate-stepPopup"
       style={style}
       ref={ref}
       {...props}
@@ -101,13 +57,7 @@ export const SmallCompleteStep = forwardRef<
           {outflowsComponent}
         </div>
       </div>
-      <TooltipDropdown options={options} handleChoice={(choice: data) => null}>
-        <DotMenuIcon
-          iconClassname="text-custom-textColor text-opacity-30 group-hover:text-opacity-50 transition duration-200 ease-linear"
-          className="cursor-pointer group transition duration-200 ease-in-out"
-          onClick={props.onClick}
-        ></DotMenuIcon>
-      </TooltipDropdown>
+      <CompleteStepOptions step={step} onClick={props.onClick} />
     </div>
   );
 });

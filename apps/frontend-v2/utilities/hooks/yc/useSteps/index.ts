@@ -4,9 +4,8 @@
  * A custom store hook for manipulating steps trees data
  */
 
-import { create } from "zustand";
 import { Step } from "utilities/classes/step";
-import { StepsStore, UseStepsActions } from "./types";
+import { UseStepsActions } from "./types";
 import { Dimensions, StepSizing } from "utilities/classes/step/types";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { useStepsReducer } from "./reducer";
@@ -40,7 +39,7 @@ export const useSteps = (
   // Keeping track of the previous state for comparison reasons (rerender effiency)
   const prevState = useRef<{ rootStep: Step | null }>({ rootStep: null });
 
-  // Initiating the step
+  // Initiating the step if a strategy was provided
   const initiated = useRef<boolean>(false);
   useEffect(() => {
     if (!initiated.current && context && strategy?.rootStep.children.length) {

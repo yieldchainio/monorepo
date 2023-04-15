@@ -40,6 +40,7 @@ export const TooltipDropdown = ({
                 <div
                   className="flex flex-row gap-1 items-start justify-start bg-white bg-opacity-0 hover:bg-opacity-10 px-6 rounded-lg py-2 w-full transitiion duration-200 ease-in-out cursor-pointer"
                   onClick={() => {
+                    if (option.data.handler) option.data.handler();
                     handleChoice(option.data);
                   }}
                 >

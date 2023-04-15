@@ -26,6 +26,7 @@ import {
   Position,
   StepSizing,
   StepState,
+  StepType,
 } from "./types";
 import { v4 as uuid } from "uuid";
 import { FlextreeNode, flextree } from "d3-flextree";
@@ -88,30 +89,123 @@ export class Step implements IStep<Step> {
     }
   };
 
+  /**
+   * Resize this step and it's descendents
+   */
+  resizeAll = (
+    newSize: StepSizing,
+    dimensions: Dimensions | null = DefaultDimensions[newSize],
+    manual: boolean = false
+  ) => {
+    this.each((step: Step) => step.resize(newSize, dimensions, manual));
+  };
+
   // ====================
   //      VARIABLES
   // ====================
 
+  // ------
+  // Globals
+  // ------
   /**
-   * Config-related variables
+   * The UUID of this step
    */
   id: string;
-  state: StepState;
-  size: StepSizing;
-  actionConfig: ActionConfigs | null;
-  dimensions: Dimensions = { width: 0, height: 0 };
-  position: Position = { x: 0, y: 0 };
 
   /**
-   * Step-related variables
+   * The "Type" of this step
+   * can either be "STEP", "TRIGGER", or "CONDITION"
+   */
+  type: StepType;
+
+  /**
+   * The state of this step.
+   * Can either be "complete", "initial", or "config"
+   */
+  state: StepState;
+
+  /**
+   * A enumerable sizing variable for this step.
+   * i.e "SMALL", "MEDIUM"
+   */
+  size: StepSizing;
+
+  /**
+   * The dimensions of this step (width, height). Used for graph calcs
+   */
+  dimensions: Dimensions = { width: 0, height: 0 };
+
+  /**
+   * The positions of this step on the used canvas. This is set by the graph() function
+   */
+  position: Position = { x: 0, y: 0 };
+
+  // ----------
+  // Reguler Step Variables
+  // ----------
+  /**
+   * The protocol of the step (e.g GMX, Uniswap)
    */
   protocol: YCProtocol | null = null;
+
+  /**
+   * The inflows of this step - In YCTokens (e.g ETH, BTC)
+   */
   inflows: YCToken[] = [];
+
+  /**
+   * The outflows of this step - In YCTokens (e.g ETH, BTC)
+   */
   outflows: YCToken[] = [];
+
+  /**
+   * The action of this step, in YCAction (e.g Stake, Swap, Long, LP)
+   */
   action: YCAction | null = null;
+
+  /**
+   * The YCFunction used by this step. (i.e stakeTokens(), addLiquidityETH())
+   */
   function: YCFunc | null = null;
-  customArguments: YCArgument[] = [];
+
+  /**
+   * The different possible action configurations for a @notice REGULER step
+   */
+  actionConfig: ActionConfigs | null;
+
+  // -----------
+  // Trigger Step Variables
+  // -----------
+  /**
+   * The name of this trigger
+   */
+  name: string | null = null;
+
+  /**
+   * A short description of this trigger
+   */
+  description: string | null = null;
+
+  /**
+   * An icon representing this trigger
+   */
+  icon: string | null = null;
+
+  /**
+   * Any additional data that the Trigger config will want to save
+   */
+  data: any | null = null;
+
+  /**
+   * Any additional data that the trigger step will want to display on the frontend.
+   */
+  visuals: React.ReactNode;
+
   percentage: number;
+
+  // --------
+  // Conditional Step Variables
+  // --------
 
   /**
    * Utility variables
@@ -128,6 +222,7 @@ export class Step implements IStep<Step> {
     this.id = config?.id || uuid();
     this.state = config?.state || "initial";
     this.size = config?.size || StepSizing.MEDIUM;
+    this.type = config?.type || StepType.STEP;
     this.actionConfig = config?.actionConfig || null;
 
     this.protocol = config?.protocol || null;
@@ -135,7 +230,6 @@ export class Step implements IStep<Step> {
     this.outflows = config?.outflows || [];
     this.action = config?.action || null;
     this.function = config?.function || null;
-    this.customArguments = config?.customArguments || [];
 
     this.children = config?.children || [];
     this.percentage = config?.percentage || 0;
@@ -223,6 +317,7 @@ export class Step implements IStep<Step> {
    */
 
   graph = (baseNodeSize: StepSizing, baseNodeDimensions?: Dimensions) => {
+    console.log("Running Graph...");
     // Instantiate layout instance with our settings
     const layout = flextree({
       nodeSize: (node: HierarchyNode<Step>) => [
@@ -292,14 +387,14 @@ export class Step implements IStep<Step> {
 
     // Iterate over each d3 node, find it's corresponding step, and set the positioning on it
     tree.each((node: FlextreeNode<Step>) => {
-      const ycNode = this.find((step) => step.id == node.data.id);
-      if (!ycNode)
+      const Step = this.find((step) => step.id == node.data.id);
+      if (!Step)
         throw new Error(
           "D3 Step ERR: Cannot find corresponding YCStep - ID: " + node.data.id
         );
 
       // Set the position
-      ycNode.position = {
+      Step.position = {
         x: node.x,
         y: node.y,
       };
@@ -308,7 +403,7 @@ export class Step implements IStep<Step> {
        * We move onto canvas-size calculation
        */
       // Shortand for mem efficieny
-      const sizing = ycNode.getNodeSizing();
+      const sizing = Step.getNodeSizing();
       positiveWidth = Math.max(sizing.width.positive, positiveWidth);
       negativeWidth = Math.min(sizing.width.negative, negativeWidth);
       positiveHeight = Math.max(sizing.height.positive, positiveHeight);
@@ -437,6 +532,7 @@ export class Step implements IStep<Step> {
    * function (in order to proprely and efficiently rerender)
    */
   shouldGraph = (prevTree: Step | null): boolean => {
+    console.log("Runnign Should Graph");
     return (
       prevTree == null ||
       JSON.stringify(prevTree.toJSON()) !== JSON.stringify(this.toJSON())

@@ -38,7 +38,7 @@ const PrivacyConfig = () => {
             position="left"
             chosen={!privacyChoice}
             lightColor="#760039"
-            heavyColor="#D91B0F"
+            heavyColor="#de04da"
             setOwn={() => setPrivacy(false)}
             emojies="🕵️🔒"
             reasons={[

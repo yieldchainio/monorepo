@@ -11,6 +11,7 @@ import {
   YCClassifications,
   DBStep,
 } from "@yc/yc-models";
+import { ImageSrc } from "components/wrappers/types";
 
 // The state of the step - whether you are choosing an action (INIT), configuring (Any action config, CONFIG), or if it is complete
 export enum BaseStepStates {
@@ -85,15 +86,32 @@ export interface IStepOnlyFE<T extends IStep<T>> {
   type?: StepType;
 }
 
-// An interface for all of the step data (which the class implements)
-export interface IStep<T extends IStep<T>> extends IStepOnlyFE<T> {
-  id?: string;
+// An interface for hte IStep propreties which are reguler step-related
+export interface IStepReguler<T extends IStep<T>> {
   protocol?: YCProtocol | null;
-  inflows?: YCToken[];
-  outflows?: YCToken[];
   action?: YCAction | null;
   function?: YCFunc | null;
   customArguments?: YCArgument[];
+}
+
+// An interface for the IStep propreties which are trigger step-related
+export interface IStepTrigger<T extends IStep<T>> {
+  triggerName?: string | null;
+  triggerDescription?: string | null;
+  triggerIcon?: ImageSrc;
+  data?: any | null;
+  triggerVisuals?: React.ReactNode;
+}
+
+// An interface for all of the step data (which the class implements)
+export interface IStep<T extends IStep<T>>
+  extends IStepOnlyFE<T>,
+    IStepReguler<T>,
+    IStepTrigger<T> {
+  id?: string;
+  inflows?: YCToken[];
+  outflows?: YCToken[];
+
   children?: T[];
   parent?: T | null;
   percentage?: number;

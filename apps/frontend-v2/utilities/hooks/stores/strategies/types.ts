@@ -26,7 +26,7 @@ export interface StrategyStoreState {
   title: string | null;
 
   // Steps of the strategy (Tree)
-  step: Step | null;
+  step: Step;
 }
 
 /**

@@ -32,6 +32,7 @@ import { v4 as uuid } from "uuid";
 import { FlextreeNode, flextree } from "d3-flextree";
 import { HierarchyNode } from "d3-hierarchy";
 import { FlowDirection } from "@prisma/client";
+import { ImageSrc } from "components/wrappers/types";
 
 export class Step implements IStep<Step> {
   // ====================
@@ -179,17 +180,17 @@ export class Step implements IStep<Step> {
   /**
    * The name of this trigger
    */
-  name: string | null = null;
+  triggerName: string | null = null;
 
   /**
    * A short description of this trigger
    */
-  description: string | null = null;
+  triggerDescription: string | null = null;
 
   /**
    * An icon representing this trigger
    */
-  icon: string | null = null;
+  triggerIcon: ImageSrc = null;
 
   /**
    * Any additional data that the Trigger config will want to save
@@ -199,7 +200,7 @@ export class Step implements IStep<Step> {
   /**
    * Any additional data that the trigger step will want to display on the frontend.
    */
-  visuals: React.ReactNode;
+  triggerVisuals: React.ReactNode;
 
   percentage: number;
 
@@ -218,24 +219,37 @@ export class Step implements IStep<Step> {
   //     CONSTRUCTOR
   // ====================
   constructor(config?: IStep<Step>, writeable: boolean = false) {
-    // We construct the gloal variables from the config
+    /**
+     * Construct global variables
+     */
     this.id = config?.id || uuid();
     this.state = config?.state || "initial";
     this.size = config?.size || StepSizing.MEDIUM;
-
     this.dimensions = DefaultDimensions[this.size];
     this.type = config?.type || StepType.STEP;
-    this.actionConfig = config?.actionConfig || null;
-
-    this.protocol = config?.protocol || null;
     this.inflows = config?.inflows || [];
     this.outflows = config?.outflows || [];
+    this.writeable = writeable;
+    this.children = config?.children || [];
+
+    /**
+     * Construct reguler step variables
+     */
+    this.actionConfig = config?.actionConfig || null;
+    this.protocol = config?.protocol || null;
     this.action = config?.action || null;
     this.function = config?.function || null;
+    this.actionConfig = config?.actionConfig || null;
 
-    this.children = config?.children || [];
+    /**
+     * Construct trigger step variables
+     */
+    this.triggerName = config?.triggerName || null;
+    this.triggerIcon = config?.triggerIcon || null;
+    this.triggerDescription = config?.triggerDescription || null;
+    this.triggerVisuals = config?.triggerVisuals || null;
+
     this.percentage = config?.percentage || 0;
-    this.writeable = writeable;
   }
 
   // ========================================
@@ -536,7 +550,6 @@ export class Step implements IStep<Step> {
    * function (in order to proprely and efficiently rerender)
    */
   shouldGraph = (prevTree: Step | null): boolean => {
-   
     return (
       prevTree == null ||
       JSON.stringify(prevTree.toJSON(false)) !==

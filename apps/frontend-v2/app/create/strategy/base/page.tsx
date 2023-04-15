@@ -8,10 +8,16 @@ import WrappedText from "components/wrappers/text";
  */
 
 import { useBackdropColorChange } from "utilities/hooks/general/useBackdropColorChange";
+import { useStrategyStore } from "utilities/hooks/stores/strategies";
 
 const BaseStepsConfig = () => {
+  // Get the current base step (Should be the root Deposit trigger)
+  const rootStep = useStrategyStore((state) => state.step);
+
   // Set the colors
   useBackdropColorChange("#c44", "#4ea");
+
+  // Return the JSX
   return (
     <div className="flex flex-col items-center justify-between  w-[100%] h-[100%]">
       <ConfigTitle>
@@ -28,6 +34,7 @@ const BaseStepsConfig = () => {
         }}
       >
         <StepsModal
+          root={rootStep}
           wrapperProps={{
             style: {
               width: "100%",

@@ -44,7 +44,9 @@ export const StepsModal = ({
    */
   const { stepsState, canvasDimensions, resizeAll, triggerComparison } =
     useSteps(
-      strategy?.rootStep
+      root
+        ? root
+        : strategy?.rootStep
         ? Step.fromDBStep({
             step: strategy.rootStep.toJSON(),
             context,

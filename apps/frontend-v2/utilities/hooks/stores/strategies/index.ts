@@ -18,6 +18,8 @@ import { YCNetwork, YCToken } from "@yc/yc-models";
 
 // Initiate the DB storage to the strategies store
 import { strategiesLocalStorage } from "./constants";
+import { Step } from "utilities/classes/step";
+import { StepType } from "utilities/classes/step/types";
 
 // Generate the UUId that will represent the strategy
 const startingID = uuid();
@@ -28,7 +30,6 @@ export const useStrategyStore = create<StrategyStore>()(
       /**
        * @State
        */
-
       // UUID of the strategy
       id: startingID,
 
@@ -45,7 +46,16 @@ export const useStrategyStore = create<StrategyStore>()(
       title: null,
 
       // Step of the strategy (tree)
-      step: null,
+      step: new Step({
+        type: StepType.TRIGGER,
+        state: "complete",
+        triggerName: "Deposit",
+        triggerDescription: "When A Vault Deposit Happens",
+        triggerIcon: {
+          dark: "/icons/deposit-light.svg",
+          light: "/icons/deposit-dark.svg",
+        },
+      }),
 
       /**
        * @Methods

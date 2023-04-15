@@ -3,23 +3,17 @@
  */
 
 import { forwardRef } from "react";
-import { CompleteStepSizedProps } from "../../types";
+import { StepProps } from "../../../types";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
-import { CompleteStepOptions } from "../../components/options";
+import { CompleteStepOptions } from "../../../components/options";
 import {
   InflowTokenBundle,
   OutflowTokenBundle,
 } from "components/tokens/bundle/step";
 
-export const MediumCompleteStep = forwardRef<
-  HTMLDivElement,
-  CompleteStepSizedProps
->(
-  (
-    { step, style, triggerComparison, ...props }: CompleteStepSizedProps,
-    ref
-  ) => {
+export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
+  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
     return (
       <div
         className="w-[327px] h-[96px] flex flex-col justify-between px-4 py-4 bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder animate-stepPopup transition duration-200 ease-in-out"

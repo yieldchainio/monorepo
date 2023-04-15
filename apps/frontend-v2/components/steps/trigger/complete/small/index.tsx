@@ -4,19 +4,13 @@
  */
 
 import WrappedImage from "components/wrappers/image";
-import { CompleteStepSizedProps } from "../../types";
+import { StepProps } from "../../../types";
 import WrappedText from "components/wrappers/text";
 import { forwardRef } from "react";
-import { CompleteStepOptions } from "../../components/options";
+import { CompleteStepOptions } from "../../../components/options";
 
-export const SmallCompleteTrigger = forwardRef<
-  HTMLDivElement,
-  CompleteStepSizedProps
->(
-  (
-    { step, style, triggerComparison, ...props }: CompleteStepSizedProps,
-    ref
-  ) => {
+export const SmallCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
+  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
     return (
       <div
         className="w-[246px] h-[56px] flex flex-row items-center justify-between px-2 bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder transition duration-200 ease-in-out animate-stepPopup"

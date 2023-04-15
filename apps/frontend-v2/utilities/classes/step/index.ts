@@ -52,7 +52,24 @@ export class Step implements IStep<Step> {
    * @param id - the string ID of the child to remove
    */
   removeChild = (id: string) => {
+    // Remove the child
     this.children = this.children.filter((child) => child.id !== id);
+    // If the children array is now empty, we add an empty step that is used to add new steps on the frontend (Assuming that we are writable)
+    if (this.children.length === 0 && this.writeable)
+      this.attemptAddEmptyChild();
+  };
+
+  /**
+   * Add an empty child,
+   * used for adding new childs, usually
+   */
+  attemptAddEmptyChild = () => {
+    if (this.children.length === 0 && this.writeable)
+      this.addChild(
+        new Step({
+          state: "empty",
+        })
+      );
   };
 
   /**
@@ -231,6 +248,9 @@ export class Step implements IStep<Step> {
     this.outflows = config?.outflows || [];
     this.writeable = writeable;
     this.children = config?.children || [];
+
+    // Add an empty placeholder child if our length is 0 and we are writeable
+    this.attemptAddEmptyChild();
 
     /**
      * Construct reguler step variables
@@ -578,6 +598,7 @@ export class Step implements IStep<Step> {
         dimensions: this.dimensions,
         inflows: this.inflows.map((token) => token.id),
         outflows: this.outflows.map((token) => token.id),
+        writeable: this.writeable,
         percentage: this.percentage,
         state: this.state,
         children: this.children

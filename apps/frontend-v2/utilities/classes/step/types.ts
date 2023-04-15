@@ -26,7 +26,15 @@ export enum StepType {
   CONDITION = "condition",
 }
 
-export type StepState = "initial" | "complete" | "config";
+/**
+ * Different states of a step.
+ *
+ * 1) Initial - an initial version of the step (i.e, usually to choose the initial config, like Choose Action, Choose Trigger, etc)
+ * 2) Config - After choosing some initial action/whatever, u would usually have some configurations for them
+ * 3) Complete - When a step's configuration is completed
+ * 4) Empty - an empty step. This is usually refering to a component which adds a new child for the parent when they have none.
+ */
+export type StepState = "initial" | "complete" | "config" | "empty";
 
 // The different types of action configs.
 export enum ActionConfigs {
@@ -127,6 +135,7 @@ export interface JSONStep {
   dimensions: Dimensions;
   type: StepType;
   state?: StepState;
+  writeable?: boolean;
 
   // ==REGULER== //
   protocol?: string;

@@ -47,16 +47,19 @@ export const useStrategyStore = create<StrategyStore>()(
       title: null,
 
       // Step of the strategy (tree)
-      step: new Step({
-        type: StepType.TRIGGER,
-        state: "complete",
-        triggerName: "Deposit",
-        triggerDescription: "When A Vault Deposit Happens",
-        triggerIcon: {
-          dark: "/icons/deposit-light.svg",
-          light: "/icons/deposit-dark.svg",
+      step: new Step(
+        {
+          type: StepType.TRIGGER,
+          state: "complete",
+          triggerName: "Deposit",
+          triggerDescription: "When A Vault Deposit Happens",
+          triggerIcon: {
+            dark: "/icons/deposit-light.svg",
+            light: "/icons/deposit-dark.svg",
+          },
         },
-      }),
+        true
+      ),
 
       /**
        * @Methods

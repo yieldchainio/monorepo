@@ -4,12 +4,12 @@
 
 import { Canvas } from "components/canvas";
 import { StepsModalProps } from "./types";
-import { CompleteStep } from "components/steps/complete";
 import { Step } from "utilities/classes/step";
 import { DefaultDimensions, StepSizing } from "utilities/classes/step/types";
 import { useSteps } from "utilities/hooks/yc/useSteps";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useMemo, useState } from "react";
+import { HeadStep } from "components/steps";
 
 export const StepsModal = ({
   style,
@@ -97,7 +97,7 @@ export const StepsModal = ({
       >
         {rootStep?.map<React.ReactNode>((step: Step) => {
           return (
-            <CompleteStep
+            <HeadStep
               step={step}
               style={{
                 left: step.position.x,

@@ -11,14 +11,18 @@ import { useStepOptions } from "utilities/hooks/yc/useSteps/useStepsOptions";
 
 export const CompleteStepOptions = ({
   step,
+  triggerComparison,
   ...props
-}: { step: Step } & BaseComponentProps) => {
+}: { step: Step; triggerComparison: () => void } & BaseComponentProps) => {
   // Get the options to display
   const options = useStepOptions({ step });
 
   // Return the JSX
   return (
-    <TooltipDropdown options={options} handleChoice={(choice: any) => null}>
+    <TooltipDropdown
+      options={options}
+      handleChoice={(choice: any) => triggerComparison()}
+    >
       <DotMenuIcon
         iconClassname="text-custom-textColor text-opacity-30 group-hover:text-opacity-50 transition duration-200 ease-linear"
         className="cursor-pointer group transition duration-200 ease-in-out"

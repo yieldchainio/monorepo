@@ -40,18 +40,6 @@ export const StrategyModal = ({
     state.context.YCstrategies.find((strat) => strat.id === strategyID)
   );
 
-  // Context (passed onto Steps hook)
-  const context = useYCStore((state) => state.context);
-
-  // Use the steps hook to graph them
-  const { stepsState, canvasDimensions } = useSteps(
-    strategy?.rootStep
-      ? Step.fromDBStep({ step: strategy.rootStep.toJSON(), context })
-      : null,
-    strategy,
-    context
-  );
-
   // Head state keeping track of whether the steps are expanded or not
   const [expanded, setExpanded] = useStateEffect<boolean>(false, (state) =>
     setModalHeight(state ? "180vh" : "110vh")
@@ -101,7 +89,7 @@ export const StrategyModal = ({
           <ProfileSection user={strategy?.creator} />
         </div>
         {!expanded && (
-          <div className="w-[80vw] absolute h-[15%] z-1000000000000 bg-gradient-to-t from-custom-bcomponentbg/100 to-custom-bcomponentbg/10  flex flex-row items-end justify-center pb-10 top-[100%] translate-y-[-100%]">
+          <div className="w-[80vw] absolute h-[15%] z-1000000000000 bg-gradient-to-t from-custom-bcomponentbg/100 to-custom-bcomponentbg/10  flex flex-row items-end justify-center pb-10 top-[100%] translate-y-[-100%] z-100">
             {" "}
             <ToggleExpandText
               state={expanded}
@@ -134,8 +122,8 @@ export const StrategyModal = ({
             }}
           >
             <StepsModal
-              rootStep={stepsState?.rootStep}
-              canvasDimensions={canvasDimensions}
+              root={strategy?.rootStep}
+              strategy={strategy}
               style={{
                 background: "none",
                 zIndex: 0,
@@ -164,8 +152,8 @@ export const StrategyModal = ({
                         component: (
                           <ModalWrapper modalKey={id}>
                             <StepsModal
-                              rootStep={stepsState?.rootStep}
-                              canvasDimensions={canvasDimensions}
+                              root={strategy?.rootStep}
+                              strategy={strategy}
                               wrapperProps={{
                                 style: {
                                   width: "80vw",

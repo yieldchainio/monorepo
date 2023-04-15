@@ -8,8 +8,10 @@ import { StepSizing } from "utilities/classes/step/types";
 
 export interface CompleteStepProps extends BaseComponentProps {
   step: Step;
+  triggerComparison: () => void;
 }
 
 export interface CompleteStepSizedProps extends BaseComponentProps {
   step: Step;
+  triggerComparison: () => void;
 }

@@ -253,6 +253,7 @@ export class Step implements IStep<Step> {
       outflows: step.outflows.map((dbtoken: DBToken) => {
         return new YCToken(dbtoken, context);
       }),
+      state: "complete",
       percentage: step.percentage,
       action: context.getAction(step.action),
       function: context.getFunction(step.function),
@@ -418,6 +419,8 @@ export class Step implements IStep<Step> {
      * If positive width is 500, min width is -300 (there are 5 nodes to the right and 3 to the left),
      * end result would be 800 total width (500 - (-300)), so all of them would fit
      */
+    console.log("Finished Graph! Gonna Console Log Positions tree...");
+    this.each((step) => console.log(step.position));
     return [positiveWidth - negativeWidth, positiveHeight - negativeHeight] as [
       number,
       number

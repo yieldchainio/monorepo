@@ -19,7 +19,10 @@ import { YCClassifications, YCStrategy } from "@yc/yc-models";
 export const useSteps = (
   root: Step | null,
   strategy?: YCStrategy,
-  context?: YCClassifications
+  context?: YCClassifications,
+  options?: {
+    stateSetter: () => void;
+  }
 ) => {
   /**
    * The state
@@ -31,7 +34,6 @@ export const useSteps = (
   /**
    * State for canvas sizing
    */
-
   const [canvasDimensions, setCanvasDimensions] = useState<
     undefined | [number, number]
   >();
@@ -39,14 +41,20 @@ export const useSteps = (
   // Keeping track of the previous state for comparison reasons (rerender effiency)
   const prevState = useRef<{ rootStep: Step | null }>({ rootStep: null });
 
-  // Initiating the step if a strategy was provided
+  /**
+   * If a strategy was provided, we initiate the root step to a new Step instance,
+   * using it's root YCStep and the global context.
+   */
   const initiated = useRef<boolean>(false);
   useEffect(() => {
     if (!initiated.current && context && strategy?.rootStep.children.length) {
       initiated.current = true;
+      console.log("Im Running HTe initiation useEffect mister");
       setRootStep(
         Step.fromDBStep({ step: strategy.rootStep.toJSON(), context })
       );
+      triggerComparison();
+      options?.stateSetter?.();
     }
   }, [strategy?.rootStep?.children?.length]);
 

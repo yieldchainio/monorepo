@@ -14,7 +14,6 @@ import {
 
 import { useDraggableCanvas } from "./hooks/useDraggableCanvas";
 import { ChildrenProvider } from "components/internal/render-children";
-import { animated } from "react-spring";
 import { RegulerButton } from "components/buttons/reguler";
 import WrappedImage from "components/wrappers/image";
 import { InfoProvider } from "components/info-providers";

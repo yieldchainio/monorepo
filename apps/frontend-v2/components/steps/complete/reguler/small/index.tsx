@@ -16,7 +16,7 @@ import { CompleteStepOptions } from "../../components/options";
 export const SmallCompleteStep = forwardRef<
   HTMLDivElement,
   CompleteStepSizedProps
->(({ step, style, ...props }: CompleteStepSizedProps, ref) => {
+>(({ step, style, triggerComparison, ...props }: CompleteStepSizedProps, ref) => {
   /**
    * Memoizing for performance
    */
@@ -53,7 +53,7 @@ export const SmallCompleteStep = forwardRef<
           {outflowsComponent}
         </div>
       </div>
-      <CompleteStepOptions step={step} onClick={props.onClick} />
+      <CompleteStepOptions step={step} onClick={props.onClick} triggerComparison={triggerComparison} />
     </div>
   );
 });

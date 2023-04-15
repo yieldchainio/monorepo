@@ -25,7 +25,7 @@ export enum StepType {
   CONDITION = "condition",
 }
 
-export type StepState = "initial" | "complete" | ActionConfigs;
+export type StepState = "initial" | "complete" | "config";
 
 // The different types of action configs.
 export enum ActionConfigs {

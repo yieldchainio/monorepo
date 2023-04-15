@@ -2,13 +2,17 @@
  * types for the steps modal
  */
 
+import { YCClassifications, YCStep, YCStrategy } from "@yc/yc-models";
 import { CanvasProps } from "components/canvas/types";
 import { BaseComponentProps } from "components/types";
 import { Step } from "utilities/classes/step";
 
-
-export interface StepsModalProps extends CanvasProps {
-    canvasDimensions?: [number, number];
-    rootStep?: Step | null
-    wrapperProps?: BaseComponentProps
+// What the useSteps props expect
+export interface useStepsProps {
+  root?: YCStep | null;
+  strategy?: YCStrategy;
+  context?: YCClassifications;
+}
+export interface StepsModalProps extends CanvasProps, useStepsProps {
+  wrapperProps?: BaseComponentProps;
 }

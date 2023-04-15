@@ -11,16 +11,16 @@ import { MediumCompleteStep } from "./reguler/medium";
 import { forwardRef } from "react";
 
 export const CompleteStep = forwardRef<HTMLDivElement, CompleteStepProps>(
-  ({ step, ...props }: CompleteStepProps, ref) => {
+  ({ step, triggerComparison, ...props }: CompleteStepProps, ref) => {
     /**
      * Switch case to return corresponding step depending on size
      */
     switch (step.size) {
       case StepSizing.SMALL:
-        return <SmallCompleteStep step={step} ref={ref} {...props} />;
+        return <SmallCompleteStep step={step} ref={ref} {...props} triggerComparison={triggerComparison} />;
 
       case StepSizing.MEDIUM:
-        return <MediumCompleteStep step={step} ref={ref} {...props} />;
+        return <MediumCompleteStep step={step} ref={ref} {...props} triggerComparison={triggerComparison} />;
     }
   }
 );

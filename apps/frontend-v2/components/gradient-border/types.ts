@@ -20,6 +20,8 @@ export interface GradientBorderProps extends BaseComponentProps {
   height?: string;
   borderRadius?: string;
   childrenContainerStyle?: CSSProperties;
+  childrenContainerClassname?: string;
   borderWidth?: string;
   globalClassname?: string;
+  dashed?: boolean;
 }

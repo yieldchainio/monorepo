@@ -3,6 +3,7 @@
  * allowing transparent background
  */
 
+import { DashedGradientBorder } from "./dashed";
 import { GradientBorderProps } from "./types";
 
 export const GradientBorder = ({
@@ -17,8 +18,27 @@ export const GradientBorder = ({
   borderWidth = "3px",
   className,
   globalClassname,
+  childrenContainerClassname,
+  dashed = false,
   children,
 }: GradientBorderProps) => {
+  if (dashed)
+    return (
+      <DashedGradientBorder
+        heavyColor={heavyColor}
+        lightColor={lightColor}
+        borderRadius={borderRadius}
+        gradientDegree={gradientDegree}
+        style={style}
+        width={width}
+        height={height}
+        childrenContainerStyle={childrenContainerStyle}
+        borderWidth={borderWidth}
+        className={className}
+        globalClassname={globalClassname}
+        children={children}
+      />
+    );
   return (
     <div
       className={

@@ -87,6 +87,13 @@ html {
   --text: var(--light-mode-text);
   --off: var(--light-turnedoff-text);
   --offhover: var(--light-turnedoff-text-hover);
+
+  --yc-lb: rgba(0, 178, 236, 1);
+  --yc-yellow: rgba(217, 202, 15, 1);
+
+  --yc-llb: rgb(104, 218, 255);
+  --yc-ly: rgb(254, 244, 100);
+
   --gradient: linear-gradient(
     90deg,
     rgb(0, 178, 236) 0%,

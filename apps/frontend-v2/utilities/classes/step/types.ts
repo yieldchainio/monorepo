@@ -121,7 +121,6 @@ export interface IStep<T extends IStep<T>>
   outflows?: YCToken[];
 
   children?: T[];
-  parent?: T | null;
   percentage?: number;
 }
 
@@ -131,6 +130,7 @@ export interface JSONStep {
   inflows: string[];
   outflows: string[];
   children: JSONStep[];
+  parent?: JSONStep | null;
   size: StepSizing;
   dimensions: Dimensions;
   type: StepType;

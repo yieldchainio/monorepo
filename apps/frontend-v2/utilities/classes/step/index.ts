@@ -44,8 +44,9 @@ export class Step implements IStep<Step> {
    * @param child - A Step instance
    */
   addChild = (child: Step) => {
+    this.removeEmptyChildren();
     this.children = [...this.children, child];
-    if (this.children.length > 0) this.removeEmptyChildren();
+    child.parent = this;
   };
 
   /**
@@ -279,6 +280,8 @@ export class Step implements IStep<Step> {
     this.triggerVisuals = config?.triggerVisuals || null;
 
     this.percentage = config?.percentage || 0;
+
+    for (const child of this.children) child.parent = this;
   }
 
   // ========================================
@@ -354,7 +357,9 @@ export class Step implements IStep<Step> {
       protocol: step.protocol ? context.getProtocol(step.protocol) : null,
       customArguments: step.customArguments,
     };
-    return new Step(config);
+    const resStep = new Step(config);
+    for (const child of resStep.children) child.parent = resStep;
+    return resStep;
   };
 
   // ========================
@@ -498,6 +503,7 @@ export class Step implements IStep<Step> {
   //     TREE FIELDS
   // ===================
   children: Step[];
+  parent: Step | null = null;
 
   // ===================
   //    TREE METHODS
@@ -597,7 +603,7 @@ export class Step implements IStep<Step> {
    * @default true
    */
 
-  toJSON = (onlyCompleted: boolean = true): JSONStep | null => {
+  toJSON = (onlyCompleted: boolean = false): JSONStep | null => {
     if ((this.state === "complete" && onlyCompleted) || !onlyCompleted)
       return {
         id: this.id,

@@ -17,7 +17,7 @@ export const IncrementalProgressBar = ({
   return (
     <div
       className={
-        "flex flex-row gap-1 items-center justify-center transition duration-200 ease-in-out" +
+        "flex flex-row gap-1.5 items-center justify-center transition duration-200 ease-in-out" +
         " " +
         (className || "")
       }
@@ -53,7 +53,7 @@ const ProgressStep = ({
    */
   const className = useMemo(() => {
     if (step.state === "not_complete") return "bg-custom-dimmed";
-    if (step.state === "active") return color + " " + "scale-[1.05]";
+    if (step.state === "active") return color + " " + "scale-[1.25]";
     return color;
   }, [color, step.state]);
   return (

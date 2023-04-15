@@ -9,7 +9,7 @@ import { Step } from "utilities/classes/step";
 import { DefaultDimensions, StepSizing } from "utilities/classes/step/types";
 import { useSteps } from "utilities/hooks/yc/useSteps";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 export const StepsModal = ({
   style,
@@ -19,6 +19,7 @@ export const StepsModal = ({
   wrapperProps,
   strategy,
   options,
+  root,
   ...props
 }: StepsModalProps) => {
   /**
@@ -67,7 +68,7 @@ export const StepsModal = ({
 
   // Root step (memoized)
   const rootStep = useMemo(() => {
-    console.log("Returning This Rootstep from memo: ", stepsState.rootStep)
+    console.log("Returning This Rootstep from memo: ", stepsState.rootStep);
     return stepsState.rootStep;
   }, [
     // stepsState,

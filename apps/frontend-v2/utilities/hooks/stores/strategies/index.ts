@@ -28,6 +28,7 @@ export const useStrategyStore = create<StrategyStore>()(
       /**
        * @State
        */
+
       // UUID of the strategy
       id: startingID,
 
@@ -131,8 +132,8 @@ export const useStrategyStore = create<StrategyStore>()(
           route: "/privacy",
           progressStep: {
             image: {
-              dark: "privacy-light.svg",
-              light: "privacy-dark.svg",
+              dark: "/icons/privacy-light.svg",
+              light: "/icons/privacy-dark.svg",
             },
             label: "Choose Privacy",
             state: "not_complete",
@@ -145,7 +146,10 @@ export const useStrategyStore = create<StrategyStore>()(
         {
           route: "/base",
           progressStep: {
-            image: "",
+            image: {
+              dark: "/icons/seed-light.svg",
+              light: "/icons/seed-dark.svg",
+            },
             label: "Assemble Base Steps",
             state: "not_complete",
           },

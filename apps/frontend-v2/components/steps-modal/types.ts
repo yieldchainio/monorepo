@@ -10,7 +10,7 @@ import { useStepsOptions } from "utilities/hooks/yc/useSteps/types";
 
 // What the useSteps props expect
 export interface useStepsProps {
-  root?: YCStep | null;
+  root?: Step | null;
   strategy?: YCStrategy;
   context?: YCClassifications;
 }

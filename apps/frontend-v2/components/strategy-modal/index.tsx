@@ -123,7 +123,6 @@ export const StrategyModal = ({
             }}
           >
             <StepsModal
-              root={strategy?.rootStep}
               strategy={strategy}
               options={{
                 initialSize: StepSizing.SMALL,
@@ -156,7 +155,6 @@ export const StrategyModal = ({
                         component: (
                           <ModalWrapper modalKey={id}>
                             <StepsModal
-                              root={strategy?.rootStep}
                               strategy={strategy}
                               wrapperProps={{
                                 style: {

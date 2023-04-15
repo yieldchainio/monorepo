@@ -67,16 +67,13 @@ export const StepsModal = ({
 
   // Root step (memoized)
   const rootStep = useMemo(() => {
+    console.log("Returning This Rootstep from memo: ", stepsState.rootStep)
     return stepsState.rootStep;
   }, [
-    stepsState,
+    // stepsState,
     stepsState.rootStep,
-    JSON.stringify(stepsState.rootStep?.toJSON()),
+    // JSON.stringify(stepsState.rootStep?.toJSON()),
   ]);
-
-  useEffect(() => {
-    triggerComparison();
-  }, []);
 
   return (
     <div

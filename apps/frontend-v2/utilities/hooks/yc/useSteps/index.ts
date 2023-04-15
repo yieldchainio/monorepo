@@ -44,20 +44,24 @@ export const useSteps = (
   /**
    * If a strategy was provided, we initiate the root step to a new Step instance,
    * using it's root YCStep and the global context.
+   *
+   * Otherwise, we set initiated to true (if a root step is already existant)
    */
   const initiated = useRef<boolean>(false);
   useEffect(() => {
-    if (!initiated.current && context && strategy?.rootStep.children.length) {
+    if (!stepsState.rootStep) {
+      if (context && strategy?.rootStep.children.length) {
+        setRootStep(
+          Step.fromDBStep({
+            step: strategy.rootStep.toJSON(),
+            context,
+            iStepConfigs: { size: options.initialSize },
+          })
+        );
+        initiated.current = true;
+      }
+    } else {
       initiated.current = true;
-      setRootStep(
-        Step.fromDBStep({
-          step: strategy.rootStep.toJSON(),
-          context,
-          iStepConfigs: { size: options.initialSize },
-        })
-      );
-      triggerComparison();
-      options?.stateSetter?.();
     }
   }, [strategy?.rootStep?.children?.length]);
 

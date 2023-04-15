@@ -5,7 +5,7 @@
  */
 
 import { Step } from "utilities/classes/step";
-import { UseStepsActions } from "./types";
+import { UseStepsActions, useStepsOptions } from "./types";
 import { Dimensions, StepSizing } from "utilities/classes/step/types";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { useStepsReducer } from "./reducer";
@@ -20,8 +20,8 @@ export const useSteps = (
   root: Step | null,
   strategy?: YCStrategy,
   context?: YCClassifications,
-  options?: {
-    stateSetter: () => void;
+  options: useStepsOptions = {
+    initialSize: StepSizing.MEDIUM,
   }
 ) => {
   /**
@@ -49,9 +49,12 @@ export const useSteps = (
   useEffect(() => {
     if (!initiated.current && context && strategy?.rootStep.children.length) {
       initiated.current = true;
-      console.log("Im Running HTe initiation useEffect mister");
       setRootStep(
-        Step.fromDBStep({ step: strategy.rootStep.toJSON(), context })
+        Step.fromDBStep({
+          step: strategy.rootStep.toJSON(),
+          context,
+          iStepConfigs: { size: options.initialSize },
+        })
       );
       triggerComparison();
       options?.stateSetter?.();
@@ -63,13 +66,14 @@ export const useSteps = (
    * Also, sets the canvas dimensions (the function's return value)
    */
   useEffect(() => {
-    console.log("UseEffect Should graph rerender");
     if (stepsState.rootStep) {
-      console.log("Gonna Run Graph");
-      setCanvasDimensions(stepsState.rootStep.graph(StepSizing.SMALL));
+      populatePositions;
+      setCanvasDimensions(
+        stepsState.rootStep.graph(
+          stepsState.rootStep.size || options.initialSize || StepSizing.SMALL
+        )
+      );
       triggerComparison();
-    } else {
-      console.log("Step state root step is undefined!", stepsState.rootStep);
     }
   }, [JSON.stringify(stepsState.rootStep?.toJSON(false))]);
 

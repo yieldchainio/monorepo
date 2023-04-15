@@ -222,6 +222,7 @@ export class Step implements IStep<Step> {
     this.id = config?.id || uuid();
     this.state = config?.state || "initial";
     this.size = config?.size || StepSizing.MEDIUM;
+
     this.dimensions = DefaultDimensions[this.size];
     this.type = config?.type || StepType.STEP;
     this.actionConfig = config?.actionConfig || null;
@@ -265,6 +266,7 @@ export class Step implements IStep<Step> {
           iStepConfigs: iStepConfigs,
         })
       ),
+      size: iStepConfigs?.size,
     };
     return new Step(stepConfig);
   };
@@ -420,8 +422,6 @@ export class Step implements IStep<Step> {
      * If positive width is 500, min width is -300 (there are 5 nodes to the right and 3 to the left),
      * end result would be 800 total width (500 - (-300)), so all of them would fit
      */
-    console.log("Finished Graph! Gonna Console Log Positions tree...");
-    this.each((step) => console.log(step.position));
     return [positiveWidth - negativeWidth, positiveHeight - negativeHeight] as [
       number,
       number
@@ -536,12 +536,7 @@ export class Step implements IStep<Step> {
    * function (in order to proprely and efficiently rerender)
    */
   shouldGraph = (prevTree: Step | null): boolean => {
-    console.log("Runnign Should Graph");
-    const prevString = JSON.stringify(prevTree?.toJSON(false));
-    const currString = JSON.stringify(this.toJSON(false));
-    console.log("Prev String", prevString);
-    console.log("Current String", currString);
-    console.log("Are Equal: ", prevString === currString);
+   
     return (
       prevTree == null ||
       JSON.stringify(prevTree.toJSON(false)) !==

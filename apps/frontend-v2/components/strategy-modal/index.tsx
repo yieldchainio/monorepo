@@ -20,6 +20,7 @@ import { ToggleExpandText } from "./components/utility/toggleExpand";
 import { useStateEffect } from "utilities/hooks/general/useStateEffect";
 import WrappedImage from "components/wrappers/image";
 import { useModals } from "utilities/hooks/stores/modal";
+import { StepSizing } from "utilities/classes/step/types";
 
 /**
  * @param strategyID - The ID of the strategy to display
@@ -124,6 +125,9 @@ export const StrategyModal = ({
             <StepsModal
               root={strategy?.rootStep}
               strategy={strategy}
+              options={{
+                initialSize: StepSizing.SMALL,
+              }}
               style={{
                 background: "none",
                 zIndex: 0,

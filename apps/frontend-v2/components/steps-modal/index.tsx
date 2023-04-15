@@ -9,7 +9,7 @@ import { Step } from "utilities/classes/step";
 import { DefaultDimensions, StepSizing } from "utilities/classes/step/types";
 import { useSteps } from "utilities/hooks/yc/useSteps";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export const StepsModal = ({
   style,
@@ -18,6 +18,7 @@ export const StepsModal = ({
   utilityButtons,
   wrapperProps,
   strategy,
+  options,
   ...props
 }: StepsModalProps) => {
   /**
@@ -43,12 +44,17 @@ export const StepsModal = ({
   const { stepsState, canvasDimensions, resizeAll, triggerComparison } =
     useSteps(
       strategy?.rootStep
-        ? Step.fromDBStep({ step: strategy.rootStep.toJSON(), context })
+        ? Step.fromDBStep({
+            step: strategy.rootStep.toJSON(),
+            context,
+            iStepConfigs: { size: options?.initialSize },
+          })
         : null,
       strategy,
       context,
       {
         stateSetter: () => setDummyState(!dummyState),
+        ...(options || {}),
       }
     );
   // Handler for resizing the nodes based on zoom
@@ -59,6 +65,18 @@ export const StepsModal = ({
       resizeAll(StepSizing.SMALL, DefaultDimensions[StepSizing.SMALL], false);
   };
 
+  // Root step (memoized)
+  const rootStep = useMemo(() => {
+    return stepsState.rootStep;
+  }, [
+    stepsState,
+    stepsState.rootStep,
+    JSON.stringify(stepsState.rootStep?.toJSON()),
+  ]);
+
+  useEffect(() => {
+    triggerComparison();
+  }, []);
 
   return (
     <div
@@ -77,7 +95,7 @@ export const StepsModal = ({
           zoom: handleZoom,
         }}
       >
-        {stepsState.rootStep?.map<React.ReactNode>((step: Step) => {
+        {rootStep?.map<React.ReactNode>((step: Step) => {
           return (
             <CompleteStep
               step={step}

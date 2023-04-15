@@ -39,3 +39,8 @@ export type UseStepsActionsPayloads =
       dimensions?: Dimensions | null;
       forceResize?: boolean;
     };
+
+export interface useStepsOptions {
+  stateSetter?: () => void;
+  initialSize?: StepSizing;
+}

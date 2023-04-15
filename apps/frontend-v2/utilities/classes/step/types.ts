@@ -37,8 +37,8 @@ export enum ActionConfigs {
 
 // The different sizing for nodes
 export enum StepSizing {
-  SMALL,
-  MEDIUM,
+  SMALL = "small",
+  MEDIUM = "medium",
 }
 
 // Dimensions (Width, height)
@@ -82,7 +82,7 @@ export interface IStepOnlyFE<T extends IStep<T>> {
   state?: StepState;
   actionConfig?: ActionConfigs | null;
   size?: StepSizing;
-  type?: StepType
+  type?: StepType;
 }
 
 // An interface for all of the step data (which the class implements)

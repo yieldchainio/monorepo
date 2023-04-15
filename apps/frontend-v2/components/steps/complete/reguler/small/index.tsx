@@ -11,10 +11,6 @@ import {
   OutflowTokenBundle,
 } from "components/tokens/bundle/step";
 import { forwardRef, useMemo } from "react";
-import { DotMenuIcon } from "components/icons/dot-menu";
-import { TooltipDropdown } from "components/tooltip-dropdown";
-import { data } from "@yc/yc-models";
-import { useStepOptions } from "utilities/hooks/yc/useSteps/useStepsOptions";
 import { CompleteStepOptions } from "../../components/options";
 
 export const SmallCompleteStep = forwardRef<

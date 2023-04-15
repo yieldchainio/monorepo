@@ -16,11 +16,12 @@ export const StepsModal = ({
   parentStyle,
   utilityButtons,
   wrapperProps,
-  
+
   ...props
 }: StepsModalProps) => {
   // Handler for resizing the nodes based on zoom
   const handleZoom = (zoom: number) => {
+    console.log("Running handle zoom... Zoom:", zoom);
     if (zoom > 1.1)
       rootStep?.resizeAll(
         StepSizing.MEDIUM,

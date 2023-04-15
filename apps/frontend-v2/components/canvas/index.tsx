@@ -100,6 +100,7 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
         {
           zoom: (_zoom: number) => {
             setZoom(_zoom < 1 ? 0.99 : _zoom > 1.5 ? 1.501 : _zoom);
+            setters?.zoom?.(_zoom)
           },
         }
       );

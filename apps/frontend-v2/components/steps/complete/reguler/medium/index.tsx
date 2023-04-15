@@ -3,7 +3,7 @@
  */
 
 import { forwardRef } from "react";
-import { CompleteStepProps, CompleteStepSizedProps } from "../../types";
+import { CompleteStepSizedProps } from "../../types";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 import { CompleteStepOptions } from "../../components/options";

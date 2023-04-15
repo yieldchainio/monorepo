@@ -134,7 +134,11 @@ export class YCArgument extends BaseClass {
   };
 
   // Encode the argument
-  encode = (): bytes => {
+  encode = (customValue?: any): bytes => {
+    // Assert that if we are a custom argument, a custom value mut be provided
+    if (this.isCustom() && customValue === undefined)
+      throw "YCArgument ERR: This Argument Is A Custom, but no custom value was provided.";
+
     let encodedValue: bytes = "0x";
     if (Array.isArray(this.#value)) {
     }

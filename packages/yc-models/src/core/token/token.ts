@@ -113,7 +113,9 @@ export class YCToken extends BaseClass {
     if (!singleQuote)
       throw new Error(
         "YCToken ERR: Cannot Get USD Price (Quote Failed!). Token ID: " +
-          this.id
+          this.id +
+          "Quote: " +
+          singleQuote
       );
     return singleQuote * this.formatDecimals(_amount);
   };
@@ -145,7 +147,7 @@ export class YCToken extends BaseClass {
   ): Promise<EthersTransactionResponse> => {
     // Assert the chain ID to match ours
     if (signer instanceof EthersExecutor)
-      this.network?.assertSameid(
+      this.network?.assertSameChainId(
         (await signer.provider?.getNetwork())?.chainId
       );
 

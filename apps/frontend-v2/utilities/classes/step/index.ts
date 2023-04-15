@@ -45,6 +45,7 @@ export class Step implements IStep<Step> {
    */
   addChild = (child: Step) => {
     this.children = [...this.children, child];
+    if (this.children.length > 0) this.removeEmptyChildren();
   };
 
   /**
@@ -70,6 +71,14 @@ export class Step implements IStep<Step> {
           state: "empty",
         })
       );
+  };
+
+  /**
+   * Removes all "empty" childs. Used when new children are added, to remove the empty child-adder
+   * placeholders
+   */
+  removeEmptyChildren = () => {
+    this.children = this.children.filter((child) => child.state !== "empty");
   };
 
   /**

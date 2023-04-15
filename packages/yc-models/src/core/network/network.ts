@@ -150,7 +150,7 @@ export class YCNetwork extends BaseClass {
   // ============================
   //      ERRORS / ASSERTIONS
   // ============================
-  assertSameid = (id?: bigint | SignerMethod): void => {
+  assertSameChainId = (id?: bigint | SignerMethod): void => {
     if (!id || id !== BigInt(this.id || 0))
       throw new Error(
         "YCNetwork ERR: Inputted Chain ID does not match network's. Expected Chain ID: " +
@@ -160,9 +160,9 @@ export class YCNetwork extends BaseClass {
       );
   };
 
-  assertSignerid = async (signer?: SignerMethod): Promise<void> => {
+  assertSignerChainID = async (signer?: SignerMethod): Promise<void> => {
     if (signer instanceof EthersExecutor)
-      this.assertSameid((await signer?.provider?.getNetwork())?.chainId);
+      this.assertSameChainId((await signer?.provider?.getNetwork())?.chainId);
   };
 
   // =================
@@ -183,4 +183,19 @@ export class YCNetwork extends BaseClass {
   };
 
   static instances: Map<number, YCNetwork> = new Map();
+
+  // =======================
+  //    UTILITY METHODS
+  // =======================
+  toJSON = (): DBNetwork => {
+    return {
+      id: this.id,
+      name: this.name,
+      json_rpc: this.jsonRpc || "",
+      logo: this.logo,
+      color: this.color || "",
+      block_explorer: this.blockExplorer,
+      diamond_address: this.diamondAddress,
+    };
+  };
 }

@@ -3,7 +3,6 @@ import { YCClassifications } from "../context/context";
 import { YCAddress } from "../address/address";
 import { YCArgument } from "../argument/argument";
 import { YCFlow } from "../flow/flow";
-import { YCStep } from "../step/step";
 import { FunctionCall, CallTypes } from "../../types/yc";
 import { CallType, VariableTypes, BaseVariableTypes } from "@prisma/client";
 import { BaseClass } from "../base";
@@ -122,7 +121,7 @@ export class YCFunc extends BaseClass {
   // =========================
 
   // Encode the current function as a FunctionCall struct, add flag
-  encode = (_step?: YCStep): string => {
+  encode = (customArguments?: any[]): string => {
     if (!this.address)
       throw new Error(
         "YCFunc ERR: Cannot Encode - Address Not Found. Function ID: " + this.id
@@ -132,7 +131,7 @@ export class YCFunc extends BaseClass {
     let iface = this.address.interface;
 
     // FunctionCall struct that will be ncoded
-    let functionCall: FunctionCall = this.FunctionCallStruct(_step);
+    let functionCall: FunctionCall = this.toFunctionCallStruct(customArguments);
 
     // Encode the function call
     let encodedFunction = iface
@@ -152,24 +151,44 @@ export class YCFunc extends BaseClass {
     return encodedWithFlags;
   };
 
-  // Return a FunctionCall struct
-  FunctionCallStruct = (_step?: YCStep): FunctionCall => {
-    // If the function requires custom arguments, then we must receive a step instance
-    if (this.requiresCustom() && !_step) {
+  /**
+   * @method toFunctionCallStructs
+   * @param customArguments - Custom arguments that should be provided if the function requires any.
+   * @returns A @interface FunctionCall that represents an on-chain FunctionCall struct.
+   */
+  toFunctionCallStruct = (customArguments?: any[]): FunctionCall => {
+    // Assert that if we require a custom argument,
+    if (
+      this.requiresCustom() &&
+      (!customArguments || !customArguments.length)
+    ) {
       throw new Error(
         "YCFunc ERR: Cannot Create FunctionCall - Function requires custom argument(s), but no step was provided"
       );
     }
+
+    // Assert that we must have an address set
     if (!this.address)
       throw new Error(
         "YCFuncERR: Cannot Create FunctionCall - Function Does Not Have An Address."
       );
     let struct: FunctionCall = {
+      // The target address (our address, tells the onchain interpreter where to call the function)
       target_address: this.address.address,
-      args: this.arguments.map((arg: YCArgument) => arg.encode()),
+
+      // Our arguments. If an argument is not a custom, we encode it. Otherwise, we encode it but
+      // input the next custom argument from our array (we shift is so that it is removed)
+      args: this.arguments.map((arg: YCArgument) =>
+        arg.isCustom() ? arg.encode(customArguments?.shift()) : arg.encode()
+      ),
+
+      // Our signature (i.e "stakeTokens(uint256,address,string)")
       signature: this.signature,
+
+      // Whether we are a callback function or not (one that requires offchain computation & reenterence)
       is_callback: this.isCallback,
     };
+
     return struct;
   };
 
@@ -178,6 +197,12 @@ export class YCFunc extends BaseClass {
     return this.arguments.some((arg: YCArgument) => arg.isCustom());
   };
 
+  // Returns the amount of custom arguments required
+  customArgumentsLength = (): number => {
+    return this.arguments.filter((arg: YCArgument) => arg.isCustom()).length;
+  };
+
+  // The flag of the return type of this function
   returnFlag = () => {
     return this.returnType;
   };

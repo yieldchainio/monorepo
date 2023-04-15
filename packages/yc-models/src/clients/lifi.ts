@@ -31,7 +31,7 @@ export class LiFi {
 
   // Get full token info
   tokenInfo = async (_token: YCToken): Promise<TokenInfo | null> => {
-    let chainid = _token.network?.chainid;
+    let chainid = _token.network?.id;
     if (!chainid) return null;
     return await (
       await axios.get(
@@ -57,8 +57,8 @@ export class LiFi {
     _receiver?: string,
     _currentTry: number = 0
   ): Promise<FullQuoteResponse | null> => {
-    let fromChainId = _fromToken.network?.chainid;
-    let toChainId = _toToken.network?.chainid;
+    let fromChainId = _fromToken.network?.id;
+    let toChainId = _toToken.network?.id;
     if (!fromChainId || !toChainId) return null;
 
     let quote: FullQuoteResponse | null = null;

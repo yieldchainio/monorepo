@@ -255,11 +255,13 @@ const StrategyDraftRow = ({
         ]}
         items={[draft]}
       />
-      <InfoProvider contents="Use This Draft">
-        <RegulerButton className="ml-auto" onClick={chooseSelf}>
-          Choose
-        </RegulerButton>
-      </InfoProvider>
+      {deleteAble && (
+        <InfoProvider contents="Use This Draft">
+          <RegulerButton className="ml-auto" onClick={chooseSelf}>
+            Edit
+          </RegulerButton>
+        </InfoProvider>
+      )}
     </div>
   );
 };

@@ -72,7 +72,7 @@ export interface JSONStrategyStoreState {
   title: string | null;
 
   // Steps of the strategy (Tree)
-  step: JSONStep | null;
+  step: JSONStep;
 
   // The configs stuff (for UX purposes)
   strategyConfigs: configProgressStep[];

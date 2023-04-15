@@ -295,9 +295,10 @@ export class Step implements IStep<Step> {
     step: JSONStep;
     context: YCClassifications;
   }): Step => {
-    const config = {
+    if (!step) return new Step();
+    const config: IStep<Step> = {
+      ...step,
       id: step.id,
-      protocol: step.protocol ? context.getProtocol(step.protocol) : null,
       inflows: step.inflows
         ? step.inflows.flatMap((dbtoken: string) => {
             const token = context.getToken(dbtoken);
@@ -310,15 +311,19 @@ export class Step implements IStep<Step> {
             return token ? [token] : [];
           })
         : [],
-      percentage: step.percentage,
-      action: step.action ? context.getAction(step.action) : null,
-      function: step.function ? context.getFunction(step.function) : null,
       children: step.children.map((child: JSONStep) =>
         Step.fromJSONStep({
           step: child,
           context: context,
         })
       ),
+      type: step.type,
+      size: step.size,
+      percentage: step.percentage,
+      action: step.action ? context.getAction(step.action) : null,
+      function: step.function ? context.getFunction(step.function) : null,
+      protocol: step.protocol ? context.getProtocol(step.protocol) : null,
+      customArguments: step.customArguments,
     };
     return new Step(config);
   };
@@ -584,6 +589,11 @@ export class Step implements IStep<Step> {
             if (jsonChild !== null) return [jsonChild];
             return [];
           }),
+        type: this.type,
+        triggerName: this.triggerName,
+        triggerDescription: this.triggerDescription,
+        triggerVisuals: this.triggerVisuals,
+        triggerIcon: this.triggerIcon,
         // customArguments: this.customArguments.map((arg) => arg.) // TODO
       };
 

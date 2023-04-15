@@ -118,16 +118,29 @@ export interface IStep<T extends IStep<T>>
 }
 
 export interface JSONStep {
+  // ==GLOBAL== //
   id: string;
-  protocol?: string;
   inflows: string[];
   outflows: string[];
+  children: JSONStep[];
+  size: StepSizing;
+  dimensions: Dimensions;
+  type: StepType;
+  state?: StepState;
+
+  // ==REGULER== //
+  protocol?: string;
   action?: string;
   function?: string;
   customArguments?: any[];
-  children: JSONStep[];
+  actionConfig?: ActionConfigs | null;
+
+  // ==TRIGGER== //
+  triggerName?: string | null;
+  triggerDescription?: string | null;
+  triggerIcon?: ImageSrc;
+  data?: any | null;
+  triggerVisuals?: React.ReactNode;
+
   percentage: number;
-  size: StepSizing;
-  dimensions: Dimensions;
-  state: StepState;
 }

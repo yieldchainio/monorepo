@@ -57,10 +57,7 @@ export const deseriallizeStrategyStore = (
       ? new YCNetwork(jsonStore.network, context)
       : null,
     title: jsonStore.title,
-    step:
-      jsonStore.step == null
-        ? null
-        : Step.fromJSONStep({ step: jsonStore.step, context: context }),
+    step: Step.fromJSONStep({ step: jsonStore.step, context: context }),
 
     strategyConfigs: useStrategyStore
       .getState()

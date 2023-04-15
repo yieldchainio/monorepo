@@ -30,6 +30,7 @@ export const useStrategyStore = create<StrategyStore>()(
       /**
        * @State
        */
+
       // UUID of the strategy
       id: startingID,
 
@@ -90,7 +91,6 @@ export const useStrategyStore = create<StrategyStore>()(
       // Set the network
       setNetwork: (network: YCNetwork) => {
         set({ network });
-        console.log("Strategy Store", get());
       },
 
       /**
@@ -190,23 +190,10 @@ export const useStrategyStore = create<StrategyStore>()(
         set({ strategyConfigs: arr });
       },
     }),
-
     {
       // Saved under this UUID as the key
       name: startingID,
       storage: createJSONStorage(() => strategiesLocalStorage),
-
-      partialize: (state) => {
-        return {
-          id: state.id,
-          isPublic: state.isPublic,
-          depositToken: state.depositToken,
-          network: state.network,
-          title: state.title,
-          step: state.step,
-          strategyConfigs: state.strategyConfigs,
-        };
-      },
     }
   )
 );

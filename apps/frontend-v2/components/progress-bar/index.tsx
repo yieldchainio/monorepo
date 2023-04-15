@@ -26,9 +26,13 @@ export const IncrementalProgressBar = ({
       {steps.map((step, i) => {
         return (
           <>
-            {<ProgressStep color={color} step={step.progressStep} />}
+            {<ProgressStep color={color} step={step.progressStep} key={i} />}
             {i !== steps.length - 1 ? (
-              <ProgressStepLine color={color} state={step.progressStep.state} />
+              <ProgressStepLine
+                color={color}
+                state={step.progressStep.state}
+                key={`${i}_line`}
+              />
             ) : null}
           </>
         );

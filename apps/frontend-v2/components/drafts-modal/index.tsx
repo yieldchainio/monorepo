@@ -65,12 +65,12 @@ export const StrategiesDraftsModal = ({
         Your Drafts
       </WrappedText>
       <div className="w-full">
-        {strategyDrafts.map((draft) => (
+        {drafts.map((draft) => (
           <StrategyDraftRow
             draft={draft}
             removeSelf={async () => {
               await strategiesLocalStorage.removeItem(draft.id);
-              setDrafts(drafts.filter((_draft) => _draft.id !== draft.id));
+              setDrafts([...drafts.filter((_draft) => _draft.id !== draft.id)]);
             }}
             chooseSelf={() => {
               loadStrategy(draft);

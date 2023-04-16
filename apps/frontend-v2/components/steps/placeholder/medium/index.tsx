@@ -25,10 +25,13 @@ export const EmptyMediumStep = forwardRef<HTMLDivElement, StepProps>(
         globalClassname="group bg-custom-dimmed bg-opacity-0 hover:bg-opacity-30 transition duration-200"
         onClick={() => {
           step.parent?.addChild(
-            new Step({
-              type: StepType.STEP,
-              state: "complete",
-            })
+            new Step(
+              {
+                type: StepType.STEP,
+                state: "initial",
+              },
+              true
+            )
           );
 
           triggerComparison();

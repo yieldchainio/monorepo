@@ -9,7 +9,7 @@ import { BaseComponentProps } from "components/types";
 import { Step } from "utilities/classes/step";
 import { useStepOptions } from "utilities/hooks/yc/useSteps/useStepsOptions";
 
-export const CompleteStepOptions = ({
+export const StepOptions = ({
   step,
   triggerComparison,
   ...props

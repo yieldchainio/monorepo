@@ -119,6 +119,7 @@ export interface IStep<T extends IStep<T>>
   id?: string;
   inflows?: YCToken[];
   outflows?: YCToken[];
+  writeable?: boolean;
 
   children?: T[];
   percentage?: number;

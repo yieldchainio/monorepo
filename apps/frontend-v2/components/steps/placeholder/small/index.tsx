@@ -29,7 +29,7 @@ export const EmptySmallStep = forwardRef<HTMLDivElement, StepProps>(
           step.parent?.addChild(
             new Step({
               type: StepType.STEP,
-              state: "complete",
+              state: "initial",
             })
           );
 

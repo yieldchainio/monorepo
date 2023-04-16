@@ -11,6 +11,8 @@ export class YCAction {
   readonly popularity: number;
   readonly available: boolean;
   readonly functions: YCFunc[] = [];
+  icon: string | { dark: string; light: string } | null = null;
+  component: React.ReactNode | null = null;
 
   // =====================
   //     CONSTRUCTOR
@@ -39,4 +41,8 @@ export class YCAction {
       this.functions.push(fullFunc);
     }
   }
+
+  // =====================
+  //        METHODS
+  // =====================
 }

@@ -103,14 +103,14 @@ export class Step implements IStep<Step> {
    */
   resize = (
     newSize: StepSizing,
-    dimensions: Dimensions | null = DefaultDimensions[newSize],
+    dimensions: Dimensions | null = this.defaultDimensions[newSize],
     manual: boolean = false
   ) => {
     // If this step has been manually resized before, then this resize must be manual as well to retain their choice
     if (manual || !this.manuallyResized) {
       // We set the new dimensions & Sizing
       this.size = newSize;
-      this.dimensions = dimensions || DefaultDimensions[newSize];
+      this.dimensions = dimensions || this.defaultDimensions[newSize];
 
       // If it's a manual resize we set the global variable specifying the user manually resized this step
       if (manual) this.manuallyResized = true;
@@ -122,7 +122,7 @@ export class Step implements IStep<Step> {
    */
   resizeAll = (
     newSize: StepSizing,
-    dimensions: Dimensions | null = DefaultDimensions[newSize],
+    dimensions: Dimensions | null,
     manual: boolean = false
   ) => {
     this.each((step: Step) => step.resize(newSize, dimensions, manual));
@@ -162,6 +162,12 @@ export class Step implements IStep<Step> {
    * The dimensions of this step (width, height). Used for graph calcs
    */
   dimensions: Dimensions = { width: 0, height: 0 };
+
+  /**
+   * Default dimensions. A node component may not be compliant with the reguler default dimensions,
+   * so we need to keep track of these so that it does not mess up on resizes
+   */
+  defaultDimensions: Record<StepSizing, Dimensions> = DefaultDimensions;
 
   /**
    * The positions of this step on the used canvas. This is set by the graph() function
@@ -245,14 +251,17 @@ export class Step implements IStep<Step> {
   // ====================
   //     CONSTRUCTOR
   // ====================
-  constructor(config?: IStep<Step>, writeable: boolean = false) {
+  constructor(
+    config?: IStep<Step>,
+    writeable: boolean = config?.writeable || false
+  ) {
     /**
      * Construct global variables
      */
     this.id = config?.id || uuid();
     this.state = config?.state || "initial";
     this.size = config?.size || StepSizing.MEDIUM;
-    this.dimensions = DefaultDimensions[this.size];
+    this.dimensions = this.defaultDimensions[this.size];
     this.type = config?.type || StepType.STEP;
     this.inflows = config?.inflows || [];
     this.outflows = config?.outflows || [];
@@ -414,16 +423,11 @@ export class Step implements IStep<Step> {
       },
     });
 
-    // We resize the nodes according to the base input.
-    // @notice that nodes that were manually resized by the
-    // user before will not be
-    // overriden by this.
-    this.each((step) =>
-      step.resize(
-        baseNodeSize,
-        baseNodeDimensions || DefaultDimensions[baseNodeSize]
-      )
-    );
+    // // We resize the nodes according to the base input.
+    // // @notice that nodes that were manually resized by the
+    // // user before will not be
+    // // overriden by this.
+    // this.each((step) => step.resize(baseNodeSize, baseNodeDimensions));
 
     // Convert our steps hierarchy to D3-compatible hierarchy
     const tree = layout.hierarchy(this);
@@ -616,15 +620,11 @@ export class Step implements IStep<Step> {
         writeable: this.writeable,
         percentage: this.percentage,
         state: this.state,
-        children: this.children
-          .filter((child) =>
-            onlyCompleted ? child.state === "complete" : true
-          )
-          .flatMap((child) => {
-            const jsonChild = child.toJSON();
-            if (jsonChild !== null) return [jsonChild];
-            return [];
-          }),
+        children: this.children.flatMap((child) => {
+          const jsonChild = child.toJSON();
+          if (jsonChild !== null) return [jsonChild];
+          return [];
+        }),
         type: this.type,
         triggerName: this.triggerName,
         triggerDescription: this.triggerDescription,

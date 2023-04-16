@@ -7,7 +7,7 @@ import WrappedImage from "components/wrappers/image";
 import { StepProps } from "../../../types";
 import WrappedText from "components/wrappers/text";
 import { forwardRef } from "react";
-import { CompleteStepOptions } from "../../../components/options";
+import { StepOptions } from "../../../components/options";
 
 export const MediumCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
@@ -31,10 +31,7 @@ export const MediumCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
         </div>
         <div className="w-[25%] ">{step.triggerVisuals}</div>
         <div className="flex flex-col h-full py-0 justify-start ">
-          <CompleteStepOptions
-            step={step}
-            triggerComparison={triggerComparison}
-          />
+          <StepOptions step={step} triggerComparison={triggerComparison} />
         </div>
       </div>
     );

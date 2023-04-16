@@ -11,7 +11,7 @@ import {
   OutflowTokenBundle,
 } from "components/tokens/bundle/step";
 import { forwardRef, useMemo } from "react";
-import { CompleteStepOptions } from "../../../components/options";
+import { StepOptions } from "../../../components/options";
 
 export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
@@ -51,7 +51,7 @@ export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
             {outflowsComponent}
           </div>
         </div>
-        <CompleteStepOptions
+        <StepOptions
           step={step}
           onClick={props.onClick}
           triggerComparison={triggerComparison}

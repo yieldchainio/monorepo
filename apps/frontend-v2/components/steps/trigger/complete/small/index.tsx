@@ -7,7 +7,7 @@ import WrappedImage from "components/wrappers/image";
 import { StepProps } from "../../../types";
 import WrappedText from "components/wrappers/text";
 import { forwardRef } from "react";
-import { CompleteStepOptions } from "../../../components/options";
+import { StepOptions } from "../../../components/options";
 
 export const SmallCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
@@ -36,10 +36,7 @@ export const SmallCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
         </div>
         {/* <div className="bg-red-500">Hey Ser What is Up</div> */}
         <div className="flex flex-col h-full py-1 justify-start ">
-          <CompleteStepOptions
-            step={step}
-            triggerComparison={triggerComparison}
-          />
+          <StepOptions step={step} triggerComparison={triggerComparison} />
         </div>
       </div>
     );

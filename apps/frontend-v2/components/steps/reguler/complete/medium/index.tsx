@@ -6,7 +6,7 @@ import { forwardRef } from "react";
 import { StepProps } from "../../../types";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
-import { CompleteStepOptions } from "../../../components/options";
+import { StepOptions } from "../../../components/options";
 import {
   InflowTokenBundle,
   OutflowTokenBundle,
@@ -33,7 +33,7 @@ export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
               <WrappedText fontSize={12}>{step.action?.name}</WrappedText>
             </div>
           </div>
-          <CompleteStepOptions
+          <StepOptions
             step={step}
             onClick={props.onClick}
             triggerComparison={triggerComparison}

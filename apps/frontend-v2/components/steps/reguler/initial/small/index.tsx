@@ -11,37 +11,24 @@ import WrappedText from "components/wrappers/text";
 import { StepOptions } from "components/steps/components/options";
 import WrappedImage from "components/wrappers/image";
 import { InfoProvider } from "components/info-providers";
+import { BaseNode } from "components/steps/components/node";
 
 export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+    // Get the available actions from our hook
     const actions = useActions();
-
-    /**
-     * We change our default dimensions on mount, this is because we do not comply with the reguler,
-     * default dimensions
-     */
-    useEffect(() => {
-      step.defaultDimensions = {
-        [StepSizing.SMALL]: { width: 246, height: 112.5 },
-        [StepSizing.MEDIUM]: {
-          width: 327,
-          height: 225,
-        },
-      };
-      step.resize(StepSizing.SMALL);
-
-      return () => {
-        step.defaultDimensions = DefaultDimensions;
-      };
-    }, []);
 
     // Return the JSX
     return (
-      <div
-        className="w-[246px] h-[112.5px] flex flex-col items-center justify-start px-4 py-2.5 bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder animate-stepPopup transition duration-200 ease-in-out gap-3"
+      <BaseNode
+        className="flex-col px-4 py-2.5 gap-3"
         style={style}
         ref={ref}
         {...props}
+        width="246px"
+        height="112.5px"
+        step={step}
+        triggerComparison={triggerComparison}
       >
         <div className="flex flex-row items-center justify-between w-full">
           <WrappedText fontSize={12}>Select Action</WrappedText>
@@ -63,7 +50,7 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
             );
           })}
         </div>
-      </div>
+      </BaseNode>
     );
   }
 );

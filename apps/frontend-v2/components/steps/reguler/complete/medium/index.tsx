@@ -11,15 +11,20 @@ import {
   InflowTokenBundle,
   OutflowTokenBundle,
 } from "components/tokens/bundle/step";
+import { BaseNode } from "components/steps/components/node";
 
 export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
     return (
-      <div
-        className="w-[327px] h-[96px] flex flex-col justify-between px-4 py-4 bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder animate-stepPopup transition duration-200 ease-in-out"
+      <BaseNode
+        className="flex-col justify-between px-4 py-4"
         style={style}
         ref={ref}
         {...props}
+        width="327px"
+        height="96px"
+         step={step}
+        triggerComparison={triggerComparison}
       >
         <div className="flex flex-row justify-between w-full">
           <div className="flex flex-row items-center justify-center gap-2">
@@ -49,7 +54,7 @@ export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
             <OutflowTokenBundle tokens={step.outflows} />
           </div>
         </div>
-      </div>
+      </BaseNode>
     );
   }
 );

@@ -12,6 +12,7 @@ import {
 } from "components/tokens/bundle/step";
 import { forwardRef, useMemo } from "react";
 import { StepOptions } from "../../../components/options";
+import { BaseNode } from "components/steps/components/node";
 
 export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
@@ -30,11 +31,15 @@ export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
 
     // Return the component
     return (
-      <div
-        className="w-[246px] h-[56px] flex flex-row items-center justify-start gap-2 px-4 bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder transition duration-200 ease-in-out animate-stepPopup"
-        style={style}
+      <BaseNode
+        width={"246px"}
+        height={"56px"}
         ref={ref}
+        style={style}
         {...props}
+        className="gap-2 px-4"
+        step={step}
+        triggerComparison={triggerComparison}
       >
         <WrappedImage
           src={step.protocol?.logo}
@@ -56,7 +61,15 @@ export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
           onClick={props.onClick}
           triggerComparison={triggerComparison}
         />
-      </div>
+      </BaseNode>
+      // <div
+      //   className="w-[246px] h-[56px] flex flex-row items-center justify-start gap-2 px-4 bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder transition duration-200 ease-in-out animate-stepPopup"
+      //   style={style}
+      //   ref={ref}
+      //   {...props}
+      // >
+
+      // </div>
     );
   }
 );

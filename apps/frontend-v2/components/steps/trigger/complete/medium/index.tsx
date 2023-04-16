@@ -8,15 +8,20 @@ import { StepProps } from "../../../types";
 import WrappedText from "components/wrappers/text";
 import { forwardRef } from "react";
 import { StepOptions } from "../../../components/options";
+import { BaseNode } from "components/steps/components/node";
 
 export const MediumCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
     return (
-      <div
-        className="w-[327px] h-[96px] flex flex-row justify-between px-4 py-4 bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder animate-stepPopup transition duration-200 ease-in-out"
+      <BaseNode
+        className="justify-between px-4 py-4 "
         style={style}
         ref={ref}
         {...props}
+        width="327px"
+        height="96px"
+        step={step}
+        triggerComparison={triggerComparison}
       >
         <div className="flex flex-row gap-2 items-center justify-start">
           <div className="flex items-center justify-center p-3 bg-custom-componentbg border-[1px] border-custom-themedBorder dark:border-0  rounded-large">
@@ -33,7 +38,7 @@ export const MediumCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
         <div className="flex flex-col h-full py-0 justify-start ">
           <StepOptions step={step} triggerComparison={triggerComparison} />
         </div>
-      </div>
+      </BaseNode>
     );
   }
 );

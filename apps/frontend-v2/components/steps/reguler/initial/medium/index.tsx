@@ -6,44 +6,26 @@ import { StepOptions } from "components/steps/components/options";
 import { StepProps } from "components/steps/types";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
-import { forwardRef, useEffect, useMemo } from "react";
-import { useYCStore } from "utilities/hooks/stores/yc-data";
-import { ACTION_IDS_TO_ICONS } from "../constants";
-import { DefaultDimensions, StepSizing } from "utilities/classes/step/types";
+import { forwardRef } from "react";
 import { useActions } from "../hooks/useActions";
+import { BaseNode } from "components/steps/components/node";
 
 export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
     // Get the available actions
     const actions = useActions();
 
-    /**
-     * We change our default dimensions on mount, this is because we do not comply with the reguler,
-     * default dimensions
-     */
-    useEffect(() => {
-      step.defaultDimensions = {
-        [StepSizing.SMALL]: { width: 246, height: 112.5 },
-
-        [StepSizing.MEDIUM]: {
-          width: 327,
-          height: 225,
-        },
-      };
-      step.resize(StepSizing.MEDIUM);
-
-      return () => {
-        step.defaultDimensions = DefaultDimensions;
-      };
-    }, []);
-
     // Return the JSX
     return (
-      <div
-        className="w-[327px] h-[225px] flex flex-col items-center justify-start px-4 py-4 bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder animate-stepPopup transition duration-200 ease-in-out gap-3"
+      <BaseNode
+        className="flex-col px-4 py-4 gap-3"
         style={style}
         ref={ref}
         {...props}
+        width="327px"
+        height="225px"
+        step={step}
+        triggerComparison={triggerComparison}
       >
         <div className="flex flex-row items-center justify-between w-full">
           <WrappedText>Select Action</WrappedText>
@@ -69,7 +51,7 @@ export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
             );
           })}
         </div>
-      </div>
+      </BaseNode>
     );
   }
 );

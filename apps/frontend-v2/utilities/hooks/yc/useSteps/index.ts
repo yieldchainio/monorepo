@@ -22,6 +22,7 @@ export const useSteps = (
   context?: YCClassifications,
   options: useStepsOptions = {
     initialSize: StepSizing.MEDIUM,
+    comparisonCallback: () => null,
   }
 ) => {
   /**
@@ -78,6 +79,7 @@ export const useSteps = (
         )
       );
       triggerComparison();
+      options.comparisonCallback?.();
     }
   }, [JSON.stringify(stepsState.rootStep?.toJSON(false))]);
 

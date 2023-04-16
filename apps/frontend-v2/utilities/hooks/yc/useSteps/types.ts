@@ -43,4 +43,5 @@ export type UseStepsActionsPayloads =
 export interface useStepsOptions {
   stateSetter?: () => void;
   initialSize?: StepSizing;
+  comparisonCallback?: () => void;
 }

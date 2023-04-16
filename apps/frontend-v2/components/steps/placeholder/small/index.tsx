@@ -27,10 +27,13 @@ export const EmptySmallStep = forwardRef<HTMLDivElement, StepProps>(
         dashSpace={8}
         onClick={() => {
           step.parent?.addChild(
-            new Step({
-              type: StepType.STEP,
-              state: "initial",
-            })
+            new Step(
+              {
+                type: StepType.STEP,
+                state: "initial",
+              },
+              true
+            )
           );
 
           triggerComparison();

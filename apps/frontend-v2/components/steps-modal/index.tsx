@@ -20,6 +20,7 @@ export const StepsModal = ({
   strategy,
   options,
   root,
+  comparisonCallback,
   ...props
 }: StepsModalProps) => {
   /**
@@ -57,6 +58,7 @@ export const StepsModal = ({
       context,
       {
         stateSetter: () => setDummyState(!dummyState),
+        comparisonCallback: comparisonCallback,
         ...(options || {}),
       }
     );

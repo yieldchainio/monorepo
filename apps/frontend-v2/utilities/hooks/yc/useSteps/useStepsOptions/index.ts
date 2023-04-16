@@ -78,7 +78,9 @@ export const useStepOptions = ({
           text: "Delete",
           data: {
             description: "Delete This Step",
-            handler: () => {},
+            handler: () => {
+              step.parent?.removeChild(step.id);
+            },
           },
         });
     }

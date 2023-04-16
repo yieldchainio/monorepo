@@ -17,4 +17,5 @@ export interface useStepsProps {
 export interface StepsModalProps extends CanvasProps, useStepsProps {
   wrapperProps?: BaseComponentProps;
   options?: useStepsOptions;
+  comparisonCallback?: () => void;
 }

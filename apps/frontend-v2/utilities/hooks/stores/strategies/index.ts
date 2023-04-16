@@ -96,6 +96,12 @@ export const useStrategyStore = create<StrategyStore>()(
         set({ network });
       },
 
+      // Refresh the step state - trigger a rehydrate and setting after manually changing stuff about it
+      rehydrateSteps: () => {
+        set({ step: get().step });
+        useStrategyStore.persist.rehydrate()
+      },
+
       /**
        * @UX States & Methods
        */

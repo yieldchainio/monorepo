@@ -14,6 +14,9 @@ const BaseStepsConfig = () => {
   // Get the current base step (Should be the root Deposit trigger)
   const rootStep = useStrategyStore((state) => state.step);
 
+  // Rehydration function
+  const rehydrateSteps = useStrategyStore((state) => state.rehydrateSteps);
+
   // Set the colors
   useBackdropColorChange("#c44", "#4ea");
 
@@ -44,6 +47,10 @@ const BaseStepsConfig = () => {
           }}
           parentStyle={{
             height: "100%",
+          }}
+          comparisonCallback={() => {
+            console.log("Rehyderating");
+            rehydrateSteps();
           }}
         />
       </StrategyConfigVerticalWrapper>

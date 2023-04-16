@@ -103,6 +103,9 @@ export interface StrategyStoreActions {
   // Set the strategy's network
   setNetwork: (network: YCNetwork) => void;
 
+  // Rehydrate the step's state
+  rehydrateSteps: () => void;
+
   // Change some details about the above
   changeConfigRouteState: (
     index: number,

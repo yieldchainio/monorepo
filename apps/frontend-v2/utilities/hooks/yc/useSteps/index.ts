@@ -92,7 +92,7 @@ export const useSteps = (
   };
   const resizeAll = (
     newSize: StepSizing,
-    newDimensions?: Dimensions,
+    newDimensions?: Dimensions | null,
     forceResize?: boolean
   ) => {
     prevState.current = { rootStep: stepsState.rootStep };

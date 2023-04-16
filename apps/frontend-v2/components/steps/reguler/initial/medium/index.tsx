@@ -23,7 +23,8 @@ export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
      */
     useEffect(() => {
       step.defaultDimensions = {
-        [StepSizing.SMALL]: DefaultDimensions.small,
+        [StepSizing.SMALL]: { width: 246, height: 112.5 },
+
         [StepSizing.MEDIUM]: {
           width: 327,
           height: 225,

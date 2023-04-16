@@ -91,7 +91,7 @@ const resizeAll = (
   if (state)
     state.rootStep?.resizeAll(
       action.newSize,
-      action.dimensions,
+      action.dimensions || null,
       action.forceResize
     );
   else

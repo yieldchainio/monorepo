@@ -10,6 +10,7 @@ import { useSteps } from "utilities/hooks/yc/useSteps";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useMemo, useState } from "react";
 import { HeadStep } from "components/steps";
+import { Edge } from "components/steps/components/edge";
 
 export const StepsModal = ({
   style,
@@ -64,10 +65,8 @@ export const StepsModal = ({
     );
   // Handler for resizing the nodes based on zoom
   const handleZoom = (zoom: number) => {
-    if (zoom > 1.1)
-      resizeAll(StepSizing.MEDIUM, DefaultDimensions[StepSizing.MEDIUM], false);
-    else
-      resizeAll(StepSizing.SMALL, DefaultDimensions[StepSizing.SMALL], false);
+    if (zoom > 1.1) resizeAll(StepSizing.MEDIUM, null, false);
+    else resizeAll(StepSizing.SMALL, null, false);
   };
 
   // Root step (memoized)
@@ -112,6 +111,13 @@ export const StepsModal = ({
               triggerComparison={triggerComparison}
             />
           );
+        })}
+        {rootStep?.map((step: Step) => {
+          return !step.children.length
+            ? null
+            : step.children.map((child: Step) => (
+                <Edge parentStep={step} childStep={child} />
+              ));
         })}
       </Canvas>
     </div>

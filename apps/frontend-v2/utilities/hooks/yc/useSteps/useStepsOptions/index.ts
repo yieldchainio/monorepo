@@ -35,11 +35,7 @@ export const useStepOptions = ({
           description: "Expand This Step",
           handler: () => {
             console.log("Running Expand Handler...");
-            step.resize(
-              StepSizing.MEDIUM,
-              DefaultDimensions[StepSizing.MEDIUM],
-              true
-            );
+            step.resize(StepSizing.MEDIUM, null, true);
           },
         },
       });
@@ -50,11 +46,7 @@ export const useStepOptions = ({
         data: {
           description: "Minimize This Step",
           handler: () => {
-            step.resize(
-              StepSizing.SMALL,
-              DefaultDimensions[StepSizing.SMALL],
-              true
-            );
+            step.resize(StepSizing.SMALL, null, true);
           },
         },
       });

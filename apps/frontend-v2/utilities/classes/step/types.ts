@@ -55,8 +55,8 @@ export type Dimensions = { width: number; height: number };
 
 // Mapping default dimensions of the step sizing
 export const DefaultDimensions: { [key in StepSizing]: Dimensions } = {
-  [StepSizing.SMALL]: { width: 176, height: 78 },
-  [StepSizing.MEDIUM]: { width: 327, height: 128 },
+  [StepSizing.SMALL]: { width: 246, height: 56 },
+  [StepSizing.MEDIUM]: { width: 327, height: 96 },
 };
 
 // Position (x, y)

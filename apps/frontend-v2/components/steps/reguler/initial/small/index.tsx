@@ -23,9 +23,12 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
     useEffect(() => {
       step.defaultDimensions = {
         [StepSizing.SMALL]: { width: 246, height: 112.5 },
-        [StepSizing.MEDIUM]: DefaultDimensions[StepSizing.MEDIUM],
+        [StepSizing.MEDIUM]: {
+          width: 327,
+          height: 225,
+        },
       };
-      step.resize(StepSizing.MEDIUM);
+      step.resize(StepSizing.SMALL);
 
       return () => {
         step.defaultDimensions = DefaultDimensions;

@@ -114,6 +114,7 @@ module.exports = {
         configSlide: "configSlide 0.3s ease-in-out",
         fill: "fill 0.4s ease-in-out",
         stepPopup: "stepPopup 0.2s ease-in-out",
+        straightEdge: "straightEdge 0.5s ease-in-out",
       },
       keyframes: (theme) => ({
         popup: {
@@ -122,6 +123,14 @@ module.exports = {
           },
           "100%": {
             transform: "scale(1)",
+          },
+        },
+        straightEdge: {
+          "0%": {
+            transform: "scaleY(0)",
+          },
+          "100%": {
+            transform: "scaleY(1)",
           },
         },
         stepPopup: {

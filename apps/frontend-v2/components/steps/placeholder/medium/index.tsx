@@ -36,6 +36,7 @@ export const EmptyMediumStep = forwardRef<HTMLDivElement, StepProps>(
 
           triggerComparison();
         }}
+        className="opacity-60"
       >
         <WrappedText
           fontSize={18}

@@ -15,13 +15,14 @@ export const StraightEdge = ({
 }: DirectedEdgeProps) => {
   return (
     <RegulerLine
-      className="text-custom-textColor"
+      className="text-custom-textColor "
       color="currentColor"
       width={`${EDGE_WIDTH}px`}
       height={`${childAnchor.y - parentAnchor.y}px`}
       style={{
         position: "absolute",
         top: `${parentAnchor.y}px`,
+        left: `${parentAnchor.x}px`,
         ...style,
       }}
     />

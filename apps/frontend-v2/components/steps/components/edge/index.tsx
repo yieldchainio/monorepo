@@ -6,6 +6,7 @@ import { Step } from "utilities/classes/step";
 import { StraightEdge } from "./components/straight-edge";
 import { EDGE_WIDTH } from "./constants";
 import { GradientEdge } from "./components/gradient-edge";
+import { RightEdge } from "./components/right-edge";
 
 export const Edge = ({
   parentStep,
@@ -18,23 +19,30 @@ export const Edge = ({
    * Get shortands of some positioning propreties of both the parent and the child
    */
 
+  // @notice
+  // We have this shorthand for the X positions since the X positions are
+  // always manipulated using transform translateX(-50%).
+  const parentX = parentStep.position.x - parentStep.dimensions.width / 2;
+  const childX = childStep.position.x - childStep.dimensions.width / 2;
+
   const parentBottomAnchor = {
-    x: parentStep.position.x + parentStep.dimensions.width / 2 - EDGE_WIDTH,
+    x: parentX + parentStep.dimensions.width / 2 - EDGE_WIDTH,
     y: parentStep.position.y + parentStep.dimensions.height,
   };
 
   const parentLeftAnchor = {
-    x: parentStep.position.x,
+    x: parentX,
     y: parentStep.position.y + parentStep.dimensions.height / 2 - EDGE_WIDTH,
   };
 
   const parentRightAnchor = {
-    x: parentStep.position.x + parentStep.dimensions.width,
+    x: parentX + parentStep.dimensions.width,
     y: parentStep.position.y + parentStep.dimensions.height / 2 - EDGE_WIDTH,
   };
 
+  // We know that the steps are always transformed -50% to the left, so the position itself is sufficient for X here
   const childTopAnchor = {
-    x: childStep.position.x + childStep.dimensions.width / 2 - EDGE_WIDTH,
+    x: childX + childStep.dimensions.width / 2 - EDGE_WIDTH,
     y: childStep.position.y,
   };
 
@@ -60,7 +68,15 @@ export const Edge = ({
   }
 
   // If the parent's right anchor is closer to the left side than the child's top anchor, we return a right edge
-  if (parentRightAnchor.x < childTopAnchor.x) return <div>Right Edge</div>;
+  if (parentRightAnchor.x < childTopAnchor.x)
+    return (
+      <RightEdge
+        parentStep={parentStep}
+        childStep={childStep}
+        parentAnchor={parentRightAnchor}
+        childAnchor={childTopAnchor}
+      />
+    );
 
   // Otherwise, we return a straight edge
   return (

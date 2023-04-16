@@ -64,18 +64,20 @@ export const BaseNode = forwardRef<
 
     // Return the node
     return (
-      <div
-        className={
-          "flex flex-row items-center justify-start  bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder transition duration-200 ease-in-out animate-stepPopup" +
-          " " +
-          (className || "")
-        }
-        style={{ width: width, height: height, ...style }}
-        ref={ref}
-        {...props}
-      >
-        {children}
-      </div>
+      <>
+        <div
+          className={
+            "flex flex-row items-center justify-start  bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder transition duration-200 ease-in-out animate-stepPopup" +
+            " " +
+            (className || "")
+          }
+          style={{ width: width, height: height, ...style }}
+          ref={ref}
+          {...props}
+        >
+          {children}
+        </div>
+      </>
     );
   }
 );

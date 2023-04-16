@@ -32,7 +32,7 @@ export const RegulerLine = ({
       <line
         x1="0"
         y1={"0"}
-        x2={"2"}
+        x2={"0"}
         y2={"0"}
         stroke-width={parseInt(borderWidth)}
         stroke={color}

@@ -43,10 +43,11 @@ export class Step implements IStep<Step> {
    * Add a child step
    * @param child - A Step instance
    */
-  addChild = (child: Step) => {
+  addChild = (child: Step, inherit: boolean = true) => {
     this.removeEmptyChildren();
     this.children = [...this.children, child];
     child.parent = this;
+    inherit && child.inheritStyle();
   };
 
   /**
@@ -126,6 +127,20 @@ export class Step implements IStep<Step> {
     manual: boolean = false
   ) => {
     this.each((step: Step) => step.resize(newSize, dimensions, manual));
+  };
+
+  /**
+   * @notice
+   * Inherits styling from the parent
+   */
+  inheritStyle = () => {
+    // Inherit the current sizing (e.g when a SMALL parent adds a child, they obv dont want
+    // it to be a MEDIUM)
+    this.parent?.size && this.resize(this.parent.size);
+
+    // Inherit writeability. Writeability is false by default, but when we add a child to
+    // a writeable parent, then it should be writeable
+    this.writeable = this.parent?.writeable || this.writeable;
   };
 
   // ====================
@@ -253,7 +268,8 @@ export class Step implements IStep<Step> {
   // ====================
   constructor(
     config?: IStep<Step>,
-    writeable: boolean = config?.writeable || false
+    writeable: boolean = config?.writeable || false,
+    inherit: boolean = true
   ) {
     /**
      * Construct global variables
@@ -267,9 +283,6 @@ export class Step implements IStep<Step> {
     this.outflows = config?.outflows || [];
     this.writeable = writeable;
     this.children = config?.children || [];
-
-    // Add an empty placeholder child if our length is 0 and we are writeable
-    this.attemptAddEmptyChild();
 
     /**
      * Construct reguler step variables
@@ -290,7 +303,13 @@ export class Step implements IStep<Step> {
 
     this.percentage = config?.percentage || 0;
 
-    for (const child of this.children) child.parent = this;
+    for (const child of this.children) {
+      child.parent = this;
+      child.inheritStyle();
+    }
+
+    // Add an empty placeholder child if our length is 0 and we are writeable
+    this.attemptAddEmptyChild();
   }
 
   // ========================================

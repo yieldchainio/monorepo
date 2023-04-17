@@ -65,7 +65,7 @@ export const useStepOptions = ({
           },
         });
 
-      if (deleteAble)
+      if (deleteAble && step.parent)
         newOptions.push({
           text: "Delete",
           data: {

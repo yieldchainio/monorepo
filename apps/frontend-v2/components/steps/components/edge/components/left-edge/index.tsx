@@ -22,6 +22,7 @@ export const LeftEdge = ({
         width: `${parentAnchor.x - childAnchor.x + CURVE_WIDTH}px`,
         height: `${childAnchor.y - parentAnchor.y - EDGE_WIDTH}px`,
         transform: "translateX(-100%)",
+        zIndex: -1,
         ...style,
       }}
       className="text-custom-textColor"

@@ -23,8 +23,9 @@ export const GradientEdge = ({
       style={{
         position: "absolute",
         top: `${parentAnchor.y}px`,
-        opacity: " 50%",
+        left: `${parentAnchor.x}px`,
         ...style,
+        opacity: " 50%",
       }}
       className="blur-[0.5px]"
     />

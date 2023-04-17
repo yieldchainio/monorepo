@@ -41,7 +41,7 @@ export const RightEdge = ({
         left: `${parentAnchor.x}px`,
         width: `${width}px`,
         height: `${height}px`,
-
+        zIndex: -1,
         ...style,
       }}
       className="text-custom-textColor"

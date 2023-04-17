@@ -12,9 +12,16 @@
  */
 
 import { BaseComponentProps } from "components/types";
-import { forwardRef, useEffect } from "react";
+import { forwardRef, useCallback, useEffect } from "react";
 import { StepProps } from "components/steps/types";
-import { DefaultDimensions, StepSizing } from "utilities/classes/step/types";
+import {
+  DefaultDimensions,
+  StepSizing,
+  StepType,
+} from "utilities/classes/step/types";
+import { PlusCircle } from "../plus-circle";
+import { InfoProvider } from "components/info-providers";
+import { Step } from "utilities/classes/step";
 
 export const BaseNode = forwardRef<
   HTMLDivElement,
@@ -65,6 +72,15 @@ export const BaseNode = forwardRef<
     // Return the node
     return (
       <>
+        {step.state == "complete" && step.children[0].state !== "empty" && (
+          <ChildAdders
+            height={height}
+            width={width}
+            style={style}
+            step={step}
+            triggerComparison={triggerComparison}
+          />
+        )}
         <div
           className={
             "flex flex-row items-center justify-start  bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder transition duration-200 ease-in-out animate-stepPopup" +
@@ -81,3 +97,63 @@ export const BaseNode = forwardRef<
     );
   }
 );
+
+/**
+ * A component containing the child adding buttons
+ */
+
+const ChildAdders = ({
+  width,
+  height,
+  style,
+  step,
+  triggerComparison,
+}: StepProps & {
+  width: `${number}${string}`;
+  height: `${number}${string}`;
+}) => {
+  /**
+   * Memoize the function to add a new child
+   */
+  const addChild = useCallback(() => {
+    step.addChild(
+      new Step({
+        type: StepType.STEP,
+        state: "initial",
+      })
+    );
+
+    triggerComparison();
+  }, [step]);
+  return (
+    <div
+      className="bg-blue-500"
+      style={{ ...style, zIndex: 0, position: "relative" }}
+    >
+      <InfoProvider contents="Add Step +" delay={300}>
+        <PlusCircle
+          style={{
+            zIndex: 2,
+            position: "absolute",
+            left: `${parseInt(width) / 2}px`,
+            top: `${parseInt(height) / 2}px`,
+          }}
+          className="translate-x-[-40%] translate-y-[-50%] hover:translate-x-[-30%]"
+          onClick={addChild}
+        />
+      </InfoProvider>
+      <InfoProvider contents="Add Step +" delay={300}>
+        <PlusCircle
+          style={{
+            zIndex: 2,
+            position: "absolute",
+            left: `-${parseInt(width) / 2}px`,
+            top: `${parseInt(height) / 2}px`,
+          }}
+          className="translate-x-[-59%] translate-y-[-50%] hover:translate-x-[-70%]"
+          onClick={addChild}
+        />
+      </InfoProvider>
+    </div>
+  );
+};

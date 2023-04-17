@@ -4,20 +4,63 @@ import { v4 as uuidv4 } from "uuid";
 
 const client = new PrismaClient();
 
-const oldStrategies = await client.strategies.findMany();
-const newActions = await client.actionsv2.findMany();
-const oldFunctions = await client.functions.findMany();
-const newProtocols = await client.protocolsv2.findMany();
-const newAddresses = await client.addressesv2.findMany();
-const oldAddresses = await client.addresses.findMany();
-const newFunctions = await client.functionsv2.findMany();
 const strategies = await client.strategiesv2.findMany();
-const newTokens = await client.tokensv2.findMany();
+const tokens = await client.tokensv2.findMany();
+
+const map = <T = any>(node: DBStep, callback: (node: DBStep) => any) => {
+  // Create a stack array
+  const stack: DBStep[] = [node];
+  const result: T[] = [];
+
+  // While it's length is bigger than 0, pop a step,
+  // invoke the callback on it, and then add all of it's children to the stack
+  while (stack.length > 0) {
+    const node = stack.pop() as DBStep;
+    result.push(callback(node));
+
+    for (const child of node.children) {
+      stack.push(child);
+    }
+  }
+
+  return result;
+};
 
 for (const strategy of strategies) {
   console.log(strategy.steps);
+  // @ts-ignore
+  console.log(strategy.steps.children[0]);
   break;
 }
+
+// for (const strategy of strategies) {
+//   const depositToken = tokens.find(
+//     (token) => token.id == strategy.deposit_token_id
+//   );
+
+//   if (!depositToken) throw "No Deposit Token";
+
+//   map(strategy.steps as unknown as DBStep, (node) => {
+//     const percentage = node.percentage;
+
+//     const tokenPercentages: Record<string, number> = {};
+
+//     if (node.id === "root") node.inflows.push(depositToken);
+//     for (const flow of node.outflows) tokenPercentages[flow.id] = percentage;
+
+//     // @ts-ignore
+//     node["tokenPercentages"] = tokenPercentages;
+//   });
+
+//   await client.strategiesv2.update({
+//     where: {
+//       id: strategy.id,
+//     },
+//     data: {
+//       steps: strategy.steps as unknown as any,
+//     },
+//   });
+// }
 
 // const strategiesAndSteps: Array<[string, DBStep]> = [];
 // for (const newStrat of strategies) {

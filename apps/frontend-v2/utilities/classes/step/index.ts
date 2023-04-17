@@ -17,10 +17,10 @@ import {
 } from "@yc/yc-models";
 import {
   ActionConfigs,
-  BaseStepStates,
   DBStepConstructionProps,
   DefaultDimensions,
   Dimensions,
+  HardFlow,
   IStep,
   JSONStep,
   Position,
@@ -31,14 +31,17 @@ import {
 import { v4 as uuid } from "uuid";
 import { FlextreeNode, flextree } from "d3-flextree";
 import { HierarchyNode } from "d3-hierarchy";
-import { FlowDirection } from "@prisma/client";
 import { ImageSrc } from "components/wrappers/types";
+import { DEPOSIT_TRIGGER_CONFIG } from "components/steps/constants";
 
 export class Step implements IStep<Step> {
   // ====================
-  //       METHODS
+  //      METHODS
   // ====================
 
+  // -----------
+  //    CORE
+  // -----------
   /**
    * Add a child step
    * @param child - A Step instance
@@ -143,6 +146,114 @@ export class Step implements IStep<Step> {
     this.writeable = this.parent?.writeable || this.writeable;
   };
 
+  // ---------------
+  //  IMPL-SPECIFIC
+  // ---------------
+
+  /**
+   * @notice
+   * Get the available inflow tokens.
+   *
+   * This retreives the parent's outflows, and subtracts the percentage of each
+   * token used by other siblings, and hence returns a filtered array
+   */
+  get availableTokens(): YCToken[] {
+    // Filter the parent's inflows to return more than 0% available percentage on @availableAndEvenPercentage
+    return (this.parent?.inflows || []).filter(
+      (token) =>
+        (this.parent?.availableAndEvenPercentage(token).available || 0) > 0
+    );
+  }
+
+  /**
+   * @notice
+   * Add an outflow to this step,
+   * This has additional logic in order to ensure appropriate percentage splitting
+   * of each token across all siblings, from the parent's inflows.
+   */
+
+  addOutflow = (token: YCToken) => {
+    // A parent must be existant
+    if (!this.parent)
+      throw new Error("Step ERR: Cannot Add Outflow Without A Valid Parent!");
+
+    const { even, clean } = this.parent.availableAndEvenPercentage(token);
+
+    // Validate that this token is available for us
+    if (even === 0) return;
+
+    /**
+     * Iterate over each clean sibling & us and use this percentage on the outflow at their index
+     */
+    for (const child of clean.concat([this])) {
+      // If we are the current sibling, we push it to the outflows array in addition to
+      // the percentage mapping
+      if (child.id == this.id) {
+        child.outflows.push(token);
+      }
+
+      // Set the percentage
+      child.tokenPercentages.set(token.id, {
+        percentage: even,
+        dirty: false,
+      });
+    }
+  };
+
+  /**
+   * @notice availableAndEvenPercentage
+   * @param token - The token to calculate the percentages of
+   * @returns even - A percentage that is splittable across all clean siblings for this token
+   * @returns available - The maximum available percentage for this token, so the accumlative percentage
+   * of this token not used by dirty siblings
+   * @returns clean - the children that are considered non-dirty that have this flow, along with the index of it
+   * @returns dirty - same format as above but only dirty
+   *
+   * @notice this is called on the parent
+   */
+  availableAndEvenPercentage = (token: YCToken) => {
+    // Init a variable for available percentage
+    let available = 100;
+
+    /**
+     * Retreive an array of clean siblings (including us) that have this inflow
+     * and are not dirty, as well as an array of siblings which are dirty
+     *
+     * Note that we map them to save the index of the flow within their hardInflows,
+     * for effiency.
+     */
+    const dirty: Step[] = [];
+    const clean: Step[] = [];
+
+    for (const child of this.children || []) {
+      // Get the percentage object in the child's token percentages mapping
+      const childPercentage = child.tokenPercentages.get(token.id);
+
+      // Irrelavent if does not contain our desired token in it's outflows mapping
+      if (!childPercentage) continue;
+
+      // Push to clean/dirty depending on proprety of it.
+      // If it's dirty, subtract it from the available percentage
+      if (childPercentage.dirty) {
+        dirty.push(child);
+        available -= childPercentage.percentage;
+      } else clean.push(child);
+    }
+
+    /**
+     * Divide the available percentage to get an even percent to spread across all clean siblings
+     */
+    const even = available / clean.length;
+
+    // Return both
+    return {
+      even,
+      available,
+      dirty,
+      clean,
+    };
+  };
+
   // ====================
   //      VARIABLES
   // ====================
@@ -206,6 +317,18 @@ export class Step implements IStep<Step> {
    * The outflows of this step - In YCTokens (e.g ETH, BTC)
    */
   outflows: YCToken[] = [];
+
+  /**
+   * Mapping tokens (outflows of this step) => percentage used of parent's inflow of the token
+   * (id => percentage & isDirty)
+   */
+  tokenPercentages: Map<
+    string,
+    {
+      percentage: number;
+      dirty: boolean;
+    }
+  > = new Map();
 
   /**
    * The action of this step, in YCAction (e.g Stake, Swap, Long, LP)
@@ -320,6 +443,8 @@ export class Step implements IStep<Step> {
     context,
     iStepConfigs,
   }: DBStepConstructionProps<Step>) => {
+    // If this is the root,
+    const additionalConfigs = step.id !== "root" ? {} : DEPOSIT_TRIGGER_CONFIG;
     const stepConfig: IStep<Step> = {
       id: step.id,
       protocol: context.getProtocol(step.protocol),
@@ -341,7 +466,9 @@ export class Step implements IStep<Step> {
         })
       ),
       size: iStepConfigs?.size,
+      ...additionalConfigs,
     };
+
     return new Step(stepConfig);
   };
 

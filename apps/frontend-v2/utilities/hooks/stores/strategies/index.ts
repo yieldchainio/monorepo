@@ -18,8 +18,8 @@ import { YCNetwork, YCToken } from "@yc/yc-models";
 
 // Initiate the DB storage to the strategies store
 import { strategiesLocalStorage } from "./constants";
+import { StepState, StepType } from "utilities/classes/step/types";
 import { Step } from "utilities/classes/step";
-import { StepType } from "utilities/classes/step/types";
 
 // Generate the UUId that will represent the strategy
 const startingID = uuid();
@@ -30,7 +30,6 @@ export const useStrategyStore = create<StrategyStore>()(
       /**
        * @State
        */
-
       // UUID of the strategy
       id: startingID,
 
@@ -50,7 +49,10 @@ export const useStrategyStore = create<StrategyStore>()(
       step: new Step(
         {
           type: StepType.TRIGGER,
-          state: "complete",
+          state: "complete" as StepState,
+          inflows: [get()?.depositToken].flatMap((token: YCToken | null) =>
+            token ? [token] : []
+          ),
           triggerName: "Deposit",
           triggerDescription: "When A Vault Deposit Happens",
           triggerIcon: {
@@ -88,7 +90,16 @@ export const useStrategyStore = create<StrategyStore>()(
 
       // Set the deposit token
       setDepositToken: (token: YCToken) => {
-        set({ depositToken: token });
+        // We also change the root step to have an inflow of this
+        const root = get().step;
+        root.inflows = [token];
+        // And delete all children which have another token as their inflow
+        for (const child of root.children)
+          if (child.outflows.some((_token) => _token.id == token.id))
+            root.removeChild(child.id);
+
+        // Set the actuak token, and also our step
+        set({ depositToken: token, step: root });
       },
 
       // Set the network
@@ -99,7 +110,7 @@ export const useStrategyStore = create<StrategyStore>()(
       // Refresh the step state - trigger a rehydrate and setting after manually changing stuff about it
       rehydrateSteps: () => {
         set({ step: get().step });
-        useStrategyStore.persist.rehydrate()
+        useStrategyStore.persist.rehydrate();
       },
 
       /**
@@ -203,6 +214,9 @@ export const useStrategyStore = create<StrategyStore>()(
       // Saved under this UUID as the key
       name: startingID,
       storage: createJSONStorage(() => strategiesLocalStorage),
+      onRehydrateStorage: (state) => {
+        // When the storage is hydrated,
+      },
     }
   )
 );

@@ -154,3 +154,12 @@ export interface JSONStep {
 
   percentage: number;
 }
+
+/**
+ * A flow with percentage share of parent's inflow, and a "dirty" field
+ */
+export type HardFlow = {
+  token: YCToken;
+  percentage: number;
+  dirty: boolean;
+};

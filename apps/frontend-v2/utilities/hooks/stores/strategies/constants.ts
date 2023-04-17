@@ -11,6 +11,7 @@ import {
 import { idbStorage } from "utilities/infra/idb/idb-interface";
 import { StateStorage } from "zustand/middleware";
 import { YCClassifications, YCNetwork, YCToken } from "@yc/yc-models";
+import { StepState, StepType } from "utilities/classes/step/types";
 import { Step } from "utilities/classes/step";
 import { useYCStore } from "../yc-data";
 import { useYCStrategy } from "utilities/hooks/yc/useYCStrategy";

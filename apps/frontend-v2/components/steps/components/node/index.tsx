@@ -72,15 +72,18 @@ export const BaseNode = forwardRef<
     // Return the node
     return (
       <>
-        {step.state == "complete" && step.children[0].state !== "empty" && (
-          <ChildAdders
-            height={height}
-            width={width}
-            style={style}
-            step={step}
-            triggerComparison={triggerComparison}
-          />
-        )}
+        {step.writeable &&
+          step.state == "complete" &&
+          step.children.length &&
+          step.children[0].state !== "empty" && (
+            <ChildAdders
+              height={height}
+              width={width}
+              style={style}
+              step={step}
+              triggerComparison={triggerComparison}
+            />
+          )}
         <div
           className={
             "flex flex-row items-center justify-start  bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder transition duration-200 ease-in-out animate-stepPopup" +

@@ -7,6 +7,7 @@ import { StraightEdge } from "./components/straight-edge";
 import { EDGE_WIDTH } from "./constants";
 import { GradientEdge } from "./components/gradient-edge";
 import { RightEdge } from "./components/right-edge";
+import { LeftEdge } from "./components/left-edge";
 
 export const Edge = ({
   parentStep,
@@ -63,9 +64,15 @@ export const Edge = ({
   }
 
   // If parent's left anchor is further away than the child's top anchor, we return a left edge
-  if (parentLeftAnchor.x > childTopAnchor.x) {
-    return <div>Left Edge</div>;
-  }
+  if (parentLeftAnchor.x > childTopAnchor.x)
+    return (
+      <LeftEdge
+        parentStep={parentStep}
+        childStep={childStep}
+        parentAnchor={parentLeftAnchor}
+        childAnchor={childTopAnchor}
+      />
+    );
 
   // If the parent's right anchor is closer to the left side than the child's top anchor, we return a right edge
   if (parentRightAnchor.x < childTopAnchor.x)

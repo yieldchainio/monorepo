@@ -177,32 +177,70 @@ export class Step implements IStep<Step> {
     if (!this.parent)
       throw new Error("Step ERR: Cannot Add Outflow Without A Valid Parent!");
 
-    const { even, clean } = this.parent.availableAndEvenPercentage(token);
-
-    // Validate that this token is available for us
-    if (even === 0) return;
-
     /**
-     * Iterate over each clean sibling & us and use this percentage on the outflow at their index
+     * Update the clean tokens' percentages on our parent for the token requested, add us as an additional for the calcs
      */
-    for (const child of clean.concat([this])) {
-      // If we are the current sibling, we push it to the outflows array in addition to
-      // the percentage mapping
-      if (child.id == this.id) {
-        child.outflows.push(token);
-      }
+    const even = this.parent.updateCleanTokenPercentages(token, [this]);
 
-      // Set the percentage
-      child.tokenPercentages.set(token.id, {
-        percentage: even,
-        dirty: false,
-      });
+    // Validate that this token is available for us,
+    // if not, remove it from our mapping (set by the above function), and return
+    if (even === 0) {
+      this.tokenPercentages.delete(token.id);
+      return;
     }
+
+    // Otherwise, push the outflow
+    this.outflows.push(token);
+
+    // We refrain from pushing the outflow in the beginning to avoid unwanted side effects
+  };
+
+  /**
+   * Add an inflow,
+   * this does not do much other than pushing into the array, main reason for this is a unified API
+   * with the addOutflow which has a purpose
+   */
+  addInflow = (token: YCToken) => {
+    this.inflows.push(token);
+  };
+
+  /**
+   * Remove an outflow
+   */
+
+  removeOutflow = (token: YCToken, index?: number) => {
+    // Remove it from our array
+    const idx =
+      index !== undefined
+        ? index
+        : this.inflows.findIndex((_token) => _token.id == token.id);
+    if (idx == -1) throw "Cannot Remove Outflow - Index Is -1 (Nonexistant!)";
+    this.inflows.splice(idx, 1);
+
+    // Delete it from our mapping of token percentages
+    this.tokenPercentages.delete(token.id);
+
+    // Re-update the other clean siblings' percentages of this token
+    this.parent?.updateCleanTokenPercentages(token);
+  };
+
+  /**
+   * Remove an inflow
+   */
+  removeInflow = (token: YCToken, index?: number) => {
+    // Remove it from our array
+    const idx =
+      index !== undefined
+        ? index
+        : this.inflows.findIndex((_token) => _token.id == token.id);
+    if (idx == -1) throw "Cannot Remove Inflow - Index Is -1 (Nonexistant!)";
+    this.inflows.splice(idx, 1);
   };
 
   /**
    * @notice availableAndEvenPercentage
    * @param token - The token to calculate the percentages of
+   * @param additionalChilds - Optioanl additional childs to take in mind as clean
    * @returns even - A percentage that is splittable across all clean siblings for this token
    * @returns available - The maximum available percentage for this token, so the accumlative percentage
    * of this token not used by dirty siblings
@@ -211,7 +249,7 @@ export class Step implements IStep<Step> {
    *
    * @notice this is called on the parent
    */
-  availableAndEvenPercentage = (token: YCToken) => {
+  availableAndEvenPercentage = (token: YCToken, additionalChilds?: Step[]) => {
     // Init a variable for available percentage
     let available = 100;
 
@@ -240,6 +278,8 @@ export class Step implements IStep<Step> {
       } else clean.push(child);
     }
 
+    for (const child of additionalChilds || []) clean.push(child);
+
     /**
      * Divide the available percentage to get an even percent to spread across all clean siblings
      */
@@ -252,6 +292,64 @@ export class Step implements IStep<Step> {
       dirty,
       clean,
     };
+  };
+
+  /**
+   * @notice
+   * updateTokenPercentages
+   * Updates the flows percentages on clean children
+   * @param token - Optional, a token to do this on
+   * @default all
+   *
+   * @param additionalChilds - Optioanl additional childs to take in mind as clean
+   *
+   * @returns even - The even percentage used, or the last one assumgn an interation was used
+   */
+  updateCleanTokenPercentages = (
+    token?: YCToken,
+    additionalChilds?: Step[]
+  ) => {
+    if (token) {
+      const { even, clean } = this.availableAndEvenPercentage(
+        token,
+        additionalChilds
+      );
+      for (const child of clean)
+        child.tokenPercentages.set(token.id, {
+          percentage: even,
+          dirty: false,
+        });
+
+      return even;
+    }
+
+    for (const token of this.inflows) {
+      const { even, clean } = this.availableAndEvenPercentage(token);
+      for (const child of clean)
+        child.tokenPercentages.set(token.id, {
+          percentage: even,
+          dirty: false,
+        });
+    }
+  };
+
+  /**
+   * Clean step configs,
+   * clean all different variables/fields (that are not core), reset it to initial
+   */
+  resetConfigs = () => {
+    this.type = StepType.STEP;
+    this.state = "initial";
+    this.protocol = null;
+    this.action = null;
+    this.actionConfig = null;
+    this.data = null;
+    this.function = null;
+    for (let i = 0; i < this.outflows.length; i++)
+      this.removeOutflow(this.outflows[i], i);
+    for (let i = 0; i < this.inflows.length; i++)
+      this.removeOutflow(this.inflows[i], i);
+    this.tokenPercentages.clear();
   };
 
   // ====================
@@ -366,7 +464,7 @@ export class Step implements IStep<Step> {
   /**
    * Any additional data that the Trigger config will want to save
    */
-  data: any | null = null;
+  data: any = {};
 
   /**
    * Any additional data that the trigger step will want to display on the frontend.
@@ -406,6 +504,7 @@ export class Step implements IStep<Step> {
     this.outflows = config?.outflows || [];
     this.writeable = writeable;
     this.children = config?.children || [];
+    this.data = config?.data || {};
 
     /**
      * Construct reguler step variables
@@ -771,11 +870,13 @@ export class Step implements IStep<Step> {
           if (jsonChild !== null) return [jsonChild];
           return [];
         }),
+        actionConfig: this.actionConfig,
         type: this.type,
         triggerName: this.triggerName,
         triggerDescription: this.triggerDescription,
         triggerVisuals: this.triggerVisuals,
         triggerIcon: this.triggerIcon,
+        data: this.data,
         // customArguments: this.customArguments.map((arg) => arg.) // TODO
       };
 

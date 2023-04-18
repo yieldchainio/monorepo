@@ -15,6 +15,7 @@ import { ToolTipDirection } from "components/info-providers/types";
 import { YCToken } from "@yc/yc-models";
 import { useSwap } from "../hooks/useSwap";
 import { ChooseToken } from "../components/choose-token";
+import { TokenSwap } from "../components/token-swap";
 
 export const MediumSwapConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
@@ -50,31 +51,14 @@ export const MediumSwapConfig = forwardRef<HTMLDivElement, StepProps>(
             : "Please Choose A From Token"
         }
       >
-        <div className="flex flex-col gap-1 w-full">
-          <ChooseToken
-            label="From"
-            network={network}
-            tokens={availableTokens}
-            choice={fromToken}
-            setChoice={chooseFromToken}
-          />
-
-          <div className="w-[25px] h-[25px] border-[1px] border-custom-border rounded-md mx-auto -mt-3 z-10 bg-custom-bcomponentbg flex items-center justify-center">
-            <WrappedImage
-              src={{
-                dark: "/icons/arrow-light.svg",
-                light: "/icons/arrow-dark.svg",
-              }}
-              className="w-[60%] h-[60%]"
-            />
-          </div>
-          <ChooseToken
-            label="To"
-            network={network}
-            choice={toToken}
-            setChoice={chooseToToken}
-          />
-        </div>
+        <TokenSwap
+          network={network}
+          tokens={availableTokens}
+          fromToken={fromToken}
+          setFromToken={chooseFromToken}
+          toToken={toToken}
+          setToToken={chooseToToken}
+        />
       </BaseActionConfig>
     );
   }

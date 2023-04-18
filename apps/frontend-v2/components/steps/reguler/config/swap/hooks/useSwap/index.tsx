@@ -106,6 +106,11 @@ export const useSwap = ({
     step.data.swap?.toToken?.id,
   ]);
 
+  // Set the step's protocol to LiFi (The exchange)
+  useEffect(() => {
+    step.protocol = context.getProtocol("2d0a459a-7501-43a3-baba-da83801d5862");
+  }, []);
+
   // Return the functions & variables
   return {
     chooseFromToken,

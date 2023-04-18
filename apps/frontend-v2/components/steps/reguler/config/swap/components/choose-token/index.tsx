@@ -6,6 +6,7 @@
 
 import { YCNetwork, YCToken } from "@yc/yc-models";
 import Dropdown from "components/dropdown";
+import { DropdownProps } from "components/dropdown/types";
 import { InfoProvider } from "components/info-providers";
 import { ToolTipDirection } from "components/info-providers/types";
 import { TokensModal } from "components/tokens-modal";
@@ -20,11 +21,15 @@ export const ChooseToken = forwardRef(
       label,
       network,
       tokens,
+      className,
+      style,
+      dropdownProps,
     }: {
       choice?: YCToken | null;
       setChoice: (token: YCToken) => void;
       network?: YCNetwork | null;
       tokens?: YCToken[] | null;
+      dropdownProps?: Partial<DropdownProps>;
     } & Partial<TokensModalProps>,
     ref
   ) => {
@@ -35,7 +40,9 @@ export const ChooseToken = forwardRef(
           buttonProps={{
             style: {
               width: "100%",
+              ...style,
             },
+            className: className,
           }}
           manualModal={true}
           choice={
@@ -47,6 +54,7 @@ export const ChooseToken = forwardRef(
                 }
               : undefined
           }
+          {...dropdownProps}
         >
           <TokensModal
             handleChoice={(token) => setChoice(token)}

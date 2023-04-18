@@ -3,11 +3,25 @@
  */
 
 import { ImageSrc } from "components/wrappers/types";
+import { SwapConfig } from "../config/swap";
+import { ActionConfigs } from "utilities/classes/step/types";
+
+/**
+ * Mapping action IDs to enum propreties
+ */
+export const ACTION_IDS_TO_ENUM_KEY: Record<string, ActionConfigs> = {
+  "c947f5bf-004f-40e6-b859-dd28c7fac0b0": ActionConfigs.SWAP,
+  "62bb7a58-6e0c-4b11-90ce-d416bd3dd10f": ActionConfigs.STAKE,
+  "1fd39f5f-d1f0-40f8-afe1-58dd4eb815bf": ActionConfigs.LP,
+  "dc5c5c0a-e594-4974-8a46-829a76a95fa7": ActionConfigs.HARVEST,
+};
 
 /**
  * Mapping action IDs => Corresponding UI components for configuration of them
  */
-export const ACTION_IDS_TO_CONFIGS: Record<string, React.ReactNode> = {};
+export const ACTION_IDS_TO_CONFIGS = {
+  "c947f5bf-004f-40e6-b859-dd28c7fac0b0": SwapConfig,
+};
 
 /**
  * Mapping action IDs => icons

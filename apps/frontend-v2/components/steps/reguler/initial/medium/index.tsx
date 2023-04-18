@@ -9,6 +9,7 @@ import WrappedText from "components/wrappers/text";
 import { forwardRef } from "react";
 import { useActions } from "../hooks/useActions";
 import { BaseNode } from "components/steps/components/node";
+import { ACTION_IDS_TO_ENUM_KEY } from "../constants";
 
 export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
@@ -34,7 +35,20 @@ export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
         <div className="grid grid-cols-3 gap-2 w-full overflow-scroll scrollbar-hide">
           {actions.map((action) => {
             return (
-              <div className="bg-custom-componentbg rounded-large flex flex-col gap-2 items-center justify-center py-3 group hover:bg-opacity-50 transition duration-200 ease-in-out">
+              <div
+                className="bg-custom-componentbg rounded-large flex flex-col gap-2 items-center justify-center py-3 group hover:bg-opacity-50 transition duration-200 ease-in-out"
+                onClick={() => {
+                  const enumKey = ACTION_IDS_TO_ENUM_KEY[action.id];
+                  if (enumKey === undefined)
+                    throw (
+                      "Cannot Use Action - Undefined Enum Key For: " + action.id
+                    );
+                  step.actionConfig = enumKey;
+                  step.action = action;
+                  step.state = "config";
+                  triggerComparison();
+                }}
+              >
                 <WrappedImage
                   src={action.icon}
                   width={20}

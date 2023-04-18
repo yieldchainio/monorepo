@@ -12,6 +12,7 @@ import { StepOptions } from "components/steps/components/options";
 import WrappedImage from "components/wrappers/image";
 import { InfoProvider } from "components/info-providers";
 import { BaseNode } from "components/steps/components/node";
+import { ACTION_IDS_TO_CONFIGS, ACTION_IDS_TO_ENUM_KEY } from "../constants";
 
 export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
@@ -38,7 +39,21 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
           {actions.map((action) => {
             return (
               <InfoProvider contents={action.name}>
-                <div className="bg-custom-componentbg rounded-large flex flex-col gap-2 items-center justify-center py-3 group hover:bg-opacity-50 transition duration-200 ease-in-out">
+                <div
+                  className="bg-custom-componentbg rounded-large flex flex-col gap-2 items-center justify-center py-3 group hover:bg-opacity-50 transition duration-200 ease-in-out"
+                  onClick={() => {
+                    const enumKey = ACTION_IDS_TO_ENUM_KEY[action.id];
+                    if (enumKey === undefined)
+                      throw (
+                        "Cannot Use Action - Undefined Enum Key For: " +
+                        action.id
+                      );
+                    step.actionConfig = enumKey;
+                    step.action = action;
+                    step.state = "config";
+                    triggerComparison();
+                  }}
+                >
                   <WrappedImage
                     src={action.icon}
                     width={20}

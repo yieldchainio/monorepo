@@ -8,6 +8,7 @@ import { EDGE_WIDTH } from "./constants";
 import { GradientEdge } from "./components/gradient-edge";
 import { RightEdge } from "./components/right-edge";
 import { LeftEdge } from "./components/left-edge";
+import { useMemo } from "react";
 
 export const Edge = ({
   parentStep,
@@ -48,8 +49,66 @@ export const Edge = ({
   };
 
   /**
-   * Switch case to decide direction, and render out corresponding edge
+   * Switch case to decide direction, and render out corresponding edge (MEMO'ed)
    */
+
+  const correctEdge = useMemo(() => {
+    /**
+     * Switch case to decide direction, and render out corresponding edge (MEMO'ed)
+     */
+
+    // If the child is an empty child, we assume it is directly under the parent anyway and return a gradient edge
+    if (childStep.state === "empty") {
+      return (
+        <GradientEdge
+          parentStep={parentStep}
+          childStep={childStep}
+          parentAnchor={parentBottomAnchor}
+          childAnchor={childTopAnchor}
+        />
+      );
+    }
+
+    // If parent's left anchor is further away than the child's top anchor, we return a left edge
+    if (parentLeftAnchor.x > childTopAnchor.x)
+      return (
+        <LeftEdge
+          parentStep={parentStep}
+          childStep={childStep}
+          parentAnchor={parentLeftAnchor}
+          childAnchor={childTopAnchor}
+        />
+      );
+
+    // If the parent's right anchor is closer to the left side than the child's top anchor, we return a right edge
+    if (parentRightAnchor.x < childTopAnchor.x)
+      return (
+        <RightEdge
+          parentStep={parentStep}
+          childStep={childStep}
+          parentAnchor={parentRightAnchor}
+          childAnchor={childTopAnchor}
+        />
+      );
+
+    // Otherwise, we return a straight edge
+    return (
+      <StraightEdge
+        parentStep={parentStep}
+        childStep={childStep}
+        parentAnchor={parentBottomAnchor}
+        childAnchor={childTopAnchor}
+        //   style={style}
+      />
+    );
+  }, [
+    parentStep.position.x,
+    parentStep.position.y,
+    childStep.position.x,
+    childStep.position.y,
+  ]);
+
+  return <div>{correctEdge}</div>;
 
   // If the child is an empty child, we assume it is directly under the parent anyway and return a gradient edge
   if (childStep.state === "empty") {

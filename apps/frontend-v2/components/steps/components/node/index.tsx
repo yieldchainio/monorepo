@@ -120,10 +120,13 @@ const ChildAdders = ({
    */
   const addChild = useCallback(() => {
     step.addChild(
-      new Step({
-        type: StepType.STEP,
-        state: "initial",
-      })
+      new Step(
+        {
+          type: StepType.STEP,
+          state: "initial",
+        },
+        true
+      )
     );
 
     triggerComparison();

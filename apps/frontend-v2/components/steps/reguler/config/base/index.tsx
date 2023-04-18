@@ -10,6 +10,7 @@ import { forwardRef } from "react";
 import { BaseNode } from "components/steps/components/node";
 import WrappedText from "components/wrappers/text";
 import { ActionConfigButtons } from "../components/buttons";
+import { StepOptions } from "components/steps/components/options";
 
 export const BaseActionConfig = forwardRef<
   HTMLDivElement,
@@ -48,9 +49,12 @@ export const BaseActionConfig = forwardRef<
         {...props}
         ref={ref}
       >
-        <div className="flex flex-row items-center justify-start gap-1 self-start">
-          <WrappedText className="text-opacity-50">Action:</WrappedText>
-          <WrappedText className="">{step.action?.name}</WrappedText>
+        <div className="flex flex-row items-center justify-between self-start w-full">
+          <div className="flex flex-row items-center justify-start gap-1 self-start ">
+            <WrappedText className="text-opacity-50">Action:</WrappedText>
+            <WrappedText className="">{step.action?.name}</WrappedText>
+          </div>
+          <StepOptions step={step} triggerComparison={triggerComparison} />
         </div>
         {children}
         <ActionConfigButtons

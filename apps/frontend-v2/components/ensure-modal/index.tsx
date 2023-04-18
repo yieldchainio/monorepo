@@ -34,7 +34,7 @@ export const EnsureModal = forwardRef<HTMLDivElement, EnsureModalProps>(
     // Return the JSX
     return (
       <div
-        className="w-[50%] h-max flex flex-col items-center justify-start rounded-lg bg-custom-bcomponentbg py-10 mx-auto "
+        className="w-[50%] h-max flex flex-col items-center justify-start rounded-lg bg-custom-bcomponentbg py-10 mx-auto gap-8 "
         ref={ref}
         onClick={onClick}
         style={style}

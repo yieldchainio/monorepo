@@ -9,6 +9,7 @@ import {
   VariableTypes,
   BaseVariableTypes,
   CallType,
+  ProtocolType,
 } from "@prisma/client";
 // A DB Model representing an action
 export interface DBAction {
@@ -98,6 +99,7 @@ export interface DBProtocol {
   twitter: string | null;
   telegram: string | null;
   discord: string | null;
+  type: ProtocolType;
 }
 
 export interface DBAddress {

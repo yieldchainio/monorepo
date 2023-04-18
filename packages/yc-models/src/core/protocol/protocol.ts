@@ -1,11 +1,10 @@
-import { ethers } from "ethers";
-import { DBProtocol, DBToken } from "../../types/db";
+import { DBProtocol } from "../../types/db";
 import { YCClassifications } from "../context/context";
-import { YCAddress } from "../address/address";
-import { YCNetwork } from "../network/network";
 import { YCSocialMedia } from "../social-media/social-media";
-import { YCToken } from "../token/token";
 import { BaseClass } from "../base";
+import { ProtocolType } from "@prisma/client";
+import { YCNetwork } from "../network/network";
+import { YCToken } from "..";
 
 /**
  * @notice
@@ -21,12 +20,13 @@ export class YCProtocol extends BaseClass {
   readonly website: string;
   readonly logo: string;
   readonly socialMedia: YCSocialMedia;
+  readonly type: ProtocolType;
 
   // =======================
   //     UNIQUE FIELDS
   // ======================
-  // #tokens: YCToken[];
-  // #networks: YCNetwork[];
+  readonly tokens: YCToken[] = [];
+  readonly networks: YCNetwork[] = [];
   // #addresses: YCAddress[];
   // #actions: YCAction[]; // TODO: Integrate this when u can, not urgent
   // =======================
@@ -49,8 +49,24 @@ export class YCProtocol extends BaseClass {
 
     this.id = _protocol.id;
 
+    this.type = _protocol.type;
+
+    /**
+     * @notice
+     * We set it to the IDs here before gettng our instance so that it matches in stringification, without an infinite limbo.
+     * we set it to the actual networks afterwards
+     */
+    this.networks = _protocol.chain_ids as unknown as YCNetwork[];
+
     const existingProtocol = this.getInstance(_protocol.id);
     if (existingProtocol) return existingProtocol;
+
+    this.networks = (this.networks as unknown as number[]).flatMap(
+      (networkID: number) => {
+        const network = _context.getNetwork(networkID);
+        return network ? [network] : [];
+      }
+    );
 
     // // Find all tokens that are included in this protocol's markets
     // let tokens = _context.tokens

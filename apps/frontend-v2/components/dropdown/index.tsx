@@ -28,6 +28,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       buttonProps,
       menuProps,
       textProps,
+      imageProps,
       manualModal,
       ...props
     }: DropdownProps,
@@ -162,6 +163,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                     width={24}
                     height={24}
                     className=" rounded-full"
+                    {...imageProps}
                   />
                 )}
                 <WrappedText {...textProps}>{currentChoice?.text}</WrappedText>

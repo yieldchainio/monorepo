@@ -1,6 +1,6 @@
 import { RegulerButtonProps } from "components/buttons/reguler/types";
 import { BaseComponentProps } from "components/types";
-import { TextProps } from "components/wrappers/types";
+import { ImageProps, TextProps } from "components/wrappers/types";
 import { CSSProperties, RefObject } from "react";
 
 /**
@@ -32,7 +32,8 @@ export interface DropdownProps {
   buttonProps?: RegulerButtonProps;
   menuProps?: Partial<DropdownMenuOptions>;
   textProps?: Omit<TextProps, "children">;
-  manualModal?: boolean
+  imageProps?: ImageProps;
+  manualModal?: boolean;
 }
 
 export interface DropdownOptionProps {

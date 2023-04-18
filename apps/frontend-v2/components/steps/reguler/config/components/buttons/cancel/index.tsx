@@ -5,6 +5,8 @@ import { RegulerButton } from "components/buttons/reguler";
 import { EnsureModal } from "components/ensure-modal";
 import { ModalWrapper } from "components/modal-wrapper";
 import { StepProps } from "components/steps/types";
+import { useMemo } from "react";
+import { StepSizing } from "utilities/classes/step/types";
 import { useModals } from "utilities/hooks/stores/modal";
 
 export const CancelButton = ({
@@ -17,6 +19,24 @@ export const CancelButton = ({
    * Get global modals
    */
   const modals = useModals();
+
+  /**
+   * Memo some styling
+   */
+  const memoStyle = useMemo(
+    () =>
+      step.size === StepSizing.SMALL
+        ? {
+            padding: "0.25rem",
+          }
+        : {},
+    [step.size]
+  );
+
+  const buttonContent = useMemo(
+    () => (step.size === StepSizing.SMALL ? "+" : "Cancel"),
+    [step.size]
+  );
   return (
     <RegulerButton
       className="bg-opacity-0 hover:bg-opacity-0 border-custom-textColor hover:border-red-600 pt-1 pb-1 "
@@ -26,6 +46,7 @@ export const CancelButton = ({
         paddingBottom: "0.5rem",
         alignItems: "center",
         justifyContent: "center",
+        ...memoStyle,
         ...style,
       }}
       onClick={() => {
@@ -51,7 +72,7 @@ export const CancelButton = ({
         });
       }}
     >
-      Cancel
+      {buttonContent}
     </RegulerButton>
   );
 };

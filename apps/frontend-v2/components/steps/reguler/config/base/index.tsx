@@ -60,9 +60,6 @@ export const BaseActionConfig = forwardRef<
         <ActionConfigButtons
           step={step}
           triggerComparison={triggerComparison}
-          style={{
-            marginTop: "auto",
-          }}
           canContinue={canContinue}
         />
       </BaseNode>

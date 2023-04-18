@@ -6,6 +6,7 @@ import GradientButton from "components/buttons/gradient";
 import { InfoProvider } from "components/info-providers";
 import { StepProps } from "components/steps/types";
 import { useMemo } from "react";
+import { StepSizing } from "utilities/classes/step/types";
 
 export const DoneButton = ({
   className,
@@ -26,7 +27,7 @@ export const DoneButton = ({
         className=""
         style={{
           width: "30%",
-
+          padding: step.size == StepSizing.SMALL ? "0.25rem" : undefined,
           ...style,
         }}
         onClick={() => {
@@ -34,7 +35,7 @@ export const DoneButton = ({
           triggerComparison();
         }}
       >
-        Done
+        {step.size == StepSizing.SMALL ? "+" : "Done"}
       </GradientButton>
     ) : (
       <InfoProvider contents={canContinue}>
@@ -43,7 +44,7 @@ export const DoneButton = ({
             className="opacity-40 pointer-events-none  "
             style={{
               width: "100%",
-
+              padding: step.size == StepSizing.SMALL ? "0.25rem" : undefined,
               ...style,
             }}
             onClick={() => {
@@ -51,7 +52,7 @@ export const DoneButton = ({
               triggerComparison();
             }}
           >
-            Done
+            {step.size == StepSizing.SMALL ? "+" : "Done"}
           </GradientButton>
         </div>
       </InfoProvider>

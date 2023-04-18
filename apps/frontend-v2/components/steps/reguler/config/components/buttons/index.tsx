@@ -5,6 +5,8 @@
 import { StepProps } from "components/steps/types";
 import { CancelButton } from "./cancel";
 import { DoneButton } from "./done";
+import { useMemo } from "react";
+import { StepSizing } from "utilities/classes/step/types";
 
 export const ActionConfigButtons = ({
   className,
@@ -15,13 +17,30 @@ export const ActionConfigButtons = ({
 }: StepProps & {
   canContinue?: true | string;
 }) => {
+  /**
+   * Memo some styling
+   */
+  const memoStyle = useMemo(
+    () =>
+      step.size === StepSizing.SMALL
+        ? {
+            width: "60%",
+          }
+        : {
+            width: "100%",
+            marginTop: "auto",
+          },
+    []
+  );
   // Return the JSX
   return (
     <div
       className={
-        "w-full flex flex-row gap-2 items-center" + " " + (className || "")
+        "self-start w-full flex flex-row gap-2 items-center" +
+        " " +
+        (className || "")
       }
-      style={style}
+      style={{ ...memoStyle, ...style }}
     >
       <CancelButton step={step} triggerComparison={triggerComparison} />
       <DoneButton

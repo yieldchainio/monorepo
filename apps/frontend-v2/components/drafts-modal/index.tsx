@@ -20,6 +20,7 @@ import { RegulerButton } from "components/buttons/reguler";
 import { strategiesLocalStorage } from "utilities/hooks/stores/strategies/constants";
 import GradientButton from "components/buttons/gradient";
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
+import { EnsureModal } from "components/ensure-modal";
 
 export const StrategiesDraftsModal = ({
   strategyDrafts,
@@ -128,31 +129,20 @@ const StrategyDraftRow = ({
                 return {
                   component: (
                     <ModalWrapper modalKey={len}>
-                      <div className="w-[50%] h-max flex flex-col items-center justify-start rounded-lg bg-custom-bcomponentbg py-10 ">
-                        <WrappedText fontSize={24} fontStyle="bold">
-                          Are You Sure You Want To Delete This Draft?
-                        </WrappedText>
+                      <EnsureModal
+                        ensureLabel="Are You Sure You Want To Delete This Draft?"
+                        confirmLabel="                            Yes, I Am Sure
+                    "
+                        confirmHandler={async () => await removeSelf()}
+                        modalKey={len}
+                      >
                         <StrategyDraftRow
                           draft={draft}
                           deleteAble={false}
                           removeSelf={removeSelf}
                           chooseSelf={chooseSelf}
                         />
-                        <div className="flex flex-row gap-6 items-center justify-center">
-                          <RegulerButton onClick={() => modals.remove(len)}>
-                            Never Mind
-                          </RegulerButton>
-                          <RegulerButton
-                            className="bg-red-800 hover:bg-red-750 border-[0px]"
-                            onClick={async () => {
-                              await removeSelf();
-                              modals.remove(len);
-                            }}
-                          >
-                            Yes, I Am Sure
-                          </RegulerButton>
-                        </div>
-                      </div>
+                      </EnsureModal>
                     </ModalWrapper>
                   ),
                 };

@@ -177,6 +177,9 @@ export class Step implements IStep<Step> {
    */
 
   addOutflow = (token: YCToken) => {
+    // If we already have this outflow, then we return
+    if (this.outflows.some((_token) => _token.id === token.id)) return;
+
     // A parent must be existant
     if (!this.parent)
       throw new Error("Step ERR: Cannot Add Outflow Without A Valid Parent!");
@@ -205,6 +208,7 @@ export class Step implements IStep<Step> {
    * with the addOutflow which has a purpose
    */
   addInflow = (token: YCToken) => {
+    if (this.inflows.some((_token) => _token.id === token.id)) return;
     this.inflows.push(token);
   };
 
@@ -253,7 +257,10 @@ export class Step implements IStep<Step> {
    *
    * @notice this is called on the parent
    */
-  availableAndEvenPercentage = (token: YCToken, additionalChilds?: Step[]) => {
+  availableAndEvenPercentage = (
+    token: YCToken,
+    additionalCleanChilds?: Step[]
+  ) => {
     // Init a variable for available percentage
     let available = 100;
 
@@ -282,7 +289,7 @@ export class Step implements IStep<Step> {
       } else clean.push(child);
     }
 
-    for (const child of additionalChilds || []) clean.push(child);
+    for (const child of additionalCleanChilds || []) clean.push(child);
 
     /**
      * Divide the available percentage to get an even percent to spread across all clean siblings
@@ -296,6 +303,43 @@ export class Step implements IStep<Step> {
       dirty,
       clean,
     };
+  };
+
+  /**
+   * @notice
+   * editTokenPercentage
+   * edit a token's percentage inflowing from the parent to us
+   */
+
+  editTokenPercentage = (token: YCToken, percentage: number): boolean => {
+    // We must have this token in our inflows
+    if (!this.inflows.some((_token) => _token.id == token.id))
+      throw "Cannot Edit Token Percentage - Inflow Not Found!";
+
+    // Get available (and even) percentage
+    const { even, available } = this.availableAndEvenPercentage(token);
+
+    // Assert that the available percentage must be sufficient to the requested one
+    if (percentage > available) return false;
+
+    // Set the percentage
+    this.tokenPercentages.set(token.id, {
+      percentage,
+      dirty: true,
+    });
+
+    // Update all of the other clean siblings on our parent
+    this.parent?.updateCleanTokenPercentages(token);
+
+    return true;
+  };
+
+  /**
+   * Get the available percentage for a token
+   */
+  availableTokenPercentage = (token: YCToken) => {
+    const { available } = this.availableAndEvenPercentage(token);
+    return available;
   };
 
   /**

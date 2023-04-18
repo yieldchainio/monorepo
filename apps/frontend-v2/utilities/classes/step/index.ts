@@ -70,6 +70,10 @@ export class Step implements IStep<Step> {
    * used for adding new childs, usually
    */
   attemptAddEmptyChild = () => {
+    // We obv dont want an empty child for an empty child
+    if (this.state == "empty") return;
+
+    // If we got no children and this step is writeable, add a new one
     if (this.children.length === 0 && this.writeable)
       this.addChild(
         new Step({

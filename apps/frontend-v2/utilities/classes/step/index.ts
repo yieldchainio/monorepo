@@ -20,7 +20,7 @@ import {
   DBStepConstructionProps,
   DefaultDimensions,
   Dimensions,
-  HardFlow,
+  TokenPercentage,
   IStep,
   JSONStep,
   Position,
@@ -468,13 +468,7 @@ export class Step implements IStep<Step> {
    * Mapping tokens (outflows of this step) => percentage used of parent's inflow of the token
    * (id => percentage & isDirty)
    */
-  tokenPercentages: Map<
-    string,
-    {
-      percentage: number;
-      dirty: boolean;
-    }
-  > = new Map();
+  tokenPercentages: Map<string, TokenPercentage> = new Map();
 
   /**
    * The action of this step, in YCAction (e.g Stake, Swap, Long, LP)
@@ -553,6 +547,9 @@ export class Step implements IStep<Step> {
     this.writeable = writeable;
     this.children = config?.children || [];
     this.data = config?.data || {};
+    this.tokenPercentages = config?.tokenPercentages
+      ? new Map<string, TokenPercentage>(config.tokenPercentages)
+      : this.tokenPercentages;
 
     /**
      * Construct reguler step variables
@@ -925,6 +922,7 @@ export class Step implements IStep<Step> {
         triggerVisuals: this.triggerVisuals,
         triggerIcon: this.triggerIcon,
         data: this.data,
+        tokenPercentages: Array.from(this.tokenPercentages.entries()),
         // customArguments: this.customArguments.map((arg) => arg.) // TODO
       };
 

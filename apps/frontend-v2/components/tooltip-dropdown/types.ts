@@ -9,4 +9,5 @@ import { BaseComponentProps } from "components/types";
 export interface TooltipDropdownProps extends BaseComponentProps {
   options: Omit<DropdownOption, "children">[];
   handleChoice: (choice: data) => void;
+  body?: React.ReactNode;
 }

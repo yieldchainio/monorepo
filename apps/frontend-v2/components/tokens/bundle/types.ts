@@ -10,4 +10,6 @@ export interface TokensBundleProps extends BaseComponentProps {
   tokens: YCToken[];
   maxImages?: number;
   imageProps?: ImageProps;
+  margin?: number;
+  tooltipEnabled?: boolean;
 }

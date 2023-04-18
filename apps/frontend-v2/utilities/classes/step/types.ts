@@ -120,6 +120,9 @@ export interface IStep<T extends IStep<T>>
   inflows?: YCToken[];
   outflows?: YCToken[];
   writeable?: boolean;
+  tokenPercentages?:
+    | Array<[string, TokenPercentage]>
+    | Map<string, TokenPercentage>;
 
   children?: T[];
   percentage?: number;
@@ -137,6 +140,7 @@ export interface JSONStep {
   type: StepType;
   state?: StepState;
   writeable?: boolean;
+  tokenPercentages?: Array<[string, TokenPercentage]>;
 
   // ==REGULER== //
   protocol?: string;
@@ -158,8 +162,7 @@ export interface JSONStep {
 /**
  * A flow with percentage share of parent's inflow, and a "dirty" field
  */
-export type HardFlow = {
-  token: YCToken;
+export type TokenPercentage = {
   percentage: number;
   dirty: boolean;
 };

@@ -9,6 +9,7 @@ import { GradientEdge } from "./components/gradient-edge";
 import { RightEdge } from "./components/right-edge";
 import { LeftEdge } from "./components/left-edge";
 import { useMemo } from "react";
+import { TokenPercentageBox } from "../token-percentage";
 
 export const Edge = ({
   parentStep,
@@ -108,50 +109,38 @@ export const Edge = ({
     childStep.position.y,
   ]);
 
-  return <div>{correctEdge}</div>;
+  /**
+   * Memo the middle point for the token percentage box
+   */
+  const middlePoint = useMemo(() => {
+    return {
+      x: correctEdge.props.childAnchor.x,
+      y:
+        correctEdge.props.parentAnchor.y +
+        (correctEdge.props.childAnchor.y - correctEdge.props.parentAnchor.y) /
+          2,
+    };
+  }, [
+    parentStep.position.x,
+    parentStep.position.y,
+    childStep.position.x,
+    childStep.position.y,
+  ]);
 
-  // If the child is an empty child, we assume it is directly under the parent anyway and return a gradient edge
-  if (childStep.state === "empty") {
-    return (
-      <GradientEdge
-        parentStep={parentStep}
-        childStep={childStep}
-        parentAnchor={parentBottomAnchor}
-        childAnchor={childTopAnchor}
-      />
-    );
-  }
-
-  // If parent's left anchor is further away than the child's top anchor, we return a left edge
-  if (parentLeftAnchor.x > childTopAnchor.x)
-    return (
-      <LeftEdge
-        parentStep={parentStep}
-        childStep={childStep}
-        parentAnchor={parentLeftAnchor}
-        childAnchor={childTopAnchor}
-      />
-    );
-
-  // If the parent's right anchor is closer to the left side than the child's top anchor, we return a right edge
-  if (parentRightAnchor.x < childTopAnchor.x)
-    return (
-      <RightEdge
-        parentStep={parentStep}
-        childStep={childStep}
-        parentAnchor={parentRightAnchor}
-        childAnchor={childTopAnchor}
-      />
-    );
-
-  // Otherwise, we return a straight edge
   return (
-    <StraightEdge
-      parentStep={parentStep}
-      childStep={childStep}
-      parentAnchor={parentBottomAnchor}
-      childAnchor={childTopAnchor}
-      //   style={style}
-    />
+    <div className=" w-max h-max">
+      {correctEdge}
+      {childStep.state !== "empty" && childStep.outflows.length ? (
+        <TokenPercentageBox
+          step={childStep}
+          triggerComparison={() => null}
+          style={{
+            left: `${middlePoint.x}px`,
+            top: `${middlePoint.y}px`,
+            transform: "translate(-50%, -50%)",
+          }}
+        ></TokenPercentageBox>
+      ) : null}
+    </div>
   );
 };

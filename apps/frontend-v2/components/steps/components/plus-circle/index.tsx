@@ -25,7 +25,7 @@ export const PlusCircle = forwardRef<
     return (
       <div
         className={
-          "bg-custom-bcomponentbg rounded-full p-1 flex items-center justify-center hover:bg-custom-dimmed transition duration-200 ease-in-out shadow-md w-max h-max" +
+          "bg-custom-bcomponentbg rounded-full p-1 flex items-center justify-center hover:bg-custom-dimmed transition duration-200 ease-in-out shadow-md w-max h-max cursor-pointer" +
           " " +
           (className || "")
         }

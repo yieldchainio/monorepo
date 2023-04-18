@@ -133,7 +133,7 @@ const ChildAdders = ({
   }, [step]);
   return (
     <div
-      className="bg-blue-500"
+      className=""
       style={{ ...style, zIndex: 0, position: "relative" }}
     >
       <InfoProvider contents="Add Step +" delay={300}>

@@ -26,11 +26,12 @@ export const TokensBundle = ({
   maxImages = 2,
   imageProps = { width: 20, height: 20 },
   children,
+  margin,
+  tooltipEnabled = true,
 }: TokensBundleProps) => {
   // Memoize the tokens
   const mappedTokens = useMemo(() => {
     return tokens.map((token, i) => {
-      console.log("Mapping token");
       if (!token) return null;
       // We do not want to move it to the left with negative margin if it's the first one to not mess up the container's flex
       if (i === 0)
@@ -53,7 +54,7 @@ export const TokensBundle = ({
           <WrappedImage
             src={token.logo}
             style={{
-              marginLeft: `-${(imageProps.width || 0) / 2}px`,
+              marginLeft: `-${margin || (imageProps.width || 0) / 2}px`,
               borderRadius: `100%`,
               ...(imageProps.style || {}),
             }}
@@ -66,14 +67,30 @@ export const TokensBundle = ({
     });
   }, [tokens, tokens.length]);
 
+  /**
+   * Memo the component to return (With / Without <TokenProvider />)
+   */
+  const tokensComponent = useMemo(() => {
+    if (tooltipEnabled)
+      return (
+        <TokensProvider tokens={tokens}>
+          <div className="flex flex-row items-center justify-start">
+            {mappedTokens}
+          </div>
+        </TokensProvider>
+      );
+
+    return (
+      <div className="flex flex-row items-center justify-start">
+        {mappedTokens}
+      </div>
+    );
+  }, [tooltipEnabled, mappedTokens, mappedTokens.length]);
+
   return (
     <div className="flex flex-row items-center justify-start gap-0.5">
       {children}
-      <TokensProvider tokens={tokens}>
-        <div className="flex flex-row items-center justify-start">
-          {mappedTokens}
-        </div>
-      </TokensProvider>
+      {tokensComponent}
       {tokens.length > maxImages && (
         <WrappedText fontSize={12} fontStyle="bold">
           {" " + "+" + (tokens.length - maxImages).toString()}

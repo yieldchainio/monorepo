@@ -12,6 +12,7 @@ import { forwardRef } from "react";
 import { RegulerCompleteStep } from "./complete";
 import { EmptyStep } from "../placeholder";
 import { RegulerChooseAction } from "./initial";
+import { ActionConfig } from "./config";
 
 export const RegulerStep = forwardRef<HTMLDivElement, StepProps>(
   ({ step, triggerComparison, style, ...props }: StepProps, ref) => {
@@ -43,7 +44,15 @@ export const RegulerStep = forwardRef<HTMLDivElement, StepProps>(
         );
 
       case "config":
-        return <div></div>;
+        return (
+          <ActionConfig
+            step={step}
+            style={style}
+            triggerComparison={triggerComparison}
+            ref={ref}
+            {...props}
+          />
+        );
 
       case "complete":
         return (

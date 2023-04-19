@@ -9,7 +9,7 @@ import { ToolTipDirection } from "./types";
  */
 export const positionTooltip = (
   direction: ToolTipDirection,
-  childRects: DOMRect | false
+  childRects: Omit<DOMRect, "bottom" | "right" | "toJSON"> | false
 ): {
   top: number;
   left: number;
@@ -23,7 +23,7 @@ export const positionTooltip = (
     };
   // The base positioning
   const returnObj = {
-    left: childRects.x,
+    left: childRects.x + window.scrollX,
     top: childRects.y + window.scrollY,
     transform: "",
   };

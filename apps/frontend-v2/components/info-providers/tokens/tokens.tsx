@@ -53,7 +53,6 @@ export const TokensProvider = ({ children, tokens }: TokensProviderProps) => {
             {
               label: "Network",
               callback: (token: YCToken, i: number) => {
-                console.log("Token ser", token);
                 return (
                   <WrappedText
                     fontSize={12}

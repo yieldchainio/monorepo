@@ -23,6 +23,7 @@ export interface InfoProviderProps extends BaseComponentProps {
   handleCustomOpen?: () => void;
   handleCustomClose?: () => void;
   setCloseHandler?: (closeHandler: () => void) => void;
+  portal?: HTMLElement;
 }
 
 // Protocols Provider props

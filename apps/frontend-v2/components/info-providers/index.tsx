@@ -48,9 +48,10 @@ export const InfoProvider = ({
   trigger = "onHover",
   overrideDefaultComponent = false,
   setCloseHandler,
+  portal,
 }: InfoProviderProps) => {
   // We set a ref for all of our consumers ( The elements which we wrap around and trigger on hover )
-  const setRefs = useRef(new Map()).current;
+  const setRefs = useRef<Map<number, HTMLDivElement>>(new Map()).current;
 
   // The current active, hovered on consumer
   const [activeConsumerIndex, setActiveConsumerIndex] = useState<number | null>(
@@ -58,7 +59,9 @@ export const InfoProvider = ({
   );
 
   // The state that triggers visiblity & positioning
-  const [visible, setVisible] = useState<DOMRect | false>(false);
+  const [visible, setVisible] = useState<
+    Omit<DOMRect, "bottom" | "right" | "toJSON"> | false
+  >(false);
 
   // a useEffect to set our state to visible (On the FIRST child),
   // if we got a visibillity override prop
@@ -86,11 +89,46 @@ export const InfoProvider = ({
     // get it's rects
     const rects = consumer.getBoundingClientRect();
 
+    const portalRects = portal
+      ? portal.getBoundingClientRect()
+      : {
+          width: 0,
+          height: 0,
+          left: 0,
+          top: 0,
+          x: 0,
+          y: 0,
+        };
+
     // Sufficient check
     if (!rects) throw new Error("Tooltip Error: Rects Are Undefined!");
 
+    // Get the computed style of the portal, if available
+    const computedStyle = portal
+      ? window.getComputedStyle(portal)
+      : { getPropertyValue: (args: string) => "1" };
+
+    // Retreive the portal's scale proprety, parseFloat it
+    const portalScale =
+      parseFloat(computedStyle.getPropertyValue("scale")) || 1;
+
+    // Calculate the X and Y offsets by subtracting the portal's coordinates
+    // from the child's, to ensure they fit exaclty within the portal (or the viewport),
+    // if no portal was provided.
+    // Also, divide the result by the portal's scale. This is done to ensure
+    // it does not mess up the positioning
+    const offsetX = (rects.left - portalRects.left) / portalScale;
+    const offsetY = (rects.top - portalRects.top) / portalScale;
+
     // Set the X and Y positions
-    setVisible(rects);
+    setVisible({
+      width: rects.width,
+      height: rects.height,
+      left: offsetX,
+      top: offsetY,
+      x: offsetX,
+      y: offsetY,
+    });
   }, [activeConsumerIndex]);
 
   // Handle hover over the children
@@ -206,7 +244,7 @@ export const InfoProvider = ({
               <ChildrenProvider>{children}</ChildrenProvider>
             )}
           </>,
-          document.body
+          portal || document.body
         )}
       {Children.map(consumers, (consumer, i) => {
         // Typecheck
@@ -217,7 +255,7 @@ export const InfoProvider = ({
         return (
           <consumer.type
             {...consumer.props}
-            ref={(node: any) => {
+            ref={(node: HTMLDivElement) => {
               !node
                 ? setRefs.delete(i)
                 : setRefs.set(i, consumer.props.ref || node);

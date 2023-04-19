@@ -64,11 +64,8 @@ export const BaseNode = forwardRef<
           height: parseInt(height),
         },
       };
-      step.resize(step.size);
 
-      return () => {
-        step.defaultDimensions = DefaultDimensions;
-      };
+      step.resize(step.size, undefined, true);
     }, [height, width]);
 
     // Return the node

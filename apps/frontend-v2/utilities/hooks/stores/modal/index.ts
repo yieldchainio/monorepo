@@ -38,9 +38,7 @@ export const useModals = create<ModalsStore>((set, get) => ({
     });
   },
   remove: (index: number) => {
-    console.log("Modals Before Removing:", get().modals);
-    console.log("Requested Index", index);
-    console.log("Request Modal: ", get().modals[index]);
+   
     if (typeof window !== "undefined")
       document.documentElement.style.overflowY = "scroll";
     set((state) => {

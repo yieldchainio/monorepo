@@ -67,7 +67,6 @@ export const useConfigRouting = (
       (optionalRoutes || routes).findLastIndex(
         (config) => config.progressStep.state === "active"
       ) || 0;
-    console.log("Latest COmplete Route Ser", latestCompleteRoute);
     routeByIndex(latestCompleteRoute);
     setCurrentIndex(latestCompleteRoute);
   };

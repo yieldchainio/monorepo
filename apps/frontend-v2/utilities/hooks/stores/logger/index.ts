@@ -21,7 +21,6 @@ export const useLogs = create<LogsStore>((set, get) => ({
     set((state) => {
       const id = uuid();
       const log = logCallback(id);
-      console.log(get());
       log.data && AWSLogger.log(get().id, log.data);
       log.lifespan !== "immortal" &&
         setTimeout(() => {

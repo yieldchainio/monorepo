@@ -49,7 +49,6 @@ const BaseStepsConfig = () => {
             height: "100%",
           }}
           comparisonCallback={() => {
-            console.log("Rehyderating");
             rehydrateSteps();
           }}
         />

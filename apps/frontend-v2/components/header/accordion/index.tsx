@@ -32,7 +32,6 @@ export const Accordion = ({
         <ModalWrapper modalKey={id} align={false}>
           <div className="h-[100vh] w-[50vw] bg-custom-componentbg animate-sidebar py-6 px-6 flex flex-col gap-2 mr-auto rounded-tr-xl rounded-br-xl absolute top-0">
             {catagories.map((catagory) => {
-              console.log("pathname", pathname);
               return (
                 <Link href={catagory.page}>
                   <div className="flex flex-row gap-2 items-center justify-start bg-custom-dropdown bg-opacity-0 hover:bg-opacity-50 transition duration-200 ease-in-out rounded-lg py-4 pl-2 relative">

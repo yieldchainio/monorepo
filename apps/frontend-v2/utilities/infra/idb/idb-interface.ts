@@ -28,14 +28,12 @@ export const idbStorage: <T = any, R = T>(
     );
   },
   setItem: async (key: string, value: T): Promise<any> => {
-    console.log("Setting IndexedDB Item... Provided Value:", value);
     // Await it if not already
     if (dbInstance instanceof Promise) {
       await dbInstance.then((res) => {
         dbInstance = res;
       });
     }
-    console.log("Seriallized Value", options.serialize(value));
     return await (dbInstance as IDBPDatabase).put(
       storeName,
       options.serialize(value),

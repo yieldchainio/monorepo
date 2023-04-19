@@ -29,7 +29,6 @@ export const Navigators = ({
 
   // Memo if we can continue
   const canContinue = useMemo(() => {
-    console.log("Condition update ser", activeStep?.condition(), strategyState);
     return activeStep?.condition() || "Please Complete This Step To Continue!";
   }, [activeStep?.condition()]);
 

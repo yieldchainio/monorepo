@@ -37,7 +37,6 @@ export const seriallizeStrategyStore = (
 ): JSONStrategyStoreState => {
   // Return a JSON store from a stateful stores
   const seriallizeres = JSON.parse(statefulStoreObject).state;
-  console.log("Seriallization Res", seriallizeres);
   return JSON.parse(statefulStoreObject).state;
 };
 

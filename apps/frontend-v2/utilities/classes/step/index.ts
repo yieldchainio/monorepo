@@ -673,7 +673,6 @@ export class Step implements IStep<Step> {
    */
 
   graph = (baseNodeSize: StepSizing, baseNodeDimensions?: Dimensions) => {
-    console.log("Running Graph...");
     // Instantiate layout instance with our settings
     const layout = flextree({
       nodeSize: (node: HierarchyNode<Step>) => [

@@ -20,7 +20,8 @@ export interface CanvasProps extends BaseComponentProps {
     label: React.ReactNode;
     onClick: () => void;
   }[];
-  parentStyle?: CSSProperties
+  parentStyle?: CSSProperties;
+  id?: string;
 }
 export interface DraggableCanvasProps extends CanvasProps {
   parentRef: ForwardedRef<HTMLDivElement>;

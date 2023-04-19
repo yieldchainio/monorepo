@@ -9,5 +9,5 @@ import { StepSizing } from "utilities/classes/step/types";
 export interface StepProps extends BaseComponentProps {
   step: Step;
   triggerComparison: () => void;
+  canvasID?: string;
 }
-

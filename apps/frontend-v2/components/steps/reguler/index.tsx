@@ -15,7 +15,7 @@ import { RegulerChooseAction } from "./initial";
 import { ActionConfig } from "./config";
 
 export const RegulerStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, triggerComparison, style, ...props }: StepProps, ref) => {
+  ({ step, triggerComparison, style, canvasID, ...props }: StepProps, ref) => {
     /**
      * Switch case to return corresponding step component depending on state type
      */
@@ -29,6 +29,7 @@ export const RegulerStep = forwardRef<HTMLDivElement, StepProps>(
             triggerComparison={triggerComparison}
             ref={ref}
             {...props}
+            canvasID={canvasID}
           />
         );
 
@@ -40,6 +41,7 @@ export const RegulerStep = forwardRef<HTMLDivElement, StepProps>(
             triggerComparison={triggerComparison}
             ref={ref}
             {...props}
+            canvasID={canvasID}
           />
         );
 
@@ -51,6 +53,7 @@ export const RegulerStep = forwardRef<HTMLDivElement, StepProps>(
             triggerComparison={triggerComparison}
             ref={ref}
             {...props}
+            canvasID={canvasID}
           />
         );
 
@@ -62,6 +65,7 @@ export const RegulerStep = forwardRef<HTMLDivElement, StepProps>(
             triggerComparison={triggerComparison}
             ref={ref}
             {...props}
+            canvasID={canvasID}
           />
         );
     }

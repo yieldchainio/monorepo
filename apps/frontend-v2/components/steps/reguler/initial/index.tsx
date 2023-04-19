@@ -10,7 +10,7 @@ import { SmallChooseAction } from "./small";
 import { MediumChooseAction } from "./medium";
 
 export const RegulerChooseAction = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     switch (step.size) {
       case StepSizing.SMALL:
         return (
@@ -20,6 +20,7 @@ export const RegulerChooseAction = forwardRef<HTMLDivElement, StepProps>(
             triggerComparison={triggerComparison}
             ref={ref}
             {...props}
+            canvasID={canvasID}
           />
         );
 

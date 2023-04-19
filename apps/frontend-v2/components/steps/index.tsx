@@ -13,7 +13,7 @@ import { RegulerStep } from "./reguler";
 import { TriggerStep } from "./trigger";
 
 export const HeadStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     /**
      * Switch case to return corresponding step component depending on the type (e.g Reguler, Condition, trigger)
      */
@@ -27,6 +27,7 @@ export const HeadStep = forwardRef<HTMLDivElement, StepProps>(
             ref={ref}
             triggerComparison={triggerComparison}
             {...props}
+            canvasID={canvasID}
           />
         );
 
@@ -38,6 +39,7 @@ export const HeadStep = forwardRef<HTMLDivElement, StepProps>(
             ref={ref}
             triggerComparison={triggerComparison}
             {...props}
+            canvasID={canvasID}
           />
         );
 

@@ -11,7 +11,7 @@ import { TriggerCompleteStep } from "./complete";
 import { EmptyStep } from "../placeholder";
 
 export const TriggerStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     /**
      * Switch case to return corresponding step component depending on state type
      */
@@ -25,6 +25,7 @@ export const TriggerStep = forwardRef<HTMLDivElement, StepProps>(
             triggerComparison={triggerComparison}
             ref={ref}
             {...props}
+            canvasID={canvasID}
           />
         );
 
@@ -42,6 +43,7 @@ export const TriggerStep = forwardRef<HTMLDivElement, StepProps>(
             triggerComparison={triggerComparison}
             ref={ref}
             {...props}
+            canvasID={canvasID}
           />
         );
     }

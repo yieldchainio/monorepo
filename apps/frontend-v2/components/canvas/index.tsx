@@ -26,6 +26,7 @@ export const Canvas = ({
   style,
   parentStyle,
   utilityButtons,
+  id,
 }: CanvasProps) => {
   // Saving refs for both the parent container & the canvas
   const parentRef = useRef<HTMLDivElement>(null);
@@ -42,6 +43,7 @@ export const Canvas = ({
         childrenWrapper={childrenWrapper}
         style={style}
         utilityButtons={utilityButtons}
+        id={id}
       >
         {children}
       </DraggableCanvas>
@@ -86,6 +88,7 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
       childrenWrapper,
       utilityButtons,
       style: propStyle,
+      id,
     }: DraggableCanvasProps,
     ref
   ) => {
@@ -99,7 +102,7 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
         {
           zoom: (_zoom: number) => {
             setZoom(_zoom < 1 ? 0.99 : _zoom > 1.5 ? 1.501 : _zoom);
-            setters?.zoom?.(_zoom)
+            setters?.zoom?.(_zoom);
           },
         }
       );
@@ -121,6 +124,7 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
           }}
           ref={ref}
           {...interactivity()}
+          id={id}
         >
           <ChildrenProvider
             callback={(wrapper) => {

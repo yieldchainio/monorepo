@@ -9,7 +9,7 @@ import { EmptySmallStep } from "./small";
 import { EmptyMediumStep } from "./medium";
 
 export const EmptyStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     /**
      * Switch case for the sizing
      */
@@ -22,6 +22,7 @@ export const EmptyStep = forwardRef<HTMLDivElement, StepProps>(
             style={style}
             triggerComparison={triggerComparison}
             {...props}
+            canvasID={canvasID}
           />
         );
 
@@ -33,6 +34,7 @@ export const EmptyStep = forwardRef<HTMLDivElement, StepProps>(
             style={style}
             triggerComparison={triggerComparison}
             {...props}
+            canvasID={canvasID}
           />
         );
     }

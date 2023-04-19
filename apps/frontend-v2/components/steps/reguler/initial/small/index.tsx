@@ -13,11 +13,15 @@ import WrappedImage from "components/wrappers/image";
 import { InfoProvider } from "components/info-providers";
 import { BaseNode } from "components/steps/components/node";
 import { ACTION_IDS_TO_CONFIGS, ACTION_IDS_TO_ENUM_KEY } from "../constants";
+import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 
 export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     // Get the available actions from our hook
     const actions = useActions();
+
+    // Get the canvas portal for tooltip
+    const canvasPortal = useElementPortal(canvasID);
 
     // Return the JSX
     return (
@@ -38,7 +42,7 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
         <div className="grid grid-cols-3 gap-2 w-full overflow-scroll scrollbar-hide">
           {actions.map((action) => {
             return (
-              <InfoProvider contents={action.name}>
+              <InfoProvider contents={action.name} portal={canvasPortal}>
                 <div
                   className="bg-custom-componentbg rounded-large flex flex-col gap-2 items-center justify-center py-3 group hover:bg-opacity-50 transition duration-200 ease-in-out"
                   onClick={() => {

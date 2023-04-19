@@ -8,7 +8,7 @@ import { Step } from "utilities/classes/step";
 import { DefaultDimensions, StepSizing } from "utilities/classes/step/types";
 import { useSteps } from "utilities/hooks/yc/useSteps";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { HeadStep } from "components/steps";
 import { Edge } from "components/steps/components/edge";
 
@@ -71,13 +71,15 @@ export const StepsModal = ({
 
   // Root step (memoized)
   const rootStep = useMemo(() => {
-    console.log("Returning This Rootstep from memo: ", stepsState.rootStep);
     return stepsState.rootStep;
   }, [
     // stepsState,
     stepsState.rootStep,
     // JSON.stringify(stepsState.rootStep?.toJSON()),
   ]);
+
+  // Get a UUID for the canvas
+  const canvasID = useId();
 
   return (
     <div
@@ -95,6 +97,7 @@ export const StepsModal = ({
         setters={{
           zoom: handleZoom,
         }}
+        id={canvasID}
       >
         {rootStep?.map<React.ReactNode>((step: Step) => {
           return (
@@ -109,6 +112,7 @@ export const StepsModal = ({
               }}
               key={step.id}
               triggerComparison={triggerComparison}
+              canvasID={canvasID}
             />
           );
         })}

@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useRef } from "react";
 import WrappedImage from "./image";
 import { InputProps, Selection } from "./types";
 import WrappedText from "./text";
@@ -28,14 +28,19 @@ const WrappedInput = ({
   title,
   value,
 }: InputProps) => {
+  const ref = useRef<HTMLInputElement>(null);
   return (
-    <div className="w-full flex flex-col justify-center items-end relative gap-1">
+    <div
+      className="w-full flex flex-col justify-center items-end relative gap-1"
+      onClick={() => console.log("Input CLickerooni")}
+    >
       {title && (
         <WrappedText className="self-start ml-2" fontSize={14}>
           {title}
         </WrappedText>
       )}
       <input
+        ref={ref}
         className={`${
           width +
           " " +
@@ -51,10 +56,10 @@ const WrappedInput = ({
           "select-none focus:ring-0 focus:ring-offset-0" +
           className
         } `}
-        onClick={(e: React.MouseEvent<HTMLElement>) =>
-          onClick ? onClick(e) : null
-        }
         onChange={onChange}
+        onClick={() => {
+          ref.current?.focus();
+        }}
         placeholder={placeholder}
         type={type}
         style={style || {}}

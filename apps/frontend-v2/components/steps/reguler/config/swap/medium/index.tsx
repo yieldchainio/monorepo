@@ -14,7 +14,7 @@ import { InfoProvider } from "components/info-providers";
 import { ToolTipDirection } from "components/info-providers/types";
 import { YCToken } from "@yc/yc-models";
 import { useSwap } from "../hooks/useSwap";
-import { ChooseToken } from "../components/choose-token";
+import { ChooseToken } from "../../components/choose-token";
 import { TokenSwap } from "../components/token-swap";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 

@@ -36,7 +36,11 @@ export const ChooseToken = forwardRef(
     ref
   ) => {
     return (
-      <InfoProvider contents={label} direction={ToolTipDirection.LEFT} portal={portal}>
+      <InfoProvider
+        contents={label}
+        direction={ToolTipDirection.LEFT}
+        portal={portal}
+      >
         <Dropdown
           options={[]}
           buttonProps={{
@@ -54,7 +58,11 @@ export const ChooseToken = forwardRef(
                   image: choice.logo,
                   data: choice,
                 }
-              : undefined
+              : {
+                  text: label,
+                  image: undefined,
+                  data: undefined,
+                }
           }
           {...dropdownProps}
         >

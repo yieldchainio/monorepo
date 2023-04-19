@@ -60,7 +60,7 @@ const DropdownMenu = ({
       );
     else
       return (
-        `${"w-max"} bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 absolute top-[60px] left-[0px] z-100 border-1 border-custom-border animate-popup overflow-hidden border-[1px] border-custom-border` +
+        `${"w-max"} bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 absolute top-[60px] left-[0px] z-100 border-1 border-custom-border animate-popup overflow-hidden border-[1px] border-custom-border scrollbar-hide` +
         " " +
         `left-[${parentRef.current?.getBoundingClientRect().left}` +
         (" " + (className || ""))

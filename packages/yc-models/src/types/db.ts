@@ -99,7 +99,7 @@ export interface DBProtocol {
   twitter: string | null;
   telegram: string | null;
   discord: string | null;
-  type: ProtocolType;
+  types: ProtocolType[];
 }
 
 export interface DBAddress {

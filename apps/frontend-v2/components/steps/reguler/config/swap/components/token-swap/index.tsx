@@ -7,7 +7,7 @@ import { YCNetwork, YCToken } from "@yc/yc-models";
 import { TokensModalProps } from "components/tokens-modal/types";
 import WrappedImage from "components/wrappers/image";
 import { forwardRef } from "react";
-import { ChooseToken } from "../choose-token";
+import { ChooseToken } from "../../../components/choose-token";
 import { DropdownProps } from "components/dropdown/types";
 
 export const TokenSwap = forwardRef(

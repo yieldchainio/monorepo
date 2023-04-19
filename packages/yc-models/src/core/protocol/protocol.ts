@@ -20,7 +20,7 @@ export class YCProtocol extends BaseClass {
   readonly website: string;
   readonly logo: string;
   readonly socialMedia: YCSocialMedia;
-  readonly type: ProtocolType;
+  readonly types: ProtocolType[];
   readonly available: boolean;
   readonly addresses: YCAddress[] = [];
   readonly color: string | null = null;
@@ -52,7 +52,8 @@ export class YCProtocol extends BaseClass {
 
     this.id = _protocol.id;
 
-    this.type = _protocol.type;
+    console.log("Protocol types ser", _protocol);
+    this.types = _protocol.types;
 
     this.available = _protocol.available;
 
@@ -137,7 +138,7 @@ export class YCProtocol extends BaseClass {
       color: this.color,
       chain_ids: this.networks.map((network) => network.id),
       address_ids: this.addresses.map((address) => address.id),
-      type: this.type,
+      types: this.types,
       twitter: this.socialMedia.twitter.link || "",
       discord: this.socialMedia.discord.link || "",
       telegram: this.socialMedia.telegram.link || "",

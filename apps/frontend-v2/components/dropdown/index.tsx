@@ -30,6 +30,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       textProps,
       imageProps,
       manualModal,
+      autoChoice = true,
       ...props
     }: DropdownProps,
     ref
@@ -55,7 +56,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
     // Change the choice each time choice is changed
     useEffect(() => {
-      !manualModal && setCurrentChoice([...options][0]);
+      !manualModal && autoChoice && setCurrentChoice([...options][0]);
     }, [JSON.stringify(options.map((opt) => JSON.stringify(opt)))]);
 
     // A state keeping track of this component's UUID, for event listening purpoes

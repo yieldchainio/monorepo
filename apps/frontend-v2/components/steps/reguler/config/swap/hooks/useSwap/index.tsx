@@ -10,6 +10,7 @@ import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import { SwapData } from "../../types";
 import { useExchanges } from "../useExchanges";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
+import { useConfigContext } from "../../../hooks/useConfigContext";
 
 export const useSwap = ({
   step,
@@ -19,21 +20,12 @@ export const useSwap = ({
   triggerComparison: () => void;
 }) => {
   /**
-   * Get the global data context (passed onto creations of persisted tokens)
+   * Get some base variables that we need (context, network & our available tokens)
    */
-  const context = useYCStore((state) => state.context);
-
-  /**
-   * Get the strategy's network
-   */
-  const network = useStrategyStore((state) => state.network);
-
-  /**
-   * Get the step's available tokens
-   * // TODO: This looks inefficient since a decent amount of computation per render...
-   * // TODO: Yet i cant think of a way to memo this as it is relaying on a lot of other variables.
-   */
-  const availableTokens = step.availableTokens;
+  const { context, network, availableTokens } = useConfigContext({
+    step,
+    triggerComparison,
+  });
 
   /**
    * Get the avaialble exchnages

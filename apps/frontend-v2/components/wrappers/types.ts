@@ -43,6 +43,9 @@ export interface InputProps extends Omit<BaseComponentProps, "onClick"> {
   type?: "text" | "number";
   title?: string;
   value?: string;
+  defaultValue?: string;
+  min?: number;
+  max?: number;
 }
 
 export type ImageSrc =

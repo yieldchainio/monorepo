@@ -27,6 +27,9 @@ const WrappedInput = ({
   style,
   title,
   value,
+  defaultValue,
+  min,
+  max,
 }: InputProps) => {
   const ref = useRef<HTMLInputElement>(null);
   return (
@@ -64,6 +67,17 @@ const WrappedInput = ({
         type={type}
         style={style || {}}
         value={value}
+        defaultValue={defaultValue}
+        min={min}
+        max={max}
+        onKeyUp={async () => {
+          await new Promise((res) => setTimeout(() => res(true), 1000));
+          if (parseFloat(ref.current?.value || "0") < (min || -100000000))
+            (ref.current || { value: "0" }).value = min?.toString() || "";
+
+          if (parseFloat(ref.current?.value || "0") > (max || 10000000000000))
+            (ref.current || { value: "0" }).value = max?.toString() || "";
+        }}
       />
       {showGlass &&
         (typeof icon == "string" ? (

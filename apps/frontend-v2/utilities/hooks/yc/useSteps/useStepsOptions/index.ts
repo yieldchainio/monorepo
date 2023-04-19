@@ -34,7 +34,6 @@ export const useStepOptions = ({
         data: {
           description: "Expand This Step",
           handler: () => {
-            console.log("Running Expand Handler...");
             step.resize(StepSizing.MEDIUM, null, true);
           },
         },
@@ -59,7 +58,7 @@ export const useStepOptions = ({
           data: {
             description: "Edit This Step",
             handler: () => {
-              // step.changeState(Ste);
+              step.changeState("config");
               // TODO:
             },
           },

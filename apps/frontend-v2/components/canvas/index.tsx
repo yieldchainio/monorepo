@@ -64,7 +64,7 @@ const ParentContainer = forwardRef<HTMLDivElement, BaseComponentProps>(
   ({ children, style }: BaseComponentProps, ref) => {
     return (
       <div
-        className="relative w-full flex flex-col items-center justify-start overflow-hidden rounded-xl border-[2px] border-custom-border "
+        className="relative w-full flex flex-col items-center justify-start overflow-hidden rounded-xl border-[0px] border-custom-border "
         ref={ref}
         style={style}
       >

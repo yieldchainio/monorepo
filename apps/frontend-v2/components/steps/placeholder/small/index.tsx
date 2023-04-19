@@ -33,7 +33,8 @@ export const EmptySmallStep = forwardRef<HTMLDivElement, StepProps>(
                 state: "initial",
               },
               true
-            )
+            ),
+            true
           );
 
           triggerComparison();

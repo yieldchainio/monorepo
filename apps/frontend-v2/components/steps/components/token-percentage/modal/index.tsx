@@ -8,6 +8,7 @@ import WrappedImage from "components/wrappers/image";
 import WrappedInput from "components/wrappers/input";
 import WrappedText from "components/wrappers/text";
 import { forwardRef } from "react";
+import { useDropdownEvent } from "utilities/hooks/general/useDropdownEvent";
 
 export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {

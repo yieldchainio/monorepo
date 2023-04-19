@@ -81,11 +81,10 @@ export const StepsModal = ({
 
   return (
     <div
-      className="w-full z-[-1] mx-auto"
+      className="w-full z-[-1] mx-auto bg-custom-componentbg bg-opacity-40 p-[4px] rounded-xl "
       onClick={props.onClick}
       {...wrapperProps}
     >
-
       <Canvas
         size={canvasDimensions}
         childrenWrapper={<div className="relative w-max h-max mx-auto"></div>}
@@ -98,7 +97,6 @@ export const StepsModal = ({
         }}
         id={canvasID}
       >
-   
         {rootStep?.map<React.ReactNode>((step: Step) => {
           return (
             <HeadStep

@@ -78,7 +78,8 @@ export class Step implements IStep<Step> {
       this.addChild(
         new Step({
           state: "empty",
-        })
+        }),
+        true
       );
   };
 
@@ -144,7 +145,7 @@ export class Step implements IStep<Step> {
   inheritStyle = () => {
     // Inherit the current sizing (e.g when a SMALL parent adds a child, they obv dont want
     // it to be a MEDIUM)
-    this.parent?.size && this.resize(this.parent.size);
+    this.parent?.size !== undefined && this.resize(this.parent.size);
 
     // Inherit writeability. Writeability is false by default, but when we add a child to
     // a writeable parent, then it should be writeable
@@ -544,7 +545,7 @@ export class Step implements IStep<Step> {
      */
     this.id = config?.id || uuid();
     this.state = config?.state || "initial";
-    this.size = config?.size || StepSizing.MEDIUM;
+    this.size = config?.size || this.parent?.size || StepSizing.MEDIUM;
     this.dimensions = this.defaultDimensions[this.size];
     this.type = config?.type || StepType.STEP;
     this.inflows = config?.inflows || [];
@@ -582,6 +583,8 @@ export class Step implements IStep<Step> {
 
     // Add an empty placeholder child if our length is 0 and we are writeable
     this.attemptAddEmptyChild();
+
+    if (this.state == "empty") this.inheritStyle();
   }
 
   // ========================================

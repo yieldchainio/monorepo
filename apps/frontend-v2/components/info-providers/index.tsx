@@ -133,10 +133,7 @@ export const InfoProvider = ({
   }, [activeConsumerIndex]);
 
   // Handle hover over the children
-  const handleTrigger = async (
-    consumerIndex: number | null,
-    close: boolean = false
-  ) => {
+  const handleTrigger = async (consumerIndex: number | null) => {
     // If we got a trigger and our inputted consumer index is not nullish
     if (consumerIndex !== null) {
       // If we got a custom open handler, invoke that
@@ -187,7 +184,7 @@ export const InfoProvider = ({
         ) => {
           e.stopPropagation();
           if (visible) setActiveConsumerIndex(null);
-          else handleTrigger(i, true);
+          else handleTrigger(i);
         },
       },
       onHover: {
@@ -196,7 +193,7 @@ export const InfoProvider = ({
           i: number | null
         ) => {
           e.stopPropagation();
-          handleTrigger(i, true);
+          handleTrigger(i);
         },
         onMouseLeave: async (e: any) => {
           e.stopPropagation();

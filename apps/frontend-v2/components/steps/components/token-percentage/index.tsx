@@ -56,13 +56,9 @@ export const TokenPercentageBox = forwardRef<
                 triggerComparison={triggerComparison}
               />
             }
-            portal={portal}
             direction={ToolTipDirection.BOTTOM}
-            retain
-            style={{
-              width: "200px",
-            }}
             overrideDefaultComponent
+            portal={portal}
           >
             <div>
               <InfoProvider

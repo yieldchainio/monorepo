@@ -78,7 +78,7 @@ export default function Home() {
         type: FilterTypes.OPTIONS,
         callback: (item: YCStrategy, config: OptionsFilter<YCStrategy>) =>
           config.selectedOptions.find(
-            (network: YCNetwork) => network.chainid == item.network?.chainid
+            (network: YCNetwork) => network.id == item.network?.id
           ),
         selectedOptions: selectedNetworks,
       })

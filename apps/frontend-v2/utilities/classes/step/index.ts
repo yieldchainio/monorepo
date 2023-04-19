@@ -260,7 +260,8 @@ export class Step implements IStep<Step> {
    */
   availableAndEvenPercentage = (
     token: YCToken,
-    additionalCleanChilds?: Step[]
+    additionalCleanChilds?: Step[],
+    childIDToExclude?: string
   ) => {
     // Init a variable for available percentage
     let available = 100;
@@ -286,7 +287,8 @@ export class Step implements IStep<Step> {
       // If it's dirty, subtract it from the available percentage
       if (childPercentage.dirty) {
         dirty.push(child);
-        available -= childPercentage.percentage;
+        if (child.id !== childIDToExclude)
+          available -= childPercentage.percentage;
       } else clean.push(child);
     }
 
@@ -314,11 +316,13 @@ export class Step implements IStep<Step> {
 
   editTokenPercentage = (token: YCToken, percentage: number): boolean => {
     // We must have this token in our inflows
-    if (!this.inflows.some((_token) => _token.id == token.id))
+    if (!this.outflows.some((_token) => _token.id == token.id))
       throw "Cannot Edit Token Percentage - Inflow Not Found!";
 
     // Get available (and even) percentage
-    const { even, available } = this.availableAndEvenPercentage(token);
+    const { even, available } = this.parent?.availableAndEvenPercentage(
+      token
+    ) || { available: 0, even: 0 };
 
     // Assert that the available percentage must be sufficient to the requested one
     if (percentage > available) return false;

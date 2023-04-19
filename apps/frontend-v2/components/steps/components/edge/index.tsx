@@ -34,7 +34,6 @@ export const Edge = forwardRef<
      */
     const canvasPortal = useElementPortal(canvasID);
 
-
     /**
      * Get shortands of some positioning propreties of both the parent and the child
      */
@@ -143,7 +142,6 @@ export const Edge = forwardRef<
       childStep.position.x,
       childStep.position.y,
     ]);
-
 
     return (
       <div className=" w-max h-max">

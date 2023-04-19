@@ -48,6 +48,9 @@ const TitleConfig = () => {
           width="w-[100%]"
           title="Strategy Title"
           value={globalTitle || undefined}
+          style={{
+            paddingRight: "12vw",
+          }}
         ></WrappedInput>
       </StrategyConfigWrapper>
     </div>

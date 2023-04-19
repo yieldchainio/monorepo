@@ -13,13 +13,13 @@ export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
     return (
       <div
-        className="absolute w-[120px] h-[180px]flex flex-col bg-custom-componentbg rounded-md border-[1px] border-custom-themedBorder shadow-md py-4 px-4 gap-6"
+        className="cursor-default overflow-hidden absolute h-[220px] w-[200px] flex flex-col bg-custom-componentbg rounded-md border-[1px] border-custom-themedBorder shadow-md py-4 px-4 gap-6"
         style={style}
       >
         <div className="flex flex-row items-center justify-start w-full">
           <WrappedText>Edit Distribution</WrappedText>
         </div>
-        <div className="flex flex-col w-full h-full overflow-scroll scrollbar-hide">
+        <div className="flex flex-col w-full h-full overflow-scroll scrollbar-hide gap-2">
           {step.outflows.map((token) => {
             // Get the current percentage from the step's mapping
             const currPercentage = step.tokenPercentages.get(token.id);
@@ -32,9 +32,13 @@ export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
               );
 
             // Get the available percentage
-            const { available } = step.parent?.availableAndEvenPercentage(
-              token
-            ) || { available: null };
+            const { available, even } = step.parent?.availableAndEvenPercentage(
+              token,
+              [],
+              step.id
+            ) || {
+              available: null,
+            };
 
             if (!available)
               throw (
@@ -44,17 +48,39 @@ export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
 
             return (
               <div className="flex flex-row items-center justify-between">
-                <div className="flex flex-row items-center gap-1">
+                <div className="flex flex-row items-center gap-[0.35rem] ">
                   <WrappedImage src={token.logo} width={20} height={20} />
-                  <WrappedText>{token.symbol}</WrappedText>
+                  <WrappedText className="leading-none">
+                    {token.symbol + " :"}
+                  </WrappedText>
                 </div>
-                <div className="flex flex-row items-center justify-start">
+                <div className="flex flex-row items-center justify-start gap-1">
                   <WrappedInput
-                    type="number"
                     style={{
-                      width: "0%",
+                      paddingTop: "4px",
+                      paddingBottom: "4px",
+                      backgroundColor: "var(--subbg)",
+                      paddingLeft: "8px",
                     }}
-                    width="w-[5%]"
+                    width="w-[50px]"
+                    showGlass={false}
+                    type="number"
+                    placeholder={even.toString()}
+                    onChange={(e) => {
+                      console.log(
+                        "Gonna Change percentage to",
+                        parseFloat(e.target.value)
+                      );
+                      step.editTokenPercentage(
+                        token,
+                        parseFloat(e.target.value)
+                      );
+                    }}
+                    defaultValue={step.tokenPercentages
+                      .get(token.id)
+                      ?.percentage?.toString()}
+                    max={available}
+                    min={0.1}
                   ></WrappedInput>
                   <WrappedText>{"/ " + available.toString()}</WrappedText>
                 </div>

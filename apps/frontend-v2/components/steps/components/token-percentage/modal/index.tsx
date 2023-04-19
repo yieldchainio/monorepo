@@ -13,7 +13,7 @@ export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
     return (
       <div
-        className="absolute w-[120px] h-[180px]flex flex-col bg-custom-componentbg rounded-md border-[1px] border-custom-themedBorder py-4 px-4 gap-6"
+        className="absolute w-[120px] h-[180px]flex flex-col bg-custom-componentbg rounded-md border-[1px] border-custom-themedBorder shadow-md py-4 px-4 gap-6"
         style={style}
       >
         <div className="flex flex-row items-center justify-start w-full">
@@ -52,8 +52,9 @@ export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
                   <WrappedInput
                     type="number"
                     style={{
-                      width: "50%",
+                      width: "0%",
                     }}
+                    width="w-[5%]"
                   ></WrappedInput>
                   <WrappedText>{"/ " + available.toString()}</WrappedText>
                 </div>

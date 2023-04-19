@@ -32,7 +32,7 @@ export const LeftEdge = ({
           parentAnchor.x - childAnchor.x - CURVE_WIDTH
         } a 50 50 0 0 1 50 50 v ${childAnchor.y - parentAnchor.y - EDGE_WIDTH}`}
         stroke={"currentColor"}
-        stroke-width={EDGE_WIDTH}
+        strokeWidth={EDGE_WIDTH}
         fill={"none"}
         transform={`translate(${
           parentAnchor.x - childAnchor.x + CURVE_WIDTH

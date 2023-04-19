@@ -22,6 +22,7 @@ export const StepsModal = ({
   options,
   root,
   comparisonCallback,
+  canvasID,
   ...props
 }: StepsModalProps) => {
   /**
@@ -78,9 +79,6 @@ export const StepsModal = ({
     // JSON.stringify(stepsState.rootStep?.toJSON()),
   ]);
 
-  // Get a UUID for the canvas
-  const canvasID = useId();
-
   return (
     <div
       className="w-full z-[-1] mx-auto"
@@ -120,7 +118,7 @@ export const StepsModal = ({
           return !step.children.length
             ? null
             : step.children.map((child: Step) => (
-                <Edge parentStep={step} childStep={child} />
+                <Edge parentStep={step} childStep={child} canvasID={canvasID} />
               ));
         })}
       </Canvas>

@@ -65,7 +65,7 @@ export const BaseNode = forwardRef<
         },
       };
 
-      step.resize(step.size, undefined, true);
+      step.resize(step.size, undefined, false, true);
     }, [height, width]);
 
     // Return the node

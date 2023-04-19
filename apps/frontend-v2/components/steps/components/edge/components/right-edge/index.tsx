@@ -49,7 +49,7 @@ export const RightEdge = ({
       <path
         d={`M0 ${EDGE_WIDTH} h ${hLine} a 50 50 0 0 1 50 50 v ${height}`}
         stroke={"currentColor"}
-        stroke-width={EDGE_WIDTH}
+        strokeWidth={EDGE_WIDTH}
         fill={"none"}
       ></path>
     </svg>

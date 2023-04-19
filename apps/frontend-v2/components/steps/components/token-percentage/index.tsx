@@ -9,9 +9,22 @@ import WrappedText from "components/wrappers/text";
 import { InfoProvider } from "components/info-providers";
 import WrappedImage from "components/wrappers/image";
 import { TokenPercentageModal } from "./modal";
+import { ToolTipDirection } from "components/info-providers/types";
 
-export const TokenPercentageBox = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+export const TokenPercentageBox = forwardRef<
+  HTMLDivElement,
+  StepProps & { portal?: HTMLElement }
+>(
+  (
+    {
+      step,
+      style,
+      triggerComparison,
+      portal,
+      ...props
+    }: StepProps & { portal?: HTMLElement },
+    ref
+  ) => {
     return (
       <div
         className=" absolute w-[80px] h-[30px] bg-custom-componentbg dark:bg-custom-bg rounded-md border-[1px] border-custom-border dark:border-custom-themedBorder flex flex-row items-center justify-center px-2 gap-2"
@@ -43,9 +56,20 @@ export const TokenPercentageBox = forwardRef<HTMLDivElement, StepProps>(
                 triggerComparison={triggerComparison}
               />
             }
+            portal={portal}
+            direction={ToolTipDirection.BOTTOM}
+            retain
+            style={{
+              width: "200px",
+            }}
+            overrideDefaultComponent
           >
             <div>
-              <InfoProvider contents="Edit Inflows %" delay={500}>
+              <InfoProvider
+                contents="Edit Inflows %"
+                delay={500}
+                portal={portal}
+              >
                 <div className="">
                   <WrappedImage
                     src={{

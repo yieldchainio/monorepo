@@ -12,7 +12,10 @@ import { forwardRef } from "react";
 export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
     return (
-      <div className="w-[120px] h-[180px]flex flex-col bg-custom-componentbg rounded-md border-[1px] border-custom-themedBorder py-4 px-4 gap-6">
+      <div
+        className="absolute w-[120px] h-[180px]flex flex-col bg-custom-componentbg rounded-md border-[1px] border-custom-themedBorder py-4 px-4 gap-6"
+        style={style}
+      >
         <div className="flex flex-row items-center justify-start w-full">
           <WrappedText>Edit Distribution</WrappedText>
         </div>

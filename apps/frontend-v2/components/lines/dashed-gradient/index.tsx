@@ -36,7 +36,7 @@ export const DashedGradientLine = ({
         y1={"0"}
         x2={"2"}
         y2={"0"}
-        stroke-width={parseInt(borderWidth)}
+        strokeWidth={parseInt(borderWidth)}
         stroke="url(#gradient)"
         strokeDasharray={`${dashSize} ${dashSpace}`}
       >

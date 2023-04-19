@@ -34,7 +34,7 @@ export const RegulerLine = ({
         y1={"0"}
         x2={"0"}
         y2={"0"}
-        stroke-width={parseInt(borderWidth)}
+        strokeWidth={parseInt(borderWidth)}
         stroke={color}
       >
         <animate

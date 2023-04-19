@@ -49,6 +49,7 @@ export const InfoProvider = ({
   overrideDefaultComponent = false,
   setCloseHandler,
   portal,
+  retain = false,
 }: InfoProviderProps) => {
   // We set a ref for all of our consumers ( The elements which we wrap around and trigger on hover )
   const setRefs = useRef<Map<number, HTMLDivElement>>(new Map()).current;
@@ -223,11 +224,13 @@ export const InfoProvider = ({
                   ...(style || {}),
                 }}
                 id="Tooltip"
-                {...applyTriggerArgs(
-                  triggers[trigger],
-                  activeConsumerIndex,
-                  {}
-                )}
+                {...(retain
+                  ? {}
+                  : applyTriggerArgs(
+                      triggers[trigger],
+                      activeConsumerIndex,
+                      {}
+                    ))}
               >
                 <ChildrenProvider
                   textProps={{
@@ -241,7 +244,24 @@ export const InfoProvider = ({
                 </ChildrenProvider>
               </div>
             ) : (
-              <ChildrenProvider>{children}</ChildrenProvider>
+              <ChildrenProvider
+                callback={(child) => {
+                  if (!isValidElement(child)) return child;
+
+                  return (
+                    <child.type
+                      {...child.props}
+                      style={{
+                        ...(child.props.style || {}),
+                        ...positionTooltip(direction, visible),
+                        ...(style || {}),
+                      }}
+                    />
+                  );
+                }}
+              >
+                {children}
+              </ChildrenProvider>
             )}
           </>,
           portal || document.body

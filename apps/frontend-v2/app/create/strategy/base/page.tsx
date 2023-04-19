@@ -51,6 +51,7 @@ const BaseStepsConfig = () => {
           comparisonCallback={() => {
             rehydrateSteps();
           }}
+          canvasID="SEED_ALLOCATION_BUILDER"
         />
       </StrategyConfigVerticalWrapper>
     </div>

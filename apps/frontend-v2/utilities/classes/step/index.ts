@@ -112,10 +112,11 @@ export class Step implements IStep<Step> {
   resize = (
     newSize: StepSizing,
     dimensions: Dimensions | null = this.defaultDimensions[newSize],
-    manual: boolean = false
+    manual: boolean = false,
+    override: boolean = false
   ) => {
     // If this step has been manually resized before, then this resize must be manual as well to retain their choice
-    if (manual || !this.manuallyResized) {
+    if (manual || override || !this.manuallyResized) {
       // We set the new dimensions & Sizing
       this.size = newSize;
       this.dimensions = dimensions || this.defaultDimensions[newSize];

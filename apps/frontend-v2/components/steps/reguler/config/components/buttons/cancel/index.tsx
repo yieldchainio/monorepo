@@ -34,7 +34,7 @@ export const CancelButton = ({
   );
 
   const buttonContent = useMemo(
-    () => (step.size === StepSizing.SMALL ? "+" : "Cancel"),
+    () => (step.size === StepSizing.SMALL ? "x" : "Cancel"),
     [step.size]
   );
   return (

@@ -75,6 +75,7 @@ export const StrategiesDraftsModal = ({
             chooseSelf={() => {
               loadStrategy(draft);
             }}
+            key={draft.id}
           />
         ))}
       </div>

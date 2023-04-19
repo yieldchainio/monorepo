@@ -52,7 +52,7 @@ export const useStepOptions = ({
 
     // Push deletability, editability (write actions)
     if (writeable) {
-      if (edit && step.state !== "config")
+      if (edit && step.state == "complete")
         newOptions.push({
           text: "Edit",
           data: {

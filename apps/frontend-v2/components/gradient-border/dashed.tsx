@@ -54,8 +54,8 @@ export const DashedGradientBorder = forwardRef<
         >
           <defs>
             <linearGradient id="gradient">
-              <stop offset="0%" stop-color={heavyColor} />
-              <stop offset="100%" stop-color={lightColor} />
+              <stop offset="0%" stopColor={heavyColor} />
+              <stop offset="100%" stopColor={lightColor} />
             </linearGradient>
           </defs>
           <rect
@@ -65,9 +65,9 @@ export const DashedGradientBorder = forwardRef<
             height={`calc(${height} - ${borderWidth})`}
             rx={parseInt(borderRadius)}
             fill="transparent"
-            stroke-width={borderWidth}
+            strokeWidth={borderWidth}
             stroke="url(#gradient)"
-            stroke-dasharray={`${dashSize} ${dashSpace}`}
+            strokeDasharray={`${dashSize} ${dashSpace}`}
           />
         </svg>
         <div

@@ -22,6 +22,7 @@ import {
 import { PlusCircle } from "../plus-circle";
 import { InfoProvider } from "components/info-providers";
 import { Step } from "utilities/classes/step";
+import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 
 export const BaseNode = forwardRef<
   HTMLDivElement,
@@ -39,6 +40,7 @@ export const BaseNode = forwardRef<
       style,
       step,
       triggerComparison,
+      canvasID,
       ...props
     }: StepProps & {
       width: `${number}${string}`;
@@ -82,6 +84,7 @@ export const BaseNode = forwardRef<
               style={style}
               step={step}
               triggerComparison={triggerComparison}
+              canvasID={canvasID}
             />
           )}
         <div
@@ -110,6 +113,7 @@ const ChildAdders = ({
   height,
   style,
   step,
+  canvasID,
   triggerComparison,
 }: StepProps & {
   width: `${number}${string}`;
@@ -131,12 +135,15 @@ const ChildAdders = ({
 
     triggerComparison();
   }, [step]);
+
+  /**
+   * Get the canvas portal for the tooltip
+   */
+  const canvasPortal = useElementPortal(canvasID);
+
   return (
-    <div
-      className=""
-      style={{ ...style, zIndex: 0, position: "relative" }}
-    >
-      <InfoProvider contents="Add Step +" delay={300}>
+    <div className="" style={{ ...style, zIndex: 0, position: "relative" }}>
+      <InfoProvider contents="Add Step +" delay={300} portal={canvasPortal}>
         <PlusCircle
           style={{
             zIndex: 2,
@@ -148,7 +155,7 @@ const ChildAdders = ({
           onClick={addChild}
         />
       </InfoProvider>
-      <InfoProvider contents="Add Step +" delay={300}>
+      <InfoProvider contents="Add Step +" delay={300} portal={canvasPortal}>
         <PlusCircle
           style={{
             zIndex: 2,

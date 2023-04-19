@@ -24,17 +24,19 @@ export const ChooseToken = forwardRef(
       className,
       style,
       dropdownProps,
+      portal,
     }: {
       choice?: YCToken | null;
       setChoice: (token: YCToken) => void;
       network?: YCNetwork | null;
       tokens?: YCToken[] | null;
       dropdownProps?: Partial<DropdownProps>;
+      portal?: HTMLElement;
     } & Partial<TokensModalProps>,
     ref
   ) => {
     return (
-      <InfoProvider contents={label} direction={ToolTipDirection.LEFT}>
+      <InfoProvider contents={label} direction={ToolTipDirection.LEFT} portal={portal}>
         <Dropdown
           options={[]}
           buttonProps={{

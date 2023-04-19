@@ -16,9 +16,10 @@ import { YCToken } from "@yc/yc-models";
 import { useSwap } from "../hooks/useSwap";
 import { ChooseToken } from "../components/choose-token";
 import { TokenSwap } from "../components/token-swap";
+import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 
 export const MediumSwapConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     /**
      * Get all of the handlers & variables from the useSwap hook
      */
@@ -32,6 +33,11 @@ export const MediumSwapConfig = forwardRef<HTMLDivElement, StepProps>(
       toToken,
     } = useSwap({ step, triggerComparison });
 
+    /**
+     * Get a portal to our canvas for tooltips
+     */
+    const canvasPortal = useElementPortal(canvasID);
+
     // Return the JSX
     return (
       <BaseActionConfig
@@ -42,6 +48,7 @@ export const MediumSwapConfig = forwardRef<HTMLDivElement, StepProps>(
         width="327px"
         height="328px"
         step={step}
+        canvasID={canvasID}
         triggerComparison={triggerComparison}
         canContinue={
           fromToken
@@ -58,6 +65,7 @@ export const MediumSwapConfig = forwardRef<HTMLDivElement, StepProps>(
           setFromToken={chooseFromToken}
           toToken={toToken}
           setToToken={chooseToToken}
+          portal={canvasPortal}
         />
       </BaseActionConfig>
     );

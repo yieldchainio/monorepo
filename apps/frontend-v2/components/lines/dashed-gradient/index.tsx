@@ -27,8 +27,8 @@ export const DashedGradientLine = ({
     >
       <defs>
         <linearGradient id="gradient">
-          <stop offset="0%" stop-color={heavyColor} />
-          <stop offset="100%" stop-color={lightColor} />
+          <stop offset="0%" stopColor={heavyColor} />
+          <stop offset="100%" stopColor={lightColor} />
         </linearGradient>
       </defs>
       <line
@@ -38,7 +38,7 @@ export const DashedGradientLine = ({
         y2={"0"}
         stroke-width={parseInt(borderWidth)}
         stroke="url(#gradient)"
-        stroke-dasharray={`${dashSize} ${dashSpace}`}
+        strokeDasharray={`${dashSize} ${dashSpace}`}
       >
         <animate
           attributeName="y2"

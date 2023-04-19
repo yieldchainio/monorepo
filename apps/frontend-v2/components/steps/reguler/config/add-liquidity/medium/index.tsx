@@ -7,7 +7,7 @@ import { forwardRef, useEffect, useMemo } from "react";
 import { BaseNode } from "components/steps/components/node";
 
 export const MediumAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     // Return the JSX
     return (
       <BaseNode
@@ -15,6 +15,7 @@ export const MediumAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
         style={style}
         ref={ref}
         {...props}
+        canvasID={canvasID}
         width="246px"
         height="112.5px"
         step={step}

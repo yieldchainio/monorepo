@@ -391,7 +391,7 @@ export class Step implements IStep<Step> {
     this.protocol = null;
     this.action = null;
     this.actionConfig = null;
-    this.data = null;
+    this.data = {};
     this.function = null;
     for (let i = 0; i < this.outflows.length; i++)
       this.removeOutflow(this.outflows[i], i);

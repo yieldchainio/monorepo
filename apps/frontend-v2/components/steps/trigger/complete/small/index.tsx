@@ -11,7 +11,7 @@ import { StepOptions } from "../../../components/options";
 import { BaseNode } from "components/steps/components/node";
 
 export const SmallCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     return (
       <BaseNode
         className="justify-between px-2 "
@@ -22,6 +22,7 @@ export const SmallCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
         height="56px"
         step={step}
         triggerComparison={triggerComparison}
+        canvasID={canvasID}
       >
         <div className="flex flex-row gap-2 items-center justify-start w-[80%] ">
           <div className="flex items-center justify-center p-3 bg-custom-componentbg border-[1px] border-custom-themedBorder dark:border-0 rounded-large w-[30%] max-w-[42px]">
@@ -41,7 +42,11 @@ export const SmallCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
         </div>
         {/* <div className="bg-red-500">Hey Ser What is Up</div> */}
         <div className="flex flex-col h-full py-1 justify-start ">
-          <StepOptions step={step} triggerComparison={triggerComparison} />
+          <StepOptions
+            canvasID={canvasID}
+            step={step}
+            triggerComparison={triggerComparison}
+          />
         </div>
       </BaseNode>
     );

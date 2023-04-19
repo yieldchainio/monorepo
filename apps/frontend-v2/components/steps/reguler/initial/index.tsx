@@ -32,6 +32,7 @@ export const RegulerChooseAction = forwardRef<HTMLDivElement, StepProps>(
             triggerComparison={triggerComparison}
             ref={ref}
             {...props}
+            canvasID={canvasID}
           />
         );
     }

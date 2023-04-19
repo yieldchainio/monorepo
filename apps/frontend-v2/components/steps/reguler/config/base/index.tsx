@@ -11,6 +11,7 @@ import { BaseNode } from "components/steps/components/node";
 import WrappedText from "components/wrappers/text";
 import { ActionConfigButtons } from "../components/buttons";
 import { StepOptions } from "components/steps/components/options";
+import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 
 export const BaseActionConfig = forwardRef<
   HTMLDivElement,
@@ -30,6 +31,7 @@ export const BaseActionConfig = forwardRef<
       step,
       triggerComparison,
       canContinue,
+      canvasID,
       ...props
     }: StepProps & {
       width: `${number}${string}`;
@@ -38,6 +40,12 @@ export const BaseActionConfig = forwardRef<
     },
     ref
   ) => {
+    /**
+     * Get a portal to our canvas for tooltips
+     */
+    const canvasPortal = useElementPortal(canvasID)
+
+    // Return JSX
     return (
       <BaseNode
         width={width}
@@ -48,19 +56,25 @@ export const BaseActionConfig = forwardRef<
         triggerComparison={triggerComparison}
         {...props}
         ref={ref}
+        canvasID={canvasID}
       >
         <div className="flex flex-row items-center justify-between self-start w-full">
           <div className="flex flex-row items-center justify-start gap-1 self-start ">
             <WrappedText className="text-opacity-50">Action:</WrappedText>
             <WrappedText className="">{step.action?.name}</WrappedText>
           </div>
-          <StepOptions step={step} triggerComparison={triggerComparison} />
+          <StepOptions
+            canvasID={canvasID}
+            step={step}
+            triggerComparison={triggerComparison}
+          />
         </div>
         {children}
         <ActionConfigButtons
           step={step}
           triggerComparison={triggerComparison}
           canContinue={canContinue}
+          portal={canvasPortal}
         />
       </BaseNode>
     );

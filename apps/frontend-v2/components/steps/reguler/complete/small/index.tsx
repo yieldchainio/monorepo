@@ -15,7 +15,7 @@ import { StepOptions } from "../../../components/options";
 import { BaseNode } from "components/steps/components/node";
 
 export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     /**
      * Memoizing for performance
      */
@@ -40,6 +40,7 @@ export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
         className="gap-2 px-4"
         step={step}
         triggerComparison={triggerComparison}
+        canvasID={canvasID}
       >
         <WrappedImage
           src={step.protocol?.logo}
@@ -57,6 +58,7 @@ export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
           </div>
         </div>
         <StepOptions
+          canvasID={canvasID}
           step={step}
           onClick={props.onClick}
           triggerComparison={triggerComparison}

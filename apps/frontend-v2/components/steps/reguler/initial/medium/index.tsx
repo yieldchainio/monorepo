@@ -12,7 +12,7 @@ import { BaseNode } from "components/steps/components/node";
 import { ACTION_IDS_TO_ENUM_KEY } from "../constants";
 
 export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     // Get the available actions
     const actions = useActions();
 
@@ -27,10 +27,15 @@ export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
         height="225px"
         step={step}
         triggerComparison={triggerComparison}
+        canvasID={canvasID}
       >
         <div className="flex flex-row items-center justify-between w-full">
           <WrappedText>Select Action</WrappedText>
-          <StepOptions step={step} triggerComparison={triggerComparison} />
+          <StepOptions
+            canvasID={canvasID}
+            step={step}
+            triggerComparison={triggerComparison}
+          />
         </div>
         <div className="grid grid-cols-3 gap-2 w-full overflow-scroll scrollbar-hide">
           {actions.map((action) => {

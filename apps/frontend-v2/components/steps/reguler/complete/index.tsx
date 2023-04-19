@@ -11,7 +11,7 @@ import { SmallCompleteStep } from "./small";
 import { MediumCompleteStep } from "./medium";
 
 export const RegulerCompleteStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, triggerComparison, style, ...props }: StepProps, ref) => {
+  ({ step, triggerComparison, style, canvasID, ...props }: StepProps, ref) => {
     /**
      * Switch case to return corresponding complete component depending on size
      */
@@ -24,6 +24,7 @@ export const RegulerCompleteStep = forwardRef<HTMLDivElement, StepProps>(
             style={style}
             triggerComparison={triggerComparison}
             {...props}
+            canvasID={canvasID}
           />
         );
 
@@ -35,6 +36,7 @@ export const RegulerCompleteStep = forwardRef<HTMLDivElement, StepProps>(
             style={style}
             triggerComparison={triggerComparison}
             {...props}
+            canvasID={canvasID}
           />
         );
     }

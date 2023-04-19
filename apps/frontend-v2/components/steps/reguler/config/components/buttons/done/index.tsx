@@ -14,8 +14,10 @@ export const DoneButton = ({
   step,
   triggerComparison,
   canContinue = true,
+  portal,
 }: StepProps & {
   canContinue?: true | string;
+  portal?: HTMLElement;
 }) => {
   /**
    * Memoize The button to continue, based on whether it is enabled or not
@@ -38,7 +40,7 @@ export const DoneButton = ({
         {step.size == StepSizing.SMALL ? "+" : "Done"}
       </GradientButton>
     ) : (
-      <InfoProvider contents={canContinue}>
+      <InfoProvider contents={canContinue} portal={portal}>
         <div className="w-[30%] cursor-auto">
           <GradientButton
             className="opacity-40 pointer-events-none  "

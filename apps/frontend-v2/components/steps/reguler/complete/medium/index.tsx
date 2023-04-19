@@ -14,7 +14,7 @@ import {
 import { BaseNode } from "components/steps/components/node";
 
 export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     return (
       <BaseNode
         className="flex-col justify-between px-4 py-4"
@@ -23,8 +23,9 @@ export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
         {...props}
         width="327px"
         height="96px"
-         step={step}
+        step={step}
         triggerComparison={triggerComparison}
+        canvasID={canvasID}
       >
         <div className="flex flex-row justify-between w-full">
           <div className="flex flex-row items-center justify-center gap-2">
@@ -39,6 +40,7 @@ export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
             </div>
           </div>
           <StepOptions
+            canvasID={canvasID}
             step={step}
             onClick={props.onClick}
             triggerComparison={triggerComparison}

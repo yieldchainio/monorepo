@@ -8,9 +8,10 @@ import { BaseNode } from "components/steps/components/node";
 import { BaseActionConfig } from "../../base";
 import { useSwap } from "../hooks/useSwap";
 import { TokenSwap } from "../components/token-swap";
+import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 
 export const SmallSwapConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     /**
      * Get all of the handlers & variables from the useSwap hook
      */
@@ -23,6 +24,11 @@ export const SmallSwapConfig = forwardRef<HTMLDivElement, StepProps>(
       fromToken,
       toToken,
     } = useSwap({ step, triggerComparison });
+
+    /**
+     * Get a portal to the canvas (For tooltips)
+     */
+    const canvasPortal = useElementPortal(canvasID);
 
     // Return the JSX
     return (
@@ -42,9 +48,11 @@ export const SmallSwapConfig = forwardRef<HTMLDivElement, StepProps>(
               : "Please Choose A To token"
             : "Please Choose A From Token"
         }
+        canvasID={canvasID}
       >
         <TokenSwap
           network={network}
+          portal={canvasPortal}
           tokens={availableTokens}
           fromToken={fromToken}
           setFromToken={chooseFromToken}

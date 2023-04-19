@@ -6,9 +6,8 @@
 import { YCNetwork, YCToken } from "@yc/yc-models";
 import { TokensModalProps } from "components/tokens-modal/types";
 import WrappedImage from "components/wrappers/image";
-import { CSSProperties, forwardRef } from "react";
+import { forwardRef } from "react";
 import { ChooseToken } from "../choose-token";
-import { RegulerButtonProps } from "components/buttons/reguler/types";
 import { DropdownProps } from "components/dropdown/types";
 
 export const TokenSwap = forwardRef(
@@ -24,6 +23,7 @@ export const TokenSwap = forwardRef(
       className,
       dropdownProps,
       bottomDropdownProps,
+      portal,
     }: {
       network?: YCNetwork | null;
       tokens?: YCToken[] | null;
@@ -33,6 +33,7 @@ export const TokenSwap = forwardRef(
       setToToken: (token: YCToken) => void;
       dropdownProps?: Partial<DropdownProps>;
       bottomDropdownProps?: Partial<DropdownProps>;
+      portal?: HTMLElement;
     } & Partial<TokensModalProps>,
     ref
   ) => {
@@ -45,6 +46,7 @@ export const TokenSwap = forwardRef(
           choice={fromToken}
           setChoice={setFromToken}
           dropdownProps={dropdownProps}
+          portal={portal}
         />
 
         <div className="w-[25px] h-[25px] border-[1px] border-custom-themedBorder rounded-md mx-auto -mt-3 z-10 bg-custom-bcomponentbg flex items-center justify-center">
@@ -63,6 +65,7 @@ export const TokenSwap = forwardRef(
           setChoice={setToToken}
           className="-mt-3"
           dropdownProps={{ ...dropdownProps, ...bottomDropdownProps }}
+          portal={portal}
         />
       </div>
     );

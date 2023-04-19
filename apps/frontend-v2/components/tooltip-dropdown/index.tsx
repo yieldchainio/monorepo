@@ -19,6 +19,7 @@ export const TooltipDropdown = ({
   children,
   handleChoice,
   body,
+  portal,
 }: TooltipDropdownProps) => {
   const { handleMenuOpen, setHandleMenuClose } = useDropdownEvent();
 
@@ -35,6 +36,7 @@ export const TooltipDropdown = ({
               contents={option.data.description || option.text}
               direction={ToolTipDirection.RIGHT}
               key={i}
+              portal={portal}
             >
               <div
                 className="flex flex-row gap-1 items-start justify-start bg-white bg-opacity-0 hover:bg-opacity-10 px-6 rounded-lg py-2 w-full transitiion duration-200 ease-in-out cursor-pointer"
@@ -64,6 +66,7 @@ export const TooltipDropdown = ({
       setCloseHandler={setHandleMenuClose}
       contents={bodyContents}
       className="bg-transparent p-0 "
+      portal={portal}
     >
       {children}
     </InfoProvider>

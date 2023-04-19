@@ -34,10 +34,15 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
         height="112.5px"
         step={step}
         triggerComparison={triggerComparison}
+        canvasID={canvasID}
       >
         <div className="flex flex-row items-center justify-between w-full">
           <WrappedText fontSize={12}>Select Action</WrappedText>
-          <StepOptions step={step} triggerComparison={triggerComparison} />
+          <StepOptions
+            canvasID={canvasID}
+            step={step}
+            triggerComparison={triggerComparison}
+          />
         </div>
         <div className="grid grid-cols-3 gap-2 w-full overflow-scroll scrollbar-hide">
           {actions.map((action) => {

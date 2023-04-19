@@ -1,14 +1,14 @@
 "use client";
+
+/**
+ * Base steps config for the strategy
+ */
+import { useBackdropColorChange } from "utilities/hooks/general/useBackdropColorChange";
+import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import { StepsModal } from "components/steps-modal";
 import { ConfigTitle } from "components/strategy-config-title";
 import { StrategyConfigVerticalWrapper } from "components/strategy-config-wrapper";
 import WrappedText from "components/wrappers/text";
-/**
- * Base steps config for the strategy
- */
-
-import { useBackdropColorChange } from "utilities/hooks/general/useBackdropColorChange";
-import { useStrategyStore } from "utilities/hooks/stores/strategies";
 
 const BaseStepsConfig = () => {
   // Get the current base step (Should be the root Deposit trigger)

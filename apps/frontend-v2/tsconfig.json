@@ -30,6 +30,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "../../libs/*"
-  ],
+, "components/contexts/seed-steps.tsx"  ],
   "exclude": ["node_modules"]
 }

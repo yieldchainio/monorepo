@@ -9,7 +9,7 @@ import { SmallSwapConfig } from "./small";
 import { MediumSwapConfig } from "./medium";
 
 export const SwapConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     switch (step.size) {
       case StepSizing.SMALL:
         return (
@@ -19,6 +19,7 @@ export const SwapConfig = forwardRef<HTMLDivElement, StepProps>(
             triggerComparison={triggerComparison}
             ref={ref}
             {...props}
+            canvasID={canvasID}
           />
         );
 
@@ -30,6 +31,7 @@ export const SwapConfig = forwardRef<HTMLDivElement, StepProps>(
             triggerComparison={triggerComparison}
             ref={ref}
             {...props}
+            canvasID={canvasID}
           />
         );
     }

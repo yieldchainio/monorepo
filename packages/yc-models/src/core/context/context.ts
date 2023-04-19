@@ -381,6 +381,11 @@ class YCClassificationsInternal {
       get: () => YCClassificationsInternal.Instance.Protocols,
     },
 
+    [Endpoints.ADDRESSES]: {
+      fetch: this.fetchAddresses,
+      refresh: this.refreshAddresses,
+      get: () => YCClassificationsInternal.Instance.Addresses,
+    },
     [Endpoints.TOKENS]: {
       fetch: this.fetchTokens,
       refresh: this.refreshTokens,
@@ -415,12 +420,6 @@ class YCClassificationsInternal {
       fetch: this.fetchArguments,
       refresh: this.refreshArguments,
       get: () => YCClassificationsInternal.Instance.Parameters,
-    },
-
-    [Endpoints.ADDRESSES]: {
-      fetch: this.fetchAddresses,
-      refresh: this.refreshAddresses,
-      get: () => YCClassificationsInternal.Instance.Addresses,
     },
 
     [Endpoints.FUNCTIONS]: {
@@ -690,15 +689,12 @@ export class YCClassifications extends YCClassificationsInternal {
   // ==============
 
   // Get an address instance using an address / it's DB identifier
-  getAddressYC = (_address_or_id: string): DBAddress | null => {
+  getAddress = (_address_or_id: string): YCAddress | null => {
     // Find the address
     return (
-      this.Addresses.find((_address: DBAddress) => {
-        // If it's an address (string), find an address obj w the same contract address
-        if (typeof _address_or_id == "string")
-          return _address.address == _address_or_id;
-        // Else, it means it is an ID - find the correpsonding address
-        else return _address.id == _address_or_id;
+      this.addresses.find((_address: YCAddress) => {
+        _address.id === _address_or_id ||
+          _address.address.toLowerCase() === _address_or_id.toLowerCase();
       }) || null
     );
   };

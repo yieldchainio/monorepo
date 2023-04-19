@@ -4,7 +4,7 @@ import { YCSocialMedia } from "../social-media/social-media";
 import { BaseClass } from "../base";
 import { ProtocolType } from "@prisma/client";
 import { YCNetwork } from "../network/network";
-import { YCToken } from "..";
+import { YCAddress, YCToken } from "..";
 
 /**
  * @notice
@@ -21,6 +21,9 @@ export class YCProtocol extends BaseClass {
   readonly logo: string;
   readonly socialMedia: YCSocialMedia;
   readonly type: ProtocolType;
+  readonly available: boolean;
+  readonly addresses: YCAddress[] = [];
+  readonly color: string | null = null;
 
   // =======================
   //     UNIQUE FIELDS
@@ -51,12 +54,17 @@ export class YCProtocol extends BaseClass {
 
     this.type = _protocol.type;
 
+    this.available = _protocol.available;
+
+    this.color = _protocol.color;
+
     /**
      * @notice
      * We set it to the IDs here before gettng our instance so that it matches in stringification, without an infinite limbo.
      * we set it to the actual networks afterwards
      */
     this.networks = _protocol.chain_ids as unknown as YCNetwork[];
+    this.addresses = _protocol.address_ids as unknown as YCAddress[];
 
     const existingProtocol = this.getInstance(_protocol.id);
     if (existingProtocol) return existingProtocol;
@@ -65,6 +73,16 @@ export class YCProtocol extends BaseClass {
       (networkID: number) => {
         const network = _context.getNetwork(networkID);
         return network ? [network] : [];
+      }
+    );
+
+    this.addresses = (this.addresses as unknown as string[]).flatMap(
+      (addressID: string) => {
+        const address = _context.getAddress(addressID);
+        console.log(
+          `Got An Address for ${_protocol.name} : ${address?.address}, The origianl one: ${addressID}`
+        );
+        return address ? [address] : [];
       }
     );
 
@@ -107,4 +125,22 @@ export class YCProtocol extends BaseClass {
   };
 
   static instances: Map<string, YCProtocol> = new Map();
+
+  // Custom toJSON
+  toJSON = (): DBProtocol => {
+    return {
+      id: this.id,
+      name: this.name,
+      logo: this.logo,
+      available: this.available,
+      website: this.website,
+      color: this.color,
+      chain_ids: this.networks.map((network) => network.id),
+      address_ids: this.addresses.map((address) => address.id),
+      type: this.type,
+      twitter: this.socialMedia.twitter.link || "",
+      discord: this.socialMedia.discord.link || "",
+      telegram: this.socialMedia.telegram.link || "",
+    };
+  };
 }

@@ -61,9 +61,7 @@ export class YCAddress extends BaseClass {
      * This is done in order for the comparison function to see our fields correctly, since it would have
      * converted the instances into IDs anyway.
      */
-    for (const func of _address.functions_ids) {
-      this.functions.push(func as unknown as YCFunc);
-    }
+    this.functions = _address.functions_ids as unknown as YCFunc[];
 
     this.contract = new ethers.Contract(
       this.address,
@@ -77,7 +75,10 @@ export class YCAddress extends BaseClass {
     if (existingAddress) return existingAddress;
 
     // Set the actual (circular) values
-    this.functions = [];
+    this.functions = (this.functions as unknown as string[]).flatMap((func) => {
+      const res = _context.getFunction(func);
+      return res ? [res] : [];
+    });
     for (const func of _address.functions_ids) {
       let currFunc = _context.getFunction(func);
       if (!currFunc)

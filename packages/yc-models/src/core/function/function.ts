@@ -6,6 +6,7 @@ import { YCFlow } from "../flow/flow";
 import { FunctionCall, CallTypes } from "../../types/yc";
 import { CallType, VariableTypes, BaseVariableTypes } from "@prisma/client";
 import { BaseClass } from "../base";
+import { YCAction } from "../action/action";
 
 const addFlags = (arg: any, _arg: any, arg_: any, arg__: any, _arg_: any) => {
   return arg;
@@ -25,6 +26,7 @@ export class YCFunc extends BaseClass {
   readonly id: string;
   readonly name: string;
   readonly address: YCAddress | null;
+  readonly actions: YCAction[] = [];
   readonly isCallback: boolean;
   readonly counterFunction: YCFunc | null;
   readonly dependencyFunction: YCFunc | null;
@@ -77,13 +79,6 @@ export class YCFunc extends BaseClass {
     tempSig += ")";
     this.signature = tempSig;
 
-    // Mapping flow identifiers => Full Flows intances
-    this.flows = _function.flows_ids.flatMap((_flow: string) => {
-      let flow = _context.getFlow(_flow);
-      if (flow) return [flow];
-      return [];
-    });
-
     /**
      * We set it as the string ID first before attemtping to get an existing singleton instance.
      * This is done in order for the comparison function to see our fields correctly, since it would have
@@ -93,6 +88,8 @@ export class YCFunc extends BaseClass {
     this.dependencyFunction =
       _function.dependancy_function_id as unknown as YCFunc;
     this.address = _function.address_id as unknown as YCAddress;
+    this.flows = _function.flows_ids as unknown as YCFlow[];
+    this.actions = _function.actions_ids as unknown as YCAction[];
 
     // Get the existing instance (or set ours otherwise)
     const existingFunc = this.getInstance(_function.id);
@@ -105,6 +102,18 @@ export class YCFunc extends BaseClass {
     this.dependencyFunction = _function.dependancy_function_id
       ? _context.getFunction(_function.dependancy_function_id)
       : null;
+
+    // Mapping flow identifiers => Full Flows intances
+    this.flows = _function.flows_ids.flatMap((_flow: string) => {
+      let flow = _context.getFlow(_flow);
+      if (flow) return [flow];
+      return [];
+    });
+
+    this.actions = _function.actions_ids.flatMap((actionID: string) => {
+      const action = _context.getAction(actionID);
+      return action ? [action] : [];
+    });
 
     let address: YCAddress | undefined = _context.addresses.find(
       (address: YCAddress) => address.hasFunction(this.id)

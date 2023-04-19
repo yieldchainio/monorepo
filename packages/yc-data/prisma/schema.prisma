@@ -137,7 +137,7 @@ model protocolsv2 {
   color       String?
   chain_ids   Int[]
   verified    Boolean
-  type        ProtocolType   @default(INTEGRATION)
+  types       ProtocolType[] @default([INTEGRATION])
   addresses   addressesv2[]
   actions     actionsv2[]    @relation("actionsv2Toprotocolsv2")
   networks    networksv2[]   @relation("networksv2Toprotocolsv2")
@@ -462,7 +462,11 @@ model withdraw {
 
 enum ProtocolType {
   EXCHANGE
+  LIQUIDITY
   INTEGRATION
+  LENDING
+  STAKING
+  PERPS
 
   @@schema("YieldchainV2")
 }

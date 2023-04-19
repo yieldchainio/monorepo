@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@bit/mui-org.material-ui.slider": "^4.9.10",
-    "@popperjs/core": "^2.11.7",
     "@rainbow-me/rainbowkit": "^0.12.3",
     "@raugfer/jazzicon": "^1.0.6",
     "@s-ui/react-sticky-content": "^1.8.0",
@@ -39,7 +38,6 @@
     "react": "18.2.0",
     "react-custom-events": "^1.1.1",
     "react-dom": "18.2.0",
-    "react-popper": "^2.3.0",
     "react-slick": "^0.29.0",
     "react-spring": "^9.7.1",
     "recharts": "^2.5.0",

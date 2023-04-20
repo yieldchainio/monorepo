@@ -6,7 +6,7 @@
 import { YCAction } from "@yc/yc-models";
 import { useMemo } from "react";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
-import { ACTION_IDS_TO_CONFIGS, ACTION_IDS_TO_ICONS } from "../../constants";
+import { ACTION_IDS_TO_CONFIGS, ACTION_IDS_TO_ICONS } from "../../../constants";
 
 export const useActions = () => {
   // Get all of the available actions

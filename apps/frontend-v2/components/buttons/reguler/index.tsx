@@ -118,7 +118,13 @@ export const RegulerButton = forwardRef<HTMLDivElement, RegulerButtonProps>(
           )}
         </div>
       );
-    }, [disabled, children, style, props, ref?.current]);
+    }, [
+      disabled,
+      children,
+      style,
+      props,
+      (ref as { current: any } | null)?.current,
+    ]);
 
     return buttonComponent;
   }

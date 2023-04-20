@@ -9,7 +9,7 @@ import WrappedText from "components/wrappers/text";
 import { forwardRef } from "react";
 import { useActions } from "../hooks/useActions";
 import { BaseNode } from "components/steps/components/node";
-import { ACTION_IDS_TO_ENUM_KEY } from "../constants";
+import { ACTION_IDS_TO_ENUM_KEY } from "../../constants";
 
 export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {

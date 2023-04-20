@@ -8,9 +8,24 @@ import { BaseActionConfig } from "../../base";
 
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 import { ProtocolsDropdown } from "../../components/protocol-dropdown";
+import { useProtocols } from "../../hooks/useProtocols";
+import { useStake } from "../hooks/useStake";
 
 export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+    /**
+     * Get all of our stake-related variables, methods from the useStake hook
+     */
+    const {
+      chooseProtocol,
+      protocols,
+      protocol,
+      network,
+      chooseFunction,
+      functions,
+      stakeFunction,
+    } = useStake({ step, triggerComparison });
+
     // Return the JSX
     return (
       <BaseActionConfig
@@ -25,7 +40,7 @@ export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
         triggerComparison={triggerComparison}
       >
         <div className="w-full">
-          <ProtocolsDropdown setChoice={() => null} />
+          <ProtocolsDropdown setChoice={chooseProtocol} />
         </div>
       </BaseActionConfig>
     );

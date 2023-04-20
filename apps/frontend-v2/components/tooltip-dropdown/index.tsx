@@ -25,7 +25,7 @@ export const TooltipDropdown = ({
   const bodyContents = useMemo(() => {
     if (body) return body;
     return (
-      <div className="absolute flex flex-col gap-2 items-center justify-start py-1 px-0 bg-custom-bcomponentbg rounded-lg border-custom-themedBorder shadow-md z-[1000] dark:border-[1px] border-custom-themedBorder">
+      <div className="absolute flex flex-col gap-2 items-center justify-start py-1 px-0 bg-custom-bcomponentbg rounded-lg border-custom-themedBorder shadow-md z-[1000] dark:border-[1px] ">
         {options.map((option: DropdownOption, i: number) => {
           return (
             <div>

@@ -83,6 +83,7 @@ export const ProtocolsDropdown = forwardRef(
         portal={portal}
       >
         <Dropdown
+          type="searchable"
           options={dropdownProtocols}
           buttonProps={{
             style: {
@@ -94,7 +95,7 @@ export const ProtocolsDropdown = forwardRef(
           choice={memoChoice}
           menuProps={{
             style: {
-              height: "150px",
+              height: "250px",
               zIndex: 1000,
               overflowY: "scroll",
             },

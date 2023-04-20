@@ -1,6 +1,6 @@
 import { DropdownMenuOptions, DropdownOption } from "../types";
 import { BaseComponentProps } from "components/types";
-import { RefObject, useMemo, useState } from "react";
+import { CSSProperties, RefObject, useMemo, useState } from "react";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 import { TextProps } from "components/wrappers/types";
@@ -44,31 +44,36 @@ const DropdownMenu = ({
   };
 
   // Memoize the classname
-  const baseClass: string = useMemo(() => {
+  const baseStyle: CSSProperties = useMemo(() => {
     if (
       (window.innerWidth <= MediaScreenSizes.TABLET ||
         modalBehaviour == "always") &&
       modalBehaviour !== "never"
     )
-      return (
-        `${
-          "w-[" +
-          `${(parentRef.current?.getBoundingClientRect().width || 0) + 2}` +
-          "px]"
-        } bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5  z-100 border-1 border-custom-border animate-popup overflow-hidden overflow-y-scroll  border-[1px] border-custom-border  scrollbar-hide ` +
-        (" " + (className || ""))
-      );
+      return {
+        width: `${
+          (parentRef?.current?.getBoundingClientRect().width || 0) + 2
+        }px`,
+      };
     else
-      return (
-        `${"w-max"} bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 absolute top-[60px] left-[0px] z-100 border-1 border-custom-border animate-popup overflow-hidden border-[1px] border-custom-border scrollbar-hide` +
-        " " +
-        `left-[${parentRef.current?.getBoundingClientRect().left}` +
-        (" " + (className || ""))
-      );
+      return {
+        width: `${
+          (parentRef?.current?.getBoundingClientRect().width || 0) + 2
+        }px`,
+        position: "absolute",
+        top: "60px",
+      };
   }, [window.innerWidth]);
 
   return (
-    <div className={baseClass} {...props} style={style}>
+    <div
+      className={
+        "bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 z-100 border-1 border-custom-border animate-popup overflow-hidden overflow-y-scroll scrollbar-hide"
+      }
+      {...props}
+      style={{ ...baseStyle, ...style }}
+      data-wheelable={false}
+    >
       {options.map((option: DropdownOption, i: number) => {
         return (
           <div
@@ -80,6 +85,7 @@ const DropdownMenu = ({
               (focusedChoice === i && choiceFocusClass ? choiceFocusClass : " ")
             }
             key={i}
+            data-wheelable={false}
           >
             <div
               className={
@@ -91,6 +97,7 @@ const DropdownMenu = ({
                 setFocusedChoice(i);
                 await choiceHandler(option);
               }}
+              data-wheelable={false}
             >
               {option.image && (
                 <WrappedImage
@@ -117,6 +124,7 @@ const DropdownMenu = ({
                     fontStyle="reguler"
                     fontSize={16}
                     {...optionProps?.textProps}
+                    data-wheelable={false}
                   >
                     {option.text}
                   </WrappedText>

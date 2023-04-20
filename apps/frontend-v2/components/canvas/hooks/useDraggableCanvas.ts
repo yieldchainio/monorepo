@@ -58,7 +58,17 @@ export const useDraggableCanvas = (
     {
       onDrag: (state) =>
         handleDrag({ deltaX: state.delta[0], deltaY: state.delta[1] }),
-      onWheel: (state) => handleWheel(state.event),
+      onWheel: (state) => {
+        if (
+          (state.event.target as HTMLElement | undefined)?.getAttribute(
+            "data-wheelable"
+          ) == "false"
+        )
+          try {
+            state.event.stopImmediatePropagation();
+          } catch (e: any) {}
+        else handleWheel(state.event);
+      },
       onPinch: (state) => handleZoom(state.offset),
     },
     {
@@ -72,6 +82,7 @@ export const useDraggableCanvas = (
         preventScroll: true,
         pointer: { touch: true },
         eventOptions: { passive: false },
+        filterTaps: true,
       },
 
       pinch: {

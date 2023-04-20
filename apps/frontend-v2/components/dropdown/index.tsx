@@ -22,6 +22,7 @@ import {
 import { MediaScreens } from "types/styles/media-breakpoints";
 import { ModalWrapper } from "components/modal-wrapper";
 import { useModals } from "utilities/hooks/stores/modal";
+import { SearchableDropdownMenu } from "./menu/searchable";
 
 const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
   (
@@ -39,6 +40,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       manualModal,
       autoChoice = true,
       disabled,
+      type = "reguler",
       ...props
     }: DropdownProps,
     ref
@@ -70,17 +72,6 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     useEffect(() => {
       !manualModal && autoChoice && setCurrentChoice([...options][0]);
     }, [JSON.stringify(options.map((opt) => JSON.stringify(opt)))]);
-
-    // Memoize some styling
-    const memoStyle: CSSProperties = useMemo(() => {
-      if (disabled)
-        return {
-          opacity: "50%",
-          pointerEvents: "none",
-        };
-
-      return {};
-    }, [disabled]);
 
     // A state keeping track of this component's UUID, for event listening purpoes
     const [UUID] = useState<string>(uuid());
@@ -128,17 +119,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 justifyContent: "center",
               }}
             >
-              {children || (
-                <DropdownMenu
-                  options={options}
-                  handler={async (choice: DropdownOption) => {
-                    await handleChoice(choice);
-                    modals.remove(id);
-                  }}
-                  parentRef={dropdownBtnRef}
-                  {...menuProps}
-                />
-              )}
+              {children || menuToReturn}
             </ModalWrapper>
           ),
           id: UUID,
@@ -157,24 +138,48 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       setCurrentChoice(_choice);
     };
 
+    // Memoize correct ref
+    const correcRef = useMemo(() => {
+      return typeof ref === "object" ? ref : dropdownBtnRef;
+    }, [ref, dropdownBtnRef]);
+
+    const menuToReturn = useMemo(() => {
+      if (type === "reguler")
+        return (
+          <DropdownMenu
+            options={options}
+            handler={handleChoice}
+            parentRef={correcRef}
+            {...menuProps}
+            className="static"
+          />
+        );
+
+      return (
+        <SearchableDropdownMenu
+          options={options}
+          handler={handleChoice}
+          parentRef={correcRef}
+          {...menuProps}
+        >
+          {children}
+        </SearchableDropdownMenu>
+      );
+    }, [type]);
+
     return (
       <div className="relative">
         {menuOpen &&
           (window.innerWidth <= MediaScreenSizes.TABLET || manualModal
             ? null
-            : children || (
-                <DropdownMenu
-                  options={options}
-                  handler={handleChoice}
-                  parentRef={dropdownBtnRef}
-                  {...menuProps}
-                  className="static"
-                />
-              ))}
+            : children || menuToReturn)}
 
         <RegulerButton
-          onClick={handleClick}
-          ref={ref || dropdownBtnRef}
+          onClick={() => {
+            handleClick();
+            console.log(correcRef);
+          }}
+          ref={correcRef}
           {...buttonProps}
           {...props}
           style={{

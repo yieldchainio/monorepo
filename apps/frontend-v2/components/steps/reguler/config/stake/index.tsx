@@ -1,5 +1,5 @@
 /**
- * A Head Config component for the Add Liquidity action, renders diff components by size.
+ * A Head Config component for the Stake action, renders diff components by size.
  */
 
 import { StepProps } from "components/steps/types";
@@ -8,7 +8,7 @@ import { StepSizing } from "utilities/classes/step/types";
 import { SmallStakeConfig } from "./small";
 import { MediumStakeConfig } from "./medium";
 
-export const SwapConfig = forwardRef<HTMLDivElement, StepProps>(
+export const StakeConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     switch (step.size) {
       case StepSizing.SMALL:

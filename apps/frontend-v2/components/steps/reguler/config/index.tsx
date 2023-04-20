@@ -7,6 +7,7 @@ import { forwardRef } from "react";
 import { ActionConfigs } from "utilities/classes/step/types";
 import { SwapConfig } from "./swap";
 import { AddLiquidityConfig } from "./add-liquidity";
+import { StakeConfig } from "./stake";
 
 export const ActionConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, triggerComparison, style, ...props }: StepProps, ref) => {
@@ -28,6 +29,17 @@ export const ActionConfig = forwardRef<HTMLDivElement, StepProps>(
       case ActionConfigs.LP:
         return (
           <AddLiquidityConfig
+            step={step}
+            triggerComparison={triggerComparison}
+            style={style}
+            ref={ref}
+            {...props}
+          />
+        );
+
+      case ActionConfigs.STAKE:
+        return (
+          <StakeConfig
             step={step}
             triggerComparison={triggerComparison}
             style={style}

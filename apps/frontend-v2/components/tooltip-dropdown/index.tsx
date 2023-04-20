@@ -25,7 +25,7 @@ export const TooltipDropdown = ({
   const bodyContents = useMemo(() => {
     if (body) return body;
     return (
-      <div className="absolute flex flex-col gap-2 items-center justify-start py-1 px-0 bg-custom-bcomponentbg rounded-lg border-custom-themedBorder shadow-sm">
+      <div className="absolute flex flex-col gap-2 items-center justify-start py-1 px-0 bg-custom-bcomponentbg rounded-lg border-custom-themedBorder shadow-md z-[1000] dark:border-[1px] border-custom-themedBorder">
         {options.map((option: DropdownOption, i: number) => {
           return (
             <div>
@@ -36,7 +36,7 @@ export const TooltipDropdown = ({
                 portal={portal}
               >
                 <div
-                  className="flex flex-row gap-1 items-start justify-start bg-white bg-opacity-0 hover:bg-opacity-10 px-6 rounded-lg py-2 w-full transitiion duration-200 ease-in-out cursor-pointer"
+                  className="flex flex-row gap-1 items-start justify-start bg-custom-textColor bg-opacity-0 hover:bg-opacity-10 px-6 rounded-lg py-2 w-full transitiion duration-200 ease-in-out cursor-pointer"
                   onClick={() => {
                     if (option.data.handler) option.data.handler();
                     handleChoice(option.data);

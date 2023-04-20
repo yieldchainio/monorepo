@@ -30,6 +30,7 @@ export const RegulerButton = forwardRef<HTMLDivElement, RegulerButtonProps>(
       setLoading(true);
       onClick && (await onClick(e));
       setLoading(false);
+      console.log("Ref SEr", ref);
       return;
     };
 
@@ -117,7 +118,7 @@ export const RegulerButton = forwardRef<HTMLDivElement, RegulerButtonProps>(
           )}
         </div>
       );
-    }, [disabled, children, style, props]);
+    }, [disabled, children, style, props, ref?.current]);
 
     return buttonComponent;
   }

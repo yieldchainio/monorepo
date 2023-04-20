@@ -43,14 +43,14 @@ export const BaseActionConfig = forwardRef<
     /**
      * Get a portal to our canvas for tooltips
      */
-    const canvasPortal = useElementPortal(canvasID)
+    const canvasPortal = useElementPortal(canvasID);
 
     // Return JSX
     return (
       <BaseNode
         width={width}
         height={height}
-        className={(className || "") + " " + "py-6 px-6"}
+        className={(className || "") + " " + "py-6 px-6 z-[100]"}
         style={style}
         step={step}
         triggerComparison={triggerComparison}

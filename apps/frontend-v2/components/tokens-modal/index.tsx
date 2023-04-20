@@ -87,9 +87,9 @@ export const TokensModal = forwardRef<HTMLDivElement, TokensModalProps>(
         type: FilterTypes.CHOICE,
         choice: chosenNetwork,
         callback: (item: YCToken, config: ChoiceFilter<YCToken, YCNetwork>) =>
-          config.choice.chainid === item.network?.chainid,
+          config.choice.id === item.network?.id,
       });
-    }, [availableNetworks, availableNetworks.length, chosenNetwork.chainid]);
+    }, [availableNetworks, availableNetworks.length, chosenNetwork.id]);
 
     // Filter by the text input
     const filterByInput = useMemo(() => {
@@ -117,7 +117,7 @@ export const TokensModal = forwardRef<HTMLDivElement, TokensModalProps>(
     return (
       <div
         className={
-          "w-[70%] h-[80%] border-[1px] border-custom-border dark:border-custom-themedBorder flex flex-row overflow-hidden mx-auto rounded-xl "
+          "w-[70%] h-[80%] border-[1px] border-custom-border dark:border-custom-themedBorder flex flex-row overflow-hidden mx-auto rounded-xl animate-modal"
         }
         ref={ref}
         onClick={onClick}

@@ -36,6 +36,7 @@ export interface DropdownProps {
   manualModal?: boolean;
   autoChoice?: boolean;
   disabled?: string | false;
+  type?: "searchable" | "reguler";
 }
 
 export interface DropdownOptionProps {
@@ -48,7 +49,7 @@ export interface DropdownOptionProps {
 export interface DropdownMenuOptions extends BaseComponentProps {
   options: DropdownOption[];
   handler: (_option: DropdownOption) => any;
-  parentRef: RefObject<HTMLElement | undefined>;
+  parentRef: RefObject<HTMLElement | undefined | null> | null;
   optionProps?: DropdownOptionProps;
   optionText?: (_option: DropdownOption, i?: number) => React.ReactNode;
   hideOptionText?: "laptop:hidden" | "";

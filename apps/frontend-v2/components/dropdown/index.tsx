@@ -1,6 +1,13 @@
 import { DropdownOption, DropdownProps } from "./types";
 import DropdownMenu from "./menu";
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, {
+  CSSProperties,
+  forwardRef,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { emitCustomEvent } from "react-custom-events";
 import { useCustomEventListener } from "react-custom-events";
 import { BaseEventData, EventTypes } from "types/events";
@@ -31,6 +38,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       imageProps,
       manualModal,
       autoChoice = true,
+      disabled,
       ...props
     }: DropdownProps,
     ref
@@ -54,10 +62,25 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       }
     }, [choice]);
 
+    useEffect(() => {
+      if (choice) setCurrentChoice(choice);
+    }, [choice]);
+
     // Change the choice each time choice is changed
     useEffect(() => {
       !manualModal && autoChoice && setCurrentChoice([...options][0]);
     }, [JSON.stringify(options.map((opt) => JSON.stringify(opt)))]);
+
+    // Memoize some styling
+    const memoStyle: CSSProperties = useMemo(() => {
+      if (disabled)
+        return {
+          opacity: "50%",
+          pointerEvents: "none",
+        };
+
+      return {};
+    }, [disabled]);
 
     // A state keeping track of this component's UUID, for event listening purpoes
     const [UUID] = useState<string>(uuid());
@@ -154,6 +177,10 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
           ref={ref || dropdownBtnRef}
           {...buttonProps}
           {...props}
+          style={{
+            ...(buttonProps?.style || {}),
+          }}
+          disabled={disabled}
         >
           <div className="flex flex-row gap-2 items-center">
             {!buttonProps?.children ? (

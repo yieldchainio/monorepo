@@ -14,7 +14,7 @@ export const ActionConfigButtons = ({
   step,
   triggerComparison,
   canContinue,
-  portal
+  portal,
 }: StepProps & {
   canContinue?: true | string;
   portal?: HTMLElement;
@@ -27,6 +27,8 @@ export const ActionConfigButtons = ({
       step.size === StepSizing.SMALL
         ? {
             width: "60%",
+            marginLeft: "auto",
+            marginRight: "auto",
           }
         : {
             width: "100%",

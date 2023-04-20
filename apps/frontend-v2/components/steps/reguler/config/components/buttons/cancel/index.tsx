@@ -5,6 +5,7 @@ import { RegulerButton } from "components/buttons/reguler";
 import { EnsureModal } from "components/ensure-modal";
 import { ModalWrapper } from "components/modal-wrapper";
 import { StepProps } from "components/steps/types";
+import { cancelAction } from "components/steps/utils/cancel-action";
 import { useMemo } from "react";
 import { StepSizing } from "utilities/classes/step/types";
 import { useModals } from "utilities/hooks/stores/modal";
@@ -62,8 +63,7 @@ export const CancelButton = ({
                    * When a cancel is confirmed, we reset the step's configurations.
                    */
                   confirmHandler={() => {
-                    step.resetConfigs();
-                    triggerComparison();
+                    cancelAction(step, triggerComparison);
                   }}
                 ></EnsureModal>
               </ModalWrapper>

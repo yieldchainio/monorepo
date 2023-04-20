@@ -5,7 +5,7 @@
 import { YCNetwork, YCProtocol, YCToken } from "@yc/yc-models";
 import { all } from "axios";
 import Dropdown from "components/dropdown";
-import { DropdownProps } from "components/dropdown/types";
+import { DropdownOption, DropdownProps } from "components/dropdown/types";
 import { InfoProvider } from "components/info-providers";
 import { ToolTipDirection } from "components/info-providers/types";
 import { TokensModal } from "components/tokens-modal";
@@ -57,6 +57,25 @@ export const ProtocolsDropdown = forwardRef(
       [allProtocols, protocols, allProtocols.length, protocols?.length]
     );
 
+    /**
+     * Memoize choice to display
+     */
+    const memoChoice = useMemo(
+      () =>
+        choice
+          ? {
+              text: choice.name,
+              image: choice.logo,
+              data: choice,
+            }
+          : {
+              text: undefined,
+              image: undefined,
+              data: undefined,
+            },
+      [choice, choice?.id]
+    );
+
     return (
       <InfoProvider
         contents={label || "Choose A Protocol"}
@@ -72,19 +91,7 @@ export const ProtocolsDropdown = forwardRef(
             },
             className: className,
           }}
-          choice={
-            choice
-              ? {
-                  text: choice.name,
-                  image: choice.logo,
-                  data: choice,
-                }
-              : {
-                  text: undefined,
-                  image: undefined,
-                  data: undefined,
-                }
-          }
+          choice={memoChoice}
           menuProps={{
             style: {
               height: "150px",
@@ -94,6 +101,9 @@ export const ProtocolsDropdown = forwardRef(
             className: "overflow-y-scroll scrollbar-hide",
           }}
           autoChoice={false}
+          choiceHandler={(choice: DropdownOption<YCProtocol>) =>
+            setChoice(choice.data)
+          }
           {...dropdownProps}
         ></Dropdown>
       </InfoProvider>

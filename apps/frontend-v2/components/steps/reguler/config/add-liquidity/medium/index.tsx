@@ -3,7 +3,7 @@
  */
 
 import { StepProps } from "components/steps/types";
-import { forwardRef, useEffect, useMemo } from "react";
+import { forwardRef, useEffect, useMemo, useRef } from "react";
 import { BaseNode } from "components/steps/components/node";
 import { BaseActionConfig } from "../../base";
 import { ProtocolsDropdown } from "../../components/protocol-dropdown";
@@ -13,6 +13,10 @@ import { ChooseToken } from "../../components/choose-token";
 import { useAddLiquidity } from "../hooks/useAddLiquidity";
 import WrappedImage from "components/wrappers/image";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
+import { cancelAction } from "components/steps/utils/cancel-action";
+import { useLogs } from "utilities/hooks/stores/logger";
+import { WarningMessage } from "components/logger/components/warning";
+import { useAssertTokensAmount } from "../hooks/useAssertTokensAmount";
 
 export const MediumAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
@@ -30,8 +34,12 @@ export const MediumAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
       network,
       availableTokens,
     } = useAddLiquidity({ step, triggerComparison });
-    const context = useYCStore((state) => state.context);
-    console.log("All Add Liq Protocols", context);
+
+    useAssertTokensAmount({
+      step,
+      triggerComparison,
+      tokens: availableTokens,
+    });
 
     // Return the JSX
     return (
@@ -45,6 +53,15 @@ export const MediumAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
         height="328px"
         step={step}
         triggerComparison={triggerComparison}
+        canContinue={
+          protocol
+            ? tokenA
+              ? tokenB
+                ? true
+                : "Please Choose Token B"
+              : "Please Choose Token A"
+            : "Please Choose A Protocol"
+        }
       >
         <div className="w-full flex flex-col gap-1">
           <WrappedText className="ml-0.5">Protocol</WrappedText>
@@ -64,6 +81,9 @@ export const MediumAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
             style={{
               width: "100%",
             }}
+            dropdownProps={{
+              disabled: !protocol ? "Please Choose A Protocol " : false,
+            }}
           />
           <div className="w-[25px] h-[25px] border-[1px] border-custom-themedBorder rounded-full  z-10 bg-custom-bcomponentbg flex items-center justify-center">
             <WrappedText>+</WrappedText>
@@ -76,6 +96,9 @@ export const MediumAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
             label="Token B"
             style={{
               width: "100%",
+            }}
+            dropdownProps={{
+              disabled: !protocol ? "Please Choose A Protocol " : false,
             }}
           />
         </div>

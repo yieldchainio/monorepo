@@ -34,7 +34,8 @@ export interface DropdownProps {
   textProps?: Omit<TextProps, "children">;
   imageProps?: ImageProps;
   manualModal?: boolean;
-  autoChoice?: boolean
+  autoChoice?: boolean;
+  disabled?: string | false;
 }
 
 export interface DropdownOptionProps {

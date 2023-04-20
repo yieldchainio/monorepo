@@ -12,6 +12,8 @@ import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useConfigContext } from "../../../hooks/useConfigContext";
 import { useProtocols } from "../../../hooks/useProtocols";
 import { ProtocolType } from "@prisma/client";
+import { useToken } from "wagmi";
+import { useTokens } from "../../../hooks/useTokens";
 
 export const useAddLiquidity = ({
   step,
@@ -23,18 +25,14 @@ export const useAddLiquidity = ({
   /**
    * Get some base variables that we need (context, network & our available tokens)
    */
-  const { context, network, availableTokens } = useConfigContext({
+  const {
+    context,
+    network,
+    availableTokens: stepAvailableTokens,
+  } = useConfigContext({
     step,
     triggerComparison,
   });
-
-  /**
-   * get the add liquidity action (Providing to useProtocols as filtering measure)
-   */
-  const addLiqAction = useMemo(
-    () => context.getAction("1fd39f5f-d1f0-40f8-afe1-58dd4eb815bf"),
-    []
-  );
 
   /**
    * Get all protocols with add liquidity available
@@ -49,8 +47,16 @@ export const useAddLiquidity = ({
    */
   const [tokenA, setTokenA] = useState<YCToken | null>(null);
   const [tokenB, setTokenB] = useState<YCToken | null>(null);
-
   const [protocol, setProtocol] = useState<YCProtocol | null>(null);
+
+  /**
+   * Get all of our available tokens for this add liquidity operation
+   */
+  const availableTokens: YCToken[] = useTokens({
+    networks: network ? [network] : undefined,
+    tokens: stepAvailableTokens,
+    // protocols: protocol ? [protocol] : [],
+  });
 
   /**
    * Functions to handle token choices
@@ -97,6 +103,7 @@ export const useAddLiquidity = ({
         protocol: protocol.toJSON(),
       };
 
+      console.log("Just Set Protocol ser");
       step.protocol = protocol;
 
       triggerComparison();
@@ -110,6 +117,7 @@ export const useAddLiquidity = ({
   useEffect(() => {
     // Shorthand for the data
     const data = step.data.lp as AddLiquidityData | null;
+    console.log("OUR Data IN uSeeffect ser", data, protocol);
 
     // If our from token is not init yet
     // And there is a persisted DBtoken in the data,
@@ -120,7 +128,7 @@ export const useAddLiquidity = ({
 
     if (data?.protocol) setProtocol(new YCProtocol(data.protocol, context));
   }, [
-    step.data.lp?.protocol.id,
+    step.data.lp?.protocol?.id,
     step.data.lp?.tokenA?.id,
     step.data.lp?.tokenB?.id,
   ]);

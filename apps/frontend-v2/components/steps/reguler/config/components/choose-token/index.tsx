@@ -43,13 +43,6 @@ export const ChooseToken = forwardRef(
       >
         <Dropdown
           options={[]}
-          buttonProps={{
-            style: {
-              width: "100%",
-              ...style,
-            },
-            className: className,
-          }}
           manualModal={true}
           choice={
             choice
@@ -65,6 +58,17 @@ export const ChooseToken = forwardRef(
                 }
           }
           {...dropdownProps}
+          buttonProps={{
+            ...(dropdownProps?.buttonProps || {}),
+            ...{
+              style: {
+                width: "100%",
+                ...style,
+                ...dropdownProps?.buttonProps?.style,
+              },
+              className: className,
+            },
+          }}
         >
           <TokensModal
             handleChoice={(token) => setChoice(token)}

@@ -20,8 +20,9 @@ model functionsv2 {
   address_id             String
   arguments_ids          String[]
   callback               Boolean           @default(false)
-  flows_ids              String[]
   actions_ids            String[]
+  inflows                String[]
+  outflows               String[]
   argumentsv2            argumentsv2[]
   flows                  flowsv2[]
   address                addressesv2       @relation(fields: [address_id], references: [id])
@@ -462,8 +463,8 @@ model withdraw {
 
 enum ProtocolType {
   EXCHANGE
-  LIQUIDITY
   INTEGRATION
+  LIQUIDITY
   LENDING
   STAKING
   PERPS

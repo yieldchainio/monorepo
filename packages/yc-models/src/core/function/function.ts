@@ -7,6 +7,7 @@ import { FunctionCall, CallTypes } from "../../types/yc";
 import { CallType, VariableTypes, BaseVariableTypes } from "@prisma/client";
 import { BaseClass } from "../base";
 import { YCAction } from "../action/action";
+import { YCToken } from "..";
 
 const addFlags = (arg: any, _arg: any, arg_: any, arg__: any, _arg_: any) => {
   return arg;
@@ -30,7 +31,8 @@ export class YCFunc extends BaseClass {
   readonly isCallback: boolean;
   readonly counterFunction: YCFunc | null;
   readonly dependencyFunction: YCFunc | null;
-  readonly flows: YCFlow[];
+  readonly outflows: YCToken[] = [];
+  readonly inflows: YCToken[] = [];
   readonly signature: string;
   readonly calltype: CallType;
   readonly arguments: YCArgument[];
@@ -88,7 +90,8 @@ export class YCFunc extends BaseClass {
     this.dependencyFunction =
       _function.dependancy_function_id as unknown as YCFunc;
     this.address = _function.address_id as unknown as YCAddress;
-    this.flows = _function.flows_ids as unknown as YCFlow[];
+    this.outflows = _function.outflows as unknown as YCToken[];
+    this.inflows = _function.inflows as unknown as YCToken[];
     this.actions = _function.actions_ids as unknown as YCAction[];
 
     // Get the existing instance (or set ours otherwise)
@@ -104,9 +107,14 @@ export class YCFunc extends BaseClass {
       : null;
 
     // Mapping flow identifiers => Full Flows intances
-    this.flows = _function.flows_ids.flatMap((_flow: string) => {
-      let flow = _context.getFlow(_flow);
-      if (flow) return [flow];
+    this.outflows = _function.outflows.flatMap((_tokenID: string) => {
+      let token = _context.getToken(_tokenID);
+      if (token) return [token];
+      return [];
+    });
+    this.inflows = _function.inflows.flatMap((_tokenID: string) => {
+      let token = _context.getToken(_tokenID);
+      if (token) return [token];
       return [];
     });
 

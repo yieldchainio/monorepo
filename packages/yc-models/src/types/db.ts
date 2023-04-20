@@ -55,9 +55,10 @@ export interface DBFunction {
   return_value_type: VariableTypes;
   return_value_base_type: BaseVariableTypes;
   address_id: string;
-  flows_ids: string[];
   arguments_ids: string[];
   actions_ids: string[];
+  outflows: string[];
+  inflows: string[];
 }
 export interface DBArgument {
   id: string;

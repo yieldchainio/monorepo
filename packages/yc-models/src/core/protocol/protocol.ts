@@ -52,7 +52,6 @@ export class YCProtocol extends BaseClass {
 
     this.id = _protocol.id;
 
-    console.log("Protocol types ser", _protocol);
     this.types = _protocol.types;
 
     this.available = _protocol.available;
@@ -80,9 +79,7 @@ export class YCProtocol extends BaseClass {
     this.addresses = (this.addresses as unknown as string[]).flatMap(
       (addressID: string) => {
         const address = _context.getAddress(addressID);
-        console.log(
-          `Got An Address for ${_protocol.name} : ${address?.address}, The origianl one: ${addressID}`
-        );
+
         return address ? [address] : [];
       }
     );

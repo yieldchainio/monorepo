@@ -75,18 +75,13 @@ export class YCAddress extends BaseClass {
     if (existingAddress) return existingAddress;
 
     // Set the actual (circular) values
-    this.functions = (this.functions as unknown as string[]).flatMap((func) => {
-      const res = _context.getFunction(func);
-      return res ? [res] : [];
-    });
-    for (const func of _address.functions_ids) {
-      let currFunc = _context.getFunction(func);
-      if (!currFunc)
-        throw new Error(
-          "YCAddress ERR: Function Not Found!, Function ID: " + func
-        );
-      this.functions.push(currFunc);
-    }
+    this.functions = (_address.functions_ids as unknown as string[]).flatMap(
+      (func) => {
+        const res = _context.getFunction(func);
+        return res ? [res] : [];
+      }
+    );
+   
   }
 
   // ====================

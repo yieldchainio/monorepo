@@ -39,8 +39,8 @@ export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
         step={step}
         triggerComparison={triggerComparison}
       >
-        <div className="w-full">
-          <ProtocolsDropdown setChoice={chooseProtocol} />
+        <div className="w-full" onClick={() => console.log(functions)}>
+          <ProtocolsDropdown setChoice={chooseProtocol} protocols={protocols} />
         </div>
       </BaseActionConfig>
     );

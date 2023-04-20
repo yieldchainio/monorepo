@@ -375,17 +375,17 @@ class YCClassificationsInternal {
       refresh: this.refreshNetworks,
       get: () => YCClassificationsInternal.Instance.Networks,
     },
+    [Endpoints.ADDRESSES]: {
+      fetch: this.fetchAddresses,
+      refresh: this.refreshAddresses,
+      get: () => YCClassificationsInternal.Instance.Addresses,
+    },
     [Endpoints.PROTOCOLS]: {
       fetch: this.fetchProtocols,
       refresh: this.refreshProtocols,
       get: () => YCClassificationsInternal.Instance.Protocols,
     },
 
-    [Endpoints.ADDRESSES]: {
-      fetch: this.fetchAddresses,
-      refresh: this.refreshAddresses,
-      get: () => YCClassificationsInternal.Instance.Addresses,
-    },
     [Endpoints.TOKENS]: {
       fetch: this.fetchTokens,
       refresh: this.refreshTokens,
@@ -689,13 +689,12 @@ export class YCClassifications extends YCClassificationsInternal {
   // ==============
 
   // Get an address instance using an address / it's DB identifier
-  getAddress = (_address_or_id: string): YCAddress | null => {
+  getAddress = (_address_id: string): YCAddress | null => {
     // Find the address
     return (
-      this.addresses.find((_address: YCAddress) => {
-        _address.id === _address_or_id ||
-          _address.address.toLowerCase() === _address_or_id.toLowerCase();
-      }) || null
+      this.addresses.find(
+        (_address: YCAddress) => _address.id === _address_id
+      ) || null
     );
   };
 

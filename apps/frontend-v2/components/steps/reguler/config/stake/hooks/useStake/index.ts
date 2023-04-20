@@ -48,6 +48,8 @@ export const useStake = ({
     action: stakeAction,
   });
 
+  console.log("Stake ACtion", stakeAction);
+
   /**
    * Get all stake functions that are under our chosen protocol
    */

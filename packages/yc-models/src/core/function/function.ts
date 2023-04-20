@@ -106,6 +106,11 @@ export class YCFunc extends BaseClass {
       ? _context.getFunction(_function.dependancy_function_id)
       : null;
 
+    this.actions = _function.actions_ids.flatMap((actionID: string) => {
+      const action = _context.getAction(actionID);
+      return action ? [action] : [];
+    });
+
     // Mapping flow identifiers => Full Flows intances
     this.outflows = _function.outflows.flatMap((_tokenID: string) => {
       let token = _context.getToken(_tokenID);
@@ -116,11 +121,6 @@ export class YCFunc extends BaseClass {
       let token = _context.getToken(_tokenID);
       if (token) return [token];
       return [];
-    });
-
-    this.actions = _function.actions_ids.flatMap((actionID: string) => {
-      const action = _context.getAction(actionID);
-      return action ? [action] : [];
     });
 
     let address: YCAddress | undefined = _context.addresses.find(

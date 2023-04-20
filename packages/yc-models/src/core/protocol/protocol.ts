@@ -64,25 +64,35 @@ export class YCProtocol extends BaseClass {
      * we set it to the actual networks afterwards
      */
     this.networks = _protocol.chain_ids as unknown as YCNetwork[];
-    this.addresses = _protocol.address_ids as unknown as YCAddress[];
 
-    const existingProtocol = this.getInstance(_protocol.id);
-    if (existingProtocol) return existingProtocol;
-
-    this.networks = (this.networks as unknown as number[]).flatMap(
-      (networkID: number) => {
-        const network = _context.getNetwork(networkID);
-        return network ? [network] : [];
-      }
-    );
-
-    this.addresses = (this.addresses as unknown as string[]).flatMap(
+    this.addresses = (_protocol.address_ids as unknown as string[]).flatMap(
       (addressID: string) => {
         const address = _context.getAddress(addressID);
-
+        console.log(
+          "Address ID:",
+          addressID,
+          "Address GOT:",
+          address,
+          "Context Addresses",
+          _context.addresses
+        );
         return address ? [address] : [];
       }
     );
+
+    // console.log(
+    //   "All Addresses whilst getting Protocol addresses:",
+    //   _context.addresses,
+    //   "Protocol's:",
+    //   this.addresses
+    // );
+    this.networks = _protocol.chain_ids.flatMap((networkID: number) => {
+      const network = _context.getNetwork(networkID);
+
+      return network ? [network] : [];
+    });
+    const existingProtocol = this.getInstance(_protocol.id);
+    if (existingProtocol) return existingProtocol;
 
     // // Find all tokens that are included in this protocol's markets
     // let tokens = _context.tokens
@@ -133,8 +143,8 @@ export class YCProtocol extends BaseClass {
       available: this.available,
       website: this.website,
       color: this.color,
-      chain_ids: this.networks.map((network) => network.id),
-      address_ids: this.addresses.map((address) => address.id),
+      chain_ids: this.networks.map((network) => network?.id),
+      address_ids: this.addresses.map((address) => address?.id),
       types: this.types,
       twitter: this.socialMedia.twitter.link || "",
       discord: this.socialMedia.discord.link || "",

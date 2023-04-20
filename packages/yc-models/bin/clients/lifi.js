@@ -25,7 +25,7 @@ export class LiFi {
     // ====================
     // Get full token info
     tokenInfo = async (_token) => {
-        let chainid = _token.network?.chainid;
+        let chainid = _token.network?.id;
         if (!chainid)
             return null;
         return await (await axios.get(this.#apiURL + `/token?chain=${chainid}&token=${_token.address}`)).data;
@@ -39,8 +39,8 @@ export class LiFi {
     };
     // Get a quote
     getFullQuote = async (_fromToken, _toToken, _amount, _sender, _toChain, _receiver, _currentTry = 0) => {
-        let fromChainId = _fromToken.network?.chainid;
-        let toChainId = _toToken.network?.chainid;
+        let fromChainId = _fromToken.network?.id;
+        let toChainId = _toToken.network?.id;
         if (!fromChainId || !toChainId)
             return null;
         let quote = null;

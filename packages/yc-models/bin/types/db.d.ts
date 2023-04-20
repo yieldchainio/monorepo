@@ -4,7 +4,7 @@
  */
 import { JsonValue } from "@yc/yc-data";
 import { address, ChainID } from "./global";
-import { FlowDirection, VariableTypes, BaseVariableTypes, CallType } from "@prisma/client";
+import { FlowDirection, VariableTypes, BaseVariableTypes, CallType, ProtocolType } from "@prisma/client";
 export interface DBAction {
     id: string;
     name: string;
@@ -84,6 +84,7 @@ export interface DBProtocol {
     twitter: string | null;
     telegram: string | null;
     discord: string | null;
+    types: ProtocolType[];
 }
 export interface DBAddress {
     id: string;

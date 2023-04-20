@@ -12,7 +12,6 @@ export class YCAction {
   readonly available: boolean;
   readonly functions: YCFunc[] = [];
   icon: string | { dark: string; light: string } | null = null;
-  component: React.ReactNode | null = null;
 
   // =====================
   //     CONSTRUCTOR

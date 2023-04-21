@@ -40,6 +40,9 @@ export const useDraggableCanvas = (
   // State for the dragging
   const [{ x, y, zoom }, setPositioning] = useState({ x: 0, y: 0, zoom: 1 });
 
+  // State for the currently focused child's index
+  const [focusedChild, setFocusedChild] = useState<number | null>(null);
+
   // Memoized value for the limitations on X and Y when moving
   const { xLimit, yLimit } = useMemo(() => {
     if (!canvasRef || !parentRef) return { xLimit: 0, yLimit: 0 };
@@ -159,9 +162,18 @@ export const useDraggableCanvas = (
   };
 
   // Handle manual movement (used by child focus)
-  const handleAbsoluteMovement = (e: { deltaY: number; deltaX: number }) => {
+  const handleAbsoluteMovement = (e: {
+    deltaY: number;
+    deltaX: number;
+    zoom?: number;
+  }) => {
     const requestedX = -e.deltaX;
     const requestedY = -e.deltaY;
+
+    canvasRef.style.transitionDuration = "0.5s";
+    setTimeout(() => {
+      canvasRef.style.transitionDuration = "0s";
+    }, 500);
 
     const desiredX =
       requestedX > xLimit
@@ -182,14 +194,20 @@ export const useDraggableCanvas = (
       ...prev,
       x: desiredX,
       y: desiredY,
+      zoom: e.zoom || zoom,
     }));
   };
 
   // Handle child click ("Focus")
   // (Scrolls to best position to center the child)
-  const handleChildFocus = (childRef: HTMLDivElement | null) => {
+  const handleChildFocus = (childRef: HTMLDivElement | null, index: number) => {
     // Make sure both are defined
     if (!canvasRef || !childRef) return;
+
+    // We only want to focus if it is not already focused
+    if (focusedChild === index) return;
+
+    setFocusedChild(index);
 
     // Get the rects of the node
     const nodeRect = childRef.getBoundingClientRect();
@@ -197,8 +215,8 @@ export const useDraggableCanvas = (
     const nodeTop = parseInt(childRef.style.top);
 
     // Calculate the ABSOLUTE transfrom diff.
-    const deltaX = nodeLeft + nodeRect.width / 2;
-    const deltaY = nodeTop - nodeRect.height / 2;
+    const deltaX = nodeLeft;
+    const deltaY = nodeTop;
 
     handleAbsoluteMovement({
       deltaY,
@@ -214,6 +232,7 @@ export const useDraggableCanvas = (
       scale: zoom,
     },
     handleChildFocus,
+    handleAbsoluteMovement,
     setPositioning,
   };
 };

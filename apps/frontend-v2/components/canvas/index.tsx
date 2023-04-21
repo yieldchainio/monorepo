@@ -93,19 +93,24 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
     ref
   ) => {
     // Use the useDraggableCanvas hook to get the styling and ref to spread
-    const { interactivity, style, handleChildFocus, setPositioning } =
-      useDraggableCanvas(
-        // @ts-ignore
-        ref.current as unknown as HTMLDivElement,
-        // @ts-ignore
-        parentRef.current as unknown as HTMLDivElement,
-        {
-          zoom: (_zoom: number) => {
-            setZoom(_zoom < 1 ? 0.99 : _zoom > 1.5 ? 1.501 : _zoom);
-            setters?.zoom?.(_zoom);
-          },
-        }
-      );
+    const {
+      interactivity,
+      style,
+      handleChildFocus,
+      handleAbsoluteMovement,
+      setPositioning,
+    } = useDraggableCanvas(
+      // @ts-ignore
+      ref.current as unknown as HTMLDivElement,
+      // @ts-ignore
+      parentRef.current as unknown as HTMLDivElement,
+      {
+        zoom: (_zoom: number) => {
+          setZoom(_zoom < 1 ? 0.99 : _zoom > 1.5 ? 1.501 : _zoom);
+          setters?.zoom?.(_zoom);
+        },
+      }
+    );
 
     const [zoom, setZoom] = useState(1);
 
@@ -155,7 +160,7 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
                             child.props.onClick?.(e);
 
                             // Add our focus function
-                            handleChildFocus(childRefs.get(i) || null);
+                            handleChildFocus(childRefs.get(i) || null, i);
                           }}
                         ></child.type>
                       );
@@ -175,7 +180,7 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
             .concat([
               {
                 onClick: () => {
-                  setPositioning({ x: 0, y: 0, zoom: 1 });
+                  handleAbsoluteMovement({ deltaX: 0, deltaY: 0, zoom: 1 });
                 },
                 children: (
                   <WrappedImage

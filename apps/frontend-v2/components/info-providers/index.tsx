@@ -50,7 +50,6 @@ export const InfoProvider = ({
   setCloseHandler,
   portal,
   retain = false,
-  
 }: InfoProviderProps) => {
   // We set a ref for all of our consumers ( The elements which we wrap around and trigger on hover )
   const setRefs = useRef<Map<number, HTMLDivElement>>(new Map()).current;

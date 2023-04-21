@@ -223,9 +223,9 @@ export class Step implements IStep<Step> {
     const idx =
       index !== undefined
         ? index
-        : this.inflows.findIndex((_token) => _token.id == token.id);
+        : this.outflows.findIndex((_token) => _token.id == token.id);
     if (idx == -1) throw "Cannot Remove Outflow - Index Is -1 (Nonexistant!)";
-    this.inflows.splice(idx, 1);
+    this.outflows.splice(idx, 1);
 
     // Delete it from our mapping of token percentages
     this.tokenPercentages.delete(token.id);

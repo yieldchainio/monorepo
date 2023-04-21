@@ -35,4 +35,5 @@ export interface ProtocolsProviderProps extends BaseComponentProps {
 // Tokens provider props
 export interface TokensProviderProps extends BaseComponentProps {
   tokens: YCToken[];
+  portal?: HTMLElement
 }

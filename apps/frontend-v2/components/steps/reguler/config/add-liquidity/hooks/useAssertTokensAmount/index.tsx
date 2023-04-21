@@ -13,10 +13,12 @@ export const useAssertTokensAmount = ({
   tokens,
   step,
   triggerComparison,
+  amount = 2,
 }: {
   tokens: YCToken[];
   step: Step;
   triggerComparison: () => void;
+  amount?: number;
 }) => {
   /**
    * @notice
@@ -30,7 +32,7 @@ export const useAssertTokensAmount = ({
   const cancelled = useRef<boolean>(false);
 
   useEffect(() => {
-    if (tokens.length < 0 && !cancelled.current) {
+    if (tokens.length < amount && !cancelled.current) {
       cancelled.current = true;
       cancelAction(step, triggerComparison);
       logs.push((id: string) => {

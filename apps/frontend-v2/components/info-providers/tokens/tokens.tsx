@@ -11,13 +11,19 @@ import WrappedText from "components/wrappers/text";
 import { sliceAddress } from "utilities/general/slice-address";
 import { TokenAddress } from "components/tokens/address";
 
-export const TokensProvider = ({ children, tokens }: TokensProviderProps) => {
+export const TokensProvider = ({
+  children,
+  tokens,
+  portal,
+}: TokensProviderProps) => {
+  console.log("Tokens Provider portal", portal);
   return (
     <InfoProvider
       delay={500}
       style={{
         backgroundColor: "rgb(var(--bigcomponentbg), 1)",
       }}
+      portal={portal}
       contents={
         <Table<YCToken>
           items={tokens}

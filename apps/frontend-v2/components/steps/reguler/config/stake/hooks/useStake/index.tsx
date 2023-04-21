@@ -130,9 +130,7 @@ export const useStake = ({
       step.clearFlows();
 
       // Add all of the outflows to this step
-      for (const token of func.outflows) {
-        step.addOutflow(token);
-      }
+      for (const token of func.outflows) step.addOutflow(token);
 
       // Add all of the inflows to this step
       for (const token of func.inflows) step.addInflow(token);

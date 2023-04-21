@@ -32,6 +32,7 @@ export const TokensBundle = ({
   textProps,
   showAdditionalText = true,
   showTextIfSingle = false,
+  portal,
 }: TokensBundleProps) => {
   // Memoize the tokens
   const mappedTokens = useMemo(() => {
@@ -84,7 +85,7 @@ export const TokensBundle = ({
   const tokensComponent = useMemo(() => {
     if (tooltipEnabled)
       return (
-        <TokensProvider tokens={tokens}>
+        <TokensProvider tokens={tokens} portal={portal}>
           <div
             className="flex flex-row items-center justify-start"
             style={style}
@@ -99,7 +100,7 @@ export const TokensBundle = ({
         {mappedTokens}
       </div>
     );
-  }, [tooltipEnabled, mappedTokens, mappedTokens.length]);
+  }, [tooltipEnabled, mappedTokens, mappedTokens.length, portal]);
 
   return (
     <div className="flex flex-row items-center justify-start gap-0.5">

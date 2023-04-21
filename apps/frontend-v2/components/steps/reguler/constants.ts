@@ -25,13 +25,6 @@ export const ACTION_IDS_TO_ENUM_KEY: Record<string, ActionConfigs> = {
 };
 
 /**
- * Mapping action IDs => Corresponding UI components for configuration of them
- */
-export const ACTION_IDS_TO_CONFIGS = {
-  "c947f5bf-004f-40e6-b859-dd28c7fac0b0": SwapConfig,
-};
-
-/**
  * Mapping action IDs => icons
  */
 

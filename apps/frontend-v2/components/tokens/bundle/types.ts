@@ -15,4 +15,5 @@ export interface TokensBundleProps extends BaseComponentProps {
   textProps?: Partial<TextProps>;
   showAdditionalText?: boolean;
   showTextIfSingle?: boolean;
+  portal?: HTMLElement
 }

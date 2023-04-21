@@ -6,12 +6,24 @@
 import WrappedImage from "components/wrappers/image";
 import { StepProps } from "../../../types";
 import WrappedText from "components/wrappers/text";
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
 import { StepOptions } from "../../../components/options";
 import { BaseNode } from "components/steps/components/node";
+import { TRIGGER_NAMES_TO_COMPONENTS, TriggerVisual } from "../../constants";
 
 export const SmallCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+    /**
+     * Memoize the persisted visual from step's data
+     */
+    const additionalVisual = useMemo(() => {
+      const Visual = TRIGGER_NAMES_TO_COMPONENTS[step.triggerName as string] as
+        | TriggerVisual
+        | undefined;
+
+      if (Visual)
+        return <Visual step={step} triggerComparison={triggerComparison} />;
+    }, [step, step.data.trigger, step.triggerName]);
     return (
       <BaseNode
         className="justify-between px-2 "
@@ -40,7 +52,7 @@ export const SmallCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
             </WrappedText>
           </div>
         </div>
-        {/* <div className="bg-red-500">Hey Ser What is Up</div> */}
+        <div className="translate-x-[-35%]">{additionalVisual}</div>
         <div className="flex flex-col h-full py-1 justify-start ">
           <StepOptions
             canvasID={canvasID}

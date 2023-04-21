@@ -90,13 +90,17 @@ export const useStrategyStore = create<StrategyStore>()(
 
       // Set the deposit token
       setDepositToken: (token: YCToken) => {
-        // We also change the root step to have an inflow of this
+        // We also change the root step to have an inflow of this,
+        // And set it's trigger data to the token (used by visuals)
         const root = get().step;
         root.inflows = [token];
+        root.data.trigger = { token: token.toJSON() };
         // And delete all children which have another token as their inflow
         for (const child of root.children)
           if (child.outflows.some((_token) => _token.id == token.id))
             root.removeChild(child.id);
+
+        //
 
         // Set the actuak token, and also our step
         set({ depositToken: token, step: root });

@@ -13,21 +13,29 @@ import {
 import { forwardRef, useMemo } from "react";
 import { StepOptions } from "../../../components/options";
 import { BaseNode } from "components/steps/components/node";
+import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 
 export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+    /**
+     * Get a portal to the canvas (for tooltips of tokens)
+     */
+    const canvasPortal = useElementPortal(canvasID);
+
     /**
      * Memoizing for performance
      */
     const inflowsComponent = useMemo(() => {
       if (!step.inflows.length) return null;
-      return <InflowTokenBundle tokens={step.inflows} />;
+      return <InflowTokenBundle tokens={step.inflows} portal={canvasPortal} />;
     }, [step.inflows, step.inflows.length]);
 
     const outflowsComponent = useMemo(() => {
       if (!step.outflows.length) return null;
-      return <OutflowTokenBundle tokens={step.outflows} />;
-    }, [step.outflows, step.outflows.length]);
+      return (
+        <OutflowTokenBundle tokens={step.outflows} portal={canvasPortal} />
+      );
+    }, [step.outflows, step.outflows.length, canvasPortal]);
 
     // Return the component
     return (

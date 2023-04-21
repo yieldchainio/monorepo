@@ -2,7 +2,7 @@
  * Medium component of completed step
  */
 
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
 import { StepProps } from "../../../types";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
@@ -12,9 +12,31 @@ import {
   OutflowTokenBundle,
 } from "components/tokens/bundle/step";
 import { BaseNode } from "components/steps/components/node";
+import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 
 export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+    /**
+     * Get a portal to the canvas (for tooltips of tokens)
+     */
+    const canvasPortal = useElementPortal(canvasID);
+
+    /**
+     * Memoizing for performance
+     */
+    const inflowsComponent = useMemo(() => {
+      if (!step.inflows.length) return null;
+      return <InflowTokenBundle tokens={step.inflows} portal={canvasPortal} />;
+    }, [step.inflows, step.inflows.length, canvasPortal]);
+
+    const outflowsComponent = useMemo(() => {
+      if (!step.outflows.length) return null;
+      return (
+        <OutflowTokenBundle tokens={step.outflows} portal={canvasPortal} />
+      );
+    }, [step.outflows, step.outflows.length, canvasPortal]);
+
+    // Return JSX
     return (
       <BaseNode
         className="flex-col justify-between px-4 py-4"
@@ -49,11 +71,11 @@ export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
         <div className="flex flex-row justify-between w-full pl-1">
           <div className="flex flex-row gap-2 items-center justify-center">
             <WrappedText>In:</WrappedText>
-            <InflowTokenBundle tokens={step.inflows} />
+            {inflowsComponent}
           </div>
           <div className="flex flex-row gap-2 items-center justify-center">
             <WrappedText>Out:</WrappedText>
-            <OutflowTokenBundle tokens={step.outflows} />
+            {outflowsComponent}
           </div>
         </div>
       </BaseNode>

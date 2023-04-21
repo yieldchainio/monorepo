@@ -14,6 +14,7 @@ export const InflowTokenBundle = ({
   tokens,
   maxImages = 2,
   imageProps = { width: 18, height: 18 },
+  portal,
 }: TokensBundleProps) => {
   return (
     <TokensBundle
@@ -26,6 +27,7 @@ export const InflowTokenBundle = ({
         },
         className: "border-green-500",
       }}
+      portal={portal}
     >
       <WrappedText
         fontSize={15}
@@ -43,6 +45,7 @@ export const OutflowTokenBundle = ({
   tokens,
   maxImages = 2,
   imageProps = { width: 18, height: 18 },
+  portal,
 }: TokensBundleProps) => {
   return (
     <TokensBundle
@@ -55,6 +58,7 @@ export const OutflowTokenBundle = ({
         },
         className: "border-red-500",
       }}
+      portal={portal}
     >
       <WrappedText fontSize={15} className="font-outline-2" fontColor="red-500">
         -

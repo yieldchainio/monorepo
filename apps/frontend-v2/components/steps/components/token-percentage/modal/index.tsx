@@ -21,7 +21,7 @@ export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
           <WrappedText>Edit Distribution</WrappedText>
         </div>
         <div className="flex flex-col w-full h-full overflow-scroll scrollbar-hide gap-2">
-          {step.outflows.map((token) => {
+          {step.outflows.map((token, i) => {
             // Get the current percentage from the step's mapping
             const currPercentage = step.tokenPercentages.get(token.id);
 
@@ -48,7 +48,10 @@ export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
               );
 
             return (
-              <div className="flex flex-row items-center justify-between">
+              <div
+                className="flex flex-row items-center justify-between"
+                key={`${i}_${token.id}`}
+              >
                 <div className="flex flex-row items-center gap-[0.35rem] ">
                   <WrappedImage
                     src={token.logo}

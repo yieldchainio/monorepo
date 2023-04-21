@@ -10,6 +10,10 @@ import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 import { ProtocolsDropdown } from "../../components/protocol-dropdown";
 import { useProtocols } from "../../hooks/useProtocols";
 import { useStake } from "../hooks/useStake";
+import { getRewardsFunction } from "../utils/getRewardsFunction";
+import { useYCStore } from "utilities/hooks/stores/yc-data";
+import WrappedText from "components/wrappers/text";
+import { PoolsDropdown } from "../components/pool-dropdown";
 
 export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
@@ -24,6 +28,7 @@ export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
       chooseFunction,
       functions,
       stakeFunction,
+      rewardsFunction,
     } = useStake({ step, triggerComparison });
 
     // Return the JSX
@@ -35,12 +40,30 @@ export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
         {...props}
         canvasID={canvasID}
         width="327px"
-        height="328px"
+        height="348px"
         step={step}
         triggerComparison={triggerComparison}
+        handleComplete={() => {
+          // We set the step's function to our stake function on completion
+          step.function = stakeFunction;
+        }}
       >
-        <div className="w-full" onClick={() => console.log(functions)}>
-          <ProtocolsDropdown setChoice={chooseProtocol} protocols={protocols} />
+        <div className="w-full flex flex-col gap-1">
+          <WrappedText>Protocol</WrappedText>
+          <ProtocolsDropdown
+            setChoice={chooseProtocol}
+            protocols={protocols}
+            choice={protocol}
+          />
+        </div>
+        <div className="w-full flex flex-col gap-1">
+          <WrappedText>Staking Pool</WrappedText>
+          <PoolsDropdown
+            size={step.size}
+            setChoice={chooseFunction}
+            functions={functions}
+            choice={stakeFunction}
+          />
         </div>
       </BaseActionConfig>
     );

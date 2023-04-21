@@ -13,6 +13,7 @@ export const useProtocols = ({
   tokens,
   type,
   action,
+  actionTokens,
 }: UseProtocolsProps) => {
   /**
    * Get all global protocols
@@ -50,16 +51,28 @@ export const useProtocols = ({
         )
           return false;
 
-        // A protocol must include the provided action, if any
-        if (
-          action &&
-          !protocol.addresses.find((address) =>
-            address.functions.some((func) =>
-              func.actions.some((_action) => _action.id == action.id)
+        // We filter on both action-related filters
+        if (action) {
+          // All functions that relate to our protocol
+          const protocolRelatedFunctions = protocol.addresses.flatMap(
+            (address) => address.functions
+          );
+
+          // If it's empty, it means it does not relate to it at all - we return false
+          if (!protocolRelatedFunctions.length) return false;
+
+          // We then filter on the actionTokens, if provided - Atleast one of the protocol-related
+          // functions must include atleast one of the provided actionTokens
+          if (
+            actionTokens &&
+            !protocolRelatedFunctions.find((func) =>
+              func.outflows.some((token) =>
+                actionTokens.some((_token) => _token.id == token.id)
+              )
             )
           )
-        )
-          return false;
+            return false;
+        }
 
         return true;
       }),

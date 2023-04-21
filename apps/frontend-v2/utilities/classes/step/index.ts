@@ -248,6 +248,30 @@ export class Step implements IStep<Step> {
   };
 
   /**
+   * clearFlows
+   * removes all existing flows
+   */
+  clearFlows = () => {
+    // Remove all mapped percentages
+    this.clearOutflows();
+    this.clearInflows();
+  };
+
+  /**
+   * clearInflows
+   */
+  clearInflows = () => {
+    for (const token of this.inflows) this.removeInflow(token);
+  };
+
+  /**
+   * clearOutflows
+   */
+  clearOutflows = () => {
+    for (const token of this.outflows) this.removeOutflow(token);
+  };
+
+  /**
    * @notice availableAndEvenPercentage
    * @param token - The token to calculate the percentages of
    * @param additionalChilds - Optioanl additional childs to take in mind as clean
@@ -490,6 +514,11 @@ export class Step implements IStep<Step> {
    * The different possible action configurations for a @notice REGULER step
    */
   actionConfig: ActionConfigs | null;
+
+  /**
+   * Optional custom arguments for the used function
+   */
+  customArguments: any[] = [];
 
   // -----------
   // Trigger Step Variables

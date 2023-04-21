@@ -9,6 +9,8 @@ import { BaseActionConfig } from "../../base";
 import { useSwap } from "../hooks/useSwap";
 import { TokenSwap } from "../components/token-swap";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
+import { completeSwapConfig } from "../utils/complete-swap-config";
+import { useYCStore } from "utilities/hooks/stores/yc-data";
 
 export const SmallSwapConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
@@ -30,6 +32,11 @@ export const SmallSwapConfig = forwardRef<HTMLDivElement, StepProps>(
      */
     const canvasPortal = useElementPortal(canvasID);
 
+    /**
+     * Get the global context
+     */
+    const context = useYCStore((state) => state.context);
+
     // Return the JSX
     return (
       <BaseActionConfig
@@ -41,6 +48,7 @@ export const SmallSwapConfig = forwardRef<HTMLDivElement, StepProps>(
         height="235px"
         step={step}
         triggerComparison={triggerComparison}
+        handleComplete={() => completeSwapConfig(step, context)}
         canContinue={
           fromToken
             ? toToken

@@ -22,7 +22,7 @@ export const Table = <T,>({
         return (
           <div
             className="flex flex-col"
-            key={i}
+            key={`table_section_${i}`}
             style={{
               gap: rowsGap || "0.5rem",
               ...(section.style || {}),

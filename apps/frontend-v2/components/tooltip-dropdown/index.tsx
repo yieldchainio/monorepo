@@ -28,11 +28,10 @@ export const TooltipDropdown = ({
       <div className="absolute flex flex-col gap-2 items-center justify-start py-1 px-0 bg-custom-bcomponentbg rounded-lg border-custom-themedBorder shadow-md z-[1000] dark:border-[1px] ">
         {options.map((option: DropdownOption, i: number) => {
           return (
-            <div>
+            <div key={`tooltip-dropdown-${i}`}>
               <InfoProvider
                 contents={option.data.description || option.text}
                 direction={ToolTipDirection.RIGHT}
-                key={i}
                 portal={portal}
               >
                 <div
@@ -43,7 +42,7 @@ export const TooltipDropdown = ({
                   }}
                 >
                   {option.image && (
-                    <WrappedImage src={option.image} width={12} height={12} />
+                    <WrappedImage src={option.image as string} width={12} height={12} />
                   )}
                   <WrappedText>{option.text}</WrappedText>
                 </div>

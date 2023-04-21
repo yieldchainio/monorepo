@@ -15,9 +15,11 @@ export const ActionConfigButtons = ({
   triggerComparison,
   canContinue,
   portal,
+  handleComplete,
 }: StepProps & {
   canContinue?: true | string;
   portal?: HTMLElement;
+  handleComplete: () => void;
 }) => {
   /**
    * Memo some styling
@@ -52,6 +54,7 @@ export const ActionConfigButtons = ({
         triggerComparison={triggerComparison}
         canContinue={canContinue}
         portal={portal}
+        handler={handleComplete}
       />
     </div>
   );

@@ -11,6 +11,8 @@ import { useAssertTokensAmount } from "../hooks/useAssertTokensAmount";
 import { ChooseToken } from "../../components/choose-token";
 import WrappedText from "components/wrappers/text";
 import { ProtocolsDropdown } from "../../components/protocol-dropdown";
+import { completeLPConfig } from "../utils/complete-lp-config";
+import { useYCStore } from "utilities/hooks/stores/yc-data";
 
 export const SmallAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
@@ -30,13 +32,20 @@ export const SmallAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
     } = useAddLiquidity({ step, triggerComparison });
 
     /**
-     * Assert the amount of tokens we need available to add liquidity (2)
+     * We asser that we must have 2 available outflows from our parent at all times. Otherwise,
+     * it is an invalid attempt of adding an LP config and we hence cancel the action
      */
     useAssertTokensAmount({
       step,
       triggerComparison,
       tokens: availableTokens,
     });
+
+    /**
+     * Get global context
+     */
+    const context = useYCStore((state) => state.context);
+
     // Return the JSX
     return (
       <BaseActionConfig
@@ -49,6 +58,7 @@ export const SmallAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
         step={step}
         triggerComparison={triggerComparison}
         canvasID={canvasID}
+        handleComplete={() => completeLPConfig(step, context)}
         canContinue={
           protocol
             ? tokenA

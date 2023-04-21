@@ -18,6 +18,7 @@ const WrappedImage = ({
   className,
   onClick,
   style,
+  wheelable = true,
 }: ImageProps) => {
   // State to track whether we fetch the color or not.
   const [fetchedColor, setFetchedColor] = useState<boolean>(false);
@@ -37,6 +38,7 @@ const WrappedImage = ({
         }
         onClick={() => onClick && onClick()}
         style={style || {}}
+        data-wheelable={wheelable}
       />
     </>
   );

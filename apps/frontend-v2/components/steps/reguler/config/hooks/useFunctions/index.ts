@@ -21,50 +21,49 @@ export const useFunctions = ({
   /**
    * Memoize the filtered functions and return them
    */
-  const memoFunctions = useMemo(
-    () =>
-      allFunctions.filter((func) => {
-        // It must be on one of the specified networks, if any
-        if (
-          networks &&
-          !networks.some((network) => network.id === func.address?.network?.id)
-        )
-          return false;
+  const memoFunctions = useMemo(() => {
+    console.log("Running Functions Memoization");
+    return allFunctions.filter((func) => {
+      // It must be on one of the specified networks, if any
+      if (
+        networks &&
+        !networks.some((network) => network.id === func.address?.network?.id)
+      )
+        return false;
 
-        // It must include the action specified, if any
-        if (action && !func.actions.some((_action) => _action.id == action.id))
-          return false;
+      // It must include the action specified, if any
+      if (action && !func.actions.some((_action) => _action.id == action.id))
+        return false;
 
-        // It must be under atleast one of the provided protocols
-        if (
-          protocols &&
-          !protocols.some(
-            (protocol) => func.address?.protocol?.id == protocol.id
+      // It must be under atleast one of the provided protocols
+      if (
+        protocols &&
+        !protocols.some((protocol) =>
+          protocol.addresses.find((address) =>
+            address.functions.some((_func) => _func.id == func.id)
           )
         )
-          return false;
+      )
+        return false;
 
-        if (
-          tokens &&
-          func.outflows.filter((token) =>
-            tokens.some((_token) => _token.id == token.id)
-          ).length < tokens.length
-        )
-          // It must outflow only our available tokens
-          return false;
+      if (
+        tokens &&
+        func.outflows.filter((token) =>
+          tokens.some((_token) => _token.id == token.id)
+        ).length < tokens.length
+      )
+        // It must outflow only our available tokens
+        return false;
 
-        return true;
-      }),
-    [
-      allFunctions,
-      allFunctions.length,
-      networks,
-      networks?.length,
-      tokens,
-      tokens?.length,
-      action?.id,
-    ]
-  );
+      return true;
+    });
+  }, [
+    allFunctions.length,
+    networks?.length,
+    tokens?.length,
+    action?.id,
+    protocols?.length,
+  ]);
 
   return memoFunctions;
 };

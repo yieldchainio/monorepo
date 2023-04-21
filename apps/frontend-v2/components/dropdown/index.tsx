@@ -165,7 +165,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
           {children}
         </SearchableDropdownMenu>
       );
-    }, [type]);
+    }, [type, options, options.length]);
 
     return (
       <div className="relative">
@@ -175,10 +175,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             : children || menuToReturn)}
 
         <RegulerButton
-          onClick={() => {
-            handleClick();
-            console.log(correcRef);
-          }}
+          onClick={handleClick}
           ref={correcRef}
           {...buttonProps}
           {...props}
@@ -187,18 +184,26 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
           }}
           disabled={disabled}
         >
-          <div className="flex flex-row gap-2 items-center">
+          <div
+            className="flex flex-row gap-2 items-center"
+            style={
+              buttonProps?.style?.gap ? { gap: buttonProps.style.gap } : {}
+            }
+          >
             {!buttonProps?.children ? (
               <>
-                {currentChoice?.image !== undefined && (
-                  <WrappedImage
-                    src={currentChoice.image}
-                    width={24}
-                    height={24}
-                    className=" rounded-full"
-                    {...imageProps}
-                  />
-                )}
+                {currentChoice?.image !== undefined &&
+                  (typeof currentChoice.image == "string" ? (
+                    <WrappedImage
+                      src={currentChoice.image}
+                      width={24}
+                      height={24}
+                      className=" rounded-full"
+                      {...imageProps}
+                    />
+                  ) : (
+                    currentChoice.image
+                  ))}
                 <WrappedText {...textProps}>{currentChoice?.text}</WrappedText>
               </>
             ) : (

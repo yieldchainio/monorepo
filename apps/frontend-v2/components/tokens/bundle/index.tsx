@@ -27,7 +27,11 @@ export const TokensBundle = ({
   imageProps = { width: 20, height: 20 },
   children,
   margin,
+  style,
   tooltipEnabled = true,
+  textProps,
+  showAdditionalText = true,
+  showTextIfSingle = false,
 }: TokensBundleProps) => {
   // Memoize the tokens
   const mappedTokens = useMemo(() => {
@@ -36,17 +40,24 @@ export const TokensBundle = ({
       // We do not want to move it to the left with negative margin if it's the first one to not mess up the container's flex
       if (i === 0)
         return (
-          <WrappedImage
-            src={token.logo}
-            style={{
-              borderRadius: `100%`,
-              ...(imageProps.style || {}),
-            }}
-            width={imageProps.width}
-            height={imageProps.height}
-            className={imageProps.className}
-            key={i}
-          />
+          <div className="flex flex-row items-center">
+            <WrappedImage
+              src={token.logo}
+              style={{
+                borderRadius: `100%`,
+                ...(imageProps.style || {}),
+              }}
+              width={imageProps.width}
+              height={imageProps.height}
+              className={"bg-custom-bg" + " " + (imageProps.className || "")}
+              key={i}
+            />
+            {tokens.length === 1 && showTextIfSingle ? (
+              <WrappedText className="ml-1 leading-none">
+                {token.symbol}
+              </WrappedText>
+            ) : null}
+          </div>
         );
 
       if (i < maxImages)
@@ -74,14 +85,17 @@ export const TokensBundle = ({
     if (tooltipEnabled)
       return (
         <TokensProvider tokens={tokens}>
-          <div className="flex flex-row items-center justify-start">
+          <div
+            className="flex flex-row items-center justify-start"
+            style={style}
+          >
             {mappedTokens}
           </div>
         </TokensProvider>
       );
 
     return (
-      <div className="flex flex-row items-center justify-start">
+      <div className="flex flex-row items-center justify-start" style={style}>
         {mappedTokens}
       </div>
     );
@@ -91,11 +105,11 @@ export const TokensBundle = ({
     <div className="flex flex-row items-center justify-start gap-0.5">
       {children}
       {tokensComponent}
-      {tokens.length > maxImages && (
-        <WrappedText fontSize={12} fontStyle="bold">
+      {tokens.length > maxImages && showAdditionalText ? (
+        <WrappedText fontSize={12} fontStyle="bold" {...textProps}>
           {" " + "+" + (tokens.length - maxImages).toString()}
         </WrappedText>
-      )}
+      ) : null}
     </div>
   );
 };

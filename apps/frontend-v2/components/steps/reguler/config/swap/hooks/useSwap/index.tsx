@@ -56,6 +56,9 @@ export const useSwap = ({
         fromToken: token.toJSON(),
       };
 
+      // Clear existing outflows
+      step.clearOutflows();
+
       // Add this to the step's outflows
       step.addOutflow(token);
 
@@ -71,6 +74,10 @@ export const useSwap = ({
         ...(step.data?.swap || {}),
         toToken: token.toJSON(),
       };
+
+      // Clear existing inflows
+      step.clearInflows();
+
       // Add this to the step's inflows
       step.addInflow(token);
 

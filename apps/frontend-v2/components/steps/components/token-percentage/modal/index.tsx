@@ -14,7 +14,7 @@ export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
     return (
       <div
-        className="cursor-default overflow-hidden absolute h-[220px] w-[200px] flex flex-col bg-custom-componentbg rounded-md border-[1px] border-custom-themedBorder shadow-md py-4 px-4 gap-6"
+        className="cursor-default overflow-hidden absolute h-[220px] w-[200px] flex flex-col bg-custom-componentbg rounded-md border-[1px] border-custom-themedBorder shadow-md py-4 px-4 gap-6 z-[1000]"
         style={style}
       >
         <div className="flex flex-row items-center justify-start w-full">
@@ -50,7 +50,12 @@ export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
             return (
               <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center gap-[0.35rem] ">
-                  <WrappedImage src={token.logo} width={20} height={20} />
+                  <WrappedImage
+                    src={token.logo}
+                    width={20}
+                    height={20}
+                    className="rounded-full"
+                  />
                   <WrappedText className="leading-none">
                     {token.symbol + " :"}
                   </WrappedText>
@@ -68,10 +73,6 @@ export const TokenPercentageModal = forwardRef<HTMLDivElement, StepProps>(
                     type="number"
                     placeholder={even.toString()}
                     onChange={(e) => {
-                      console.log(
-                        "Gonna Change percentage to",
-                        parseFloat(e.target.value)
-                      );
                       step.editTokenPercentage(
                         token,
                         parseFloat(e.target.value)

@@ -7,8 +7,8 @@ import { DashedGradientBorder } from "./dashed";
 import { GradientBorderProps } from "./types";
 
 export const GradientBorder = ({
-  heavyColor,
-  lightColor,
+  heavyColor = "var(--yc-lb)",
+  lightColor = "var(--yc-y)",
   borderRadius = "20px",
   gradientDegree = "90deg",
   style = {},
@@ -42,7 +42,7 @@ export const GradientBorder = ({
   return (
     <div
       className={
-        "flex flex-col overflow-hidden items-center justify-center" +
+        "flex flex-col overflow-hidden items-center justify-center pointer-events-none" +
         " " +
         (globalClassname || "")
       }
@@ -69,7 +69,11 @@ export const GradientBorder = ({
         }}
       ></div>
       <div
-        className="translate-y-[-100%]"
+        className={
+          "translate-y-[-100%] pointer-events-auto" +
+          " " +
+          (childrenContainerClassname || "")
+        }
         style={{
           width: width,
           height: height,

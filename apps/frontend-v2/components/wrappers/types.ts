@@ -65,4 +65,5 @@ export interface ImageProps {
   getColor?: boolean;
   onClick?: () => any;
   style?: React.CSSProperties;
+  wheelable?: boolean
 }

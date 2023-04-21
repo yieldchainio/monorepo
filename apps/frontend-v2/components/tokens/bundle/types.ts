@@ -4,7 +4,7 @@
 
 import { YCToken } from "@yc/yc-models";
 import { BaseComponentProps } from "components/types";
-import { ImageProps } from "components/wrappers/types";
+import { ImageProps, TextProps } from "components/wrappers/types";
 
 export interface TokensBundleProps extends BaseComponentProps {
   tokens: YCToken[];
@@ -12,4 +12,7 @@ export interface TokensBundleProps extends BaseComponentProps {
   imageProps?: ImageProps;
   margin?: number;
   tooltipEnabled?: boolean;
+  textProps?: Partial<TextProps>;
+  showAdditionalText?: boolean;
+  showTextIfSingle?: boolean;
 }

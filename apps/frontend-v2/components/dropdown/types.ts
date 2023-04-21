@@ -10,7 +10,7 @@ export type data = any;
 export interface DropdownOption<T = any> {
   text?: string;
   children?: Array<React.ReactElement | null>;
-  image?: string | null;
+  image?: string | null | React.ReactNode;
   data: T;
 }
 

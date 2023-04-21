@@ -20,15 +20,18 @@ export const Edge = forwardRef<
     canvasID?: string;
   }
 >(
-  ({
-    parentStep,
-    childStep,
-    canvasID,
-  }: {
-    parentStep: Step;
-    childStep: Step;
-    canvasID?: string;
-  }) => {
+  (
+    {
+      parentStep,
+      childStep,
+      canvasID,
+    }: {
+      parentStep: Step;
+      childStep: Step;
+      canvasID?: string;
+    },
+    ref
+  ) => {
     /**
      * Portal for the  canvas (used for percentage box tooltip)
      */

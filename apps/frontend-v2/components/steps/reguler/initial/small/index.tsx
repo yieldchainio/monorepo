@@ -44,7 +44,10 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
             triggerComparison={triggerComparison}
           />
         </div>
-        <div className="grid grid-cols-3 gap-2 w-full overflow-scroll scrollbar-hide">
+        <div
+          className="grid grid-cols-3 gap-2 w-full overflow-scroll scrollbar-hide"
+          data-wheelable={false}
+        >
           {actions.map((action) => {
             return (
               <InfoProvider contents={action.name} portal={canvasPortal}>
@@ -62,12 +65,14 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
                     step.state = "config";
                     triggerComparison();
                   }}
+                  data-wheelable={false}
                 >
                   <WrappedImage
                     src={action.icon}
                     width={20}
                     height={20}
                     className="group-hover:scale-[1.05] transition duration-200 ease-in-out will-change-transform"
+                    wheelable={false}
                   />
                 </div>
               </InfoProvider>

@@ -19,6 +19,7 @@ export const BaseActionConfig = forwardRef<
     width: `${number}${string}`;
     height: `${number}${string}`;
     canContinue?: true | string;
+    handleComplete: () => void;
   }
 >(
   (
@@ -32,11 +33,13 @@ export const BaseActionConfig = forwardRef<
       triggerComparison,
       canContinue,
       canvasID,
+      handleComplete,
       ...props
     }: StepProps & {
       width: `${number}${string}`;
       height: `${number}${string}`;
       canContinue?: true | string;
+      handleComplete: () => void;
     },
     ref
   ) => {
@@ -75,6 +78,7 @@ export const BaseActionConfig = forwardRef<
           triggerComparison={triggerComparison}
           canContinue={canContinue}
           portal={canvasPortal}
+          handleComplete={handleComplete}
         />
       </BaseNode>
     );

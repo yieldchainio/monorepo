@@ -22,20 +22,21 @@ export const NetworksList = ({
 
   // State keeping track of chosen networks
   // @notice for some reason if i used the drilled state it was slow AF. So using this for styling.
-  const [networkChosen, setNetworkChosen] = useState(networks[0].chainid);
+  const [networkChosen, setNetworkChosen] = useState(networks[0].id);
   return (
     <div className="flex flex-col gap-2 w-full overflow-scroll scrollbar-hide bg-inherit">
-      {memoizedNetworks.map((network) => (
+      {memoizedNetworks.map((network, i) => (
         <div
+          key={i}
           className={
             "w-full p-[1px] rounded-xl transition duration-200 ease-in-out   " +
             " " +
-            (networkChosen == network.chainid
+            (networkChosen == network.id
               ? "bg-gradient-to-r from-custom-ycllb to-custom-ycly "
               : "bg-inherit hover:bg-custom-themedBorder hover:scale-[0.99]")
           }
           onClick={() => {
-            setNetworkChosen(network.chainid);
+            setNetworkChosen(network.id);
             handler(network);
           }}
         >

@@ -118,7 +118,12 @@ export const StepsModal = ({
           return !step.children.length
             ? null
             : step.children.map((child: Step) => (
-                <Edge parentStep={step} childStep={child} canvasID={canvasID} />
+                <Edge
+                  parentStep={step}
+                  childStep={child}
+                  canvasID={canvasID}
+                  key={`${step.id}_${child.id}`}
+                />
               ));
         })}
       </Canvas>

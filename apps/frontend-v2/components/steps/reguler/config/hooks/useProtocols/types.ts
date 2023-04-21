@@ -9,4 +9,5 @@ export interface UseProtocolsProps {
   tokens?: YCToken[];
   type?: ProtocolType;
   action?: YCAction;
+  actionTokens?: YCToken[];
 }

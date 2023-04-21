@@ -10,6 +10,9 @@ import { STAKE_ID } from "components/steps/reguler/constants";
 import { YCFunc, YCProtocol } from "@yc/yc-models";
 import { StakeData } from "./types";
 import { useFunctions } from "../../../hooks/useFunctions";
+import { getRewardsFunction } from "../../utils/getRewardsFunction";
+import { useLogs } from "utilities/hooks/stores/logger";
+import { ErrorMessage } from "components/logger/components/error";
 
 export const useStake = ({
   step,
@@ -27,10 +30,16 @@ export const useStake = ({
   });
 
   /**
+   * Get global logs to throw errors, messages
+   */
+  const logs = useLogs();
+
+  /**
    * States to keep track of the chosen tokens and protocol
    */
   const [protocol, setProtocol] = useState<YCProtocol | null>(null);
-  const [stakeFunction, setStakeFunction] = useState<YCFunc | null>();
+  const [stakeFunction, setStakeFunction] = useState<YCFunc | null>(null);
+  const [rewardsFunction, setRewardsFunction] = useState<YCFunc | null>(null);
 
   /**
    * Get our stake action (memoize it)
@@ -46,9 +55,8 @@ export const useStake = ({
   const protocols = useProtocols({
     networks: network ? [network] : undefined,
     action: stakeAction,
+    actionTokens: availableTokens,
   });
-
-  console.log("Stake ACtion", stakeAction);
 
   /**
    * Get all stake functions that are under our chosen protocol
@@ -66,13 +74,25 @@ export const useStake = ({
 
   // Choose a protocol
   const chooseProtocol = useCallback(
-    (protocol: YCProtocol) => {
+    (_protocol: YCProtocol) => {
+      // Whether or not the requested protocol is the same as the current one
+      if (_protocol.id == protocol?.id) return;
+
+      // Set the protocol on the step's data (persistant), and also reset the function to null
       (step.data.stake as StakeData) = {
         ...(step.data?.stake || {}),
-        protocol: protocol.toJSON(),
+        protocol: _protocol.toJSON(),
+        func: null,
       };
 
-      console.log("Just Set Protocol ser");
+      // Reset the step's inflows & outflows (Since we changed our function)
+      step.clearFlows();
+
+      // // Reset the states (wont be auto updated by the side effect as it is nullish)
+      setStakeFunction(null);
+      setRewardsFunction(null);
+
+      // Change the protocol of this step
       step.protocol = protocol;
 
       triggerComparison();
@@ -81,16 +101,46 @@ export const useStake = ({
   );
 
   // Choose a function
-  const chooseFunction = useCallback(() => {
+  const chooseFunction = useCallback(
     (func: YCFunc) => {
+      // Change the stake data on the step (persistant)
       (step.data.stake as StakeData) = {
         ...(step.data?.stake || {}),
         func: func.toJSON(),
       };
 
-      step.function = func;
-    };
-  }, [JSON.stringify(step.toJSON())]);
+      // Validate that we have all required outflows available
+      if (
+        func.outflows.find(
+          (token) => !availableTokens.find((_token) => _token.id == token.id)
+        )
+      )
+        logs.push((id: string) => ({
+          component: (
+            <ErrorMessage id={id}>
+              You Do Not Have The Available Tokens For This Pool
+            </ErrorMessage>
+          ),
+          id,
+          lifespan: 4000,
+          data: {},
+        }));
+
+      // Clear all existing outflows & inflows
+      step.clearFlows();
+
+      // Add all of the outflows to this step
+      for (const token of func.outflows) {
+        step.addOutflow(token);
+      }
+
+      // Add all of the inflows to this step
+      for (const token of func.inflows) step.addInflow(token);
+
+      triggerComparison();
+    },
+    [JSON.stringify(step.toJSON())]
+  );
 
   /**
    * Initiallize the choices from persistance if not yet
@@ -98,8 +148,17 @@ export const useStake = ({
   useEffect(() => {
     // Shorthand for the data
     const data = step.data.stake as StakeData | null;
-    if (data?.func) setStakeFunction(new YCFunc(data.func, context));
-    if (data?.protocol) setProtocol(new YCProtocol(data.protocol, context));
+    if (data?.func) {
+      const stakeFunc = new YCFunc(data.func, context);
+      const rewardsFunc = getRewardsFunction(stakeFunc, context);
+      setStakeFunction(stakeFunc);
+      setRewardsFunction(rewardsFunc);
+    }
+    if (data?.protocol) {
+      const newProtocol = new YCProtocol(data.protocol, context);
+      setProtocol(newProtocol);
+      step.protocol = newProtocol;
+    }
   }, [step.data.stake?.protocol?.id, step.data.stake?.func?.id]);
 
   // Return the functions & variables
@@ -111,5 +170,6 @@ export const useStake = ({
     chooseFunction,
     functions,
     stakeFunction,
+    rewardsFunction,
   };
 };

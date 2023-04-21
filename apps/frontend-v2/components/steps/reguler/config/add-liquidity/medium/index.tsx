@@ -17,6 +17,7 @@ import { cancelAction } from "components/steps/utils/cancel-action";
 import { useLogs } from "utilities/hooks/stores/logger";
 import { WarningMessage } from "components/logger/components/warning";
 import { useAssertTokensAmount } from "../hooks/useAssertTokensAmount";
+import { completeLPConfig } from "../utils/complete-lp-config";
 
 export const MediumAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
@@ -35,11 +36,20 @@ export const MediumAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
       availableTokens,
     } = useAddLiquidity({ step, triggerComparison });
 
+    /**
+     * We asser that we must have 2 available outflows from our parent at all times. Otherwise,
+     * it is an invalid attempt of adding an LP config and we hence cancel the action
+     */
     useAssertTokensAmount({
       step,
       triggerComparison,
       tokens: availableTokens,
     });
+
+    /**
+     * Get global context
+     */
+    const context = useYCStore((state) => state.context);
 
     // Return the JSX
     return (
@@ -53,6 +63,7 @@ export const MediumAddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
         height="328px"
         step={step}
         triggerComparison={triggerComparison}
+        handleComplete={() => completeLPConfig(step, context)}
         canContinue={
           protocol
             ? tokenA

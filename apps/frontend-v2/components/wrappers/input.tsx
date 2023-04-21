@@ -35,7 +35,6 @@ const WrappedInput = ({
   return (
     <div
       className="w-full flex flex-col justify-center items-end relative gap-1"
-      onClick={() => console.log("Input CLickerooni")}
     >
       {title && (
         <WrappedText className="self-start ml-2" fontSize={14}>

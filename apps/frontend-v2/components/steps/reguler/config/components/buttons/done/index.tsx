@@ -15,9 +15,11 @@ export const DoneButton = ({
   triggerComparison,
   canContinue = true,
   portal,
+  handler,
 }: StepProps & {
   canContinue?: true | string;
   portal?: HTMLElement;
+  handler: () => void;
 }) => {
   /**
    * Memoize The button to continue, based on whether it is enabled or not
@@ -33,6 +35,7 @@ export const DoneButton = ({
           ...style,
         }}
         onClick={() => {
+          handler();
           step.state = "complete";
           triggerComparison();
         }}
@@ -50,6 +53,7 @@ export const DoneButton = ({
               ...style,
             }}
             onClick={() => {
+              handler();
               step.state = "complete";
               triggerComparison();
             }}

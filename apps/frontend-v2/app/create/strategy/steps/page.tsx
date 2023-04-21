@@ -48,7 +48,7 @@ const TitleConfig = () => {
         onChange={(e) => setInput(e.target.value)}
         width="w-[100%]"
         title="Strategy Title"
-        value={globalTitle || undefined}
+        defaultValue={globalTitle || undefined}
       ></WrappedInput>
     </div>
   );

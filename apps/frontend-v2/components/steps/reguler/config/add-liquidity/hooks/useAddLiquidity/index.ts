@@ -88,8 +88,9 @@ export const useAddLiquidity = ({
         ...(step.data?.lp || {}),
         tokenB: token.toJSON(),
       };
-      // Add this to the step's inflows
-      step.addInflow(token);
+
+      // Add this to the step's outflows
+      step.addOutflow(token);
 
       triggerComparison();
     },
@@ -103,7 +104,6 @@ export const useAddLiquidity = ({
         protocol: protocol.toJSON(),
       };
 
-      console.log("Just Set Protocol ser");
       step.protocol = protocol;
 
       triggerComparison();
@@ -117,7 +117,6 @@ export const useAddLiquidity = ({
   useEffect(() => {
     // Shorthand for the data
     const data = step.data.lp as AddLiquidityData | null;
-    console.log("OUR Data IN uSeeffect ser", data, protocol);
 
     // If our from token is not init yet
     // And there is a persisted DBtoken in the data,
@@ -126,7 +125,11 @@ export const useAddLiquidity = ({
 
     if (data?.tokenB) setTokenB(new YCToken(data.tokenB, context));
 
-    if (data?.protocol) setProtocol(new YCProtocol(data.protocol, context));
+    if (data?.protocol) {
+      const newProtocol = new YCProtocol(data.protocol, context);
+      setProtocol(newProtocol);
+      step.protocol = newProtocol;
+    }
   }, [
     step.data.lp?.protocol?.id,
     step.data.lp?.tokenA?.id,

@@ -83,8 +83,14 @@ export const PrivacyCard = ({
             </div>
 
             <div className="flex flex-col gap-3 items-start justify-start">
-              {reasons.map(({ reason, description }) => {
-                return <ReasonItem reason={reason} description={description} />;
+              {reasons.map(({ reason, description }, i) => {
+                return (
+                  <ReasonItem
+                    reason={reason}
+                    description={description}
+                    key={i}
+                  />
+                );
               })}
             </div>
           </div>

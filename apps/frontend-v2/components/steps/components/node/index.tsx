@@ -23,6 +23,7 @@ import { PlusCircle } from "../plus-circle";
 import { InfoProvider } from "components/info-providers";
 import { Step } from "utilities/classes/step";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
+import { ToolTipDirection } from "components/info-providers/types";
 
 export const BaseNode = forwardRef<
   HTMLDivElement,
@@ -140,7 +141,12 @@ const ChildAdders = ({
 
   return (
     <div className="" style={{ ...style, zIndex: 0, position: "relative" }}>
-      <InfoProvider contents="Add Step +" delay={300} portal={canvasPortal}>
+      <InfoProvider
+        contents="Add Step +"
+        delay={300}
+        portal={canvasPortal}
+        direction={ToolTipDirection.RIGHT}
+      >
         <PlusCircle
           style={{
             zIndex: 2,
@@ -152,7 +158,12 @@ const ChildAdders = ({
           onClick={addChild}
         />
       </InfoProvider>
-      <InfoProvider contents="Add Step +" delay={300} portal={canvasPortal}>
+      <InfoProvider
+        contents="Add Step +"
+        delay={300}
+        portal={canvasPortal}
+        direction={ToolTipDirection.LEFT}
+      >
         <PlusCircle
           style={{
             zIndex: 2,

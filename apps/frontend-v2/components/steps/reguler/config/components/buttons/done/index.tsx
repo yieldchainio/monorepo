@@ -63,7 +63,7 @@ export const DoneButton = ({
         </div>
       </InfoProvider>
     );
-  }, [canContinue]);
+  }, [canContinue, handler]);
 
   // Return the JSX
   return btnComponent;

@@ -15,4 +15,15 @@ export interface LogsStore {
   map: (
     logCallback: (item: UserLog, index: number, arr: UserLog[]) => any
   ) => any;
+  lazyPush: ({
+    message,
+    data = {},
+    lifespan = 2000,
+    type = "info",
+  }: {
+    message: string;
+    data?: any;
+    lifespan?: number;
+    type?: "info" | "error" | "warning" | "success";
+  }) => string;
 }

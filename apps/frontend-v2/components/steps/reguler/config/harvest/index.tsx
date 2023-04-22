@@ -8,7 +8,7 @@ import { StepSizing } from "utilities/classes/step/types";
 import { SmallHarvestConfig } from "./small";
 import { MediumHarvestConfig } from "./medium";
 
-export const SwapConfig = forwardRef<HTMLDivElement, StepProps>(
+export const HarvestConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     switch (step.size) {
       case StepSizing.SMALL:

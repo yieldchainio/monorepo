@@ -8,6 +8,7 @@ import { ActionConfigs } from "utilities/classes/step/types";
 import { SwapConfig } from "./swap";
 import { AddLiquidityConfig } from "./add-liquidity";
 import { StakeConfig } from "./stake";
+import { HarvestConfig } from "./harvest";
 
 export const ActionConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, triggerComparison, style, ...props }: StepProps, ref) => {
@@ -40,6 +41,17 @@ export const ActionConfig = forwardRef<HTMLDivElement, StepProps>(
       case ActionConfigs.STAKE:
         return (
           <StakeConfig
+            step={step}
+            triggerComparison={triggerComparison}
+            style={style}
+            ref={ref}
+            {...props}
+          />
+        );
+
+      case ActionConfigs.HARVEST:
+        return (
+          <HarvestConfig
             step={step}
             triggerComparison={triggerComparison}
             style={style}

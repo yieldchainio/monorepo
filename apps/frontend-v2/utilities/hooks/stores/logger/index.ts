@@ -3,6 +3,7 @@ import { LogsStore, UserLog } from "./types";
 import { v4 as uuid } from "uuid";
 import { AWSLogger } from "@yc/aws-models/bin/logger";
 import { persist } from "zustand/middleware";
+import { getErrorLog, getInfoLog, getSuccessLog, getWarningLog } from "./utils";
 
 /**
  * @notice
@@ -53,5 +54,48 @@ export const useLogs = create<LogsStore>((set, get) => ({
         logs: [],
       };
     });
+  },
+
+  /**
+   * Utility functions to push errors, warnings & information as a shorthand
+   */
+  lazyPush: ({
+    message,
+    data = {},
+    lifespan = 2000,
+    type = "info",
+  }: {
+    message: string;
+    data?: any;
+    lifespan?: number;
+    type?: "info" | "error" | "warning" | "success";
+  }) => {
+    /**
+     * Switch case for getter function of log
+     */
+    const logFunc =
+      type === "info"
+        ? getInfoLog
+        : type === "error"
+        ? getErrorLog
+        : type === "warning"
+        ? getWarningLog
+        : type == "success"
+        ? getSuccessLog
+        : null;
+
+    // Sufficient guard
+    if (logFunc === null) return "";
+
+    // Push it manually
+    get().push((id: string) => ({
+      component: logFunc(message, id),
+      id,
+      lifespan,
+      data,
+    }));
+
+    // Return the message (used for throwing if an error)
+    return message;
   },
 }));

@@ -149,7 +149,9 @@ export const PoolsDropdown = forwardRef(
                     <WrappedText className="leading-0">Stake</WrappedText>
                     <TokensBundle
                       tokens={_option.data.stake.outflows}
-                      showTextIfSingle
+                      showTextIfSingle={
+                        size === StepSizing.SMALL ? false : true
+                      }
                     />
                   </div>
                   <WrappedImage
@@ -172,6 +174,9 @@ export const PoolsDropdown = forwardRef(
                         width: 24,
                         height: 24,
                       }}
+                      showTextIfSingle={
+                        size === StepSizing.SMALL ? false : true
+                      }
                     />
                   </div>
                 </div>

@@ -27,6 +27,9 @@ export interface StrategyStoreState {
 
   // Steps of the strategy (Tree)
   step: Step;
+
+  // Seed step of the strategy (the base steps), (Tree)
+  seedStep: Step;
 }
 
 /**
@@ -73,6 +76,9 @@ export interface JSONStrategyStoreState {
 
   // Steps of the strategy (Tree)
   step: JSONStep;
+
+  // Seed step of the strategy (the base steps), (Tree)
+  seedStep: JSONStep;
 
   // The configs stuff (for UX purposes)
   strategyConfigs: configProgressStep[];

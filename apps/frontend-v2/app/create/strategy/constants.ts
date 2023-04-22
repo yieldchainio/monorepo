@@ -37,7 +37,7 @@ export const configRoutes: {
   },
 
   {
-    route: "/base",
+    route: "/seed",
     progressStep: {
       image: "",
       label: "Assemble Base Steps",

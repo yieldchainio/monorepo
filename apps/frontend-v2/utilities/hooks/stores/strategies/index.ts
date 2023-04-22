@@ -30,6 +30,7 @@ export const useStrategyStore = create<StrategyStore>()(
       /**
        * @State
        */
+
       // UUID of the strategy
       id: startingID,
 
@@ -47,6 +48,23 @@ export const useStrategyStore = create<StrategyStore>()(
 
       // Step of the strategy (tree)
       step: new Step(
+        {
+          type: StepType.TRIGGER,
+          state: "complete" as StepState,
+          inflows: [get()?.depositToken].flatMap((token: YCToken | null) =>
+            token ? [token] : []
+          ),
+          triggerName: "Deposit",
+          triggerDescription: "When A Vault Deposit Happens",
+          triggerIcon: {
+            dark: "/icons/deposit-light.svg",
+            light: "/icons/deposit-dark.svg",
+          },
+        },
+        true
+      ),
+
+      seedStep: new Step(
         {
           type: StepType.TRIGGER,
           state: "complete" as StepState,
@@ -90,9 +108,9 @@ export const useStrategyStore = create<StrategyStore>()(
 
       // Set the deposit token
       setDepositToken: (token: YCToken) => {
-        // We also change the root step to have an inflow of this,
+        // We also change the root seed step to have an inflow of this,
         // And set it's trigger data to the token (used by visuals)
-        const root = get().step;
+        const root = get().seedStep;
         root.inflows = [token];
         root.data.trigger = { token: token.toJSON() };
         // And delete all children which have another token as their inflow
@@ -113,7 +131,7 @@ export const useStrategyStore = create<StrategyStore>()(
 
       // Refresh the step state - trigger a rehydrate and setting after manually changing stuff about it
       rehydrateSteps: () => {
-        set({ step: get().step });
+        set({ step: get().step, seedStep: get().seedStep });
         useStrategyStore.persist.rehydrate();
       },
 
@@ -178,7 +196,7 @@ export const useStrategyStore = create<StrategyStore>()(
               : "Please Choose Your Privacy To Continue",
         },
         {
-          route: "/base",
+          route: "/seed",
           progressStep: {
             image: {
               dark: "/icons/seed-light.svg",

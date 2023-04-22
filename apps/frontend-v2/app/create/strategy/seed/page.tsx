@@ -12,7 +12,7 @@ import WrappedText from "components/wrappers/text";
 
 const BaseStepsConfig = () => {
   // Get the current base step (Should be the root Deposit trigger)
-  const rootStep = useStrategyStore((state) => state.step);
+  const rootStep = useStrategyStore((state) => state.seedStep);
 
   // Rehydration function
   const rehydrateSteps = useStrategyStore((state) => state.rehydrateSteps);

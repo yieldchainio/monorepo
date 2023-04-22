@@ -36,7 +36,6 @@ export const seriallizeStrategyStore = (
   statefulStoreObject: string
 ): JSONStrategyStoreState => {
   // Return a JSON store from a stateful stores
-  const seriallizeres = JSON.parse(statefulStoreObject).state;
   return JSON.parse(statefulStoreObject).state;
 };
 
@@ -57,7 +56,8 @@ export const deseriallizeStrategyStore = (
       ? new YCNetwork(jsonStore.network, context)
       : null,
     title: jsonStore.title,
-    step: Step.fromJSONStep({ step: jsonStore.step, context: context }),
+    step: Step.fromJSONStep({ step: jsonStore.step, context }),
+    seedStep: Step.fromJSONStep({ step: jsonStore.seedStep, context }),
 
     strategyConfigs: useStrategyStore
       .getState()

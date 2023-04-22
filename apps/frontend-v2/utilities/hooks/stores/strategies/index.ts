@@ -206,7 +206,7 @@ export const useStrategyStore = create<StrategyStore>()(
             state: "not_complete",
           },
           condition: () =>
-            !!get().step
+            !!get().seedStep
               ? true
               : "Please Choose Atleast One Base Step To Continue",
         },

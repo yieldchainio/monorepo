@@ -13,9 +13,9 @@ import { useBackdropColorChange } from "utilities/hooks/general/useBackdropColor
 import { StrategyConfigVerticalWrapper } from "components/strategy-config-wrapper";
 import { StepsModal } from "components/steps-modal";
 
-const TitleConfig = () => {
+const StepsConfig = () => {
   // Get the current base step (Should be the root Deposit trigger)
-  const rootStep = useStrategyStore((state) => state.seedStep);
+  const rootStep = useStrategyStore((state) => state.step);
 
   // Rehydration function
   const rehydrateSteps = useStrategyStore((state) => state.rehydrateSteps);
@@ -60,4 +60,4 @@ const TitleConfig = () => {
   );
 };
 
-export default TitleConfig;
+export default StepsConfig;

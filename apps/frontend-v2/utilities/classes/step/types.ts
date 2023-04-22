@@ -44,6 +44,10 @@ export enum ActionConfigs {
   HARVEST = "HARVEST",
 }
 
+// The different types of trigger configs
+export enum TriggerConfigs {
+  AUTOMATION = "AUTOMATION",
+}
 // The different sizing for nodes
 export enum StepSizing {
   SMALL = "small",
@@ -109,6 +113,7 @@ export interface IStepTrigger<T extends IStep<T>> {
   triggerIcon?: ImageSrc;
   data?: any | null;
   triggerVisuals?: React.ReactNode;
+  triggerConfig?: TriggerConfigs | null;
 }
 
 // An interface for all of the step data (which the class implements)

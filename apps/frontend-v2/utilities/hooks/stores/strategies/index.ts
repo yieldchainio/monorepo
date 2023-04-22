@@ -30,7 +30,6 @@ export const useStrategyStore = create<StrategyStore>()(
       /**
        * @State
        */
-
       // UUID of the strategy
       id: startingID,
 
@@ -50,15 +49,12 @@ export const useStrategyStore = create<StrategyStore>()(
       step: new Step(
         {
           type: StepType.TRIGGER,
-          state: "complete" as StepState,
-          inflows: [get()?.depositToken].flatMap((token: YCToken | null) =>
-            token ? [token] : []
-          ),
-          triggerName: "Deposit",
-          triggerDescription: "When A Vault Deposit Happens",
+          state: "config" as StepState,
+          triggerName: "Automation",
+          triggerDescription: "On Automation Trigger",
           triggerIcon: {
-            dark: "/icons/deposit-light.svg",
-            light: "/icons/deposit-dark.svg",
+            dark: "/icons/timer-light.svg",
+            light: "/icons/timer-dark.svg",
           },
         },
         true
@@ -121,7 +117,7 @@ export const useStrategyStore = create<StrategyStore>()(
         //
 
         // Set the actuak token, and also our step
-        set({ depositToken: token, step: root });
+        set({ depositToken: token, seedStep: root });
       },
 
       // Set the network

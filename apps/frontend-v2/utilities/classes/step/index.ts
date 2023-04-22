@@ -27,6 +27,7 @@ import {
   StepSizing,
   StepState,
   StepType,
+  TriggerConfigs,
 } from "./types";
 import { v4 as uuid } from "uuid";
 import { FlextreeNode, flextree } from "d3-flextree";
@@ -513,7 +514,7 @@ export class Step implements IStep<Step> {
   /**
    * The different possible action configurations for a @notice REGULER step
    */
-  actionConfig: ActionConfigs | null;
+  actionConfig: ActionConfigs | null = null;
 
   /**
    * Optional custom arguments for the used function
@@ -537,6 +538,12 @@ export class Step implements IStep<Step> {
    * An icon representing this trigger
    */
   triggerIcon: ImageSrc = null;
+
+  /**
+   * Trigger config
+   * actionConfig equivlenet for @notice trigger
+   */
+  triggerConfig: TriggerConfigs | null = null;
 
   /**
    * Any additional data that the Trigger config will want to save
@@ -589,7 +596,6 @@ export class Step implements IStep<Step> {
     /**
      * Construct reguler step variables
      */
-    this.actionConfig = config?.actionConfig || null;
     this.protocol = config?.protocol || null;
     this.action = config?.action || null;
     this.function = config?.function || null;
@@ -602,6 +608,7 @@ export class Step implements IStep<Step> {
     this.triggerIcon = config?.triggerIcon || null;
     this.triggerDescription = config?.triggerDescription || null;
     this.triggerVisuals = config?.triggerVisuals || null;
+    this.triggerConfig = config?.triggerConfig || null;
 
     this.percentage = config?.percentage || 0;
 

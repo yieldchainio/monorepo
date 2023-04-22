@@ -9,6 +9,7 @@ import { forwardRef } from "react";
 import { StepProps } from "../types";
 import { TriggerCompleteStep } from "./complete";
 import { EmptyStep } from "../placeholder";
+import { TriggerConfig } from "./config";
 
 export const TriggerStep = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
@@ -33,7 +34,16 @@ export const TriggerStep = forwardRef<HTMLDivElement, StepProps>(
         return <div></div>;
 
       case "config":
-        return <div></div>;
+        return (
+          <TriggerConfig
+            step={step}
+            style={style}
+            triggerComparison={triggerComparison}
+            ref={ref}
+            {...props}
+            canvasID={canvasID}
+          />
+        );
 
       case "complete":
         return (

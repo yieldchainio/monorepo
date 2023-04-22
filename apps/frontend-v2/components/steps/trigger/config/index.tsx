@@ -4,7 +4,8 @@
 
 import { StepProps } from "components/steps/types";
 import { forwardRef } from "react";
-import { ActionConfigs } from "utilities/classes/step/types";
+import { TriggerConfigs } from "utilities/classes/step/types";
+import { AutomationConfig } from "./automation";
 
 export const TriggerConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, triggerComparison, style, ...props }: StepProps, ref) => {
@@ -12,8 +13,18 @@ export const TriggerConfig = forwardRef<HTMLDivElement, StepProps>(
      * Switch case to return corresponding action config component based on the enum proprety actionConfigs
      */
     switch (step.triggerConfig) {
+      case TriggerConfigs.AUTOMATION:
+        return (
+          <AutomationConfig
+            step={step}
+            triggerComparison={triggerComparison}
+            style={style}
+            ref={ref}
+            {...props}
+          />
+        );
       default:
-        return null;
+        return <div>{step.triggerConfig}</div>;
     }
   }
 );

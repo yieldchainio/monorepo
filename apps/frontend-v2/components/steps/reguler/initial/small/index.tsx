@@ -12,7 +12,7 @@ import { StepOptions } from "components/steps/components/options";
 import WrappedImage from "components/wrappers/image";
 import { InfoProvider } from "components/info-providers";
 import { BaseNode } from "components/steps/components/node";
-import { ACTION_IDS_TO_CONFIGS, ACTION_IDS_TO_ENUM_KEY } from "../../constants";
+import { ACTION_IDS_TO_ENUM_KEY } from "../../constants";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 
 export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(

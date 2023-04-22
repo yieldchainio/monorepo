@@ -160,6 +160,7 @@ export interface JSONStep {
   triggerIcon?: ImageSrc;
   data?: any | null;
   triggerVisuals?: React.ReactNode;
+  triggerConfig?: TriggerConfigs | null;
 
   percentage: number;
 }

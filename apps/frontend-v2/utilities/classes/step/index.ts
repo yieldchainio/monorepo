@@ -965,6 +965,7 @@ export class Step implements IStep<Step> {
         triggerDescription: this.triggerDescription,
         triggerVisuals: this.triggerVisuals,
         triggerIcon: this.triggerIcon,
+        triggerConfig: this.triggerConfig,
         data: this.data,
         tokenPercentages: Array.from(this.tokenPercentages.entries()),
         // customArguments: this.customArguments.map((arg) => arg.) // TODO

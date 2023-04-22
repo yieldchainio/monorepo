@@ -59,7 +59,6 @@ export const useStepOptions = ({
             description: "Edit This Step",
             handler: () => {
               step.changeState("config");
-              // TODO:
             },
           },
         });

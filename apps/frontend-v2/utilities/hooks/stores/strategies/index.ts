@@ -18,8 +18,13 @@ import { YCNetwork, YCToken } from "@yc/yc-models";
 
 // Initiate the DB storage to the strategies store
 import { strategiesLocalStorage } from "./constants";
-import { StepState, StepType } from "utilities/classes/step/types";
+import {
+  StepState,
+  StepType,
+  TriggerConfigs,
+} from "utilities/classes/step/types";
 import { Step } from "utilities/classes/step";
+import { TriggerConfig } from "components/steps/trigger/config";
 
 // Generate the UUId that will represent the strategy
 const startingID = uuid();
@@ -51,11 +56,12 @@ export const useStrategyStore = create<StrategyStore>()(
           type: StepType.TRIGGER,
           state: "config" as StepState,
           triggerName: "Automation",
-          triggerDescription: "On Automation Trigger",
+          triggerDescription: "Scheduled Trigger",
           triggerIcon: {
             dark: "/icons/timer-light.svg",
             light: "/icons/timer-dark.svg",
           },
+          triggerConfig: TriggerConfigs.AUTOMATION,
         },
         true
       ),

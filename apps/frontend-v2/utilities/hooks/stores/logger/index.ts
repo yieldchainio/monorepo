@@ -67,7 +67,7 @@ export const useLogs = create<LogsStore>((set, get) => ({
   }: {
     message: string;
     data?: any;
-    lifespan?: number;
+    lifespan?: number | "immortal";
     type?: "info" | "error" | "warning" | "success";
   }) => {
     /**
@@ -88,12 +88,14 @@ export const useLogs = create<LogsStore>((set, get) => ({
     if (logFunc === null) return "";
 
     // Push it manually
-    get().push((id: string) => ({
-      component: logFunc(message, id),
-      id,
-      lifespan,
-      data,
-    }));
+    get().push((id: string) => {
+      return {
+        component: logFunc(message, id),
+        id,
+        lifespan,
+        data,
+      };
+    });
 
     // Return the message (used for throwing if an error)
     return message;

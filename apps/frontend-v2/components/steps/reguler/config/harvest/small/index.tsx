@@ -19,17 +19,6 @@ export const SmallHarvestConfig = forwardRef<HTMLDivElement, StepProps>(
       triggerComparison
     );
 
-    /**
-     * useEffect running on harvest function,
-     * if it is undefined, we throw (nothing to harvest)
-     */
-    useEffect(() => {
-      // Must be valid
-      if (harvestFunction === "invalid") console.warn(throwNoPositions());
-
-      // Otherwise we choose it
-      if (harvestFunction) choosePosition();
-    }, [choosePosition, harvestFunction]);
     // Return the JSX
     return (
       <BaseActionConfig

@@ -945,6 +945,7 @@ export class Step implements IStep<Step> {
         outflows: this.outflows.map((token) => token.id),
         writeable: this.writeable,
         percentage: this.percentage,
+        function: this.function?.id,
         state: this.state,
         children: this.children.flatMap((child) => {
           const jsonChild = child.toJSON();

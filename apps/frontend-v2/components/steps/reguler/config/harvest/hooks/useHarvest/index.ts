@@ -6,7 +6,7 @@
 
 import { Step } from "utilities/classes/step";
 import { useConfigContext } from "../../../hooks/useConfigContext";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { HARVEST_ID } from "components/steps/reguler/constants";
 import { useLogs } from "utilities/hooks/stores/logger";
 
@@ -47,32 +47,13 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
   );
 
   /**
-   * Harvestable function - all functions under harvest that either do not have any dependencies
-   * (probably wont happen lol), or that have our unlocking function as their dependency
-   */
-  const harvestFunction = useMemo(
-    () =>
-      allFunctions.find((func) => {
-        // It must be harvest-related
-        if (!func.actions.some((action) => action.id === HARVEST_ID))
-          return false;
-
-        // It must either have no dependencies (unlikely), or have our function as it's dependency
-        if (
-          !func.dependencyFunction ||
-          func.dependencyFunction?.id !== unlockingFunction?.id
-        )
-          return false;
-
-        return true;
-      }) || (allFunctions.length ? "invalid" : null),
-    [unlockingFunction?.id, allFunctions.length]
-  );
-
-  /**
    * A function to use when throwing that there is no harvest function
    */
+  const threw = useRef<boolean>(false);
+
   const throwNoPositions = () => {
+    if (threw.current) return;
+    threw.current = true;
     step.state = "initial";
     return logs.lazyPush({
       message:
@@ -82,11 +63,40 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
   };
 
   /**
+   * Harvestable function - all functions under harvest that either do not have any dependencies
+   * (probably wont happen lol), or that have our unlocking function as their dependency
+   */
+  const harvestFunction = useMemo(() => {
+    const func = allFunctions.find((func) => {
+      // It must be harvest-related
+      if (!func.actions.some((action) => action.id === HARVEST_ID))
+        return false;
+
+      // It must either have no dependencies (unlikely), or have our function as it's dependency
+      if (
+        !func.dependencyFunction ||
+        func.dependencyFunction?.id !== unlockingFunction?.id
+      )
+        return false;
+
+      return true;
+    });
+
+    if (!func && allFunctions.length) throwNoPositions();
+
+    return func;
+  }, [unlockingFunction?.id, allFunctions.length]);
+
+  useEffect(() => {
+    if (harvestFunction) choosePosition();
+  }, [harvestFunction]);
+
+  /**
    * Set the step's data for the harvest function
    */
   const choosePosition = () => {
     // Assert that we must have a harvestable position
-    if (!harvestFunction || harvestFunction === "invalid") {
+    if (!harvestFunction) {
       console.warn(
         logs.lazyPush({
           message:

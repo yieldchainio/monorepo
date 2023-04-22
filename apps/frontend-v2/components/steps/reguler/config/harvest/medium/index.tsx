@@ -43,7 +43,7 @@ export const MediumHarvestConfig = forwardRef<HTMLDivElement, StepProps>(
         height="220.5px"
         step={step}
         triggerComparison={triggerComparison}
-        handleComplete={() => console.log(harvestFunction)}
+        handleComplete={() => null}
       ></BaseActionConfig>
     );
   }

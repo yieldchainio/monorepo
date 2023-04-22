@@ -44,8 +44,6 @@ export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
         handleComplete={() => {
           // We set the step's function to our stake function on completion
           step.function = stakeFunction;
-          console.log("Stake Functinon", stakeFunction);
-          console.log("All Functions Provided", functions);
         }}
       >
         <div className="w-full flex flex-col gap-1">

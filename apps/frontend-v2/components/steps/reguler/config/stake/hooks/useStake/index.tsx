@@ -149,10 +149,7 @@ export const useStake = ({
     if (data?.func) {
       const stakeFunc = new YCFunc(data.func, context);
       const rewardsFunc = getRewardsFunction(stakeFunc, context);
-      console.log(
-        "Gonna Set Stake Func State From useEffect... StakeFunction:",
-        stakeFunc
-      );
+
       setStakeFunction(stakeFunc);
       setRewardsFunction(rewardsFunc);
     }

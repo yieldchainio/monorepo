@@ -16,7 +16,6 @@ export const TokensProvider = ({
   tokens,
   portal,
 }: TokensProviderProps) => {
-  console.log("Tokens Provider portal", portal);
   return (
     <InfoProvider
       delay={500}

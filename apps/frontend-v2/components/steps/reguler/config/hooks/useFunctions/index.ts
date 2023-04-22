@@ -22,7 +22,6 @@ export const useFunctions = ({
    * Memoize the filtered functions and return them
    */
   const memoFunctions = useMemo(() => {
-    console.log("Running Functions Memoization");
     return allFunctions.filter((func) => {
       // It must be on one of the specified networks, if any
       if (

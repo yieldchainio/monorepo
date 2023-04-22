@@ -29,10 +29,52 @@ export const MediumAutomationConfig = forwardRef<HTMLDivElement, StepProps>(
         handleComplete={() => null}
       >
         <div className="w-full flex flex-row gap-2">
-          <InfoProvider
-            contents="HEy"
-            direction={ToolTipDirection.LEFT}
-          ></InfoProvider>
+          <InfoProvider contents="HEy" direction={ToolTipDirection.LEFT}>
+            <Dropdown
+              options={[
+                {
+                  text: "Minutes",
+                  image: undefined,
+                  data: undefined,
+                },
+                {
+                  text: "Hours",
+                  image: undefined,
+                  data: undefined,
+                },
+                {
+                  text: "Days",
+                  image: undefined,
+                  data: undefined,
+                },
+                {
+                  text: "Weeks",
+                  image: undefined,
+                  data: undefined,
+                },
+              ]}
+              type="searchable"
+              buttonProps={{
+                style: {
+                  width: "100%",
+                },
+              }}
+              menuProps={{
+                style: {
+                  height: "250px",
+                  zIndex: 1000,
+                  overflowY: "scroll",
+                },
+                className: "overflow-y-scroll scrollbar-hide",
+              }}
+              autoChoice={false}
+              choice={{
+                text: timestamp,
+                data: undefined,
+              }}
+              choiceHandler={() => null}
+            ></Dropdown>
+          </InfoProvider>
           <WrappedInput
             showGlass={false}
             type="number"
@@ -41,50 +83,6 @@ export const MediumAutomationConfig = forwardRef<HTMLDivElement, StepProps>(
             min={1}
             onChange={(e) => chooseInterval(parseInt(e.target.value))}
           />
-          <Dropdown
-            options={[
-              {
-                text: "Minutes",
-                image: undefined,
-                data: undefined,
-              },
-              {
-                text: "Hours",
-                image: undefined,
-                data: undefined,
-              },
-              {
-                text: "Days",
-                image: undefined,
-                data: undefined,
-              },
-              {
-                text: "Weeks",
-                image: undefined,
-                data: undefined,
-              },
-            ]}
-            type="searchable"
-            buttonProps={{
-              style: {
-                width: "100%",
-              },
-            }}
-            menuProps={{
-              style: {
-                height: "250px",
-                zIndex: 1000,
-                overflowY: "scroll",
-              },
-              className: "overflow-y-scroll scrollbar-hide",
-            }}
-            autoChoice={false}
-            choice={{
-              text: timestamp,
-              data: undefined,
-            }}
-            choiceHandler={() => null}
-          ></Dropdown>
         </div>
       </BaseTriggerConfig>
     );

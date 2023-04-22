@@ -2,6 +2,7 @@ import { DropdownOption, DropdownProps } from "./types";
 import DropdownMenu from "./menu";
 import React, {
   CSSProperties,
+  ForwardedRef,
   forwardRef,
   useEffect,
   useMemo,
@@ -41,6 +42,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       autoChoice = true,
       disabled,
       type = "reguler",
+      refSetter,
       ...props
     }: DropdownProps,
     ref
@@ -84,7 +86,12 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     );
 
     // Ref for the button's location (For properly locating the menu when opened)
-    const dropdownBtnRef = useRef<HTMLDivElement>(null);
+    const dropdownBtnRef = useRef<HTMLDivElement>();
+
+    // We set our ref setter to set the dropdown btn ref on mount
+    useEffect(() => {
+      refSetter = (node: HTMLDivElement) => (dropdownBtnRef.current = node);
+    }, []);
 
     // Handle the button being clicked
     const handleClick = async () => {
@@ -140,8 +147,9 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
     // Memoize correct ref
     const correcRef = useMemo(() => {
-      return typeof ref === "object" ? ref : dropdownBtnRef;
-    }, [ref, dropdownBtnRef]);
+      // TODO: Not sure why but reguler ref fucked it
+      return dropdownBtnRef;
+    }, [ref, dropdownBtnRef, dropdownBtnRef.current]);
 
     const menuToReturn = useMemo(() => {
       if (type === "reguler")
@@ -176,7 +184,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
         <RegulerButton
           onClick={handleClick}
-          ref={correcRef}
+          ref={correcRef as React.MutableRefObject<HTMLDivElement | null>}
           {...buttonProps}
           {...props}
           style={{

@@ -25,6 +25,7 @@ export interface InfoProviderProps extends BaseComponentProps {
   setCloseHandler?: (closeHandler: () => void) => void;
   portal?: HTMLElement;
   retain?: boolean;
+  refSetter?: (node: HTMLDivElement) => void;
 }
 
 // Protocols Provider props
@@ -35,5 +36,5 @@ export interface ProtocolsProviderProps extends BaseComponentProps {
 // Tokens provider props
 export interface TokensProviderProps extends BaseComponentProps {
   tokens: YCToken[];
-  portal?: HTMLElement
+  portal?: HTMLElement;
 }

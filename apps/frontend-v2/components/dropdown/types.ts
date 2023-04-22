@@ -37,6 +37,7 @@ export interface DropdownProps {
   autoChoice?: boolean;
   disabled?: string | false;
   type?: "searchable" | "reguler";
+  refSetter?: (node: HTMLDivElement) => void;
 }
 
 export interface DropdownOptionProps {

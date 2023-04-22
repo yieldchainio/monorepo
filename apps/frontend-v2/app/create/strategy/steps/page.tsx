@@ -10,46 +10,52 @@ import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import { useEffect, useState } from "react";
 import useDebounce from "utilities/hooks/general/useDebounce";
 import { useBackdropColorChange } from "utilities/hooks/general/useBackdropColorChange";
+import { StrategyConfigVerticalWrapper } from "components/strategy-config-wrapper";
+import { StepsModal } from "components/steps-modal";
 
 const TitleConfig = () => {
-  // Title setter for current strategy config
-  const setTitle = useStrategyStore((state) => state.setTitle);
+  // Get the current base step (Should be the root Deposit trigger)
+  const rootStep = useStrategyStore((state) => state.seedStep);
 
-  // Current title (Init to this)
-  const globalTitle = useStrategyStore((state) => state.title);
-
-  // The onChange'ed value
-  const [input, setInput] = useState<string | null>(globalTitle);
-
-  // The debounced input (We dont wanna rerender globally all the time)
-  const debouncedInput = useDebounce(
-    input,
-    500,
-    (title) => title && setTitle(title)
-  );
+  // Rehydration function
+  const rehydrateSteps = useStrategyStore((state) => state.rehydrateSteps);
 
   // Set the colors
-  useBackdropColorChange("#2aa", "#e6a");
+  useBackdropColorChange("var(--yc-llb)", "var(--yc-ly)");
 
   return (
-    <div className="flex flex-col items-center justify-between  w-[50%] h-[55%]">
+    <div className="flex flex-col items-center justify-between  w-[100%] h-[100%]">
       <ConfigTitle>
-        {"Let's Get started 👋"}{" "}
+        {"Build Your Strategy ⚡"}{" "}
         <WrappedText fontSize={16} className="text-opacity-50">
-          Give your strategy an epic title to get started
+          Choose some triggers, and build the strategy's flow 🚀
         </WrappedText>{" "}
       </ConfigTitle>
-
-      <WrappedInput
-        type="text"
-        className=""
-        showGlass={false}
-        placeholder='e.g: "Non-dev did smth" '
-        onChange={(e) => setInput(e.target.value)}
-        width="w-[100%]"
-        title="Strategy Title"
-        defaultValue={globalTitle || undefined}
-      ></WrappedInput>
+      <StrategyConfigVerticalWrapper
+        style={{
+          width: "80%",
+          height: "80%",
+          zIndex: 1000,
+        }}
+      >
+        <StepsModal
+          root={rootStep}
+          wrapperProps={{
+            style: {
+              width: "100%",
+              height: "100%",
+              zIndex: 1000,
+            },
+          }}
+          parentStyle={{
+            height: "100%",
+          }}
+          comparisonCallback={() => {
+            rehydrateSteps();
+          }}
+          canvasID="SEED_ALLOCATION_BUILDER"
+        />
+      </StrategyConfigVerticalWrapper>
     </div>
   );
 };

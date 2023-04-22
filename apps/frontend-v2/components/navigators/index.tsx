@@ -11,6 +11,7 @@ import { IncrementalProgressBar } from "components/progress-bar";
 import { useMemo } from "react";
 import { InfoProvider } from "components/info-providers";
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
+import { configProgressStep } from "utilities/hooks/stores/strategies/types";
 
 export const Navigators = ({
   next,
@@ -24,7 +25,7 @@ export const Navigators = ({
 
   // Get the current active step
   const activeStep = useMemo(() => {
-    return steps.findLast((config) => config.progressStep.state === "active");
+    return steps.find((config) => config.progressStep.state === "active");
   }, [JSON.stringify(steps.map((step) => JSON.stringify(step)))]);
 
   // Memo if we can continue

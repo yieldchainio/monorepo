@@ -118,7 +118,7 @@ export const Header = () => {
               image: network.logo,
               data: {
                 json_rpc: network.jsonRpc,
-                chain_id: network.chainid,
+                chain_id: network.id,
                 color: network.color,
               },
             };
@@ -134,14 +134,14 @@ export const Header = () => {
               ? (() => {
                   const network =
                     chain &&
-                    networks.find((network) => network.chainid == chain.id);
+                    networks.find((network) => network.id == chain.id);
                   if (network)
                     return {
                       text: network.name,
                       image: network.logo,
                       data: {
                         json_rpc: network.jsonRpc,
-                        chain_id: network.chainid,
+                        chain_id: network.id,
                         color: network.color,
                       },
                     };

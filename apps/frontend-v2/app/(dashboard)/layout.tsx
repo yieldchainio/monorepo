@@ -324,8 +324,8 @@ const StrategySlideshow = ({
         slidesToShow={strategies.length < 4 ? strategies.length : 4}
         slidesPerRow={1}
         slidesToScroll={1}
-        arrows={true}
-        dots={true}
+        arrows
+        dots
         className="items-center justify-center  gap-0"
         responsive={[
           {

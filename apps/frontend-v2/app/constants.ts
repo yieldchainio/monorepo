@@ -27,7 +27,7 @@ const ONLY_VERIFIED_CREATORS: FilterInstance<
   YCStrategy,
   BooleanFilter<YCStrategy>
 > = new FilterInstance<YCStrategy, BooleanFilter<YCStrategy>>({
-  callback: (item: YCStrategy) => item.creator?.isVerified,
+  callback: (item: YCStrategy) => item.creator?.verified,
   name: "Verified Creators",
   type: FilterTypes.BOOLEAN,
 });

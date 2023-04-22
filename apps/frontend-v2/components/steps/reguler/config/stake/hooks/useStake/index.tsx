@@ -97,7 +97,7 @@ export const useStake = ({
 
       triggerComparison();
     },
-    [JSON.stringify(step.toJSON())]
+    [JSON.stringify(step.toJSON({}))]
   );
 
   // Choose a function
@@ -137,7 +137,7 @@ export const useStake = ({
 
       triggerComparison();
     },
-    [JSON.stringify(step.toJSON())]
+    [JSON.stringify(step.toJSON({}))]
   );
 
   /**

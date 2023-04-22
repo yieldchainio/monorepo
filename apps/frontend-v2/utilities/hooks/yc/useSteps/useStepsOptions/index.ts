@@ -76,7 +76,7 @@ export const useStepOptions = ({
     }
 
     return newOptions;
-  }, [step, JSON.stringify(step.toJSON())]);
+  }, [step, JSON.stringify(step.toJSON({}))]);
 
   return options;
 };

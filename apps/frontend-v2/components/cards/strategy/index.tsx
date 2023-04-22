@@ -135,7 +135,7 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
                   </ProtocolsProvider>
                 ),
               }}
-              showLines={true}
+              showLines
               fontSize={12}
               sectionsClassname={"gap-3 mb-0 justify-start "}
               titlesClassname={"text-opacity-25"}

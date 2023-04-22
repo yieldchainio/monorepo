@@ -929,8 +929,8 @@ export class Step implements IStep<Step> {
   shouldGraph = (prevTree: Step | null): boolean => {
     return (
       prevTree == null ||
-      JSON.stringify(prevTree.toJSON(false)) !==
-        JSON.stringify(this.toJSON(false))
+      JSON.stringify(prevTree.toJSON({ onlyCompleted: false })) !==
+        JSON.stringify(this.toJSON({ onlyCompleted: false }))
     );
   };
 
@@ -940,7 +940,11 @@ export class Step implements IStep<Step> {
    * @default true
    */
 
-  toJSON = (onlyCompleted: boolean = false): JSONStep | null => {
+  toJSON = ({
+    onlyCompleted = false,
+  }: {
+    onlyCompleted?: boolean;
+  }): JSONStep | null => {
     if ((this.state === "complete" && onlyCompleted) || !onlyCompleted)
       return {
         id: this.id,
@@ -955,7 +959,7 @@ export class Step implements IStep<Step> {
         function: this.function?.id,
         state: this.state,
         children: this.children.flatMap((child) => {
-          const jsonChild = child.toJSON();
+          const jsonChild = child.toJSON({ onlyCompleted: false });
           if (jsonChild !== null) return [jsonChild];
           return [];
         }),

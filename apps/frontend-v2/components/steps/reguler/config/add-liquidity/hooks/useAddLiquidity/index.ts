@@ -78,7 +78,7 @@ export const useAddLiquidity = ({
 
       triggerComparison();
     },
-    [JSON.stringify(step.toJSON())]
+    [JSON.stringify(step.toJSON({onlyCompleted: false}))]
   );
 
   const chooseTokenB = useCallback(
@@ -94,7 +94,7 @@ export const useAddLiquidity = ({
 
       triggerComparison();
     },
-    [JSON.stringify(step.toJSON())]
+    [JSON.stringify(step.toJSON({}))]
   );
 
   const chooseProtocol = useCallback(
@@ -108,7 +108,7 @@ export const useAddLiquidity = ({
 
       triggerComparison();
     },
-    [JSON.stringify(step.toJSON())]
+    [JSON.stringify(step.toJSON({}))]
   );
 
   /**

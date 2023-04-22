@@ -64,7 +64,7 @@ export const useSwap = ({
 
       triggerComparison();
     },
-    [JSON.stringify(step.toJSON())]
+    [JSON.stringify(step.toJSON({}))]
   );
 
   const chooseToToken = useCallback(
@@ -83,7 +83,7 @@ export const useSwap = ({
 
       triggerComparison();
     },
-    [JSON.stringify(step.toJSON())]
+    [JSON.stringify(step.toJSON({}))]
   );
 
   /**

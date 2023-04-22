@@ -72,7 +72,6 @@ export const useSteps = (
    */
   useEffect(() => {
     if (stepsState.rootStep) {
-      populatePositions;
       setCanvasDimensions(
         stepsState.rootStep.graph(
           stepsState.rootStep.size || options.initialSize || StepSizing.SMALL
@@ -81,7 +80,7 @@ export const useSteps = (
       triggerComparison();
       options.comparisonCallback?.();
     }
-  }, [JSON.stringify(stepsState.rootStep?.toJSON(false))]);
+  }, [JSON.stringify(stepsState.rootStep?.toJSON({}))]);
 
   /**
    * Wrapping actions for ease

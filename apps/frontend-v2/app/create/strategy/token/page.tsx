@@ -76,7 +76,7 @@ const TokenConfig = () => {
                 }
               : undefined
           }
-          manualModal={true}
+          manualModal
           buttonProps={{
             children: (
               <>

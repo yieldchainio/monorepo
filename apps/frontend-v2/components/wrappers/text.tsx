@@ -135,7 +135,7 @@ const WrappedText = forwardRef<HTMLDivElement, TextProps>(
           onClick ? onClick(e) : null
         }
         contentEditable={contentEditable}
-        suppressContentEditableWarning={true}
+        suppressContentEditableWarning
         id={id}
         onInput={(e) => onInput && onInput(e)}
         style={style || {}}

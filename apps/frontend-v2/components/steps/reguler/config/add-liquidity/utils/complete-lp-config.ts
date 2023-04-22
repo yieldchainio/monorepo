@@ -7,6 +7,7 @@ import { AddLiquidityData } from "../types";
 import { DBToken, YCClassifications, YCToken } from "@yc/yc-models";
 import { v4 as uuid } from "uuid";
 import { constants } from "ethers";
+import { ADD_LIQUIDITY_FUNCTION_ID } from "../constants";
 
 export const completeLPConfig = (step: Step, context: YCClassifications) => {
   // Get the LP data

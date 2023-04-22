@@ -74,7 +74,7 @@ const NetworkConfig = () => {
           choiceHandler={(choice: DropdownOption<YCNetwork>) =>
             setNetwork(choice.data)
           }
-          manualModal={true}
+          manualModal
           buttonProps={{
             children: (
               <>

@@ -101,7 +101,7 @@ const DropdownMenu = ({
             >
               {option.image && (
                 <WrappedImage
-                  src={option.image}
+                  src={option.image as string}
                   alt=""
                   width={24}
                   height={24}

@@ -43,7 +43,7 @@ export const ChooseToken = forwardRef(
       >
         <Dropdown
           options={[]}
-          manualModal={true}
+          manualModal
           choice={
             choice
               ? {

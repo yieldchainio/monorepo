@@ -68,7 +68,7 @@ const DropdownMenu = ({
   return (
     <div
       className={
-        "bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 z-100 border-1 border-custom-border animate-popup overflow-hidden overflow-y-scroll scrollbar-hide"
+        "bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 z-100 border-[1px] border-custom-themedBorder animate-popup overflow-hidden overflow-y-scroll scrollbar-hide shadow-sm"
       }
       {...props}
       style={{ ...baseStyle, ...style }}
@@ -134,7 +134,7 @@ const DropdownMenu = ({
             </div>
             {typeof loading !== "boolean" &&
               JSON.stringify(loading.data) == JSON.stringify(option.data) && (
-                <SmallLoader color={option.data.color} className="mb-1" />
+                <SmallLoader color={option.data?.color} className="mb-1" />
               )}
           </div>
         );

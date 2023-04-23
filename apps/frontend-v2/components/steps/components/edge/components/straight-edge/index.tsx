@@ -7,12 +7,10 @@ import { EDGE_WIDTH } from "../../constants";
 import { DirectedEdgeProps } from "../../types";
 
 export const StraightEdge = ({
-  parentStep,
-  childStep,
   childAnchor,
   parentAnchor,
   style,
-}: DirectedEdgeProps) => {
+}: Omit<DirectedEdgeProps, "parentStep" | "childStep">) => {
   return (
     <RegulerLine
       className="text-custom-textColor "

@@ -191,7 +191,7 @@ export const SearchableDropdownMenu = forwardRef<
                 {typeof loading !== "boolean" &&
                   JSON.stringify(loading.data) ==
                     JSON.stringify(option.data) && (
-                    <SmallLoader color={option.data.color} className="mb-1" />
+                    <SmallLoader color={option.data?.color} className="mb-1" />
                   )}
               </div>
             );

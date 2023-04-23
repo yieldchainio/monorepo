@@ -42,7 +42,11 @@ export const TooltipDropdown = ({
                   }}
                 >
                   {option.image && (
-                    <WrappedImage src={option.image as string} width={12} height={12} />
+                    <WrappedImage
+                      src={option.image as string}
+                      width={12}
+                      height={12}
+                    />
                   )}
                   <WrappedText>{option.text}</WrappedText>
                 </div>
@@ -52,7 +56,7 @@ export const TooltipDropdown = ({
         })}
       </div>
     );
-  }, [body]);
+  }, [body, portal]);
 
   return (
     <InfoProvider

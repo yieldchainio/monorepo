@@ -32,7 +32,7 @@ const TitleConfig = () => {
   return (
     <div className="flex flex-col items-center justify-between  w-[50%] h-[50%]">
       <ConfigTitle>
-        {"Let's Get started 👋"}{" "}
+        {"Let's Get Started 👋"}{" "}
         <WrappedText fontSize={16} className="text-opacity-50">
           Give your strategy an epic title to get started
         </WrappedText>{" "}

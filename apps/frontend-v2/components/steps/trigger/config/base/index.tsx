@@ -76,6 +76,7 @@ export const BaseTriggerConfig = forwardRef<
           canContinue={canContinue}
           portal={canvasPortal}
           handleComplete={handleComplete}
+          cancellable={false}
         />
       </BaseNode>
     );

@@ -12,7 +12,9 @@ export const useAutomation = ({ step, triggerComparison }: StepProps) => {
   /**
    * States to keep track of the input
    */
-  const [intervalInput, setIntervalInput] = useState<number>(1);
+  const [intervalInput, setIntervalInput] = useState<number>(
+    step.data?.automation?.input || 1
+  );
   const [timestamp, setTimestamp] = useState<Timestamps>(Timestamps.DAYS);
 
   /**
@@ -53,6 +55,7 @@ export const useAutomation = ({ step, triggerComparison }: StepProps) => {
     const data = step.data?.automation as AutomationData | undefined;
     if (!data) return;
 
+    console.log("Got Data Change, ", data);
     if (data.input) setIntervalInput(data.input);
     if (data.timestamp) setTimestamp(data.timestamp);
   }, [
@@ -61,6 +64,16 @@ export const useAutomation = ({ step, triggerComparison }: StepProps) => {
     step.data?.automation?.input,
     step.data?.automation?.timestamp,
   ]);
+
+  /**
+   * useEffect running on our state change, changing the state's triggerDescription
+   */
+  useEffect(() => {
+    // @ts-ignore
+    // This works fine but screaming. Ignoring.
+    const description = `Every ${intervalInput} ${Timestamps[timestamp]}`;
+    step.triggerDescription = description;
+  }, [intervalInput, timestamp]);
 
   return { chooseInterval, chooseTimestamp, timestamp, intervalInput };
 };

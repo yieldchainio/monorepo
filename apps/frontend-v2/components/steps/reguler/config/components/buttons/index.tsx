@@ -15,11 +15,13 @@ export const ActionConfigButtons = ({
   triggerComparison,
   canContinue,
   portal,
+  cancellable = true,
   handleComplete,
 }: StepProps & {
   canContinue?: true | string;
   portal?: HTMLElement;
   handleComplete: () => void;
+  cancellable?: boolean;
 }) => {
   /**
    * Memo some styling
@@ -48,7 +50,9 @@ export const ActionConfigButtons = ({
       }
       style={{ ...memoStyle, ...style }}
     >
-      <CancelButton step={step} triggerComparison={triggerComparison} />
+      {cancellable && (
+        <CancelButton step={step} triggerComparison={triggerComparison} />
+      )}
       <DoneButton
         step={step}
         triggerComparison={triggerComparison}

@@ -3,12 +3,12 @@
  */
 
 export enum Timestamps {
-  MINUTES = "MINUTES",
-  HOURS = "HOURS",
-  DAYS = "DAYS",
-  WEEKS = "WEEKS",
-  MONTHS = "MONTHS",
-  YEARS = "YEARS",
+  MINUTES = "Minutes",
+  HOURS = "Hours",
+  DAYS = "Days",
+  WEEKS = "Weeks",
+  MONTHS = "Months",
+  YEARS = "Years",
 }
 
 export const TIMESTAMPS_TO_VALUE_IN_SECONDS: Record<Timestamps, number> = {

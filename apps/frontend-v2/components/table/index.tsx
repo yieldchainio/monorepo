@@ -10,13 +10,18 @@ export const Table = <T,>({
   items,
   columnsGap,
   rowsGap,
+  labelsStyle,
+  style,
+  className,
 }: TableProps<T>) => {
   return (
     <div
-      className="flex flex-row gap-4 w-max pt-2 pb-2"
       style={{
         gap: columnsGap || "1rem",
+
+        ...(style || {}),
       }}
+      className={"flex flex-row w-max pt-2 pb-2 " + " " + (className || "")}
     >
       {sections.map((section, i) => {
         return (
@@ -32,6 +37,7 @@ export const Table = <T,>({
               textProps={{
                 fontSize: 10,
                 className: "text-opacity-30",
+                style: labelsStyle,
               }}
             >
               {section.label}

@@ -1,3 +1,4 @@
+import { BaseComponentProps } from "components/types";
 import { CSSProperties } from "react";
 
 export interface Section<T> {
@@ -6,10 +7,11 @@ export interface Section<T> {
   labelCallback?: (label: string) => React.ReactNode
   style?: CSSProperties
 }
-export interface TableProps<T> {
+export interface TableProps<T> extends BaseComponentProps {
   sections: Section<T>[];
   items: T[];
   columnsGap?: string;
   rowsGap?: string;
+  labelsStyle?: CSSProperties
   
 }

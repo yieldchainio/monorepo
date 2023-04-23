@@ -6,11 +6,17 @@
 
 import { Step } from "utilities/classes/step";
 import { useConfigContext } from "../../../hooks/useConfigContext";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { HARVEST_ID } from "components/steps/reguler/constants";
 import { useLogs } from "utilities/hooks/stores/logger";
+import { YCFunc } from "@yc/yc-models";
+import { completeHarvest } from "../../utils/complete-harvest";
+import { HarvestData } from "../../types";
 
 export const useHarvest = (step: Step, triggerComparison: () => void) => {
+  // ===========
+  //   GLOBALS
+  // ===========
   /**
    * Get global logs store for logging errors/info
    */
@@ -46,11 +52,53 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
     [step.parent?.function?.id, step?.function?.id]
   );
 
+  // ===========
+  //   STATES
+  // ===========
+  const [harvestFunction, setHarvestFunction] = useState<YCFunc | null>(null);
+
+  /**
+   * Harvestable functions - all functions under harvest that either do not have any dependencies
+   * (probably wont happen lol), or that have our unlocking function as their dependency,
+   * or are present within the parent's "unlockedFunctions"
+   */
+  const harvestFunctions = useMemo(() => {
+    const funcs = allFunctions.filter((func) => {
+      // It must be harvest-related
+      if (!func.actions.some((action) => action.id === HARVEST_ID))
+        return false;
+
+      // If it has no dependency, return true (it's open to all - UNLIKELY)
+      if (!func.dependencyFunction) return true;
+
+      // It should potentially included in the parent's "unlockedFunctions" (Added externally,
+      // e.g from seed steps to tree steps)
+      if (
+        step.parent?.unlockedFunctions.some(
+          (_func) => _func.func.id == func.id && !_func.used
+        )
+      )
+        return true;
+
+      // At this point it must have our function as it's dependency
+      if (func.dependencyFunction?.id == unlockingFunction?.id) return true;
+
+      return false;
+    });
+
+    if (!funcs && allFunctions.length) throwNoPositions();
+
+    return funcs;
+  }, [unlockingFunction?.id, allFunctions.length]);
+
+  // ===========
+  //   METHODS
+  // ===========
+
   /**
    * A function to use when throwing that there is no harvest function
    */
   const threw = useRef<boolean>(false);
-
   const throwNoPositions = () => {
     if (threw.current) return;
     threw.current = true;
@@ -63,40 +111,13 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
   };
 
   /**
-   * Harvestable function - all functions under harvest that either do not have any dependencies
-   * (probably wont happen lol), or that have our unlocking function as their dependency
-   */
-  const harvestFunction = useMemo(() => {
-    const func = allFunctions.find((func) => {
-      // It must be harvest-related
-      if (!func.actions.some((action) => action.id === HARVEST_ID))
-        return false;
-
-      // It must either have no dependencies (unlikely), or have our function as it's dependency
-      if (
-        !func.dependencyFunction ||
-        func.dependencyFunction?.id !== unlockingFunction?.id
-      )
-        return false;
-
-      return true;
-    });
-
-    if (!func && allFunctions.length) throwNoPositions();
-
-    return func;
-  }, [unlockingFunction?.id, allFunctions.length]);
-
-  useEffect(() => {
-    if (harvestFunction) choosePosition();
-  }, [harvestFunction]);
-
-  /**
    * Set the step's data for the harvest function
+   * @param func - The function to choose as the harvest function
+   * @param completeConfig - whether to complete this config (used if there is only)
    */
-  const choosePosition = () => {
+  const choosePosition = (func: YCFunc, completeConfig: boolean = false) => {
     // Assert that we must have a harvestable position
-    if (!harvestFunction) {
+    if (!harvestFunctions.length) {
       console.warn(
         logs.lazyPush({
           message:
@@ -117,11 +138,26 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
       });
 
     // Assert that the parent step must have a protocol
-    if (!step.parent?.protocol)
+    if (!func.dependencyFunction?.address?.protocol)
       throw logs.lazyPush({
         message: "Cannot Harvest Position - Parent's Protocol Is Not Defined.",
         type: "error",
       });
+
+    /**
+     * Whether it was externally unlocked (used for editing later on, so it's not ommited forever once complete)
+     */
+    const externallyUnlocked = step.parent?.unlockedFunctions?.some(
+      (_func) => _func.func.id == func.id
+    );
+
+    /**
+     * Set the data on the step (used by our useEffect to set the states)
+     */
+    (step.data.harvest as HarvestData | undefined) = {
+      ...step.data?.harvest,
+      func,
+    };
     /**
      * First, set the protocol to the one from the parent (We are harvesting the smae position)
      */
@@ -135,27 +171,48 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
     /**
      *  Then, set the flows of this step
      */
-    for (const token of harvestFunction.outflows) step.addOutflow(token);
-    for (const token of harvestFunction.inflows) step.addInflow(token);
+    for (const token of func.outflows) step.addOutflow(token);
+    for (const token of func.inflows) step.addInflow(token);
 
-    /**
-     * Then set the function
-     */
-    step.function = harvestFunction;
+    // Complete the config if specified (called by useEffect if we only have 1 harvest)
+    if (completeConfig) completeHarvest(step);
 
-    /**
-     * Set the action also
-     */
-    step.action = harvestAction;
-
-    /**
-     * Set the statre to complete
-     */
-    step.state = "complete";
+    triggerComparison();
 
     return;
   };
 
+  /**
+   * If we only have a single harvest function, we choose it immedaitly
+   */
+  useEffect(() => {
+    if (harvestFunctions.length === 1) {
+      choosePosition(harvestFunctions[0], true);
+      logs.lazyPush({
+        message: `Added ${harvestFunctions[0].inflows.map(
+          (token, i) => token.symbol
+        )} Harvest Automatically`,
+        type: "info",
+      });
+    }
+  }, [harvestFunctions.length]);
+
+  /**
+   * useEffect running on the harvest data change, setting our states
+   */
+  useEffect(() => {
+    // We watch the harvest function data, if it exists:
+    if (step.data?.harvest?.func) {
+      // Set our harvest function state
+      setHarvestFunction(step.data?.harvest?.func);
+    }
+  }, [step.data?.harvest?.func]);
+
   // Return the harvestable functions
-  return { harvestFunction, choosePosition, throwNoPositions };
+  return {
+    harvestFunctions,
+    choosePosition,
+    throwNoPositions,
+    harvestFunction,
+  };
 };

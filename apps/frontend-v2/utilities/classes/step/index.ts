@@ -60,7 +60,25 @@ export class Step implements IStep<Step> {
    */
   removeChild = (id: string) => {
     // Remove the child
-    this.children = this.children.filter((child) => child.id !== id);
+    this.children = this.children.filter((child) => {
+      // If the ID is another one than the child to remove, we return true
+      const isMatchingID = child.id == id;
+      if (!isMatchingID) return true;
+
+      // Otherwise, we first look for it's function in our unlockedFunctions.
+      // if we find it, we re-open it for use.
+      const unlockedFunctionIdx = this.unlockedFunctions.findIndex(
+        (unlockedFunc) => unlockedFunc.func.id === child.function?.id
+      );
+      if (unlockedFunctionIdx !== -1)
+        this.unlockedFunctions[unlockedFunctionIdx] = {
+          func: this.unlockedFunctions[unlockedFunctionIdx].func,
+          used: false,
+        };
+
+      // We return false to filter it out and remove it
+      return false;
+    });
     // If the children array is now empty, we add an empty step that is used to add new steps on the frontend (Assuming that we are writable)
     if (this.children.length === 0 && this.writeable)
       this.attemptAddEmptyChild();
@@ -538,7 +556,10 @@ export class Step implements IStep<Step> {
    * by some external factor (i.e, this is a tree strategy and some functions
    * were unlocked by the seed strategy, added to this array)
    */
-  unlockedFunctions: YCFunc[] = [];
+  unlockedFunctions: {
+    func: YCFunc;
+    used: boolean;
+  }[] = [];
 
   /**
    * The different possible action configurations for a @notice REGULER step
@@ -728,9 +749,9 @@ export class Step implements IStep<Step> {
       action: step.action ? context.getAction(step.action) : null,
       function: step.function ? context.getFunction(step.function) : null,
       unlockedFunctions: step.unlockedFunctions
-        ? step.unlockedFunctions.flatMap((funcID) => {
+        ? step.unlockedFunctions.flatMap(({ funcID, used }) => {
             const func = context.getFunction(funcID);
-            return func ? [func] : [];
+            return func ? [{ func, used }] : [];
           })
         : [],
 
@@ -792,12 +813,6 @@ export class Step implements IStep<Step> {
         return 80;
       },
     });
-
-    // // We resize the nodes according to the base input.
-    // // @notice that nodes that were manually resized by the
-    // // user before will not be
-    // // overriden by this.
-    // this.each((step) => step.resize(baseNodeSize, baseNodeDimensions));
 
     // Convert our steps hierarchy to D3-compatible hierarchy
     const tree = layout.hierarchy(this);
@@ -994,7 +1009,10 @@ export class Step implements IStep<Step> {
         writeable: this.writeable,
         percentage: this.percentage,
         function: this.function?.id,
-        unlockedFunctions: this.unlockedFunctions.map((func) => func.id),
+        unlockedFunctions: this.unlockedFunctions.map((func) => ({
+          funcID: func.func.id,
+          used: func.used,
+        })),
         state: this.state,
         children: this.children.flatMap((child) => {
           const jsonChild = child.toJSON({ onlyCompleted: false });

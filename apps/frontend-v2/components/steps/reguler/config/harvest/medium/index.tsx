@@ -8,13 +8,16 @@ import { BaseActionConfig } from "../../base";
 
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 import { useHarvest } from "../hooks/useHarvest";
+import WrappedText from "components/wrappers/text";
+import { PositionsDropdown } from "../components/positions-dropdown";
+import { completeHarvest } from "../utils/complete-harvest";
 
 export const MediumHarvestConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
     /**
      * Get the harvestable functions
      */
-    const { choosePosition, harvestFunction, throwNoPositions } = useHarvest(
+    const { choosePosition, harvestFunctions, harvestFunction } = useHarvest(
       step,
       triggerComparison
     );
@@ -28,11 +31,20 @@ export const MediumHarvestConfig = forwardRef<HTMLDivElement, StepProps>(
         {...props}
         canvasID={canvasID}
         width="327px"
-        height="220.5px"
+        height="265.5px"
         step={step}
         triggerComparison={triggerComparison}
-        handleComplete={() => null}
-      ></BaseActionConfig>
+        handleComplete={() => completeHarvest(step)}
+      >
+        <div className="w-full flex flex-col gap-1">
+          <WrappedText>Position To Harvest</WrappedText>
+          <PositionsDropdown
+            functions={harvestFunctions}
+            setChoice={choosePosition}
+            choice={harvestFunction}
+          />
+        </div>
+      </BaseActionConfig>
     );
   }
 );

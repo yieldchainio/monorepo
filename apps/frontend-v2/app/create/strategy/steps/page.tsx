@@ -56,15 +56,30 @@ const StepsConfig = () => {
       // If this step has no function, it's not relevent to us
       if (!step.function) return;
 
-      // Find all functions from global context which are unlocked by this step's function
+      // Find all functions from global context which are unlocked by this step's function,
+      // And also filter them based on whether it was used within the seed already or not
       const dependants = context.functions.filter(
-        (func) => func?.dependencyFunction?.id === step.function?.id
+        (func) =>
+          // All the ones that are dependant on it,
+          func?.dependencyFunction?.id === step.function?.id &&
+          // And are also not used within the seed
+          !baseRootStep.find((_step) => _step.function?.id == func.id)
       );
 
-      // Push each one of this step's unlocked dependants to the tree's root's unlockedFunctions
-      for (const func of dependants) rootStep.unlockedFunctions.push(func);
+      // If no dependants, continue
+      if (!dependants.length) return;
+
+      // Push each one of this step's unlocked dependants to the tree's root's unlockedFunctions,
+      // determine if they are already used within the tree by whether or not we can find it used
+      // within the tree's root's children
+      for (const func of dependants) {
+        const used = rootStep.children.some(
+          (child) => child.function?.id === func.id
+        );
+        rootStep.unlockedFunctions.push({ func, used });
+      }
     });
-  }, []);
+  }, [rootStep.children?.length]);
 
   // Return the JSX
   return (

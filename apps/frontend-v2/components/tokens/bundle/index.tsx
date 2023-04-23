@@ -54,7 +54,7 @@ export const TokensBundle = ({
               key={i}
             />
             {tokens.length === 1 && showTextIfSingle ? (
-              <WrappedText className="ml-1 leading-none">
+              <WrappedText className="ml-1 leading-none tablet:hidden">
                 {token.symbol}
               </WrappedText>
             ) : null}

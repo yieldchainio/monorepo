@@ -55,7 +55,6 @@ export const useAutomation = ({ step, triggerComparison }: StepProps) => {
     const data = step.data?.automation as AutomationData | undefined;
     if (!data) return;
 
-    console.log("Got Data Change, ", data);
     if (data.input) setIntervalInput(data.input);
     if (data.timestamp) setTimestamp(data.timestamp);
   }, [

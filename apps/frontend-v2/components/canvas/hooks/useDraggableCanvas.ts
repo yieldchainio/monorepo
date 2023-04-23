@@ -57,22 +57,11 @@ export const useDraggableCanvas = (
     const canvasRects = canvasRef.getBoundingClientRect();
     const parentRects = parentRef.getBoundingClientRect();
 
-    console.log(
-      "Child VS Parent Height",
-      canvasRects.height,
-      parentRects.height
-    );
-    console.log(
-      "Canvas Height VS Canvas height / zoom",
-      canvasRects.height,
-      canvasRects.height / zoom
-    );
     const limits = {
       xLimit: (canvasRects.width / zoom - parentRects.width) / 2,
       yLimit: canvasRects.height / zoom - parentRects.height,
     };
 
-    console.log("Limits", limits, "Zoom", zoom);
 
     return limits;
   }, [canvasRef, parentRef, zoom, ...(limits.dependencies || [])]);

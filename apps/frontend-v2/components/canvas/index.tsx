@@ -63,7 +63,6 @@ export const Canvas = ({
  */
 const ParentContainer = forwardRef<HTMLDivElement, BaseComponentProps>(
   ({ children, style }: BaseComponentProps, ref) => {
-    console.log("Parent Style INSIDE parent", style);
     return (
       <div
         className="relative flex flex-col items-center justify-start overflow-hidden rounded-xl border-[0px] border-custom-border "
@@ -144,7 +143,6 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
           }}
           ref={ref}
           id={id}
-          onClick={() => console.log(ref ? ref : null)}
         >
           <ChildrenProvider
             callback={(wrapper) => {

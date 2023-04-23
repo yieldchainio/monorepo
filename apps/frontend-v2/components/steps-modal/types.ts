@@ -23,5 +23,6 @@ export interface StepsModalProps extends CanvasProps, useStepsProps {
   baseContainer?: React.ReactNode;
   baseContainerRef?: RefObject<HTMLElement | undefined | null> | null;
   baseRootStep?: Step | null;
-  writeable?: boolean
+  writeable?: boolean;
+  seedContainerOnClick?: () => void;
 }

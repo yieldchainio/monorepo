@@ -220,7 +220,6 @@ export const useDraggableCanvas = (
     setFocusedChild(index);
 
     // Get the rects of the node
-    const nodeRect = childRef.getBoundingClientRect();
     const nodeLeft = parseInt(childRef.style.left);
     const nodeTop = parseInt(childRef.style.top);
 

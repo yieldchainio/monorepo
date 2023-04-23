@@ -5,23 +5,10 @@
 import { Canvas } from "components/canvas";
 import { StepsModalProps } from "./types";
 import { Step } from "utilities/classes/step";
-import {
-  DefaultDimensions,
-  Dimensions,
-  StepSizing,
-} from "utilities/classes/step/types";
+import { Dimensions, StepSizing } from "utilities/classes/step/types";
 import { useSteps } from "utilities/hooks/yc/useSteps";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
-import {
-  Children,
-  isValidElement,
-  useCallback,
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { HeadStep } from "components/steps";
 import { Edge } from "components/steps/components/edge";
 import WrappedImage from "components/wrappers/image";
@@ -46,6 +33,7 @@ export const StepsModal = ({
   canvasID,
   writeable,
   baseRootStep,
+  seedContainerOnClick,
   ...props
 }: StepsModalProps) => {
   // =================
@@ -344,20 +332,77 @@ export const StepsModal = ({
         }}
         id={canvasID}
       >
-        <StepsTree
-          step={baseRoot}
-          triggerComparison={triggerComparison}
-          canvasID={canvasID}
-        />
-        <StepsTree
-          step={rootStep}
-          triggerComparison={triggerComparison}
-          canvasID={canvasID}
-        />
+        <>
+          {baseRootStep?.map<React.ReactNode>((step: Step, i: number) => {
+            return (
+              <HeadStep
+                step={step}
+                style={{
+                  left: step.position.x,
+                  top: step.position.y,
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  transform: "translateX(-50%)",
+                  ...style,
+                }}
+                key={step.id}
+                triggerComparison={triggerComparison}
+                canvasID={canvasID}
+              />
+            );
+          })}
+          {baseRootStep?.map((step: Step) => {
+            return !step.children.length
+              ? null
+              : step.children.map((child: Step) => (
+                  <Edge
+                    parentStep={step}
+                    childStep={child}
+                    canvasID={canvasID}
+                    key={`${step.id}_${child.id}`}
+                    style={style}
+                  />
+                ));
+          })}
+        </>
+
+        {rootStep?.map<React.ReactNode>((step: Step, i: number) => {
+          return (
+            <HeadStep
+              step={step}
+              style={{
+                left: step.position.x,
+                top: step.position.y,
+                marginLeft: "auto",
+                marginRight: "auto",
+                transform: "translateX(-50%)",
+                ...style,
+              }}
+              key={step.id}
+              triggerComparison={triggerComparison}
+              canvasID={canvasID}
+            />
+          );
+        })}
+        {rootStep?.map((step: Step) => {
+          return !step.children.length
+            ? null
+            : step.children.map((child: Step) => (
+                <Edge
+                  parentStep={step}
+                  childStep={child}
+                  canvasID={canvasID}
+                  key={`${step.id}_${child.id}`}
+                  style={style}
+                />
+              ));
+        })}
+
         {baseRootStep && (
           <BorderedStepsContainer
             width={`${baseContainerDimensions.width}px`}
             height={`${baseContainerDimensions.height}px`}
+            onClick={() => seedContainerOnClick?.()}
           />
         )}
         {baseRootStep && (
@@ -392,7 +437,8 @@ const StepsTree = ({
 }) => {
   return (
     <>
-      {step?.map<React.ReactNode>((step: Step) => {
+      1
+      {step?.map<React.ReactNode>((step: Step, i: number) => {
         return (
           <HeadStep
             step={step}
@@ -430,6 +476,7 @@ const StepsTree = ({
 const BorderedStepsContainer = ({
   width,
   height,
+  onClick,
 }: BaseComponentProps & { width: string; height: string }) => {
   return (
     <div

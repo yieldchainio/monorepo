@@ -955,20 +955,22 @@ export class Step implements IStep<Step> {
    * standard mapping function for the tree
    */
 
-  map = <T>(callback: (step: Step) => T): T[] => {
+  map = <T>(callback: (step: Step, i: number) => T): T[] => {
     // Create a stack array
     const stack: Step[] = [this];
     const result: T[] = [];
 
     // While it's length is bigger than 0, pop a step,
     // invoke the callback on it, and then add all of it's children to the stack
+    let i = 0;
     while (stack.length > 0) {
       const node = stack.pop() as Step;
-      result.push(callback(node));
+      result.push(callback(node, i));
 
       for (const child of node.children) {
         stack.push(child);
       }
+      i++;
     }
 
     return result;

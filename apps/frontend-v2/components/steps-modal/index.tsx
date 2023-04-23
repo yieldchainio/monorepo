@@ -196,109 +196,16 @@ export const StepsModal = ({
     else resizeBoth(StepSizing.SMALL, null, false);
   };
 
-  /**
-   * Function to push the steps canvas when full screen is requested
-   */
-  const toFullScreen = () => {
-    modals.push((id: number) => {
-      return {
-        component: (
-          <ModalWrapper
-            modalKey={id}
-            style={{
-              padding: "2vh",
-              zIndex: 0,
-            }}
-            closeFunction={() => {
-              modals.remove(id);
-            }}
-          >
-            <div
-              className="w-full  mx-auto bg-custom-componentbg bg-opacity-40 p-[4px] rounded-xl "
-              onClick={props.onClick}
-              style={{
-                width: "95vw",
-                height: "95vh",
-              }}
-            >
-              <Canvas
-                size={canvasDimensions}
-                childrenWrapper={
-                  <div className="relative w-max h-max mx-auto"></div>
-                }
-                style={style}
-                className={className}
-                parentStyle={parentStyle}
-                utilityButtons={[
-                  ...(utilityButtons || []),
-                  {
-                    children: (
-                      <WrappedImage
-                        src={{
-                          dark: "/icons/minimize-light.svg",
-                          light: "/icons/minimize-dark.svg",
-                        }}
-                        width={14}
-                        height={14}
-                      />
-                    ),
-
-                    label: "Minimize Screen",
-                    onClick: () => {
-                      modals.remove(id);
-                    },
-                  },
-                ]}
-                setters={{
-                  zoom: handleZoom,
-                }}
-                id={canvasID}
-              >
-                {rootStep?.map<React.ReactNode>((step: Step) => {
-                  return (
-                    <HeadStep
-                      step={step}
-                      style={{
-                        left: step.position.x,
-                        top: step.position.y,
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                        transform: "translateX(-50%)",
-                      }}
-                      key={step.id}
-                      triggerComparison={triggerComparison}
-                      canvasID={canvasID}
-                    />
-                  );
-                })}
-                {rootStep?.map((step: Step) => {
-                  return !step.children.length
-                    ? null
-                    : step.children.map((child: Step) => (
-                        <Edge
-                          parentStep={step}
-                          childStep={child}
-                          canvasID={canvasID}
-                          key={`${step.id}_${child.id}`}
-                        />
-                      ));
-                })}
-              </Canvas>
-            </div>
-          </ModalWrapper>
-        ),
-      };
-    });
-  };
-
   // ========
   //   JSX
   // ========
 
-  return (
+  // Variable for the component, so we can reuse on fullscreen function
+  const component = (
     <div
       className="  bg-custom-componentbg bg-opacity-40 p-[4px] rounded-xl "
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation();
         props.onClick?.();
       }}
       {...wrapperProps}
@@ -423,6 +330,33 @@ export const StepsModal = ({
       </Canvas>
     </div>
   );
+
+  /**
+   * Function to push the steps canvas to fullscreen
+   */
+
+  const toFullScreen = () => {
+    modals.push((id: number) => {
+      return {
+        component: (
+          <ModalWrapper
+            modalKey={id}
+            style={{
+              padding: "2vh",
+              zIndex: 0,
+            }}
+            closeFunction={() => {
+              modals.remove(id);
+            }}
+          >
+            {component}
+          </ModalWrapper>
+        ),
+      };
+    });
+  };
+
+  return component;
 };
 
 const StepsTree = ({

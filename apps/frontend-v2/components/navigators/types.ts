@@ -10,4 +10,5 @@ export interface NavigatorsProps {
   steps: configProgressStep[];
   nextCallback: (configIndex: number) => void;
   prevCallback: (configIndex: number) => void;
+  currentIndex: number
 }

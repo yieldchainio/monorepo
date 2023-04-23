@@ -16,12 +16,13 @@ import { configProgressStep } from "utilities/hooks/stores/strategies/types";
 
 export const useConfigRouting = (
   baseRoute: string,
-  routes: configProgressStep[]
+  routes: configProgressStep[],
+  constantNextCallback?: (index: number) => void
 ) => {
   // Keep a state of the current index
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  // Get the next router
+  // Get the nextjs router
   const router = useRouter();
 
   /**
@@ -30,6 +31,7 @@ export const useConfigRouting = (
 
   // next
   const next = (callback?: (index: number) => void) => {
+    constantNextCallback?.(currentIndex);
     if (currentIndex == routes.length - 1) return;
     if (callback) callback(currentIndex);
     router.replace(`${baseRoute}${routes[currentIndex + 1].route}`);
@@ -61,7 +63,7 @@ export const useConfigRouting = (
     router.replace(`${baseRoute}${routes[index].route}`);
     setCurrentIndex(index);
   };
-  // Initiate the routes (Routes to nearest step route marked "Complete")
+  // Initiate the routes (Routes to nearest step route marked "Active")
   const initRoute = (optionalRoutes?: configProgressStep[]) => {
     const latestCompleteRoute =
       (optionalRoutes || routes).findLastIndex(

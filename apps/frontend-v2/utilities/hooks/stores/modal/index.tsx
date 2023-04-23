@@ -1,6 +1,7 @@
 import React from "react";
 import { create } from "zustand";
-
+import { v4 as uuid } from "uuid";
+import { ModalWrapper } from "components/modal-wrapper";
 /**
  * @notice
  * @hook useModals()
@@ -22,6 +23,7 @@ interface ModalsStore {
   purge: (pathName: `/${string}`) => void;
   destroy: () => void;
   exists: (id: string) => boolean;
+  lazyPush: (modalComponent: React.ReactNode) => void;
   findIndexByID: (id: string) => number;
 }
 
@@ -38,7 +40,6 @@ export const useModals = create<ModalsStore>((set, get) => ({
     });
   },
   remove: (index: number) => {
-   
     if (typeof window !== "undefined")
       document.documentElement.style.overflowY = "scroll";
     set((state) => {
@@ -77,5 +78,22 @@ export const useModals = create<ModalsStore>((set, get) => ({
 
   findIndexByID: (id: string) => {
     return get().modals.findIndex((modal) => modal.id == id);
+  },
+
+  lazyPush: (modalComponent: React.ReactNode) => {
+    const prevModals = get().modals;
+    set({
+      modals: [
+        ...prevModals,
+        {
+          component: (
+            <ModalWrapper modalKey={prevModals.length}>
+              {modalComponent}
+            </ModalWrapper>
+          ),
+          id: uuid(),
+        },
+      ],
+    });
   },
 }));

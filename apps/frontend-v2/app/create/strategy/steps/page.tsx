@@ -92,8 +92,8 @@ const StepsConfig = () => {
       </ConfigTitle>
       <StrategyConfigVerticalWrapper
         style={{
-          width: "80%",
-          height: "80%",
+          width: "90%",
+          height: "90%",
           zIndex: 1000,
         }}
       >

@@ -12,6 +12,8 @@ import { useMemo } from "react";
 import { InfoProvider } from "components/info-providers";
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import { configProgressStep } from "utilities/hooks/stores/strategies/types";
+import { BaseComponentProps } from "components/types";
+import WrappedText from "components/wrappers/text";
 
 export const Navigators = ({
   next,
@@ -19,6 +21,7 @@ export const Navigators = ({
   steps,
   nextCallback,
   prevCallback,
+  currentIndex,
 }: NavigatorsProps) => {
   // Get the strategy store (to rerender and check continute conditions based on state changes)
   const strategyState = useStrategyStore((state) => state.title);
@@ -45,7 +48,11 @@ export const Navigators = ({
       <IncrementalProgressBar steps={steps} color="bg-blue-500" />
       <div className="flex flex-row gap-10">
         <PrevButton prev={prev} callback={prevCallback} enabled={canPrev} />
-        <NextButton next={next} enabled={canContinue} callback={nextCallback} />
+        <NextButton next={next} enabled={canContinue} callback={nextCallback}>
+          {currentIndex === steps.length - 1 ? (
+            <div className="flex flex-row items-center">Deploy 🚀</div>
+          ) : undefined}
+        </NextButton>
       </div>
     </div>
   );
@@ -55,11 +62,12 @@ const NextButton = ({
   next,
   enabled,
   callback,
+  children,
 }: {
   next: (callback?: (index: number) => void) => void;
   enabled: true | string;
   callback: (index: number) => void;
-}) => {
+} & BaseComponentProps) => {
   // Memoize the button to return (If to return a infoprovider, disabled button or enabled one)
   const buttonToReturn = useMemo(() => {
     if (enabled === true)
@@ -73,13 +81,19 @@ const NextButton = ({
             next(callback);
           }}
         >
-          Next Step
-          <WrappedImage
-            src={"/icons/dropdown-arrow-dark.svg"}
-            width={26}
-            height={26}
-            className="rotate-[-90deg]"
-          ></WrappedImage>
+          {children ? (
+            children
+          ) : (
+            <>
+              Next Step
+              <WrappedImage
+                src={"/icons/dropdown-arrow-dark.svg"}
+                width={26}
+                height={26}
+                className="rotate-[-90deg]"
+              ></WrappedImage>
+            </>
+          )}
         </GradientButton>
       );
 

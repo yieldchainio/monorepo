@@ -20,13 +20,19 @@ import { useModals } from "utilities/hooks/stores/modal";
 import { ModalWrapper } from "components/modal-wrapper";
 import { StrategiesDraftsModal } from "components/drafts-modal";
 import { ChildrenProvider } from "components/internal/render-children";
-import { configProgressStep } from "utilities/hooks/stores/strategies/types";
+import { DeploymentModal } from "components/deployment-modal";
 
 const StrategyConfigLayout = ({ children }: StrategyCreationLayoutProps) => {
   /**
    * Get the state of the config routes to show progress and so on
    */
   const configRoutesState = useStrategyStore((state) => state.strategyConfigs);
+
+  /**
+   * Get the seed & tree's root steps from the store, to push to deployment modal on finish
+   */
+  const seedRootStep = useStrategyStore((state) => state.seedStep);
+  const treeRootStep = useStrategyStore((state) => state.step);
 
   /**
    * Get route config state changer
@@ -36,10 +42,26 @@ const StrategyConfigLayout = ({ children }: StrategyCreationLayoutProps) => {
   );
 
   /**
+   * Deployment push function (memoized)
+   */
+  const attemptPushDeploymentModal = (index: number) => {
+    if (index === configRoutesState.length - 1)
+      modals.lazyPush(
+        <DeploymentModal
+          seedRootStep={seedRootStep}
+          treeRootStep={treeRootStep}
+        />
+      );
+  };
+
+  /**
    * Get the next and prev functions for our configs (Assinging to buttons)
    */
-  const { next, prev, routeByIndex, progress, initRoute, currentIndex } =
-    useConfigRouting("/create/strategy", configRoutesState);
+  const { next, prev, initRoute, currentIndex } = useConfigRouting(
+    "/create/strategy",
+    configRoutesState,
+    attemptPushDeploymentModal
+  );
 
   /**
    * Styling store, set the colors of the backdrops
@@ -125,6 +147,7 @@ const StrategyConfigLayout = ({ children }: StrategyCreationLayoutProps) => {
           changeConfigRouteState(index, "not_complete");
           changeConfigRouteState(index - 1, "active");
         }}
+        currentIndex={currentIndex}
       />
       <ChildrenProvider
         callback={(child) =>

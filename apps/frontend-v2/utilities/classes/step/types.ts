@@ -103,6 +103,7 @@ export interface IStepReguler<T extends IStep<T>> {
   protocol?: YCProtocol | null;
   action?: YCAction | null;
   function?: YCFunc | null;
+  unlockedFunctions?: YCFunc[];
   customArguments?: YCArgument[];
 }
 
@@ -151,6 +152,7 @@ export interface JSONStep {
   protocol?: string;
   action?: string;
   function?: string;
+  unlockedFunctions?: string[];
   customArguments?: any[];
   actionConfig?: ActionConfigs | null;
 

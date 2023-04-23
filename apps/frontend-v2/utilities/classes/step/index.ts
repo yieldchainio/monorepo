@@ -534,6 +534,13 @@ export class Step implements IStep<Step> {
   function: YCFunc | null = null;
 
   /**
+   * Functions that are unlocked starting from this node to it's descendents,
+   * by some external factor (i.e, this is a tree strategy and some functions
+   * were unlocked by the seed strategy, added to this array)
+   */
+  unlockedFunctions: YCFunc[] = [];
+
+  /**
    * The different possible action configurations for a @notice REGULER step
    */
   actionConfig: ActionConfigs | null = null;
@@ -621,6 +628,7 @@ export class Step implements IStep<Step> {
     this.protocol = config?.protocol || null;
     this.action = config?.action || null;
     this.function = config?.function || null;
+    this.unlockedFunctions = config?.unlockedFunctions || [];
     this.actionConfig = config?.actionConfig || null;
 
     /**
@@ -719,6 +727,13 @@ export class Step implements IStep<Step> {
       percentage: step.percentage,
       action: step.action ? context.getAction(step.action) : null,
       function: step.function ? context.getFunction(step.function) : null,
+      unlockedFunctions: step.unlockedFunctions
+        ? step.unlockedFunctions.flatMap((funcID) => {
+            const func = context.getFunction(funcID);
+            return func ? [func] : [];
+          })
+        : [],
+
       protocol: step.protocol ? context.getProtocol(step.protocol) : null,
       customArguments: step.customArguments,
     };
@@ -979,6 +994,7 @@ export class Step implements IStep<Step> {
         writeable: this.writeable,
         percentage: this.percentage,
         function: this.function?.id,
+        unlockedFunctions: this.unlockedFunctions.map((func) => func.id),
         state: this.state,
         children: this.children.flatMap((child) => {
           const jsonChild = child.toJSON({ onlyCompleted: false });

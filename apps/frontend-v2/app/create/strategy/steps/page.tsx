@@ -12,6 +12,9 @@ import useDebounce from "utilities/hooks/general/useDebounce";
 import { useBackdropColorChange } from "utilities/hooks/general/useBackdropColorChange";
 import { StrategyConfigVerticalWrapper } from "components/strategy-config-wrapper";
 import { StepsModal } from "components/steps-modal";
+import { Step } from "utilities/classes/step";
+import { useYCStore } from "utilities/hooks/stores/yc-data";
+import { YCFunc } from "@yc/yc-models";
 
 const StepsConfig = () => {
   // Get the current root step (Should be the root automation trigger on config state)
@@ -23,32 +26,49 @@ const StepsConfig = () => {
   // Rehydration function
   const rehydrateSteps = useStrategyStore((state) => state.rehydrateSteps);
 
+  // Global store context
+  const context = useYCStore((state) => state.context);
+
   // Set the colors
   useBackdropColorChange("var(--yc-llb)", "var(--yc-ly)");
 
-  const baseStepsRef = useRef<null | HTMLDivElement>(null);
+  /**
+   * We run a useEffect on mount of this page,
+   * we clear our root's unlocked functions, and add to it all of the unlocked
+   * dependents from the seed steps.
+   *
+   * This is done because we want the user to be able to access the functions they unlocked
+   * during the seeding stage. For instance, a user may seed their strategy w/ multiple
+   * staking, lending positions, when a deposit into the strategy happens.
+   * All of which unlock some claiming/harvest functions.
+   *
+   * In this case, they would want to use them on the tree strategy, harvesting the rewards,
+   * compounding them, longing shiba cum inu, or doing whatever else with these positions.
+   */
 
-  const baseStepsContainer = (
-    <div
-      ref={baseStepsRef}
-      className="absolute border-[2px] border-custom-border border-dashed rounded-md "
-      style={{
-        width: "327px",
-        height: "100px",
-        marginLeft: "auto",
-        marginRight: "auto",
-        top: "0px",
-        left: "0px",
-        transform: "translateX(-50%)",
-      }}
-    >
-      <WrappedText>Hello Ser</WrappedText>
-    </div>
-  );
+  useEffect(() => {
+    // Clear the existing unlocked functions (no multiples!)
+    rootStep.unlockedFunctions = [];
 
+    // Iterate over each of the seed steps, search for unlocked function in the global context,
+    // and add them to the tree's root if found
+    baseRootStep.each((step: Step) => {
+      // If this step has no function, it's not relevent to us
+      if (!step.function) return;
+
+      // Find all functions from global context which are unlocked by this step's function
+      const dependants = context.functions.filter(
+        (func) => func?.dependencyFunction?.id === step.function?.id
+      );
+
+      // Push each one of this step's unlocked dependants to the tree's root's unlockedFunctions
+      for (const func of dependants) rootStep.unlockedFunctions.push(func);
+    });
+  }, []);
+
+  // Return the JSX
   return (
     <div className="flex flex-col items-center justify-between  w-[100%] h-[100%]">
-      {baseStepsContainer}
       <ConfigTitle>
         {"Build Your Strategy ⚡"}{" "}
         <WrappedText fontSize={16} className="text-opacity-50">

@@ -22,7 +22,7 @@ const BaseStepsConfig = () => {
 
   // Return the JSX
   return (
-    <div className="flex flex-col items-center  w-[100vw] h-[100vh] bg-red-500">
+    <div className="flex flex-col items-center  w-[100vw] h-[100vh]">
       <ConfigTitle>
         {"Create Initial Allocations 🌱"}{" "}
         <WrappedText fontSize={16} className="text-opacity-50">
@@ -39,7 +39,9 @@ const BaseStepsConfig = () => {
         wrapperProps={{
           style: {
             width: "90%",
+            marginTop: "4vh",
           },
+          className: "animate-[modal_0.35s_ease-in-out]",
         }}
         comparisonCallback={() => {
           rehydrateSteps();

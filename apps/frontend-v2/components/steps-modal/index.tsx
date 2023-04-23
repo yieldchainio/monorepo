@@ -31,6 +31,7 @@ import { StepProps } from "components/steps/types";
 import { SEED_TO_TREE_MARGIN } from "./constants";
 import WrappedText from "components/wrappers/text";
 import { BaseComponentProps } from "components/types";
+import { StraightEdge } from "components/steps/components/edge/components/straight-edge";
 
 export const StepsModal = ({
   style,
@@ -153,6 +154,22 @@ export const StepsModal = ({
       (canvasDimensions?.[1] || 0) + (baseCanvasDimensions?.[1] || 0) + 200,
     ],
     [canvasDimensions, baseCanvasDimensions?.[0], baseCanvasDimensions?.[1]]
+  );
+
+  /**
+   * Memoize base container dimensions
+   */
+  const baseContainerDimensions = useMemo(
+    () => ({
+      width: baseCanvasDimensions
+        ? baseCanvasDimensions[0] + SEED_TO_TREE_MARGIN
+        : 0,
+
+      height: baseCanvasDimensions
+        ? baseCanvasDimensions[1] + SEED_TO_TREE_MARGIN
+        : 0,
+    }),
+    [baseCanvasDimensions?.[0], baseCanvasDimensions?.[1], SEED_TO_TREE_MARGIN]
   );
 
   // ===============
@@ -337,18 +354,27 @@ export const StepsModal = ({
           triggerComparison={triggerComparison}
           canvasID={canvasID}
         />
-        <BorderedStepsContainer
-          width={`${
-            baseCanvasDimensions
-              ? baseCanvasDimensions[0] + SEED_TO_TREE_MARGIN
-              : 0
-          }px`}
-          height={`${
-            baseCanvasDimensions
-              ? baseCanvasDimensions[1] + SEED_TO_TREE_MARGIN
-              : 0
-          }px`}
-        />
+        {baseRootStep && (
+          <BorderedStepsContainer
+            width={`${baseContainerDimensions.width}px`}
+            height={`${baseContainerDimensions.height}px`}
+          />
+        )}
+        {baseRootStep && (
+          <StraightEdge
+            parentAnchor={{
+              x: 0,
+              y: baseContainerDimensions.height,
+            }}
+            childAnchor={{
+              x: 0,
+              y: rootStep?.position?.y || 0,
+            }}
+            style={{
+              opacity: "50%",
+            }}
+          />
+        )}
       </Canvas>
     </div>
   );
@@ -359,8 +385,6 @@ const StepsTree = ({
   canvasID,
   triggerComparison,
   style,
-  transformX,
-  transformY,
 }: Omit<StepProps, "step"> & {
   step: Step | null;
   transformX?: string;

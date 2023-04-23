@@ -11,6 +11,7 @@ import { LeftEdge } from "./components/left-edge";
 import { forwardRef, useMemo } from "react";
 import { TokenPercentageBox } from "../token-percentage";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
+import { BaseComponentProps } from "components/types";
 
 export const Edge = forwardRef<
   HTMLDivElement,
@@ -18,18 +19,19 @@ export const Edge = forwardRef<
     parentStep: Step;
     childStep: Step;
     canvasID?: string;
-  }
+  } & BaseComponentProps
 >(
   (
     {
       parentStep,
       childStep,
       canvasID,
+      style,
     }: {
       parentStep: Step;
       childStep: Step;
       canvasID?: string;
-    },
+    } & BaseComponentProps,
     ref
   ) => {
     /**
@@ -85,6 +87,7 @@ export const Edge = forwardRef<
             childStep={childStep}
             parentAnchor={parentBottomAnchor}
             childAnchor={childTopAnchor}
+            style={style}
           />
         );
       }
@@ -97,6 +100,7 @@ export const Edge = forwardRef<
             childStep={childStep}
             parentAnchor={parentLeftAnchor}
             childAnchor={childTopAnchor}
+            style={style}
           />
         );
 
@@ -108,6 +112,7 @@ export const Edge = forwardRef<
             childStep={childStep}
             parentAnchor={parentRightAnchor}
             childAnchor={childTopAnchor}
+            style={style}
           />
         );
 
@@ -118,7 +123,7 @@ export const Edge = forwardRef<
           childStep={childStep}
           parentAnchor={parentBottomAnchor}
           childAnchor={childTopAnchor}
-          //   style={style}
+          style={style}
         />
       );
     }, [
@@ -157,6 +162,7 @@ export const Edge = forwardRef<
               left: `${middlePoint.x}px`,
               top: `${middlePoint.y}px`,
               transform: "translate(-50%, -50%)",
+              ...style,
             }}
             portal={canvasPortal}
           ></TokenPercentageBox>

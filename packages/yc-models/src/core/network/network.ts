@@ -179,7 +179,7 @@ export class YCNetwork extends BaseClass {
 
     YCNetwork.instances.set(id, this);
 
-    return existingNetwork || null;
+    return null;
   };
 
   static instances: Map<number, YCNetwork> = new Map();

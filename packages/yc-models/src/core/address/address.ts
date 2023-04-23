@@ -44,6 +44,7 @@ export class YCAddress extends BaseClass {
       (fragment) => Object.keys(fragment).length > 0
     );
     this.network = _context.getNetwork(_address.chain_id);
+    this.protocol = _address.protocol_id as unknown as YCProtocol;
 
     // let protocol = _context
     //   .protocolsAddresses()
@@ -74,6 +75,8 @@ export class YCAddress extends BaseClass {
     const existingAddress = this.getInstance(_address.id);
     if (existingAddress) return existingAddress;
 
+    this.protocol = _context.getProtocol(_address.protocol_id);
+
     // Set the actual (circular) values
     this.functions = (_address.functions_ids as unknown as string[]).flatMap(
       (func) => {
@@ -81,7 +84,6 @@ export class YCAddress extends BaseClass {
         return res ? [res] : [];
       }
     );
-   
   }
 
   // ====================
@@ -116,7 +118,7 @@ export class YCAddress extends BaseClass {
 
     YCAddress.instances.set(id, this);
 
-    return existingUser || null;
+    return null;
   };
 
   static instances: Map<string, YCAddress> = new Map();

@@ -68,14 +68,7 @@ export class YCProtocol extends BaseClass {
     this.addresses = (_protocol.address_ids as unknown as string[]).flatMap(
       (addressID: string) => {
         const address = _context.getAddress(addressID);
-        console.log(
-          "Address ID:",
-          addressID,
-          "Address GOT:",
-          address,
-          "Context Addresses",
-          _context.addresses
-        );
+
         return address ? [address] : [];
       }
     );
@@ -129,7 +122,7 @@ export class YCProtocol extends BaseClass {
 
     YCProtocol.instances.set(id, this);
 
-    return existingProtocol || null;
+    return null;
   };
 
   static instances: Map<string, YCProtocol> = new Map();

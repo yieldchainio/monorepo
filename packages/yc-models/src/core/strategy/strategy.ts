@@ -488,7 +488,7 @@ export class YCStrategy extends BaseClass {
 
     YCStrategy.instances.set(id, this);
 
-    return existingUser || null;
+    return null;
   };
 
   // =================

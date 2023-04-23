@@ -31,12 +31,13 @@ export class YCFunc extends BaseClass {
   readonly isCallback: boolean;
   readonly counterFunction: YCFunc | null;
   readonly dependencyFunction: YCFunc | null;
+  readonly dependents: YCFunc[] = [];
   readonly outflows: YCToken[] = [];
   readonly inflows: YCToken[] = [];
   readonly signature: string;
   readonly calltype: CallType;
   readonly arguments: YCArgument[];
-  readonly returnType: string;
+  readonly returnType: VariableTypes;
   readonly returnBaseType: BaseVariableTypes;
 
   // ====================
@@ -81,6 +82,17 @@ export class YCFunc extends BaseClass {
     tempSig += ")";
     this.signature = tempSig;
 
+    let address: YCAddress | null = _context.getAddress(_function.address_id);
+
+    if (!address)
+      throw new Error("YCFunc ERR: Address Not Found! Func ID: " + this.id);
+
+    this.address = address;
+
+    // Add ourselves to our address if not yet
+    if (!this.address.functions.find((func) => func.id == this.id))
+      this.address.functions.push(this);
+
     /**
      * We set it as the string ID first before attemtping to get an existing singleton instance.
      * This is done in order for the comparison function to see our fields correctly, since it would have
@@ -89,10 +101,10 @@ export class YCFunc extends BaseClass {
     this.counterFunction = _function.inverse_function_id as unknown as YCFunc;
     this.dependencyFunction =
       _function.dependancy_function_id as unknown as YCFunc;
-    this.address = _function.address_id as unknown as YCAddress;
+
     this.outflows = _function.outflows as unknown as YCToken[];
     this.inflows = _function.inflows as unknown as YCToken[];
-    this.actions = _function.actions_ids as unknown as YCAction[];
+    this.actions = (_function.actions_ids || []) as unknown as YCAction[];
 
     // Get the existing instance (or set ours otherwise)
     const existingFunc = this.getInstance(_function.id);
@@ -106,7 +118,7 @@ export class YCFunc extends BaseClass {
       ? _context.getFunction(_function.dependancy_function_id)
       : null;
 
-    this.actions = _function.actions_ids.flatMap((actionID: string) => {
+    this.actions = (_function.actions_ids || []).flatMap((actionID: string) => {
       const action = _context.getAction(actionID);
       return action ? [action] : [];
     });
@@ -122,15 +134,6 @@ export class YCFunc extends BaseClass {
       if (token) return [token];
       return [];
     });
-
-    let address: YCAddress | undefined = _context.addresses.find(
-      (address: YCAddress) => address.hasFunction(this.id)
-    );
-
-    if (!address)
-      throw new Error("YCFunc ERR: Address Not Found! Func ID: " + this.id);
-
-    this.address = address;
   }
 
   // =========================
@@ -238,8 +241,29 @@ export class YCFunc extends BaseClass {
 
     YCFunc.instances.set(id, this);
 
-    return existingUser || null;
+    return  null;
   };
 
   static instances: Map<string, YCFunc> = new Map();
+
+  /**
+   * Custom toJSON function
+   */
+  toJSON = (): DBFunction => {
+    return {
+      id: this.id,
+      name: this.id,
+      dependancy_function_id: this.dependencyFunction?.id || null,
+      inverse_function_id: this.counterFunction?.id || null,
+      arguments_ids: this.arguments.map((arg) => arg.id),
+      callback: this.isCallback,
+      call_type: this.calltype,
+      return_value_base_type: this.returnBaseType,
+      return_value_type: this.returnType,
+      address_id: this.address?.id || "",
+      actions_ids: this.actions.map((action) => action.id),
+      outflows: this.outflows.map((token) => token.id),
+      inflows: this.inflows.map((token) => token.id),
+    };
+  };
 }

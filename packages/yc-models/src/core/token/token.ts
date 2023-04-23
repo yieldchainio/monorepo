@@ -233,7 +233,7 @@ export class YCToken extends BaseClass {
 
     YCToken.instances.set(id, this);
 
-    return existingToken || null;
+    return null;
   };
 
   static instances: Map<string, YCToken> = new Map();

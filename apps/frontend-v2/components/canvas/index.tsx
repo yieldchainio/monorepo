@@ -8,6 +8,7 @@ import {
   MouseEvent,
   forwardRef,
   isValidElement,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -62,9 +63,10 @@ export const Canvas = ({
  */
 const ParentContainer = forwardRef<HTMLDivElement, BaseComponentProps>(
   ({ children, style }: BaseComponentProps, ref) => {
+    console.log("Parent Style INSIDE parent", style);
     return (
       <div
-        className="relative w-full flex flex-col items-center justify-start overflow-hidden rounded-xl border-[0px] border-custom-border "
+        className="relative flex flex-col items-center justify-start overflow-hidden rounded-xl border-[0px] border-custom-border "
         ref={ref}
         style={style}
       >
@@ -109,6 +111,14 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
           setZoom(_zoom < 1 ? 0.99 : _zoom > 1.5 ? 1.501 : _zoom);
           setters?.zoom?.(_zoom);
         },
+      },
+      {
+        zoom: {
+          min: { value: 0.99, continue: true },
+          max: { value: 1.501, continue: true },
+          default: { value: 1, continue: true },
+        },
+        dependencies: [size?.[0], size?.[1]],
       }
     );
 
@@ -117,19 +127,24 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
     // We set a ref for all of our child nodes (To focus onClick, mainly.)
     const childRefs: Map<number, HTMLDivElement> = useRef(new Map()).current;
 
+    // Memoize width and height
+    const width = useMemo(() => size?.[0], [size?.[0]]);
+    const height = useMemo(() => size?.[1], [size?.[1]]);
+
     return (
       <>
         <div
-          className="min-w-[150%] min-h-[150%] bg-custom-darkSubbg h-max bg-dotted-spacing-6 bg-dotted-custom-border cursor-grab active:cursor-grabbing flex flex-row items-start justify-center  touch-pinch-zoom py-10 "
+          className="absolute min-w-[150%] min-h-[150%] bg-custom-darkSubbg bg-dotted-spacing-6 bg-dotted-custom-border cursor-grab active:cursor-grabbing flex flex-row items-start justify-center  touch-pinch-zoom py-10  "
+          {...interactivity()}
           style={{
             ...style,
-            width: !size ? undefined : `${size[0] * 5}px`,
-            height: !size ? undefined : `${size[1] * 5}px`,
             ...propStyle,
+            width: `${width}px`,
+            height: `${height}px`,
           }}
           ref={ref}
-          {...interactivity()}
           id={id}
+          onClick={() => console.log(ref ? ref : null)}
         >
           <ChildrenProvider
             callback={(wrapper) => {

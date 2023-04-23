@@ -431,6 +431,28 @@ export class Step implements IStep<Step> {
     this.tokenPercentages.clear();
   };
 
+  /**
+   * disableDescendentsWriteabillity,
+   * disables writability on the step and all of its descendents
+   */
+  disableDescendantsWriteability = () => {
+    this.map((step) => {
+      step.writeable = false;
+      step.removeEmptyChildren();
+    });
+  };
+
+  /**
+   * enableDescendentsWriteability
+   * Enable writeability on all descendents
+   */
+  enableDescendentsWriteability = () => {
+    this.map((step) => {
+      step.writeable = true;
+      step.attemptAddEmptyChild();
+    });
+  };
+
   // ====================
   //      VARIABLES
   // ====================
@@ -716,7 +738,7 @@ export class Step implements IStep<Step> {
    * @uses D3 to graphicize this step node and all if it's descendents
    */
 
-  graph = (baseNodeSize: StepSizing, baseNodeDimensions?: Dimensions) => {
+  graph = (basePositions?: Position) => {
     // Instantiate layout instance with our settings
     const layout = flextree({
       nodeSize: (node: HierarchyNode<Step>) => [
@@ -789,8 +811,8 @@ export class Step implements IStep<Step> {
 
       // Set the position
       Step.position = {
-        x: node.x,
-        y: node.y,
+        x: node.x + (basePositions?.x || 0),
+        y: node.y + (basePositions?.y || 0),
       };
 
       /**

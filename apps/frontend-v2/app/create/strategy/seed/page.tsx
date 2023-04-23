@@ -22,38 +22,30 @@ const BaseStepsConfig = () => {
 
   // Return the JSX
   return (
-    <div className="flex flex-col items-center justify-between  w-[100%] h-[100%]">
+    <div className="flex flex-col items-center  w-[100vw] h-[100vh] bg-red-500">
       <ConfigTitle>
         {"Create Initial Allocations 🌱"}{" "}
         <WrappedText fontSize={16} className="text-opacity-50">
           The initial positions that a deposit is routed into
         </WrappedText>{" "}
       </ConfigTitle>
-      <StrategyConfigVerticalWrapper
-        style={{
-          width: "80%",
-          height: "80%",
-          zIndex: 1000,
+
+      <StepsModal
+        writeable
+        root={rootStep}
+        parentStyle={{
+          height: "42vh",
         }}
-      >
-        <StepsModal
-          root={rootStep}
-          wrapperProps={{
-            style: {
-              width: "100%",
-              height: "100%",
-              zIndex: 1000,
-            },
-          }}
-          parentStyle={{
-            height: "100%",
-          }}
-          comparisonCallback={() => {
-            rehydrateSteps();
-          }}
-          canvasID="SEED_ALLOCATION_BUILDER"
-        />
-      </StrategyConfigVerticalWrapper>
+        wrapperProps={{
+          style: {
+            width: "90%",
+          },
+        }}
+        comparisonCallback={() => {
+          rehydrateSteps();
+        }}
+        canvasID="SEED_ALLOCATION_BUILDER"
+      />
     </div>
   );
 };

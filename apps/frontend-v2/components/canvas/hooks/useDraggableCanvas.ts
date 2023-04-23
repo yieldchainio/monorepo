@@ -29,16 +29,23 @@ export const useDraggableCanvas = (
     zoom: {
       min: { value: number; continue: boolean };
       max: { value: number; continue: boolean };
+      default: { value: number; continue: boolean };
     };
+    dependencies?: any[];
   } = {
     zoom: {
       min: { value: 0.99, continue: true },
       max: { value: 1.501, continue: true },
+      default: { value: 1, continue: true },
     },
   }
 ) => {
   // State for the dragging
-  const [{ x, y, zoom }, setPositioning] = useState({ x: 0, y: 0, zoom: 1 });
+  const [{ x, y, zoom }, setPositioning] = useState({
+    x: 0,
+    y: 0,
+    zoom: limits.zoom.default.value,
+  });
 
   // State for the currently focused child's index
   const [focusedChild, setFocusedChild] = useState<number | null>(null);
@@ -46,15 +53,29 @@ export const useDraggableCanvas = (
   // Memoized value for the limitations on X and Y when moving
   const { xLimit, yLimit } = useMemo(() => {
     if (!canvasRef || !parentRef) return { xLimit: 0, yLimit: 0 };
+
     const canvasRects = canvasRef.getBoundingClientRect();
     const parentRects = parentRef.getBoundingClientRect();
+
+    console.log(
+      "Child VS Parent Height",
+      canvasRects.height,
+      parentRects.height
+    );
+    console.log(
+      "Canvas Height VS Canvas height / zoom",
+      canvasRects.height,
+      canvasRects.height / zoom
+    );
     const limits = {
       xLimit: (canvasRects.width / zoom - parentRects.width) / 2,
       yLimit: canvasRects.height / zoom - parentRects.height,
     };
 
+    console.log("Limits", limits, "Zoom", zoom);
+
     return limits;
-  }, [canvasRef, parentRef, zoom]);
+  }, [canvasRef, parentRef, zoom, ...(limits.dependencies || [])]);
 
   // The useGessture interactivty variable, spread into the element
   const interactivity = useGesture(

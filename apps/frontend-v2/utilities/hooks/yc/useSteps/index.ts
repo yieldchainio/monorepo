@@ -23,6 +23,10 @@ export const useSteps = (
   options: useStepsOptions = {
     initialSize: StepSizing.MEDIUM,
     comparisonCallback: () => null,
+    basePositions: {
+      x: 0,
+      y: 0,
+    },
   }
 ) => {
   /**
@@ -72,15 +76,15 @@ export const useSteps = (
    */
   useEffect(() => {
     if (stepsState.rootStep) {
-      setCanvasDimensions(
-        stepsState.rootStep.graph(
-          stepsState.rootStep.size || options.initialSize || StepSizing.SMALL
-        )
-      );
+      setCanvasDimensions(stepsState.rootStep.graph(options.basePositions));
       triggerComparison();
       options.comparisonCallback?.();
     }
-  }, [JSON.stringify(stepsState.rootStep?.toJSON({}))]);
+  }, [
+    JSON.stringify(stepsState.rootStep?.toJSON({})),
+    options.basePositions?.x,
+    options.basePositions?.y,
+  ]);
 
   /**
    * Wrapping actions for ease

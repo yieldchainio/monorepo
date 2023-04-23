@@ -45,8 +45,7 @@ export const useStepsReducer: Reducer<
      * @param baseDimensions - Optional, manual width & height dimensions if the default ones do not fit the component's requirments.
      */
     case UseStepsActions.POPULATE_POSITIONS:
-      if (state)
-        state.rootStep?.graph(action.baseNodeSizing, action.baseDimensions);
+      if (state) state.rootStep?.graph();
       else
         throw new Error(
           "useStepsActions ERR - Cannot graph steps (Rootstep is not defined)"

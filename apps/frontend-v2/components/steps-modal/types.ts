@@ -5,6 +5,7 @@
 import { YCClassifications, YCStep, YCStrategy } from "@yc/yc-models";
 import { CanvasProps } from "components/canvas/types";
 import { BaseComponentProps } from "components/types";
+import { RefObject } from "react";
 import { Step } from "utilities/classes/step";
 import { useStepsOptions } from "utilities/hooks/yc/useSteps/types";
 
@@ -19,4 +20,8 @@ export interface StepsModalProps extends CanvasProps, useStepsProps {
   options?: useStepsOptions;
   comparisonCallback?: () => void;
   canvasID?: string;
+  baseContainer?: React.ReactNode;
+  baseContainerRef?: RefObject<HTMLElement | undefined | null> | null;
+  baseRootStep?: Step | null;
+  writeable?: boolean
 }

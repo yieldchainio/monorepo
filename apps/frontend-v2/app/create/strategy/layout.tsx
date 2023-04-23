@@ -98,7 +98,7 @@ const StrategyConfigLayout = ({ children }: StrategyCreationLayoutProps) => {
 
   // Return the component
   return (
-    <div className="flex flex-col items-center justify-start bg-custom-bg w-[100vw] h-[100vh] overflow-hidden z-0 absolute pt-[20vh] pb-[20vh]">
+    <div className="flex flex-col items-center overflow-hidden justify-start bg-custom-bg w-[100vw] h-[100vh] z-0 absolute pt-[20vh] pb-[20vh]">
       <BackdropColor
         color={top}
         style={{ zIndex: -1, top: "-20%", left: "80%", width: "50vw" }}

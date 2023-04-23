@@ -5,15 +5,32 @@
 import { Canvas } from "components/canvas";
 import { StepsModalProps } from "./types";
 import { Step } from "utilities/classes/step";
-import { DefaultDimensions, StepSizing } from "utilities/classes/step/types";
+import {
+  DefaultDimensions,
+  Dimensions,
+  StepSizing,
+} from "utilities/classes/step/types";
 import { useSteps } from "utilities/hooks/yc/useSteps";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
-import { useCallback, useId, useMemo, useState } from "react";
+import {
+  Children,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { HeadStep } from "components/steps";
 import { Edge } from "components/steps/components/edge";
 import WrappedImage from "components/wrappers/image";
 import { useModals } from "utilities/hooks/stores/modal";
 import { ModalWrapper } from "components/modal-wrapper";
+import { StepProps } from "components/steps/types";
+import { SEED_TO_TREE_MARGIN } from "./constants";
+import WrappedText from "components/wrappers/text";
+import { BaseComponentProps } from "components/types";
 
 export const StepsModal = ({
   style,
@@ -26,17 +43,41 @@ export const StepsModal = ({
   root,
   comparisonCallback,
   canvasID,
+  writeable,
+  baseRootStep,
   ...props
 }: StepsModalProps) => {
+  // =================
+  //     GLOBALS
+  // =================
   /**
    * We get the global context instance from the store, to pass onto the useSteps hook
    */
   const context = useYCStore((state) => state.context);
 
   /**
+   * Get global modals context for pushing fullscreen
+   */
+  const modals = useModals();
+
+  /**
    * Some Dummy State to trigger a comparison on graphs
    */
   const [dummyState, setDummyState] = useState<boolean>(false);
+
+  // ======================
+  //     STYLING STATES
+  // ======================
+
+  /**
+   * A state + useEffect to update a base Y coordinate for all steps graphing,
+   * according to whether or not we got a base container, and what is the height of it
+   */
+  const [baseY, setBaseY] = useState<number>(0);
+
+  // =============================
+  //       CORE VARIABLES
+  // =============================
 
   /**
    * We instantiate the useSteps hook with the provided root step, and the optional strategy & context.
@@ -64,28 +105,91 @@ export const StepsModal = ({
       {
         stateSetter: () => setDummyState(!dummyState),
         comparisonCallback: comparisonCallback,
+        basePositions: {
+          y: baseY,
+          x: 0,
+        },
         ...(options || {}),
       }
     );
-  // Handler for resizing the nodes based on zoom
-  const handleZoom = (zoom: number) => {
-    if (zoom > 1.1) resizeAll(StepSizing.MEDIUM, null, false);
-    else resizeAll(StepSizing.SMALL, null, false);
-  };
+
+  /**
+   * We have the equivlenet for the optionally provided base root
+   */
+  const {
+    stepsState: baseStepsState,
+    canvasDimensions: baseCanvasDimensions,
+    resizeAll: resizeAllBase,
+    triggerComparison: triggerBaseComparison,
+  } = useSteps(baseRootStep || null, undefined, undefined, {
+    stateSetter: () => setDummyState(!dummyState),
+    comparisonCallback: comparisonCallback,
+    basePositions: {
+      y: SEED_TO_TREE_MARGIN,
+      x: 0,
+    },
+  });
 
   // Root step (memoized)
   const rootStep = useMemo(() => {
+    // We enable writeability if not yet, if specified
+    if (writeable) stepsState.rootStep?.enableDescendentsWriteability();
     return stepsState.rootStep;
-  }, [
-    // stepsState,
-    stepsState.rootStep,
-    // JSON.stringify(stepsState.rootStep?.toJSON()),
-  ]);
+  }, [stepsState.rootStep]);
+
+  // Base Root step (memoized)
+  const baseRoot = useMemo(() => {
+    // We disable writeability on it
+    baseStepsState.rootStep?.disableDescendantsWriteability();
+    return baseStepsState.rootStep;
+  }, [baseStepsState.rootStep]);
 
   /**
-   * Get global modals context for pushing fullscreen
+   * Memoize canvas size
    */
-  const modals = useModals();
+  const canvasSize = useMemo(
+    () => [
+      Math.max(canvasDimensions?.[0] || 0, baseCanvasDimensions?.[0] || 0),
+      (canvasDimensions?.[1] || 0) + (baseCanvasDimensions?.[1] || 0) + 200,
+    ],
+    [canvasDimensions, baseCanvasDimensions?.[0], baseCanvasDimensions?.[1]]
+  );
+
+  // ===============
+  //    USEEFFECTS
+  // ===============
+  /**
+   * useEffect on the base canvas dimensions to set the base Y
+   */
+  useEffect(() => {
+    if (!baseCanvasDimensions) return;
+    setBaseY(baseCanvasDimensions[1] + SEED_TO_TREE_MARGIN * 2);
+  }, [baseCanvasDimensions]);
+
+  // ===============
+  //    METHODS
+  // ===============
+
+  /**
+   * resizeBoth
+   * resizes both root and base root (if existant)
+   */
+  const resizeBoth = (
+    newSize: StepSizing,
+    newDimensions: Dimensions | null,
+    forceResize: boolean
+  ) => {
+    resizeAll(newSize, newDimensions, forceResize);
+    resizeAllBase(newSize, newDimensions, forceResize);
+  };
+
+  /**
+   * Handle zooming by resizing nodes
+   */
+  const handleZoom = (zoom: number) => {
+    if (zoom > 1.1) resizeBoth(StepSizing.MEDIUM, null, false);
+    else resizeBoth(StepSizing.SMALL, null, false);
+  };
 
   /**
    * Function to push the steps canvas when full screen is requested
@@ -182,14 +286,20 @@ export const StepsModal = ({
     });
   };
 
+  // ========
+  //   JSX
+  // ========
+
   return (
     <div
-      className="w-full z-[-1] mx-auto bg-custom-componentbg bg-opacity-40 p-[4px] rounded-xl "
-      onClick={props.onClick}
+      className="  bg-custom-componentbg bg-opacity-40 p-[4px] rounded-xl "
+      onClick={() => {
+        props.onClick?.();
+      }}
       {...wrapperProps}
     >
       <Canvas
-        size={canvasDimensions}
+        size={canvasSize as [number, number]}
         childrenWrapper={<div className="relative w-max h-max mx-auto"></div>}
         style={style}
         className={className}
@@ -217,36 +327,105 @@ export const StepsModal = ({
         }}
         id={canvasID}
       >
-        {rootStep?.map<React.ReactNode>((step: Step) => {
-          return (
-            <HeadStep
-              step={step}
-              style={{
-                left: step.position.x,
-                top: step.position.y,
-                marginLeft: "auto",
-                marginRight: "auto",
-                transform: "translateX(-50%)",
-              }}
-              key={step.id}
-              triggerComparison={triggerComparison}
-              canvasID={canvasID}
-            />
-          );
-        })}
-        {rootStep?.map((step: Step) => {
-          return !step.children.length
-            ? null
-            : step.children.map((child: Step) => (
-                <Edge
-                  parentStep={step}
-                  childStep={child}
-                  canvasID={canvasID}
-                  key={`${step.id}_${child.id}`}
-                />
-              ));
-        })}
+        <StepsTree
+          step={baseRoot}
+          triggerComparison={triggerComparison}
+          canvasID={canvasID}
+        />
+        <StepsTree
+          step={rootStep}
+          triggerComparison={triggerComparison}
+          canvasID={canvasID}
+        />
+        <BorderedStepsContainer
+          width={`${
+            baseCanvasDimensions
+              ? baseCanvasDimensions[0] + SEED_TO_TREE_MARGIN
+              : 0
+          }px`}
+          height={`${
+            baseCanvasDimensions
+              ? baseCanvasDimensions[1] + SEED_TO_TREE_MARGIN
+              : 0
+          }px`}
+        />
       </Canvas>
+    </div>
+  );
+};
+
+const StepsTree = ({
+  step,
+  canvasID,
+  triggerComparison,
+  style,
+  transformX,
+  transformY,
+}: Omit<StepProps, "step"> & {
+  step: Step | null;
+  transformX?: string;
+  transformY?: string;
+}) => {
+  return (
+    <>
+      {step?.map<React.ReactNode>((step: Step) => {
+        return (
+          <HeadStep
+            step={step}
+            style={{
+              left: step.position.x,
+              top: step.position.y,
+              marginLeft: "auto",
+              marginRight: "auto",
+              transform: "translateX(-50%)",
+              ...style,
+            }}
+            key={step.id}
+            triggerComparison={triggerComparison}
+            canvasID={canvasID}
+          />
+        );
+      })}
+      {step?.map((step: Step) => {
+        return !step.children.length
+          ? null
+          : step.children.map((child: Step) => (
+              <Edge
+                parentStep={step}
+                childStep={child}
+                canvasID={canvasID}
+                key={`${step.id}_${child.id}`}
+                style={style}
+              />
+            ));
+      })}
+    </>
+  );
+};
+
+const BorderedStepsContainer = ({
+  width,
+  height,
+}: BaseComponentProps & { width: string; height: string }) => {
+  return (
+    <div
+      className="group absolute border-[2px] border-custom-border border-dashed rounded-md  bg-custom-bcomponentbg bg-opacity-0 hover:bg-opacity-75 transition duration-200 ease-in-out cursor-pointer flex flex-col items-center justify-center"
+      style={{
+        width,
+        height,
+        marginLeft: "auto",
+        marginRight: "auto",
+        top: "0px",
+        left: "0px",
+        transform: "translateX(-50%)",
+      }}
+    >
+      <WrappedText
+        fontSize={26}
+        className=" text-opacity-0  group-hover:text-opacity-70 transition duration-200 ease-in-out"
+      >
+        Edit Seed Steps
+      </WrappedText>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { Step } from "utilities/classes/step";
-import { Dimensions, StepSizing } from "utilities/classes/step/types";
+import { Dimensions, Position, StepSizing } from "utilities/classes/step/types";
 
 // The interface for the global store, which stores mapped IDs to StepsStores
 export interface StepsStore {
@@ -44,4 +44,5 @@ export interface useStepsOptions {
   stateSetter?: () => void;
   initialSize?: StepSizing;
   comparisonCallback?: () => void;
+  basePositions?: Position;
 }

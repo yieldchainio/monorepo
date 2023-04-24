@@ -72,7 +72,7 @@ export const useSteps = (root: Step | null) => {
       baseNodeSize: StepSizing,
       baseDimensions?: Dimensions
     ) => {
-      get().rootStep?.graph(baseNodeSize, baseDimensions);
+      get().rootStep?.graph();
     },
 
     /**

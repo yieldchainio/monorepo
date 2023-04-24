@@ -8,7 +8,9 @@ const SmallLoader = ({ color, className }: LoaderProps) => {
       <svg
         aria-hidden="true"
         className={
-          "inline w-4 h-4 mr-2 text-gray-200 animate-spin dark:text-gray-600 "
+          "inline w-4 h-4 mr-2 text-gray-200 animate-spin dark:text-gray-600 " +
+          " " +
+          (className || "")
         }
         style={{
           fill: color,

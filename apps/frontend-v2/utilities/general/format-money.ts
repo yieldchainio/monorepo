@@ -5,6 +5,7 @@
  */
 export const formatMoney = (
   value: number,
+  decimalsAmount: number = 2,
   currency: "$" | "₪" = "$"
 ): string => {
   const stringified = value.toString().split(".")[0];
@@ -14,7 +15,7 @@ export const formatMoney = (
     stringified.length == 2 ||
     stringified.length == 3
   )
-    return `$${value.toFixed(2)}`;
+    return `$${value.toFixed(decimalsAmount)}`;
   else if (stringified.length == 4) {
     const thousandsString = value.toFixed(0).toString().split("");
     thousandsString.splice(1, 0, ",");
@@ -22,14 +23,14 @@ export const formatMoney = (
   } else {
     try {
       const base = value.toFixed(0).toString();
-      if (stringified.length === 5) return `$${base.slice(0, 2)}K`;
-      if (stringified.length === 6) return `$${base.slice(0, 3)}K`;
+      if (stringified.length === 5) return `$${base.slice(0, 3)}K`;
+      if (stringified.length === 6) return `$${base.slice(0, 4)}K`;
       if (stringified.length === 7) return `$${base[0]}M`;
-      if (stringified.length === 8) return `$${base.slice(0, 1)}M`;
-      if (stringified.length === 9) return `$${base.slice(0, 2)}M`;
+      if (stringified.length === 8) return `$${base.slice(0, 2)}M`;
+      if (stringified.length === 9) return `$${base.slice(0, 3)}M`;
       if (stringified.length === 10) return `$${base[0]}B`;
-      if (stringified.length === 11) return `$${base.slice(0, 1)}B`;
-      if (stringified.length === 12) return `$${base.slice(0, 2)}B`;
+      if (stringified.length === 11) return `$${base.slice(0, 2)}B`;
+      if (stringified.length === 12) return `$${base.slice(0, 3)}B`;
       return `$${value.toFixed(0)}`;
     } catch (e) {
       console.error(

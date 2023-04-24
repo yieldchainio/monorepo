@@ -70,7 +70,9 @@ const DropdownMenu = ({
   return (
     <div
       className={
-        "bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 z-100 border-[1px] border-custom-themedBorder animate-popup overflow-hidden overflow-y-scroll scrollbar-hide shadow-sm"
+        "bg-custom-bcomponentbg rounded-xl px-2.5 py-3 flex flex-col gap-0.5 z-100 border-[1px] border-custom-themedBorder animate-popup overflow-hidden overflow-y-scroll scrollbar-hide shadow-sm" +
+        " " +
+        (className || "")
       }
       {...props}
       style={{ ...baseStyle, ...style }}

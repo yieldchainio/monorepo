@@ -83,7 +83,7 @@ const StepsConfig = () => {
 
   // Return the JSX
   return (
-    <div className="flex flex-col items-center justify-between  w-[100%] h-[100%]">
+    <div className="flex flex-col items-center justify-between  w-[100%] h-[100%] gap-6">
       <ConfigTitle>
         {"Build Your Strategy ⚡"}{" "}
         <WrappedText fontSize={16} className="text-opacity-50">

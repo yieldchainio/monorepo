@@ -119,8 +119,6 @@ export const Edge = forwardRef<
       // Otherwise, we return a straight edge
       return (
         <StraightEdge
-          parentStep={parentStep}
-          childStep={childStep}
           parentAnchor={parentBottomAnchor}
           childAnchor={childTopAnchor}
           style={style}

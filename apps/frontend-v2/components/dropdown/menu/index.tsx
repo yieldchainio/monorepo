@@ -28,6 +28,7 @@ const DropdownMenu = ({
   modalBehaviour = "auto",
   choiceFocusClass,
   style,
+  closeModal,
   ...props
 }: DropdownMenuOptions) => {
   // IF we are loading a choice rn or not
@@ -41,6 +42,7 @@ const DropdownMenu = ({
     setLoading(option);
     await handler(option);
     setLoading(false);
+    closeModal?.();
   };
 
   // Memoize the classname

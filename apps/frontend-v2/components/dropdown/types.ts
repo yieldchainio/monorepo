@@ -1,5 +1,5 @@
 import { RegulerButtonProps } from "components/buttons/reguler/types";
-import { BaseComponentProps } from "components/types";
+import { BaseComponentProps, BaseModalChildProps } from "components/types";
 import { ImageProps, TextProps } from "components/wrappers/types";
 import { CSSProperties, RefObject } from "react";
 
@@ -47,7 +47,7 @@ export interface DropdownOptionProps {
   textProps?: Partial<TextProps>;
 }
 // Props Interface
-export interface DropdownMenuOptions extends BaseComponentProps {
+export interface DropdownMenuOptions extends BaseComponentProps, BaseModalChildProps {
   options: DropdownOption[];
   handler: (_option: DropdownOption) => any;
   parentRef: RefObject<HTMLElement | undefined | null> | null;
@@ -56,4 +56,7 @@ export interface DropdownMenuOptions extends BaseComponentProps {
   hideOptionText?: "laptop:hidden" | "";
   modalBehaviour?: "always" | "never" | "auto";
   choiceFocusClass?: string;
+
 }
+
+

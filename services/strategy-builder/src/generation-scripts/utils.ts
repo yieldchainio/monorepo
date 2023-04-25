@@ -6,14 +6,23 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import Web3 from "web3";
 import axios from "axios";
-import { DBToken, DBAddress, DBArgument, DBFunction, DBFlow } from "../generation-types";
+import {
+  DBToken,
+  DBContract,
+  DBArgument,
+  DBFunction,
+  DBFlow,
+} from "../generation-types";
 
 export const getTokenDetails = async (_token_identifier: number) => {
-  let full_tokens_list: DBToken[] = (await axios.get("https://api.yieldchain.io/tokens")).data.tokens as DBToken[];
+  let full_tokens_list: DBToken[] = (
+    await axios.get("https://api.yieldchain.io/tokens")
+  ).data.tokens as DBToken[];
   let current_token_details: DBToken =
     full_tokens_list[
       full_tokens_list.findIndex(
-        (token_item: any /* IToken */) => token_item.token_identifier == _token_identifier
+        (token_item: any /* IToken */) =>
+          token_item.token_identifier == _token_identifier
       )
     ];
 
@@ -21,11 +30,16 @@ export const getTokenDetails = async (_token_identifier: number) => {
 };
 
 export const getFlowDetails = async (_flow_identifier: number) => {
-  let full_flows_list: DBFlow[] = (await axios.get("https://api.yieldchain.io/flows")).data.flows as DBFlow[];
+  let full_flows_list: DBFlow[] = (
+    await axios.get("https://api.yieldchain.io/flows")
+  ).data.flows as DBFlow[];
 
   let current_flow_details: DBFlow =
     full_flows_list[
-      full_flows_list.findIndex((flow_item: any /* IFlow */) => flow_item.flow_identifier == _flow_identifier)
+      full_flows_list.findIndex(
+        (flow_item: any /* IFlow */) =>
+          flow_item.flow_identifier == _flow_identifier
+      )
     ];
   return current_flow_details;
 };
@@ -33,38 +47,46 @@ export const getFlowDetails = async (_flow_identifier: number) => {
 export const getFunctionDetails = async (_function_identifier: number) => {
   // Gets Function Details From Data
 
-  let full_functions_list: DBFunction[] = (await axios.get("https://api.yieldchain.io/functions")).data
-    .functions as DBFunction[]; // Gets Full Functions List From Database
+  let full_functions_list: DBFunction[] = (
+    await axios.get("https://api.yieldchain.io/functions")
+  ).data.functions as DBFunction[]; // Gets Full Functions List From Database
 
   let current_function_details: DBFunction =
     full_functions_list[
       full_functions_list.findIndex(
-        (function_item: any /* IFunction */) => function_item.function_identifier == _function_identifier
+        (function_item: any /* IFunction */) =>
+          function_item.function_identifier == _function_identifier
       )
     ]; // Finds Current Function Details
   return current_function_details; // Returns Current Function Details
 };
 
 export const getParameterDetails = async (_parameter_identifier: number) => {
-  let full_parameters_list: DBArgument[] = (await axios.get("https://api.yieldchain.io/parameters")).data
-    .parameters as DBArgument[]; // Get full parameters list from API
+  let full_parameters_list: DBArgument[] = (
+    await axios.get("https://api.yieldchain.io/parameters")
+  ).data.parameters as DBArgument[]; // Get full parameters list from API
 
   let current_parameter_details: DBArgument =
     full_parameters_list[
       full_parameters_list.findIndex(
-        (parameter_item: any) => parameter_item.parameter_identifier == _parameter_identifier
+        (parameter_item: any) =>
+          parameter_item.parameter_identifier == _parameter_identifier
       )
     ]; // Get current parameter details from parameters list
   return current_parameter_details; // Return current parameter details
 };
 
 export const getAddressDetails = async (_address_identifier: any) => {
-  let full_addresses_list: DBAddress[] = (await axios.get("https://api.yieldchain.io/addresses")).data
-    .addresses as DBAddress[]; // Gets the full list of addresses from the api
+  let full_addresses_list: DBContract[] = (
+    await axios.get("https://api.yieldchain.io/addresses")
+  ).data.addresses as DBContract[]; // Gets the full list of addresses from the api
 
-  let current_address_details: DBAddress =
+  let current_address_details: DBContract =
     full_addresses_list[
-      full_addresses_list.findIndex((address_item: any) => address_item.address_identifier == _address_identifier)
+      full_addresses_list.findIndex(
+        (address_item: any) =>
+          address_item.address_identifier == _address_identifier
+      )
     ]; // Finds the address details from the full list of addresses
   return current_address_details; // Returns the address details
 };
@@ -81,14 +103,20 @@ export const createArrayByNumberInput = async (number: any) => {
 
 export const getFunctionAddress = async (_function_identifier: any) => {
   console.log(`Getting Address for FuncID ${_function_identifier}...`);
-  let allAddresses = (await axios.get("https://api.yieldchain.io/addresses")).data.addresses;
-  let allFunctions = (await axios.get("https://api.yieldchain.io/functions")).data.functions;
+  let allAddresses = (await axios.get("https://api.yieldchain.io/addresses"))
+    .data.addresses;
+  let allFunctions = (await axios.get("https://api.yieldchain.io/functions"))
+    .data.functions;
   console.log(`All Addresses: ${allAddresses}`);
   console.log(`All Functions: ${allFunctions}`);
   let currentAddress = allAddresses.find(
-    (addressObj: any) => addressObj.functions && addressObj.functions.includes(_function_identifier)
+    (addressObj: any) =>
+      addressObj.functions &&
+      addressObj.functions.includes(_function_identifier)
   );
-  console.log(`Address for FuncID ${_function_identifier}: ${currentAddress.address}}`);
+  console.log(
+    `Address for FuncID ${_function_identifier}: ${currentAddress.address}}`
+  );
   return currentAddress;
 };
 

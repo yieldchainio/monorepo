@@ -38,7 +38,7 @@ export const useFunctions = ({
       if (
         protocols &&
         !protocols.some((protocol) =>
-          protocol.addresses.find((address) =>
+          protocol.contracts.find((address) =>
             address.functions.some((_func) => _func.id == func.id)
           )
         )

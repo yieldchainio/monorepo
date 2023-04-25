@@ -103,7 +103,7 @@ export interface DBProtocol {
   types: ProtocolType[];
 }
 
-export interface DBAddress {
+export interface DBContract {
   id: string;
   address: string;
   chain_id: ChainID;

@@ -54,7 +54,7 @@ export const useProtocols = ({
         // We filter on both action-related filters
         if (action) {
           // All functions that relate to our protocol
-          const protocolRelatedFunctions = protocol.addresses.flatMap(
+          const protocolRelatedFunctions = protocol.contracts.flatMap(
             (address) => address.functions
           );
 

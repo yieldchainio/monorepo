@@ -4,7 +4,7 @@ import { YCSocialMedia } from "../social-media/social-media";
 import { BaseClass } from "../base";
 import { ProtocolType } from "@prisma/client";
 import { YCNetwork } from "../network/network";
-import { YCAddress, YCToken } from "..";
+import { YCContract, YCToken } from "..";
 
 /**
  * @notice
@@ -12,50 +12,89 @@ import { YCAddress, YCToken } from "..";
  * A class representing a Yieldchain protocol
  */
 export class YCProtocol extends BaseClass {
-  // =======================
+  // =================
   //      FIELDS
-  // ======================
+  // =================
+
+  /**
+   * The ID of this protocol (uuid)
+   */
   readonly id: string;
+
+  /**
+   * The name of this protocol (Pancakeswap, Uniswap, GMX, etc)
+   */
   readonly name: string;
-  readonly website: string;
-  readonly logo: string;
-  readonly socialMedia: YCSocialMedia;
+
+  /**
+   * The types of this protocol (EXCHANGE, LIQUIDITY, STAKING, INTEGRATION, etc)
+   */
   readonly types: ProtocolType[];
+
+  /**
+   * Whether this protocol is available for use or not
+   */
   readonly available: boolean;
-  readonly addresses: YCAddress[] = [];
+
+  /**
+   * All of the contracts available under this protocol (that are classified)
+   */
+  readonly contracts: YCContract[] = [];
+
+  /**
+   * The website URL of this protocol (https://uniswap.org)
+   */
+  readonly website: string;
+
+  /**
+   * The logo URI of this protocol
+   */
+  readonly logo: string;
+
+  /**
+   * Social media instance of all of this protocol's social medias
+   */
+  readonly socialMedia: YCSocialMedia;
+
+  /**
+   * Color of this protocol (can be null, frontend)
+   */
   readonly color: string | null = null;
 
   // =======================
   //     UNIQUE FIELDS
   // ======================
+
+  /**
+   * All of the tokens available on this protocol.
+   * Mostly just relevent for DEXs
+   */
   readonly tokens: YCToken[] = [];
+
+  /**
+   * The networks this protocol is available on
+   */
   readonly networks: YCNetwork[] = [];
-  // #addresses: YCAddress[];
-  // #actions: YCAction[]; // TODO: Integrate this when u can, not urgent
+
   // =======================
   //     CONSTRUCTOR
   // ======================
   constructor(_protocol: DBProtocol, _context: YCClassifications) {
+    /**
+     * Set static vars
+     */
     super();
-    // Set static
     this.socialMedia = new YCSocialMedia(
       _protocol.twitter,
       _protocol.telegram,
       _protocol.discord
     );
-
     this.name = _protocol.name;
-
     this.website = _protocol.website;
-
     this.logo = _protocol.logo;
-
     this.id = _protocol.id;
-
     this.types = _protocol.types;
-
     this.available = _protocol.available;
-
     this.color = _protocol.color;
 
     /**
@@ -65,7 +104,7 @@ export class YCProtocol extends BaseClass {
      */
     this.networks = _protocol.chain_ids as unknown as YCNetwork[];
 
-    this.addresses = (_protocol.address_ids as unknown as string[]).flatMap(
+    this.contracts = (_protocol.address_ids as unknown as string[]).flatMap(
       (addressID: string) => {
         const address = _context.getAddress(addressID);
 
@@ -73,12 +112,6 @@ export class YCProtocol extends BaseClass {
       }
     );
 
-    // console.log(
-    //   "All Addresses whilst getting Protocol addresses:",
-    //   _context.addresses,
-    //   "Protocol's:",
-    //   this.addresses
-    // );
     this.networks = _protocol.chain_ids.flatMap((networkID: number) => {
       const network = _context.getNetwork(networkID);
 
@@ -102,9 +135,9 @@ export class YCProtocol extends BaseClass {
     //   )
     // );
 
-    // // Find all addresses where the parent protocol is this protocol
-    // this.#addresses = _context.addresses.filter(
-    //   (address: YCAddress) => address.protocol()?.ID() == this.ID()
+    // // Find all contracts where the parent protocol is this protocol
+    // this.#contracts = _context.contracts.filter(
+    //   (address: YCContract) => address.protocol()?.ID() == this.ID()
     // );
   }
 
@@ -137,7 +170,7 @@ export class YCProtocol extends BaseClass {
       website: this.website,
       color: this.color,
       chain_ids: this.networks.map((network) => network?.id),
-      address_ids: this.addresses.map((address) => address?.id),
+      address_ids: this.contracts.map((address) => address?.id),
       types: this.types,
       twitter: this.socialMedia.twitter.link || "",
       discord: this.socialMedia.discord.link || "",

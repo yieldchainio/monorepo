@@ -23,30 +23,74 @@ import { YCStatistic } from "./statistic";
 
 export class YCStrategy extends BaseClass {
   // =================================
-  //      PUBLIC FIELDS & METHODS
+  //       FIELDS & GETTERS
   // =================================
 
   /**
-   * Static fields
+   * The address of this strategy (e.g 0x00...000)
    */
   readonly address: address;
-  readonly contract: EthersContract;
-  readonly id: string;
-  readonly title: string;
-  readonly depositToken: YCToken;
-  readonly creator: YCUser | null = null;
-  readonly rootStep: YCStep;
-  readonly verified: boolean;
-  readonly network: YCNetwork | null;
-  readonly executionInterval: number;
-  readonly statistics: YCStatistic[] = [];
-  readonly apy: number;
 
   /**
-   * Public getters/methods
+   * A ethers.js contract instance of this strategy
    */
+  readonly contract: EthersContract;
 
-  // Get the TVL (raw)
+  /**
+   * The ID of this strategy (uuid)
+   */
+  readonly id: string;
+
+  /**
+   * The title of this strategy (I.e "A Strategy For The Wicked")
+   */
+  readonly title: string;
+
+  /**
+   * The deposit token of this strategy
+   */
+  readonly depositToken: YCToken;
+
+  /**
+   * The creating user of this strategy
+   */
+  readonly creator: YCUser | null = null;
+
+  /**
+   * The root step of this strategy. A tree of all of the strategy's steps
+   */
+  readonly rootStep: YCStep;
+
+  /**
+   * Whether this strategy is verified or not
+   */
+  readonly verified: boolean;
+
+  /**
+   * The network this strategy is on
+   */
+  readonly network: YCNetwork | null;
+
+  /**
+   * The execution interval of this strategy (how often it automates)
+   */
+  readonly executionInterval: number;
+
+  /**
+   * The statistics about this strategy (APY, Gas fees, etc) - used for charting
+   */
+  readonly statistics: YCStatistic[] = [];
+
+  /**
+   * The current APY of this strategy
+   */
+  readonly apy: number;
+
+  // Public getters/methods
+
+  /**
+   * Get the Total Value Locked Of The Strattegy
+   */
   get tvl(): bigint {
     return this.#tvl;
   }
@@ -149,7 +193,14 @@ export class YCStrategy extends BaseClass {
     }
   }
 
-  // Get the TVL in USD
+  // ============
+  //   METHODS
+  // ============
+  /**
+   * Get the TVL of this vault in USD value - Async (quoting)
+   * @param cache - whether to return cached values or not
+   * @returns TVL in USD value
+   */
   usdTVL = async (cache: boolean = true): Promise<number> => {
     const formatted =
       cache && this.#usdTVL
@@ -165,7 +216,11 @@ export class YCStrategy extends BaseClass {
     return formatted;
   };
 
-  // Get both the TVL and the usd value of it
+  /**
+   * Get the TVL of this vault in USD and raw values - Async (quoting)
+   * @param cache - whether to return cached values or not
+   * @returns raw TVL + usd TVL
+   */
   tvlAndUSDValue = async (
     cache: boolean = true
   ): Promise<{ tvl: bigint; usdTVL: number }> => {
@@ -179,7 +234,12 @@ export class YCStrategy extends BaseClass {
     };
   };
 
-  // Get a user's shares
+  /**
+   * Get a user's shares of the vault
+   * @param address - the address of the user
+   * @param cache - whether to allow cached values to be returned
+   * @returns The user's shares (bigint)
+   */
   userShares = async (
     address: string,
     cache: boolean = true
@@ -197,7 +257,13 @@ export class YCStrategy extends BaseClass {
     return shares;
   };
 
-  // Get a user's shares in Usd
+  /**
+   * Get a user's shares in USD value
+   * @param address - the address of the user
+   * @param rawShares - an amount of raw shares to quote, if you have it already adn want to avoi another JSON RPC call
+   * @param cache - Whether to allow cached values
+   * @returns the user's shares in USD value
+   */
   userUSDShares = async (
     address: string,
     rawShares?: bigint,
@@ -215,7 +281,12 @@ export class YCStrategy extends BaseClass {
     return usdShares;
   };
 
-  // Get both the raw shares and USD shares
+  /**
+   * Get a user's both USD and raw values of their shares
+   * @param address - The address of a user
+   * @param cache - Whether to allow cached values
+   * @returns both USD and raw values of the user's shares
+   */
   userUSDAndRawShares = async (
     address: string,
     cache: boolean = true
@@ -228,14 +299,23 @@ export class YCStrategy extends BaseClass {
     };
   };
 
-  // Get the gas balance
+  /**
+   * Get the vault's gas balance
+   * @param cache - Whether to allow cached values to be returned
+   * @returns The gas balance (bigint)
+   */
   gasBalance = async (cache: boolean = true): Promise<bigint> => {
     return cache && this.#gasBalance
       ? this.#gasBalance
       : await this.#setGasBalance();
   };
 
-  // Get USD value of gas balance
+  /**
+   * Get the vault's gas balance in USD value
+   * @param rawValue - Optional raw value to go off of to avoid another async op
+   * @param cache - Whether to allw cached values to be returned
+   * @returns USD value of the vault's gas balance
+   */
   gasBalanceUSD = async (
     rawValue?: bigint,
     cache: boolean = true
@@ -249,7 +329,11 @@ export class YCStrategy extends BaseClass {
     return usdValue;
   };
 
-  // Get both USD and raw gas values
+  /**
+   * Get the vault's gas balance in USD value & in raw values
+   * @param cache - Whether to allw cached values to be returned
+   * @returns USD and raw values of the vault's gas balance
+   */
   gasBalanceAndUSD = async (
     cache: boolean = true
   ): Promise<{ balance: bigint; usdValue: number }> => {
@@ -258,10 +342,17 @@ export class YCStrategy extends BaseClass {
     return { balance, usdValue };
   };
 
-  /**
-   * Write/Population Methods @Onchain
-   */
+  // -------
+  // Onchain Write / Population Methods
+  // -------
 
+  /**
+   * A function to deposit funds into the vault
+   * @param amount - the amount of the depoisit token to deposit, can either be raw or formatted
+   * @param signer - The signer method to use (either ethers signer or a callback, see the type)
+   * @param approveAll - Whether to approve an infinite amount of tokens, or just the amount requested
+   * @returns An ethers transaction response
+   */
   fullDeposit = async (
     amount: number | bigint,
     signer: SignerMethod,
@@ -293,6 +384,12 @@ export class YCStrategy extends BaseClass {
     return (await this.signTransactions(signer, txns))[1];
   };
 
+  /**
+   * Make a deposit without approvals (for with approvals, see fullDeposit)
+   * @param amount - The amount of depisit tokens to deposit. raw or foramtted.
+   * @param signer - The signer to use
+   * @returns Ethers transactions response
+   */
   deposit = async (
     amount: number | bigint,
     signer: SignerMethod
@@ -301,7 +398,6 @@ export class YCStrategy extends BaseClass {
     await this.network?.assertSignerChainID(signer);
 
     // Populate a deposit and sign it
-    console.log("Amount gonna send", this.depositToken.getParsed(amount));
     return await this.signTransaction(
       signer,
       await this.populateDeposit(this.depositToken.getParsed(amount), {
@@ -310,6 +406,12 @@ export class YCStrategy extends BaseClass {
     );
   };
 
+  /**
+   * Withdraw shares out of the vault
+   * @param amount - The amount to withdraw
+   * @param signer - The signer to use
+   * @returns Ethers.js transaction reesponse
+   */
   withdraw = async (
     amount: bigint,
     signer: SignerMethod
@@ -331,18 +433,28 @@ export class YCStrategy extends BaseClass {
    * some consumers may not be compatible with our versions,
    * we allow to simply populate a transaction object which can be signed with any provider
    */
-  // Populate a plain deposit
+
+  /**
+   * Populate a deposit transaction
+   * @param amount - The amount to use
+   * @param args Trasnsaction args
+   * @returns TransactionRequest object
+   */
   populateDeposit = async (
     amount: number | bigint,
     args: Partial<TransactionRequest> & { from: string }
   ) => {
     this.#assertDepositToken();
 
-    console.log("Amount got", amount, "Args", args);
     return await this.contract.deposit.populateTransaction(amount, args);
   };
 
-  // Populate a plain withdrawl
+  /**
+   *Popoulate a withdrawal transaction
+   * @param amount - the amount to withdraw
+   * @param args - trasnaction args
+   * @returns - a TrasnactionRequest object
+   */
   populateWithdrawal = async (
     amount: number | bigint,
     args: Partial<TransactionRequest> & { from: string }
@@ -364,6 +476,9 @@ export class YCStrategy extends BaseClass {
   //   CONSTRUCTOR
   // =================
   constructor(_strategy: DBStrategy, _context: YCClassifications) {
+    /**
+     * Set static vars
+     */
     super();
     this.id = _strategy.id;
     this.address = _strategy.address;
@@ -380,20 +495,18 @@ export class YCStrategy extends BaseClass {
       abi,
       this.network?.provider
     );
-
     this.executionInterval = _strategy.execution_interval;
-
     this.statistics = _context
       .getStrategyStats(this.id)
       .sort(
         (a, b) =>
           new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf()
       );
-
     this.apy = this.statistics[this.statistics.length - 1].apy;
-
     this.#setTVL();
     this.#setGasBalance();
+
+    // Return singleton ref for the strat
     const existingStrategy = this.getInstance(this.id);
     if (existingStrategy) return existingStrategy;
   }

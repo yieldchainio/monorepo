@@ -26,18 +26,58 @@ import { BaseClass } from "../base";
  * A class representing an on-chain token
  */
 export class YCToken extends BaseClass {
-  // =========================
-  //       FIELDS/GETTERS
-  // =========================
+  // ============
+  //    FIELDS
+  // ============
+
+  /**
+   * The name of this token
+   */
   readonly name: string;
+
+  /**
+   * The ID of this token (uuid)
+   */
   readonly id: string;
+
+  /**
+   * The symbol of this token (e.g UNI, GMX, BTC, ETH)
+   */
   readonly symbol: string;
+
+  /**
+   * The address of this token (e.g 0x00...000)
+   */
   readonly address: string;
-  readonly logo: string | null = null; // Init to null (Optional field)
+
+  /**
+   * Decimals this token has, for formatting/parsing (e.g 18)
+   */
   readonly decimals: number;
+
+  /**
+   * The logo of this token
+   */
+  readonly logo: string | null = null; // Init to null (Optional field)
+
+  /**
+   * All of the different "markets" or "protocols" this token is available in
+   */
   readonly markets: YCProtocol[] = [];
+
+  /**
+   * Whether this is a native token or not (like ETH for ethereum)
+   */
   readonly native: boolean = false; // Init to false
+
+  /**
+   * The network this token is on
+   */
   readonly network: YCNetwork | null;
+
+  /**
+   * A contract object for this token, optional
+   */
   readonly contract: Contract;
 
   // =======================
@@ -48,8 +88,10 @@ export class YCToken extends BaseClass {
     _context: YCClassifications,
     _network?: YCNetwork
   ) {
+    /**
+     * Init static vars
+     */
     super();
-    // Init static fields
     this.name = _token.name;
     this.id = _token.id;
     this.symbol = _token.symbol;
@@ -69,6 +111,7 @@ export class YCToken extends BaseClass {
       this.network?.provider
     );
 
+    // Return existing singleton if exists
     const existingToken = this.getInstance(_token.id);
     if (existingToken) return existingToken;
 
@@ -87,17 +130,30 @@ export class YCToken extends BaseClass {
   //        METHODS
   // =======================
 
-  // Parse a formatted number by the decimals
+  /**
+   * Parse some formatted number into the raw number of tokens using it's decimals
+   * @param _number  - the number to parse
+   * @returns - the parsed number (bigint)
+   */
   parseDecimals = (_number: string | number | bigint): bigint => {
     return ethers.parseUnits(_number.toString(), this.decimals);
   };
 
-  // Format a number by the decimals
+  /**
+   * Format a raw number of an amount of this token using its decimals
+   * @param _number - The raw number (bigint / string)
+   * @returns The formatted number
+   */
   formatDecimals = (_number: string | bigint): number => {
     return parseFloat(ethers.formatUnits(_number, this.decimals));
   };
 
-  // Get a big number (either parse or return plain depending on type)
+  /**
+   * Get the parsed value of either an already parsed number, or a formatted number.
+   * Used by some functions as a shorthand so that they can accept both formatted and raw numbers
+   * @param value - the value to aprse
+   * @returns parsed value
+   */
   getParsed = (value: number | bigint): bigint => {
     console.log("Value Got In get parsed", value, "typeof", typeof value);
     if (typeof value == "number") {
@@ -107,7 +163,11 @@ export class YCToken extends BaseClass {
     return value;
   };
 
-  // Get a quote of an amount against USD
+  /**
+   * Quote some amount of this token against USD
+   * @param _amount - The amount to quote (RAW)
+   * @returns
+   */
   quoteUSD = async (_amount: bigint): Promise<number> => {
     const singleQuote = await LiFi.getInstance().getUSDPrice(this);
     if (!singleQuote)
@@ -120,18 +180,29 @@ export class YCToken extends BaseClass {
     return singleQuote * this.formatDecimals(_amount);
   };
 
-  // Quote 1 token against $ USD
+  /**
+   * The price of this token in USD (i.e 1 TOKEN === ? $USD)
+   * @returns the price in USD of a single token
+   */
   price = async (): Promise<number | null> => {
     return await LiFi.getInstance().getUSDPrice(this);
   };
 
-  // Price against another token
+  /**
+   * Price of this 1 token against another token
+   * @param _token - The other token to quote against
+   * @returns The price of 1 token against the inputted token
+   */
   priceAgainstToken = async (_token: YCToken): Promise<number | null> => {
     return await LiFi.getInstance().getTokenPrice(this, _token);
   };
 
-  // Check whether this token is liquid in a certain market (By ID)
-  isInMarket = (_protocolID: string) => {
+  /**
+   * Whether or not this token is present in some markets/protocols/exchanges,
+   * @param _protocolID - The protocol ID to search for
+   * @returns boolean, whether it exists there or not
+   */
+  isInMarket = (_protocolID: string): boolean => {
     return this.markets.some((market: YCProtocol) => market.id);
   };
 
@@ -139,7 +210,13 @@ export class YCToken extends BaseClass {
   //   ONCHAIN METHODS
   // ====================
 
-  // Approve some tokens
+  /**
+   * Send an approval transaction
+   * @param spender - The address we are allowing to spend our tokens
+   * @param amount - The amount to approve
+   * @param signer - The signeing method to sign the transaction
+   * @returns Ethers transaction response
+   */
   approve = async (
     spender: string,
     amount: bigint,
@@ -160,7 +237,14 @@ export class YCToken extends BaseClass {
     return await this.signTransaction(signer, approvaltxn);
   };
 
-  // Approve if allownace is insufficient
+  /**
+   * Approves only the amount required to reach the desired allownace,
+   * taking into account existing allowance between the parties
+   * @param spender - The address we are allowing to spend our tokens
+   * @param amount - The amount to approve
+   * @param signer - The signeing method to sign the transaction
+   * @returns Ethers transaction response
+   */
   safeApproval = async (
     spender: string,
     amount: bigint,
@@ -189,6 +273,14 @@ export class YCToken extends BaseClass {
    * Transaction population methods,
    * @return Transaction req object
    */
+
+  /**
+   * Populate an approval transaction
+   * @param spender - The address we are allowing to spend our tokens
+   * @param amount - The amount to approve
+   * @param signer - The signeing method to sign the transaction
+   * @returns TransactionRequest object
+   */
   populateApproval = async (
     amount: bigint | number,
     spender: string,
@@ -201,6 +293,13 @@ export class YCToken extends BaseClass {
     );
   };
 
+  /**
+   * Populate a safe approval (only approve enough to reach desired allownace)
+   * @param spender - The address we are allowing to spend our tokens
+   * @param amount - The amount to approve
+   * @param signer - The signeing method to sign the transaction
+   * @returns TransactionRequest object
+   */
   populateSafeApproval = async (
     amount: bigint | number,
     spender: string,

@@ -3,7 +3,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import {
-  DBAddress,
+  DBContract,
   DBArgument,
   DBStrategy,
   DBToken,
@@ -322,7 +322,7 @@ app.get("/v2/protocols", async (req: any, res: any) => {
  * @dev Addresses (e.g. 0x1234...),
  */
 app.get("/v2/addresses", async (req: any, res: any) => {
-  const addresses: DBAddress[] = await prisma.addressesv2.findMany();
+  const addresses: DBContract[] = await prisma.addressesv2.findMany();
   res.status(200).json({ addresses });
 });
 

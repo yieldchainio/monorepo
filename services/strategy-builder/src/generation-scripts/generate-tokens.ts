@@ -7,7 +7,7 @@ import Web3 from "web3";
 import axios from "axios";
 import { appendToFile, appendNewLineShortcut } from "./fs-shortcuts.js";
 import { getTokenDetails } from "./utils.js";
-import { DBAddress } from "../generation-types";
+import { DBContract } from "../generation-types";
 
 export const generateTokenVariables = async (
   _fileName: any,
@@ -79,15 +79,15 @@ export const generateTokenVariables = async (
       address_identifier: number;
       address_identifier_2: number;
     };
-    let related_addresses: DBAddress[] = address_relations
+    let related_addresses: DBContract[] = address_relations
       .map((address_relation: addressRelationType) => {
         return {
           current_address: allAddresses.find(
-            (address: DBAddress) =>
+            (address: DBContract) =>
               address.address_identifier == address_relation.address_identifier
           ),
           related_address: allAddresses.find(
-            (address: DBAddress) =>
+            (address: DBContract) =>
               address.address_identifier ==
               address_relation.address_identifier_2
           ),
@@ -95,8 +95,8 @@ export const generateTokenVariables = async (
       })
       .filter(
         (address_relation: {
-          current_address: DBAddress;
-          related_address: DBAddress;
+          current_address: DBContract;
+          related_address: DBContract;
         }) =>
           Web3.utils.toChecksumAddress(
             address_relation.current_address.contract_address

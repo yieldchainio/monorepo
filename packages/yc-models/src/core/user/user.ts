@@ -6,24 +6,57 @@ import { YCClassifications } from "../context/context";
 import { YCSocialMedia } from "../social-media/social-media";
 import { YCStrategy } from "../strategy/strategy";
 import { fetchRouter } from "../utils/fetch-router";
+import { UserUpdateArguments, SignupArguments } from "./types";
 
-/**
+/**s
  * @notice
  * YCToken
  * A class representing an on-chain token
  */
 export class YCUser extends BaseClass {
-  // =======================
-  //    PRIVATE VARIABLES
-  // =======================
-  username: string;
-  id: string;
-  address: string;
-  profilePic: string;
-  description: string;
-  verified: boolean;
-  socialMedia: YCSocialMedia;
-  createdVaults: YCStrategy[] = [];
+  // ==========
+  //    FIELDS
+  // ==========
+
+  /**
+   * The username of this user
+   */
+  readonly username: string;
+
+  /**
+   * The ID representing this user (uuid)
+   */
+  readonly id: string;
+
+  /**
+   * The onchain address of this user (e.g 0x00..000)
+   */
+  readonly address: string;
+
+  /**
+   * The profile picture of this user (if any)
+   */
+  readonly profilePic: string;
+
+  /**
+   * The description this user gave themselves
+   */
+  readonly description: string;
+
+  /**
+   * Whether or not this is a verified user
+   */
+  readonly verified: boolean;
+
+  /**
+   * The social medias of this user
+   */
+  readonly socialMedia: YCSocialMedia;
+
+  /**
+   * The strategies created by the user
+   */
+  readonly createdVaults: YCStrategy[] = [];
 
   // =======================
   //    STATIC  METHODS
@@ -169,6 +202,9 @@ export class YCUser extends BaseClass {
   //      CONSTRUCTOR
   // =======================
   constructor(_user: DBUser, _context: YCClassifications) {
+    /**
+     * Set static vars
+     */
     super();
     this.address = _user.address;
     this.id = _user.id;
@@ -222,45 +258,3 @@ export class YCUser extends BaseClass {
 
   static instances: Map<string, YCUser> = new Map();
 }
-
-// Different type of tokens - Native token (e.g ETH), ERC20, ERC721, etc
-enum TokenType {
-  NATIVE = 0,
-  ERC20 = 1,
-  ERC721 = 2,
-}
-
-export interface SignupArguments {
-  address: string;
-  username?: string;
-  context?: YCClassifications;
-  description?: string;
-  profilePicture?: string;
-  twitter?: string;
-  discord?: string;
-  telegram?: string;
-}
-
-export type UserUpdateArguments =
-  | {
-      id: undefined | null;
-      address: string;
-      username?: string;
-      context: YCClassifications;
-      description?: string;
-      profilePicture?: string;
-      twitter?: string | { handle: string; link: string };
-      discord?: string | { handle: string; link: string };
-      telegram?: string | { handle: string; link: string };
-    }
-  | {
-      id: string;
-      address?: string;
-      username?: string;
-      context?: YCClassifications;
-      description?: string;
-      profilePicture?: string;
-      twitter?: string | { handle: string; link: string };
-      discord?: string | { handle: string; link: string };
-      telegram?: string | { handle: string; link: string };
-    };

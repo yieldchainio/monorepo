@@ -1,6 +1,6 @@
 import { DBFunction } from "../../types/db";
 import { YCClassifications } from "../context/context";
-import { YCAddress } from "../address/address";
+import { YCContract } from "../address/address";
 import { YCArgument } from "../argument/argument";
 import { YCFlow } from "../flow/flow";
 import { FunctionCall, CallTypes } from "../../types/yc";
@@ -26,7 +26,7 @@ export class YCFunc extends BaseClass {
   // ====================
   readonly id: string;
   readonly name: string;
-  readonly address: YCAddress | null;
+  readonly address: YCContract | null;
   readonly actions: YCAction[] = [];
   readonly isCallback: boolean;
   readonly counterFunction: YCFunc | null;
@@ -82,7 +82,7 @@ export class YCFunc extends BaseClass {
     tempSig += ")";
     this.signature = tempSig;
 
-    let address: YCAddress | null = _context.getAddress(_function.address_id);
+    let address: YCContract | null = _context.getAddress(_function.address_id);
 
     if (!address)
       throw new Error("YCFunc ERR: Address Not Found! Func ID: " + this.id);
@@ -241,7 +241,7 @@ export class YCFunc extends BaseClass {
 
     YCFunc.instances.set(id, this);
 
-    return  null;
+    return null;
   };
 
   static instances: Map<string, YCFunc> = new Map();

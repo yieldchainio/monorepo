@@ -4,7 +4,7 @@
  */
 // Imports
 import {
-  DBAddress,
+  DBContract,
   DBAction,
   DBFunction,
   DBFlow,
@@ -17,7 +17,7 @@ import {
   DBStatistic,
 } from "./db";
 export interface ClassificationContext {
-  addresses: DBAddress[];
+  addresses: DBContract[];
   funcs: DBFunction[];
   tokens: DBToken[];
   parameters: DBArgument[]; // TODO: Change name to arguments
@@ -27,7 +27,7 @@ export interface ClassificationContext {
   actions: DBAction[];
   networks: DBNetwork[];
   users: DBUser[];
-  statistics: DBStatistic[]
+  statistics: DBStatistic[];
 }
 
 // A step inputted from the frontend

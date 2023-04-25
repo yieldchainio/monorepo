@@ -7,7 +7,7 @@ import {
   YCUser,
   YCAction,
   YCStrategy,
-  YCAddress,
+  YCContract,
   YCNetwork,
   YCProtocol,
   YCToken,
@@ -15,7 +15,7 @@ import {
   YCArgument,
   CustomArgument,
   YCFunc,
-  DBAddress,
+  DBContract,
   DBFlow,
   DBFunction,
   DBToken,
@@ -62,7 +62,7 @@ class YCClassificationsInternal {
   // =======================
 
   // "Endpoints"
-  protected Addresses: DBAddress[] = [];
+  protected Addresses: DBContract[] = [];
   protected Functions: DBFunction[] = [];
   protected Tokens: DBToken[] = [];
   protected Parameters: DBArgument[] = []; // TODO: Change name to arguments
@@ -74,7 +74,7 @@ class YCClassificationsInternal {
   protected Statistics: DBStatistic[] = [];
   protected Users: DBUser[] = [];
 
-  YCaddresses: YCAddress[] = [];
+  YCContractes: YCContract[] = [];
   YCfunctions: YCFunc[] = [];
   YCtokens: YCToken[] = [];
   YCparameters: YCArgument[] = []; // TODO: Change name to arguments
@@ -275,9 +275,9 @@ class YCClassificationsInternal {
   };
 
   protected refreshAddresses = async () => {
-    this.YCaddresses = this.Addresses.map(
-      (address: DBAddress) =>
-        new YCAddress(address, YCClassificationsInternal.getInstance())
+    this.YCContractes = this.Addresses.map(
+      (address: DBContract) =>
+        new YCContract(address, YCClassificationsInternal.getInstance())
     );
   };
 
@@ -578,12 +578,12 @@ export class YCClassifications extends YCClassificationsInternal {
   //    ENDPOINTS
   // ==============
   get addresses() {
-    if (!this.YCaddresses.length)
-      this.YCaddresses = this.Addresses.map(
-        (address: DBAddress) => new YCAddress(address, this)
+    if (!this.YCContractes.length)
+      this.YCContractes = this.Addresses.map(
+        (address: DBContract) => new YCContract(address, this)
       );
 
-    return this.YCaddresses;
+    return this.YCContractes;
   }
 
   get networks() {
@@ -689,11 +689,11 @@ export class YCClassifications extends YCClassificationsInternal {
   // ==============
 
   // Get an address instance using an address / it's DB identifier
-  getAddress = (_address_id: string): YCAddress | null => {
+  getAddress = (_address_id: string): YCContract | null => {
     // Find the address
     return (
       this.addresses.find(
-        (_address: YCAddress) => _address.id === _address_id
+        (_address: YCContract) => _address.id === _address_id
       ) || null
     );
   };

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IFullFunction } from "src/App";
 import {
-  DBAddress,
+  DBContract,
   DBFlow,
   DBFunction,
   DBNetwork,
@@ -195,14 +195,14 @@ export const integrateIntoDB = async (
       await axios.get("https://api.yieldchain.io/protocols-addresses")
     ).data.protocols_addresses;
 
-    // Rows of DBAddresses
-    let allAddresses: DBAddress[] = await (
+    // Rows of DBContractes
+    let allAddresses: DBContract[] = await (
       await axios.get("https://api.yieldchain.io/addresses")
     ).data.addresses;
 
     // The current address (if it exists)
-    let currentAddress: DBAddress | undefined = allAddresses.find(
-      (address: DBAddress) =>
+    let currentAddress: DBContract | undefined = allAddresses.find(
+      (address: DBContract) =>
         ethers.getAddress(address.contract_address) ===
         ethers.getAddress(_integrationObject.contract_address)
     );

@@ -33,7 +33,10 @@ export class YCNetwork extends BaseClass {
   /**
    * The native token of this network (e.g ETH for ethereum, FTM for Fantom)
    */
-  nativeToken: YCToken | null = null;
+  #nativeToken: YCToken | null = null;
+  get nativeToken(): YCToken | null {
+    return this.#nativeToken;
+  }
 
   /**
    * Color of this network,
@@ -157,13 +160,7 @@ export class YCNetwork extends BaseClass {
     /**
      * Initiate our native token by finding a zero-address token on our network
      */
-    if (_context)
-      this.nativeToken =
-        _context.tokens.find(
-          (token) =>
-            token.address === ethers.ZeroAddress &&
-            token.network?.id === this.id
-        ) || null;
+    if (_context) this.#initToken(_context);
 
     /**
      * Return singleton if viable
@@ -171,6 +168,21 @@ export class YCNetwork extends BaseClass {
     const existingNetwork = this.getInstance(_network.id);
     if (existingNetwork) return existingNetwork;
   }
+
+  // ======================
+  //   INTERNAL METHODS
+  // ======================
+  #initToken = async (_context: YCClassifications) => {
+    // Initiallize the context if not already
+    if (!_context.initiallized) await _context.initiallize();
+    // Find our native token by inputting the 0x00..00 address and our chain id
+    const token = _context.rawTokens.find(
+      (token_) =>
+        token_.chain_id == this.id && token_.address == ethers.ZeroAddress
+    );
+    // Set it globally
+    if (token) this.#nativeToken = new YCToken(token, _context, this) || null;
+  };
 
   // ============================
   //      ERRORS / ASSERTIONS
@@ -189,7 +201,6 @@ export class YCNetwork extends BaseClass {
           id
       );
   };
-
 
   /**
    * Assert tue chain ID of a signer to be the same as ours

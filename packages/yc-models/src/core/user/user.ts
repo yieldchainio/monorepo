@@ -7,6 +7,7 @@ import { YCSocialMedia } from "../social-media/social-media";
 import { YCStrategy } from "../strategy/strategy";
 import { fetchRouter } from "../utils/fetch-router";
 import { UserUpdateArguments, SignupArguments } from "./types";
+export * from "./types";
 
 /**s
  * @notice

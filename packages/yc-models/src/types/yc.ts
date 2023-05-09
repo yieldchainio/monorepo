@@ -50,11 +50,22 @@ export interface FunctionCall {
   target_address: string;
   args: string[];
   signature: string;
-  is_callback: boolean;
 }
 
-export enum BaseVariableTypes {
-  ARRAY,
-  REGULER,
-  STRUCT,
+type HexNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+type HexLetter = "A" | "B" | "C" | "D" | "E" | "F";
+type HexChar = HexLetter | HexNumber;
+
+// How a single typeflag looks like
+export type typeflag = `${HexChar}${HexChar}`;
+export type typeflags = `${typeflag}${typeflag}`;
+
+/**
+ * Type of context when encoding
+ */
+
+export enum EncodingContext {
+  SEED,
+  TREE,
+  UPROOT,
 }

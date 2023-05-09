@@ -1,13 +1,14 @@
 import { YCClassifications } from "../context/context";
 import { DBArgument } from "../../types/db";
 import { bytes } from "../../types/global";
-import { YCFunc } from "../function/function";
+import { TokenPercentageImplementor, YCFunc } from "../function/function";
 import { BaseClass } from "../base";
-
-export interface CustomArgument {
-  value: any;
-  isFunction: boolean;
-}
+import { Typeflags } from "@prisma/client";
+import { EncodingContext, typeflags } from "../../types";
+import { getArgumentFlags } from "../../utils/builder/get-command-flags";
+import { AbiCoder } from "ethers";
+import { YCToken } from "..";
+import { encodeUniqueCommands } from "../../utils/builder/special-commands";
 
 /**
  * @notice
@@ -21,186 +22,133 @@ export class YCArgument extends BaseClass {
   //    PRIVATE VARIABLES
   // =======================
   #value: string | YCFunc | Array<string | YCFunc>;
-  #solidityType: string;
-  #isCustom: boolean;
-  #isArray: boolean;
-  #identifier: string;
-  #index: number;
-  #name: string | null;
+  get value() {
+    return this.#value;
+  }
+  readonly solidityType: string;
+  readonly typeflag: Typeflags;
+  readonly retTypeflag: Typeflags;
+  readonly isCustom: boolean;
+  readonly identifier: string;
+  readonly name: string | null;
   readonly id: string;
+  readonly relatingToken: YCToken | null;
+  readonly preconfiguredCustomValues: Array<YCArgument | null>;
 
   // =======================
   //      CONSTRUCTOR
   // =======================
-  constructor(
-    _argument: DBArgument,
-    _context: YCClassifications,
-    _customArgument: CustomArgument | CustomArgument[] = {
-      value: "TODO: Get actual value lmao",
-      isFunction: false,
-    }
-  ) {
+  constructor(_argument: DBArgument, _context: YCClassifications) {
     super();
-    // Init private variables
-    this.#solidityType = _argument.solidity_type;
-    this.#isArray = _argument.solidity_type.includes("[");
-    this.#identifier = _argument.id;
-    this.#index = _argument.index;
-    this.#name = _argument.name;
-    this.#isCustom = _argument.value.includes("custom_argument");
+    // Init variables
+    this.solidityType = _argument.solidity_type;
+    this.typeflag = _argument.typeflag;
+    this.retTypeflag = _argument.ret_typeflag;
+    this.identifier = _argument.id;
+    this.name = _argument.name;
+    this.isCustom = _argument.value.includes("custom_argument");
     this.id = _argument.id;
+    this.relatingToken = _argument.relating_token
+      ? _context.getToken(_argument.relating_token)
+      : null;
 
-    // Set Fields For The Custom Argument
-    if (this.#isCustom) {
-      // If we didnt get a custom argument, we throw an error
-      if (!_customArgument)
-        throw new Error(
-          "YCArgument ERR: Unable to set argument value - Argument is a custom field, but no custom argument was provided."
-        );
-
-      // @notice
-      // Checking if we got an array of custom arguments, or just one.
-      // If we got one we just iterate once,
-      // Else we iterate over each item
-      let iterations: CustomArgument[] = [];
-
-      Array.isArray(_customArgument)
-        ? iterations.push(..._customArgument)
-        : iterations.push(_customArgument);
-
-      // Init value
-      let value: Array<YCFunc | string> = [];
-
-      for (let i = 0; i < iterations.length; i++) {
-        // Current argument being iterated over
-        let currentArgPart = iterations[i];
-
-        // If it's not a function, just use the inputted value
-        if (!currentArgPart.isFunction) value[i] = currentArgPart.value;
-        // If it is a function, set the value to the function using the value as an ID
-        else {
-          let func = _context.getFunction(currentArgPart.value);
-          if (!func)
-            throw new Error(
-              "YCArgument ERR: Unable to set argument value - Argument is a custom function, but was unable to retreive function by ID - funcID: " +
-                currentArgPart.value
-            );
-          value[i] = func;
-        }
-      }
-
-      // Either set the array or the plain value
-      if (value.length > 1) this.#value = value;
-      else this.#value = value[0];
-
-      return this;
-    }
-
-    // If the argument type is not a function - we simply use the hardcoded value
-    if (_argument.solidity_type !== "function") {
-      this.#value = _argument.value;
-      return this;
-    }
-
-    console.log("Some function value");
+    this.preconfiguredCustomValues =
+      _argument.preconfigured_custom_values.flatMap((argID: string | null) => {
+        if (!argID) return [null];
+        const arg = _context.getArgument(argID);
+        return arg ? [arg] : [];
+      });
 
     // @notice
     // If the solidity type is a function, the value is refering to the identifier of the function.
     // We want to use it when encoding this argument so that it can be evaluated at runtime
     // Get the YCFunc object
-    let func = _context.getFunction(_argument.value);
+    if (_argument.solidity_type == "function") {
+      let func = _context.getFunction(_argument.value);
 
-    // Throw an error if we got a null back
-    if (!func) {
-      throw new Error(
-        "Function In YCArgument not found! Function ID: " + _argument.value
-      );
-    }
+      // Throw an error if we got a null back
+      if (!func) {
+        throw new Error(
+          "Function In YCArgument not found! Function ID: " + _argument.value
+        );
+      }
 
-    // Assign the value to the YCFunc instance
-    this.#value = func;
+      // Assign the value to the YCFunc instance
+      this.#value = func;
+
+      // If the argument type is not a function - we simply use the hardcoded value
+    } else this.#value = _argument.value;
   }
 
   // =============
   //    METHODS
   // =============
-  type = (): string => {
-    return this.#solidityType;
-  };
-
-  // Returns true if the argument is considered a "custom" argument
-  isCustom = (): boolean => {
-    return this.#isCustom;
+  // Set the value of the argument, used by unique utility parsers
+  setValue = (newValue: any) => {
+    if (!this.isCustom) throw "Cannot Set Value To Non-Custom Argument";
+    this.#value = newValue;
   };
 
   // Encode the argument
-  encode = (customValue?: any): bytes => {
+  encodeYCCommand = (
+    step: TokenPercentageImplementor,
+    context: EncodingContext,
+    customValues: Array<any | YCFunc>
+  ): bytes => {
     // Assert that if we are a custom argument, a custom value mut be provided
-    if (this.isCustom() && customValue === undefined)
+    if (this.isCustom && !customValues.length)
       throw "YCArgument ERR: This Argument Is A Custom, but no custom value was provided.";
 
-    let encodedValue: bytes = "0x";
-    if (Array.isArray(this.#value)) {
+    // We insert into the custom values, our preconfigured custom values at their indexes, if any
+    
+
+    // @notice We first attempt to get some special utility encoding through. If we do, we return that instead.
+    // Otherwise, we continue on to the reguler encoding
+    const specialCommand: string | null = encodeUniqueCommands(
+      step,
+      context,
+      this,
+      customValues
+    );
+    if (specialCommand) return specialCommand;
+
+    // Begin by getting the typeflags to prepend
+    const typeflags: typeflags = getArgumentFlags(this);
+
+    // Init variable for the naked encoded command
+    let command: string = typeflags;
+
+    // Then, check to see if our argument is a custom value.
+    // If it is, then we check to see if it's an instance of YC func.
+    // If it is, we call encode YC command on it. Otherwise, we just abi.encode it
+    if (this.isCustom) {
+      // @notice We get the current custom argument by shifting it out of the array. This allows us
+      // To include recursive custom arguments, where our custom arguments may be functions that also require
+      // custom arguments.
+      const currentCustomValue = customValues.shift();
+
+      // If function, call encodeYCCommand on it, include remaining custom values
+      if (currentCustomValue instanceof YCFunc)
+        command = currentCustomValue.encodeYCCommand(
+          step,
+          context,
+          customValues
+        );
+      // Else, just ABI encode it and add to existing typeflags
+      else
+        command += AbiCoder.defaultAbiCoder().encode(
+          [this.solidityType],
+          [currentCustomValue]
+        );
     }
-    return "0x";
+
+    // Assert that naked command length is bigger than 0 (excluding typeflags)
+    if (command.length < 6)
+      throw "Cannot Encode Arg - Naked Command Length Is 0";
+
+    // Return the typeflags + naked command
+    return command;
   };
 }
 
-// type ISolidityType = string | SolidityTypes
-
-// const getSolidityType = (_stringSolidityType: string): string | SolidityTypes => {
-//     return SolidityTypes[_stringSolidityType] ? SolidityTypes[_stringSolidityType] : _stringSolidityType
-// }
-
-// enum SolidityTypes {
-//   int8 ,
-//   int16,
-//   int32,
-//   int64,
-//   int128,
-//   int256,
-//   uint8,
-//   uint16,
-//   uint32,
-//   uint64,
-//   uint128,
-//   uint256,
-//   bool,
-//   address,
-//   string,
-//   struct,
-//   bytes,
-//   bytes1,
-//   bytes2,
-//   bytes3,
-//   bytes4,
-//   bytes5,
-//   bytes6,
-//   bytes7,
-//   bytes8,
-//   bytes9,
-//   bytes10,
-//   bytes11,
-//   bytes12,
-//   bytes13,
-//   bytes14,
-//   bytes15,
-//   bytes16,
-//   bytes17,
-//   bytes18,
-//   bytes19,
-//   bytes20,
-//   bytes21,
-//   bytes22,
-//   bytes23,
-//   bytes24,
-//   bytes25,
-//   bytes26,
-//   bytes27,
-//   bytes28,
-//   bytes29,
-//   bytes30,
-//   bytes31,
-//   bytes32,
-//   function,
-// }
+export interface TokenPercentages {}

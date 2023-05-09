@@ -4,13 +4,8 @@
  */
 import { JsonValue } from "@yc/yc-data";
 import { address, ChainID } from "./global";
-import {
-  FlowDirection,
-  VariableTypes,
-  BaseVariableTypes,
-  CallType,
-  ProtocolType,
-} from "@prisma/client";
+import { Typeflags } from "@prisma/client";
+import { FlowDirection, ProtocolType } from "@prisma/client";
 // A DB Model representing an action
 export interface DBAction {
   id: string;
@@ -51,14 +46,13 @@ export interface DBFunction {
   callback: boolean;
   inverse_function_id: string | null;
   dependancy_function_id: string | null;
-  call_type: CallType;
-  return_value_type: VariableTypes;
-  return_value_base_type: BaseVariableTypes;
   address_id: string;
   arguments_ids: string[];
   actions_ids: string[];
   outflows: string[];
   inflows: string[];
+  typeflag: Typeflags;
+  ret_typeflag: Typeflags;
 }
 export interface DBArgument {
   id: string;
@@ -67,9 +61,11 @@ export interface DBArgument {
   value: string;
   name: string | null;
   custom: boolean;
-  variable_type: VariableTypes;
-  base_type: BaseVariableTypes;
+  typeflag: Typeflags;
+  ret_typeflag: Typeflags;
   function_id: string;
+  relating_token: string | null;
+  preconfigured_custom_values: Array<string | null>;
 }
 
 export interface DBFlow {

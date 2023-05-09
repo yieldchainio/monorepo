@@ -3,15 +3,13 @@ import { YCClassifications } from "../context/context";
 import { YCContract } from "../address/address";
 import { YCArgument } from "../argument/argument";
 import { YCFlow } from "../flow/flow";
-import { FunctionCall, CallTypes } from "../../types/yc";
-import { CallType, VariableTypes, BaseVariableTypes } from "@prisma/client";
+import { FunctionCall, CallTypes, EncodingContext } from "../../types/yc";
+import { Typeflags } from "@prisma/client";
 import { BaseClass } from "../base";
 import { YCAction } from "../action/action";
 import { YCToken } from "..";
-
-const addFlags = (arg: any, _arg: any, arg_: any, arg__: any, _arg_: any) => {
-  return arg;
-};
+import { TypeFlags } from "typescript";
+import { getFunctionFlags } from "../../utils/builder/get-command-flags";
 
 export class YCFunc extends BaseClass {
   // ====================
@@ -31,14 +29,12 @@ export class YCFunc extends BaseClass {
   readonly isCallback: boolean;
   readonly counterFunction: YCFunc | null;
   readonly dependencyFunction: YCFunc | null;
-  readonly dependents: YCFunc[] = [];
   readonly outflows: YCToken[] = [];
   readonly inflows: YCToken[] = [];
   readonly signature: string;
-  readonly calltype: CallType;
+  readonly typeflag: Typeflags;
+  readonly retTypeflag: Typeflags;
   readonly arguments: YCArgument[];
-  readonly returnType: VariableTypes;
-  readonly returnBaseType: BaseVariableTypes;
 
   // ====================
   //     CONSTRUCTOR
@@ -48,11 +44,10 @@ export class YCFunc extends BaseClass {
     // Static variables
     this.id = _function.id;
     this.name = _function.name;
-    this.returnType = _function.return_value_type;
-    this.returnBaseType = _function.return_value_base_type;
-    this.isCallback = _function.callback;
+    this.typeflag = _function.typeflag;
+    this.retTypeflag = _function.ret_typeflag;
 
-    this.calltype = _function.call_type;
+    this.isCallback = _function.callback;
 
     // Mapping arg identifiers => Full argument instances
     let fullArgs = _function.arguments_ids.map((_arg: string) =>
@@ -76,7 +71,7 @@ export class YCFunc extends BaseClass {
     // Create signature
     let tempSig: string = `${this.name}(`;
     for (let i = 0; i < this.arguments.length; i++) {
-      tempSig += this.arguments[i].type();
+      tempSig += this.arguments[i].solidityType;
       if (i != this.arguments.length - 1) tempSig += ",";
     }
     tempSig += ")";
@@ -135,13 +130,18 @@ export class YCFunc extends BaseClass {
       return [];
     });
   }
+  
+
 
   // =========================
   //    GENERATION METHODS
   // =========================
-
   // Encode the current function as a FunctionCall struct, add flag
-  encode = (customArguments?: any[]): string => {
+  encodeYCCommand = (
+    step: TokenPercentageImplementor,
+    context: EncodingContext,
+    customArguments: Array<any | YCFunc>
+  ): string => {
     if (!this.address)
       throw new Error(
         "YCFunc ERR: Cannot Encode - Address Not Found. Function ID: " + this.id
@@ -151,7 +151,10 @@ export class YCFunc extends BaseClass {
     let iface = this.address.interface;
 
     // FunctionCall struct that will be ncoded
-    let functionCall: FunctionCall = this.toFunctionCallStruct(customArguments);
+    let functionCall: FunctionCall = this.toFunctionCallStruct(step,
+      context,
+      customArguments
+    );
 
     // Encode the function call
     let encodedFunction = iface
@@ -159,24 +162,22 @@ export class YCFunc extends BaseClass {
       .encode([YCFunc.FunctionCallTuple], [functionCall]);
 
     // get the flag'ified encoded FunctionCall
-    let encodedWithFlags = addFlags(
-      encodedFunction,
-      "function",
-      this.calltype,
-      this.returnType,
-      this.returnBaseType
-    );
+    let encodedWithFlags = getFunctionFlags(this);
 
     // Return the encoded function with the flag
     return encodedWithFlags;
   };
 
   /**
-   * @method toFunctionCallStructs
+   * @method toFunctionCallStruct
    * @param customArguments - Custom arguments that should be provided if the function requires any.
    * @returns A @interface FunctionCall that represents an on-chain FunctionCall struct.
    */
-  toFunctionCallStruct = (customArguments?: any[]): FunctionCall => {
+  toFunctionCallStruct = (
+    step: TokenPercentageImplementor,
+    context: EncodingContext,
+    customArguments: any[]
+  ): FunctionCall => {
     // Assert that if we require a custom argument,
     if (
       this.requiresCustom() &&
@@ -192,6 +193,8 @@ export class YCFunc extends BaseClass {
       throw new Error(
         "YCFuncERR: Cannot Create FunctionCall - Function Does Not Have An Address."
       );
+
+    // Create the struct
     let struct: FunctionCall = {
       // The target address (our address, tells the onchain interpreter where to call the function)
       target_address: this.address.address,
@@ -199,14 +202,11 @@ export class YCFunc extends BaseClass {
       // Our arguments. If an argument is not a custom, we encode it. Otherwise, we encode it but
       // input the next custom argument from our array (we shift is so that it is removed)
       args: this.arguments.map((arg: YCArgument) =>
-        arg.isCustom() ? arg.encode(customArguments?.shift()) : arg.encode()
+        arg.encodeYCCommand(step, context, customArguments)
       ),
 
       // Our signature (i.e "stakeTokens(uint256,address,string)")
       signature: this.signature,
-
-      // Whether we are a callback function or not (one that requires offchain computation & reenterence)
-      is_callback: this.isCallback,
     };
 
     return struct;
@@ -214,17 +214,12 @@ export class YCFunc extends BaseClass {
 
   // Returns true if the function requires a custom argument
   requiresCustom = (): boolean => {
-    return this.arguments.some((arg: YCArgument) => arg.isCustom());
+    return this.arguments.some((arg: YCArgument) => arg.isCustom);
   };
 
   // Returns the amount of custom arguments required
   customArgumentsLength = (): number => {
-    return this.arguments.filter((arg: YCArgument) => arg.isCustom()).length;
-  };
-
-  // The flag of the return type of this function
-  returnFlag = () => {
-    return this.returnType;
+    return this.arguments.filter((arg: YCArgument) => arg.isCustom).length;
   };
 
   // =================
@@ -257,13 +252,21 @@ export class YCFunc extends BaseClass {
       inverse_function_id: this.counterFunction?.id || null,
       arguments_ids: this.arguments.map((arg) => arg.id),
       callback: this.isCallback,
-      call_type: this.calltype,
-      return_value_base_type: this.returnBaseType,
-      return_value_type: this.returnType,
+      typeflag: this.typeflag,
+      ret_typeflag: this.retTypeflag,
       address_id: this.address?.id || "",
       actions_ids: this.actions.map((action) => action.id),
       outflows: this.outflows.map((token) => token.id),
       inflows: this.inflows.map((token) => token.id),
     };
   };
+}
+
+export type TokenPercentage = {
+  percentage: number;
+  dirty: boolean;
+};
+
+export interface TokenPercentageImplementor {
+  tokenPercentages: Map<string, TokenPercentage>;
 }

@@ -1,6 +1,6 @@
 import { DBToken, DBFlow } from "../../types/db";
 import { YCClassifications } from "../context/context";
-import { FlowDirection } from "@prisma/client";
+import { FlowDirection } from "@yc/yc-models";
 import { YCToken } from "../token/token";
 
 /**
@@ -47,7 +47,6 @@ export class YCFlow {
       id: this.id,
       direction: this.direction,
       token_id: this.token.id,
-      
     };
   };
 }

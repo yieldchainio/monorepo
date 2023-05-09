@@ -19,7 +19,7 @@ import {
 } from "@yc/yc-models";
 import dotenv from "dotenv";
 dotenv.config();
-import { FlowDirection, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 console.log("DAtabase URL", process.env.DATABASE_URL);
 console.log("dotenv", dotenv);
@@ -326,13 +326,13 @@ app.get("/v2/addresses", async (req: any, res: any) => {
   res.status(200).json({ addresses });
 });
 
-/**
- * @dev Token flows - Token ID & Whether it is an inflow or an outflow (boolean)
- */
-app.get("/v2/flows", async (req: any, res: any) => {
-  const flows: DBFlow[] = await prisma.flowsv2.findMany();
-  res.status(200).json({ flows });
-});
+// /**
+//  * @dev Token flows - Token ID & Whether it is an inflow or an outflow (boolean)
+//  */
+// app.get("/v2/flows", async (req: any, res: any) => {
+//   const flows: DBFlow[] = await prisma.flowsv2.findMany();
+//   res.status(200).json({ flows });
+// });
 
 /**
  * @dev Parameters/Arguments to use in raw function calls

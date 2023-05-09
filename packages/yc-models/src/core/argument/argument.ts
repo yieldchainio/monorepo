@@ -8,7 +8,7 @@ import { EncodingContext, typeflags } from "../../types";
 import { getArgumentFlags } from "../../utils/builder/get-command-flags";
 import { AbiCoder } from "ethers";
 import { YCToken } from "..";
-import { encodeUniqueCommands } from "../../utils/builder/special-commands";
+import { trySpecialEncoding } from "../../utils/builder/special-commands";
 
 /**
  * @notice
@@ -100,11 +100,10 @@ export class YCArgument extends BaseClass {
       throw "YCArgument ERR: This Argument Is A Custom, but no custom value was provided.";
 
     // We insert into the custom values, our preconfigured custom values at their indexes, if any
-    
 
     // @notice We first attempt to get some special utility encoding through. If we do, we return that instead.
     // Otherwise, we continue on to the reguler encoding
-    const specialCommand: string | null = encodeUniqueCommands(
+    const specialCommand: string | null = trySpecialEncoding(
       step,
       context,
       this,

@@ -20,13 +20,13 @@ for (const network of networks) {
   });
 }
 
-client.flowsv2.findMany({
-  where: {
-    token: {
-      symbol: "ETH",
-    },
-  },
-});
+// client.flowsv2.findMany({
+//   where: {
+//     token: {
+//       symbol: "ETH",
+//     },
+//   },
+// });
 
 
 

@@ -5,7 +5,7 @@
 import { JsonValue } from "@yc/yc-data";
 import { address, ChainID } from "./global";
 import { Typeflags } from "@prisma/client";
-import { FlowDirection, ProtocolType } from "@prisma/client";
+import { ProtocolType } from "@prisma/client";
 // A DB Model representing an action
 export interface DBAction {
   id: string;
@@ -56,7 +56,6 @@ export interface DBFunction {
 }
 export interface DBArgument {
   id: string;
-  index: number;
   solidity_type: string;
   value: string;
   name: string | null;
@@ -140,4 +139,9 @@ export interface DBStatistic {
   timestamp: string | Date;
   apy: number;
   gasFee: string;
+}
+
+export enum FlowDirection {
+  INFLOW,
+  OUTFLOW,
 }

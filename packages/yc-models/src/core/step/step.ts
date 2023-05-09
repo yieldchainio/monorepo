@@ -6,7 +6,7 @@ import { YCClassifications } from "../context/context";
 import { YCFlow } from "../flow/flow";
 import { YCFunc } from "../function/function";
 import { YCProtocol } from "../protocol/protocol";
-import { FlowDirection } from "@prisma/client";
+import { FlowDirection } from "@yc/yc-models";
 import { v4 as uuid } from "uuid";
 
 export class YCStep extends BaseClass {

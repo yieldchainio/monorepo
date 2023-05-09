@@ -19,7 +19,7 @@ const UtilityCommandEncoders: Record<string, Function> = {
  * @param customValues - Array of custom values provided to the argument
  * @returns encodedCommand - Either an encoded command if found utility to parse, or null if none
  */
-export const encodeUniqueCommands = (
+export const trySpecialEncoding = (
   step: TokenPercentageImplementor,
   context: EncodingContext,
   argument: YCArgument,
@@ -30,7 +30,7 @@ export const encodeUniqueCommands = (
 
   // Return either the uniquely-encoded command or null if none
   return (
-    UtilityCommandEncoders[argument.value.name](
+    UtilityCommandEncoders[argument.value.name]?.(
       step,
       context,
       argument,

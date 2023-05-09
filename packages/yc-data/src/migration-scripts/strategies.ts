@@ -1,4 +1,4 @@
-import { FlowDirection, PrismaClient, strategiesv2 } from "@prisma/client";
+import { PrismaClient, strategiesv2 } from "@prisma/client";
 import { DBStep } from "@yc/yc-models";
 import { v4 as uuidv4 } from "uuid";
 

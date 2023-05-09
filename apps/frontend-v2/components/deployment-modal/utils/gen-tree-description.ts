@@ -5,7 +5,7 @@
 
 import { Step } from "utilities/classes/step";
 import { StepType } from "utilities/classes/step/types";
-import { FlowDirection } from "@prisma/client";
+import { FlowDirection } from "@yc/yc-models";
 import { YCToken } from "@yc/yc-models";
 import { HARVEST_ID } from "components/steps/reguler/constants";
 
@@ -52,9 +52,7 @@ export const getStepsTreeDescription = (
 
 // Map tokens to list of token symbols
 const stringifyFlows = (flows: YCToken[]) =>
-  flows
-    .map((token) => token.symbol)
-    .join(", ");
+  flows.map((token) => token.symbol).join(", ");
 
 /**
  * Per action description getters

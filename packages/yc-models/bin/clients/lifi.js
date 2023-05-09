@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ethers } from "ethers";
-export class LiFi {
+class LiFi {
     // ====================
     //    PRIVATE FIELDS
     // ====================
@@ -64,6 +64,7 @@ export class LiFi {
         return parseFloat(fullQuote.estimate.toAmount);
     };
 }
+export { LiFi };
 var QuoteResType;
 (function (QuoteResType) {
     QuoteResType["SWAP"] = "swap";

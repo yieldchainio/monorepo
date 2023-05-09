@@ -60,7 +60,7 @@ export interface DBProtocol {
     color: string;
     hidden: boolean;
 }
-export interface DBAddress {
+export interface DBContract {
     address_identifier: number;
     contract_address: address;
     abi: JSON;

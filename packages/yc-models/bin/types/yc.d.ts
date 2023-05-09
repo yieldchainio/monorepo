@@ -2,9 +2,9 @@
  * @notice
  * A complete context of Yieldchain's current classified Database.
  */
-import { DBAddress, DBAction, DBFunction, DBFlow, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBUser, DBStatistic } from "./db";
+import { DBContract, DBAction, DBFunction, DBFlow, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBUser, DBStatistic } from "./db";
 export interface ClassificationContext {
-    addresses: DBAddress[];
+    addresses: DBContract[];
     funcs: DBFunction[];
     tokens: DBToken[];
     parameters: DBArgument[];
@@ -31,10 +31,18 @@ export interface FunctionCall {
     target_address: string;
     args: string[];
     signature: string;
-    is_callback: boolean;
 }
-export declare enum BaseVariableTypes {
-    ARRAY = 0,
-    REGULER = 1,
-    STRUCT = 2
+type HexNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+type HexLetter = "A" | "B" | "C" | "D" | "E" | "F";
+type HexChar = HexLetter | HexNumber;
+export type typeflag = `${HexChar}${HexChar}`;
+export type typeflags = `${typeflag}${typeflag}`;
+/**
+ * Type of context when encoding
+ */
+export declare enum EncodingContext {
+    SEED = 0,
+    TREE = 1,
+    UPROOT = 2
 }
+export {};

@@ -13,7 +13,6 @@ import {
   YCToken,
   YCFlow,
   YCArgument,
-  CustomArgument,
   YCFunc,
   DBContract,
   DBFlow,
@@ -612,12 +611,6 @@ export class YCClassifications extends YCClassificationsInternal {
 
     return this.YCparameters;
   }
-
-  getArguments = (_customValue?: CustomArgument) => {
-    return this.Parameters.map(
-      (arg: DBArgument) => new YCArgument(arg, this, _customValue)
-    );
-  };
 
   get flows() {
     if (!this.YCflows.length)

@@ -1,9 +1,9 @@
-import { DBToken, DBAddress, DBArgument, DBFunction, DBFlow } from "../generation-types";
+import { DBToken, DBContract, DBArgument, DBFunction, DBFlow } from "../generation-types";
 export declare const getTokenDetails: (_token_identifier: number) => Promise<DBToken>;
 export declare const getFlowDetails: (_flow_identifier: number) => Promise<DBFlow>;
 export declare const getFunctionDetails: (_function_identifier: number) => Promise<DBFunction>;
 export declare const getParameterDetails: (_parameter_identifier: number) => Promise<DBArgument>;
-export declare const getAddressDetails: (_address_identifier: any) => Promise<DBAddress>;
+export declare const getAddressDetails: (_address_identifier: any) => Promise<DBContract>;
 export declare const createArrayByNumberInput: (number: any) => Promise<number[]>;
 export declare const getFunctionAddress: (_function_identifier: any) => Promise<any>;
 export declare const removeDuplicatesSimple: (arr: any) => any;

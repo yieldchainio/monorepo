@@ -10,23 +10,22 @@ datasource db {
 }
 
 model functionsv2 {
-  id                     String            @id @default(uuid())
+  id                     String        @id @default(uuid())
   name                   String
   inverse_function_id    String?
   dependancy_function_id String?
-  call_type              CallType
-  return_value_type      VariableTypes
-  return_value_base_type BaseVariableTypes
   address_id             String
   arguments_ids          String[]
-  callback               Boolean           @default(false)
+  callback               Boolean       @default(false)
   actions_ids            String[]
   inflows                String[]
   outflows               String[]
+  ret_typeflag           Typeflags     @default(VALUE_VAR_FLAG)
+  typeflag               Typeflags     @default(CALL_COMMAND_FLAG)
   argumentsv2            argumentsv2[]
   flows                  flowsv2[]
-  address                addressesv2       @relation(fields: [address_id], references: [id])
-  actions                actionsv2[]       @relation("actionsv2Tofunctionsv2")
+  address                addressesv2   @relation(fields: [address_id], references: [id])
+  actions                actionsv2[]   @relation("actionsv2Tofunctionsv2")
 
   @@map("functions")
   @@schema("YieldchainV2")
@@ -58,6 +57,7 @@ model tokensv2 {
   markets_ids  String[]
   flows        flowsv2[]
   strategiesv2 strategiesv2[]
+  argumentsv2  argumentsv2[]
 
   @@map("tokens")
   @@schema("YieldchainV2")
@@ -109,17 +109,20 @@ model networksv2 {
 }
 
 model argumentsv2 {
-  id            String            @id @default(uuid())
-  index         Int
-  value         String
-  custom        Boolean           @default(false)
-  solidity_type String
-  variable_type VariableTypes
-  base_type     BaseVariableTypes
-  name          String?
-  dev_notes     String?
-  function_id   String
-  function      functionsv2       @relation(fields: [function_id], references: [id])
+  id                          String      @id @default(uuid())
+  index                       Int
+  value                       String
+  custom                      Boolean     @default(false)
+  solidity_type               String
+  name                        String?
+  dev_notes                   String?
+  function_id                 String
+  typeflag                    Typeflags   @default(VALUE_VAR_FLAG)
+  ret_typeflag                Typeflags   @default(VALUE_VAR_FLAG)
+  function                    functionsv2 @relation(fields: [function_id], references: [id])
+  relating_token              String?
+  token                       tokensv2?   @relation(fields: [relating_token], references: [id])
+  preconfigured_custom_values String[]    @default([])
 
   @@map("arguments")
   @@schema("YieldchainV2")
@@ -494,10 +497,18 @@ enum VariableTypes {
   @@schema("YieldchainV2")
 }
 
-enum BaseVariableTypes {
-  NORMAL
-  ARRAY
-  STRUCT
+enum Typeflags {
+  VALUE_VAR_FLAG
+  REF_VAR_FLAG
+  COMMANDS_LIST_FLAG
+  COMMANDS_REF_ARR_FLAG
+  RAW_REF_VAR_FLAG
+  STATICCALL_COMMAND_FLAG
+  CALL_COMMAND_FLAG
+  DELEGATECALL_COMMAND_FLAG
+  INTERNAL_LOAD_FLAG
 
   @@schema("YieldchainV2")
 }
+
+// @notice This is how custom arguments item in argumentsv2 schema should look like

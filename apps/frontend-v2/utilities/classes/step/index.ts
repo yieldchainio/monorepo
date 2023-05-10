@@ -12,6 +12,7 @@ import {
   YCProtocol,
   YCToken,
   assert,
+  Node,
 } from "@yc/yc-models";
 import {
   ActionConfigs,
@@ -33,7 +34,7 @@ import { HierarchyNode } from "d3-hierarchy";
 import { ImageSrc } from "components/wrappers/types";
 import { DEPOSIT_TRIGGER_CONFIG } from "components/steps/constants";
 
-export class Step implements IStep<Step> {
+export class Step extends Node<Step> implements IStep<Step> {
   // ====================
   //      METHODS
   // ====================
@@ -624,6 +625,7 @@ export class Step implements IStep<Step> {
     writeable: boolean = config?.writeable || false,
     inherit: boolean = true
   ) {
+    super();
     /**
      * Construct global variables
      */
@@ -887,92 +889,8 @@ export class Step implements IStep<Step> {
   };
 
   // ===================
-  //     TREE FIELDS
-  // ===================
-  children: Step[];
-  parent: Step | null = null;
-
-  // ===================
   //    TREE METHODS
   // ===================
-
-  /**
-   * Standard hierarchy iteration function,
-   * goes floor-by-floor
-   */
-  each = (callback: (step: Step) => any) => {
-    // Create a stack array
-    const stack: Step[] = [this];
-
-    // While it's length is bigger than 0, pop a step,
-    // invoke the callback on it, and then add all of it's children to the stack
-    while (stack.length > 0) {
-      const node = stack.pop() as Step;
-      callback(node);
-
-      for (const child of node.children) {
-        stack.push(child);
-      }
-    }
-  };
-
-  /**
-   * eachBefore
-   * standard iteration breadth-first iteration method
-   */
-  eachBefore = (callback: (step: Step) => any): void => {
-    callback(this);
-    for (const child of this.children) child.eachBefore(callback);
-  };
-
-  /**
-   * find
-   * Iterates over the tree to find a step corresponding to a callback check, and returns it (or null if not found)
-   */
-  find = (condition: (step: Step) => boolean): Step | null => {
-    // Create a stack array
-    const stack: Step[] = [this];
-
-    // While it's length is bigger than 0, pop a step,
-    // invoke the condition on it. If true, return the node - otherwise, add all of it's children to the stack (to keep looping)
-    while (stack.length > 0) {
-      const node = stack.pop() as Step;
-      const res = condition(node);
-      if (res) return node;
-
-      for (const child of node.children) {
-        stack.push(child);
-      }
-    }
-    // return null if we found none that answer our condition
-    return null;
-  };
-
-  /**
-   * Map
-   * standard mapping function for the tree
-   */
-
-  map = <T>(callback: (step: Step, i: number) => T): T[] => {
-    // Create a stack array
-    const stack: Step[] = [this];
-    const result: T[] = [];
-
-    // While it's length is bigger than 0, pop a step,
-    // invoke the callback on it, and then add all of it's children to the stack
-    let i = 0;
-    while (stack.length > 0) {
-      const node = stack.pop() as Step;
-      result.push(callback(node, i));
-
-      for (const child of node.children) {
-        stack.push(child);
-      }
-      i++;
-    }
-
-    return result;
-  };
 
   /**
    * A function for the frontend to compare for changes and rerun the graph

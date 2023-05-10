@@ -8,7 +8,6 @@ export enum Endpoints {
   USERS = "users",
   STRATEGIES = "strateges",
   PROTOCOLS = "protocols",
-  FLOWS = "flows",
   FUNCTIONS = "functions",
   ARGUMENTS = "arguments",
   ADDRESSES = "addresses",

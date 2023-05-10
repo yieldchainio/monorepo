@@ -11,7 +11,6 @@ export const fetchYC = async (
     _funcs,
     _tokens,
     _parameters,
-    _flows,
     _protocols,
     _strategies,
     _networks,
@@ -23,7 +22,6 @@ export const fetchYC = async (
     axios.get(baseApi + "/v2/functions"),
     axios.get(baseApi + "/v2/tokens"),
     axios.get(baseApi + "/v2/parameters"),
-    axios.get(baseApi + "/v2/flows"),
     axios.get(baseApi + "/v2/protocols"),
     axios.get(baseApi + "/v2/strategies"),
     axios.get(baseApi + "/v2/networks"),
@@ -37,14 +35,12 @@ export const fetchYC = async (
   const funcs = _funcs.data.functions;
   const tokens = _tokens.data.tokens;
   const parameters = _parameters.data.parameters;
-  const flows = _flows.data.flows;
   const protocols = _protocols.data.protocols;
   const strategies = _strategies.data.strategies;
   const networks = _networks.data.networks;
   const actions = _actions.data.actions;
   const users = _users.data.users;
   const statistics = _statistics.data.statistics;
-
 
   return {
     addresses,
@@ -53,7 +49,6 @@ export const fetchYC = async (
     strategies,
     actions,
     funcs,
-    flows,
     users,
     parameters,
     tokens,

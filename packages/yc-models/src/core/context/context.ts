@@ -65,7 +65,6 @@ class YCClassificationsInternal {
   protected Functions: DBFunction[] = [];
   protected Tokens: DBToken[] = [];
   protected Parameters: DBArgument[] = []; // TODO: Change name to arguments
-  protected Flows: DBFlow[] = [];
   protected Protocols: DBProtocol[] = [];
   protected Strategies: DBStrategy[] = [];
   protected Networks: DBNetwork[] = [];
@@ -77,7 +76,6 @@ class YCClassificationsInternal {
   YCfunctions: YCFunc[] = [];
   YCtokens: YCToken[] = [];
   YCparameters: YCArgument[] = []; // TODO: Change name to arguments
-  YCflows: YCFlow[] = [];
   YCprotocols: YCProtocol[] = [];
   YCstrategies: YCStrategy[] = [];
   YCnetworks: YCNetwork[] = [];
@@ -185,12 +183,6 @@ class YCClassificationsInternal {
     ).data.parameters;
   };
 
-  protected fetchFlows = async () => {
-    this.Flows = await (
-      await axios.get(YCClassifications.apiURL + "/v2/flows")
-    ).data.flows;
-  };
-
   protected fetchUsers = async () => {
     this.Users =
       (await fetchRouter<DBUser[]>({
@@ -291,13 +283,6 @@ class YCClassificationsInternal {
     this.YCparameters = this.Parameters.map(
       (arg: DBArgument) =>
         new YCArgument(arg, YCClassificationsInternal.getInstance())
-    );
-  };
-
-  protected refreshFlows = async () => {
-    this.YCflows = this.Flows.map(
-      (flow: DBFlow) =>
-        new YCFlow(flow, YCClassificationsInternal.getInstance())
     );
   };
 
@@ -409,12 +394,6 @@ class YCClassificationsInternal {
       get: () => YCClassificationsInternal.Instance.Users,
     },
 
-    [Endpoints.FLOWS]: {
-      fetch: this.fetchFlows,
-      refresh: this.refreshFlows,
-      get: () => YCClassificationsInternal.Instance.Flows,
-    },
-
     [Endpoints.ARGUMENTS]: {
       fetch: this.fetchArguments,
       refresh: this.refreshArguments,
@@ -471,7 +450,6 @@ export class YCClassifications extends YCClassificationsInternal {
 
     this.Addresses = jsonContext.addresses;
     this.Actions = jsonContext.actions;
-    this.Flows = jsonContext.flows;
     this.Tokens = jsonContext.tokens;
     this.Functions = jsonContext.funcs;
     this.Networks = jsonContext.networks;
@@ -612,12 +590,6 @@ export class YCClassifications extends YCClassificationsInternal {
     return this.YCparameters;
   }
 
-  get flows() {
-    if (!this.YCflows.length)
-      this.YCflows = this.Flows.map((flow: DBFlow) => new YCFlow(flow, this));
-    return this.YCflows;
-  }
-
   get strategies() {
     if (!this.YCstrategies.length) {
       this.YCstrategies = this.Strategies.map(
@@ -710,23 +682,6 @@ export class YCClassifications extends YCClassificationsInternal {
     return (
       this.arguments.find((_arg: YCArgument) => _arg.id == _argument_id) || null
     );
-  };
-
-  // Get a full flow instance with a flow ID
-  getFlow = (_flow_id: string | DBFlow): YCFlow | null => {
-    return this.flows.find(
-      (_flow: YCFlow) =>
-        _flow.id == (typeof _flow_id === "string" ? _flow_id : _flow_id.id)
-    ) || typeof _flow_id === "string"
-      ? null
-      : new YCFlow(
-          {
-            id: typeof _flow_id == "string" ? _flow_id : _flow_id.id,
-            token_id: _flow_id.token_id,
-            direction: _flow_id.direction,
-          },
-          this
-        );
   };
 
   // Get the full Token instance with a token ID

@@ -22,7 +22,6 @@ export interface ClassificationContext {
   funcs: DBFunction[];
   tokens: DBToken[];
   parameters: DBArgument[]; // TODO: Change name to arguments
-  flows: DBFlow[];
   protocols: DBProtocol[];
   strategies: DBStrategy[];
   actions: DBAction[];

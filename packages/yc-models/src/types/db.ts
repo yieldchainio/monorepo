@@ -63,10 +63,8 @@ export interface DBArgument {
   custom: boolean;
   typeflag: Typeflags;
   ret_typeflag: Typeflags;
-  function_id: string;
   relating_token: string | null;
   overridden_custom_values: Array<string | null>;
-  editable: boolean;
 }
 
 export interface DBFlow {

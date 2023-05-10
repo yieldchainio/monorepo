@@ -8,6 +8,7 @@ import {
   CallTypes,
   EncodingContext,
   CustomArgsTree,
+  TokenPercentage
 } from "../../types/yc";
 import { Typeflags } from "@prisma/client";
 import { BaseClass } from "../base";
@@ -261,10 +262,6 @@ export class YCFunc extends BaseClass {
   };
 }
 
-export type TokenPercentage = {
-  percentage: number;
-  dirty: boolean;
-};
 
 export interface TokenPercentageImplementor {
   tokenPercentages: Map<string, TokenPercentage>;

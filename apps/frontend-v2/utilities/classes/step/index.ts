@@ -976,7 +976,6 @@ const serializeCustomArgs = (
     const serializedArg: CustomArgsTree = {
       value: null,
       customArgs: arg.customArgs,
-      editable: false,
       preConfigured: true,
     };
 
@@ -1019,7 +1018,6 @@ const deseriallizeCustomArgs = (
     const deserializedArg: CustomArgsTree = {
       value: circulerCreator(arg),
       customArgs: arg.customArgs.map((nestedArg) => circulerCreator(nestedArg)),
-      editable: false,
       preConfigured: true,
     };
     deseriallized.push(deserializedArg);

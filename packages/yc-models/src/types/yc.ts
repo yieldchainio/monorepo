@@ -78,7 +78,6 @@ export type TokenPercentage = {
 
 export interface CustomArgsTree {
   value: any;
-  editable: boolean;
   preConfigured: boolean;
   customArgs: CustomArgsTree[];
 }

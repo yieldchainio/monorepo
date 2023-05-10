@@ -25,16 +25,14 @@ export function constructCustomArgsTree(
       root.push({
         value: premadeArgs[i],
         customArgs: [],
-        editable: arg.editable,
         preConfigured: premadeArgs[i] ? true : false,
       });
     else
       root.push({
         value: premadeArgs[i],
         customArgs: [
-          ...constructCustomArgsTree(arg.value, arg.preconfiguredCustomValues),
+          //   ...constructCustomArgsTree(arg.value, arg.preconfiguredCustomValues),
         ],
-        editable: arg.editable,
         preConfigured: premadeArgs[i] ? true : false,
       });
   }

@@ -8,12 +8,13 @@ import { encodeGetInvestmentAmount } from "./get-investment-amount";
  */
 const UtilityCommandEncoders: Record<
   string,
-  (
-    step: TokenPercentageImplementor,
-    context: EncodingContext,
-    argument: YCArgument,
-    customValue: CustomArgsTree
-  ) => string
+  // (
+  //   step: TokenPercentageImplementor,
+  //   context: EncodingContext,
+  //   argument: YCArgument,
+  //   customValue: CustomArgsTree
+  // ) => string
+  any
 > = {
   getInvestmentAmount: encodeGetInvestmentAmount,
 };

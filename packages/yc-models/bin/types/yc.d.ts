@@ -1,7 +1,3 @@
-/**
- * @notice
- * A complete context of Yieldchain's current classified Database.
- */
 import { DBContract, DBAction, DBFunction, DBFlow, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBUser, DBStatistic } from "./db";
 export interface ClassificationContext {
     addresses: DBContract[];
@@ -44,5 +40,28 @@ export declare enum EncodingContext {
     SEED = 0,
     TREE = 1,
     UPROOT = 2
+}
+export type TokenPercentage = {
+    percentage: number;
+    dirty: boolean;
+};
+export interface CustomArgsTree {
+    value: any;
+    preConfigured: boolean;
+    customArgs: CustomArgsTree[];
+}
+/**
+ * A JSON step that the builder accepts, and the frontend should extend
+ */
+export interface DeployableStep {
+    id: string;
+    inflows: string[];
+    outflows: string[];
+    children: DeployableStep[];
+    parent?: DeployableStep | null;
+    tokenPercentages?: Array<[string, TokenPercentage]>;
+    function?: string;
+    customArguments?: CustomArgsTree[];
+    data?: any | null;
 }
 export {};

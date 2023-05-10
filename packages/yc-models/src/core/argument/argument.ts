@@ -29,7 +29,6 @@ export class YCArgument extends BaseClass {
   readonly typeflag: Typeflags;
   readonly retTypeflag: Typeflags;
   readonly isCustom: boolean;
-  readonly editable: boolean;
   readonly identifier: string;
   readonly name: string | null;
   readonly id: string;
@@ -47,7 +46,6 @@ export class YCArgument extends BaseClass {
     this.identifier = _argument.id;
     this.name = _argument.name;
     this.isCustom = _argument.custom;
-    this.editable = _argument.editable;
     this.id = _argument.id;
     this.relatingToken = _argument.relating_token
       ? _context.getToken(_argument.relating_token)
@@ -145,4 +143,3 @@ export class YCArgument extends BaseClass {
   };
 }
 
-export interface TokenPercentages {}

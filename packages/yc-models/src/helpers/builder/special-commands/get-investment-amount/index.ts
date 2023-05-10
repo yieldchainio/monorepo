@@ -42,7 +42,7 @@ export const encodeGetInvestmentAmount = (
     customValue.splice(1, 0, withdrawalFunc);
 
     // Enocde the function (it will use the custom value) and return
-    return argument.encodeYCCommand(step, context, customValues);
+    // return argument.encodeYCCommand(step, context, customValues);
   }
 
   // Get the token percentage from the step, assert that it must exist also
@@ -51,10 +51,10 @@ export const encodeGetInvestmentAmount = (
     throw "Cannot Encode Get Investment Amount - No Token Percentage Set";
 
   // Push it to the custom values
-  customValues.splice(1, 0, tokenPercentage);
+  // customValue.splice(1, 0, tokenPercentage);
 
   // Now encode it as a YC command, it will use the new custom value when encoding
-  return argument.encodeYCCommand(step, context, customValues);
+  return argument.encodeYCCommand(step, context);
 };
 
 /**

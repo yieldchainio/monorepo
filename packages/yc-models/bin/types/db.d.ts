@@ -5,7 +5,7 @@
 import { JsonValue } from "@yc/yc-data";
 import { address, ChainID } from "./global";
 import { Typeflags } from "@prisma/client";
-import { FlowDirection, ProtocolType } from "@prisma/client";
+import { ProtocolType } from "@prisma/client";
 export interface DBAction {
     id: string;
     name: string;
@@ -47,19 +47,18 @@ export interface DBFunction {
     inflows: string[];
     typeflag: Typeflags;
     ret_typeflag: Typeflags;
+    signature: string;
 }
 export interface DBArgument {
     id: string;
-    index: number;
     solidity_type: string;
     value: string;
     name: string | null;
     custom: boolean;
     typeflag: Typeflags;
     ret_typeflag: Typeflags;
-    function_id: string;
     relating_token: string | null;
-    preconfigured_custom_values: Array<string | null>;
+    overridden_custom_values: Array<string | null>;
 }
 export interface DBFlow {
     id: string;
@@ -127,4 +126,8 @@ export interface DBStatistic {
     timestamp: string | Date;
     apy: number;
     gasFee: string;
+}
+export declare enum FlowDirection {
+    INFLOW = 0,
+    OUTFLOW = 1
 }

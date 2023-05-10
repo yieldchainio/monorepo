@@ -8,7 +8,7 @@ import {
   EthersTransactionResponse,
   SignerMethod,
 } from "../../types";
-import { safeToJSON } from "../../utils";
+import { safeToJSON } from "../../helpers";
 
 /**
  * Another base class which has base web3 functionality to support bothbackends and frontneds

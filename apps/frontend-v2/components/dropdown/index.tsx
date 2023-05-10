@@ -147,7 +147,6 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
     // Memoize correct ref
     const correcRef = useMemo(() => {
-      // TODO: Not sure why but reguler ref fucked it
       return dropdownBtnRef;
     }, [ref, dropdownBtnRef, dropdownBtnRef.current]);
 

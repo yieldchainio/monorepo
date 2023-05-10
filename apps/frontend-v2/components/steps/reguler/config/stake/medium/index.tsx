@@ -43,7 +43,7 @@ export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
         triggerComparison={triggerComparison}
         handleComplete={() => {
           // We set the step's function to our stake function on completion
-          step.function = stakeFunction;
+          step.setFunction(stakeFunction);
         }}
       >
         <div className="w-full flex flex-col gap-1">

@@ -1,14 +1,24 @@
 import { STATICCALL_COMMAND_FLAG, TypeflagValues } from "../../../constants";
 import { TokenPercentageImplementor, YCArgument, YCFunc } from "../../../core";
-import { EncodingContext } from "../../../types";
+import { CustomArgsTree, EncodingContext } from "../../../types";
 import { encodeGetInvestmentAmount } from "./get-investment-amount";
 
 /**
  * Map function names to parsers
  */
-const UtilityCommandEncoders: Record<string, Function> = {
+const UtilityCommandEncoders: Record<
+  string,
+  (
+    step: TokenPercentageImplementor,
+    context: EncodingContext,
+    argument: YCArgument,
+    customValue: CustomArgsTree
+  ) => string
+> = {
   getInvestmentAmount: encodeGetInvestmentAmount,
 };
+
+type bytes = `0x${string}`;
 
 /**
  * @notice
@@ -23,7 +33,7 @@ export const trySpecialEncoding = (
   step: TokenPercentageImplementor,
   context: EncodingContext,
   argument: YCArgument,
-  customValues: Array<any | YCFunc>
+  customValue: CustomArgsTree
 ): string | null => {
   // We only parse functions as utility commands
   if (!(argument.value instanceof YCFunc)) return null;
@@ -34,7 +44,7 @@ export const trySpecialEncoding = (
       step,
       context,
       argument,
-      customValues
+      customValue
     ) || null
   );
 };

@@ -42,7 +42,7 @@ export const completeLPConfig = (step: Step, context: YCClassifications) => {
     throw "Cannot Complete LP Config - YC Add Liquidity Function Is Non-Existant.";
 
   // Set our step's function to this function
-  step.function = addLiqFunction;
+  step.setFunction(addLiqFunction);
 
   // Create the custom arguments
   const clientID = data.protocol.id;
@@ -61,7 +61,7 @@ export const completeLPConfig = (step: Step, context: YCClassifications) => {
     toTokenAmounts,
     slippage,
     step.customArguments, // @notice, the generic custom args components has been setting custom args on this field up until this point, whilst the add liquidity function takes a custom arguments field of it's own. So we set the custom args as the desired args for the add liq config, and use the ones optionally inputted by the user up until now as the custom args field on the function itself.
-  ];
+  ].map((arg) => ({ value: arg, customArgs: [], editable: false, preConfigured: true }));
 
   return;
 };

@@ -53,6 +53,7 @@ export interface DBFunction {
   inflows: string[];
   typeflag: Typeflags;
   ret_typeflag: Typeflags;
+  signature: string;
 }
 export interface DBArgument {
   id: string;
@@ -64,7 +65,8 @@ export interface DBArgument {
   ret_typeflag: Typeflags;
   function_id: string;
   relating_token: string | null;
-  preconfigured_custom_values: Array<string | null>;
+  overridden_custom_values: Array<string | null>;
+  editable: boolean;
 }
 
 export interface DBFlow {

@@ -92,17 +92,17 @@ model networksv2 {
 }
 
 model argumentsv2 {
-  id                          String    @id @default(uuid())
-  value                       String
-  custom                      Boolean   @default(false)
-  solidity_type               String
-  name                        String?
-  dev_notes                   String?
-  typeflag                    Typeflags @default(VALUE_VAR_FLAG)
-  ret_typeflag                Typeflags @default(VALUE_VAR_FLAG)
-  relating_token              String?
-  preconfigured_custom_values String[]  @default([])
-  token                       tokensv2? @relation(fields: [relating_token], references: [id])
+  id                       String    @id @default(uuid())
+  value                    String
+  custom                   Boolean   @default(false)
+  solidity_type            String
+  name                     String?
+  dev_notes                String?
+  typeflag                 Typeflags @default(VALUE_VAR_FLAG)
+  ret_typeflag             Typeflags @default(VALUE_VAR_FLAG)
+  relating_token           String?
+  overridden_custom_values String[]  @default([])
+  token                    tokensv2? @relation(fields: [relating_token], references: [id])
 
   @@map("arguments")
   @@schema("YieldchainV2")

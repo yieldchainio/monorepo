@@ -24,7 +24,7 @@ export const completeSwapConfig = (step: Step, context: YCClassifications) => {
     throw "Cannot Complete Swap Config - Swap Function Is Non-Existant.";
 
   // Set the step's function to the swap function
-  step.function = swapFunction;
+  step.setFunction(swapFunction);
 
   // Custom arguments for the swap function
   const fromToken = data.fromToken;
@@ -33,7 +33,14 @@ export const completeSwapConfig = (step: Step, context: YCClassifications) => {
   const toAddress = constants.AddressZero; // TODO: Own address getter function ser
 
   // Set them
-  step.customArguments = [fromToken, toToken, fromAmount, toAddress];
+  step.customArguments = [fromToken, toToken, fromAmount, toAddress].map(
+    (arg) => ({
+      value: arg,
+      customArgs: [],
+      editable: false,
+      preConfigured: true,
+    })
+  );
 
   return;
 };

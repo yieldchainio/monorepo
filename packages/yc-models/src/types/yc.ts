@@ -3,6 +3,7 @@
  * A complete context of Yieldchain's current classified Database.
  */
 // Imports
+import { TokenPercentageImplementor, YCArgument, YCFunc } from "../core";
 import {
   DBContract,
   DBAction,
@@ -68,4 +69,31 @@ export enum EncodingContext {
   SEED,
   TREE,
   UPROOT,
+}
+
+export type TokenPercentage = {
+  percentage: number;
+  dirty: boolean;
+};
+
+export interface CustomArgsTree {
+  value: any;
+  editable: boolean;
+  preConfigured: boolean;
+  customArgs: CustomArgsTree[];
+}
+
+/**
+ * A JSON step that the builder accepts, and the frontend should extend
+ */
+export interface DeployableStep {
+  id: string;
+  inflows: string[];
+  outflows: string[];
+  children: DeployableStep[];
+  parent?: DeployableStep | null;
+  tokenPercentages?: Array<[string, TokenPercentage]>;
+  function?: string;
+  customArguments?: CustomArgsTree[];
+  data?: any | null;
 }

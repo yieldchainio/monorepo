@@ -10,6 +10,7 @@ import {
   YCToken,
   YCClassifications,
   DBStep,
+  CustomArgsTree,
 } from "@yc/yc-models";
 import { ImageSrc } from "components/wrappers/types";
 
@@ -107,7 +108,7 @@ export interface IStepReguler<T extends IStep<T>> {
     func: YCFunc;
     used: boolean;
   }[];
-  customArguments?: YCArgument[];
+  customArguments?: CustomArgsTree[];
 }
 
 // An interface for the IStep propreties which are trigger step-related
@@ -180,4 +181,3 @@ export type TokenPercentage = {
   percentage: number;
   dirty: boolean;
 };
-

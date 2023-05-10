@@ -19,7 +19,7 @@ export const completeHarvest = (step: Step) => {
     throw "Cannot Complete Harvest - Protocol Is Non-Existant.";
 
   // Set the step's function to it
-  step.function = data.func;
+  step.setFunction(data.func);
 
   // Set the protocol
   step.protocol = data.func.address.protocol;

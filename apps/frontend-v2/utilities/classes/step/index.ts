@@ -13,6 +13,8 @@ import {
   YCToken,
   assert,
   Node,
+  CustomArgsTree,
+  safeToJSON,
 } from "@yc/yc-models";
 import {
   ActionConfigs,
@@ -33,6 +35,7 @@ import { FlextreeNode, flextree } from "d3-flextree";
 import { HierarchyNode } from "d3-hierarchy";
 import { ImageSrc } from "components/wrappers/types";
 import { DEPOSIT_TRIGGER_CONFIG } from "components/steps/constants";
+import { constructCustomArgsTree } from "./helpers/construct-custom-args-tree";
 
 export class Step extends Node<Step> implements IStep<Step> {
   // ====================
@@ -173,6 +176,16 @@ export class Step extends Node<Step> implements IStep<Step> {
   // ---------------
   //  IMPL-SPECIFIC
   // ---------------
+
+  /**
+   * Set the step's function
+   * @param newFunc - The function to set
+   */
+  setFunction(func: YCFunc | null) {
+    this.function = func;
+    if (func == null) this.customArguments = [];
+    else this.customArguments = constructCustomArgsTree(func);
+  }
 
   /**
    * @notice
@@ -440,7 +453,7 @@ export class Step extends Node<Step> implements IStep<Step> {
     this.action = null;
     this.actionConfig = null;
     this.data = {};
-    this.function = null;
+    this.setFunction(null);
     for (let i = 0; i < this.outflows.length; i++)
       this.removeOutflow(this.outflows[i], i);
     for (let i = 0; i < this.inflows.length; i++)
@@ -568,7 +581,7 @@ export class Step extends Node<Step> implements IStep<Step> {
   /**
    * Optional custom arguments for the used function
    */
-  customArguments: any[] = [];
+  customArguments: CustomArgsTree[] = [];
 
   // -----------
   // Trigger Step Variables
@@ -648,7 +661,8 @@ export class Step extends Node<Step> implements IStep<Step> {
      */
     this.protocol = config?.protocol || null;
     this.action = config?.action || null;
-    this.function = config?.function || null;
+    config?.function ? this.setFunction(config.function) : null;
+    this.customArguments = config?.customArguments || [];
     this.unlockedFunctions = config?.unlockedFunctions || [];
     this.actionConfig = config?.actionConfig || null;
 
@@ -756,7 +770,7 @@ export class Step extends Node<Step> implements IStep<Step> {
         : [],
 
       protocol: step.protocol ? context.getProtocol(step.protocol) : null,
-      customArguments: step.customArguments,
+      customArguments: deseriallizeCustomArgs(step.customArguments || []),
     };
     const resStep = new Step(config);
     for (const child of resStep.children) child.parent = resStep;
@@ -915,42 +929,101 @@ export class Step extends Node<Step> implements IStep<Step> {
   }: {
     onlyCompleted?: boolean;
   }): JSONStep | null => {
-    if ((this.state === "complete" && onlyCompleted) || !onlyCompleted)
-      return {
-        id: this.id,
-        size: this.size,
-        action: this.action?.id,
-        protocol: this.protocol?.id,
-        dimensions: this.dimensions,
-        inflows: this.inflows.map((token) => token.id),
-        outflows: this.outflows.map((token) => token.id),
-        writeable: this.writeable,
-        percentage: this.percentage,
-        function: this.function?.id,
-        unlockedFunctions: this.unlockedFunctions.map((func) => ({
-          funcID: func.func.id,
-          used: func.used,
-        })),
-        state: this.state,
-        children: this.children.flatMap((child) => {
-          const jsonChild = child.toJSON({ onlyCompleted: false });
-          if (jsonChild !== null) return [jsonChild];
-          return [];
-        }),
-        actionConfig: this.actionConfig,
-        type: this.type,
-        triggerName: this.triggerName,
-        triggerDescription: this.triggerDescription,
-        triggerVisuals: this.triggerVisuals,
-        triggerIcon: this.triggerIcon,
-        triggerConfig: this.triggerConfig,
-        data: this.data,
-        tokenPercentages: Array.from(this.tokenPercentages.entries()),
-        // customArguments: this.customArguments.map((arg) => arg.) // TODO
-      };
-
-    return null;
+    if (onlyCompleted && this.state !== "complete") return null;
+    return {
+      id: this.id,
+      size: this.size,
+      action: this.action?.id,
+      protocol: this.protocol?.id,
+      dimensions: this.dimensions,
+      inflows: this.inflows.map((token) => token.id),
+      outflows: this.outflows.map((token) => token.id),
+      writeable: this.writeable,
+      percentage: this.percentage,
+      function: this.function?.id,
+      unlockedFunctions: this.unlockedFunctions.map((func) => ({
+        funcID: func.func.id,
+        used: func.used,
+      })),
+      state: this.state,
+      children: this.children.flatMap((child) => {
+        const jsonChild = child.toJSON({ onlyCompleted: false });
+        if (jsonChild !== null) return [jsonChild];
+        return [];
+      }),
+      actionConfig: this.actionConfig,
+      type: this.type,
+      triggerName: this.triggerName,
+      triggerDescription: this.triggerDescription,
+      triggerVisuals: this.triggerVisuals,
+      triggerIcon: this.triggerIcon,
+      triggerConfig: this.triggerConfig,
+      data: this.data,
+      tokenPercentages: Array.from(this.tokenPercentages.entries()),
+      customArguments: serializeCustomArgs(this.customArguments), // TODO
+    };
   };
 
   // TODO: toDBStep()
 }
+
+const serializeCustomArgs = (
+  argsTreeArr: CustomArgsTree[]
+): CustomArgsTree[] => {
+  const serialized: CustomArgsTree[] = [];
+
+  for (const arg of argsTreeArr) {
+    const serializedArg: CustomArgsTree = {
+      value: null,
+      customArgs: arg.customArgs,
+      editable: false,
+      preConfigured: true,
+    };
+
+    if (typeof arg.value == "object")
+      serializedArg.value =
+        arg.value instanceof YCFunc
+          ? arg.value.toJSON()
+          : safeToJSON(arg.value);
+    else serializedArg.value = arg.value;
+
+    if (arg.customArgs.length > 0)
+      serializedArg.customArgs = serializeCustomArgs(serializedArg.customArgs);
+
+    serialized.push(serializedArg);
+  }
+
+  return serialized;
+};
+
+const deseriallizeCustomArgs = (
+  argsTreeArr: CustomArgsTree[]
+): CustomArgsTree[] => {
+  const circulerCreator = (arg: any) => {
+    if (typeof arg !== "object") {
+      const potentialFunction =
+        YCClassifications.getInstance().getFunction(arg);
+      return potentialFunction || arg;
+    }
+
+    if (typeof arg == "object") {
+      const newObj: typeof arg = {};
+      for (const entry of Object.entries(arg))
+        newObj[entry[0]] = circulerCreator(entry[1]);
+      return newObj;
+    }
+  };
+  const deseriallized: CustomArgsTree[] = [];
+
+  for (const arg of argsTreeArr) {
+    const deserializedArg: CustomArgsTree = {
+      value: circulerCreator(arg),
+      customArgs: arg.customArgs.map((nestedArg) => circulerCreator(nestedArg)),
+      editable: false,
+      preConfigured: true,
+    };
+    deseriallized.push(deserializedArg);
+  }
+
+  return deseriallized;
+};

@@ -4,11 +4,11 @@ import { bytes } from "../../types/global";
 import { TokenPercentageImplementor, YCFunc } from "../function/function";
 import { BaseClass } from "../base";
 import { Typeflags } from "@prisma/client";
-import { EncodingContext, typeflags } from "../../types";
-import { getArgumentFlags } from "../../utils/builder/get-command-flags";
+import { CustomArgsTree, EncodingContext, typeflags } from "../../types";
+import { getArgumentFlags } from "../../helpers/builder/get-command-flags";
 import { AbiCoder } from "ethers";
 import { YCToken } from "..";
-import { trySpecialEncoding } from "../../utils/builder/special-commands";
+import { trySpecialEncoding } from "../../helpers/builder/special-commands";
 
 /**
  * @notice
@@ -29,11 +29,11 @@ export class YCArgument extends BaseClass {
   readonly typeflag: Typeflags;
   readonly retTypeflag: Typeflags;
   readonly isCustom: boolean;
+  readonly editable: boolean;
   readonly identifier: string;
   readonly name: string | null;
   readonly id: string;
   readonly relatingToken: YCToken | null;
-  readonly preconfiguredCustomValues: Array<YCArgument | null>;
 
   // =======================
   //      CONSTRUCTOR
@@ -46,18 +46,12 @@ export class YCArgument extends BaseClass {
     this.retTypeflag = _argument.ret_typeflag;
     this.identifier = _argument.id;
     this.name = _argument.name;
-    this.isCustom = _argument.value.includes("custom_argument");
+    this.isCustom = _argument.custom;
+    this.editable = _argument.editable;
     this.id = _argument.id;
     this.relatingToken = _argument.relating_token
       ? _context.getToken(_argument.relating_token)
       : null;
-
-    this.preconfiguredCustomValues =
-      _argument.preconfigured_custom_values.flatMap((argID: string | null) => {
-        if (!argID) return [null];
-        const arg = _context.getArgument(argID);
-        return arg ? [arg] : [];
-      });
 
     // @notice
     // If the solidity type is a function, the value is refering to the identifier of the function.
@@ -76,6 +70,16 @@ export class YCArgument extends BaseClass {
       // Assign the value to the YCFunc instance
       this.#value = func;
 
+      // Replace the value (func)'s custom arguments with our overrides if any
+      for (let i = 0; i < _argument.overridden_custom_values.length; i++) {
+        const customVal = _argument.overridden_custom_values[i];
+        if (customVal == null) continue;
+        const argInstance = _context.getArgument(customVal);
+        if (!argInstance)
+          throw "Cannot Override Custom Args - Did Not Get Arg Instance";
+        if (customVal !== null) func.arguments[i] = argInstance;
+      }
+
       // If the argument type is not a function - we simply use the hardcoded value
     } else this.#value = _argument.value;
   }
@@ -93,21 +97,15 @@ export class YCArgument extends BaseClass {
   encodeYCCommand = (
     step: TokenPercentageImplementor,
     context: EncodingContext,
-    customValues: Array<any | YCFunc>
+    customValue?: CustomArgsTree
   ): bytes => {
-    // Assert that if we are a custom argument, a custom value mut be provided
-    if (this.isCustom && !customValues.length)
-      throw "YCArgument ERR: This Argument Is A Custom, but no custom value was provided.";
-
-    // We insert into the custom values, our preconfigured custom values at their indexes, if any
-
     // @notice We first attempt to get some special utility encoding through. If we do, we return that instead.
     // Otherwise, we continue on to the reguler encoding
-    const specialCommand: string | null = trySpecialEncoding(
+    const specialCommand: bytes | null = trySpecialEncoding(
       step,
       context,
       this,
-      customValues
+      customValue as CustomArgsTree
     );
     if (specialCommand) return specialCommand;
 
@@ -115,29 +113,26 @@ export class YCArgument extends BaseClass {
     const typeflags: typeflags = getArgumentFlags(this);
 
     // Init variable for the naked encoded command
-    let command: string = typeflags;
+    let command: bytes = typeflags;
 
     // Then, check to see if our argument is a custom value.
     // If it is, then we check to see if it's an instance of YC func.
     // If it is, we call encode YC command on it. Otherwise, we just abi.encode it
     if (this.isCustom) {
-      // @notice We get the current custom argument by shifting it out of the array. This allows us
-      // To include recursive custom arguments, where our custom arguments may be functions that also require
-      // custom arguments.
-      const currentCustomValue = customValues.shift();
+      if (!customValue) throw "Cannot Encode - Current Custom Value Undefined";
 
       // If function, call encodeYCCommand on it, include remaining custom values
-      if (currentCustomValue instanceof YCFunc)
-        command = currentCustomValue.encodeYCCommand(
+      if (customValue.value instanceof YCFunc)
+        command = customValue.value.encodeYCCommand(
           step,
           context,
-          customValues
+          customValue.customArgs
         );
       // Else, just ABI encode it and add to existing typeflags
       else
         command += AbiCoder.defaultAbiCoder().encode(
           [this.solidityType],
-          [currentCustomValue]
+          [customValue.value]
         );
     }
 

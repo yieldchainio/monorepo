@@ -3,13 +3,18 @@ import { YCClassifications } from "../context/context";
 import { YCContract } from "../address/address";
 import { YCArgument } from "../argument/argument";
 import { YCFlow } from "../flow/flow";
-import { FunctionCall, CallTypes, EncodingContext } from "../../types/yc";
+import {
+  FunctionCall,
+  CallTypes,
+  EncodingContext,
+  CustomArgsTree,
+} from "../../types/yc";
 import { Typeflags } from "@prisma/client";
 import { BaseClass } from "../base";
 import { YCAction } from "../action/action";
 import { YCToken } from "..";
 import { TypeFlags } from "typescript";
-import { getFunctionFlags } from "../../utils/builder/get-command-flags";
+import { getFunctionFlags } from "../../helpers/builder/get-command-flags";
 
 export class YCFunc extends BaseClass {
   // ====================
@@ -50,34 +55,28 @@ export class YCFunc extends BaseClass {
     this.isCallback = _function.callback;
 
     // Mapping arg identifiers => Full argument instances
-    let fullArgs = _function.arguments_ids.map((_arg: string) =>
+    const fullArgs = _function.arguments_ids.map((_arg: string) =>
       _context.getArgument(_arg)
     );
 
     // Throw an error and assign no arguments if the arguments include a null value
-    if (fullArgs.includes(null)) {
-      this.arguments = [];
-      throw new Error(
+    if (fullArgs.includes(null))
+      throw (
         "YCFunc ERROR: Found Null Argument. Argument Value: " +
-          fullArgs.find((arg: YCArgument | null) => arg == null)
+        fullArgs.find((arg: YCArgument | null) => arg == null)
       );
-    } else {
-      // Should be sufficient anyway - Typescript whining for no reason.
+    // Should be sufficient anyway - Typescript whining for no reason.
+    else
       this.arguments = fullArgs.flatMap((arg: YCArgument | null) =>
         arg !== null ? [arg] : []
       );
-    }
 
     // Create signature
-    let tempSig: string = `${this.name}(`;
-    for (let i = 0; i < this.arguments.length; i++) {
-      tempSig += this.arguments[i].solidityType;
-      if (i != this.arguments.length - 1) tempSig += ",";
-    }
-    tempSig += ")";
-    this.signature = tempSig;
+    this.signature = _function.signature;
 
-    let address: YCContract | null = _context.getAddress(_function.address_id);
+    const address: YCContract | null = _context.getAddress(
+      _function.address_id
+    );
 
     if (!address)
       throw new Error("YCFunc ERR: Address Not Found! Func ID: " + this.id);
@@ -102,8 +101,8 @@ export class YCFunc extends BaseClass {
     this.actions = (_function.actions_ids || []) as unknown as YCAction[];
 
     // Get the existing instance (or set ours otherwise)
-    const existingFunc = this.getInstance(_function.id);
-    if (existingFunc) return existingFunc;
+    // const existingFunc = this.getInstance(_function.id);
+    // if (existingFunc) return existingFunc;
 
     // Set the actual dependency/counter functions
     this.counterFunction = _function.inverse_function_id
@@ -130,8 +129,6 @@ export class YCFunc extends BaseClass {
       return [];
     });
   }
-  
-
 
   // =========================
   //    GENERATION METHODS
@@ -148,24 +145,25 @@ export class YCFunc extends BaseClass {
       );
 
     // Ethers interface for encoding
-    let iface = this.address.interface;
+    const iface = this.address.interface;
 
     // FunctionCall struct that will be ncoded
-    let functionCall: FunctionCall = this.toFunctionCallStruct(step,
+    const functionCall: FunctionCall = this.toFunctionCallStruct(
+      step,
       context,
       customArguments
     );
 
+    // get the flag'ified encoded FunctionCall
+    const flags = getFunctionFlags(this);
+
     // Encode the function call
-    let encodedFunction = iface
+    const encodedFunction = iface
       .getAbiCoder()
       .encode([YCFunc.FunctionCallTuple], [functionCall]);
 
-    // get the flag'ified encoded FunctionCall
-    let encodedWithFlags = getFunctionFlags(this);
-
     // Return the encoded function with the flag
-    return encodedWithFlags;
+    return flags + encodedFunction;
   };
 
   /**
@@ -176,7 +174,7 @@ export class YCFunc extends BaseClass {
   toFunctionCallStruct = (
     step: TokenPercentageImplementor,
     context: EncodingContext,
-    customArguments: any[]
+    customArguments: CustomArgsTree[]
   ): FunctionCall => {
     // Assert that if we require a custom argument,
     if (
@@ -195,14 +193,14 @@ export class YCFunc extends BaseClass {
       );
 
     // Create the struct
-    let struct: FunctionCall = {
+    const struct: FunctionCall = {
       // The target address (our address, tells the onchain interpreter where to call the function)
       target_address: this.address.address,
 
       // Our arguments. If an argument is not a custom, we encode it. Otherwise, we encode it but
       // input the next custom argument from our array (we shift is so that it is removed)
       args: this.arguments.map((arg: YCArgument) =>
-        arg.encodeYCCommand(step, context, customArguments)
+        arg.encodeYCCommand(step, context)
       ),
 
       // Our signature (i.e "stakeTokens(uint256,address,string)")
@@ -258,6 +256,7 @@ export class YCFunc extends BaseClass {
       actions_ids: this.actions.map((action) => action.id),
       outflows: this.outflows.map((token) => token.id),
       inflows: this.inflows.map((token) => token.id),
+      signature: this.signature,
     };
   };
 }

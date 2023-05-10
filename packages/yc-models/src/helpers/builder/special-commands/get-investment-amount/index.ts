@@ -4,9 +4,9 @@ import {
   YCClassifications,
   YCFunc,
 } from "../../../../core";
-import { EncodingContext } from "../../../../types";
+import { CustomArgsTree, EncodingContext } from "../../../../types";
 
-const WITHDRAW_SHARES_RETREIVER_FUNCTION_ID = "000";
+const WITHDRAW_SHARES_RETREIVER_ARG_ID = "000";
 
 /**
  * Encode a getInvestmentAmount() YC Command
@@ -15,7 +15,7 @@ export const encodeGetInvestmentAmount = (
   step: TokenPercentageImplementor,
   context: EncodingContext,
   argument: YCArgument,
-  customValues: Array<any | YCFunc>
+  customValue: YCArgument[]
 ): string => {
   // YCArgument value must be function
   if (!(argument.value instanceof YCFunc))
@@ -26,20 +26,20 @@ export const encodeGetInvestmentAmount = (
     throw "Cannot Encode Get Investment Amount - No Relating Token";
 
   // @notice
-  // We first chec to see if the context is UPROOT. If it is,
+  // We first check to see if the context is UPROOT. If it is,
   // Then we actually add another function call instead of the set token percentage,
   // which is used to MLOAD the shares % the user is trying to withdraw
   if (context == EncodingContext.UPROOT) {
     // Get the withdraw shares retreiver function
-    const withdrawalFunc = YCClassifications.getInstance().getFunction(
-      WITHDRAW_SHARES_RETREIVER_FUNCTION_ID
+    const withdrawalFunc = YCClassifications.getInstance().getArgument(
+      WITHDRAW_SHARES_RETREIVER_ARG_ID
     );
     if (!withdrawalFunc)
       throw "Cannot Encode Get Investmnet Amount - Context is uproot, and cannot get Withdrawal Shares Retreiver from context";
 
     // Insert it to custom values (At this point the recursive list)
     // Will have the args of our argument as the first 2, then the rest
-    customValues.splice(1, 0, withdrawalFunc);
+    customValue.splice(1, 0, withdrawalFunc);
 
     // Enocde the function (it will use the custom value) and return
     return argument.encodeYCCommand(step, context, customValues);

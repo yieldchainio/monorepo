@@ -62,7 +62,7 @@ const gnsBalanceOfArg: argumentsv2 = {
   value: balanceOfID,
   solidity_type: "function",
   dev_notes: "Get the GNS Balance of the vault",
-  preconfigured_custom_values: [selfArgumentID],
+  overridden_custom_values: [selfArgumentID],
   typeflag: Typeflags.STATICCALL_COMMAND_FLAG,
   relating_token: null,
   ret_typeflag: Typeflags.VALUE_VAR_FLAG,
@@ -82,7 +82,7 @@ const gnsAmountArg: argumentsv2 = {
   typeflag: Typeflags.STATICCALL_COMMAND_FLAG,
   ret_typeflag: Typeflags.VALUE_VAR_FLAG,
   relating_token: GNS_TOKEN_ID,
-  preconfigured_custom_values: [gnsBalanceOfArgID, placeholderDivisorArgID],
+  overridden_custom_values: [gnsBalanceOfArgID, placeholderDivisorArgID],
 };
 
 await prisma.argumentsv2.create({ data: gnsAmountArg });
@@ -138,7 +138,7 @@ const wordExtracterFirstArg: argumentsv2 = {
   typeflag: Typeflags.REF_VAR_FLAG,
   ret_typeflag: Typeflags.REF_VAR_FLAG,
   relating_token: null,
-  preconfigured_custom_values: [],
+  overridden_custom_values: [],
 };
 
 const wordExtracterIdxArgID = uuid();
@@ -153,7 +153,7 @@ const wordExtracterIdxArg: argumentsv2 = {
   typeflag: Typeflags.VALUE_VAR_FLAG,
   relating_token: null,
   ret_typeflag: Typeflags.VALUE_VAR_FLAG,
-  preconfigured_custom_values: [],
+  overridden_custom_values: [],
 };
 
 await prisma.argumentsv2.create({ data: wordExtracterFirstArg });
@@ -208,7 +208,7 @@ const gnsStakePositionReaderArg: argumentsv2 = {
   typeflag: Typeflags.STATICCALL_COMMAND_FLAG,
   ret_typeflag: Typeflags.RAW_REF_VAR_FLAG,
   relating_token: null,
-  preconfigured_custom_values: [],
+  overridden_custom_values: [],
 };
 
 await prisma.argumentsv2.create({ data: gnsStakePositionReaderArg });
@@ -224,7 +224,7 @@ const stakedGNSExtracterArg: argumentsv2 = {
   dev_notes:
     "Extracts the staked GNS from the position reader which returns a struct",
   value: wordExtracterFuncID,
-  preconfigured_custom_values: [gnsStakePositionReaderArgID],
+  overridden_custom_values: [gnsStakePositionReaderArgID],
   custom: false,
 };
 
@@ -236,10 +236,7 @@ const gnsUnstakeAmountArg: argumentsv2 = {
   solidity_type: "function",
   custom: false,
   value: getInvestmentAmountFuncID,
-  preconfigured_custom_values: [
-    stakedGNSExtracterArgID,
-    placeholderDivisorArgID,
-  ],
+  overridden_custom_values: [stakedGNSExtracterArgID, placeholderDivisorArgID],
   name: "amount",
   dev_notes: "get investment amount wrapper for GNS staking reader",
   typeflag: Typeflags.STATICCALL_COMMAND_FLAG,

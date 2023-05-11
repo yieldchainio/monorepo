@@ -8,7 +8,8 @@ import {
   CallTypes,
   EncodingContext,
   CustomArgsTree,
-  TokenPercentage
+  TokenPercentage,
+  DeployableStep,
 } from "../../types/yc";
 import { Typeflags } from "@prisma/client";
 import { BaseClass } from "../base";
@@ -16,6 +17,7 @@ import { YCAction } from "../action/action";
 import { YCToken } from "..";
 import { TypeFlags } from "typescript";
 import { getFunctionFlags } from "../../helpers/builder/get-command-flags";
+import { bytes } from "../../types";
 
 export class YCFunc extends BaseClass {
   // ====================
@@ -23,7 +25,8 @@ export class YCFunc extends BaseClass {
   // ====================
 
   // The signature used to encode/decode the FunctionCall struct - i.e a tuple representing it's fields
-  static readonly FunctionCallTuple = "(address,bytes[],string,bool)";
+  static readonly FunctionCallTuple =
+    "tuple(address target_address, bytes[] args, string signature)";
 
   // ====================
   //    PRIVATE FIELDS
@@ -52,13 +55,13 @@ export class YCFunc extends BaseClass {
     this.name = _function.name;
     this.typeflag = _function.typeflag;
     this.retTypeflag = _function.ret_typeflag;
-
     this.isCallback = _function.callback;
 
     // Mapping arg identifiers => Full argument instances
-    const fullArgs = _function.arguments_ids.map((_arg: string) =>
-      _context.getArgument(_arg)
-    );
+    const fullArgs = _function.arguments_ids.map((_arg: string) => {
+      const jsonArg = _context.rawArguments.find((arg) => arg.id == _arg);
+      return jsonArg ? new YCArgument(jsonArg, _context) : null;
+    });
 
     // Throw an error and assign no arguments if the arguments include a null value
     if (fullArgs.includes(null))
@@ -102,8 +105,8 @@ export class YCFunc extends BaseClass {
     this.actions = (_function.actions_ids || []) as unknown as YCAction[];
 
     // Get the existing instance (or set ours otherwise)
-    // const existingFunc = this.getInstance(_function.id);
-    // if (existingFunc) return existingFunc;
+    const existingFunc = this.getInstance(_function.id);
+    if (existingFunc) return existingFunc;
 
     // Set the actual dependency/counter functions
     this.counterFunction = _function.inverse_function_id
@@ -136,10 +139,10 @@ export class YCFunc extends BaseClass {
   // =========================
   // Encode the current function as a FunctionCall struct, add flag
   encodeYCCommand = (
-    step: TokenPercentageImplementor,
+    step: DeployableStep,
     context: EncodingContext,
     customArguments: Array<any | YCFunc>
-  ): string => {
+  ): bytes => {
     if (!this.address)
       throw new Error(
         "YCFunc ERR: Cannot Encode - Address Not Found. Function ID: " + this.id
@@ -159,12 +162,18 @@ export class YCFunc extends BaseClass {
     const flags = getFunctionFlags(this);
 
     // Encode the function call
+    console.log("Function call Struct:", functionCall);
     const encodedFunction = iface
       .getAbiCoder()
       .encode([YCFunc.FunctionCallTuple], [functionCall]);
 
+    console.log(
+      "Function Encoded: ",
+      "0x" + flags + encodedFunction.slice(2, encodedFunction.length)
+    );
+
     // Return the encoded function with the flag
-    return flags + encodedFunction;
+    return "0x" + flags + encodedFunction.slice(2, encodedFunction.length);
   };
 
   /**
@@ -173,17 +182,14 @@ export class YCFunc extends BaseClass {
    * @returns A @interface FunctionCall that represents an on-chain FunctionCall struct.
    */
   toFunctionCallStruct = (
-    step: TokenPercentageImplementor,
+    step: DeployableStep,
     context: EncodingContext,
-    customArguments: CustomArgsTree[]
+    customArguments: Array<string | null>
   ): FunctionCall => {
     // Assert that if we require a custom argument,
-    if (
-      this.requiresCustom() &&
-      (!customArguments || !customArguments.length)
-    ) {
+    if (this.customArgumentsLength !== customArguments.length) {
       throw new Error(
-        "YCFunc ERR: Cannot Create FunctionCall - Function requires custom argument(s), but no step was provided"
+        "YCFunc ERR: Cannot Create FunctionCall - Function requires custom argument(s?), but no step was provided"
       );
     }
 
@@ -201,7 +207,11 @@ export class YCFunc extends BaseClass {
       // Our arguments. If an argument is not a custom, we encode it. Otherwise, we encode it but
       // input the next custom argument from our array (we shift is so that it is removed)
       args: this.arguments.map((arg: YCArgument) =>
-        arg.encodeYCCommand(step, context)
+        arg.encodeYCCommand(
+          step,
+          context,
+          arg.isCustom ? customArguments.shift() : undefined
+        )
       ),
 
       // Our signature (i.e "stakeTokens(uint256,address,string)")
@@ -212,14 +222,14 @@ export class YCFunc extends BaseClass {
   };
 
   // Returns true if the function requires a custom argument
-  requiresCustom = (): boolean => {
+  get requiresCustom(): boolean {
     return this.arguments.some((arg: YCArgument) => arg.isCustom);
-  };
+  }
 
   // Returns the amount of custom arguments required
-  customArgumentsLength = (): number => {
+  get customArgumentsLength(): number {
     return this.arguments.filter((arg: YCArgument) => arg.isCustom).length;
-  };
+  }
 
   // =================
   //   SINGLETON REF
@@ -261,7 +271,6 @@ export class YCFunc extends BaseClass {
     };
   };
 }
-
 
 export interface TokenPercentageImplementor {
   tokenPercentages: Map<string, TokenPercentage>;

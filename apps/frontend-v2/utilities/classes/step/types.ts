@@ -108,7 +108,7 @@ export interface IStepReguler<T extends IStep<T>> {
     func: YCFunc;
     used: boolean;
   }[];
-  customArguments?: CustomArgsTree[];
+  customArguments?: Array<string | null>;
 }
 
 // An interface for the IStep propreties which are trigger step-related
@@ -160,7 +160,7 @@ export interface JSONStep {
     funcID: string;
     used: boolean;
   }[];
-  customArguments?: any[];
+  customArguments: Array<string | null>;
   actionConfig?: ActionConfigs | null;
 
   // ==TRIGGER== //

@@ -1,25 +1,28 @@
 import { STATICCALL_COMMAND_FLAG, TypeflagValues } from "../../../constants";
 import { TokenPercentageImplementor, YCArgument, YCFunc } from "../../../core";
-import { CustomArgsTree, EncodingContext } from "../../../types";
+import {
+  CustomArgsTree,
+  DeployableStep,
+  EncodingContext,
+} from "../../../types";
 import { encodeGetInvestmentAmount } from "./get-investment-amount";
+
+// Constants
+const GET_INVESTMENT_AMOUNT_ID = "b6ce56d0-d032-47ed-a3ff-8dedd81f0c2d";
 
 /**
  * Map function names to parsers
  */
 const UtilityCommandEncoders: Record<
   string,
-  // (
-  //   step: TokenPercentageImplementor,
-  //   context: EncodingContext,
-  //   argument: YCArgument,
-  //   customValue: CustomArgsTree
-  // ) => string
-  any
+  (
+    step: DeployableStep,
+    context: EncodingContext,
+    argument: YCArgument
+  ) => string
 > = {
-  getInvestmentAmount: encodeGetInvestmentAmount,
+  [GET_INVESTMENT_AMOUNT_ID]: encodeGetInvestmentAmount,
 };
-
-type bytes = `0x${string}`;
 
 /**
  * @notice
@@ -31,21 +34,15 @@ type bytes = `0x${string}`;
  * @returns encodedCommand - Either an encoded command if found utility to parse, or null if none
  */
 export const trySpecialEncoding = (
-  step: TokenPercentageImplementor,
+  step: DeployableStep,
   context: EncodingContext,
-  argument: YCArgument,
-  customValue: CustomArgsTree
+  argument: YCArgument
 ): string | null => {
-  // We only parse functions as utility commands
+  // We only parse functions as special commands
   if (!(argument.value instanceof YCFunc)) return null;
 
-  // Return either the uniquely-encoded command or null if none
+  // Return either the speicla-encoded command or null if none
   return (
-    UtilityCommandEncoders[argument.value.name]?.(
-      step,
-      context,
-      argument,
-      customValue
-    ) || null
+    UtilityCommandEncoders[argument.value.id]?.(step, context, argument) || null
   );
 };

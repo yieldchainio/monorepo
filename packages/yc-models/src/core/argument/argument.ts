@@ -4,11 +4,12 @@ import { bytes } from "../../types/global";
 import { TokenPercentageImplementor, YCFunc } from "../function/function";
 import { BaseClass } from "../base";
 import { Typeflags } from "@prisma/client";
-import { CustomArgsTree, EncodingContext, typeflags } from "../../types";
+import { CustomArgsTree, DeployableStep, EncodingContext, typeflags } from "../../types";
 import { getArgumentFlags } from "../../helpers/builder/get-command-flags";
 import { AbiCoder } from "ethers";
 import { YCToken } from "..";
 import { trySpecialEncoding } from "../../helpers/builder/special-commands";
+import { remove0xPrefix } from "../../helpers/builder/remove-0x-prefix";
 
 /**
  * @notice
@@ -51,12 +52,16 @@ export class YCArgument extends BaseClass {
       ? _context.getToken(_argument.relating_token)
       : null;
 
+    console.log("Argument Relating Token:", this.relatingToken);
+
     // @notice
     // If the solidity type is a function, the value is refering to the identifier of the function.
     // We want to use it when encoding this argument so that it can be evaluated at runtime
     // Get the YCFunc object
     if (_argument.solidity_type == "function") {
-      let func = _context.getFunction(_argument.value);
+      const func = _context.rawFunctions.find(
+        (func) => func.id == _argument.value
+      );
 
       // Throw an error if we got a null back
       if (!func) {
@@ -66,16 +71,24 @@ export class YCArgument extends BaseClass {
       }
 
       // Assign the value to the YCFunc instance
-      this.#value = func;
+      this.#value = new YCFunc(func, _context);
 
       // Replace the value (func)'s custom arguments with our overrides if any
       for (let i = 0; i < _argument.overridden_custom_values.length; i++) {
-        const customVal = _argument.overridden_custom_values[i];
-        if (customVal == null) continue;
-        const argInstance = _context.getArgument(customVal);
+        const potentialUnderlyingArgID = _argument.overridden_custom_values[i];
+        if (potentialUnderlyingArgID == "undefined") continue;
+        const underlyingJsonArg = _context.rawArguments.find(
+          (arg) => arg.id == potentialUnderlyingArgID
+        );
+        if (!underlyingJsonArg)
+          throw (
+            "Cannot Get Underlying Arg Of Override. ID: " +
+            potentialUnderlyingArgID
+          );
+        const argInstance = new YCArgument(underlyingJsonArg, _context);
         if (!argInstance)
           throw "Cannot Override Custom Args - Did Not Get Arg Instance";
-        if (customVal !== null) func.arguments[i] = argInstance;
+        this.#value.arguments[i] = argInstance;
       }
 
       // If the argument type is not a function - we simply use the hardcoded value
@@ -93,17 +106,16 @@ export class YCArgument extends BaseClass {
 
   // Encode the argument
   encodeYCCommand = (
-    step: TokenPercentageImplementor,
+    step: DeployableStep,
     context: EncodingContext,
-    customValue?: CustomArgsTree
+    customValue?: string | null
   ): bytes => {
     // @notice We first attempt to get some special utility encoding through. If we do, we return that instead.
     // Otherwise, we continue on to the reguler encoding
     const specialCommand: bytes | null = trySpecialEncoding(
       step,
       context,
-      this,
-      customValue as CustomArgsTree
+      this
     );
     if (specialCommand) return specialCommand;
 
@@ -113,33 +125,29 @@ export class YCArgument extends BaseClass {
     // Init variable for the naked encoded command
     let command: bytes = typeflags;
 
-    // Then, check to see if our argument is a custom value.
-    // If it is, then we check to see if it's an instance of YC func.
-    // If it is, we call encode YC command on it. Otherwise, we just abi.encode it
+    // Encode either our value, or provided custom value if we are custom
     if (this.isCustom) {
-      if (!customValue) throw "Cannot Encode - Current Custom Value Undefined";
-
-      // If function, call encodeYCCommand on it, include remaining custom values
-      if (customValue.value instanceof YCFunc)
-        command = customValue.value.encodeYCCommand(
-          step,
-          context,
-          customValue.customArgs
+      if (!customValue)
+        throw (
+          "Cannot Encode Argument As YC Command - Expected Custom Value, But Got None. ID: " +
+          this.id
         );
-      // Else, just ABI encode it and add to existing typeflags
-      else
-        command += AbiCoder.defaultAbiCoder().encode(
-          [this.solidityType],
-          [customValue.value]
-        );
+      command += remove0xPrefix(
+        AbiCoder.defaultAbiCoder().encode([this.solidityType], [customValue])
+      );
     }
+    // If we are a function, encode it instead
+    else if (this.value instanceof YCFunc)
+      command = remove0xPrefix(this.value.encodeYCCommand(step, context, []));
+    // Else, encode our value normally
+    else
+      command += remove0xPrefix(
+        AbiCoder.defaultAbiCoder().encode([this.solidityType], [this.value])
+      );
 
-    // Assert that naked command length is bigger than 0 (excluding typeflags)
     if (command.length < 6)
       throw "Cannot Encode Arg - Naked Command Length Is 0";
 
-    // Return the typeflags + naked command
-    return command;
+    return "0x" + command;
   };
 }
-

@@ -17,6 +17,7 @@ import {
   DBUser,
   DBStatistic,
 } from "./db";
+import { bytes } from "./global";
 export interface ClassificationContext {
   addresses: DBContract[];
   funcs: DBFunction[];
@@ -48,7 +49,7 @@ export enum CallTypes {
 
 export interface FunctionCall {
   target_address: string;
-  args: string[];
+  args: bytes[];
   signature: string;
 }
 
@@ -92,6 +93,6 @@ export interface DeployableStep {
   parent?: DeployableStep | null;
   tokenPercentages?: Array<[string, TokenPercentage]>;
   function?: string;
-  customArguments?: CustomArgsTree[];
+  customArguments?: Array<string | null>;
   data?: any | null;
 }

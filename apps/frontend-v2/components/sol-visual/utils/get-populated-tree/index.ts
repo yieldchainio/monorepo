@@ -140,11 +140,6 @@ export const getPopulatedSolTransfersTree = async (txnID: string) => {
     currentXAxisPosition -= SOL_TXN_NODE_WIDTH + SOL_TXN_NODE_GAP;
   }
 
-  console.log(
-    "The populated trnasfers",
-    transfersWithPositionsAndTokenMetadata
-  );
-
   return transfersWithPositionsAndTokenMetadata;
 };
 

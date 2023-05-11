@@ -15,6 +15,7 @@ import {
   Node,
   CustomArgsTree,
   safeToJSON,
+  DBFunction,
 } from "@yc/yc-models";
 import {
   ActionConfigs,
@@ -35,7 +36,7 @@ import { FlextreeNode, flextree } from "d3-flextree";
 import { HierarchyNode } from "d3-hierarchy";
 import { ImageSrc } from "components/wrappers/types";
 import { DEPOSIT_TRIGGER_CONFIG } from "components/steps/constants";
-import { constructCustomArgsTree } from "./helpers/construct-custom-args-tree";
+import { getCustomFields } from "./helpers/get-custom-fields";
 
 export class Step extends Node<Step> implements IStep<Step> {
   // ====================
@@ -183,8 +184,7 @@ export class Step extends Node<Step> implements IStep<Step> {
    */
   setFunction(func: YCFunc | null) {
     this.function = func;
-    if (func == null) this.customArguments = [];
-    else this.customArguments = constructCustomArgsTree(func);
+    this.customArguments = func ? getCustomFields(func) : [];
   }
 
   /**
@@ -581,7 +581,7 @@ export class Step extends Node<Step> implements IStep<Step> {
   /**
    * Optional custom arguments for the used function
    */
-  customArguments: CustomArgsTree[] = [];
+  customArguments: Array<string | null> = [];
 
   // -----------
   // Trigger Step Variables
@@ -770,7 +770,7 @@ export class Step extends Node<Step> implements IStep<Step> {
         : [],
 
       protocol: step.protocol ? context.getProtocol(step.protocol) : null,
-      customArguments: deseriallizeCustomArgs(step.customArguments || []),
+      customArguments: step?.customArguments || [],
     };
     const resStep = new Step(config);
     for (const child of resStep.children) child.parent = resStep;
@@ -960,68 +960,68 @@ export class Step extends Node<Step> implements IStep<Step> {
       triggerConfig: this.triggerConfig,
       data: this.data,
       tokenPercentages: Array.from(this.tokenPercentages.entries()),
-      customArguments: serializeCustomArgs(this.customArguments), // TODO
+      customArguments: this.customArguments, // TODO
     };
   };
 
   // TODO: toDBStep()
 }
 
-const serializeCustomArgs = (
-  argsTreeArr: CustomArgsTree[]
-): CustomArgsTree[] => {
-  const serialized: CustomArgsTree[] = [];
+// const serializeCustomArgs = (
+//   argsTreeArr: CustomArgsTree[]
+// ): CustomArgsTree[] => {
+//   const serialized: CustomArgsTree[] = [];
 
-  for (const arg of argsTreeArr) {
-    const serializedArg: CustomArgsTree = {
-      value: null,
-      customArgs: arg.customArgs,
-      preConfigured: true,
-    };
+//   for (const arg of argsTreeArr) {
+//     const serializedArg: CustomArgsTree = {
+//       value: null,
+//       customArgs: arg.customArgs,
+//       preConfigured: true,
+//     };
 
-    if (typeof arg.value == "object")
-      serializedArg.value =
-        arg.value instanceof YCFunc
-          ? arg.value.toJSON()
-          : safeToJSON(arg.value);
-    else serializedArg.value = arg.value;
+//     if (typeof arg.value == "object")
+//       serializedArg.value =
+//         arg.value instanceof YCFunc
+//           ? arg.value.toJSON()
+//           : safeToJSON(arg.value);
+//     else serializedArg.value = arg.value;
 
-    if (arg.customArgs.length > 0)
-      serializedArg.customArgs = serializeCustomArgs(serializedArg.customArgs);
+//     if (arg.customArgs.length > 0)
+//       serializedArg.customArgs = serializeCustomArgs(serializedArg.customArgs);
 
-    serialized.push(serializedArg);
-  }
+//     serialized.push(serializedArg);
+//   }
 
-  return serialized;
-};
+//   return serialized;
+// };
 
-const deseriallizeCustomArgs = (
-  argsTreeArr: CustomArgsTree[]
-): CustomArgsTree[] => {
-  const circulerCreator = (arg: any) => {
-    if (typeof arg !== "object") {
-      const potentialFunction =
-        YCClassifications.getInstance().getFunction(arg);
-      return potentialFunction || arg;
-    }
+// const deseriallizeCustomArgs = (
+//   argsTreeArr: CustomArgsTree[]
+// ): CustomArgsTree[] => {
+//   const circulerCreator = (arg: any) => {
+//     if (typeof arg !== "object") {
+//       const potentialFunction =
+//         YCClassifications.getInstance().getFunction(arg);
+//       return potentialFunction || arg;
+//     }
 
-    if (typeof arg == "object") {
-      const newObj: typeof arg = {};
-      for (const entry of Object.entries(arg))
-        newObj[entry[0]] = circulerCreator(entry[1]);
-      return newObj;
-    }
-  };
-  const deseriallized: CustomArgsTree[] = [];
+//     if (typeof arg == "object") {
+//       const newObj: typeof arg = {};
+//       for (const entry of Object.entries(arg))
+//         newObj[entry[0]] = circulerCreator(entry[1]);
+//       return newObj;
+//     }
+//   };
+//   const deseriallized: CustomArgsTree[] = [];
 
-  for (const arg of argsTreeArr) {
-    const deserializedArg: CustomArgsTree = {
-      value: circulerCreator(arg),
-      customArgs: arg.customArgs.map((nestedArg) => circulerCreator(nestedArg)),
-      preConfigured: true,
-    };
-    deseriallized.push(deserializedArg);
-  }
+//   for (const arg of argsTreeArr) {
+//     const deserializedArg: CustomArgsTree = {
+//       value: circulerCreator(arg),
+//       customArgs: arg.customArgs.map((nestedArg) => circulerCreator(nestedArg)),
+//       preConfigured: true,
+//     };
+//     deseriallized.push(deserializedArg);
+//   }
 
-  return deseriallized;
-};
+//   return deseriallized;
+// };

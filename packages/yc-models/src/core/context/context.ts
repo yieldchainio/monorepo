@@ -581,6 +581,10 @@ export class YCClassifications extends YCClassificationsInternal {
     return this.YCfunctions;
   }
 
+  get rawFunctions() {
+    return this.Functions;
+  }
+
   get arguments() {
     if (!this.YCparameters.length)
       this.YCparameters = this.Parameters.map(
@@ -588,6 +592,10 @@ export class YCClassifications extends YCClassificationsInternal {
       );
 
     return this.YCparameters;
+  }
+
+  get rawArguments() {
+    return this.Parameters;
   }
 
   get strategies() {

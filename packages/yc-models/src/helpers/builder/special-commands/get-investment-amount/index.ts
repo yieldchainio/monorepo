@@ -1,21 +1,30 @@
+import { AbiCoder, ethers } from "ethers";
 import {
   TokenPercentageImplementor,
   YCArgument,
   YCClassifications,
   YCFunc,
 } from "../../../../core";
-import { CustomArgsTree, EncodingContext } from "../../../../types";
+import {
+  CustomArgsTree,
+  DeployableStep,
+  EncodingContext,
+  FunctionCall,
+} from "../../../../types";
+import { VALUE_VAR_FLAG } from "../../../../constants";
+import { TypeflagValues } from "../../../../constants";
+import { remove0xPrefix } from "../../remove-0x-prefix";
 
+const WITHDRAW_SHARES_MEM_LOCATION = "0x2c0";
 const WITHDRAW_SHARES_RETREIVER_ARG_ID = "000";
 
 /**
  * Encode a getInvestmentAmount() YC Command
  */
 export const encodeGetInvestmentAmount = (
-  step: TokenPercentageImplementor,
+  step: DeployableStep,
   context: EncodingContext,
-  argument: YCArgument,
-  customValue: YCArgument[]
+  argument: YCArgument
 ): string => {
   // YCArgument value must be function
   if (!(argument.value instanceof YCFunc))
@@ -31,30 +40,61 @@ export const encodeGetInvestmentAmount = (
   // which is used to MLOAD the shares % the user is trying to withdraw
   if (context == EncodingContext.UPROOT) {
     // Get the withdraw shares retreiver function
-    const withdrawalFunc = YCClassifications.getInstance().getArgument(
-      WITHDRAW_SHARES_RETREIVER_ARG_ID
-    );
-    if (!withdrawalFunc)
-      throw "Cannot Encode Get Investmnet Amount - Context is uproot, and cannot get Withdrawal Shares Retreiver from context";
+    const withdrawalFuncStruct: FunctionCall = {
+      target_address: ethers.ZeroAddress,
+      // The location in memory of the withdraw shares variable
+      args: [
+        AbiCoder.defaultAbiCoder().encode(
+          ["uint256"],
+          [WITHDRAW_SHARES_MEM_LOCATION]
+        ),
+      ],
+      signature: "",
+    };
 
-    // Insert it to custom values (At this point the recursive list)
-    // Will have the args of our argument as the first 2, then the rest
-    customValue.splice(1, 0, withdrawalFunc);
-
-    // Enocde the function (it will use the custom value) and return
-    // return argument.encodeYCCommand(step, context, customValues);
+    // Encode the withdraw shares loader manually
+    return `${
+      (TypeflagValues["INTERNAL_LOAD_FLAG"],
+      TypeflagValues["VALUE_VAR_FLAG"],
+      AbiCoder.defaultAbiCoder().encode(
+        [YCFunc.FunctionCallTuple],
+        [withdrawalFuncStruct]
+      ))
+    }`;
   }
 
   // Get the token percentage from the step, assert that it must exist also
-  const tokenPercentage = step.tokenPercentages.get(argument.relatingToken.id);
+  const tokenPercentage = new Map(step.tokenPercentages).get(
+    argument.relatingToken.id
+  );
   if (!tokenPercentage)
     throw "Cannot Encode Get Investment Amount - No Token Percentage Set";
 
-  // Push it to the custom values
-  // customValue.splice(1, 0, tokenPercentage);
+  // Encode hardcoded divisor and return
+  const tokenPercentageAsCommand = `0x${
+    (TypeflagValues["VALUE_VAR_FLAG"],
+    TypeflagValues["VALUE_VAR_FLAG"],
+    remove0xPrefix(
+      AbiCoder.defaultAbiCoder().encode(
+        ["uint256"],
+        // We transform it into a "divisor" and multiply by 100 (safe maths)
+        [(100 / tokenPercentage.percentage) * 100]
+      )
+    ))
+  }`;
 
-  // Now encode it as a YC command, it will use the new custom value when encoding
-  return argument.encodeYCCommand(step, context);
+  const fullGetInvestmentCommand = argument.value.encodeYCCommand(
+    step,
+    context,
+    [tokenPercentageAsCommand]
+  );
+
+  console.log(
+    "Encoded Get InvestmentAmount Command:",
+    fullGetInvestmentCommand
+  );
+
+  return fullGetInvestmentCommand;
 };
 
 /**

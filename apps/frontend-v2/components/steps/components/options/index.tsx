@@ -3,12 +3,14 @@
  * delete, expand/minimize, etc
  */
 
+import { EncodingContext } from "@yc/yc-models";
 import { DotMenuIcon } from "components/icons/dot-menu";
 import { StepProps } from "components/steps/types";
 import { TooltipDropdown } from "components/tooltip-dropdown";
 import { BaseComponentProps } from "components/types";
 import { Step } from "utilities/classes/step";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
+import { useLogs } from "utilities/hooks/stores/logger";
 import { useStepOptions } from "utilities/hooks/yc/useSteps/useStepsOptions";
 
 export const StepOptions = ({
@@ -23,6 +25,8 @@ export const StepOptions = ({
   // Get the canvas portal
   const canvasPortal = useElementPortal(canvasID);
 
+  const logs = useLogs();
+
   // Return the JSX
   return (
     <TooltipDropdown
@@ -35,7 +39,16 @@ export const StepOptions = ({
         className="cursor-pointer group transition duration-200 ease-in-out"
         onClick={() => {
           props.onClick?.();
+          const jsonStep = step.toJSON({ onlyCompleted: true });
+          if (!jsonStep)
+            throw logs.lazyPush({
+              message: "JSON Step is Null!",
+              type: "error",
+            });
           console.log(step);
+          console.log(
+            step.function?.encodeYCCommand(jsonStep, EncodingContext.SEED, [])
+          );
         }}
       ></DotMenuIcon>
     </TooltipDropdown>

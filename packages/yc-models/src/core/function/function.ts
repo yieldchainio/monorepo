@@ -1,4 +1,4 @@
-import { DBFunction } from "../../types/db";
+import { DBArgument, DBFunction } from "../../types/db";
 import { YCClassifications } from "../context/context";
 import { YCContract } from "../address/address";
 import { YCArgument } from "../argument/argument";
@@ -58,17 +58,23 @@ export class YCFunc extends BaseClass {
     this.isCallback = _function.callback;
 
     // Mapping arg identifiers => Full argument instances
-    const fullArgs = _function.arguments_ids.map((_arg: string) => {
-      const jsonArg = _context.rawArguments.find((arg) => arg.id == _arg);
-      return jsonArg ? new YCArgument(jsonArg, _context) : null;
-    });
+    const fullArgs = _function.arguments_ids.map(
+      (_arg: string | DBArgument) => {
+        if (typeof _arg == "object") return new YCArgument(_arg, _context);
+        const jsonArg = _context.rawArguments.find((arg) => arg.id == _arg);
+        return jsonArg ? new YCArgument(jsonArg, _context) : null;
+      }
+    );
 
     // Throw an error and assign no arguments if the arguments include a null value
-    if (fullArgs.includes(null))
+    if (fullArgs.includes(null)) {
+      console.log(_function.arguments_ids);
+
       throw (
         "YCFunc ERROR: Found Null Argument. Argument Value: " +
         fullArgs.find((arg: YCArgument | null) => arg == null)
       );
+    }
     // Should be sufficient anyway - Typescript whining for no reason.
     else
       this.arguments = fullArgs.flatMap((arg: YCArgument | null) =>
@@ -188,8 +194,10 @@ export class YCFunc extends BaseClass {
   ): FunctionCall => {
     // Assert that if we require a custom argument,
     if (this.customArgumentsLength !== customArguments.length) {
+      console.log(this.customArgumentsLength, customArguments);
+      console.log(this.signature);
       throw new Error(
-        "YCFunc ERR: Cannot Create FunctionCall - Function requires custom argument(s?), but no step was provided"
+        "YCFunc ERR: Cannot Create FunctionCall - Function requires custom argument(s?), but provided args length mismatch"
       );
     }
 
@@ -253,13 +261,15 @@ export class YCFunc extends BaseClass {
   /**
    * Custom toJSON function
    */
-  toJSON = (): DBFunction => {
+  toJSON = (retainArgs: boolean = false): DBFunction => {
     return {
       id: this.id,
       name: this.id,
       dependancy_function_id: this.dependencyFunction?.id || null,
       inverse_function_id: this.counterFunction?.id || null,
-      arguments_ids: this.arguments.map((arg) => arg.id),
+      arguments_ids: this.arguments.map((arg) =>
+        retainArgs ? arg.toJSON(retainArgs) : arg.id
+      ) as string[],
       callback: this.isCallback,
       typeflag: this.typeflag,
       ret_typeflag: this.retTypeflag,

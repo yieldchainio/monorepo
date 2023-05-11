@@ -92,7 +92,7 @@ export interface DeployableStep {
   children: DeployableStep[];
   parent?: DeployableStep | null;
   tokenPercentages?: Array<[string, TokenPercentage]>;
-  function?: string;
+  function?: DBFunction;
   customArguments?: Array<string | null>;
   data?: any | null;
 }

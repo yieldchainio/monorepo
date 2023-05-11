@@ -1,10 +1,15 @@
 import { YCClassifications } from "../context/context";
-import { DBArgument } from "../../types/db";
+import { DBArgument, DBFunction } from "../../types/db";
 import { bytes } from "../../types/global";
 import { TokenPercentageImplementor, YCFunc } from "../function/function";
 import { BaseClass } from "../base";
 import { Typeflags } from "@prisma/client";
-import { CustomArgsTree, DeployableStep, EncodingContext, typeflags } from "../../types";
+import {
+  CustomArgsTree,
+  DeployableStep,
+  EncodingContext,
+  typeflags,
+} from "../../types";
 import { getArgumentFlags } from "../../helpers/builder/get-command-flags";
 import { AbiCoder } from "ethers";
 import { YCToken } from "..";
@@ -33,7 +38,8 @@ export class YCArgument extends BaseClass {
   readonly identifier: string;
   readonly name: string | null;
   readonly id: string;
-  readonly relatingToken: YCToken | null;
+  relatingToken: YCToken | null;
+  #overridenCustomArguments: Array<string | null> = [];
 
   // =======================
   //      CONSTRUCTOR
@@ -52,16 +58,15 @@ export class YCArgument extends BaseClass {
       ? _context.getToken(_argument.relating_token)
       : null;
 
-    console.log("Argument Relating Token:", this.relatingToken);
-
     // @notice
     // If the solidity type is a function, the value is refering to the identifier of the function.
     // We want to use it when encoding this argument so that it can be evaluated at runtime
     // Get the YCFunc object
     if (_argument.solidity_type == "function") {
-      const func = _context.rawFunctions.find(
-        (func) => func.id == _argument.value
-      );
+      const func =
+        typeof (_argument.value as string | DBFunction) == "string"
+          ? _context.rawFunctions.find((func) => func.id == _argument.value)
+          : _argument.value;
 
       // Throw an error if we got a null back
       if (!func) {
@@ -71,9 +76,10 @@ export class YCArgument extends BaseClass {
       }
 
       // Assign the value to the YCFunc instance
-      this.#value = new YCFunc(func, _context);
+      this.#value = new YCFunc(func as DBFunction, _context);
 
       // Replace the value (func)'s custom arguments with our overrides if any
+      this.#overridenCustomArguments = _argument.overridden_custom_values;
       for (let i = 0; i < _argument.overridden_custom_values.length; i++) {
         const potentialUnderlyingArgID = _argument.overridden_custom_values[i];
         if (potentialUnderlyingArgID == "undefined") continue;
@@ -150,4 +156,23 @@ export class YCArgument extends BaseClass {
 
     return "0x" + command;
   };
+
+  toJSON(retainArgs: boolean = false): DBArgument {
+    return {
+      id: this.id,
+      name: this.name,
+      solidity_type: this.solidityType,
+      value: (this.value instanceof YCFunc
+        ? retainArgs
+          ? this.value.toJSON(retainArgs)
+          : this.value.id
+        : this.value) as unknown as any,
+
+      custom: this.isCustom,
+      typeflag: this.typeflag,
+      ret_typeflag: this.retTypeflag,
+      relating_token: this.relatingToken?.id || null,
+      overridden_custom_values: this.#overridenCustomArguments,
+    };
+  }
 }

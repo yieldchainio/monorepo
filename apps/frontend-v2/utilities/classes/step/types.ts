@@ -11,6 +11,7 @@ import {
   YCClassifications,
   DBStep,
   CustomArgsTree,
+  DBFunction,
 } from "@yc/yc-models";
 import { ImageSrc } from "components/wrappers/types";
 
@@ -155,7 +156,7 @@ export interface JSONStep {
   // ==REGULER== //
   protocol?: string;
   action?: string;
-  function?: string;
+  function?: DBFunction;
   unlockedFunctions?: {
     funcID: string;
     used: boolean;

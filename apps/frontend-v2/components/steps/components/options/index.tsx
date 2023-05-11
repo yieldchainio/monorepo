@@ -47,7 +47,11 @@ export const StepOptions = ({
             });
           console.log(step);
           console.log(
-            step.function?.encodeYCCommand(jsonStep, EncodingContext.SEED, [])
+            step.function?.encodeYCCommand(
+              jsonStep,
+              EncodingContext.SEED,
+              step.customArguments
+            )
           );
         }}
       ></DotMenuIcon>

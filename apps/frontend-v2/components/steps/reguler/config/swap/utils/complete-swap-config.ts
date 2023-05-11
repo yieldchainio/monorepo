@@ -8,6 +8,7 @@ import {
   YCArgument,
   YCClassifications,
   YCFunc,
+  YCToken,
 } from "@yc/yc-models";
 import { Step } from "utilities/classes/step";
 import { SwapData } from "../types";
@@ -76,7 +77,15 @@ export const completeSwapConfig = (step: Step, context: YCClassifications) => {
     fromTokenDBArgument,
     YCClassifications.getInstance()
   );
-  swapFunction.arguments[2] = tokenBalanceOfGetter;
+
+  console.log(swapFunction);
+
+  // Insert our new balanceOf getter to the getInvestmentAmount args
+  (swapFunction.arguments[2].value as YCFunc).arguments[0] =
+    tokenBalanceOfGetter;
+
+  // Set the relating token on it
+  swapFunction.arguments[2].relatingToken = new YCToken(fromToken, context);
 
   // Set them
   step.customArguments = [fromToken.address, toToken.address];

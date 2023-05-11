@@ -761,7 +761,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       size: step.size,
       percentage: step.percentage,
       action: step.action ? context.getAction(step.action) : null,
-      function: step.function ? context.getFunction(step.function) : null,
+      function: step.function ? new YCFunc(step.function, context) : null,
       unlockedFunctions: step.unlockedFunctions
         ? step.unlockedFunctions.flatMap(({ funcID, used }) => {
             const func = context.getFunction(funcID);
@@ -940,7 +940,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       outflows: this.outflows.map((token) => token.id),
       writeable: this.writeable,
       percentage: this.percentage,
-      function: this.function?.id,
+      function: this.function?.toJSON(true),
       unlockedFunctions: this.unlockedFunctions.map((func) => ({
         funcID: func.func.id,
         used: func.used,

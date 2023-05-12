@@ -5,7 +5,7 @@
  */
 
 import { JSONStep, YCClassifications, YCStep } from "@yc/yc-models";
-import { ValidationResponse } from "../../types";
+import { ValidationResponse } from "../../types.js";
 
 export function validateSteps(
   stepsTree: YCStep,

@@ -8,7 +8,7 @@
  */
 
 import { JSONStep, YCContract, YCStep, YCToken, address } from "@yc/yc-models";
-import { ApprovalPairs } from "../../types";
+import { ApprovalPairs } from "../../types.js";
 
 export function buildApprovalPairs(
   seedSteps: YCStep,

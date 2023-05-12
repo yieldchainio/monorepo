@@ -10,7 +10,7 @@ import {
   YCStep,
   bytes,
 } from "@yc/yc-models";
-import { StepsToEncodedFunctions } from "../../types";
+import { StepsToEncodedFunctions } from "../../types.js";
 import { ethers } from "ethers";
 
 export function encodeTreesFunctions(

@@ -7,7 +7,7 @@
  */
 
 import { YCStep, bytes } from "@yc/yc-models";
-import { StepsToEncodedFunctions } from "../../types";
+import { StepsToEncodedFunctions } from "../../types.js";
 import { YCStepStruct } from "@yc/yc-models";
 
 export function buildOnchainStepsList(
@@ -40,5 +40,5 @@ export function buildOnchainStepsList(
     stepIdsToIndices.set(step.id, index);
     linkedList[parentIdx].childrenIndices.push(index);
   });
-  return linkedList
+  return linkedList;
 }

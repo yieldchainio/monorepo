@@ -4,7 +4,7 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
-import { BuilderResponse, VaultCreationRequest } from "./types";
+import { BuilderResponse, VaultCreationRequest } from "./types.js";
 import { createDeployableVaultInput } from "./helpers/index.js";
 
 // App to use for reguler API

@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
 import { BuilderResponse, VaultCreationRequest } from "./types";
-import { createDeployableVaultInput } from "./helpers";
+import { createDeployableVaultInput } from "./helpers/index.js";
 
 const prisma = new PrismaClient();
 

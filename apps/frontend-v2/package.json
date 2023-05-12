@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@babel/plugin-syntax-import-assertions": "^7.20.0",
     "@bit/mui-org.material-ui.slider": "^4.9.10",
     "@rainbow-me/rainbowkit": "^0.12.3",
     "@raugfer/jazzicon": "^1.0.6",

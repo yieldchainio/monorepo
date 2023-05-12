@@ -17,7 +17,13 @@ const nextConfig = {
           {
             loader: "babel-loader",
             options: {
-              presets: [["@babel/preset-env", { targets: "defaults" }]],
+              presets: [
+                ["@babel/preset-env", { targets: "defaults" }],
+                [
+                  "@babel/plugin-syntax-import-assertions",
+                  { targets: "defaults" },
+                ],
+              ],
             },
           },
         ],

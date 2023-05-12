@@ -50,7 +50,7 @@ app.post(
   }
 );
 
-app.get("/", async (req: any, res: any) => {
+app.get("/", (req: any, res: any) => {
   res.status(200).send("ur mum");
 });
 /****************@App **************************************************/

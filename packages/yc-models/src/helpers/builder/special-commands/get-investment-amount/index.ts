@@ -9,9 +9,9 @@ import {
   CustomArgsTree,
   DeployableStep,
   EncodingContext,
-  FunctionCall,
   JSONStep,
 } from "../../../../types";
+import { FunctionCallStruct } from "../../../../types/onchain";
 import { VALUE_VAR_FLAG } from "../../../../constants";
 import { TypeflagValues } from "../../../../constants";
 import { remove0xPrefix } from "../../remove-0x-prefix";
@@ -41,7 +41,7 @@ export const encodeGetInvestmentAmount = (
   // which is used to MLOAD the shares % the user is trying to withdraw
   if (context == EncodingContext.UPROOT) {
     // Get the withdraw shares retreiver function
-    const withdrawalFuncStruct: FunctionCall = {
+    const withdrawalFuncStruct: FunctionCallStruct = {
       target_address: ethers.ZeroAddress,
       // The location in memory of the withdraw shares variable
       args: [

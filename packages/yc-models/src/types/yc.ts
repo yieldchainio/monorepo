@@ -47,12 +47,6 @@ export enum CallTypes {
   CALL = 4,
 }
 
-export interface FunctionCall {
-  target_address: string;
-  args: bytes[];
-  signature: string;
-}
-
 type HexNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 type HexLetter = "A" | "B" | "C" | "D" | "E" | "F";
 type HexChar = HexLetter | HexNumber;

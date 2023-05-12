@@ -16,6 +16,13 @@ import { Node } from "../../general/node/plain";
 
 export class YCStep extends Node<YCStep> {
   // ====================
+  //      CONSTNATS
+  // ====================
+  // The signature used to encode/decode the YCStep struct - i.e a tuple representing it's fields
+  static readonly YCStepTupleSig =
+    "tuple(bytes func, uint256[] childrenIndices, bytes[] conditions, bool isCallback)";
+
+  // ====================
   //      VARIABLES
   // ====================
   /**
@@ -48,7 +55,7 @@ export class YCStep extends Node<YCStep> {
    * Mapping tokens (outflows of this step) => percentage used of parent's inflow of the token
    * (id => percentage & isDirty)
    */
-  tokenPercentages: Map<string, TokenPercentage> = new Map();
+  tokenPercentages: Map<string, number> = new Map();
 
   /**
    * The action of this step, in YCAction (e.g Stake, Swap, Long, LP)
@@ -94,6 +101,10 @@ export class YCStep extends Node<YCStep> {
         : new YCFunc(_step.function, _context);
     this.customArguments = _step.customArguments;
     this.data = _step.data;
+    console.log("B4 creating new map ser", _step.tokenPercentages);
+    this.tokenPercentages = new Map(
+      typeof _step.tokenPercentages == "object" ? [] : _step.tokenPercentages
+    );
   }
 
   /**
@@ -111,9 +122,7 @@ export class YCStep extends Node<YCStep> {
       customArguments: this.customArguments,
       children: this.children.map((child) => child.toJSON()),
       data: this.data,
-      tokenPercentages: Array.from(this.tokenPercentages.entries()).map(
-        ([tokenID, { dirty, percentage }]) => [tokenID, percentage]
-      ),
+      tokenPercentages: Array.from(this.tokenPercentages.entries()),
     };
   };
 }

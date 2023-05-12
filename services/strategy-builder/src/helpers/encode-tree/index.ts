@@ -9,15 +9,11 @@ import {
   ConstructableNode,
   Node,
 } from "@yc/yc-models";
-import { updateTokenPercentages } from "./update-token-percentages";
+import { updateTokenPercentages } from "../update-token-percentages";
 
 export type InteractiveDeployableStep = ConstructableNode<any> & DeployableStep;
 
 export function encodeTree(deployableStep: DeployableStep) {
-  // Get the classification instance
-  const ycContext = YCClassifications.getInstance();
-
-  // Create an instance of the tree with iteration methods
   const tree: InteractiveDeployableStep = new ConstructableNode(
     deployableStep
   ) as InteractiveDeployableStep;
@@ -26,7 +22,5 @@ export function encodeTree(deployableStep: DeployableStep) {
   updateTokenPercentages(tree);
 
   // Iterate over each step - Encode it
-  tree.map((step: InteractiveDeployableStep) => {
-    
-  })
+  tree.map((step: InteractiveDeployableStep) => {});
 }

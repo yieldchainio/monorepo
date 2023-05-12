@@ -967,7 +967,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       tokenPercentages: Array.from(this.tokenPercentages.entries()).map(
         ([tokenID, { percentage }]) => [tokenID, percentage]
       ),
-      customArguments: this.customArguments, // TODO
+      customArguments: this.customArguments,
     };
   }
 }

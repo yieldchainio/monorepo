@@ -4,13 +4,13 @@ import { YCContract } from "../address/address";
 import { YCArgument } from "../argument/argument";
 import { YCFlow } from "../flow/flow";
 import {
-  FunctionCall,
   CallTypes,
   EncodingContext,
   CustomArgsTree,
   TokenPercentage,
   DeployableStep,
 } from "../../types/yc";
+import { FunctionCallStruct } from "../../types/onchain";
 import { Typeflags } from "@prisma/client";
 import { BaseClass } from "../base";
 import { YCAction } from "../action/action";
@@ -24,7 +24,7 @@ export class YCFunc extends BaseClass {
   //    STATIC FIELDS
   // ====================
 
-  // The signature used to encode/decode the FunctionCall struct - i.e a tuple representing it's fields
+  // The signature used to encode/decode the FunctionCallStruct struct - i.e a tuple representing it's fields
   static readonly FunctionCallTuple =
     "tuple(address target_address, bytes[] args, string signature)";
 
@@ -143,7 +143,7 @@ export class YCFunc extends BaseClass {
   // =========================
   //    GENERATION METHODS
   // =========================
-  // Encode the current function as a FunctionCall struct, add flag
+  // Encode the current function as a FunctionCallStruct struct, add flag
   encodeYCCommand = (
     step: JSONStep,
     context: EncodingContext,
@@ -157,14 +157,14 @@ export class YCFunc extends BaseClass {
     // Ethers interface for encoding
     const iface = this.address.interface;
 
-    // FunctionCall struct that will be ncoded
-    const functionCall: FunctionCall = this.toFunctionCallStruct(
+    // FunctionCallStruct struct that will be ncoded
+    const functionCall: FunctionCallStruct = this.toFunctionCallStruct(
       step,
       context,
       customArguments
     );
 
-    // get the flag'ified encoded FunctionCall
+    // get the flag'ified encoded FunctionCallStruct
     const flags = getFunctionFlags(this);
 
     // Encode the function call
@@ -185,30 +185,30 @@ export class YCFunc extends BaseClass {
   /**
    * @method toFunctionCallStruct
    * @param customArguments - Custom arguments that should be provided if the function requires any.
-   * @returns A @interface FunctionCall that represents an on-chain FunctionCall struct.
+   * @returns A @interface FunctionCallStruct that represents an on-chain FunctionCallStruct struct.
    */
   toFunctionCallStruct = (
     step: JSONStep,
     context: EncodingContext,
     customArguments: Array<string | null>
-  ): FunctionCall => {
+  ): FunctionCallStruct => {
     // Assert that if we require a custom argument,
     if (this.customArgumentsLength !== customArguments.length) {
       console.log(this.customArgumentsLength, customArguments);
       console.log(this.signature);
       throw new Error(
-        "YCFunc ERR: Cannot Create FunctionCall - Function requires custom argument(s?), but provided args length mismatch"
+        "YCFunc ERR: Cannot Create FunctionCallStruct - Function requires custom argument(s?), but provided args length mismatch"
       );
     }
 
     // Assert that we must have an address set
     if (!this.address)
       throw new Error(
-        "YCFuncERR: Cannot Create FunctionCall - Function Does Not Have An Address."
+        "YCFuncERR: Cannot Create FunctionCallStruct - Function Does Not Have An Address."
       );
 
     // Create the struct
-    const struct: FunctionCall = {
+    const struct: FunctionCallStruct = {
       // The target address (our address, tells the onchain interpreter where to call the function)
       target_address: this.address.address,
 

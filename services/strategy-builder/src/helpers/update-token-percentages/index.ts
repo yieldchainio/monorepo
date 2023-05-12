@@ -3,18 +3,17 @@
  * @param tree - InteractiveDeployableStep that we can iterate over recursively
  */
 
-import { TokenPercentage } from "@yc/yc-models";
-import { InteractiveDeployableStep } from "./encode-tree";
+import { TokenPercentage, YCStep } from "@yc/yc-models";
 
-export function updateTokenPercentages(stepTree: InteractiveDeployableStep) {
+export function updateTokenPercentages(stepTree: YCStep) {
   // Map through the tree - For each node, fix the token percentages
-  stepTree.map((step: InteractiveDeployableStep) => {
+  stepTree.map((step: YCStep) => {
     const { children } = step;
 
     const unusedPercentages = new Map<string, number>();
 
     for (let childIndex = 0; childIndex < children.length; childIndex++) {
-      const child = children[childIndex] as InteractiveDeployableStep;
+      const child = children[childIndex] as YCStep;
 
       const childTokenPercentages = new Map<string, number>();
 
@@ -24,20 +23,16 @@ export function updateTokenPercentages(stepTree: InteractiveDeployableStep) {
 
         childTokenPercentages.set(
           tokenPercentagePair[0],
-          (tokenPercentagePair[1].percentage / unusedPercentage) * 100
+          (tokenPercentagePair[1] / unusedPercentage) * 100
         );
 
         unusedPercentages.set(
           tokenPercentagePair[0],
-          unusedPercentage - tokenPercentagePair[1].percentage
+          unusedPercentage - tokenPercentagePair[1]
         );
       }
 
-      const newPercentages: Array<[string, TokenPercentage]> = [];
-      for (const [tokenID, percentage] of childTokenPercentages) {
-        newPercentages.push([tokenID, { dirty: false, percentage }]);
-      }
-      child.tokenPercentages = newPercentages;
+      child.tokenPercentages = childTokenPercentages;
     }
   });
 }

@@ -6,13 +6,15 @@ import { JSONStep, address, bytes } from "@yc/yc-models";
 import { Request } from "express";
 import { VaultFactoryInputs } from "@yc/yc-models/src/types/onchain";
 
-export type VaultCreationRequest = Request & {
-  seedSteps: JSONStep;
-  treeSteps: JSONStep;
-  vaultVisibility: boolean;
-  depositTokenID: string;
-  chainID: number;
-};
+export interface VaultCreationRequest extends Request {
+  body: {
+    seedSteps: JSONStep;
+    treeSteps: JSONStep;
+    vaultVisibility: boolean;
+    depositTokenID: string;
+    chainID: number;
+  };
+}
 
 type FalseValidationResponse = { status: false; reason: string };
 type TrueValidationResponse = { status: true };

@@ -1,10 +1,11 @@
 import dotenv from "dotenv";
 dotenv.config();
-import express, { Request } from "express";
+import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
-import { VaultCreationRequest } from "./types";
+import { BuilderResponse, VaultCreationRequest } from "./types";
+import { createDeployableVaultInput } from "./helpers";
 
 const prisma = new PrismaClient();
 
@@ -27,11 +28,25 @@ let PORT: number = 8080;
 
 app.post(
   "/strategy-creation-data",
-  async (req: VaultCreationRequest, res: any, next: any) => {
-    //
-    // Verify the strategy on etherscan
+  async (
+    req: VaultCreationRequest,
+    res: Response<BuilderResponse>,
+    next: any
+  ) => {
+    if (Object.values(req.body).some((field) => field == null))
+      res
+        .status(400)
+        .json({ status: false, reason: "Insufficient Arguments Provided" });
 
-    res.status(200).json({});
+    const builderResult: BuilderResponse = await createDeployableVaultInput(
+      req.body.seedSteps,
+      req.body.treeSteps,
+      req.body.vaultVisibility,
+      req.body.depositTokenID,
+      req.body.chainID
+    );
+
+    res.status(builderResult.status == true ? 200 : 400).json(builderResult);
   }
 );
 

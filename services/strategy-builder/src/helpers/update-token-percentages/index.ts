@@ -3,7 +3,7 @@
  * @param tree - InteractiveDeployableStep that we can iterate over recursively
  */
 
-import { TokenPercentage, YCStep } from "@yc/yc-models";
+import { YCStep } from "@yc/yc-models";
 
 export function updateTokenPercentages(stepTree: YCStep) {
   // Map through the tree - For each node, fix the token percentages
@@ -35,4 +35,8 @@ export function updateTokenPercentages(stepTree: YCStep) {
       child.tokenPercentages = childTokenPercentages;
     }
   });
+}
+
+export function batchUpdateTokenPercentages(trees: YCStep[]) {
+  for (const tree of trees) updateTokenPercentages(tree);
 }

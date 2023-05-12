@@ -9,6 +9,7 @@
  */
 
 import {
+  EncodingContext,
   JSONStep,
   YCClassifications,
   YCNetwork,
@@ -29,6 +30,10 @@ import {
 } from "@yc/yc-models/src/types/onchain";
 import { encodeYCSteps } from "./encode-yc-steps";
 import factoryABI from "@yc/yc-models/src/ABIs/factory.json";
+import {
+  batchUpdateTokenPercentages,
+  updateTokenPercentages,
+} from "./update-token-percentages";
 
 export async function createDeployableVaultInput(
   seedSteps: JSONStep,
@@ -66,6 +71,8 @@ export async function createDeployableVaultInput(
   if (!uprootValidation.status)
     return { status: false, reason: uprootValidation.reason };
 
+  batchUpdateTokenPercentages([seedInstance, treeInstance, uprootInstance]);
+
   const approvalPairs = buildApprovalPairs(
     seedInstance,
     treeInstance,
@@ -75,9 +82,9 @@ export async function createDeployableVaultInput(
   );
 
   const stepsToEncodedFunctions = encodeTreesFunctions([
-    seedInstance,
-    treeInstance,
-    uprootInstance,
+    [seedInstance, EncodingContext.SEED],
+    [treeInstance, EncodingContext.TREE],
+    [uprootInstance, EncodingContext.UPROOT],
   ]);
 
   const onchainSeedArr: bytes[] = encodeYCSteps(

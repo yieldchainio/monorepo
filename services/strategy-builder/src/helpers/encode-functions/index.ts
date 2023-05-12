@@ -4,11 +4,34 @@
  * @return stepsToEncodedFunctins - Mapping step IDs to their corresponding encoded functions (hex string)
  */
 
-import { YCStep, bytes } from "@yc/yc-models";
+import {
+  EncodingContext,
+  YCClassifications,
+  YCStep,
+  bytes,
+} from "@yc/yc-models";
 import { StepsToEncodedFunctions } from "../../types";
+import { ethers } from "ethers";
 
 export function encodeTreesFunctions(
-  stepsTree: YCStep[]
+  stepsTrees: Array<[YCStep, EncodingContext]>
 ): StepsToEncodedFunctions {
-  return new Map<string, bytes>();
+  const stepIDsToEncodedFunctions: StepsToEncodedFunctions = new Map<
+    string,
+    bytes
+  >();
+
+  for (const tree of stepsTrees)
+    tree[0].map((step: YCStep) =>
+      stepIDsToEncodedFunctions.set(
+        step.id,
+        step.function?.encodeYCCommand(
+          step.toJSON(),
+          tree[1],
+          step.customArguments
+        ) || ethers.ZeroHash
+      )
+    );
+
+  return stepIDsToEncodedFunctions;
 }

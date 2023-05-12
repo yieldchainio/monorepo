@@ -58,7 +58,6 @@ export async function createDeployableVaultInput(
     treeInstance,
     depositToken
   );
-
   const seedValidation = validateSteps(seedInstance, ycContext);
   if (!seedValidation.status)
     return { status: false, reason: seedValidation.reason };
@@ -71,8 +70,11 @@ export async function createDeployableVaultInput(
   if (!uprootValidation.status)
     return { status: false, reason: uprootValidation.reason };
 
+
+    
   batchUpdateTokenPercentages([seedInstance, treeInstance, uprootInstance]);
 
+  
   const approvalPairs = buildApprovalPairs(
     seedInstance,
     treeInstance,
@@ -81,6 +83,7 @@ export async function createDeployableVaultInput(
     network.diamondAddress as address
   );
 
+  
   const stepsToEncodedFunctions = encodeTreesFunctions([
     [seedInstance, EncodingContext.SEED],
     [treeInstance, EncodingContext.TREE],

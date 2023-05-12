@@ -1,4 +1,3 @@
-import { ContainerDefinition } from "aws-cdk-lib/aws-ecs";
 import { defaultPortMappings } from "../lib/utils";
 import { RepoSettings, ServiceTypes } from "../types";
 import {

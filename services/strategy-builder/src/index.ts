@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
-import express, { Request, Response } from "express";
+import express, { Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { PrismaClient } from "@prisma/client";
 import { BuilderResponse, VaultCreationRequest } from "./types.js";
 import { createDeployableVaultInput } from "./helpers/index.js";
 

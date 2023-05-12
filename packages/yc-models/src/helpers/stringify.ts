@@ -2,8 +2,6 @@
  * A safe stringify function that is able to stringify circular classes
  */
 
-import { YCClassifications } from "..";
-
 export const safeToJSON = <T>(obj: T) => {
   return circularReplacer(obj, 1);
 };

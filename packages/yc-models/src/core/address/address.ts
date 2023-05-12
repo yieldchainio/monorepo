@@ -1,11 +1,11 @@
 import { Contract, ethers, Interface, InterfaceAbi } from "ethers";
-import { DBContract } from "../../types/db";
+import { DBContract } from "../../types/db.js";
 import { EthersContract } from "../../types/ethers";
-import { YCClassifications } from "../context/context";
-import { YCFunc } from "../function/function";
-import { YCNetwork } from "../network/network";
-import { YCProtocol } from "../protocol/protocol";
-import { BaseClass } from "../base";
+import { YCClassifications } from "../context/context.js";
+import { YCFunc } from "../function/function.js";
+import { YCNetwork } from "../network/network.js";
+import { YCProtocol } from "../protocol/protocol.js";
+import { BaseClass } from "../base/index.js";
 
 export class YCContract extends BaseClass {
   // ================

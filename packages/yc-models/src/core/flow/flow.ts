@@ -1,7 +1,7 @@
-import { DBToken, DBFlow } from "../../types/db";
-import { YCClassifications } from "../context/context";
+import { DBToken, DBFlow } from "../../types/db.js";
+import { YCClassifications } from "../context/context.js";
 import { FlowDirection } from "@yc/yc-models";
-import { YCToken } from "../token/token";
+import { YCToken } from "../token/token.js";
 
 /**
  * @notice

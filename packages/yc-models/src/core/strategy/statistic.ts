@@ -3,7 +3,7 @@
  * for a strategy
  */
 
-import { DBStatistic } from "../../types";
+import { DBStatistic } from "../../types/index.js";
 
 export class YCStatistic {
   readonly id: string;

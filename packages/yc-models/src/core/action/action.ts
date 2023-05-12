@@ -1,6 +1,6 @@
-import { DBAction } from "../../types/db";
-import { YCClassifications } from "../context/context";
-import { YCFunc } from "../function/function";
+import { DBAction } from "../../types/db.js";
+import { YCClassifications } from "../context/context.js";
+import { YCFunc } from "../function/function.js";
 
 export class YCAction {
   // =====================

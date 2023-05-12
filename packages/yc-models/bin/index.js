@@ -1,6 +1,6 @@
-export * from "./clients";
-export * from "./core";
-export * from "./types";
-export * from "./helpers";
-export * from "./general";
+export * from "./clients/index.js";
+export * from "./core/index.js";
+export * from "./types/index.js";
+export * from "./helpers/index.js";
+export * from "./general/index.js";
 //# sourceMappingURL=index.js.map

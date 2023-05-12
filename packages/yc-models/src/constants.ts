@@ -1,5 +1,5 @@
 import { Typeflags } from "@prisma/client";
-import { typeflag } from "./types";
+import { typeflag } from "./types/index.js";
 /**
  * Constants
  */

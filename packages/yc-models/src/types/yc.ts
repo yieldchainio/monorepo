@@ -3,12 +3,10 @@
  * A complete context of Yieldchain's current classified Database.
  */
 // Imports
-import { TokenPercentageImplementor, YCArgument, YCFunc } from "../core";
 import {
   DBContract,
   DBAction,
   DBFunction,
-  DBFlow,
   DBToken,
   DBArgument,
   DBStrategy,
@@ -16,8 +14,7 @@ import {
   DBNetwork,
   DBUser,
   DBStatistic,
-} from "./db";
-import { bytes } from "./global";
+} from "./db.js";
 export interface ClassificationContext {
   addresses: DBContract[];
   funcs: DBFunction[];

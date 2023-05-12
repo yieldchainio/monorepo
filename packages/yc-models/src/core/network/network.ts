@@ -1,11 +1,11 @@
 import { ethers } from "ethers";
-import { SignerMethod } from "../../types";
+import { SignerMethod } from "../../types/index.js";
 import { DBNetwork } from "../../types/db";
 import { EthersExecutor, EthersJsonRpcProvider } from "../../types/ethers";
-import { BaseClass } from "../base";
-import { YCClassifications } from "../context/context";
-import { YCProtocol } from "../protocol/protocol";
-import { YCToken } from "../token/token";
+import { BaseClass } from "../base/index.js";
+import { YCClassifications } from "../context/context.js";
+import { YCProtocol } from "../protocol/protocol.js";
+import { YCToken } from "../token/token.js";
 
 /**
  * @YCNetwork

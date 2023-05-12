@@ -1,5 +1,5 @@
-import { DBToken } from "../../types/db";
-import { YCClassifications } from "../context/context";
+import { DBToken } from "../../types/db.js";
+import { YCClassifications } from "../context/context.js";
 import {
   BrowserProvider,
   Contract,
@@ -8,17 +8,17 @@ import {
   Provider,
   TransactionRequest,
 } from "ethers";
-import { YCProtocol } from "../protocol/protocol";
-import { YCNetwork } from "../network/network";
-import { LiFi } from "../../clients/lifi";
+import { YCProtocol } from "../protocol/protocol.js";
+import { YCNetwork } from "../network/network.js";
+import { LiFi } from "../../clients/lifi/index.js";
 import {
   EthersContract,
   EthersExecutor,
   EthersTransactionResponse,
   SignerMethod,
-} from "../../types";
+} from "../../types/index.js";
 import erc20ABI from "../../ABIs/erc20.json" assert { type: "json" };
-import { BaseClass } from "../base";
+import { BaseClass } from "../base/index.js";
 
 /**
  * @notice

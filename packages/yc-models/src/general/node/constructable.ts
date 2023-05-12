@@ -2,7 +2,7 @@
  * Construcable node class
  */
 
-import { Node } from "./plain";
+import { Node } from "./plain.js";
 
 export interface NodeConstruct<T> {
   children: T[];

@@ -1,1 +1,1 @@
-export * from "./lifi";
+export * from "./lifi/index.js";

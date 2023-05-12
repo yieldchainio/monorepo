@@ -3,10 +3,9 @@
  * Yieldchain's Database Models / Interfaces
  */
 import { JsonValue } from "@yc/yc-data";
-import { address, ChainID } from "./global";
-import { Typeflags } from "@prisma/client";
-import { ProtocolType } from "@prisma/client";
-import { StepType } from "..";
+import { address, ChainID } from "./global.js";
+import { Typeflags, ProtocolType } from "@prisma/client";
+import { StepType } from "./yc.js";
 // A DB Model representing an action
 export interface DBAction {
   id: string;
@@ -130,7 +129,7 @@ export interface JSONStep {
   inflows: DBToken[];
   outflows: DBToken[];
   action?: string;
-  function: DBFunction | null
+  function: DBFunction | null;
   customArguments: any[];
   children: JSONStep[];
   data: any | null;

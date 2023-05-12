@@ -12,7 +12,7 @@ import {
   YCProtocol,
   DBFunction,
 } from "@yc/yc-models";
-import { Node } from "../../general/node/plain";
+import { Node } from "../../general/node/plain.js";
 
 export class YCStep extends Node<YCStep> {
   // ====================

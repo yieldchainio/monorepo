@@ -1,12 +1,6 @@
-import { STATICCALL_COMMAND_FLAG, TypeflagValues } from "../../../constants";
-import { TokenPercentageImplementor, YCArgument, YCFunc } from "../../../core";
-import {
-  CustomArgsTree,
-  DeployableStep,
-  EncodingContext,
-  JSONStep,
-} from "../../../types";
-import { encodeGetInvestmentAmount } from "./get-investment-amount";
+import { YCArgument, YCFunc } from "../../../core/index.js";
+import { EncodingContext, JSONStep } from "../../../types/index.js";
+import { encodeGetInvestmentAmount } from "./get-investment-amount/index.js";
 
 // Constants
 const GET_INVESTMENT_AMOUNT_ID = "b6ce56d0-d032-47ed-a3ff-8dedd81f0c2d";
@@ -16,11 +10,7 @@ const GET_INVESTMENT_AMOUNT_ID = "b6ce56d0-d032-47ed-a3ff-8dedd81f0c2d";
  */
 const UtilityCommandEncoders: Record<
   string,
-  (
-    step: JSONStep,
-    context: EncodingContext,
-    argument: YCArgument
-  ) => string
+  (step: JSONStep, context: EncodingContext, argument: YCArgument) => string
 > = {
   [GET_INVESTMENT_AMOUNT_ID]: encodeGetInvestmentAmount,
 };

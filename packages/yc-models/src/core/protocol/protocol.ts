@@ -1,10 +1,11 @@
-import { DBProtocol } from "../../types/db";
-import { YCClassifications } from "../context/context";
+import { DBProtocol } from "../../types/db.js";
+import { YCClassifications } from "../context/context.js";
 import { YCSocialMedia } from "../social-media/social-media";
-import { BaseClass } from "../base";
+import { BaseClass } from "../base/index.js";
 import { ProtocolType } from "@prisma/client";
-import { YCNetwork } from "../network/network";
-import { YCContract, YCToken } from "..";
+import { YCNetwork } from "../network/network.js";
+import { YCToken } from "../token/token.js";
+import { YCContract } from "../address/address.js";
 
 /**
  * @notice

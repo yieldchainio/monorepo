@@ -1,2 +1,2 @@
-export * from "./assert";
-export * from "./stringify";
+export * from "./assert.js";
+export * from "./stringify.js";

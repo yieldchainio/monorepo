@@ -4,17 +4,16 @@ import {
   YCArgument,
   YCClassifications,
   YCFunc,
-} from "../../../../core";
+} from "../../../../core/index.js";
 import {
   CustomArgsTree,
   DeployableStep,
   EncodingContext,
   JSONStep,
-} from "../../../../types";
-import { FunctionCallStruct } from "../../../../types/onchain";
-import { VALUE_VAR_FLAG } from "../../../../constants";
-import { TypeflagValues } from "../../../../constants";
-import { remove0xPrefix } from "../../remove-0x-prefix";
+} from "../../../../types/index.js";
+import { FunctionCallStruct } from "../../../../types/onchain.js";
+import { TypeflagValues } from "../../../../constants.js";
+import { remove0xPrefix } from "../../remove-0x-prefix.js";
 
 const WITHDRAW_SHARES_MEM_LOCATION = "0x2c0";
 const WITHDRAW_SHARES_RETREIVER_ARG_ID = "000";

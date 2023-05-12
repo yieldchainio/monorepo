@@ -1,23 +1,18 @@
-import { DBArgument, DBFunction, JSONStep } from "../../types/db";
-import { YCClassifications } from "../context/context";
-import { YCContract } from "../address/address";
-import { YCArgument } from "../argument/argument";
-import { YCFlow } from "../flow/flow";
+import { DBArgument, DBFunction, JSONStep } from "../../types/db.js";
+import { YCClassifications } from "../context/context.js";
+import { YCContract } from "../address/address.js";
+import { YCArgument } from "../argument/argument.js";
 import {
-  CallTypes,
+  FunctionCallStruct,
   EncodingContext,
-  CustomArgsTree,
   TokenPercentage,
-  DeployableStep,
-} from "../../types/yc";
-import { FunctionCallStruct } from "../../types/onchain";
+} from "../../types/index.js";
 import { Typeflags } from "@prisma/client";
-import { BaseClass } from "../base";
-import { YCAction } from "../action/action";
-import { YCToken } from "..";
-import { TypeFlags } from "typescript";
-import { getFunctionFlags } from "../../helpers/builder/get-command-flags";
-import { bytes } from "../../types";
+import { BaseClass } from "../base/index.js";
+import { YCAction } from "../action/action.js";
+import { YCToken } from "../token/token.js";
+import { getFunctionFlags } from "../../helpers/builder/get-command-flags.js";
+import { bytes } from "../../types/index.js";
 
 export class YCFunc extends BaseClass {
   // ====================

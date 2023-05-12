@@ -1,6 +1,6 @@
-import { BaseClass } from "../base";
-import { YCClassifications } from "../context/context";
-import { YCNotFoundError } from "../errors/errors";
+import { BaseClass } from "../base/index.js";
+import { YCClassifications } from "../context/context.js";
+import { YCNotFoundError } from "../errors/errors.js";
 
 // Type for a social media - can have a handle and a link
 export type SingleSocialMedia = {

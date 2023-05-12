@@ -4,14 +4,14 @@ import {
   EthersExecutor,
   EthersTransactionResponse,
   SignerMethod,
-} from "../../types";
-import { DBStrategy, JSONStep } from "../../types/db";
-import { BaseClass, BaseWeb3Class } from "../base";
-import { YCClassifications } from "../context/context";
-import { YCNetwork } from "../network/network";
-import { YCStep } from "../step/step";
-import { YCToken } from "../token/token";
-import { YCUser } from "../user/user";
+} from "../../types/index.js";
+import { DBStrategy, JSONStep } from "../../types/db.js";
+import { BaseClass, BaseWeb3Class } from "../base/index.js";
+import { YCClassifications } from "../context/context.js";
+import { YCNetwork } from "../network/network.js";
+import { YCStep } from "../step/step.js";
+import { YCToken } from "../token/token.js";
+import { YCUser } from "../user/user.js";
 import abi from "../../ABIs/strategy.json" assert { type: "json" };
 import {
   BrowserProvider,

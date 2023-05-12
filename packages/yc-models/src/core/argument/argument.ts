@@ -1,20 +1,20 @@
-import { YCClassifications } from "../context/context";
-import { DBArgument, DBFunction, JSONStep } from "../../types/db";
-import { bytes } from "../../types/global";
-import { TokenPercentageImplementor, YCFunc } from "../function/function";
-import { BaseClass } from "../base";
+import { YCClassifications } from "../context/context.js";
+import { DBArgument, DBFunction, JSONStep } from "../../types/db.js";
+import { bytes } from "../../types/global.js";
+import { TokenPercentageImplementor, YCFunc } from "../function/function.js";
+import { BaseClass } from "../base/index.js";
 import { Typeflags } from "@prisma/client";
 import {
   CustomArgsTree,
   DeployableStep,
   EncodingContext,
   typeflags,
-} from "../../types";
-import { getArgumentFlags } from "../../helpers/builder/get-command-flags";
+} from "../../types/index.js";
+import { getArgumentFlags } from "../../helpers/builder/get-command-flags.js";
 import { AbiCoder } from "ethers";
 import { YCToken } from "..";
-import { trySpecialEncoding } from "../../helpers/builder/special-commands";
-import { remove0xPrefix } from "../../helpers/builder/remove-0x-prefix";
+import { trySpecialEncoding } from "../../helpers/builder/special-commands/index.js";
+import { remove0xPrefix } from "../../helpers/builder/remove-0x-prefix.js";
 
 /**
  * @notice

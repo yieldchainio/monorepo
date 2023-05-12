@@ -2,7 +2,7 @@
  * Onchain YC types
  */
 
-import { address, bytes } from "./global";
+import { address, bytes } from "./global.js";
 
 export interface FunctionCallStruct {
   target_address: string;

@@ -1,4 +1,8 @@
-import { DBContract, DBAction, DBFunction, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBUser, DBStatistic } from "./db";
+/**
+ * @notice
+ * A complete context of Yieldchain's current classified Database.
+ */
+import { DBContract, DBAction, DBFunction, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBUser, DBStatistic } from "./db.js";
 export interface ClassificationContext {
     addresses: DBContract[];
     funcs: DBFunction[];

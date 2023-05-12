@@ -27,7 +27,7 @@ import {
   fetchRouter,
   DBStatistic,
 } from "@yc/yc-models";
-import { YCStatistic } from "../strategy/statistic";
+import { YCStatistic } from "../strategy/statistic.js";
 
 /**
  * @notice

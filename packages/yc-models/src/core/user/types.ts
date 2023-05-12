@@ -1,4 +1,4 @@
-import { YCClassifications } from "../context";
+import { YCClassifications } from "../context/index.js";
 
 export interface SignupArguments {
   address: string;

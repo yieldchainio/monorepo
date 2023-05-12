@@ -1,13 +1,13 @@
 import { PrismaClient } from "@yc/yc-data";
 import axios from "axios";
-import { DBStrategy, DBUser } from "../../types/db";
-import { BaseClass } from "../base";
-import { YCClassifications } from "../context/context";
-import { YCSocialMedia } from "../social-media/social-media";
-import { YCStrategy } from "../strategy/strategy";
-import { fetchRouter } from "../utils/fetch-router";
-import { UserUpdateArguments, SignupArguments } from "./types";
-export * from "./types";
+import { DBStrategy, DBUser } from "../../types/db.js";
+import { BaseClass } from "../base/index.js";
+import { YCClassifications } from "../context/context.js";
+import { YCSocialMedia } from "../social-media/social-media.js";
+import { YCStrategy } from "../strategy/strategy.js";
+import { fetchRouter } from "../utils/fetch-router.js";
+import { UserUpdateArguments, SignupArguments } from "./types.js";
+export * from "./types.js";
 
 /**s
  * @notice

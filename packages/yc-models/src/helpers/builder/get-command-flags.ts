@@ -1,7 +1,6 @@
-import { YCArgument, YCFunc } from "../../core";
-import { Typeflags } from "@prisma/client";
-import { typeflags } from "../../types";
-import { TypeflagValues } from "../../constants";
+import { YCArgument, YCFunc } from "../../core/index.js";
+import { typeflags } from "../../types/index.js";
+import { TypeflagValues } from "../../constants.js";
 
 /**
  * Add YC Command encoding typeflags, based on argument instance

@@ -1,6 +1,6 @@
 import { DBProtocol } from "../../types/db.js";
 import { YCClassifications } from "../context/context.js";
-import { YCSocialMedia } from "../social-media/social-media";
+import { YCSocialMedia } from "../social-media/social-media.js";
 import { BaseClass } from "../base/index.js";
 import { ProtocolType } from "@prisma/client";
 import { YCNetwork } from "../network/network.js";

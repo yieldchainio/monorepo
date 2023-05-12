@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { SignerMethod } from "../../types/index.js";
-import { DBNetwork } from "../../types/db";
+import { DBNetwork } from "../../types/db.js";
 import { EthersExecutor, EthersJsonRpcProvider } from "../../types/ethers.js";
 import { BaseClass } from "../base/index.js";
 import { YCClassifications } from "../context/context.js";

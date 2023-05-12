@@ -1,6 +1,5 @@
 import { Contract, ethers, Interface, InterfaceAbi } from "ethers";
 import { DBContract } from "../../types/db.js";
-import { EthersContract } from "../../types/ethers";
 import { YCClassifications } from "../context/context.js";
 import { YCFunc } from "../function/function.js";
 import { YCNetwork } from "../network/network.js";

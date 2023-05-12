@@ -96,3 +96,9 @@ export interface DeployableStep {
   customArguments?: Array<string | null>;
   data?: any | null;
 }
+
+export enum StepType {
+  STEP = "step",
+  TRIGGER = "trigger",
+  CONDITION = "condition",
+}

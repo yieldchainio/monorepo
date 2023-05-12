@@ -5,7 +5,7 @@
 import { DBNetwork, DBToken, YCNetwork, YCToken } from "@yc/yc-models";
 import { ImageSrc } from "components/wrappers/types";
 import { Step } from "utilities/classes/step";
-import { JSONStep } from "utilities/classes/step/types";
+import { JSONFrontendStep } from "utilities/classes/step/types";
 /**
  * @state
  */
@@ -75,10 +75,10 @@ export interface JSONStrategyStoreState {
   title: string | null;
 
   // Steps of the strategy (Tree)
-  step: JSONStep;
+  step: JSONFrontendStep;
 
   // Seed step of the strategy (the base steps), (Tree)
-  seedStep: JSONStep;
+  seedStep: JSONFrontendStep;
 
   // The configs stuff (for UX purposes)
   strategyConfigs: configProgressStep[];

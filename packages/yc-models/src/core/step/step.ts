@@ -1,31 +1,82 @@
-import { YCToken } from "..";
-import { DBFlow, DBStep, DBToken } from "../../types";
-import { YCAction } from "../action/action";
-import { BaseClass } from "../base";
-import { YCClassifications } from "../context/context";
-import { YCFlow } from "../flow/flow";
-import { YCFunc } from "../function/function";
-import { YCProtocol } from "../protocol/protocol";
-import { FlowDirection } from "@yc/yc-models";
-import { v4 as uuid } from "uuid";
+import {
+  FlowDirection,
+  JSONStep,
+  StepType,
+  TokenPercentage,
+  DBFlow,
+  DBToken,
+  YCToken,
+  YCAction,
+  YCClassifications,
+  YCFunc,
+  YCProtocol,
+  DBFunction,
+} from "@yc/yc-models";
+import { Node } from "../../general/node/plain";
 
-export class YCStep extends BaseClass {
+export class YCStep extends Node<YCStep> {
+  // ====================
+  //      VARIABLES
+  // ====================
+  /**
+   * The UUID of this step
+   */
   id: string;
-  protocol: YCProtocol | null;
-  inflows: YCToken[] = [];
-  outflows: YCToken[] = [];
-  children: YCStep[] = [];
-  percentage: number;
-  action: YCAction | null;
-  function: YCFunc | null;
-  parentId: string | null;
-  customArguments: any[];
 
-  constructor(_step: DBStep, _context: YCClassifications) {
+  /**
+   * The "Type" of this step
+   * can either be "STEP", "TRIGGER", or "CONDITION"
+   */
+  type: StepType;
+
+  /**
+   * The protocol of the step (e.g GMX, Uniswap)
+   */
+  protocol: YCProtocol | null = null;
+
+  /**
+   * The inflows of this step - In YCTokens (e.g ETH, BTC)
+   */
+  inflows: YCToken[] = [];
+
+  /**
+   * The outflows of this step - In YCTokens (e.g ETH, BTC)
+   */
+  outflows: YCToken[] = [];
+
+  /**
+   * Mapping tokens (outflows of this step) => percentage used of parent's inflow of the token
+   * (id => percentage & isDirty)
+   */
+  tokenPercentages: Map<string, TokenPercentage> = new Map();
+
+  /**
+   * The action of this step, in YCAction (e.g Stake, Swap, Long, LP)
+   */
+  action: YCAction | null = null;
+
+  /**
+   * The YCFunction used by this step. (i.e stakeTokens(), addLiquidityETH())
+   */
+  function: YCFunc | null = null;
+
+  /**
+   * Optional custom arguments for the used function
+   */
+  customArguments: Array<string | null> = [];
+
+  /**
+   * Any additional data that the Trigger config will want to save
+   */
+  data: any = {};
+
+  constructor(_step: JSONStep, _context: YCClassifications) {
     super();
     this.id = _step.id;
-    this.parentId = _step.parentId;
-    this.protocol = _context.getProtocol(_step.protocol);
+    this.parent = null;
+    this.protocol = _step.protocol
+      ? _context.getProtocol(_step.protocol)
+      : null;
     this.inflows = _step.inflows.map((dbtoken: DBToken) => {
       return new YCToken(dbtoken, _context);
     });
@@ -33,110 +84,36 @@ export class YCStep extends BaseClass {
       return new YCToken(dbbtoken, _context);
     });
     this.children = _step.children.map(
-      (child: DBStep) => new YCStep(child, _context)
+      (child: JSONStep) => new YCStep(child, _context)
     );
-
-    this.percentage = _step.percentage;
+    this.type = StepType.STEP;
     this.action = _context.getAction(_step.action);
-    this.function = _context.getFunction(_step.function);
-    this.customArguments = _step.customArgs;
+    this.function =
+      typeof _step.function == "string"
+        ? _context.getFunction(_step.function)
+        : new YCFunc(_step.function, _context);
+    this.customArguments = _step.customArguments;
+    this.data = _step.data;
   }
 
   /**
    * Convert the step into a JSON step
    */
-  toJSON = (): DBStep => {
+  toJSON = (): JSONStep => {
     return {
       id: this.id,
-      parentId: this.parentId,
+      parentId: this.parent as unknown as string,
       action: this.action?.id || "",
       protocol: this.protocol?.id || "",
-      percentage: this.percentage,
       inflows: this.inflows.map((token) => token.toJSON()),
       outflows: this.outflows.map((token) => token.toJSON()),
-      function: this.function?.id || "",
-      customArgs: this.customArguments,
+      function: this.function?.toJSON() as DBFunction,
+      customArguments: this.customArguments,
       children: this.children.map((child) => child.toJSON()),
+      data: this.data,
+      tokenPercentages: Array.from(this.tokenPercentages.entries()).map(
+        ([tokenID, { dirty, percentage }]) => [tokenID, percentage]
+      ),
     };
-  };
-
-  // ===================
-  //    TREE METHODS
-  // ===================
-
-  /**
-   * Standard hierarchy iteration function,
-   * goes floor-by-floor
-   */
-  each = (callback: (step: YCStep) => any) => {
-    // Create a stack array
-    const stack: YCStep[] = [this];
-
-    // While it's length is bigger than 0, pop a step,
-    // invoke the callback on it, and then add all of it's children to the stack
-    while (stack.length > 0) {
-      const node = stack.pop() as YCStep;
-      callback(node);
-
-      for (const child of node.children) {
-        stack.push(child);
-      }
-    }
-  };
-
-  /**
-   * eachBefore
-   * standard iteration breadth-first iteration method
-   */
-  eachBefore = (callback: (step: YCStep) => any): void => {
-    callback(this);
-    for (const child of this.children) child.eachBefore(callback);
-  };
-
-  /**
-   * find
-   * Iterates over the tree to find a step corresponding to a callback check, and returns it (or null if not found)
-   */
-  find = (condition: (step: YCStep) => boolean): YCStep | null => {
-    // Create a stack array
-    const stack: YCStep[] = [this];
-
-    // While it's length is bigger than 0, pop a step,
-    // invoke the condition on it. If true, return the node - otherwise, add all of it's children to the stack (to keep looping)
-    while (stack.length > 0) {
-      const node = stack.pop() as YCStep;
-      const res = condition(node);
-      if (res) return node;
-
-      for (const child of node.children) {
-        stack.push(child);
-      }
-    }
-    // return null if we found none that answer our condition
-    return null;
-  };
-
-  /**
-   * Map
-   * standard mapping function for the tree
-   */
-
-  map = <T>(callback: (step: YCStep) => T): T[] => {
-    // Create a stack array
-    const stack: YCStep[] = [this];
-    const result: T[] = [];
-
-    // While it's length is bigger than 0, pop a step,
-    // invoke the callback on it, and then add all of it's children to the stack
-    while (stack.length > 0) {
-      const node = stack.pop() as YCStep;
-      result.push(callback(node));
-
-      for (const child of node.children) {
-        stack.push(child);
-      }
-    }
-
-    return result;
   };
 }

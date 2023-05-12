@@ -14,4 +14,10 @@ export var EncodingContext;
     EncodingContext[EncodingContext["TREE"] = 1] = "TREE";
     EncodingContext[EncodingContext["UPROOT"] = 2] = "UPROOT";
 })(EncodingContext || (EncodingContext = {}));
+export var StepType;
+(function (StepType) {
+    StepType["STEP"] = "step";
+    StepType["TRIGGER"] = "trigger";
+    StepType["CONDITION"] = "condition";
+})(StepType || (StepType = {}));
 //# sourceMappingURL=yc.js.map

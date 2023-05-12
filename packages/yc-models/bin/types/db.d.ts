@@ -108,17 +108,18 @@ export interface DBUser {
     whitelisted: boolean;
     verified: boolean;
 }
-export interface DBStep {
+export interface JSONStep {
     id: string | "root";
-    parentId: string | null;
-    protocol: string;
-    percentage: number;
+    parentId?: string | null;
+    protocol?: string;
+    tokenPercentages: Array<[string, number]>;
     inflows: DBToken[];
     outflows: DBToken[];
     action: string;
-    function: string;
-    customArgs: any[];
-    children: DBStep[];
+    function: DBFunction;
+    customArguments: any[];
+    children: JSONStep[];
+    data: any | null;
 }
 export interface DBStatistic {
     id: string;

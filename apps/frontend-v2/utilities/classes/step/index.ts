@@ -3,7 +3,6 @@
  */
 
 import {
-  DBStep,
   DBToken,
   YCAction,
   YCArgument,
@@ -12,10 +11,8 @@ import {
   YCProtocol,
   YCToken,
   assert,
-  Node,
-  CustomArgsTree,
-  safeToJSON,
   DBFunction,
+  JSONStep,
 } from "@yc/yc-models";
 import {
   ActionConfigs,
@@ -24,12 +21,12 @@ import {
   Dimensions,
   TokenPercentage,
   IStep,
-  JSONStep,
   Position,
   StepSizing,
   StepState,
   StepType,
   TriggerConfigs,
+  JSONFrontendStep,
 } from "./types";
 import { v4 as uuid } from "uuid";
 import { FlextreeNode, flextree } from "d3-flextree";
@@ -37,6 +34,7 @@ import { HierarchyNode } from "d3-hierarchy";
 import { ImageSrc } from "components/wrappers/types";
 import { DEPOSIT_TRIGGER_CONFIG } from "components/steps/constants";
 import { getCustomFields } from "./helpers/get-custom-fields";
+import { Node } from "@yc/yc-models";
 
 export class Step extends Node<Step> implements IStep<Step> {
   // ====================
@@ -581,7 +579,7 @@ export class Step extends Node<Step> implements IStep<Step> {
   /**
    * Optional custom arguments for the used function
    */
-  customArguments: Array<string | null> = [];
+  customArguments: Array<any | null> = [];
 
   // -----------
   // Trigger Step Variables
@@ -616,8 +614,6 @@ export class Step extends Node<Step> implements IStep<Step> {
    * Any additional data that the trigger step will want to display on the frontend.
    */
   triggerVisuals: React.ReactNode;
-
-  percentage: number;
 
   // --------
   // Conditional Step Variables
@@ -675,8 +671,6 @@ export class Step extends Node<Step> implements IStep<Step> {
     this.triggerVisuals = config?.triggerVisuals || null;
     this.triggerConfig = config?.triggerConfig || null;
 
-    this.percentage = config?.percentage || 0;
-
     for (const child of this.children) {
       child.parent = this;
       child.inheritStyle();
@@ -700,7 +694,7 @@ export class Step extends Node<Step> implements IStep<Step> {
     const additionalConfigs = step.id !== "root" ? {} : DEPOSIT_TRIGGER_CONFIG;
     const stepConfig: IStep<Step> = {
       id: step.id,
-      protocol: context.getProtocol(step.protocol),
+      protocol: step.protocol ? context.getProtocol(step.protocol) : null,
       inflows: step.inflows.map((dbtoken: DBToken) => {
         return new YCToken(dbtoken, context);
       }),
@@ -708,10 +702,9 @@ export class Step extends Node<Step> implements IStep<Step> {
         return new YCToken(dbtoken, context);
       }),
       state: "complete",
-      percentage: step.percentage,
       action: context.getAction(step.action),
-      function: context.getFunction(step.function),
-      children: step.children.map((child: DBStep) =>
+      function: new YCFunc(step.function, context),
+      children: step.children.map((child: JSONStep) =>
         Step.fromDBStep({
           step: child,
           context: context,
@@ -732,26 +725,20 @@ export class Step extends Node<Step> implements IStep<Step> {
     step,
     context,
   }: {
-    step: JSONStep;
+    step: JSONFrontendStep;
     context: YCClassifications;
   }): Step => {
     if (!step) return new Step();
     const config: IStep<Step> = {
       ...step,
       id: step.id,
-      inflows: step.inflows
-        ? step.inflows.flatMap((dbtoken: string) => {
-            const token = context.getToken(dbtoken);
-            return token ? [token] : [];
-          })
-        : [],
-      outflows: step.outflows
-        ? step.outflows.flatMap((dbtoken: string) => {
-            const token = context.getToken(dbtoken);
-            return token ? [token] : [];
-          })
-        : [],
-      children: step.children.map((child: JSONStep) =>
+      inflows: step.inflows.map(
+        (dbtoken: DBToken) => new YCToken(dbtoken, context)
+      ),
+      outflows: step.outflows.map(
+        (dbtoken: DBToken) => new YCToken(dbtoken, context)
+      ),
+      children: step.children.map((child: JSONFrontendStep) =>
         Step.fromJSONStep({
           step: child,
           context: context,
@@ -759,7 +746,6 @@ export class Step extends Node<Step> implements IStep<Step> {
       ),
       type: step.type,
       size: step.size,
-      percentage: step.percentage,
       action: step.action ? context.getAction(step.action) : null,
       function: step.function ? new YCFunc(step.function, context) : null,
       unlockedFunctions: step.unlockedFunctions
@@ -928,19 +914,18 @@ export class Step extends Node<Step> implements IStep<Step> {
     onlyCompleted = false,
   }: {
     onlyCompleted?: boolean;
-  }): JSONStep | null => {
+  }): JSONFrontendStep | null => {
     if (onlyCompleted && this.state !== "complete") return null;
     return {
       id: this.id,
       size: this.size,
-      action: this.action?.id,
-      protocol: this.protocol?.id,
+      action: this.action?.id || "",
+      protocol: this.protocol?.id || "",
       dimensions: this.dimensions,
-      inflows: this.inflows.map((token) => token.id),
-      outflows: this.outflows.map((token) => token.id),
+      inflows: this.inflows.map((token) => token.toJSON()),
+      outflows: this.outflows.map((token) => token.toJSON()),
       writeable: this.writeable,
-      percentage: this.percentage,
-      function: this.function?.toJSON(true),
+      function: this.function?.toJSON(true) as DBFunction,
       unlockedFunctions: this.unlockedFunctions.map((func) => ({
         funcID: func.func.id,
         used: func.used,
@@ -964,7 +949,27 @@ export class Step extends Node<Step> implements IStep<Step> {
     };
   };
 
-  // TODO: toDBStep()
+  toDeployableJSON(): JSONStep | null {
+    if (this.state !== "complete") return null;
+    return {
+      id: this.id,
+      action: this.action?.id || "",
+      protocol: this.protocol?.id || "",
+      inflows: this.inflows.map((token) => token.toJSON()),
+      outflows: this.outflows.map((token) => token.toJSON()),
+      function: this.function?.toJSON(true) as DBFunction,
+      children: this.children.flatMap((child) => {
+        const jsonChild = child.toDeployableJSON();
+        if (jsonChild !== null) return [jsonChild];
+        return [];
+      }),
+      data: this.data,
+      tokenPercentages: Array.from(this.tokenPercentages.entries()).map(
+        ([tokenID, { percentage }]) => [tokenID, percentage]
+      ),
+      customArguments: this.customArguments, // TODO
+    };
+  }
 }
 
 // const serializeCustomArgs = (

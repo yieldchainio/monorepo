@@ -1,5 +1,5 @@
 import { PrismaClient, strategiesv2 } from "@prisma/client";
-import { DBStep } from "@yc/yc-models";
+import { JSONStep } from "@yc/yc-models";
 import { v4 as uuidv4 } from "uuid";
 
 const client = new PrismaClient();
@@ -7,15 +7,15 @@ const client = new PrismaClient();
 const strategies = await client.strategiesv2.findMany();
 const tokens = await client.tokensv2.findMany();
 
-const map = <T = any>(node: DBStep, callback: (node: DBStep) => any) => {
+const map = <T = any>(node: JSONStep, callback: (node: JSONStep) => any) => {
   // Create a stack array
-  const stack: DBStep[] = [node];
+  const stack: JSONStep[] = [node];
   const result: T[] = [];
 
   // While it's length is bigger than 0, pop a step,
   // invoke the callback on it, and then add all of it's children to the stack
   while (stack.length > 0) {
-    const node = stack.pop() as DBStep;
+    const node = stack.pop() as JSONStep;
     result.push(callback(node));
 
     for (const child of node.children) {
@@ -40,7 +40,7 @@ for (const strategy of strategies) {
 
 //   if (!depositToken) throw "No Deposit Token";
 
-//   map(strategy.steps as unknown as DBStep, (node) => {
+//   map(strategy.steps as unknown as JSONStep, (node) => {
 //     const percentage = node.percentage;
 
 //     const tokenPercentages: Record<string, number> = {};
@@ -62,13 +62,13 @@ for (const strategy of strategies) {
 //   });
 // }
 
-// const strategiesAndSteps: Array<[string, DBStep]> = [];
+// const strategiesAndSteps: Array<[string, JSONStep]> = [];
 // for (const newStrat of strategies) {
 //   // Mapping old IDs to new UUIDS
 //   const oldToNewIDs = new Map<number, string>();
 
 //   // Creating a root step
-//   const rootStep: DBStep = {
+//   const rootStep: JSONStep = {
 //     id: "root",
 //     parentId: null,
 //     protocol: "",
@@ -96,7 +96,7 @@ for (const strategy of strategies) {
 //     oldToNewIDs.set(oldStep.step_identifier, newID);
 //   }
 
-//   const newSteps: Omit<DBStep, "children">[] = [rootStep];
+//   const newSteps: Omit<JSONStep, "children">[] = [rootStep];
 //   // Another iteration where we now change the details
 //   // @ts-ignore
 //   for (const step of strategy.strategy_object.steps_array) {
@@ -158,7 +158,7 @@ for (const strategy of strategies) {
 //     if (!newProtocol || !newProtocol.id) throw "Protocol Undefined";
 //     console.log("new Protocol", newProtocol.id);
 
-//     const newStep: Omit<DBStep, "children"> = {
+//     const newStep: Omit<JSONStep, "children"> = {
 //       parentId: newParentId as string,
 //       id: newId,
 //       protocol: newProtocol.id,
@@ -235,8 +235,8 @@ for (const strategy of strategies) {
 //     newSteps.push(newStep);
 //   }
 
-//   const getChilds = (node: DBStep) => {
-//     const children = (newSteps as DBStep[]).filter(
+//   const getChilds = (node: JSONStep) => {
+//     const children = (newSteps as JSONStep[]).filter(
 //       (step) => step.parentId == node.id
 //     );
 //     node.children = children;
@@ -245,11 +245,11 @@ for (const strategy of strategies) {
 
 //   getChilds(rootStep);
 
-//   const each = (node: DBStep, depth: number = 0) => {
+//   const each = (node: JSONStep, depth: number = 0) => {
 //     let msg = "";
 //     let j = 0;
 //     let descendentsAmt = 0;
-//     const addDescendent = (node: DBStep) => {
+//     const addDescendent = (node: JSONStep) => {
 //       descendentsAmt++;
 //       for (const child of node.children) addDescendent(child);
 //     };

@@ -1,5 +1,5 @@
 import { YCClassifications } from "../context/context";
-import { DBArgument, DBFunction } from "../../types/db";
+import { DBArgument, DBFunction, JSONStep } from "../../types/db";
 import { bytes } from "../../types/global";
 import { TokenPercentageImplementor, YCFunc } from "../function/function";
 import { BaseClass } from "../base";
@@ -112,7 +112,7 @@ export class YCArgument extends BaseClass {
 
   // Encode the argument
   encodeYCCommand = (
-    step: DeployableStep,
+    step: JSONStep,
     context: EncodingContext,
     customValue?: string | null
   ): bytes => {

@@ -5,7 +5,7 @@ import {
   EthersTransactionResponse,
   SignerMethod,
 } from "../../types";
-import { DBStrategy, DBStep } from "../../types/db";
+import { DBStrategy, JSONStep } from "../../types/db";
 import { BaseClass, BaseWeb3Class } from "../base";
 import { YCClassifications } from "../context/context";
 import { YCNetwork } from "../network/network";
@@ -487,7 +487,10 @@ export class YCStrategy extends BaseClass {
       _strategy.deposit_token_id
     ) as YCToken;
     this.creator = _context.getUser(_strategy.creator_id) || null;
-    this.rootStep = new YCStep(_strategy.steps as unknown as DBStep, _context);
+    this.rootStep = new YCStep(
+      _strategy.steps as unknown as JSONStep,
+      _context
+    );
     this.verified = _strategy.verified;
     this.network = _context.getNetwork(_strategy.chain_id);
     this.contract = new Contract(

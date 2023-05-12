@@ -6,10 +6,10 @@
  * @return CustomArgsTree
  */
 
-import { CustomArgsTree, YCArgument, YCFunc } from "@yc/yc-models";
+import { YCFunc } from "@yc/yc-models";
 
 export function getCustomFields(func: YCFunc): Array<null> {
   const customFields: Array<null> = [];
   for (const arg of func.arguments) if (arg.isCustom) customFields.push(null);
-  return customFields
+  return customFields;
 }

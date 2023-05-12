@@ -1,10 +1,10 @@
-import { DBContract, DBAction, DBFunction, DBFlow, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBUser, DBStatistic } from "./db";
+import { DBContract, DBAction, DBFunction, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBUser, DBStatistic } from "./db";
+import { bytes } from "./global";
 export interface ClassificationContext {
     addresses: DBContract[];
     funcs: DBFunction[];
     tokens: DBToken[];
     parameters: DBArgument[];
-    flows: DBFlow[];
     protocols: DBProtocol[];
     strategies: DBStrategy[];
     actions: DBAction[];
@@ -25,7 +25,7 @@ export declare enum CallTypes {
 }
 export interface FunctionCall {
     target_address: string;
-    args: string[];
+    args: bytes[];
     signature: string;
 }
 type HexNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
@@ -60,8 +60,13 @@ export interface DeployableStep {
     children: DeployableStep[];
     parent?: DeployableStep | null;
     tokenPercentages?: Array<[string, TokenPercentage]>;
-    function?: string;
-    customArguments?: CustomArgsTree[];
+    function?: DBFunction;
+    customArguments?: Array<string | null>;
     data?: any | null;
+}
+export declare enum StepType {
+    STEP = "step",
+    TRIGGER = "trigger",
+    CONDITION = "condition"
 }
 export {};

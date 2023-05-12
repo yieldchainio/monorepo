@@ -1,4 +1,4 @@
-import { DBArgument, DBFunction } from "../../types/db";
+import { DBArgument, DBFunction, JSONStep } from "../../types/db";
 import { YCClassifications } from "../context/context";
 import { YCContract } from "../address/address";
 import { YCArgument } from "../argument/argument";
@@ -145,7 +145,7 @@ export class YCFunc extends BaseClass {
   // =========================
   // Encode the current function as a FunctionCall struct, add flag
   encodeYCCommand = (
-    step: DeployableStep,
+    step: JSONStep,
     context: EncodingContext,
     customArguments: Array<any | YCFunc>
   ): bytes => {
@@ -188,7 +188,7 @@ export class YCFunc extends BaseClass {
    * @returns A @interface FunctionCall that represents an on-chain FunctionCall struct.
    */
   toFunctionCallStruct = (
-    step: DeployableStep,
+    step: JSONStep,
     context: EncodingContext,
     customArguments: Array<string | null>
   ): FunctionCall => {

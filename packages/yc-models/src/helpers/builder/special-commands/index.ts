@@ -4,6 +4,7 @@ import {
   CustomArgsTree,
   DeployableStep,
   EncodingContext,
+  JSONStep,
 } from "../../../types";
 import { encodeGetInvestmentAmount } from "./get-investment-amount";
 
@@ -16,7 +17,7 @@ const GET_INVESTMENT_AMOUNT_ID = "b6ce56d0-d032-47ed-a3ff-8dedd81f0c2d";
 const UtilityCommandEncoders: Record<
   string,
   (
-    step: DeployableStep,
+    step: JSONStep,
     context: EncodingContext,
     argument: YCArgument
   ) => string
@@ -34,7 +35,7 @@ const UtilityCommandEncoders: Record<
  * @returns encodedCommand - Either an encoded command if found utility to parse, or null if none
  */
 export const trySpecialEncoding = (
-  step: DeployableStep,
+  step: JSONStep,
   context: EncodingContext,
   argument: YCArgument
 ): string | null => {

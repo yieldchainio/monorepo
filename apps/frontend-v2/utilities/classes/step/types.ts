@@ -9,9 +9,10 @@ import {
   YCProtocol,
   YCToken,
   YCClassifications,
-  DBStep,
   CustomArgsTree,
   DBFunction,
+  JSONStep,
+  DBToken,
 } from "@yc/yc-models";
 import { ImageSrc } from "components/wrappers/types";
 
@@ -85,9 +86,9 @@ export type Position = { x: number; y: number };
 //   size: StepSizing;
 // }
 
-// An interface for the props provided when construcing a Step from a DBStep
+// An interface for the props provided when construcing a Step from a JSONStep
 export interface DBStepConstructionProps<T extends IStep<T>> {
-  step: DBStep;
+  step: JSONStep;
   context: YCClassifications;
   iStepConfigs?: IStepOnlyFE<T>;
 }
@@ -139,13 +140,13 @@ export interface IStep<T extends IStep<T>>
   percentage?: number;
 }
 
-export interface JSONStep {
+export interface JSONFrontendStep {
   // ==GLOBAL== //
   id: string;
-  inflows: string[];
-  outflows: string[];
-  children: JSONStep[];
-  parent?: JSONStep | null;
+  inflows: DBToken[];
+  outflows: DBToken[];
+  children: JSONFrontendStep[];
+  parent?: JSONFrontendStep | null;
   size: StepSizing;
   dimensions: Dimensions;
   type: StepType;
@@ -171,8 +172,6 @@ export interface JSONStep {
   data?: any | null;
   triggerVisuals?: React.ReactNode;
   triggerConfig?: TriggerConfigs | null;
-
-  percentage: number;
 }
 
 /**

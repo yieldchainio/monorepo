@@ -39,7 +39,7 @@ export const StepOptions = ({
         className="cursor-pointer group transition duration-200 ease-in-out"
         onClick={() => {
           props.onClick?.();
-          const jsonStep = step.toJSON({ onlyCompleted: true });
+          const jsonStep = step.toDeployableJSON();
           if (!jsonStep)
             throw logs.lazyPush({
               message: "JSON Step is Null!",

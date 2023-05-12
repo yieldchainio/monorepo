@@ -10,6 +10,7 @@ import {
   DeployableStep,
   EncodingContext,
   FunctionCall,
+  JSONStep,
 } from "../../../../types";
 import { VALUE_VAR_FLAG } from "../../../../constants";
 import { TypeflagValues } from "../../../../constants";
@@ -22,7 +23,7 @@ const WITHDRAW_SHARES_RETREIVER_ARG_ID = "000";
  * Encode a getInvestmentAmount() YC Command
  */
 export const encodeGetInvestmentAmount = (
-  step: DeployableStep,
+  step: JSONStep,
   context: EncodingContext,
   argument: YCArgument
 ): string => {
@@ -78,7 +79,7 @@ export const encodeGetInvestmentAmount = (
       AbiCoder.defaultAbiCoder().encode(
         ["uint256"],
         // We transform it into a "divisor" and multiply by 100 (safe maths)
-        [(100 / tokenPercentage.percentage) * 100]
+        [(100 / tokenPercentage) * 100]
       )
     ))
   }`;

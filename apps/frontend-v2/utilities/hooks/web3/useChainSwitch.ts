@@ -1,4 +1,4 @@
-import { useNetwork, useProvider, useSwitchNetwork, Chain } from "wagmi";
+import { useNetwork, useSwitchNetwork, Chain } from "wagmi";
 
 export const useChainSwitch = () => {
   // Get all chains

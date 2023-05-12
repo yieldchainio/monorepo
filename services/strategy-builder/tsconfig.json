@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "incremental": true,
     "target": "ESNext",
     "module": "ESNext",
     "declaration": true,
@@ -9,8 +10,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
     "rootDir": "./src",
-    "outDir": "./bin"
+    "outDir": "./bin",
+    "composite": true,
+    "resolveJsonModule": true
   }
 }

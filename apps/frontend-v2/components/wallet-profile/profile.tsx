@@ -4,12 +4,11 @@ import { YCUserHookReturn } from "utilities/hooks/yc/useYCUser";
 import WrappedImage from "components/wrappers/image";
 import Icon from "components/icons/camera";
 import WrappedText from "components/wrappers/text";
-import WrappedInput from "components/wrappers/input";
 import { RegulerButton } from "components/buttons/reguler";
 import DisconnectIcon from "components/icons/disconnect";
 import { ThemeSwitch } from "components/switches/theme";
 import EditIcon from "components/icons/edit";
-import { FormEvent, MouseEvent, useEffect, useState } from "react";
+import { FormEvent, MouseEvent, useState } from "react";
 import CheckmarkIcon from "components/icons/checkmark";
 import SmallLoader from "components/loaders/small";
 

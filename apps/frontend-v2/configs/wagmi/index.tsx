@@ -35,7 +35,7 @@ interface WrappedWagmiProps {
 const WrappedWagmi = ({ children }: WrappedWagmiProps) => {
   const isMounted = useIsMounted();
 
-  if (!isMounted) return null
+  if (!isMounted) return null;
 
   return (
     <WagmiConfig client={wagmiClient}>

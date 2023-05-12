@@ -12,10 +12,7 @@ import WrappedText from "components/wrappers/text";
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import useYCUser from "utilities/hooks/yc/useYCUser";
 import { InterModalSection } from "../../general/modal-section";
-import { getProvider } from "@wagmi/core";
-import { ethers } from "ethers";
-import { Web3Provider } from "@ethersproject/providers";
-import { useContractWrite, useSendTransaction, useSigner } from "wagmi";
+import {  useSigner } from "wagmi";
 import useDebounce from "utilities/hooks/general/useDebounce";
 
 export const StrategyOperationsBox = ({

@@ -6,13 +6,10 @@
 import { YCProtocol, YCToken } from "@yc/yc-models";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Step } from "utilities/classes/step";
-import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import { AddLiquidityData } from "../../types";
-import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useConfigContext } from "../../../hooks/useConfigContext";
 import { useProtocols } from "../../../hooks/useProtocols";
 import { ProtocolType } from "@prisma/client";
-import { useToken } from "wagmi";
 import { useTokens } from "../../../hooks/useTokens";
 
 export const useAddLiquidity = ({

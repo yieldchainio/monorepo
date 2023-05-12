@@ -1,7 +1,7 @@
 /**
  * A hook specifying whether the component mounted yet or not
  */
-
+"use client"
 import { useEffect, useState } from "react";
 
 export const useIsMounted = () => {

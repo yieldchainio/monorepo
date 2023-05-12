@@ -1,3 +1,4 @@
+"use client";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { RegulerButton } from "../reguler";
 import { RegulerButtonProps } from "../reguler/types";

@@ -53,8 +53,8 @@ export const useStrategyStore = create<StrategyStore>()(
       // Step of the strategy (tree)
       step: new Step(
         {
-          type: StepType.TRIGGER,
           state: "config" as StepState,
+          type: StepType.TRIGGER,
           triggerName: "Automation",
           triggerDescription: "Scheduled Trigger",
           triggerIcon: {

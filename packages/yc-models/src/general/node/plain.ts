@@ -79,4 +79,9 @@ export class Node<T extends Node<T>> {
   
       return result;
     };
+
+
+    /**
+     * Returns leaf node
+     */
   }

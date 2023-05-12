@@ -122,6 +122,7 @@ export class YCStep extends Node<YCStep> {
       children: this.children.map((child) => child.toJSON()),
       data: this.data,
       tokenPercentages: Array.from(this.tokenPercentages.entries()),
+      type: this.type,
     };
   };
 }

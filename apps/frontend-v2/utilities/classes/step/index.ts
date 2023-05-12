@@ -968,6 +968,8 @@ export class Step extends Node<Step> implements IStep<Step> {
         ([tokenID, { percentage }]) => [tokenID, percentage]
       ),
       customArguments: this.customArguments,
+      type: this.type,
+      
     };
   }
 }

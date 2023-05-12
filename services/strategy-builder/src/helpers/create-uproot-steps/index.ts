@@ -6,12 +6,23 @@
  * @return uprootSteps - The uproot steps of the strategy
  */
 
-import { JSONStep, YCStep, YCToken } from "@yc/yc-models";
+import { JSONStep, YCClassifications, YCStep, YCToken } from "@yc/yc-models";
+import { v4 as uuid } from "uuid";
 
 export function createUprootSteps(
   seedSteps: YCStep,
   treeSteps: YCStep,
   depositToken: YCToken
 ): YCStep {
+  // const root: YCStep = new YCStep(
+  //   {
+  //     id: uuid(),
+  //     tokenPercentages: [],
+  //     inflows: [],
+  //     outflows: [],
+      
+  //   },
+  //   YCClassifications.getInstance()
+  // );
   return seedSteps;
 }

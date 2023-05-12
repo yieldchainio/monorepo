@@ -35,6 +35,7 @@ export const useStrategyStore = create<StrategyStore>()(
       /**
        * @State
        */
+
       // UUID of the strategy
       id: startingID,
 

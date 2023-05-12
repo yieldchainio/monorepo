@@ -702,8 +702,8 @@ export class Step extends Node<Step> implements IStep<Step> {
         return new YCToken(dbtoken, context);
       }),
       state: "complete",
-      action: context.getAction(step.action),
-      function: new YCFunc(step.function, context),
+      action: step.action ? context.getAction(step.action) : null,
+      function: step.function ? new YCFunc(step.function, context) : null,
       children: step.children.map((child: JSONStep) =>
         Step.fromDBStep({
           step: child,
@@ -969,7 +969,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       ),
       customArguments: this.customArguments,
       type: this.type,
-      
+
     };
   }
 }

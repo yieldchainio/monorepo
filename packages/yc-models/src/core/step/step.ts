@@ -90,15 +90,19 @@ export class YCStep extends Node<YCStep> {
     this.outflows = _step.outflows.map((dbbtoken: DBToken) => {
       return new YCToken(dbbtoken, _context);
     });
-    this.children = _step.children.map(
-      (child: JSONStep) => new YCStep(child, _context)
-    );
+    this.children = _step.children.map((child: JSONStep) => {
+      const step = new YCStep(child, _context);
+      step.parent = this;
+      return step;
+    });
     this.type = StepType.STEP;
-    this.action = _context.getAction(_step.action);
+    this.action = _step.action ? _context.getAction(_step.action) : null;
     this.function =
       typeof _step.function == "string"
         ? _context.getFunction(_step.function)
-        : new YCFunc(_step.function, _context);
+        : _step.function
+        ? new YCFunc(_step.function, _context)
+        : null;
     this.customArguments = _step.customArguments;
     this.data = _step.data;
     this.tokenPercentages = new Map(

@@ -129,8 +129,8 @@ export interface JSONStep {
   tokenPercentages: Array<[string, number]>;
   inflows: DBToken[];
   outflows: DBToken[];
-  action: string;
-  function: DBFunction;
+  action?: string;
+  function: DBFunction | null
   customArguments: any[];
   children: JSONStep[];
   data: any | null;

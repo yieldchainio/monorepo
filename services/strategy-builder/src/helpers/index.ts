@@ -12,28 +12,21 @@ import {
   EncodingContext,
   JSONStep,
   YCClassifications,
-  YCNetwork,
   YCStep,
   address,
   bytes,
-} from "@yc/yc-models";
-import { validateSteps } from "./validate";
-import { BuilderResponse } from "../types";
-import { createUprootSteps } from "./create-uproot-steps";
-import { buildApprovalPairs } from "./build-approval-pairs";
-import { encodeTreesFunctions } from "./encode-functions";
-import { buildOnchainStepsList } from "./build-onchain-steps-list";
-import { Interface, ethers } from "ethers";
-import {
   VaultFactoryInputs,
-  YCStepStruct,
-} from "@yc/yc-models/src/types/onchain";
-import { encodeYCSteps } from "./encode-yc-steps";
+} from "@yc/yc-models";
+import { validateSteps } from "./validate/index.js";
+import { BuilderResponse } from "../types";
+import { createUprootSteps } from "./create-uproot-steps/index.js";
+import { buildApprovalPairs } from "./build-approval-pairs/index.js";
+import { encodeTreesFunctions } from "./encode-functions/index.js";
+import { buildOnchainStepsList } from "./build-onchain-steps-list/index.js";
+import { encodeYCSteps } from "./encode-yc-steps/index.js";
+import { batchUpdateTokenPercentages } from "./update-token-percentages/index.js";
+import { ethers } from "ethers";
 import factoryABI from "@yc/yc-models/src/ABIs/factory.json";
-import {
-  batchUpdateTokenPercentages,
-  updateTokenPercentages,
-} from "./update-token-percentages";
 
 export async function createDeployableVaultInput(
   seedSteps: JSONStep,
@@ -70,11 +63,8 @@ export async function createDeployableVaultInput(
   if (!uprootValidation.status)
     return { status: false, reason: uprootValidation.reason };
 
-
-    
   batchUpdateTokenPercentages([seedInstance, treeInstance, uprootInstance]);
 
-  
   const approvalPairs = buildApprovalPairs(
     seedInstance,
     treeInstance,
@@ -83,7 +73,6 @@ export async function createDeployableVaultInput(
     network.diamondAddress as address
   );
 
-  
   const stepsToEncodedFunctions = encodeTreesFunctions([
     [seedInstance, EncodingContext.SEED],
     [treeInstance, EncodingContext.TREE],

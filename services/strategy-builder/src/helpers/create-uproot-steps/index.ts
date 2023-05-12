@@ -16,7 +16,7 @@ import {
 } from "@yc/yc-models";
 import { v4 as uuid } from "uuid";
 import * as _ from "lodash";
-import { DUPLICATEABLE_FUNCTION_IDS } from "./constants";
+import { DUPLICATEABLE_FUNCTION_IDS } from "./constants.js";
 
 export function createUprootSteps(
   seedSteps: YCStep,

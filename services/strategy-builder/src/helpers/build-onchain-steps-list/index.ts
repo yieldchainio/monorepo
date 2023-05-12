@@ -8,7 +8,7 @@
 
 import { YCStep, bytes } from "@yc/yc-models";
 import { StepsToEncodedFunctions } from "../../types";
-import { YCStepStruct } from "@yc/yc-models/src/types/onchain";
+import { YCStepStruct } from "@yc/yc-models";
 
 export function buildOnchainStepsList(
   stepsTree: YCStep,

@@ -7,8 +7,6 @@ import { PrismaClient } from "@prisma/client";
 import { BuilderResponse, VaultCreationRequest } from "./types";
 import { createDeployableVaultInput } from "./helpers/index.js";
 
-const prisma = new PrismaClient();
-
 // App to use for reguler API
 const app = express();
 

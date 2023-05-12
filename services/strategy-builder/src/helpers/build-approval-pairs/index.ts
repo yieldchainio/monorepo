@@ -7,14 +7,49 @@
  * @return approvalPairs - 2D array of addresses [[tokenAddress, addressToApprove]]
  */
 
-import { JSONStep, YCStep, YCToken } from "@yc/yc-models";
+import { JSONStep, YCContract, YCStep, YCToken, address } from "@yc/yc-models";
 import { ApprovalPairs } from "../../types";
 
 export function buildApprovalPairs(
   seedSteps: YCStep,
   treeSteps: YCStep,
   uprootSteps: YCStep,
-  depositToken: YCToken
+  depositToken: YCToken,
+  diamondAddress: address
 ): ApprovalPairs {
-  return [];
+  const approvalPairs: address[][] = [];
+
+  // Diamond needs to be approved of deposit token for stashing on deposits
+  approvalPairs.push([depositToken.address as address, diamondAddress]);
+
+  seedSteps.map((step: YCStep) => {
+    const relatedTokens = removeDuplicates<YCToken>([
+      ...step.outflows,
+      ...step.inflows,
+      ...(step.function?.inflows || []),
+      ...(step.function?.outflows || []),
+    ]);
+
+    const relatedContracts = step.function?.address?.address
+      ? removeDuplicates<YCContract>([
+          step.function.address,
+          ...step.function.address.relatedContracts,
+        ])
+      : [];
+
+    for (const contract of relatedContracts)
+      for (const token of relatedTokens)
+        approvalPairs.push([
+          token.address as address,
+          contract.address as address,
+        ]);
+  });
+  return approvalPairs;
+}
+
+function removeDuplicates<T extends { id: string }>(items: T[]): T[] {
+  return items.filter(
+    (token: T, index: number) =>
+      items.findIndex((_token) => _token.id == token.id) == index
+  );
 }

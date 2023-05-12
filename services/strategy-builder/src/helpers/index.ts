@@ -13,6 +13,7 @@ import {
   YCClassifications,
   YCNetwork,
   YCStep,
+  address,
   bytes,
 } from "@yc/yc-models";
 import { validateSteps } from "./validate";
@@ -69,7 +70,8 @@ export async function createDeployableVaultInput(
     seedInstance,
     treeInstance,
     uprootInstance,
-    depositToken
+    depositToken,
+    network.diamondAddress as address
   );
 
   const stepsToEncodedFunctions = encodeTreesFunctions([

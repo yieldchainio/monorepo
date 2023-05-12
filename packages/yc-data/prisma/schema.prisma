@@ -61,15 +61,16 @@ model actionsv2 {
 }
 
 model addressesv2 {
-  id            String        @id @default(uuid())
-  address       String
-  abi           Json          @db.Json
-  chain_id      Int
-  protocol_id   String
-  functions_ids String[]
-  network       networksv2    @relation(fields: [chain_id], references: [id])
-  protocol      protocolsv2   @relation(fields: [protocol_id], references: [id])
-  functions     functionsv2[]
+  id                String        @id @default(uuid())
+  address           String
+  abi               Json          @db.Json
+  chain_id          Int
+  protocol_id       String
+  functions_ids     String[]      @default([])
+  related_contracts String[]      @default([])
+  network           networksv2    @relation(fields: [chain_id], references: [id])
+  protocol          protocolsv2   @relation(fields: [protocol_id], references: [id])
+  functions         functionsv2[]
 
   @@map("addresses")
   @@schema("YieldchainV2")

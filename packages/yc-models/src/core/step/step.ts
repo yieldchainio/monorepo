@@ -101,7 +101,6 @@ export class YCStep extends Node<YCStep> {
         : new YCFunc(_step.function, _context);
     this.customArguments = _step.customArguments;
     this.data = _step.data;
-    console.log("B4 creating new map ser", _step.tokenPercentages);
     this.tokenPercentages = new Map(
       typeof _step.tokenPercentages == "object" ? [] : _step.tokenPercentages
     );

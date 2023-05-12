@@ -105,6 +105,7 @@ export interface DBContract {
   abi: JsonValue;
   functions_ids: string[];
   protocol_id: string;
+  related_contracts: string[];
 }
 
 export interface DBUser {

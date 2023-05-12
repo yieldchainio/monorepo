@@ -563,6 +563,10 @@ export class YCClassifications extends YCClassificationsInternal {
     return this.YCContractes;
   }
 
+  get rawAddresses() {
+    return this.Addresses;
+  }
+
   get networks() {
     if (!this.YCnetworks.length) {
       const networks = this.Networks.map(

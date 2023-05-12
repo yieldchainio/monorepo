@@ -52,6 +52,11 @@ export class YCContract extends BaseClass {
    */
   readonly interface: Interface;
 
+  /**
+   * The addresses relating to this one
+   */
+  readonly relatedContracts: YCContract[] = [];
+
   // ====================
   //     CONSTRUCTOR
   // ====================
@@ -79,12 +84,22 @@ export class YCContract extends BaseClass {
       this.abi,
       this.network?.provider
     );
+    this.relatedContracts =
+      _address.related_contracts as unknown as YCContract[];
+
     this.interface = new Interface(this.abi);
 
     // Get the existing instance (or set ours otherwise)
     const existingAddress = this.getInstance(_address.id);
     if (existingAddress) return existingAddress;
 
+    console.log("Address Object", _address);
+    this.relatedContracts = _context.rawAddresses.flatMap((jsonContract) => {
+      const exists = _address.related_contracts.some(
+        (relatedContractID) => relatedContractID == jsonContract.id
+      );
+      return exists ? [new YCContract(jsonContract, _context)] : [];
+    });
     this.protocol = _context.getProtocol(_address.protocol_id);
 
     // Set the actual (circular) values

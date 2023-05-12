@@ -26,7 +26,7 @@ import { buildOnchainStepsList } from "./build-onchain-steps-list/index.js";
 import { encodeYCSteps } from "./encode-yc-steps/index.js";
 import { batchUpdateTokenPercentages } from "./update-token-percentages/index.js";
 import { ethers } from "ethers";
-import factoryABI from "@yc/yc-models/src/ABIs/factory.json";
+import factoryABI from "@yc/yc-models/src/ABIs/factory.json" assert { type: "json" };
 
 export async function createDeployableVaultInput(
   seedSteps: JSONStep,

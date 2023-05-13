@@ -56,10 +56,10 @@ export const encodeGetInvestmentAmount = (
     return `${
       (TypeflagValues["INTERNAL_LOAD_FLAG"],
       TypeflagValues["VALUE_VAR_FLAG"],
-      AbiCoder.defaultAbiCoder().encode(
+    remove0xPrefix(  AbiCoder.defaultAbiCoder().encode(
         [YCFunc.FunctionCallTuple],
         [withdrawalFuncStruct]
-      ))
+      )))
     }`;
   }
 

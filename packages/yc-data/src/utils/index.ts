@@ -1,1 +1,1 @@
-export * from "./parse-prisma-json";
+export * from "./parse-prisma-json.js";

@@ -22,7 +22,7 @@ const UtilityCommandEncoders: Record<
  * @param context - Encoding context (SEED, TREE, UPROOT)
  * @param argument - The argument to aprse for utility methods
  * @param customValues - Array of custom values provided to the argument
- * @returns encodedCommand - Either an encoded command if found utility to parse, or null if none
+ * @return encodedCommand - Either an encoded command if found utility to parse, or null if none
  */
 export const trySpecialEncoding = (
   step: JSONStep,

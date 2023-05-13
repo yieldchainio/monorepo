@@ -28,7 +28,7 @@ for (const strategy of strategies) {
 //     (token) => token.id == strategy.deposit_token_id
 //   );
 //   if (!depositToken) throw "No Deposit Token";
-//   map(strategy.steps as unknown as DBStep, (node) => {
+//   map(strategy.steps as unknown as JSONStep, (node) => {
 //     const percentage = node.percentage;
 //     const tokenPercentages: Record<string, number> = {};
 //     if (node.id === "root") node.inflows.push(depositToken);
@@ -45,12 +45,12 @@ for (const strategy of strategies) {
 //     },
 //   });
 // }
-// const strategiesAndSteps: Array<[string, DBStep]> = [];
+// const strategiesAndSteps: Array<[string, JSONStep]> = [];
 // for (const newStrat of strategies) {
 //   // Mapping old IDs to new UUIDS
 //   const oldToNewIDs = new Map<number, string>();
 //   // Creating a root step
-//   const rootStep: DBStep = {
+//   const rootStep: JSONStep = {
 //     id: "root",
 //     parentId: null,
 //     protocol: "",
@@ -73,7 +73,7 @@ for (const strategy of strategies) {
 //     const newID = uuidv4();
 //     oldToNewIDs.set(oldStep.step_identifier, newID);
 //   }
-//   const newSteps: Omit<DBStep, "children">[] = [rootStep];
+//   const newSteps: Omit<JSONStep, "children">[] = [rootStep];
 //   // Another iteration where we now change the details
 //   // @ts-ignore
 //   for (const step of strategy.strategy_object.steps_array) {
@@ -121,7 +121,7 @@ for (const strategy of strategies) {
 //     );
 //     if (!newProtocol || !newProtocol.id) throw "Protocol Undefined";
 //     console.log("new Protocol", newProtocol.id);
-//     const newStep: Omit<DBStep, "children"> = {
+//     const newStep: Omit<JSONStep, "children"> = {
 //       parentId: newParentId as string,
 //       id: newId,
 //       protocol: newProtocol.id,
@@ -191,19 +191,19 @@ for (const strategy of strategies) {
 //       newStep.parentId = rootStep.id;
 //     newSteps.push(newStep);
 //   }
-//   const getChilds = (node: DBStep) => {
-//     const children = (newSteps as DBStep[]).filter(
+//   const getChilds = (node: JSONStep) => {
+//     const children = (newSteps as JSONStep[]).filter(
 //       (step) => step.parentId == node.id
 //     );
 //     node.children = children;
 //     for (const child of children) getChilds(child);
 //   };
 //   getChilds(rootStep);
-//   const each = (node: DBStep, depth: number = 0) => {
+//   const each = (node: JSONStep, depth: number = 0) => {
 //     let msg = "";
 //     let j = 0;
 //     let descendentsAmt = 0;
-//     const addDescendent = (node: DBStep) => {
+//     const addDescendent = (node: JSONStep) => {
 //       descendentsAmt++;
 //       for (const child of node.children) addDescendent(child);
 //     };

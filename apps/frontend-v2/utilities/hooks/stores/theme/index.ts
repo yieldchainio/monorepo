@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 /**
  * @notice
@@ -19,13 +20,24 @@ export interface ThemeStore {
 }
 
 // The actual store hook
-export const useTheme = create<ThemeStore>((set) => ({
-  theme: Themes.DARK,
-  setTheme: (_theme: Themes) =>
-    set((state) => {
-      document.documentElement.className = _theme;
-      return {
-        theme: _theme,
-      };
+export const useTheme = create<ThemeStore>()(
+  persist(
+    (set, get) => ({
+      theme: Themes.DARK,
+      setTheme: (_theme: Themes) =>
+        set((state) => {
+          document.documentElement.className = _theme;
+          return {
+            theme: _theme,
+          };
+        }),
     }),
-}));
+    {
+      name: "theme",
+      // onRehydrateStorage: (state) => {
+      //   state.setTheme(state.theme)
+      //   console.log("Set THeme:", state.setTheme);
+      // },
+    }
+  )
+);

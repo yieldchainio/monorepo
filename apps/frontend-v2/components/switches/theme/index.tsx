@@ -10,7 +10,8 @@ import { useTheme, Themes } from "utilities/hooks/stores/theme";
  */
 export const ThemeSwitch = () => {
   // Get the theme state
-  const { theme, setTheme } = useTheme();
+  const theme = useTheme((state) => state.theme);
+  const setTheme = useTheme((state) => state.setTheme);
 
   // Keep track of the switch state manually,
   // using the theme state - override the reguler switch one.
@@ -27,10 +28,14 @@ export const ThemeSwitch = () => {
   // state accordingly
   useEffect(() => {
     setThemeImage(theme == Themes.DARK ? "/icons/moon.svg" : "/icons/sun.svg");
+
+    // For initiation from persisted storage
+    setTheme(theme);
   }, [theme]);
 
   // Handle the click - set the theme and also our boolean state
   const handleClick = (on: boolean) => {
+    console.log("Set Theme Onclick", setTheme, theme);
     setTheme(on ? Themes.LIGHT : Themes.DARK);
     setBooleanState(on);
   };

@@ -3,6 +3,5 @@
  * @param stepsArr - Linked-list array of YCStep structs
  * @return encodedSteps - Array of the ABI-encoded steps
  */
-import { bytes } from "@yc/yc-models";
-import { YCStepStruct } from "@yc/yc-models/src/types/onchain";
+import { bytes, YCStepStruct } from "@yc/yc-models";
 export declare function encodeYCSteps(stepsArr: YCStepStruct[]): bytes[];

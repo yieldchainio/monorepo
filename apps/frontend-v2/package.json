@@ -21,6 +21,7 @@
     "@types/uuid": "^9.0.1",
     "@use-gesture/react": "^10.2.25",
     "@yc/yc-models": "*",
+    "@yc/strategy-builder/src/types.js": "*",
     "autoprefixer": "^10.4.13",
     "axios": "^1.3.4",
     "d3-flextree": "^2.1.2",

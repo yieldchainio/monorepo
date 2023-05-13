@@ -16,9 +16,9 @@ import {
   address,
   bytes,
   VaultFactoryInputs,
+  BuilderResponse,
 } from "@yc/yc-models";
 import { validateSteps } from "./validate/index.js";
-import { BuilderResponse } from "../types.js";
 import { createUprootSteps } from "./create-uproot-steps/index.js";
 import { buildApprovalPairs } from "./build-approval-pairs/index.js";
 import { encodeTreesFunctions } from "./encode-functions/index.js";

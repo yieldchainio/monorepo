@@ -4,8 +4,7 @@
  * @return encodedSteps - Array of the ABI-encoded steps
  */
 
-import { YCStep, bytes } from "@yc/yc-models";
-import { YCStepStruct } from "@yc/yc-models/src/types/onchain";
+import { YCStep, bytes, YCStepStruct } from "@yc/yc-models";
 import { ethers } from "ethers";
 
 export function encodeYCSteps(stepsArr: YCStepStruct[]): bytes[] {

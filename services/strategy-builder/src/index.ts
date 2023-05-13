@@ -3,8 +3,9 @@ dotenv.config();
 import express, { Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { BuilderResponse, VaultCreationRequest } from "./types.js";
+import { VaultCreationRequest } from "./types.js";
 import { createDeployableVaultInput } from "./helpers/index.js";
+import { BuilderResponse } from "@yc/yc-models";
 
 // App to use for reguler API
 const app = express();

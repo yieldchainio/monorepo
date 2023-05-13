@@ -5,7 +5,7 @@
  * @param depositToken - The deposit token of the strategy
  * @return uprootSteps - The uproot steps of the strategy
  */
-import { StepType, YCClassifications, YCStep, } from "@yc/yc-models";
+import { StepType, YCClassifications, YCStep } from "@yc/yc-models";
 import { v4 as uuid } from "uuid";
 import * as _ from "lodash";
 import { DUPLICATEABLE_FUNCTION_IDS } from "./constants.js";

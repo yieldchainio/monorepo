@@ -5,7 +5,5 @@
  * @return YCStep (Struct) array, specifying the encoded function, whether it's a callback,
  * and the indices of it's children within the array
  */
-import { YCStep } from "@yc/yc-models";
-import { StepsToEncodedFunctions } from "../../types.js";
-import { YCStepStruct } from "@yc/yc-models";
+import { YCStepStruct, StepsToEncodedFunctions, YCStep } from "@yc/yc-models";
 export declare function buildOnchainStepsList(stepsTree: YCStep, stepFunctions: StepsToEncodedFunctions): YCStepStruct[];

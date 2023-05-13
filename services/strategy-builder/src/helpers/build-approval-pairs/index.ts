@@ -7,8 +7,14 @@
  * @return approvalPairs - 2D array of addresses [[tokenAddress, addressToApprove]]
  */
 
-import { JSONStep, YCContract, YCStep, YCToken, address } from "@yc/yc-models";
-import { ApprovalPairs } from "../../types.js";
+import {
+  JSONStep,
+  YCContract,
+  YCStep,
+  YCToken,
+  address,
+  ApprovalPairs,
+} from "@yc/yc-models";
 
 export function buildApprovalPairs(
   seedSteps: YCStep,

@@ -6,14 +6,7 @@
  * @return uprootSteps - The uproot steps of the strategy
  */
 
-import {
-  JSONStep,
-  StepType,
-  YCClassifications,
-  YCFunc,
-  YCStep,
-  YCToken,
-} from "@yc/yc-models";
+import { StepType, YCClassifications, YCStep, YCToken } from "@yc/yc-models";
 import { v4 as uuid } from "uuid";
 import * as _ from "lodash";
 import { DUPLICATEABLE_FUNCTION_IDS } from "./constants.js";

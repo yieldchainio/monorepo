@@ -4,8 +4,12 @@
  * @param context - YC Classification context to validate
  */
 
-import { JSONStep, YCClassifications, YCStep } from "@yc/yc-models";
-import { ValidationResponse } from "../../types.js";
+import {
+  JSONStep,
+  YCClassifications,
+  YCStep,
+  ValidationResponse,
+} from "@yc/yc-models";
 
 export function validateSteps(
   stepsTree: YCStep,

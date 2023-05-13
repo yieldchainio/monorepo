@@ -7,6 +7,5 @@
  * @param chainID - The chain to deploy on
  * @return deploymentCalldata
  */
-import { JSONStep } from "@yc/yc-models";
-import { BuilderResponse } from "../types.js";
+import { JSONStep, BuilderResponse } from "@yc/yc-models";
 export declare function createDeployableVaultInput(seedSteps: JSONStep, treeSteps: JSONStep, vaultVisibility: boolean, depositTokenID: string, chainID: number): Promise<BuilderResponse>;

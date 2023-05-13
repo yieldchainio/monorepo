@@ -9,8 +9,8 @@ import {
   YCClassifications,
   YCStep,
   bytes,
+  StepsToEncodedFunctions,
 } from "@yc/yc-models";
-import { StepsToEncodedFunctions } from "../../types.js";
 import { ethers } from "ethers";
 
 export function encodeTreesFunctions(

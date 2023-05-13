@@ -6,9 +6,12 @@
  * and the indices of it's children within the array
  */
 
-import { YCStep, bytes } from "@yc/yc-models";
-import { StepsToEncodedFunctions } from "../../types.js";
-import { YCStepStruct } from "@yc/yc-models";
+import {
+  YCStepStruct,
+  StepsToEncodedFunctions,
+  YCStep,
+  bytes,
+} from "@yc/yc-models";
 
 export function buildOnchainStepsList(
   stepsTree: YCStep,

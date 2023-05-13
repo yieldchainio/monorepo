@@ -13,5 +13,8 @@
     "@types/uuid": "^9.0.1",
     "date-fns": "^2.29.3",
     "to-checksum-address": "^1.0.0"
+  },
+  "scripts": {
+    "build": "tsc -b --force"
   }
 }

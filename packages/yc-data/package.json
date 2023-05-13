@@ -2,7 +2,7 @@
   "name": "@yc/yc-data",
   "type": "module",
   "version": "1.0.0",
-  "main": "./src/index.ts",
+  "main": "./bin/index.js",
   "types": "./src/index.ts",
   "license": "MIT",
   "dependencies": {

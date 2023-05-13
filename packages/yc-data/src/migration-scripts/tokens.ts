@@ -1,5 +1,5 @@
-import { PrismaClient, tokensv2 } from "@prisma/client";
+// import { PrismaClient, tokensv2 } from "@prisma/client";
 
-const client = new PrismaClient();
+// const client = new PrismaClient();
 
 

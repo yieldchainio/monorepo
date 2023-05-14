@@ -15,24 +15,33 @@ import {
   address,
   ApprovalPairs,
 } from "@yc/yc-models";
+import { ethers } from "ethers";
 
 export function buildApprovalPairs(
   seedSteps: YCStep,
   treeSteps: YCStep,
   uprootSteps: YCStep,
-  depositToken: YCToken,
-  diamondAddress: address
+  depositToken: YCToken
 ): ApprovalPairs {
   const approvalPairs: address[][] = [];
 
   // Diamond needs to be approved of deposit token for stashing on deposits
-  approvalPairs.push([depositToken.address as address, diamondAddress]);
+  approvalPairs.push([
+    depositToken.address as address,
+    ethers.ZeroAddress as address,
+  ]);
 
-  seedSteps.map((step: YCStep) => {
+  approvalPairs.push(...getTreeApprovalPairs(seedSteps));
+  approvalPairs.push(...getTreeApprovalPairs(treeSteps));
+  approvalPairs.push(...getTreeApprovalPairs(uprootSteps));
+  return approvalPairs;
+}
+
+function getTreeApprovalPairs(tree: YCStep) {
+  const pairs: ApprovalPairs = [];
+  tree.map((step: YCStep) => {
     const relatedTokens = removeDuplicates<YCToken>([
       ...step.outflows,
-      ...step.inflows,
-      ...(step.function?.inflows || []),
       ...(step.function?.outflows || []),
     ]);
 
@@ -45,12 +54,10 @@ export function buildApprovalPairs(
 
     for (const contract of relatedContracts)
       for (const token of relatedTokens)
-        approvalPairs.push([
-          token.address as address,
-          contract.address as address,
-        ]);
+        pairs.push([token.address as address, contract.address as address]);
   });
-  return approvalPairs;
+
+  return pairs;
 }
 
 function removeDuplicates<T extends { id: string }>(items: T[]): T[] {

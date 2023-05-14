@@ -8,15 +8,12 @@ import { StepType, YCClassifications, YCStep } from "@yc/yc-models";
 import { v4 as uuid } from "uuid";
 import { buildSwapFunction } from "@yc/yc-models";
 export function addScrapeSwaps(uprootTree, depositToken) {
-    console.log(YCClassifications.getInstance().protocols.find((protocol) => protocol.id == "2d0a459a-7501-43a3-baba-da83801d5862"));
     const tokensToSwap = new Set();
     uprootTree.map((step) => {
         for (const token of (step.function?.inflows || []).concat(step.inflows)) {
-            console.log("Adding", token.symbol, "On Scrape Swap For Function:", step.function?.signature);
             tokensToSwap.add(token);
         }
         for (const token of (step.function?.outflows || []).concat(step.outflows)) {
-            console.log("Deleting", token.symbol, "On Scrape Swap For Function:", step.function?.signature);
             tokensToSwap.delete(token);
         }
     });
@@ -38,7 +35,6 @@ export function addScrapeSwaps(uprootTree, depositToken) {
         }, YCClassifications.getInstance());
         swapStep.function = swapFunction;
         lastStep.children.push(swapStep);
-        console.log("Scrape Swap", token.symbol, "=>", depositToken.symbol);
     }
 }
 //# sourceMappingURL=add-scrape-swaps.js.map

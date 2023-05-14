@@ -80,8 +80,7 @@ export async function createDeployableVaultInput(
     seedInstance,
     treeInstance,
     uprootInstance,
-    depositToken,
-    network.diamondAddress as address
+    depositToken
   );
 
   const stepsToEncodedFunctions = encodeTreesFunctions([

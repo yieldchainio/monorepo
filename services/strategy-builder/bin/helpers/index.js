@@ -45,7 +45,9 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
     if (!uprootValidation.status)
         return { status: false, reason: uprootValidation.reason };
     batchUpdateTokenPercentages([seedInstance, treeInstance, uprootInstance]);
-    const approvalPairs = buildApprovalPairs(seedInstance, treeInstance, uprootInstance, depositToken, network.diamondAddress);
+    console.log("Seed Children After Update Token Percentages:", seedInstance.children.map((child) => child.tokenPercentages.entries()));
+    const approvalPairs = buildApprovalPairs(seedInstance, treeInstance, uprootInstance, depositToken);
+    console.log("Approval Pairs", approvalPairs);
     const stepsToEncodedFunctions = encodeTreesFunctions([
         [seedInstance, EncodingContext.SEED],
         [treeInstance, EncodingContext.TREE],

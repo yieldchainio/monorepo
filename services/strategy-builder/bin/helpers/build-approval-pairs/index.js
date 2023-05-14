@@ -6,15 +6,24 @@
  * @param depositToken - Deposit token of the vault
  * @return approvalPairs - 2D array of addresses [[tokenAddress, addressToApprove]]
  */
-export function buildApprovalPairs(seedSteps, treeSteps, uprootSteps, depositToken, diamondAddress) {
+import { ethers } from "ethers";
+export function buildApprovalPairs(seedSteps, treeSteps, uprootSteps, depositToken) {
     const approvalPairs = [];
     // Diamond needs to be approved of deposit token for stashing on deposits
-    approvalPairs.push([depositToken.address, diamondAddress]);
-    seedSteps.map((step) => {
+    approvalPairs.push([
+        depositToken.address,
+        ethers.ZeroAddress,
+    ]);
+    approvalPairs.push(...getTreeApprovalPairs(seedSteps));
+    approvalPairs.push(...getTreeApprovalPairs(treeSteps));
+    approvalPairs.push(...getTreeApprovalPairs(uprootSteps));
+    return approvalPairs;
+}
+function getTreeApprovalPairs(tree) {
+    const pairs = [];
+    tree.map((step) => {
         const relatedTokens = removeDuplicates([
             ...step.outflows,
-            ...step.inflows,
-            ...(step.function?.inflows || []),
             ...(step.function?.outflows || []),
         ]);
         const relatedContracts = step.function?.address?.address
@@ -25,12 +34,9 @@ export function buildApprovalPairs(seedSteps, treeSteps, uprootSteps, depositTok
             : [];
         for (const contract of relatedContracts)
             for (const token of relatedTokens)
-                approvalPairs.push([
-                    token.address,
-                    contract.address,
-                ]);
+                pairs.push([token.address, contract.address]);
     });
-    return approvalPairs;
+    return pairs;
 }
 function removeDuplicates(items) {
     return items.filter((token, index) => items.findIndex((_token) => _token.id == token.id) == index);

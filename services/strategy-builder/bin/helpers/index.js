@@ -19,15 +19,22 @@ import { ethers } from "ethers";
 import factoryABI from "@yc/yc-models/src/ABIs/factory.json" assert { type: "json" };
 export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisibility, depositTokenID, chainID) {
     const ycContext = YCClassifications.getInstance();
+    if (!ycContext.initiallized)
+        await ycContext.initiallize();
+    console.log("Got Context");
     const network = ycContext.getNetwork(chainID);
     if (!network || !network.diamondAddress)
         return { status: false, reason: "Unsupported network" };
+    console.log("Got Network");
     const depositToken = ycContext.getToken(depositTokenID);
     if (!depositToken)
         return { status: false, reason: "Deposit Token Not Found In Context" };
+    console.log("Got Token");
     const seedInstance = new YCStep(seedSteps, ycContext);
     const treeInstance = new YCStep(treeSteps, ycContext);
     const uprootInstance = createUprootSteps(seedInstance, treeInstance, depositToken);
+    console.log("Uproot Children:");
+    uprootInstance.print();
     const seedValidation = validateSteps(seedInstance, ycContext);
     if (!seedValidation.status)
         return { status: false, reason: seedValidation.reason };

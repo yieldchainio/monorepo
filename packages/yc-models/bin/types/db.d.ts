@@ -48,6 +48,7 @@ export interface DBFunction {
     typeflag: Typeflags;
     ret_typeflag: Typeflags;
     signature: string;
+    copy_args: boolean;
 }
 export interface DBArgument {
     id: string;

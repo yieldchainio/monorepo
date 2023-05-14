@@ -22,7 +22,11 @@ class YCFunc extends BaseClass {
     signature;
     typeflag;
     retTypeflag;
-    arguments;
+    #arguments;
+    get arguments() {
+        return this.#arguments;
+    }
+    copyArgs;
     // ====================
     //     CONSTRUCTOR
     // ====================
@@ -34,6 +38,7 @@ class YCFunc extends BaseClass {
         this.typeflag = _function.typeflag;
         this.retTypeflag = _function.ret_typeflag;
         this.isCallback = _function.callback;
+        this.copyArgs = _function.copy_args;
         // Mapping arg identifiers => Full argument instances
         const fullArgs = _function.arguments_ids.map((_arg) => {
             if (typeof _arg == "object")
@@ -49,7 +54,7 @@ class YCFunc extends BaseClass {
         }
         // Should be sufficient anyway - Typescript whining for no reason.
         else
-            this.arguments = fullArgs.flatMap((arg) => arg !== null ? [arg] : []);
+            this.#arguments = fullArgs.flatMap((arg) => arg !== null ? [arg] : []);
         // Create signature
         this.signature = _function.signature;
         const address = _context.getAddress(_function.address_id);
@@ -177,7 +182,7 @@ class YCFunc extends BaseClass {
     toJSON = (retainArgs = false) => {
         return {
             id: this.id,
-            name: this.id,
+            name: this.name,
             dependancy_function_id: this.dependencyFunction?.id || null,
             inverse_function_id: this.counterFunction?.id || null,
             arguments_ids: this.arguments.map((arg) => retainArgs ? arg.toJSON(retainArgs) : arg.id),
@@ -189,8 +194,14 @@ class YCFunc extends BaseClass {
             outflows: this.outflows.map((token) => token.id),
             inflows: this.inflows.map((token) => token.id),
             signature: this.signature,
+            copy_args: this.copyArgs,
         };
     };
+    argumentsManipulated = false;
+    setArguments(newArgs) {
+        this.argumentsManipulated = true;
+        this.#arguments = newArgs;
+    }
 }
 export { YCFunc };
 //# sourceMappingURL=function.js.map

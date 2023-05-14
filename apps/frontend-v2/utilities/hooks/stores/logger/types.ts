@@ -1,4 +1,3 @@
-import { AWSLogger } from "@yc/aws-models/bin/logger";
 export interface UserLog {
   component: React.ReactNode;
   lifespan: number | "immortal";

@@ -9,6 +9,7 @@ import { YCAction } from "../action/action.js";
 import { YCToken } from "../token/token.js";
 import { bytes } from "../../types/index.js";
 export declare class YCFunc extends BaseClass {
+    #private;
     static readonly FunctionCallTuple = "tuple(address target_address, bytes[] args, string signature)";
     readonly id: string;
     readonly name: string;
@@ -22,7 +23,8 @@ export declare class YCFunc extends BaseClass {
     readonly signature: string;
     readonly typeflag: Typeflags;
     readonly retTypeflag: Typeflags;
-    readonly arguments: YCArgument[];
+    get arguments(): YCArgument[];
+    readonly copyArgs: boolean;
     constructor(_function: DBFunction, _context: YCClassifications);
     encodeYCCommand: (step: JSONStep, context: EncodingContext, customArguments: Array<any | YCFunc>) => bytes;
     /**
@@ -39,6 +41,8 @@ export declare class YCFunc extends BaseClass {
      * Custom toJSON function
      */
     toJSON: (retainArgs?: boolean) => DBFunction;
+    protected argumentsManipulated: boolean;
+    setArguments(newArgs: YCArgument[]): void;
 }
 export interface TokenPercentageImplementor {
     tokenPercentages: Map<string, TokenPercentage>;

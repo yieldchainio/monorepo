@@ -38,7 +38,11 @@ export class YCFunc extends BaseClass {
   readonly signature: string;
   readonly typeflag: Typeflags;
   readonly retTypeflag: Typeflags;
-  readonly arguments: YCArgument[];
+  #arguments: YCArgument[];
+  get arguments() {
+    return this.#arguments;
+  }
+  readonly copyArgs: boolean;
 
   // ====================
   //     CONSTRUCTOR
@@ -51,6 +55,7 @@ export class YCFunc extends BaseClass {
     this.typeflag = _function.typeflag;
     this.retTypeflag = _function.ret_typeflag;
     this.isCallback = _function.callback;
+    this.copyArgs = _function.copy_args;
 
     // Mapping arg identifiers => Full argument instances
     const fullArgs = _function.arguments_ids.map(
@@ -72,7 +77,7 @@ export class YCFunc extends BaseClass {
     }
     // Should be sufficient anyway - Typescript whining for no reason.
     else
-      this.arguments = fullArgs.flatMap((arg: YCArgument | null) =>
+      this.#arguments = fullArgs.flatMap((arg: YCArgument | null) =>
         arg !== null ? [arg] : []
       );
 
@@ -259,7 +264,7 @@ export class YCFunc extends BaseClass {
   toJSON = (retainArgs: boolean = false): DBFunction => {
     return {
       id: this.id,
-      name: this.id,
+      name: this.name,
       dependancy_function_id: this.dependencyFunction?.id || null,
       inverse_function_id: this.counterFunction?.id || null,
       arguments_ids: this.arguments.map((arg) =>
@@ -273,8 +278,15 @@ export class YCFunc extends BaseClass {
       outflows: this.outflows.map((token) => token.id),
       inflows: this.inflows.map((token) => token.id),
       signature: this.signature,
+      copy_args: this.copyArgs,
     };
   };
+
+  protected argumentsManipulated = false;
+  setArguments(newArgs: YCArgument[]) {
+    this.argumentsManipulated = true;
+    this.#arguments = newArgs;
+  }
 }
 
 export interface TokenPercentageImplementor {

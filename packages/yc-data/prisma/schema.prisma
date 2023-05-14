@@ -23,6 +23,7 @@ model functionsv2 {
   ret_typeflag           Typeflags   @default(VALUE_VAR_FLAG)
   typeflag               Typeflags   @default(CALL_COMMAND_FLAG)
   signature              String
+  copy_args              Boolean     @default(false)
   address                addressesv2 @relation(fields: [address_id], references: [id])
   actions                actionsv2[] @relation("actionsv2Tofunctionsv2")
 

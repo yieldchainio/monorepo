@@ -1,4 +1,4 @@
-import { StepType, YCToken, YCFunc, } from "@yc/yc-models";
+import { YCToken, YCFunc, } from "@yc/yc-models";
 import { Node } from "../../general/node/plain.js";
 class YCStep extends Node {
     // ====================
@@ -51,6 +51,21 @@ class YCStep extends Node {
      * Any additional data that the Trigger config will want to save
      */
     data = {};
+    // -----------
+    // Trigger Step Variables
+    // -----------
+    /**
+     * The name of this trigger
+     */
+    triggerName = null;
+    /**
+     * A short description of this trigger
+     */
+    triggerDescription = null;
+    /**
+     * An icon representing this trigger
+     */
+    triggerIcon = null;
     constructor(_step, _context) {
         super();
         this.id = _step.id;
@@ -69,7 +84,7 @@ class YCStep extends Node {
             step.parent = this;
             return step;
         });
-        this.type = StepType.STEP;
+        this.type = _step.type;
         this.action = _step.action ? _context.getAction(_step.action) : null;
         this.function =
             typeof _step.function == "string"
@@ -79,12 +94,15 @@ class YCStep extends Node {
                     : null;
         this.customArguments = _step.customArguments;
         this.data = _step.data;
-        this.tokenPercentages = new Map(typeof _step.tokenPercentages == "object" ? [] : _step.tokenPercentages);
+        this.tokenPercentages = new Map(Array.isArray(_step.tokenPercentages) ? _step.tokenPercentages : []);
+        this.triggerName = _step.triggerName || null;
+        this.triggerDescription = _step.triggerDescription || null;
+        this.triggerIcon = _step.triggerIcon || null;
     }
     /**
      * Convert the step into a JSON step
      */
-    toJSON = () => {
+    toJSON = (retainFunc = false) => {
         return {
             id: this.id,
             parentId: this.parent,
@@ -92,7 +110,7 @@ class YCStep extends Node {
             protocol: this.protocol?.id || "",
             inflows: this.inflows.map((token) => token.toJSON()),
             outflows: this.outflows.map((token) => token.toJSON()),
-            function: this.function?.toJSON(),
+            function: this.function?.toJSON(retainFunc),
             customArguments: this.customArguments,
             children: this.children.map((child) => child.toJSON()),
             data: this.data,
@@ -100,6 +118,14 @@ class YCStep extends Node {
             type: this.type,
         };
     };
+    print(indent = 0) {
+        let indentation = "";
+        while (indentation.length < indent)
+            indentation += " ";
+        console.log(indentation + this.function?.signature);
+        for (const child of this.children)
+            child.print(indent + 2);
+    }
 }
 export { YCStep };
 //# sourceMappingURL=step.js.map

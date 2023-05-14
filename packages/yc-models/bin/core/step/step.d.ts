@@ -44,9 +44,25 @@ export declare class YCStep extends Node<YCStep> {
      * Any additional data that the Trigger config will want to save
      */
     data: any;
+    /**
+     * The name of this trigger
+     */
+    triggerName: string | null;
+    /**
+     * A short description of this trigger
+     */
+    triggerDescription: string | null;
+    /**
+     * An icon representing this trigger
+     */
+    triggerIcon: string | {
+        dark: string;
+        light: string;
+    } | null;
     constructor(_step: JSONStep, _context: YCClassifications);
     /**
      * Convert the step into a JSON step
      */
-    toJSON: () => JSONStep;
+    toJSON: (retainFunc?: boolean) => JSONStep;
+    print(indent?: number): void;
 }

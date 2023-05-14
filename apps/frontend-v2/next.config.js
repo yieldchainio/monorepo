@@ -13,20 +13,14 @@ const nextConfig = {
       config.module.rules.push({
         test: /\.m?js$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: "babel-loader",
-            options: {
-              presets: [
-                ["@babel/preset-env", { targets: "defaults" }],
-                [
-                  "@babel/plugin-syntax-import-assertions",
-                  { targets: "defaults" },
-                ],
-              ],
-            },
-          },
-        ],
+        // use: [
+        //   {
+        //     loader: "babel-loader",
+        //     options: {
+        //       presets: [["@babel/preset-env", { targets: "defaults" }], ["@babel/plugin-syntax-import-assertions"]],
+        //     },
+        //   },
+        // ],
       });
 
     return config;

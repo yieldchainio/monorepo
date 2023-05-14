@@ -68,7 +68,6 @@ class YCContract extends BaseClass {
         const existingAddress = this.getInstance(_address.id);
         if (existingAddress)
             return existingAddress;
-        console.log("Address Object", _address);
         this.relatedContracts = _context.rawAddresses.flatMap((jsonContract) => {
             const exists = _address.related_contracts.some((relatedContractID) => relatedContractID == jsonContract.id);
             return exists ? [new YCContract(jsonContract, _context)] : [];

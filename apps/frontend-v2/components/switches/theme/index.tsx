@@ -35,7 +35,6 @@ export const ThemeSwitch = () => {
 
   // Handle the click - set the theme and also our boolean state
   const handleClick = (on: boolean) => {
-    console.log("Set Theme Onclick", setTheme, theme);
     setTheme(on ? Themes.LIGHT : Themes.DARK);
     setBooleanState(on);
   };

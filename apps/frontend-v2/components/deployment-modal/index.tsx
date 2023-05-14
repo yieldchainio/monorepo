@@ -10,18 +10,23 @@ import { getStepsTreeDescription } from "./utils/gen-tree-description";
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import WrappedImage from "components/wrappers/image";
 import { TokensBundle } from "components/tokens/bundle";
-import { YCToken } from "@yc/yc-models";
+import { JSONStep, YCToken } from "@yc/yc-models";
 import { BaseComponentProps } from "components/types";
 import GradientButton from "components/buttons/gradient";
 import { RegulerButton } from "components/buttons/reguler";
+import { getDeploymentData } from "./utils/get-deployment-data";
+import { useLogs } from "utilities/hooks/stores/logger";
 
 export const DeploymentModal = ({
   seedRootStep,
   treeRootStep,
+  onClick,
 }: DeployModalProps) => {
   /**
    * Get global details about the strategy from the global store
    */
+
+  const logs = useLogs();
 
   const title = useStrategyStore((state) => state.title);
   const network = useStrategyStore((state) => state.network);
@@ -108,7 +113,10 @@ export const DeploymentModal = ({
     [seedRootStep, treeRootStep]
   );
   return (
-    <div className="w-[80%] h-[80%] flex flex-row mx-auto my-auto overflow-hidden rounded-large ">
+    <div
+      className="w-[80%] h-[80%] flex flex-row mx-auto my-auto overflow-hidden rounded-large "
+      onClick={onClick}
+    >
       <div className=" flex flex-col  bg-custom-bcomponentbg w-[100%] py-14 px-12 gap-10">
         <div className="flex flex-col gap-3">
           <WrappedText fontStyle="bold" fontSize={28}>
@@ -144,6 +152,18 @@ export const DeploymentModal = ({
               paddingBottom: "0.75rem",
             }}
             className="tablet:content-['Hey']"
+            onClick={() =>
+              getDeploymentData(
+                {
+                  seedSteps: seedRootStep.toDeployableJSON() as JSONStep,
+                  treeSteps: treeRootStep.toDeployableJSON() as JSONStep,
+                  vaultVisibility: visibility,
+                  depositTokenID: depositToken?.id as string,
+                  chainID: network?.id as number,
+                },
+                (message: string) => logs.lazyPush({ message, type: "info" })
+              )
+            }
           >
             Deploy 🚀
           </GradientButton>

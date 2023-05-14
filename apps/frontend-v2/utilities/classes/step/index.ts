@@ -186,6 +186,18 @@ export class Step extends Node<Step> implements IStep<Step> {
   }
 
   /**
+   * Set some custom argument,
+   * done in order to change the array ref and allow frontend to react
+   * @param idx - Index to insert in
+   * @param value - The value to insert
+   */
+  setCustomArg(idx: number, value:any) {
+    const newArr = [...this.customArguments]
+    newArr[idx] = value
+    this.customArguments = newArr
+  }
+
+  /**
    * @notice
    * Get the available inflow tokens.
    *

@@ -20,6 +20,7 @@ export declare class YCArgument extends BaseClass {
     readonly typeflag: Typeflags;
     readonly retTypeflag: Typeflags;
     readonly isCustom: boolean;
+    readonly devNotes: string | null;
     readonly identifier: string;
     readonly name: string | null;
     readonly id: string;

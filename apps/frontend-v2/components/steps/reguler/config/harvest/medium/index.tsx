@@ -6,7 +6,6 @@ import { StepProps } from "components/steps/types";
 import { forwardRef, useEffect, useMemo } from "react";
 import { BaseActionConfig } from "../../base";
 
-import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 import { useHarvest } from "../hooks/useHarvest";
 import WrappedText from "components/wrappers/text";
 import { PositionsDropdown } from "../components/positions-dropdown";
@@ -35,6 +34,9 @@ export const MediumHarvestConfig = forwardRef<HTMLDivElement, StepProps>(
         step={step}
         triggerComparison={triggerComparison}
         handleComplete={() => completeHarvest(step)}
+        canContinue={
+          harvestFunction !== undefined || "Choose Position To Harvest"
+        }
       >
         <div className="w-full flex flex-col gap-1">
           <WrappedText>Position To Harvest</WrappedText>

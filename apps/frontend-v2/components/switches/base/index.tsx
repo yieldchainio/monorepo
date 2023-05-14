@@ -5,8 +5,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import WrappedImage from "components/wrappers/image";
+import { ImageSrc } from "components/wrappers/types.js";
+import { BaseComponentProps } from "components/types.js";
 
-interface SwitchProps {
+interface SwitchProps extends BaseComponentProps {
   // A handler function for handling the switch turn on/off
   handler: (on: boolean) => any;
   // Optional styling
@@ -18,8 +20,8 @@ interface SwitchProps {
 }
 
 interface SwitchImages {
-  onImage?: string;
-  offImage?: string;
+  onImage?: ImageSrc;
+  offImage?: ImageSrc;
 }
 
 export const Switch = ({
@@ -27,13 +29,17 @@ export const Switch = ({
   className,
   images,
   overridingState,
+  children,
 }: SwitchProps) => {
   // Keep track of whether the button is on or off, change switch location based on that
   const [on, setOn] = useState<boolean>(false);
 
   // useEffect listening to the (optional) overriding state and updating our state with it
   useEffect(() => {
-    if (overridingState !== undefined) setOn(overridingState);
+    if (overridingState !== undefined) {
+      setOn(overridingState);
+      handler(overridingState)
+    }
   }, [overridingState]);
 
   // Handle click - set on/off and use the handler
@@ -41,6 +47,7 @@ export const Switch = ({
     handler(!on);
     setOn(!on);
   };
+
   return (
     <div
       className="flex w-[60px] h-[28.2px] rounded-full border-custom-border border-[1px] bg-custom-bcomponentbg bg-opacity-[100%] drop-shadow-sm py-1 px-1.5 cursor-pointer hover:bg-custom-componentbg transition duration-200 ease-in-out"
@@ -59,6 +66,7 @@ export const Switch = ({
           duration: 1000,
         }}
       >
+        {children}
         {!on && images?.offImage && (
           <WrappedImage alt="" src={images.offImage} width={12} height={12} />
         )}

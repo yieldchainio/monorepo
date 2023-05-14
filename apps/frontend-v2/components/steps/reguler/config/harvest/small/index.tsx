@@ -24,6 +24,10 @@ export const SmallHarvestConfig = forwardRef<HTMLDivElement, StepProps>(
       triggerComparison
     );
 
+    useEffect(() => {
+      step.setFunction(harvestFunction);
+    }, [harvestFunction]);
+
     /**
      * Get portal to canvas (for tooltips)
      */

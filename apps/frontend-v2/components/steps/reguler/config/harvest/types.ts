@@ -2,13 +2,13 @@
  * Types for the harvest config
  */
 
-import { YCFunc, YCProtocol } from "@yc/yc-models";
+import { DBFunction, YCFunc, YCProtocol } from "@yc/yc-models";
 import { DropdownProps } from "components/dropdown/types";
 import { BaseComponentProps } from "components/types";
 
 // The data of harvest on the step (for persistnace)
 export type HarvestData = {
-  func?: YCFunc;
+  func?: DBFunction;
   externallyUnlocked?: boolean;
 };
 

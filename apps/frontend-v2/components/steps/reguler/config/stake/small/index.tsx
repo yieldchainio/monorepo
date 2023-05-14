@@ -27,6 +27,11 @@ export const SmallStakeConfig = forwardRef<HTMLDivElement, StepProps>(
       stakeFunction,
       rewardsFunction,
     } = useStake({ step, triggerComparison });
+
+    useEffect(() => {
+      step.setFunction(stakeFunction);
+    }, [stakeFunction]);
+
     // Return the JSX
     return (
       <BaseActionConfig
@@ -41,7 +46,7 @@ export const SmallStakeConfig = forwardRef<HTMLDivElement, StepProps>(
         triggerComparison={triggerComparison}
         handleComplete={() => {
           // We set the step's function to our stake function on completion
-          step.setFunction(stakeFunction)
+          step.setFunction(stakeFunction);
         }}
       >
         <div className="w-full">

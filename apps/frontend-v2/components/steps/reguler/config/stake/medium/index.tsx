@@ -29,6 +29,10 @@ export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
       stakeFunction,
     } = useStake({ step, triggerComparison });
 
+    useEffect(() => {
+      step.setFunction(stakeFunction)
+    }, [stakeFunction])
+
     // Return the JSX
     return (
       <BaseActionConfig

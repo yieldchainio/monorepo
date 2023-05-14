@@ -9,9 +9,10 @@ import { useConfigContext } from "../../../hooks/useConfigContext";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { HARVEST_ID } from "components/steps/reguler/constants";
 import { useLogs } from "utilities/hooks/stores/logger";
-import { YCFunc } from "@yc/yc-models";
+import { YCClassifications, YCFunc } from "@yc/yc-models";
 import { completeHarvest } from "../../utils/complete-harvest";
 import { HarvestData } from "../../types";
+import { HarvestConfig } from "../../index.jsx";
 
 export const useHarvest = (step: Step, triggerComparison: () => void) => {
   // ===========
@@ -25,7 +26,7 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
   /**
    * Get some base variables that we need (context, network & our available tokens)
    */
-  const { context, network, availableTokens } = useConfigContext({
+  const { context } = useConfigContext({
     step,
     triggerComparison,
   });
@@ -156,7 +157,7 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
      */
     (step.data.harvest as HarvestData | undefined) = {
       ...step.data?.harvest,
-      func,
+      func: func.toJSON(),
     };
     /**
      * First, set the protocol to the one from the parent (We are harvesting the smae position)
@@ -186,14 +187,16 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
    * If we only have a single harvest function, we choose it immedaitly
    */
   useEffect(() => {
-    if (harvestFunctions.length === 1) {
-      choosePosition(harvestFunctions[0], true);
-      logs.lazyPush({
-        message: `Added ${harvestFunctions[0].inflows.map(
-          (token, i) => token.symbol
-        )} Harvest Automatically`,
-        type: "info",
-      });
+    if (harvestFunctions.length === 1 && !step.data?.harvest?.func?.id) {
+      choosePosition(harvestFunctions[0], !harvestFunctions[0].requiresCustom);
+
+      if (!harvestFunctions[0].requiresCustom)
+        logs.lazyPush({
+          message: `Added ${harvestFunctions[0].inflows.map(
+            (token, i) => token.symbol
+          )} Harvest Automatically`,
+          type: "info",
+        });
     }
   }, [harvestFunctions.length]);
 
@@ -202,9 +205,13 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
    */
   useEffect(() => {
     // We watch the harvest function data, if it exists:
-    if (step.data?.harvest?.func) {
+    const data = step.data?.harvest as HarvestData;
+    if (data?.func) {
       // Set our harvest function state
-      setHarvestFunction(step.data?.harvest?.func);
+      const func = new YCFunc(data.func, YCClassifications.getInstance());
+      setHarvestFunction(func);
+
+      if (step.function?.id !== func.id) step.setFunction(func);
     }
   }, [step.data?.harvest?.func]);
 

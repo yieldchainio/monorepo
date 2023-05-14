@@ -35,6 +35,7 @@ export class YCArgument extends BaseClass {
   readonly typeflag: Typeflags;
   readonly retTypeflag: Typeflags;
   readonly isCustom: boolean;
+  readonly devNotes: string | null = null;
   readonly identifier: string;
   readonly name: string | null;
   readonly id: string;
@@ -54,6 +55,7 @@ export class YCArgument extends BaseClass {
     this.name = _argument.name;
     this.isCustom = _argument.custom;
     this.id = _argument.id;
+    this.devNotes = _argument.dev_notes || null;
     this.relatingToken = _argument.relating_token
       ? _context.getToken(_argument.relating_token)
       : null;
@@ -173,6 +175,7 @@ export class YCArgument extends BaseClass {
       ret_typeflag: this.retTypeflag,
       relating_token: this.relatingToken?.id || null,
       overridden_custom_values: this.#overridenCustomArguments,
+      dev_notes: this.devNotes,
     };
   }
 }

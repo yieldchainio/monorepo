@@ -55,7 +55,7 @@ export interface DBFunction {
   typeflag: Typeflags;
   ret_typeflag: Typeflags;
   signature: string;
-  copy_args: boolean
+  copy_args: boolean;
 }
 export interface DBArgument {
   id: string;
@@ -67,6 +67,7 @@ export interface DBArgument {
   ret_typeflag: Typeflags;
   relating_token: string | null;
   overridden_custom_values: Array<string | null>;
+  dev_notes?: string | null;
 }
 
 export interface DBFlow {

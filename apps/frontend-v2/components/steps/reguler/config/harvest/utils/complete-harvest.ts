@@ -2,7 +2,7 @@
  * Finallize the harvest configuration
  */
 
-import { YCClassifications, YCProtocol } from "@yc/yc-models";
+import { YCClassifications, YCFunc, YCProtocol } from "@yc/yc-models";
 import { Step } from "utilities/classes/step";
 import { HarvestData } from "../types";
 
@@ -14,27 +14,33 @@ export const completeHarvest = (step: Step) => {
   if (!data.func)
     throw "Cannot Complete Harvest - You Did Not Choose A Position!";
 
+  const func = new YCFunc(data.func, YCClassifications.getInstance());
+
   // Assert that the protocol must exist
-  if (!data.func.address?.protocol)
+  if (!func.address?.protocol)
     throw "Cannot Complete Harvest - Protocol Is Non-Existant.";
 
   // Set the step's function to it
-  step.setFunction(data.func);
+  if (step.function?.id !== func.id) {
+    const customArgs = step.customArguments;
+    step.setFunction(func);
+    step.customArguments = customArgs;
+  }
 
   // Set the protocol
-  step.protocol = data.func.address.protocol;
+  step.protocol = func.address.protocol;
 
   // Clean it from the parent's "unlockedFunctions", if it's there
   if (step.parent?.unlockedFunctions)
     step.parent.unlockedFunctions = step.parent.unlockedFunctions.map(
-      (func) => {
-        if (func.func.id === data.func?.id)
+      (_func) => {
+        if (_func.func.id === func.id)
           return {
-            func: func.func,
+            func: _func.func,
             used: true,
           };
 
-        return func;
+        return _func;
       }
     );
 

@@ -3,18 +3,9 @@
  */
 
 import { StepProps } from "components/steps/types";
-import { forwardRef, useEffect, useMemo, useState } from "react";
-import { BaseNode } from "components/steps/components/node";
-import { useStrategyStore } from "utilities/hooks/stores/strategies";
+import { forwardRef} from "react";
 import { BaseActionConfig } from "../../base";
-import Dropdown from "components/dropdown";
-import { TokensModal } from "components/tokens-modal";
-import WrappedImage from "components/wrappers/image";
-import { InfoProvider } from "components/info-providers";
-import { ToolTipDirection } from "components/info-providers/types";
-import { YCToken } from "@yc/yc-models";
 import { useSwap } from "../hooks/useSwap";
-import { ChooseToken } from "../../components/choose-token";
 import { TokenSwap } from "../components/token-swap";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 import { completeSwapConfig } from "../utils/complete-swap-config";

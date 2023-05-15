@@ -30,8 +30,8 @@ export const encodeGetInvestmentAmount = (step, context, argument) => {
             signature: "",
         };
         // Encode the withdraw shares loader manually
-        return `${(TypeflagValues["INTERNAL_LOAD_FLAG"],
-            TypeflagValues["VALUE_VAR_FLAG"],
+        return `0x${(TypeflagValues.INTERNAL_LOAD_FLAG,
+            TypeflagValues.VALUE_VAR_FLAG,
             remove0xPrefix(AbiCoder.defaultAbiCoder().encode([YCFunc.FunctionCallTuple], [withdrawalFuncStruct])))}`;
     }
     // Get the token percentage from the step, assert that it must exist also
@@ -45,7 +45,6 @@ export const encodeGetInvestmentAmount = (step, context, argument) => {
         // We transform it into a "divisor" and multiply by 100 (safe maths)
         [(100 / tokenPercentage) * 100])))}`;
     const fullGetInvestmentCommand = argument.value.encodeYCCommand(step, context, [tokenPercentageAsCommand]);
-    console.log("Encoded Get InvestmentAmount Command:", fullGetInvestmentCommand);
     return fullGetInvestmentCommand;
 };
 /**

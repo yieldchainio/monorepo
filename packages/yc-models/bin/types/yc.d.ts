@@ -35,9 +35,9 @@ export type typeflags = `${typeflag}${typeflag}`;
  * Type of context when encoding
  */
 export declare enum EncodingContext {
-    SEED = 0,
-    TREE = 1,
-    UPROOT = 2
+    SEED = "seed",
+    TREE = "tree",
+    UPROOT = "uproot"
 }
 export type TokenPercentage = {
     percentage: number;

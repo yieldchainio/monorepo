@@ -48,7 +48,6 @@ class YCFunc extends BaseClass {
         });
         // Throw an error and assign no arguments if the arguments include a null value
         if (fullArgs.includes(null)) {
-            console.log(_function.arguments_ids);
             throw ("YCFunc ERROR: Found Null Argument. Argument Value: " +
                 fullArgs.find((arg) => arg == null));
         }
@@ -118,11 +117,9 @@ class YCFunc extends BaseClass {
         // get the flag'ified encoded FunctionCallStruct
         const flags = getFunctionFlags(this);
         // Encode the function call
-        console.log("Function call Struct:", functionCall);
         const encodedFunction = iface
             .getAbiCoder()
             .encode([YCFunc.FunctionCallTuple], [functionCall]);
-        console.log("Function Encoded: ", "0x" + flags + encodedFunction.slice(2, encodedFunction.length));
         // Return the encoded function with the flag
         return "0x" + flags + encodedFunction.slice(2, encodedFunction.length);
     };
@@ -133,11 +130,8 @@ class YCFunc extends BaseClass {
      */
     toFunctionCallStruct = (step, context, customArguments) => {
         // Assert that if we require a custom argument,
-        if (this.customArgumentsLength !== customArguments.length) {
-            console.log(this.customArgumentsLength, customArguments);
-            console.log(this.signature);
+        if (this.customArgumentsLength !== customArguments.length)
             throw new Error("YCFunc ERR: Cannot Create FunctionCallStruct - Function requires custom argument(s?), but provided args length mismatch");
-        }
         // Assert that we must have an address set
         if (!this.address)
             throw new Error("YCFuncERR: Cannot Create FunctionCallStruct - Function Does Not Have An Address.");

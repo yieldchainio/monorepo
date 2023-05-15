@@ -113,7 +113,6 @@ class YCNetwork extends BaseClass {
         this.logo = _network.logo;
         this.color = _network.color || undefined;
         this.blockExplorer = _network.block_explorer || null;
-        console.log("Network Diamond Address", _network.diamond_address);
         this.diamondAddress = _network.diamond_address;
         /**
          * Initiate the ethers provider if we have a json rpc available

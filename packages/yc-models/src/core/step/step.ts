@@ -153,10 +153,23 @@ export class YCStep extends Node<YCStep> {
     };
   };
 
+  /**
+   * Clone this step
+   */
+  clone(retainFunc: boolean = true) {
+    const jsonStep = this.toJSON(retainFunc);
+    jsonStep.customArguments = [...jsonStep.customArguments];
+    jsonStep.tokenPercentages = [...jsonStep.tokenPercentages];
+    jsonStep.children = [...jsonStep.children];
+    const newStep = new YCStep(jsonStep, YCClassifications.getInstance());
+    newStep.parent = this.parent;
+    return newStep;
+  }
+
   print(indent: number = 0) {
     let indentation = "";
     while (indentation.length < indent) indentation += " ";
-    console.log(indentation + this.function?.signature);
+    console.log(indentation + this.function?.signature + " - " + (this.parent?.function?.signature  || this.parent?.triggerName || "No Parent"));
 
     for (const child of this.children) child.print(indent + 2);
   }

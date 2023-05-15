@@ -1,4 +1,4 @@
-import { YCToken, YCFunc, } from "@yc/yc-models";
+import { YCToken, YCClassifications, YCFunc, } from "@yc/yc-models";
 import { Node } from "../../general/node/plain.js";
 class YCStep extends Node {
     // ====================
@@ -118,11 +118,23 @@ class YCStep extends Node {
             type: this.type,
         };
     };
+    /**
+     * Clone this step
+     */
+    clone(retainFunc = true) {
+        const jsonStep = this.toJSON(retainFunc);
+        jsonStep.customArguments = [...jsonStep.customArguments];
+        jsonStep.tokenPercentages = [...jsonStep.tokenPercentages];
+        jsonStep.children = [...jsonStep.children];
+        const newStep = new YCStep(jsonStep, YCClassifications.getInstance());
+        newStep.parent = this.parent;
+        return newStep;
+    }
     print(indent = 0) {
         let indentation = "";
         while (indentation.length < indent)
             indentation += " ";
-        console.log(indentation + this.function?.signature);
+        console.log(indentation + this.function?.signature + " - " + (this.parent?.function?.signature || this.parent?.triggerName || "No Parent"));
         for (const child of this.children)
             child.print(indent + 2);
     }

@@ -53,13 +53,15 @@ export const encodeGetInvestmentAmount = (
     };
 
     // Encode the withdraw shares loader manually
-    return `${
-      (TypeflagValues["INTERNAL_LOAD_FLAG"],
-      TypeflagValues["VALUE_VAR_FLAG"],
-    remove0xPrefix(  AbiCoder.defaultAbiCoder().encode(
-        [YCFunc.FunctionCallTuple],
-        [withdrawalFuncStruct]
-      )))
+    return `0x${
+      (TypeflagValues.INTERNAL_LOAD_FLAG,
+      TypeflagValues.VALUE_VAR_FLAG,
+      remove0xPrefix(
+        AbiCoder.defaultAbiCoder().encode(
+          [YCFunc.FunctionCallTuple],
+          [withdrawalFuncStruct]
+        )
+      ))
     }`;
   }
 
@@ -87,11 +89,6 @@ export const encodeGetInvestmentAmount = (
     step,
     context,
     [tokenPercentageAsCommand]
-  );
-
-  console.log(
-    "Encoded Get InvestmentAmount Command:",
-    fullGetInvestmentCommand
   );
 
   return fullGetInvestmentCommand;

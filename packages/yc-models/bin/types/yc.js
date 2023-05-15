@@ -10,9 +10,9 @@ export var CallTypes;
  */
 export var EncodingContext;
 (function (EncodingContext) {
-    EncodingContext[EncodingContext["SEED"] = 0] = "SEED";
-    EncodingContext[EncodingContext["TREE"] = 1] = "TREE";
-    EncodingContext[EncodingContext["UPROOT"] = 2] = "UPROOT";
+    EncodingContext["SEED"] = "seed";
+    EncodingContext["TREE"] = "tree";
+    EncodingContext["UPROOT"] = "uproot";
 })(EncodingContext || (EncodingContext = {}));
 export var StepType;
 (function (StepType) {

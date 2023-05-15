@@ -102,17 +102,19 @@ class YCStep extends Node {
     /**
      * Convert the step into a JSON step
      */
-    toJSON = (retainFunc = false) => {
+    toJSON = (retainFunc = false, retainParent = true) => {
         return {
             id: this.id,
-            parentId: this.parent,
+            parentId: retainParent
+                ? this.parent
+                : this.parent?.id,
             action: this.action?.id || "",
             protocol: this.protocol?.id || "",
             inflows: this.inflows.map((token) => token.toJSON()),
             outflows: this.outflows.map((token) => token.toJSON()),
             function: this.function?.toJSON(retainFunc),
             customArguments: this.customArguments,
-            children: this.children.map((child) => child.toJSON()),
+            children: this.children.map((child) => child.toJSON(retainFunc, retainParent)),
             data: this.data,
             tokenPercentages: Array.from(this.tokenPercentages.entries()),
             type: this.type,
@@ -134,7 +136,12 @@ class YCStep extends Node {
         let indentation = "";
         while (indentation.length < indent)
             indentation += " ";
-        console.log(indentation + this.function?.signature + " - " + (this.parent?.function?.signature || this.parent?.triggerName || "No Parent"));
+        console.log(indentation +
+            this.function?.signature +
+            " - " +
+            (this.parent?.function?.signature ||
+                this.parent?.triggerName ||
+                "No Parent"));
         for (const child of this.children)
             child.print(indent + 2);
     }

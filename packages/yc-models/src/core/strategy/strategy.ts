@@ -148,7 +148,9 @@ export class YCStrategy extends BaseClass {
         data: calldata,
         from: YCStrategy.getSigningAddress(signer),
       })
-    ).wait();
+    )?.wait();
+
+    console.log("Transaction Send Res", res);
 
     if (res?.status == 1) {
       const vaultAddress = await res.getResult();

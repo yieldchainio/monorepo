@@ -136,17 +136,24 @@ export class YCStep extends Node<YCStep> {
   /**
    * Convert the step into a JSON step
    */
-  toJSON = (retainFunc: boolean = false): JSONStep => {
+  toJSON = (
+    retainFunc: boolean = false,
+    retainParent: boolean = true
+  ): JSONStep => {
     return {
       id: this.id,
-      parentId: this.parent as unknown as string,
+      parentId: retainParent
+        ? (this.parent as unknown as string)
+        : this.parent?.id,
       action: this.action?.id || "",
       protocol: this.protocol?.id || "",
       inflows: this.inflows.map((token) => token.toJSON()),
       outflows: this.outflows.map((token) => token.toJSON()),
       function: this.function?.toJSON(retainFunc) as DBFunction,
       customArguments: this.customArguments,
-      children: this.children.map((child) => child.toJSON()),
+      children: this.children.map((child) =>
+        child.toJSON(retainFunc, retainParent)
+      ),
       data: this.data,
       tokenPercentages: Array.from(this.tokenPercentages.entries()),
       type: this.type,
@@ -169,7 +176,14 @@ export class YCStep extends Node<YCStep> {
   print(indent: number = 0) {
     let indentation = "";
     while (indentation.length < indent) indentation += " ";
-    console.log(indentation + this.function?.signature + " - " + (this.parent?.function?.signature  || this.parent?.triggerName || "No Parent"));
+    console.log(
+      indentation +
+        this.function?.signature +
+        " - " +
+        (this.parent?.function?.signature ||
+          this.parent?.triggerName ||
+          "No Parent")
+    );
 
     for (const child of this.children) child.print(indent + 2);
   }

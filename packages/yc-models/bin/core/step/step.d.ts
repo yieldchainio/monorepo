@@ -63,7 +63,7 @@ export declare class YCStep extends Node<YCStep> {
     /**
      * Convert the step into a JSON step
      */
-    toJSON: (retainFunc?: boolean) => JSONStep;
+    toJSON: (retainFunc?: boolean, retainParent?: boolean) => JSONStep;
     /**
      * Clone this step
      */

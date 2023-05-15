@@ -52,8 +52,7 @@ app.post(
       req.body.chainID
     );
 
-    console.log("Builder Result:", builderResult);
-
+      console.log("Builder Result", builderResult)
     res.status(builderResult.status == true ? 200 : 400).json(builderResult);
   }
 );

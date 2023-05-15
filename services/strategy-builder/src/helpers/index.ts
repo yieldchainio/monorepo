@@ -136,6 +136,6 @@ export async function createDeployableVaultInput(
   return {
     status: true,
     deploymentCalldata: deploymentCalldata.data,
-    uprootSteps: uprootInstance.toJSON(true),
+    uprootSteps: uprootInstance.toJSON(false, false),
   };
 }

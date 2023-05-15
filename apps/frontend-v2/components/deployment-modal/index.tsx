@@ -25,6 +25,7 @@ import { v4 as uuid } from "uuid";
 import { useSigner } from "wagmi";
 import useYCUser from "utilities/hooks/yc/useYCUser";
 import { addStrategy } from "./utils/add-strategy";
+import { useRouter } from "next/navigation";
 
 export const DeploymentModal = ({
   seedRootStep,
@@ -42,17 +43,7 @@ export const DeploymentModal = ({
   const depositToken = useStrategyStore((state) => state.depositToken);
   const visibility = useStrategyStore((state) => state.isPublic);
 
-  const [deploymentData, setDeploymentData] = useState<string | null>(null);
-
-  // @ts-ignore
-  // const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-  //   chainId: network?.id || 1,
-  //   mode: "prepared",
-  //   request: {
-  //     to: network?.diamondAddress || "",
-  //     data: deploymentData || "",
-  //   },
-  // });
+  const router = useRouter();
 
   const { address, id } = useYCUser();
 
@@ -213,7 +204,7 @@ export const DeploymentModal = ({
                   execution_interval: 1000,
                   seedSteps: seedRootStep.toDeployableJSON() as any,
                   treeSteps: treeRootStep.toDeployableJSON() as any,
-                  uprootSteps: builderResult?.uprootSteps as any
+                  uprootSteps: builderResult?.uprootSteps as any,
                 };
 
                 if (!builderResult)
@@ -280,18 +271,27 @@ export const DeploymentModal = ({
                   lifespan: added,
                 });
 
-                added.then((res) =>
-                  res == true
-                    ? logs.lazyPush({
-                        type: "success",
-                        message: "Added Stratey Successfully",
-                      })
-                    : logs.lazyPush({
-                        type: "error",
-                        message:
-                          "Failed To Add Strategy To Database - Contact Team For Help",
-                      })
-                );
+                
+
+                added.then((res) => {
+                  if (!res)
+                    return logs.lazyPush({
+                      type: "error",
+                      message:
+                        "Failed To Add Strategy To Database - Contact Team For Help",
+                    });
+
+                  logs.lazyPush({
+                    type: "success",
+                    message: "Added Stratey Successfully",
+                  });
+
+                  logs.lazyPush({
+                    message: "Redirecting To Vault's Page...",
+                  });
+
+                  router.push(`/strategy/${strategyID}`);
+                });
               });
             }}
           >

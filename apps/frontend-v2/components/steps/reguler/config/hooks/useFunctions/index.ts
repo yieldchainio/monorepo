@@ -22,6 +22,14 @@ export const useFunctions = ({
    * Memoize the filtered functions and return them
    */
   const memoFunctions = useMemo(() => {
+    console.log(
+      "Details Inside Memo",
+      allFunctions.length,
+      networks?.[0]?.name,
+      tokens?.[0]?.symbol,
+      action?.name,
+      protocols?.[0]?.name
+    );
     return allFunctions.filter((func) => {
       // It must be on one of the specified networks, if any
       if (
@@ -47,9 +55,9 @@ export const useFunctions = ({
 
       if (
         tokens &&
-        func.outflows.filter((token) =>
-          tokens.some((_token) => _token.id == token.id)
-        ).length < tokens.length
+        func.outflows.some(
+          (token) => !tokens.some((toecan) => toecan.id == token.id)
+        )
       )
         // It must outflow only our available tokens
         return false;
@@ -62,7 +70,17 @@ export const useFunctions = ({
     tokens?.length,
     action?.id,
     protocols?.length,
+    protocols,
+    protocols?.[0],
   ]);
 
+  console.log(
+    "Function sDetails",
+    allFunctions.length,
+    networks?.[0]?.name,
+    tokens?.[0]?.symbol,
+    action?.name,
+    protocols?.[0]?.name
+  );
   return memoFunctions;
 };

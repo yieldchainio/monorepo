@@ -38,10 +38,11 @@ export function buildOnchainStepsList(
 
     if (!step.parent?.id) return;
     const parentIdx = stepIdsToIndices.get(step.parent.id);
-    if (!parentIdx) throw "Cannot Create Linked List - Parent IDX unavailable";
+    if (parentIdx == undefined)
+      throw "Cannot Create Linked List - Parent index is undefined";
 
-    stepIdsToIndices.set(step.id, index);
     linkedList[parentIdx].childrenIndices.push(index);
   });
+
   return linkedList;
 }

@@ -12,6 +12,7 @@ import { reversifyTreeFunctions } from "./helpers/reversify-step-function.js";
 import { hydrateAndFlipTree } from "./helpers/flip-tree.js";
 import { addScrapeSwaps } from "./helpers/add-scrape-swaps.js";
 import { removeUnnecessarySwaps } from "./helpers/remove-unneccsery-swaps.js";
+import { updateParents } from "./helpers/update-parents.js";
 export function createUprootSteps(seedSteps, treeSteps, depositToken) {
     // The root step of the uproot (A withdrawal trigger)
     const root = new YCStep({
@@ -53,6 +54,7 @@ export function createUprootSteps(seedSteps, treeSteps, depositToken) {
     reversifyTreeFunctions(root);
     removeUnnecessarySwaps(root);
     addScrapeSwaps(root, depositToken);
+    updateParents(root);
     return root;
 }
 //# sourceMappingURL=index.js.map

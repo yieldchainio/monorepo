@@ -1,0 +1,1 @@
+{"version":3,"file":"update-parents.js","sourceRoot":"","sources":["../../../../src/helpers/create-uproot-steps/helpers/update-parents.ts"],"names":[],"mappings":"AAAA;;GAEG;AAIH,MAAM,UAAU,aAAa,CAAC,IAAY;IACxC,IAAI,CAAC,GAAG,CAAC,CAAC,IAAI,EAAE,EAAE;QAChB,KAAK,MAAM,KAAK,IAAI,IAAI,CAAC,QAAQ;YAAE,KAAK,CAAC,MAAM,GAAG,IAAI,CAAC;IACzD,CAAC,CAAC,CAAC;AACL,CAAC"}

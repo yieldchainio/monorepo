@@ -8,12 +8,13 @@
 
 import { StepType, YCClassifications, YCStep, YCToken } from "@yc/yc-models";
 import { v4 as uuid } from "uuid";
-import lodash from "lodash";
+import lodash, { update } from "lodash";
 import { DUPLICATEABLE_FUNCTION_IDS } from "./constants.js";
 import { reversifyTreeFunctions } from "./helpers/reversify-step-function.js";
 import { hydrateAndFlipTree } from "./helpers/flip-tree.js";
 import { addScrapeSwaps } from "./helpers/add-scrape-swaps.js";
 import { removeUnnecessarySwaps } from "./helpers/remove-unneccsery-swaps.js";
+import { updateParents } from "./helpers/update-parents.js";
 
 export function createUprootSteps(
   seedSteps: YCStep,
@@ -77,5 +78,7 @@ export function createUprootSteps(
 
   addScrapeSwaps(root, depositToken);
 
+  updateParents(root)
+  
   return root;
 }

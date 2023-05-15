@@ -7,7 +7,9 @@ import { ethers } from "ethers";
 export function encodeTreesFunctions(stepsTrees) {
     const stepIDsToEncodedFunctions = new Map();
     for (const tree of stepsTrees)
-        tree[0].map((step) => stepIDsToEncodedFunctions.set(step.id, step.function?.encodeYCCommand(step.toJSON(), tree[1], step.customArguments) || ethers.ZeroHash));
+        tree[0].map((step) => {
+            stepIDsToEncodedFunctions.set(step.id, step.function?.encodeYCCommand(step.toJSON(), tree[1], step.customArguments) || ethers.ZeroHash);
+        });
     return stepIDsToEncodedFunctions;
 }
 //# sourceMappingURL=index.js.map

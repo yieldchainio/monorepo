@@ -21,20 +21,19 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
     const ycContext = YCClassifications.getInstance();
     if (!ycContext.initiallized)
         await ycContext.initiallize();
-    console.log("Got Context");
+    console.log("Got Context...");
     const network = ycContext.getNetwork(chainID);
     if (!network || !network.diamondAddress)
         return { status: false, reason: "Unsupported network" };
-    console.log("Got Network");
+    console.log("Got Network...");
     const depositToken = ycContext.getToken(depositTokenID);
     if (!depositToken)
         return { status: false, reason: "Deposit Token Not Found In Context" };
-    console.log("Got Token");
+    console.log("Got Token...");
     const seedInstance = new YCStep(seedSteps, ycContext);
     const treeInstance = new YCStep(treeSteps, ycContext);
     const uprootInstance = createUprootSteps(seedInstance, treeInstance, depositToken);
-    console.log("Uproot Children:");
-    uprootInstance.print();
+    console.log("Built Uproot...");
     const seedValidation = validateSteps(seedInstance, ycContext);
     if (!seedValidation.status)
         return { status: false, reason: seedValidation.reason };
@@ -45,15 +44,21 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
     if (!uprootValidation.status)
         return { status: false, reason: uprootValidation.reason };
     batchUpdateTokenPercentages([seedInstance, treeInstance, uprootInstance]);
+    console.log("Updated Token Percentages...");
     const approvalPairs = buildApprovalPairs(seedInstance, treeInstance, uprootInstance, depositToken);
+    console.log("Built Approval Pairs...");
     const stepsToEncodedFunctions = encodeTreesFunctions([
         [seedInstance, EncodingContext.SEED],
         [treeInstance, EncodingContext.TREE],
         [uprootInstance, EncodingContext.UPROOT],
     ]);
+    console.log("Encoded Trees...");
     const onchainSeedArr = encodeYCSteps(buildOnchainStepsList(seedInstance, stepsToEncodedFunctions));
+    console.log("Created Seed Linked-list...");
     const onchainTreeArr = encodeYCSteps(buildOnchainStepsList(treeInstance, stepsToEncodedFunctions));
+    console.log("Created Tree Linked-list...");
     const onchainUprootArr = encodeYCSteps(buildOnchainStepsList(uprootInstance, stepsToEncodedFunctions));
+    console.log("Created Uproot Linked-list...");
     const ycFactoryInstance = new ethers.Contract(network.diamondAddress, factoryABI, new ethers.JsonRpcProvider(network.jsonRpc));
     const vaultCreationArgs = {
         seedSteps: onchainSeedArr,
@@ -63,7 +68,7 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
         depositToken: depositToken.address,
         isPublic: vaultVisibility,
     };
-    const deploymentCalldata = await ycFactoryInstance.createVault.populateTransaction(...vaultCreationArgs);
+    const deploymentCalldata = await ycFactoryInstance.createVault.populateTransaction(...Object.values(vaultCreationArgs));
     return {
         status: true,
         deploymentCalldata: deploymentCalldata.data,

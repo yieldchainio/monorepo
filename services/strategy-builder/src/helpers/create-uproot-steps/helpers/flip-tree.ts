@@ -7,7 +7,6 @@
  */
 
 import { YCStep } from "@yc/yc-models";
-import { cloneStep } from "./clone-step.js";
 import { v4 as uuid } from "uuid";
 
 export function flipTree(
@@ -28,7 +27,7 @@ export function flipTree(
 
   usedParents.add(oldParent?.id as string);
 
-  const newChild = cloneStep(oldParent);
+  const newChild = oldParent.clone();
 
   newChild.id = uuid();
   tree?.children.push(newChild);
@@ -53,26 +52,26 @@ function getClosestParent(
   else return getClosestParent(parent.parent, condition);
 }
 
-
 /**
  * Head function to create the flipped tree,
  */
 export function hydrateAndFlipTree(
-    oldTrees: YCStep[],
-    newTree: YCStep,
-    shouldIncludeNode: (node: YCStep) => boolean
-  ) {
-    const allLeaves = [];
-    for (const tree of oldTrees) allLeaves.push(...tree.leaves);
-  
-    const usedParents = new Set();
-  
-    for (const step of allLeaves) {
-      if (!shouldIncludeNode(step)) continue;
-  
-      const newStep = cloneStep(step);
-      newStep.id = uuid(); // We give it a new ID since it's a new step
-      flipTree(newStep, shouldIncludeNode, usedParents);
-      newTree.children.push(newStep);
-    }
+  oldTrees: YCStep[],
+  newTree: YCStep,
+  shouldIncludeNode: (node: YCStep) => boolean
+) {
+  const allLeaves = [];
+  for (const tree of oldTrees) allLeaves.push(...tree.leaves);
+
+  const usedParents = new Set();
+
+  for (const step of allLeaves) {
+    if (!shouldIncludeNode(step)) continue;
+
+    const newStep = step.clone();
+    newStep.id = uuid(); // We give it a new ID since it's a new step
+    flipTree(newStep, shouldIncludeNode, usedParents);
+    newStep.parent = newTree;
+    newTree.children.push(newStep);
   }
+}

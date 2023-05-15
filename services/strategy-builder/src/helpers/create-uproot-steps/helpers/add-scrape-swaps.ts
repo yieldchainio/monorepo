@@ -33,7 +33,7 @@ export function addScrapeSwaps(uprootTree: YCStep, depositToken: YCToken) {
         inflows: [depositToken.toJSON()],
         outflows: [token.toJSON()],
         function: null,
-        customArguments: [token.id, depositToken.id],
+        customArguments: [token.address, depositToken.address],
         children: [],
         data: null,
         type: StepType.STEP,

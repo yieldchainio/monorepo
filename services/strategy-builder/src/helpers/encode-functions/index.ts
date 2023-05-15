@@ -22,7 +22,7 @@ export function encodeTreesFunctions(
   >();
 
   for (const tree of stepsTrees)
-    tree[0].map((step: YCStep) =>
+    tree[0].map((step: YCStep) => {
       stepIDsToEncodedFunctions.set(
         step.id,
         step.function?.encodeYCCommand(
@@ -30,8 +30,8 @@ export function encodeTreesFunctions(
           tree[1],
           step.customArguments
         ) || ethers.ZeroHash
-      )
-    );
+      );
+    });
 
   return stepIDsToEncodedFunctions;
 }

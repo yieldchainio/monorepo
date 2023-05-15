@@ -24,6 +24,7 @@ app.post("/strategy-creation-data", async (req, res, next) => {
             .status(400)
             .json({ status: false, reason: "Insufficient Arguments Provided" });
     const builderResult = await createDeployableVaultInput(req.body.seedSteps, req.body.treeSteps, req.body.vaultVisibility, req.body.depositTokenID, req.body.chainID);
+    console.log("Builder Result:", builderResult);
     res.status(builderResult.status == true ? 200 : 400).json(builderResult);
 });
 app.get("/", (req, res) => {

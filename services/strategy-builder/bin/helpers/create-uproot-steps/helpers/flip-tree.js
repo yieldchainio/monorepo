@@ -5,7 +5,6 @@
  * @param condition - A condition to check on each parent node to see if shall be included, or propagated to the next one
  * @param usedParents - A hash set of used parents that we shall not use anymore
  */
-import { cloneStep } from "./clone-step.js";
 import { v4 as uuid } from "uuid";
 export function flipTree(tree, condition, usedParents) {
     tree.children = [];
@@ -15,7 +14,7 @@ export function flipTree(tree, condition, usedParents) {
     if (usedParents.has(oldParent?.id))
         return;
     usedParents.add(oldParent?.id);
-    const newChild = cloneStep(oldParent);
+    const newChild = oldParent.clone();
     newChild.id = uuid();
     tree?.children.push(newChild);
     flipTree(newChild, condition, usedParents);
@@ -46,9 +45,10 @@ export function hydrateAndFlipTree(oldTrees, newTree, shouldIncludeNode) {
     for (const step of allLeaves) {
         if (!shouldIncludeNode(step))
             continue;
-        const newStep = cloneStep(step);
+        const newStep = step.clone();
         newStep.id = uuid(); // We give it a new ID since it's a new step
         flipTree(newStep, shouldIncludeNode, usedParents);
+        newStep.parent = newTree;
         newTree.children.push(newStep);
     }
 }

@@ -15,6 +15,7 @@ export type BuilderResponse =
   | FalseValidationResponse
   | (TrueValidationResponse & {
       deploymentCalldata: bytes;
+      uprootSteps: JSONStep
     });
 
 export type ApprovalPairs = address[][];
@@ -28,3 +29,21 @@ export type BuilderRequestBody = {
   depositTokenID: string;
   chainID: number;
 };
+
+export type StrategyClassificationRequestBody = {
+  id: string;
+  address: address;
+  seedSteps: JSONStep;
+  treeSteps: JSONStep;
+  uprootSteps: JSONStep;
+  vaultVisibility: boolean;
+  depositTokenID: string;
+  chainID: number;
+  creatorID: string;
+  verified: boolean;
+  title: string;
+};
+
+export type StrategyClassificationResponse =
+  | FalseValidationResponse
+  | TrueValidationResponse;

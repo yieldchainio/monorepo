@@ -37,18 +37,19 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
     // Some memoization
     const protocolsNoDupes = useMemo(() => {
       const protocols: YCProtocol[] = [];
-      if (strategy?.rootStep.children.length) {
-        strategy.rootStep.each((step: YCStep) => {
-          const stepProtocol = step.protocol;
-          if (
-            stepProtocol &&
-            !protocols.some((protocol) => protocol.id === stepProtocol.id)
-          )
-            protocols.push(stepProtocol);
+      for (const tree of [strategy?.seedSteps, strategy?.treeSteps])
+        tree?.each((step) => {
+          if (step.protocol) protocols.push(step.protocol);
         });
-      }
-      return protocols;
-    }, [strategy?.rootStep.children.length]);
+
+      return protocols.filter(
+        (protocol, idx) =>
+          protocols.findIndex((_protocol) => _protocol.id == protocol.id) == idx
+      );
+    }, [
+      strategy?.seedSteps.children.length,
+      strategy?.treeSteps.children.length,
+    ]);
 
     const userSubtitle = useMemo(() => {
       return socialMedia.twitter.handle || address !== undefined

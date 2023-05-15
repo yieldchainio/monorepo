@@ -4,8 +4,10 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { createDeployableVaultInput } from "./helpers/index.js";
+import { PrismaClient } from "@prisma/client";
 // App to use for reguler API
 const app = express();
+const prismaClient = new PrismaClient();
 // Setup parsers & Cors settings
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -26,6 +28,37 @@ app.post("/strategy-creation-data", async (req, res, next) => {
     const builderResult = await createDeployableVaultInput(req.body.seedSteps, req.body.treeSteps, req.body.vaultVisibility, req.body.depositTokenID, req.body.chainID);
     console.log("Builder Result:", builderResult);
     res.status(builderResult.status == true ? 200 : 400).json(builderResult);
+});
+app.post("/add-strategy", async (req, res) => {
+    const requestedStrategy = req.body;
+    const existingStrategy = await prismaClient.strategiesv2.findFirst({
+        where: {
+            address: requestedStrategy.address,
+        },
+    });
+    if (existingStrategy)
+        res
+            .status(400)
+            .json({ status: false, reason: "Strategy Already Exists In Database" });
+    try {
+        await prismaClient.strategiesv2.create({
+            data: {
+                id: requestedStrategy.id,
+                chain_id: requestedStrategy.chainID,
+                seed_steps: requestedStrategy.seedSteps,
+                tree_steps: requestedStrategy.treeSteps,
+                title: requestedStrategy.title,
+                deposit_token_id: requestedStrategy.depositTokenID,
+                address: requestedStrategy.address,
+                execution_interval: 1000,
+                creator_id: requestedStrategy.creatorID,
+            },
+        });
+        res.status(200).json({ status: true });
+    }
+    catch (e) {
+        res.status(400).json({ status: false, reason: e.message });
+    }
 });
 app.get("/", (req, res) => {
     res.status(200).send("ur mum");

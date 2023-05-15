@@ -23,7 +23,9 @@ export interface DBStrategy {
     creator_id: string;
     verified: boolean;
     execution_interval: number;
-    steps: JSON;
+    seedSteps: JSON;
+    treeSteps: JSON;
+    uprootSteps: JSON;
 }
 export interface DBNetwork {
     id: number;

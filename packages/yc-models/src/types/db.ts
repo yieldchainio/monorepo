@@ -27,7 +27,9 @@ export interface DBStrategy {
   creator_id: string;
   verified: boolean;
   execution_interval: number;
-  steps: JSON;
+  seedSteps: JSON;
+  treeSteps: JSON;
+  uprootSteps: JSON;
 }
 
 // A DB Model representing a network

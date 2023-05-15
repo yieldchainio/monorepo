@@ -35,9 +35,11 @@ export declare class YCStrategy extends BaseClass {
      */
     readonly creator: YCUser | null;
     /**
-     * The root step of this strategy. A tree of all of the strategy's steps
+     * The root steps of this strategy. A tree of all of the strategy's steps
      */
-    readonly rootStep: YCStep;
+    readonly seedSteps: YCStep;
+    readonly treeSteps: YCStep;
+    readonly uprootSteps: YCStep;
     /**
      * Whether this strategy is verified or not
      */

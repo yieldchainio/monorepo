@@ -10,7 +10,13 @@ import { getStepsTreeDescription } from "./utils/gen-tree-description";
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import WrappedImage from "components/wrappers/image";
 import { TokensBundle } from "components/tokens/bundle";
-import { DBStrategy, JSONStep, YCStrategy, YCToken } from "@yc/yc-models";
+import {
+  DBStrategy,
+  JSONStep,
+  YCClassifications,
+  YCStrategy,
+  YCToken,
+} from "@yc/yc-models";
 import GradientButton from "components/buttons/gradient";
 import { RegulerButton } from "components/buttons/reguler";
 import { getDeploymentData } from "./utils/get-deployment-data";
@@ -18,6 +24,7 @@ import { useLogs } from "utilities/hooks/stores/logger";
 import { v4 as uuid } from "uuid";
 import { useSigner } from "wagmi";
 import useYCUser from "utilities/hooks/yc/useYCUser";
+import { addStrategy } from "./utils/add-strategy";
 
 export const DeploymentModal = ({
   seedRootStep,
@@ -187,8 +194,14 @@ export const DeploymentModal = ({
                 lifespan: deploymentCalldata,
               });
 
-              await deploymentCalldata.then(async (calldata) => {
+              await deploymentCalldata.then(async (builderResult) => {
                 const strategyID = uuid();
+                if (!network || !depositToken || !title)
+                  return logs.lazyPush({
+                    type: "error",
+                    message:
+                      "Please Complete All Strategy Details Before Deploying",
+                  });
                 const jsonStrategy: DBStrategy = {
                   id: strategyID,
                   address: "0xunknownatthemoment",
@@ -198,10 +211,12 @@ export const DeploymentModal = ({
                   creator_id: id || "",
                   verified: false,
                   execution_interval: 1000,
-                  steps: JSON.parse(JSON.stringify({})),
+                  seedSteps: seedRootStep.toDeployableJSON() as any,
+                  treeSteps: treeRootStep.toDeployableJSON() as any,
+                  uprootSteps: builderResult?.uprootSteps as any
                 };
 
-                if (!calldata)
+                if (!builderResult)
                   return logs.lazyPush({
                     type: "error",
                     message:
@@ -211,7 +226,7 @@ export const DeploymentModal = ({
                   });
 
                 const strategy = await YCStrategy.fromDeploymentCalldata(
-                  calldata,
+                  builderResult.deploymentCalldata,
                   jsonStrategy,
                   {
                     from: address as unknown as string,
@@ -240,7 +255,43 @@ export const DeploymentModal = ({
                     strategy.title +
                     " Vault Deployed Successfully At " +
                     strategy.address,
+                  lifespan: 10000,
                 });
+
+                YCClassifications.getInstance().YCstrategies.push(strategy);
+
+                const added = addStrategy({
+                  id: strategy.id,
+                  address: strategy.address,
+                  creatorID: id || "",
+                  seedSteps: seedRootStep.toDeployableJSON() as any,
+                  treeSteps: treeRootStep.toDeployableJSON() as any,
+                  uprootSteps: builderResult.uprootSteps,
+                  vaultVisibility: visibility,
+                  depositTokenID: depositToken.id,
+                  chainID: network.id,
+                  verified: true,
+                  title,
+                });
+
+                logs.lazyPush({
+                  type: "info",
+                  message: "Adding Strategy To Our System...",
+                  lifespan: added,
+                });
+
+                added.then((res) =>
+                  res == true
+                    ? logs.lazyPush({
+                        type: "success",
+                        message: "Added Stratey Successfully",
+                      })
+                    : logs.lazyPush({
+                        type: "error",
+                        message:
+                          "Failed To Add Strategy To Database - Contact Team For Help",
+                      })
+                );
               });
             }}
           >

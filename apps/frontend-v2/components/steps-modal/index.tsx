@@ -82,9 +82,9 @@ export const StepsModal = ({
     useSteps(
       root
         ? root
-        : strategy?.rootStep
+        : strategy?.treeSteps
         ? Step.fromDBStep({
-            step: strategy.rootStep.toJSON(),
+            step: strategy.treeSteps.toJSON(),
             context,
             iStepConfigs: { size: options?.initialSize },
           })
@@ -110,14 +110,26 @@ export const StepsModal = ({
     canvasDimensions: baseCanvasDimensions,
     resizeAll: resizeAllBase,
     triggerComparison: triggerBaseComparison,
-  } = useSteps(baseRootStep || null, undefined, undefined, {
-    stateSetter: () => setDummyState(!dummyState),
-    comparisonCallback: comparisonCallback,
-    basePositions: {
-      y: SEED_TO_TREE_MARGIN,
-      x: 0,
-    },
-  });
+  } = useSteps(
+    baseRootStep ||
+      (strategy?.seedSteps
+        ? Step.fromDBStep({
+            step: strategy?.seedSteps.toJSON(),
+            context,
+            iStepConfigs: { size: options?.initialSize },
+          })
+        : null),
+    undefined,
+    undefined,
+    {
+      stateSetter: () => setDummyState(!dummyState),
+      comparisonCallback: comparisonCallback,
+      basePositions: {
+        y: SEED_TO_TREE_MARGIN,
+        x: 0,
+      },
+    }
+  );
 
   // Root step (memoized)
   const rootStep = useMemo(() => {

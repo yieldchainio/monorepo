@@ -55,10 +55,10 @@ export const useSteps = (
   const initiated = useRef<boolean>(false);
   useEffect(() => {
     if (!stepsState.rootStep) {
-      if (context && strategy?.rootStep.children.length) {
+      if (context && strategy?.treeSteps.children.length) {
         setRootStep(
           Step.fromDBStep({
-            step: strategy.rootStep.toJSON(),
+            step: strategy.treeSteps.toJSON(),
             context,
             iStepConfigs: { size: options.initialSize },
           })
@@ -68,7 +68,7 @@ export const useSteps = (
     } else {
       initiated.current = true;
     }
-  }, [strategy?.rootStep?.children?.length]);
+  }, [strategy?.treeSteps?.children?.length]);
 
   /**
    * A useEffect that triggers the ``graph()`` function on our tree when it should.

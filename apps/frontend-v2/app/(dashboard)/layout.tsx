@@ -112,7 +112,17 @@ export default function Home() {
             item.title.toLowerCase().includes(lowerCasedInput) ||
             item.depositToken?.symbol.toLowerCase().includes(lowerCasedInput) ||
             item.depositToken?.name.toLowerCase().includes(lowerCasedInput) ||
-            item.rootStep
+            item.seedSteps
+              .map((step) => step.protocol)
+              .find((protocol) =>
+                protocol?.name.toLowerCase().includes(lowerCasedInput)
+              ) ||
+            item.treeSteps
+              .map((step) => step.protocol)
+              .find((protocol) =>
+                protocol?.name.toLowerCase().includes(lowerCasedInput)
+              ) ||
+            item.uprootSteps
               .map((step) => step.protocol)
               .find((protocol) =>
                 protocol?.name.toLowerCase().includes(lowerCasedInput)

@@ -3,13 +3,16 @@
  *
  */
 
-import { BuilderRequestBody, BuilderResponse } from "@yc/yc-models";
+import { BuilderRequestBody, BuilderResponse, JSONStep } from "@yc/yc-models";
 import axios from "axios";
 
 export async function getDeploymentData(
   req: BuilderRequestBody,
   logger?: (msg: string) => void
-) {
+): Promise<{
+  uprootSteps: JSONStep;
+  deploymentCalldata: string;
+} | null> {
   try {
     const res = await axios.post<BuilderResponse>(
       "http://localhost:8080/strategy-creation-data",
@@ -17,7 +20,10 @@ export async function getDeploymentData(
     );
     if (res.data.status) {
       logger?.("Submit The Deployment Transaction In Your Wallet...");
-      return res.data.deploymentCalldata;
+      return {
+        deploymentCalldata: res.data.deploymentCalldata,
+        uprootSteps: res.data.uprootSteps,
+      };
     }
     return null;
   } catch (e: any) {
@@ -28,4 +34,6 @@ export async function getDeploymentData(
     };
     logger?.(err.response.data.reason);
   }
+
+  return null;
 }

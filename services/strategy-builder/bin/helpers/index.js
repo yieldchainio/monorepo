@@ -72,6 +72,7 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
     return {
         status: true,
         deploymentCalldata: deploymentCalldata.data,
+        uprootSteps: uprootInstance.toJSON(true),
     };
 }
 //# sourceMappingURL=index.js.map

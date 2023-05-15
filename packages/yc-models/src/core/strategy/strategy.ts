@@ -59,9 +59,11 @@ export class YCStrategy extends BaseClass {
   readonly creator: YCUser | null = null;
 
   /**
-   * The root step of this strategy. A tree of all of the strategy's steps
+   * The root steps of this strategy. A tree of all of the strategy's steps
    */
-  readonly rootStep: YCStep;
+  readonly seedSteps: YCStep;
+  readonly treeSteps: YCStep;
+  readonly uprootSteps: YCStep;
 
   /**
    * Whether this strategy is verified or not
@@ -451,10 +453,20 @@ export class YCStrategy extends BaseClass {
       _strategy.deposit_token_id
     ) as YCToken;
     this.creator = _context.getUser(_strategy.creator_id) || null;
-    this.rootStep = new YCStep(
-      _strategy.steps as unknown as JSONStep,
+
+    this.seedSteps = new YCStep(
+      _strategy.seedSteps as unknown as JSONStep,
       _context
     );
+    this.treeSteps = new YCStep(
+      _strategy.treeSteps as unknown as JSONStep,
+      _context
+    );
+    this.uprootSteps = new YCStep(
+      _strategy.uprootSteps as unknown as JSONStep,
+      _context
+    );
+
     this.verified = _strategy.verified;
     this.network = _context.getNetwork(_strategy.chain_id);
     this.contract = new Contract(

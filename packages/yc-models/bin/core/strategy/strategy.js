@@ -34,9 +34,11 @@ class YCStrategy extends BaseClass {
      */
     creator = null;
     /**
-     * The root step of this strategy. A tree of all of the strategy's steps
+     * The root steps of this strategy. A tree of all of the strategy's steps
      */
-    rootStep;
+    seedSteps;
+    treeSteps;
+    uprootSteps;
     /**
      * Whether this strategy is verified or not
      */
@@ -304,7 +306,9 @@ class YCStrategy extends BaseClass {
         this.title = _strategy.title;
         this.depositToken = _context.getToken(_strategy.deposit_token_id);
         this.creator = _context.getUser(_strategy.creator_id) || null;
-        this.rootStep = new YCStep(_strategy.steps, _context);
+        this.seedSteps = new YCStep(_strategy.seedSteps, _context);
+        this.treeSteps = new YCStep(_strategy.treeSteps, _context);
+        this.uprootSteps = new YCStep(_strategy.uprootSteps, _context);
         this.verified = _strategy.verified;
         this.network = _context.getNetwork(_strategy.chain_id);
         this.contract = new Contract(getAddress(this.address), abi, this.network?.provider);

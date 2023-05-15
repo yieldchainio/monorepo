@@ -32,6 +32,22 @@ export class BaseWeb3Class {
     return await _signTransaction(transaction);
   };
 
+  static signTransaction = async (
+    signingMethod: SignerMethod,
+    transaction: ContractTransaction
+  ): Promise<EthersTransactionResponse> => {
+    // If we got a callback as the signing method, we call it with the requests. Otherwise,
+    // we got a signer so we make a function that sends the transaction to it
+    const _signTransaction =
+      signingMethod instanceof EthersExecutor
+        ? async (req: ContractTransaction) =>
+            await signingMethod.sendTransaction(req)
+        : signingMethod.executionCallback;
+
+    // Iterate and call our function, push each receipt to an array
+    return await _signTransaction(transaction);
+  };
+
   // Send multiple transactions
   signTransactions = async (
     signingMethod: SignerMethod,
@@ -61,6 +77,11 @@ export class BaseWeb3Class {
 
   // Get a signer's address from a SignerMethod
   getSigningAddress = (signingMethod: SignerMethod): string => {
+    if (signingMethod instanceof EthersExecutor) return signingMethod.address;
+    return signingMethod.from;
+  };
+
+  static getSigningAddress = (signingMethod: SignerMethod): string => {
     if (signingMethod instanceof EthersExecutor) return signingMethod.address;
     return signingMethod.from;
   };

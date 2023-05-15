@@ -1,4 +1,4 @@
-import { address, EthersContract, EthersTransactionResponse, SignerMethod } from "../../types/index.js";
+import { address, bytes, EthersContract, EthersTransactionResponse, SignerMethod } from "../../types/index.js";
 import { DBStrategy } from "../../types/db.js";
 import { BaseClass } from "../base/index.js";
 import { YCClassifications } from "../context/context.js";
@@ -70,8 +70,9 @@ export declare class YCStrategy extends BaseClass {
      */
     get formattedInterval(): {
         interval: number;
-        unit: "Days" | "Minutes" | "this.executionInterval" | "Months" | "Weeks" | "Years" | "Day" | "Minute" | "Second" | "Month" | "Week" | "Year" | "Hour" | "Hours";
+        unit: "Days" | "Minutes" | "Seconds" | "Months" | "Weeks" | "Years" | "Day" | "Minute" | "Second" | "Month" | "Week" | "Year" | "Hour" | "Hours";
     };
+    static fromDeploymentCalldata(calldata: bytes, jsonStrategy: DBStrategy, signer: SignerMethod): Promise<YCStrategy | null>;
     /**
      * Get the TVL of this vault in USD value - Async (quoting)
      * @param cache - whether to return cached values or not

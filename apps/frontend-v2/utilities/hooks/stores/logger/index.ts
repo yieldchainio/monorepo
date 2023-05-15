@@ -23,7 +23,12 @@ export const useLogs = create<LogsStore>((set, get) => ({
       const id = uuid();
       const log = logCallback(id);
       log.data && AWSLogger.log(get().id, log.data);
-      log.lifespan !== "immortal" &&
+
+      if (log.lifespan instanceof Promise)
+        log.lifespan.then(() => {
+          state.remove(id);
+        });
+      else if (log.lifespan !== "immortal")
         setTimeout(() => {
           state.remove(id);
         }, log.lifespan);
@@ -67,7 +72,7 @@ export const useLogs = create<LogsStore>((set, get) => ({
   }: {
     message: string;
     data?: any;
-    lifespan?: number | "immortal";
+    lifespan?: number | "immortal" | Promise<any>;
     type?: "info" | "error" | "warning" | "success";
   }) => {
     /**

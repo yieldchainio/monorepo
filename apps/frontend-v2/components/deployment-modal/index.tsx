@@ -4,18 +4,20 @@
 
 import { StepsModal } from "components/steps-modal";
 import { DeployModalProps } from "./types";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import WrappedText from "components/wrappers/text";
 import { getStepsTreeDescription } from "./utils/gen-tree-description";
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import WrappedImage from "components/wrappers/image";
 import { TokensBundle } from "components/tokens/bundle";
-import { JSONStep, YCToken } from "@yc/yc-models";
-import { BaseComponentProps } from "components/types";
+import { DBStrategy, JSONStep, YCStrategy, YCToken } from "@yc/yc-models";
 import GradientButton from "components/buttons/gradient";
 import { RegulerButton } from "components/buttons/reguler";
 import { getDeploymentData } from "./utils/get-deployment-data";
 import { useLogs } from "utilities/hooks/stores/logger";
+import { v4 as uuid } from "uuid";
+import { useSigner } from "wagmi";
+import useYCUser from "utilities/hooks/yc/useYCUser";
 
 export const DeploymentModal = ({
   seedRootStep,
@@ -32,6 +34,22 @@ export const DeploymentModal = ({
   const network = useStrategyStore((state) => state.network);
   const depositToken = useStrategyStore((state) => state.depositToken);
   const visibility = useStrategyStore((state) => state.isPublic);
+
+  const [deploymentData, setDeploymentData] = useState<string | null>(null);
+
+  // @ts-ignore
+  // const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
+  //   chainId: network?.id || 1,
+  //   mode: "prepared",
+  //   request: {
+  //     to: network?.diamondAddress || "",
+  //     data: deploymentData || "",
+  //   },
+  // });
+
+  const { address, id } = useYCUser();
+
+  const { data: signer, isLoading, isError } = useSigner();
 
   /**
    * Memoize all of the above as "Sections"
@@ -152,8 +170,8 @@ export const DeploymentModal = ({
               paddingBottom: "0.75rem",
             }}
             className="tablet:content-['Hey']"
-            onClick={() =>
-              getDeploymentData(
+            onClick={async () => {
+              const deploymentCalldata = getDeploymentData(
                 {
                   seedSteps: seedRootStep.toDeployableJSON() as JSONStep,
                   treeSteps: treeRootStep.toDeployableJSON() as JSONStep,
@@ -162,8 +180,69 @@ export const DeploymentModal = ({
                   chainID: network?.id as number,
                 },
                 (message: string) => logs.lazyPush({ message, type: "info" })
-              )
-            }
+              );
+
+              logs.lazyPush({
+                message: "Please Wait While We Build Strategy Input...",
+                lifespan: deploymentCalldata,
+              });
+
+              await deploymentCalldata.then(async (calldata) => {
+                const strategyID = uuid();
+                const jsonStrategy: DBStrategy = {
+                  id: strategyID,
+                  address: "0xunknownatthemoment",
+                  title: title || "",
+                  chain_id: network?.id || 1,
+                  deposit_token_id: depositToken?.id || "",
+                  creator_id: id || "",
+                  verified: false,
+                  execution_interval: 1000,
+                  steps: JSON.parse(JSON.stringify({})),
+                };
+
+                if (!calldata)
+                  return logs.lazyPush({
+                    type: "error",
+                    message:
+                      "Building Strategy Failed. Please Contact Team On Telegram/Discord",
+
+                    lifespan: 10000,
+                  });
+
+                const strategy = await YCStrategy.fromDeploymentCalldata(
+                  calldata,
+                  jsonStrategy,
+                  {
+                    from: address as unknown as string,
+                    executionCallback: async (req) => {
+                      await signer?.provider?.waitForTransaction(
+                        (
+                          await signer?.sendTransaction(req as any)
+                        ).hash
+                      );
+                    },
+                  }
+                );
+
+                if (!strategy)
+                  return logs.lazyPush({
+                    type: "error",
+                    message:
+                      "Building Strategy Failed. Please Contact Team On Telegram/Discord",
+
+                    lifespan: 10000,
+                  });
+
+                logs.lazyPush({
+                  type: "success",
+                  message:
+                    strategy.title +
+                    " Vault Deployed Successfully At " +
+                    strategy.address,
+                });
+              });
+            }}
           >
             Deploy 🚀
           </GradientButton>

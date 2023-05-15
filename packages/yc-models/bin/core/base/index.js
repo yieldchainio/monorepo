@@ -6,9 +6,18 @@ import { safeToJSON } from "../../helpers/index.js";
 /**
  * Another base class which has base web3 functionality to support bothbackends and frontneds
  */
-export class BaseWeb3Class {
+class BaseWeb3Class {
     // Send a transaction with either a signer or a callback that signs populated transactions
     signTransaction = async (signingMethod, transaction) => {
+        // If we got a callback as the signing method, we call it with the requests. Otherwise,
+        // we got a signer so we make a function that sends the transaction to it
+        const _signTransaction = signingMethod instanceof EthersExecutor
+            ? async (req) => await signingMethod.sendTransaction(req)
+            : signingMethod.executionCallback;
+        // Iterate and call our function, push each receipt to an array
+        return await _signTransaction(transaction);
+    };
+    static signTransaction = async (signingMethod, transaction) => {
         // If we got a callback as the signing method, we call it with the requests. Otherwise,
         // we got a signer so we make a function that sends the transaction to it
         const _signTransaction = signingMethod instanceof EthersExecutor
@@ -41,7 +50,13 @@ export class BaseWeb3Class {
             return signingMethod.address;
         return signingMethod.from;
     };
+    static getSigningAddress = (signingMethod) => {
+        if (signingMethod instanceof EthersExecutor)
+            return signingMethod.address;
+        return signingMethod.from;
+    };
 }
+export { BaseWeb3Class };
 export class BaseClass extends BaseWeb3Class {
     // Method to convert the class ,including it's getters - to JSON.
     toJSON() {

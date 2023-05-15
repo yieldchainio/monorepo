@@ -1,5 +1,6 @@
 import {
   address,
+  bytes,
   EthersContract,
   EthersExecutor,
   EthersTransactionResponse,
@@ -20,6 +21,7 @@ import {
   TransactionRequest,
 } from "ethers";
 import { YCStatistic } from "./statistic";
+import { formatInterval } from "./format-interval.js";
 
 export class YCStrategy extends BaseClass {
   // =================================
@@ -107,7 +109,7 @@ export class YCStrategy extends BaseClass {
     unit:
       | "Days"
       | "Minutes"
-      | "this.executionInterval"
+      | "Seconds"
       | "Months"
       | "Weeks"
       | "Years"
@@ -120,77 +122,39 @@ export class YCStrategy extends BaseClass {
       | "Hour"
       | "Hours";
   } {
-    let minute = 60;
-    let hour = 3600;
-    let day = 86400;
-    let week = 604800;
-    let month = day * 30;
+    return formatInterval(this.executionInterval);
+  }
 
-    if (this.executionInterval >= month) {
-      const interval =
-        parseFloat(
-          (this.executionInterval / month).toFixed(1).toString().split(".")[1]
-        ) > 0
-          ? parseFloat((this.executionInterval / month).toFixed(1))
-          : this.executionInterval / month;
-      return {
-        interval,
-        unit: interval === 1 ? "Month" : "Months",
-      };
+  // ==================
+  //   STATIC METHODS
+  // ==================
+  static async fromDeploymentCalldata(
+    calldata: bytes,
+    jsonStrategy: DBStrategy,
+    signer: SignerMethod
+  ): Promise<YCStrategy | null> {
+    const network = YCClassifications.getInstance().getNetwork(
+      jsonStrategy.chain_id
+    );
+    const diamondAddress = network?.diamondAddress;
+    if (!diamondAddress)
+      throw "Cannot Deploy Strategy - Network Does Not Have Diamond Deployed";
+
+    const res = await (
+      await YCStrategy.signTransaction(signer, {
+        to: diamondAddress,
+        data: calldata,
+        from: YCStrategy.getSigningAddress(signer),
+      })
+    ).wait();
+
+    if (res?.status == 1) {
+      const vaultAddress = await res.getResult();
+      jsonStrategy.address = vaultAddress as address;
+      return new YCStrategy(jsonStrategy, YCClassifications.getInstance());
     }
-    if (this.executionInterval >= week) {
-      const interval =
-        parseFloat(
-          (this.executionInterval / week).toFixed(1).toString().split(".")[1]
-        ) > 0
-          ? parseFloat((this.executionInterval / week).toFixed(1))
-          : this.executionInterval / week;
-      return {
-        interval,
-        unit: interval === 1 ? "Week" : "Weeks",
-      };
-    }
-    if (this.executionInterval >= day) {
-      const interval =
-        parseFloat(
-          (this.executionInterval / day).toFixed(1).toString().split(".")[1]
-        ) > 0
-          ? parseFloat((this.executionInterval / day).toFixed(1))
-          : this.executionInterval / day;
-      return {
-        interval,
-        unit: interval === 1 ? "Day" : "Days",
-      };
-    }
-    if (this.executionInterval >= hour) {
-      const interval: number =
-        parseFloat(
-          (this.executionInterval / hour).toFixed(1).toString().split(".")[1]
-        ) > 0
-          ? parseFloat((this.executionInterval / hour).toFixed(1))
-          : this.executionInterval / hour;
-      return {
-        interval,
-        unit: interval === 1 ? "Hour" : "Hours",
-      };
-    }
-    if (this.executionInterval >= minute) {
-      const interval =
-        parseFloat(
-          (this.executionInterval / minute).toFixed(1).toString().split(".")[1]
-        ) > 0
-          ? parseFloat((this.executionInterval / minute).toFixed(1))
-          : this.executionInterval / minute;
-      return {
-        interval,
-        unit: interval === 1 ? "Minute" : "Minutes",
-      };
-    } else {
-      return {
-        interval: this.executionInterval,
-        unit: "this.executionInterval",
-      };
-    }
+
+    return null;
   }
 
   // ============

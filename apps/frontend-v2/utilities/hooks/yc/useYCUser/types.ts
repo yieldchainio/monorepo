@@ -18,6 +18,7 @@ export interface YCUserHookReturn {
   socialMedia: YCSocialMedia;
   verified: boolean;
   description: string | undefined;
+  id?: string
 }
 
 // Interface for the useYCUser's props

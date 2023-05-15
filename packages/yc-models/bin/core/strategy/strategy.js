@@ -1,8 +1,10 @@
 import { BaseClass } from "../base/index.js";
+import { YCClassifications } from "../context/context.js";
 import { YCStep } from "../step/step.js";
 import { YCToken } from "../token/token.js";
 import abi from "../../ABIs/strategy.json" assert { type: "json" };
 import { Contract, getAddress, } from "ethers";
+import { formatInterval } from "./format-interval.js";
 class YCStrategy extends BaseClass {
     // =================================
     //       FIELDS & GETTERS
@@ -69,62 +71,27 @@ class YCStrategy extends BaseClass {
      * e.g 124...44 == 2.2 Months
      */
     get formattedInterval() {
-        let minute = 60;
-        let hour = 3600;
-        let day = 86400;
-        let week = 604800;
-        let month = day * 30;
-        if (this.executionInterval >= month) {
-            const interval = parseFloat((this.executionInterval / month).toFixed(1).toString().split(".")[1]) > 0
-                ? parseFloat((this.executionInterval / month).toFixed(1))
-                : this.executionInterval / month;
-            return {
-                interval,
-                unit: interval === 1 ? "Month" : "Months",
-            };
+        return formatInterval(this.executionInterval);
+    }
+    // ==================
+    //   STATIC METHODS
+    // ==================
+    static async fromDeploymentCalldata(calldata, jsonStrategy, signer) {
+        const network = YCClassifications.getInstance().getNetwork(jsonStrategy.chain_id);
+        const diamondAddress = network?.diamondAddress;
+        if (!diamondAddress)
+            throw "Cannot Deploy Strategy - Network Does Not Have Diamond Deployed";
+        const res = await (await YCStrategy.signTransaction(signer, {
+            to: diamondAddress,
+            data: calldata,
+            from: YCStrategy.getSigningAddress(signer),
+        })).wait();
+        if (res?.status == 1) {
+            const vaultAddress = await res.getResult();
+            jsonStrategy.address = vaultAddress;
+            return new YCStrategy(jsonStrategy, YCClassifications.getInstance());
         }
-        if (this.executionInterval >= week) {
-            const interval = parseFloat((this.executionInterval / week).toFixed(1).toString().split(".")[1]) > 0
-                ? parseFloat((this.executionInterval / week).toFixed(1))
-                : this.executionInterval / week;
-            return {
-                interval,
-                unit: interval === 1 ? "Week" : "Weeks",
-            };
-        }
-        if (this.executionInterval >= day) {
-            const interval = parseFloat((this.executionInterval / day).toFixed(1).toString().split(".")[1]) > 0
-                ? parseFloat((this.executionInterval / day).toFixed(1))
-                : this.executionInterval / day;
-            return {
-                interval,
-                unit: interval === 1 ? "Day" : "Days",
-            };
-        }
-        if (this.executionInterval >= hour) {
-            const interval = parseFloat((this.executionInterval / hour).toFixed(1).toString().split(".")[1]) > 0
-                ? parseFloat((this.executionInterval / hour).toFixed(1))
-                : this.executionInterval / hour;
-            return {
-                interval,
-                unit: interval === 1 ? "Hour" : "Hours",
-            };
-        }
-        if (this.executionInterval >= minute) {
-            const interval = parseFloat((this.executionInterval / minute).toFixed(1).toString().split(".")[1]) > 0
-                ? parseFloat((this.executionInterval / minute).toFixed(1))
-                : this.executionInterval / minute;
-            return {
-                interval,
-                unit: interval === 1 ? "Minute" : "Minutes",
-            };
-        }
-        else {
-            return {
-                interval: this.executionInterval,
-                unit: "this.executionInterval",
-            };
-        }
+        return null;
     }
     // ============
     //   METHODS

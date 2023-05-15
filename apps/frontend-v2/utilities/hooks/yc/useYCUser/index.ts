@@ -292,6 +292,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
       socialMedia,
       verified,
       description,
+      id: user?.id
     };
 
   return {
@@ -303,6 +304,7 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     socialMedia: socialMedia,
     verified: false,
     description: undefined,
+    id: undefined
   };
 };
 

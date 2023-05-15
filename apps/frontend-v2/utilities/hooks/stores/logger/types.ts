@@ -1,6 +1,6 @@
 export interface UserLog {
   component: React.ReactNode;
-  lifespan: number | "immortal";
+  lifespan: number | "immortal" | Promise<any>;
   id: string;
   data: any;
 }
@@ -22,7 +22,7 @@ export interface LogsStore {
   }: {
     message: string;
     data?: any;
-    lifespan?: number;
+    lifespan?: number | Promise<any>;
     type?: "info" | "error" | "warning" | "success";
   }) => string;
 }

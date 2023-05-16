@@ -12,7 +12,7 @@ import WrappedText from "components/wrappers/text";
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import useYCUser from "utilities/hooks/yc/useYCUser";
 import { InterModalSection } from "../../general/modal-section";
-import {  useSigner } from "wagmi";
+import { useNetwork, useSigner } from "wagmi";
 import useDebounce from "utilities/hooks/general/useDebounce";
 
 export const StrategyOperationsBox = ({
@@ -32,6 +32,8 @@ export const StrategyOperationsBox = ({
 
   const { data: signer, isLoading, isError } = useSigner();
 
+  const { chain } = useNetwork();
+
   // Handle an operation (Deposit/Withdraw)
   const handleOperation = useCallback(async () => {
     if (!signer) {
@@ -44,17 +46,20 @@ export const StrategyOperationsBox = ({
         isError
       );
     }
-    if (operation == "Deposit")
+    if (operation == "Deposit") {
+      if (!chain?.id) return;
       await strategy?.fullDeposit(parseFloat(valueInput.toString()), {
         from: address as unknown as string,
         executionCallback: async (req) => {
-          await signer?.provider?.waitForTransaction(
-            (
-              await signer?.sendTransaction(req as any)
-            ).hash
-          );
+          const res = await signer?.sendTransaction(req as any);
+          if (!res) throw "Cannot Deploy - Res Undefined In Execution Callback";
+          return {
+            hash: res.hash,
+          };
         },
+        chainID: chain.id,
       });
+    }
   }, [operation, strategy?.stringify(), debouncedValue]);
 
   return (

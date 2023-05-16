@@ -4,7 +4,7 @@
 
 import { BaseComponentProps } from "components/types";
 import { CanvasProps, DraggableCanvasProps } from "./types";
-import {
+import React, {
   MouseEvent,
   forwardRef,
   isValidElement,
@@ -147,14 +147,13 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
           <ChildrenProvider
             callback={(wrapper) => {
               if (!isValidElement(wrapper)) return wrapper;
-
               return (
                 <wrapper.type {...wrapper.props}>
                   {" "}
                   <ChildrenProvider
                     callback={(child, i) => {
                       // Typecheck
-                      if (!isValidElement(child)) return child;
+                      if (!isValidElement(child) || child.type == React.Fragment) return child;
 
                       // If it is valid, we return it but set it to trigger our focus function onClick, which will transform the canvas onto its
                       // own position to center it. we also give it a ref for the above to be feasiable

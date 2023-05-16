@@ -99,6 +99,7 @@ export class YCStep extends Node<YCStep> {
   constructor(_step: JSONStep, _context: YCClassifications) {
     super();
     this.id = _step.id;
+
     this.parent = null;
     this.protocol = _step.protocol
       ? _context.getProtocol(_step.protocol)

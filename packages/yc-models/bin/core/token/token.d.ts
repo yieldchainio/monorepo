@@ -1,9 +1,9 @@
 import { DBToken } from "../../types/db.js";
 import { YCClassifications } from "../context/context.js";
-import { Contract, ContractTransaction, TransactionRequest } from "ethers";
+import { Contract, ContractTransaction, TransactionReceipt, TransactionRequest } from "ethers";
 import { YCProtocol } from "../protocol/protocol.js";
 import { YCNetwork } from "../network/network.js";
-import { EthersTransactionResponse, SignerMethod } from "../../types/index.js";
+import { SignerMethod } from "../../types/index.js";
 import { BaseClass } from "../base/index.js";
 /**
  * @notice
@@ -101,7 +101,7 @@ export declare class YCToken extends BaseClass {
      * @param signer - The signeing method to sign the transaction
      * @returns Ethers transaction response
      */
-    approve: (spender: string, amount: bigint, signer: SignerMethod) => Promise<EthersTransactionResponse>;
+    approve: (spender: string, amount: bigint, signer: SignerMethod) => Promise<TransactionReceipt>;
     /**
      * Approves only the amount required to reach the desired allownace,
      * taking into account existing allowance between the parties
@@ -110,7 +110,7 @@ export declare class YCToken extends BaseClass {
      * @param signer - The signeing method to sign the transaction
      * @returns Ethers transaction response
      */
-    safeApproval: (spender: string, amount: bigint, signer: SignerMethod) => Promise<EthersTransactionResponse | true>;
+    safeApproval: (spender: string, amount: bigint, signer: SignerMethod) => Promise<TransactionReceipt | true>;
     /**
      * Transaction population methods,
      * @return Transaction req object

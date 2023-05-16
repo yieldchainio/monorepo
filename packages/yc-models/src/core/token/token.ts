@@ -6,7 +6,9 @@ import {
   ContractTransaction,
   ethers,
   Provider,
+  TransactionReceipt,
   TransactionRequest,
+  TransactionResponse,
 } from "ethers";
 import { YCProtocol } from "../protocol/protocol.js";
 import { YCNetwork } from "../network/network.js";
@@ -221,7 +223,7 @@ export class YCToken extends BaseClass {
     spender: string,
     amount: bigint,
     signer: SignerMethod
-  ): Promise<EthersTransactionResponse> => {
+  ): Promise<TransactionReceipt> => {
     // Assert the chain ID to match ours
     if (signer instanceof EthersExecutor)
       this.network?.assertSameChainId(
@@ -249,7 +251,7 @@ export class YCToken extends BaseClass {
     spender: string,
     amount: bigint,
     signer: SignerMethod
-  ): Promise<EthersTransactionResponse | true> => {
+  ): Promise<TransactionReceipt | true> => {
     // Only approve just enough for it to be sufficient ontop of existing allownace
     const amountToApprove =
       amount -

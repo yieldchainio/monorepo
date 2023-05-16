@@ -1,4 +1,4 @@
-import { address, bytes, EthersContract, EthersTransactionResponse, SignerMethod } from "../../types/index.js";
+import { address, bytes, EthersContract, SignerMethod } from "../../types/index.js";
 import { DBStrategy } from "../../types/db.js";
 import { BaseClass } from "../base/index.js";
 import { YCClassifications } from "../context/context.js";
@@ -6,7 +6,7 @@ import { YCNetwork } from "../network/network.js";
 import { YCStep } from "../step/step.js";
 import { YCToken } from "../token/token.js";
 import { YCUser } from "../user/user.js";
-import { TransactionRequest } from "ethers";
+import { ethers, TransactionReceipt, TransactionRequest } from "ethers";
 import { YCStatistic } from "./statistic";
 export declare class YCStrategy extends BaseClass {
     #private;
@@ -144,21 +144,21 @@ export declare class YCStrategy extends BaseClass {
      * @param approveAll - Whether to approve an infinite amount of tokens, or just the amount requested
      * @returns An ethers transaction response
      */
-    fullDeposit: (amount: number | bigint, signer: SignerMethod, approveAll?: boolean) => Promise<EthersTransactionResponse>;
+    fullDeposit: (amount: number | bigint, signer: SignerMethod, approveAll?: boolean) => Promise<TransactionReceipt>;
     /**
      * Make a deposit without approvals (for with approvals, see fullDeposit)
      * @param amount - The amount of depisit tokens to deposit. raw or foramtted.
      * @param signer - The signer to use
      * @returns Ethers transactions response
      */
-    deposit: (amount: number | bigint, signer: SignerMethod) => Promise<EthersTransactionResponse | null>;
+    deposit: (amount: number | bigint, signer: SignerMethod) => Promise<TransactionReceipt | null>;
     /**
      * Withdraw shares out of the vault
      * @param amount - The amount to withdraw
      * @param signer - The signer to use
      * @returns Ethers.js transaction reesponse
      */
-    withdraw: (amount: bigint, signer: SignerMethod) => Promise<EthersTransactionResponse | null>;
+    withdraw: (amount: bigint, signer: SignerMethod) => Promise<TransactionReceipt | null>;
     /**
      * Population for our transactions,
      * some consumers may not be compatible with our versions,
@@ -172,7 +172,7 @@ export declare class YCStrategy extends BaseClass {
      */
     populateDeposit: (amount: number | bigint, args: Partial<TransactionRequest> & {
         from: string;
-    }) => Promise<import("ethers").ContractTransaction>;
+    }) => Promise<ethers.ContractTransaction>;
     /**
      *Popoulate a withdrawal transaction
      * @param amount - the amount to withdraw
@@ -181,7 +181,7 @@ export declare class YCStrategy extends BaseClass {
      */
     populateWithdrawal: (amount: number | bigint, args: Partial<TransactionRequest> & {
         from: string;
-    }) => Promise<import("ethers").ContractTransaction>;
+    }) => Promise<ethers.ContractTransaction>;
     constructor(_strategy: DBStrategy, _context: YCClassifications);
     getInstance: (id: string) => YCStrategy | null;
     static instances: Map<string, YCStrategy>;

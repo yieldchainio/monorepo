@@ -28,5 +28,8 @@ export type SignerMethod =
   | EthersExecutor
   | (Partial<TransactionRequest> & {
       from: string;
-      executionCallback: (req: ContractTransaction) => Promise<any>;
+      executionCallback: (
+        req: ContractTransaction
+      ) => Promise<{ hash: string }>;
+      chainID: number;
     });

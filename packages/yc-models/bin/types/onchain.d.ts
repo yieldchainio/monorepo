@@ -21,3 +21,7 @@ export interface VaultFactoryInputs {
     depositToken: address;
     isPublic: boolean;
 }
+export declare const VAULT_CREATED_EVENT_SIGNATURE = "VaultCreated(address,address,address)";
+export interface VaultCreatedEvent {
+    strategyAddress: address;
+}

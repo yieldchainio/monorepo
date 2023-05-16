@@ -1,5 +1,5 @@
 /**
  * Onchain YC types
  */
-export {};
+export const VAULT_CREATED_EVENT_SIGNATURE = "VaultCreated(address,address,address)";
 //# sourceMappingURL=onchain.js.map

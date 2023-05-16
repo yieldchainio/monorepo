@@ -53,46 +53,54 @@ export const ApyChart = ({ strategy }: { strategy?: YCStrategy }) => {
       paddingX="px-0"
       className="pb-0 overflow-hidden"
     >
-      <div className="w-full h-full pt-2 rounded-xl flex flex-col items-end">
-        <ChartTimeframes
-          timeframes={APY_CHART_TIMEFRAMES}
-          items={strategy?.statistics || []}
-          setter={setFilteredStatistics}
-        />
-        <ResponsiveContainer width="100%" height="100%" className="mt-1">
-          <AreaChart data={filteredStatistics}>
-            <defs>
-              <linearGradient id="color" x1={0} x2={0} y1={1} y2={1}>
-                <stop
-                  offset={"0%"}
-                  stopColor={chartColor}
-                  stopOpacity={0.7}
-                ></stop>
-                <stop
-                  offset={"75%"}
-                  stopColor={chartColor}
-                  stopOpacity={0.07}
-                ></stop>
-              </linearGradient>
-            </defs>
-            <Area dataKey="apy" stroke={chartColor} fill="url(#color)"></Area>
-            <YAxis
-              dataKey="apy"
-              axisLine={false}
-              tickLine={false}
-              tickCount={6}
-              tickFormatter={(apy: number) => `${apy}%`}
-              tick={{ fontSize: "10px" }}
-            />
-            <CartesianGrid opacity={0.1} vertical={false} />
-            <Tooltip
-              content={
-                <CustomTooltip<YCStatistic[]> data={filteredStatistics} />
-              }
-              wrapperStyle={{ outline: "none" }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+      <div className="w-full h-full pt-0 rounded-xl flex flex-col ">
+        <div className="absolute self-end pt-2">
+          <ChartTimeframes
+            timeframes={APY_CHART_TIMEFRAMES}
+            items={strategy?.statistics || []}
+            setter={setFilteredStatistics}
+          />
+        </div>
+        {filteredStatistics?.length ? (
+          <ResponsiveContainer width="100%" height="100%" className="mt-1">
+            <AreaChart data={filteredStatistics}>
+              <defs>
+                <linearGradient id="color" x1={0} x2={0} y1={1} y2={1}>
+                  <stop
+                    offset={"0%"}
+                    stopColor={chartColor}
+                    stopOpacity={0.7}
+                  ></stop>
+                  <stop
+                    offset={"75%"}
+                    stopColor={chartColor}
+                    stopOpacity={0.07}
+                  ></stop>
+                </linearGradient>
+              </defs>
+              <Area dataKey="apy" stroke={chartColor} fill="url(#color)"></Area>
+              <YAxis
+                dataKey="apy"
+                axisLine={false}
+                tickLine={false}
+                tickCount={6}
+                tickFormatter={(apy: number) => `${apy}%`}
+                tick={{ fontSize: "10px" }}
+              />
+              <CartesianGrid opacity={0.1} vertical={false} />
+              <Tooltip
+                content={
+                  <CustomTooltip<YCStatistic[]> data={filteredStatistics} />
+                }
+                wrapperStyle={{ outline: "none" }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        ) : (
+          <WrappedText fontSize={24} className="mx-auto my-auto">
+            {"No Data To Display (Yet)"}
+          </WrappedText>
+        )}
       </div>
       {/* <div className="relative flex flex-row justify-end">
         <ChartTimeframes

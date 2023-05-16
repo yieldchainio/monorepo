@@ -11,7 +11,6 @@ import {
   YCNetwork,
   YCProtocol,
   YCToken,
-  YCFlow,
   YCArgument,
   YCFunc,
   DBContract,

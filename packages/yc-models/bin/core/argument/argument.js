@@ -109,7 +109,7 @@ export class YCArgument extends BaseClass {
         }
         // If we are a function, encode it instead
         else if (this.value instanceof YCFunc)
-            command += remove0xPrefix(this.value.encodeYCCommand(step, context, []));
+            command = remove0xPrefix(this.value.encodeYCCommand(step, context, []));
         // Else, encode our value normally
         else
             command += remove0xPrefix(AbiCoder.defaultAbiCoder().encode([this.solidityType], [this.value]));

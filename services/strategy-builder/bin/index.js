@@ -4,6 +4,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { createDeployableVaultInput } from "./helpers/index.js";
+import { YCClassifications, } from "@yc/yc-models";
 import { PrismaClient } from "@prisma/client";
 // App to use for reguler API
 const app = express();
@@ -13,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 // Hydrate the YC data when initing
-// await YCClassifications.getInstance().initiallize();
+await YCClassifications.getInstance().initiallize();
 // Port for reguler app
 let PORT = 8080;
 /**

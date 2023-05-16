@@ -39,18 +39,18 @@ export const StepOptions = ({
         className="cursor-pointer group transition duration-200 ease-in-out"
         onClick={() => {
           props.onClick?.();
-          // const jsonStep = step.toDeployableJSON();
-          // if (!jsonStep)
-          //   throw logs.lazyPush({
-          //     message: "JSON Step is Null!",
-          //     type: "error",
-          //   });
+          const jsonStep = step.toDeployableJSON();
+          if (!jsonStep)
+            throw logs.lazyPush({
+              message: "JSON Step is Null!",
+              type: "error",
+            });
           console.log(step);
-          // console.log(
-          //   step.function?.encodeYCCommand(jsonStep, EncodingContext.SEED, [
-          //     ...step.customArguments,
-          //   ])
-          // );
+          console.log(
+            step.function?.encodeYCCommand(jsonStep, EncodingContext.SEED, [
+              ...step.customArguments,
+            ])
+          );
         }}
       ></DotMenuIcon>
     </TooltipDropdown>

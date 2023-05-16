@@ -349,11 +349,20 @@ export class YCStrategy extends BaseClass {
           from: this.getSigningAddress(signer),
         });
 
+    const requiredGasPrepay =
+      await this.contract.approxDepositGas.staticCallResult();
+
+    if (!requiredGasPrepay[0]) {
+      console.error("Errornous Gas Approximation", requiredGasPrepay);
+      throw "Cannot Deposit - Gas Approximation Not Defined On Strategy";
+    }
+
     // Populate a deposit
     const depositTxn = await this.populateDeposit(
       this.depositToken.getParsed(amount),
       {
         from: this.getSigningAddress(signer),
+        value: requiredGasPrepay[0] * 2n,
       }
     );
 
@@ -377,11 +386,20 @@ export class YCStrategy extends BaseClass {
     // Make sure the signer's chain ID matches the strategy's
     await this.network?.assertSignerChainID(signer);
 
+    const requiredGasPrepay =
+      await this.contract.approxDepositGas.staticCallResult();
+
+    if (!requiredGasPrepay[0]) {
+      console.error("Errornous Gas Approximation", requiredGasPrepay);
+      throw "Cannot Deposit - Gas Approximation Not Defined On Strategy";
+    }
+
     // Populate a deposit and sign it
     return await this.signTransaction(
       signer,
       await this.populateDeposit(this.depositToken.getParsed(amount), {
         from: this.getSigningAddress(signer),
+        value: requiredGasPrepay[0] * 2n,
       })
     );
   };

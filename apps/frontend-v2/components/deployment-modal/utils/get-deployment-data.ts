@@ -19,7 +19,6 @@ export async function getDeploymentData(
       req
     );
     if (res.data.status) {
-      logger?.("Submit The Deployment Transaction In Your Wallet...");
       return {
         deploymentCalldata: res.data.deploymentCalldata,
         uprootSteps: res.data.uprootSteps,

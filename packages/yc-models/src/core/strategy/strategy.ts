@@ -5,6 +5,7 @@ import {
   EthersExecutor,
   EthersTransactionResponse,
   SignerMethod,
+  VAULT_CREATED_EVENT_SIGNATURE,
 } from "../../types/index.js";
 import { DBStrategy, JSONStep } from "../../types/db.js";
 import { BaseClass, BaseWeb3Class } from "../base/index.js";
@@ -15,9 +16,12 @@ import { YCToken } from "../token/token.js";
 import { YCUser } from "../user/user.js";
 import abi from "../../ABIs/strategy.json" assert { type: "json" };
 import {
+  AbiCoder,
   BrowserProvider,
   Contract,
+  ethers,
   getAddress,
+  TransactionReceipt,
   TransactionRequest,
 } from "ethers";
 import { YCStatistic } from "./statistic";
@@ -142,19 +146,27 @@ export class YCStrategy extends BaseClass {
     if (!diamondAddress)
       throw "Cannot Deploy Strategy - Network Does Not Have Diamond Deployed";
 
-    const res = await (
-      await YCStrategy.signTransaction(signer, {
-        to: diamondAddress,
-        data: calldata,
-        from: YCStrategy.getSigningAddress(signer),
-      })
-    )?.wait();
-
-    console.log("Transaction Send Res", res);
+    const res = await YCStrategy.signTransaction(signer, {
+      to: diamondAddress,
+      data: calldata,
+      from: YCStrategy.getSigningAddress(signer),
+    });
 
     if (res?.status == 1) {
-      const vaultAddress = await res.getResult();
-      jsonStrategy.address = vaultAddress as address;
+      const deployLog = res.logs.find(
+        (log) => log.topics[0] == ethers.id(VAULT_CREATED_EVENT_SIGNATURE)
+      );
+
+      if (!deployLog) throw "Cannot Add Strategy - No Deploy Log";
+      const vaultAddress = AbiCoder.defaultAbiCoder().decode(
+        ["address"],
+        deployLog.topics[1]
+      );
+
+      if (!vaultAddress[0])
+        throw "Cannot Add Strategy - Address Topic Undefined";
+      jsonStrategy.address = vaultAddress[0] as address;
+
       return new YCStrategy(jsonStrategy, YCClassifications.getInstance());
     }
 
@@ -217,7 +229,7 @@ export class YCStrategy extends BaseClass {
     const shares: bigint =
       cachedShares && cache
         ? cachedShares
-        : await this.contract.userShares(getAddress(address));
+        : await this.contract.balances(getAddress(address));
     if (shares == undefined)
       throw new Error(
         "YCStrategy ERR: Cannot Retreive User's Shares - ethers.js error."
@@ -325,7 +337,7 @@ export class YCStrategy extends BaseClass {
     amount: number | bigint,
     signer: SignerMethod,
     approveAll: boolean = false
-  ): Promise<EthersTransactionResponse> => {
+  ): Promise<TransactionReceipt> => {
     this.#assertDepositToken();
     await this.network?.assertSignerChainID(signer);
     // Populate an approval for the amount of tokens required for the operation (no more than that)
@@ -361,7 +373,7 @@ export class YCStrategy extends BaseClass {
   deposit = async (
     amount: number | bigint,
     signer: SignerMethod
-  ): Promise<EthersTransactionResponse | null> => {
+  ): Promise<TransactionReceipt | null> => {
     // Make sure the signer's chain ID matches the strategy's
     await this.network?.assertSignerChainID(signer);
 
@@ -383,7 +395,7 @@ export class YCStrategy extends BaseClass {
   withdraw = async (
     amount: bigint,
     signer: SignerMethod
-  ): Promise<EthersTransactionResponse | null> => {
+  ): Promise<TransactionReceipt | null> => {
     // Make sure the signer's chain ID matches the strategy's
     await this.network?.assertSignerChainID(signer);
 
@@ -457,15 +469,15 @@ export class YCStrategy extends BaseClass {
     this.creator = _context.getUser(_strategy.creator_id) || null;
 
     this.seedSteps = new YCStep(
-      _strategy.seedSteps as unknown as JSONStep,
+      _strategy.seed_steps as unknown as JSONStep,
       _context
     );
     this.treeSteps = new YCStep(
-      _strategy.treeSteps as unknown as JSONStep,
+      _strategy.tree_steps as unknown as JSONStep,
       _context
     );
     this.uprootSteps = new YCStep(
-      _strategy.uprootSteps as unknown as JSONStep,
+      _strategy.uproot_steps as unknown as JSONStep,
       _context
     );
 
@@ -483,7 +495,7 @@ export class YCStrategy extends BaseClass {
         (a, b) =>
           new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf()
       );
-    this.apy = this.statistics[this.statistics.length - 1].apy;
+    this.apy = this.statistics[this.statistics.length - 1]?.apy || 0;
     this.#setTVL();
     this.#setGasBalance();
 
@@ -501,7 +513,7 @@ export class YCStrategy extends BaseClass {
     if (retry >= 5) return 0n;
     try {
       // Get the data from our contract object
-      const tvl: bigint = await this.contract.totalVaultShares();
+      const tvl: bigint = await this.contract.totalShares();
 
       // Set the global field
       if (tvl) this.#tvl = tvl;
@@ -551,7 +563,7 @@ export class YCStrategy extends BaseClass {
   // ============================
 
   #assertUserShares = async (userAddress: string, amount: bigint) => {
-    const userShares = await this.contract.userShares(userAddress);
+    const userShares = await this.contract.balances(userAddress);
     this.assert(
       userShares && userShares >= amount,
       "YCStrategy ERR: Insufficient Shares For Inputted Amount. Shares: " +

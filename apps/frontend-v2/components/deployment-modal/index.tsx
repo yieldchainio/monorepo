@@ -169,7 +169,7 @@ export const DeploymentModal = ({
             }}
             className="tablet:content-['Hey']"
             onClick={async () => {
-              const deploymentCalldata = getDeploymentData(
+              const deploymentDataPromise = getDeploymentData(
                 {
                   seedSteps: seedRootStep.toDeployableJSON() as JSONStep,
                   treeSteps: treeRootStep.toDeployableJSON() as JSONStep,
@@ -182,16 +182,24 @@ export const DeploymentModal = ({
 
               logs.lazyPush({
                 message: "Please Wait While We Build Strategy Input...",
-                lifespan: deploymentCalldata,
+                lifespan: deploymentDataPromise,
               });
 
-              await deploymentCalldata.then(async (builderResult) => {
+              await deploymentDataPromise.then(async (builderResult) => {
                 const strategyID = uuid();
                 if (!network || !depositToken || !title)
                   return logs.lazyPush({
                     type: "error",
                     message:
                       "Please Complete All Strategy Details Before Deploying",
+                  });
+                if (!builderResult || !builderResult.uprootSteps.id)
+                  return logs.lazyPush({
+                    type: "error",
+                    message:
+                      "Building Strategy Failed. Please Contact Team On Telegram/Discord",
+
+                    lifespan: 10000,
                   });
                 const jsonStrategy: DBStrategy = {
                   id: strategyID,
@@ -202,34 +210,35 @@ export const DeploymentModal = ({
                   creator_id: id || "",
                   verified: false,
                   execution_interval: 1000,
-                  seedSteps: seedRootStep.toDeployableJSON() as any,
-                  treeSteps: treeRootStep.toDeployableJSON() as any,
-                  uprootSteps: builderResult?.uprootSteps as any,
+                  seed_steps: seedRootStep.toDeployableJSON() as any,
+                  tree_steps: treeRootStep.toDeployableJSON() as any,
+                  uproot_steps: builderResult.uprootSteps as any,
                 };
 
-                if (!builderResult)
-                  return logs.lazyPush({
-                    type: "error",
-                    message:
-                      "Building Strategy Failed. Please Contact Team On Telegram/Discord",
-
-                    lifespan: 10000,
-                  });
-
-                const strategy = await YCStrategy.fromDeploymentCalldata(
+                const strategyPromise = YCStrategy.fromDeploymentCalldata(
                   builderResult.deploymentCalldata,
                   jsonStrategy,
                   {
                     from: address as unknown as string,
                     executionCallback: async (req) => {
-                      await signer?.provider?.waitForTransaction(
-                        (
-                          await signer?.sendTransaction(req as any)
-                        ).hash
-                      );
+                      const res = await signer?.sendTransaction(req as any);
+                      if (!res)
+                        throw "Cannot Deploy - Res Undefined In Execution Callback";
+                      return {
+                        hash: res.hash,
+                      };
                     },
+                    chainID: network.id,
                   }
                 );
+
+                logs.lazyPush({
+                  message:
+                    "Submit The Deployment Transaction In Your Wallet...",
+                  lifespan: strategyPromise,
+                });
+
+                const strategy = await strategyPromise;
 
                 if (!strategy)
                   return logs.lazyPush({
@@ -251,7 +260,7 @@ export const DeploymentModal = ({
 
                 YCClassifications.getInstance().YCstrategies.push(strategy);
 
-                const added = addStrategy({
+                const addedPromise = addStrategy({
                   id: strategy.id,
                   address: strategy.address,
                   creatorID: id || "",
@@ -268,13 +277,11 @@ export const DeploymentModal = ({
                 logs.lazyPush({
                   type: "info",
                   message: "Adding Strategy To Our System...",
-                  lifespan: added,
+                  lifespan: addedPromise,
                 });
 
-                
-
-                added.then((res) => {
-                  if (!res)
+                addedPromise.then((added) => {
+                  if (!added)
                     return logs.lazyPush({
                       type: "error",
                       message:

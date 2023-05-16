@@ -12,6 +12,8 @@ const prismaClient = new PrismaClient();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+// Hydrate the YC data when initing
+// await YCClassifications.getInstance().initiallize();
 // Port for reguler app
 let PORT = 8080;
 /**
@@ -47,6 +49,7 @@ app.post("/add-strategy", async (req, res) => {
                 chain_id: requestedStrategy.chainID,
                 seed_steps: requestedStrategy.seedSteps,
                 tree_steps: requestedStrategy.treeSteps,
+                uproot_steps: requestedStrategy.uprootSteps,
                 title: requestedStrategy.title,
                 deposit_token_id: requestedStrategy.depositTokenID,
                 address: requestedStrategy.address,

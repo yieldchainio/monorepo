@@ -10,7 +10,6 @@ import { YCFunc } from "@yc/yc-models";
 
 export function getCustomFields(func: YCFunc): Array<null> {
   const customFields: Array<null> = [];
-  console.log("Func Arguments", func.arguments);
   for (const arg of func.arguments) if (arg.isCustom) customFields.push(null);
   return customFields;
 }

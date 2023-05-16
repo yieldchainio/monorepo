@@ -9,6 +9,7 @@ import {
   BuilderResponse,
   StrategyClassificationRequestBody,
   StrategyClassificationResponse,
+  YCClassifications,
 } from "@yc/yc-models";
 import { PrismaClient } from "@prisma/client";
 import { v4 as uuid } from "uuid";
@@ -22,6 +23,9 @@ const prismaClient = new PrismaClient();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+
+// Hydrate the YC data when initing
+await YCClassifications.getInstance().initiallize();
 
 // Port for reguler app
 let PORT: number = 8080;
@@ -52,7 +56,7 @@ app.post(
       req.body.chainID
     );
 
-      console.log("Builder Result", builderResult)
+    console.log("Builder Result", builderResult);
     res.status(builderResult.status == true ? 200 : 400).json(builderResult);
   }
 );
@@ -82,6 +86,7 @@ app.post(
           chain_id: requestedStrategy.chainID,
           seed_steps: requestedStrategy.seedSteps as any,
           tree_steps: requestedStrategy.treeSteps as any,
+          uproot_steps: requestedStrategy.uprootSteps as any,
           title: requestedStrategy.title,
           deposit_token_id: requestedStrategy.depositTokenID,
           address: requestedStrategy.address,

@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { SignerMethod } from "../../types/index.js";
+import { SignerMethod, address } from "../../types/index.js";
 import { DBNetwork } from "../../types/db.js";
 import { EthersExecutor, EthersJsonRpcProvider } from "../../types/ethers.js";
 import { BaseClass } from "../base/index.js";
@@ -53,7 +53,7 @@ export class YCNetwork extends BaseClass {
   /**
    * The address of the YC Diamond on this network, can be null.
    */
-  readonly diamondAddress: string | null = null; // Init to null ^^^^^^^^^^
+  readonly diamondAddress: address | null = null; // Init to null ^^^^^^^^^^
 
   /**
    * Whether this network is available currently or not
@@ -148,7 +148,7 @@ export class YCNetwork extends BaseClass {
     this.logo = _network.logo;
     this.color = _network.color || undefined;
     this.blockExplorer = _network.block_explorer || null;
-    this.diamondAddress = _network.diamond_address;
+    this.diamondAddress = _network.diamond_address as address
 
     /**
      * Initiate the ethers provider if we have a json rpc available

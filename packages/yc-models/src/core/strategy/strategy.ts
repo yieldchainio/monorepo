@@ -411,19 +411,37 @@ export class YCStrategy extends BaseClass {
    * @returns Ethers.js transaction reesponse
    */
   withdraw = async (
-    amount: bigint,
+    amount: number | bigint,
     signer: SignerMethod
   ): Promise<TransactionReceipt | null> => {
     // Make sure the signer's chain ID matches the strategy's
     await this.network?.assertSignerChainID(signer);
 
-    // Sign the transaction from the population
-    return await this.signTransaction(
-      signer,
-      await this.populateWithdrawal(amount, {
+    const requiredGasPrepay =
+      await this.contract.approxWithdrawalGas.staticCallResult();
+
+    if (!requiredGasPrepay[0]) {
+      console.error("Errornous Gas Approximation", requiredGasPrepay);
+      throw "Cannot Deposit - Gas Approximation Not Defined On Strategy";
+    }
+
+    const bigintGas = BigInt(requiredGasPrepay[0] * 2n);
+
+    console.log("typeof bigint gas", typeof bigintGas);
+
+    // Populate a withdrawal
+    const withdrawTxn = await this.populateWithdrawal(
+      BigInt(this.depositToken.getParsed(amount)),
+      {
         from: this.getSigningAddress(signer),
-      })
+        value: BigInt(requiredGasPrepay[0] * 2n),
+      }
     );
+
+    console.log("Populated withdraw");
+
+    // Sign the transaction from the population
+    return await this.signTransaction(signer, withdrawTxn);
   };
 
   /**
@@ -467,7 +485,7 @@ export class YCStrategy extends BaseClass {
     );
 
     // Populate the transaction object & return it
-    return await this.contract.deposit.populateTransaction(args);
+    return await this.contract.withdraw.populateTransaction(amount, args);
   };
 
   // =================

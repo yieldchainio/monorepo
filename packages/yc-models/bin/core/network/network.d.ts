@@ -1,4 +1,4 @@
-import { SignerMethod } from "../../types/index.js";
+import { SignerMethod, address } from "../../types/index.js";
 import { DBNetwork } from "../../types/db.js";
 import { EthersJsonRpcProvider } from "../../types/ethers.js";
 import { BaseClass } from "../base/index.js";
@@ -36,7 +36,7 @@ export declare class YCNetwork extends BaseClass {
     /**
      * The address of the YC Diamond on this network, can be null.
      */
-    readonly diamondAddress: string | null;
+    readonly diamondAddress: address | null;
     /**
      * Whether this network is available currently or not
      */

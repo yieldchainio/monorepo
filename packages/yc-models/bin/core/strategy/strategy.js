@@ -277,10 +277,21 @@ class YCStrategy extends BaseClass {
     withdraw = async (amount, signer) => {
         // Make sure the signer's chain ID matches the strategy's
         await this.network?.assertSignerChainID(signer);
-        // Sign the transaction from the population
-        return await this.signTransaction(signer, await this.populateWithdrawal(amount, {
+        const requiredGasPrepay = await this.contract.approxWithdrawalGas.staticCallResult();
+        if (!requiredGasPrepay[0]) {
+            console.error("Errornous Gas Approximation", requiredGasPrepay);
+            throw "Cannot Deposit - Gas Approximation Not Defined On Strategy";
+        }
+        const bigintGas = BigInt(requiredGasPrepay[0] * 2n);
+        console.log("typeof bigint gas", typeof bigintGas);
+        // Populate a withdrawal
+        const withdrawTxn = await this.populateWithdrawal(BigInt(this.depositToken.getParsed(amount)), {
             from: this.getSigningAddress(signer),
-        }));
+            value: BigInt(requiredGasPrepay[0] * 2n),
+        });
+        console.log("Populated withdraw");
+        // Sign the transaction from the population
+        return await this.signTransaction(signer, withdrawTxn);
     };
     /**
      * Population for our transactions,
@@ -309,7 +320,7 @@ class YCStrategy extends BaseClass {
         // Assert the user's shares to be sufficient to the inputted amount
         await this.#assertUserShares(args.from || "", this.depositToken.getParsed(amount));
         // Populate the transaction object & return it
-        return await this.contract.deposit.populateTransaction(args);
+        return await this.contract.withdraw.populateTransaction(amount, args);
     };
     // =================
     //   CONSTRUCTOR

@@ -158,7 +158,7 @@ export declare class YCStrategy extends BaseClass {
      * @param signer - The signer to use
      * @returns Ethers.js transaction reesponse
      */
-    withdraw: (amount: bigint, signer: SignerMethod) => Promise<TransactionReceipt | null>;
+    withdraw: (amount: number | bigint, signer: SignerMethod) => Promise<TransactionReceipt | null>;
     /**
      * Population for our transactions,
      * some consumers may not be compatible with our versions,

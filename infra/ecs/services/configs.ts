@@ -15,13 +15,12 @@ config();
  */
 const ENVs: { [key in ServicesAndWorkers]?: Record<string, string> } = {
   [ServicesAndWorkers.DATAPROVIDER]: {
-    POSTGRES_PORT: process.env.POSTGRES_PORT || "",
-    POSTGRES_PW: process.env.POSTGRES_PW || "",
-    POSTGRES_HOST: process.env.POSTGRES_HOST || "",
+    DATABASE_URL: process.env.DATABASE_URL || "",
   },
   [ServicesAndWorkers.ONCHAINLISTENER]: {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || "",
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || "",
+    DATABASE_URL: process.env.DATABASE_URL || "",
   },
   [ServicesAndWorkers.FRONTEND]: {},
 
@@ -40,11 +39,7 @@ const ENVs: { [key in ServicesAndWorkers]?: Record<string, string> } = {
   },
 
   [ServicesAndWorkers.STRATEGYBUILDER]: {
-    POSTGRES_PORT: process.env.POSTGRES_PORT || "",
-    POSTGRES_PW: process.env.POSTGRES_PW || "",
-    POSTGRES_HOST: process.env.POSTGRES_HOST || "",
-    PRIVATE_KEY: process.env.PRIVATE_KEY || "",
-    ARBISCAN_API_KEY: process.env.ARBISCAN_API_KEY || "",
+    DATABASE_URL: process.env.DATABASE_URL || "",
   },
 
   [ServicesAndWorkers.SQSORCHESTRATOR]: {
@@ -97,7 +92,6 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       name: ServicesAndWorkers.DATAPROVIDER,
       subdomain: "api.yieldchain.io",
       portMappings: [...defaultPortMappings.service],
-      initialDeployment: true,
     },
     [ServicesAndWorkers.INTEGRATIONPRVDR]: {
       repoSettings: ecrRepos.INTEGRATIONPRVDR as RepoSettings,
@@ -106,7 +100,6 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       name: ServicesAndWorkers.INTEGRATIONPRVDR,
       subdomain: "integrationapi.yieldchain.io",
       portMappings: [...defaultPortMappings.service],
-      initialDeployment: true,
     },
     [ServicesAndWorkers.INTEGRATIONFRNTD]: {
       repoSettings: ecrRepos.INTEGRATIONFRNTD as RepoSettings,
@@ -115,7 +108,6 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       name: ServicesAndWorkers.INTEGRATIONFRNTD,
       subdomain: "admindashboard.yieldchain.io",
       portMappings: [...defaultPortMappings.service],
-      initialDeployment: true,
     },
     [ServicesAndWorkers.ONCHAINLISTENER]: {
       repoSettings: ecrRepos.ONCHAINLISTENER as RepoSettings,
@@ -149,6 +141,6 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       type: ServiceTypes.SERVICE,
       name: ServicesAndWorkers.STRATEGYBUILDER,
       portMappings: [...defaultPortMappings.service],
-      subdomain: "builderapi.yieldchain.io",
+      subdomain: "builder.yieldchain.io",
     },
   };

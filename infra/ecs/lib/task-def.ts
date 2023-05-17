@@ -50,14 +50,13 @@ export default class FargateTaskDef extends FargateTaskDefinition {
   constructor(
     scope: Construct,
     id: string,
-    props: FargateTaskDefinitionProps = {
-      ...defaultTaskDef,
-    }
+    props: FargateTaskDefinitionProps & { taskRole: IRole }
   ) {
-    const defaultRole = new DefaultIAMRole(scope).role();
     props = {
+      ...defaultTaskDef,
       ...props,
-      taskRole: props.taskRole || defaultRole,
+      taskRole: props.taskRole,
+      family: id,
     };
     super(scope, id, props);
   }

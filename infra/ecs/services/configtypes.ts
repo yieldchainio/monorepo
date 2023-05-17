@@ -39,20 +39,21 @@ export enum ServicesAndWorkers {
 interface BaseServiceConfig {
   ENVs: Record<string, string>;
   repoSettings: RepoSettings;
-  type: ServiceTypes;
   name: string;
+  type: ServiceTypes;
 }
 
 // Interface for a service config
 export interface IServiceConfig extends BaseServiceConfig {
+  type: ServiceTypes.SERVICE;
   subdomain: string | null;
   portMappings: { hostPort: number; containerPort: number }[];
-  targetGroupsARNs: string[];
-  initialDeployment: boolean;
 }
 
 // Interface for a worker config
-export interface IWorkerConfig extends BaseServiceConfig {}
+export interface IWorkerConfig extends BaseServiceConfig {
+  type: ServiceTypes.WORKER;
+}
 
 // Config for a service/worker
 export type ServiceOrWorkerConfig = IWorkerConfig | IServiceConfig;

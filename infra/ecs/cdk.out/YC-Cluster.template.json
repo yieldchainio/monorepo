@@ -1,0 +1,3307 @@
+{
+ "Resources": {
+  "YCECSVpc16C2B5BF": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YCECSVpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/Resource"
+   }
+  },
+  "YCECSVpcPublicSubnet1Subnet4D7EC8A9": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "AvailabilityZone": "us-east-1a",
+    "CidrBlock": "10.0.0.0/19",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet1/Subnet"
+   }
+  },
+  "YCECSVpcPublicSubnet1RouteTable367A5C34": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet1/RouteTable"
+   }
+  },
+  "YCECSVpcPublicSubnet1RouteTableAssociation996F68D0": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPublicSubnet1RouteTable367A5C34"
+    },
+    "SubnetId": {
+     "Ref": "YCECSVpcPublicSubnet1Subnet4D7EC8A9"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet1/RouteTableAssociation"
+   }
+  },
+  "YCECSVpcPublicSubnet1DefaultRoute2B39E6BE": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPublicSubnet1RouteTable367A5C34"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "YCECSVpcIGWA07428CC"
+    }
+   },
+   "DependsOn": [
+    "YCECSVpcVPCGW92B58525"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet1/DefaultRoute"
+   }
+  },
+  "YCECSVpcPublicSubnet1EIP4FA7C96E": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet1/EIP"
+   }
+  },
+  "YCECSVpcPublicSubnet1NATGatewayC18F3579": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "SubnetId": {
+     "Ref": "YCECSVpcPublicSubnet1Subnet4D7EC8A9"
+    },
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "YCECSVpcPublicSubnet1EIP4FA7C96E",
+      "AllocationId"
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "YCECSVpcPublicSubnet1DefaultRoute2B39E6BE",
+    "YCECSVpcPublicSubnet1RouteTableAssociation996F68D0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet1/NATGateway"
+   }
+  },
+  "YCECSVpcPublicSubnet2Subnet9E19CD83": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "AvailabilityZone": "us-east-1b",
+    "CidrBlock": "10.0.32.0/19",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet2/Subnet"
+   }
+  },
+  "YCECSVpcPublicSubnet2RouteTable950959A8": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet2/RouteTable"
+   }
+  },
+  "YCECSVpcPublicSubnet2RouteTableAssociationABE2D466": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPublicSubnet2RouteTable950959A8"
+    },
+    "SubnetId": {
+     "Ref": "YCECSVpcPublicSubnet2Subnet9E19CD83"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet2/RouteTableAssociation"
+   }
+  },
+  "YCECSVpcPublicSubnet2DefaultRoute3DDE6E3E": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPublicSubnet2RouteTable950959A8"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "YCECSVpcIGWA07428CC"
+    }
+   },
+   "DependsOn": [
+    "YCECSVpcVPCGW92B58525"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet2/DefaultRoute"
+   }
+  },
+  "YCECSVpcPublicSubnet2EIP613C9523": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet2/EIP"
+   }
+  },
+  "YCECSVpcPublicSubnet2NATGateway8ABB108B": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "SubnetId": {
+     "Ref": "YCECSVpcPublicSubnet2Subnet9E19CD83"
+    },
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "YCECSVpcPublicSubnet2EIP613C9523",
+      "AllocationId"
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet2"
+     }
+    ]
+   },
+   "DependsOn": [
+    "YCECSVpcPublicSubnet2DefaultRoute3DDE6E3E",
+    "YCECSVpcPublicSubnet2RouteTableAssociationABE2D466"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet2/NATGateway"
+   }
+  },
+  "YCECSVpcPublicSubnet3Subnet6DBE4C3C": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "AvailabilityZone": "us-east-1c",
+    "CidrBlock": "10.0.64.0/19",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet3"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet3/Subnet"
+   }
+  },
+  "YCECSVpcPublicSubnet3RouteTableE2F85256": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet3"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet3/RouteTable"
+   }
+  },
+  "YCECSVpcPublicSubnet3RouteTableAssociation7035A5DD": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPublicSubnet3RouteTableE2F85256"
+    },
+    "SubnetId": {
+     "Ref": "YCECSVpcPublicSubnet3Subnet6DBE4C3C"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet3/RouteTableAssociation"
+   }
+  },
+  "YCECSVpcPublicSubnet3DefaultRouteEF1C052D": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPublicSubnet3RouteTableE2F85256"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "YCECSVpcIGWA07428CC"
+    }
+   },
+   "DependsOn": [
+    "YCECSVpcVPCGW92B58525"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet3/DefaultRoute"
+   }
+  },
+  "YCECSVpcPublicSubnet3EIP5AE91A37": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet3"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet3/EIP"
+   }
+  },
+  "YCECSVpcPublicSubnet3NATGateway70A02B0B": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "SubnetId": {
+     "Ref": "YCECSVpcPublicSubnet3Subnet6DBE4C3C"
+    },
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "YCECSVpcPublicSubnet3EIP5AE91A37",
+      "AllocationId"
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PublicSubnet3"
+     }
+    ]
+   },
+   "DependsOn": [
+    "YCECSVpcPublicSubnet3DefaultRouteEF1C052D",
+    "YCECSVpcPublicSubnet3RouteTableAssociation7035A5DD"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PublicSubnet3/NATGateway"
+   }
+  },
+  "YCECSVpcPrivateSubnet1Subnet1286F6C0": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "AvailabilityZone": "us-east-1a",
+    "CidrBlock": "10.0.96.0/19",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PrivateSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet1/Subnet"
+   }
+  },
+  "YCECSVpcPrivateSubnet1RouteTable60D889CD": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PrivateSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet1/RouteTable"
+   }
+  },
+  "YCECSVpcPrivateSubnet1RouteTableAssociationBB5C2F85": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPrivateSubnet1RouteTable60D889CD"
+    },
+    "SubnetId": {
+     "Ref": "YCECSVpcPrivateSubnet1Subnet1286F6C0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet1/RouteTableAssociation"
+   }
+  },
+  "YCECSVpcPrivateSubnet1DefaultRoute891CC613": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPrivateSubnet1RouteTable60D889CD"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "YCECSVpcPublicSubnet1NATGatewayC18F3579"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet1/DefaultRoute"
+   }
+  },
+  "YCECSVpcPrivateSubnet2SubnetB580F791": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "AvailabilityZone": "us-east-1b",
+    "CidrBlock": "10.0.128.0/19",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PrivateSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet2/Subnet"
+   }
+  },
+  "YCECSVpcPrivateSubnet2RouteTable2110C49F": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PrivateSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet2/RouteTable"
+   }
+  },
+  "YCECSVpcPrivateSubnet2RouteTableAssociation84FB0F57": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPrivateSubnet2RouteTable2110C49F"
+    },
+    "SubnetId": {
+     "Ref": "YCECSVpcPrivateSubnet2SubnetB580F791"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet2/RouteTableAssociation"
+   }
+  },
+  "YCECSVpcPrivateSubnet2DefaultRoute59BAAEAA": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPrivateSubnet2RouteTable2110C49F"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "YCECSVpcPublicSubnet2NATGateway8ABB108B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet2/DefaultRoute"
+   }
+  },
+  "YCECSVpcPrivateSubnet3SubnetA6A7C898": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "AvailabilityZone": "us-east-1c",
+    "CidrBlock": "10.0.160.0/19",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PrivateSubnet3"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet3/Subnet"
+   }
+  },
+  "YCECSVpcPrivateSubnet3RouteTableC95989A0": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YC-Cluster/YCECSVpc/PrivateSubnet3"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet3/RouteTable"
+   }
+  },
+  "YCECSVpcPrivateSubnet3RouteTableAssociation46C7FD48": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPrivateSubnet3RouteTableC95989A0"
+    },
+    "SubnetId": {
+     "Ref": "YCECSVpcPrivateSubnet3SubnetA6A7C898"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet3/RouteTableAssociation"
+   }
+  },
+  "YCECSVpcPrivateSubnet3DefaultRoute441534C7": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "YCECSVpcPrivateSubnet3RouteTableC95989A0"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "YCECSVpcPublicSubnet3NATGateway70A02B0B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/PrivateSubnet3/DefaultRoute"
+   }
+  },
+  "YCECSVpcIGWA07428CC": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "YCECSVpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/IGW"
+   }
+  },
+  "YCECSVpcVPCGW92B58525": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    },
+    "InternetGatewayId": {
+     "Ref": "YCECSVpcIGWA07428CC"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSVpc/VPCGW"
+   }
+  },
+  "YCECSClusterB729975E7ADB9F49": {
+   "Type": "AWS::ECS::Cluster",
+   "Properties": {
+    "ClusterName": "YC-Cluster"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSClusterB729975E/Resource"
+   }
+  },
+  "YCECSDefaultSecurityServiceGroupDE0B50A6": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "YC-Cluster/YCECSDefaultSecurityServiceGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow from anyone on port 80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow from anyone on port 443",
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSDefaultSecurityServiceGroup/Resource"
+   }
+  },
+  "YCECSDefaultSecurityServiceGroupfromYCClusterYCECSDefaultSecurityServiceGroupC90C6C518080E8287BFE": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "Load balancer to target",
+    "FromPort": 8080,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "YCECSDefaultSecurityServiceGroupDE0B50A6",
+      "GroupId"
+     ]
+    },
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "YCECSDefaultSecurityServiceGroupDE0B50A6",
+      "GroupId"
+     ]
+    },
+    "ToPort": 8080
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSDefaultSecurityServiceGroup/from YCClusterYCECSDefaultSecurityServiceGroupC90C6C51:8080"
+   }
+  },
+  "DATAPRVDRTASKDEF02CC6223": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "DATABASE_URL",
+        "Value": "postgres://OfirYC:B.%3F3f%2Apbf%3D2Df%21i@postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com:5432/postgres"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/data-provider:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "DATAPRVDRTASKDEFDATAPRVDRCONTAINERLogGroupEAC2C55B"
+        },
+        "awslogs-stream-prefix": "DATAPRVDR-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "DATAPRVDR-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "DATAPRVDRTASKDEFExecutionRole13A261AF",
+      "Arn"
+     ]
+    },
+    "Family": "DATAPRVDR-TASKDEF",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/DATAPRVDR-TASKDEF/Resource"
+   }
+  },
+  "DATAPRVDRTASKDEFDATAPRVDRCONTAINERLogGroupEAC2C55B": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/DATAPRVDR-TASKDEF/DATAPRVDR-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "DATAPRVDRTASKDEFExecutionRole13A261AF": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/DATAPRVDR-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "DATAPRVDRTASKDEFExecutionRoleDefaultPolicy75C9ED2A": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/data-provider"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "DATAPRVDRTASKDEFDATAPRVDRCONTAINERLogGroupEAC2C55B",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "DATAPRVDRTASKDEFExecutionRoleDefaultPolicy75C9ED2A",
+    "Roles": [
+     {
+      "Ref": "DATAPRVDRTASKDEFExecutionRole13A261AF"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/DATAPRVDR-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "DATAPRVDRSERVICEService41FE84C5": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "YCECSClusterB729975E7ADB9F49"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "DATAPRVDR-CONTAINER",
+      "ContainerPort": 8080,
+      "TargetGroupArn": {
+       "Ref": "YCDATAPRVDRSERVICETGF2F39B30"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "YCECSDefaultSecurityServiceGroupDE0B50A6",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "YCECSVpcPrivateSubnet1Subnet1286F6C0"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet2SubnetB580F791"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet3SubnetA6A7C898"
+       }
+      ]
+     }
+    },
+    "ServiceName": "DATAPRVDR-SERVICE",
+    "TaskDefinition": {
+     "Ref": "DATAPRVDRTASKDEF02CC6223"
+    }
+   },
+   "DependsOn": [
+    "DATAPRVDRSERVICEYCDATAPRVDRSERVICEALBYCDATAPRVDRSERVICEHTTPLISTENER465B9F16",
+    "DATAPRVDRSERVICEYCDATAPRVDRSERVICEALBYCDATAPRVDRSERVICEHTTPSLISTENER8AA5624C"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/DATAPRVDR-SERVICE/Service"
+   }
+  },
+  "DATAPRVDRSERVICETaskCountTargetA818FA5A": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Ref": "YCECSClusterB729975E7ADB9F49"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "DATAPRVDRSERVICEService41FE84C5",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/DATAPRVDR-SERVICE/TaskCount/Target/Resource"
+   }
+  },
+  "DATAPRVDRSERVICEYCDATAPRVDRSERVICEALB05794633": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Name": "YC-DATAPRVDR-SERVICE-LB",
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "YCECSDefaultSecurityServiceGroupDE0B50A6",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Ref": "YCECSVpcPublicSubnet1Subnet4D7EC8A9"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet2Subnet9E19CD83"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet3Subnet6DBE4C3C"
+     }
+    ],
+    "Type": "application"
+   },
+   "DependsOn": [
+    "YCECSVpcPublicSubnet1DefaultRoute2B39E6BE",
+    "YCECSVpcPublicSubnet1RouteTableAssociation996F68D0",
+    "YCECSVpcPublicSubnet2DefaultRoute3DDE6E3E",
+    "YCECSVpcPublicSubnet2RouteTableAssociationABE2D466",
+    "YCECSVpcPublicSubnet3DefaultRouteEF1C052D",
+    "YCECSVpcPublicSubnet3RouteTableAssociation7035A5DD"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/DATAPRVDR-SERVICE/YC-DATAPRVDR-SERVICE-ALB/Resource"
+   }
+  },
+  "DATAPRVDRSERVICEYCDATAPRVDRSERVICEALBYCDATAPRVDRSERVICEHTTPLISTENER465B9F16": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCDATAPRVDRSERVICETGF2F39B30"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "DATAPRVDRSERVICEYCDATAPRVDRSERVICEALB05794633"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/DATAPRVDR-SERVICE/YC-DATAPRVDR-SERVICE-ALB/YC-DATAPRVDR-SERVICE-HTTPLISTENER/Resource"
+   }
+  },
+  "DATAPRVDRSERVICEYCDATAPRVDRSERVICEALBYCDATAPRVDRSERVICEHTTPSLISTENER8AA5624C": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCDATAPRVDRSERVICETGF2F39B30"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "DATAPRVDRSERVICEYCDATAPRVDRSERVICEALB05794633"
+    },
+    "Certificates": [
+     {
+      "CertificateArn": "arn:aws:acm:us-east-1:010073361729:certificate/db613a68-9aac-453f-b630-6581b5ac6383"
+     }
+    ],
+    "Port": 443,
+    "Protocol": "HTTPS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/DATAPRVDR-SERVICE/YC-DATAPRVDR-SERVICE-ALB/YC-DATAPRVDR-SERVICE-HTTPSLISTENER/Resource"
+   }
+  },
+  "YCDATAPRVDRSERVICETGF2F39B30": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/",
+    "HealthCheckProtocol": "HTTP",
+    "Matcher": {
+     "HttpCode": "200"
+    },
+    "Port": 8080,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YC-DATAPRVDR-SERVICE-TG/Resource"
+   }
+  },
+  "apiyieldchainioALBRECORDFEE6805C": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "Name": "api.yieldchain.io.",
+    "Type": "A",
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::Join": [
+       "",
+       [
+        "dualstack.",
+        {
+         "Fn::GetAtt": [
+          "DATAPRVDRSERVICEYCDATAPRVDRSERVICEALB05794633",
+          "DNSName"
+         ]
+        }
+       ]
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "DATAPRVDRSERVICEYCDATAPRVDRSERVICEALB05794633",
+       "CanonicalHostedZoneID"
+      ]
+     }
+    },
+    "HostedZoneId": "Z01218335OMCUR3F67FA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/api.yieldchain.io_ALB_RECORD/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRTASKDEF74CD0EBE": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_PORT",
+        "Value": "5432"
+       },
+       {
+        "Name": "POSTGRES_PW",
+        "Value": "B.?3f*pbf=2Df!i"
+       },
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": "postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/integration-provider:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "INTEGRATIONPRVDRTASKDEFINTEGRATIONPRVDRCONTAINERLogGroupDEF46B02"
+        },
+        "awslogs-stream-prefix": "INTEGRATIONPRVDR-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "INTEGRATIONPRVDR-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "INTEGRATIONPRVDRTASKDEFExecutionRoleF31E927A",
+      "Arn"
+     ]
+    },
+    "Family": "INTEGRATIONPRVDR-TASKDEF",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONPRVDR-TASKDEF/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRTASKDEFINTEGRATIONPRVDRCONTAINERLogGroupDEF46B02": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONPRVDR-TASKDEF/INTEGRATIONPRVDR-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRTASKDEFExecutionRoleF31E927A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONPRVDR-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRTASKDEFExecutionRoleDefaultPolicyB1FAA57B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/integration-provider"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "INTEGRATIONPRVDRTASKDEFINTEGRATIONPRVDRCONTAINERLogGroupDEF46B02",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "INTEGRATIONPRVDRTASKDEFExecutionRoleDefaultPolicyB1FAA57B",
+    "Roles": [
+     {
+      "Ref": "INTEGRATIONPRVDRTASKDEFExecutionRoleF31E927A"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONPRVDR-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRSERVICEService25D6A983": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "YCECSClusterB729975E7ADB9F49"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "INTEGRATIONPRVDR-CONTAINER",
+      "ContainerPort": 8080,
+      "TargetGroupArn": {
+       "Ref": "YCINTEGRATIONPRVDRSERVICETGB97175C4"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "YCECSDefaultSecurityServiceGroupDE0B50A6",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "YCECSVpcPrivateSubnet1Subnet1286F6C0"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet2SubnetB580F791"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet3SubnetA6A7C898"
+       }
+      ]
+     }
+    },
+    "ServiceName": "INTEGRATIONPRVDR-SERVICE",
+    "TaskDefinition": {
+     "Ref": "INTEGRATIONPRVDRTASKDEF74CD0EBE"
+    }
+   },
+   "DependsOn": [
+    "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBYCINTEGRATIONPRVDRSERVICEHTTPLISTENERDE2E150C",
+    "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBYCINTEGRATIONPRVDRSERVICEHTTPSLISTENEREBE8DEFF"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONPRVDR-SERVICE/Service"
+   }
+  },
+  "INTEGRATIONPRVDRSERVICETaskCountTargetB48876EB": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Ref": "YCECSClusterB729975E7ADB9F49"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "INTEGRATIONPRVDRSERVICEService25D6A983",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONPRVDR-SERVICE/TaskCount/Target/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBC85DA605": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Name": "YC-INTEGRATIONPRVDR-SERVICE-LB",
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "YCECSDefaultSecurityServiceGroupDE0B50A6",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Ref": "YCECSVpcPublicSubnet1Subnet4D7EC8A9"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet2Subnet9E19CD83"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet3Subnet6DBE4C3C"
+     }
+    ],
+    "Type": "application"
+   },
+   "DependsOn": [
+    "YCECSVpcPublicSubnet1DefaultRoute2B39E6BE",
+    "YCECSVpcPublicSubnet1RouteTableAssociation996F68D0",
+    "YCECSVpcPublicSubnet2DefaultRoute3DDE6E3E",
+    "YCECSVpcPublicSubnet2RouteTableAssociationABE2D466",
+    "YCECSVpcPublicSubnet3DefaultRouteEF1C052D",
+    "YCECSVpcPublicSubnet3RouteTableAssociation7035A5DD"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONPRVDR-SERVICE/YC-INTEGRATIONPRVDR-SERVICE-ALB/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBYCINTEGRATIONPRVDRSERVICEHTTPLISTENERDE2E150C": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCINTEGRATIONPRVDRSERVICETGB97175C4"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBC85DA605"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONPRVDR-SERVICE/YC-INTEGRATIONPRVDR-SERVICE-ALB/YC-INTEGRATIONPRVDR-SERVICE-HTTPLISTENER/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBYCINTEGRATIONPRVDRSERVICEHTTPSLISTENEREBE8DEFF": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCINTEGRATIONPRVDRSERVICETGB97175C4"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBC85DA605"
+    },
+    "Certificates": [
+     {
+      "CertificateArn": "arn:aws:acm:us-east-1:010073361729:certificate/58b695b0-e6e4-420f-a7e8-712620a3ceda"
+     }
+    ],
+    "Port": 443,
+    "Protocol": "HTTPS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONPRVDR-SERVICE/YC-INTEGRATIONPRVDR-SERVICE-ALB/YC-INTEGRATIONPRVDR-SERVICE-HTTPSLISTENER/Resource"
+   }
+  },
+  "YCINTEGRATIONPRVDRSERVICETGB97175C4": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/",
+    "HealthCheckProtocol": "HTTP",
+    "Matcher": {
+     "HttpCode": "200"
+    },
+    "Port": 8080,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YC-INTEGRATIONPRVDR-SERVICE-TG/Resource"
+   }
+  },
+  "integrationapiyieldchainioALBRECORD05F15322": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "Name": "integrationapi.yieldchain.io.",
+    "Type": "A",
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::Join": [
+       "",
+       [
+        "dualstack.",
+        {
+         "Fn::GetAtt": [
+          "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBC85DA605",
+          "DNSName"
+         ]
+        }
+       ]
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "INTEGRATIONPRVDRSERVICEYCINTEGRATIONPRVDRSERVICEALBC85DA605",
+       "CanonicalHostedZoneID"
+      ]
+     }
+    },
+    "HostedZoneId": "Z01218335OMCUR3F67FA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/integrationapi.yieldchain.io_ALB_RECORD/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDTASKDEFEB23869D": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/integration-frontend:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "INTEGRATIONFRNTDTASKDEFINTEGRATIONFRNTDCONTAINERLogGroup263028FE"
+        },
+        "awslogs-stream-prefix": "INTEGRATIONFRNTD-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "INTEGRATIONFRNTD-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "INTEGRATIONFRNTDTASKDEFExecutionRoleA26FC75A",
+      "Arn"
+     ]
+    },
+    "Family": "INTEGRATIONFRNTD-TASKDEF",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONFRNTD-TASKDEF/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDTASKDEFINTEGRATIONFRNTDCONTAINERLogGroup263028FE": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONFRNTD-TASKDEF/INTEGRATIONFRNTD-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDTASKDEFExecutionRoleA26FC75A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONFRNTD-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDTASKDEFExecutionRoleDefaultPolicyD49FC3CA": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/integration-frontend"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "INTEGRATIONFRNTDTASKDEFINTEGRATIONFRNTDCONTAINERLogGroup263028FE",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "INTEGRATIONFRNTDTASKDEFExecutionRoleDefaultPolicyD49FC3CA",
+    "Roles": [
+     {
+      "Ref": "INTEGRATIONFRNTDTASKDEFExecutionRoleA26FC75A"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONFRNTD-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDSERVICEService78191258": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "YCECSClusterB729975E7ADB9F49"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "INTEGRATIONFRNTD-CONTAINER",
+      "ContainerPort": 8080,
+      "TargetGroupArn": {
+       "Ref": "YCINTEGRATIONFRNTDSERVICETG8087D229"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "YCECSDefaultSecurityServiceGroupDE0B50A6",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "YCECSVpcPrivateSubnet1Subnet1286F6C0"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet2SubnetB580F791"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet3SubnetA6A7C898"
+       }
+      ]
+     }
+    },
+    "ServiceName": "INTEGRATIONFRNTD-SERVICE",
+    "TaskDefinition": {
+     "Ref": "INTEGRATIONFRNTDTASKDEFEB23869D"
+    }
+   },
+   "DependsOn": [
+    "INTEGRATIONFRNTDSERVICEYCINTEGRATIONFRNTDSERVICEALBYCINTEGRATIONFRNTDSERVICEHTTPLISTENER69AFF0ED",
+    "INTEGRATIONFRNTDSERVICEYCINTEGRATIONFRNTDSERVICEALBYCINTEGRATIONFRNTDSERVICEHTTPSLISTENER2FDE1AC5"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONFRNTD-SERVICE/Service"
+   }
+  },
+  "INTEGRATIONFRNTDSERVICETaskCountTarget49BD2360": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Ref": "YCECSClusterB729975E7ADB9F49"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "INTEGRATIONFRNTDSERVICEService78191258",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONFRNTD-SERVICE/TaskCount/Target/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDSERVICEYCINTEGRATIONFRNTDSERVICEALB65A35A4D": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Name": "YC-INTEGRATIONFRNTD-SERVICE-LB",
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "YCECSDefaultSecurityServiceGroupDE0B50A6",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Ref": "YCECSVpcPublicSubnet1Subnet4D7EC8A9"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet2Subnet9E19CD83"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet3Subnet6DBE4C3C"
+     }
+    ],
+    "Type": "application"
+   },
+   "DependsOn": [
+    "YCECSVpcPublicSubnet1DefaultRoute2B39E6BE",
+    "YCECSVpcPublicSubnet1RouteTableAssociation996F68D0",
+    "YCECSVpcPublicSubnet2DefaultRoute3DDE6E3E",
+    "YCECSVpcPublicSubnet2RouteTableAssociationABE2D466",
+    "YCECSVpcPublicSubnet3DefaultRouteEF1C052D",
+    "YCECSVpcPublicSubnet3RouteTableAssociation7035A5DD"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONFRNTD-SERVICE/YC-INTEGRATIONFRNTD-SERVICE-ALB/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDSERVICEYCINTEGRATIONFRNTDSERVICEALBYCINTEGRATIONFRNTDSERVICEHTTPLISTENER69AFF0ED": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCINTEGRATIONFRNTDSERVICETG8087D229"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "INTEGRATIONFRNTDSERVICEYCINTEGRATIONFRNTDSERVICEALB65A35A4D"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONFRNTD-SERVICE/YC-INTEGRATIONFRNTD-SERVICE-ALB/YC-INTEGRATIONFRNTD-SERVICE-HTTPLISTENER/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDSERVICEYCINTEGRATIONFRNTDSERVICEALBYCINTEGRATIONFRNTDSERVICEHTTPSLISTENER2FDE1AC5": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCINTEGRATIONFRNTDSERVICETG8087D229"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "INTEGRATIONFRNTDSERVICEYCINTEGRATIONFRNTDSERVICEALB65A35A4D"
+    },
+    "Certificates": [
+     {
+      "CertificateArn": "arn:aws:acm:us-east-1:010073361729:certificate/74f19982-ce03-4686-9863-e8f90feb4bb5"
+     }
+    ],
+    "Port": 443,
+    "Protocol": "HTTPS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/INTEGRATIONFRNTD-SERVICE/YC-INTEGRATIONFRNTD-SERVICE-ALB/YC-INTEGRATIONFRNTD-SERVICE-HTTPSLISTENER/Resource"
+   }
+  },
+  "YCINTEGRATIONFRNTDSERVICETG8087D229": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/",
+    "HealthCheckProtocol": "HTTP",
+    "Matcher": {
+     "HttpCode": "200"
+    },
+    "Port": 8080,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YC-INTEGRATIONFRNTD-SERVICE-TG/Resource"
+   }
+  },
+  "admindashboardyieldchainioALBRECORDACCAB3E2": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "Name": "admindashboard.yieldchain.io.",
+    "Type": "A",
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::Join": [
+       "",
+       [
+        "dualstack.",
+        {
+         "Fn::GetAtt": [
+          "INTEGRATIONFRNTDSERVICEYCINTEGRATIONFRNTDSERVICEALB65A35A4D",
+          "DNSName"
+         ]
+        }
+       ]
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "INTEGRATIONFRNTDSERVICEYCINTEGRATIONFRNTDSERVICEALB65A35A4D",
+       "CanonicalHostedZoneID"
+      ]
+     }
+    },
+    "HostedZoneId": "Z01218335OMCUR3F67FA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/admindashboard.yieldchain.io_ALB_RECORD/Resource"
+   }
+  },
+  "ONCHAINLISTENERTASKDEF1C2AB560": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "AWS_ACCESS_KEY_ID",
+        "Value": "AKIAQEWDLJVAXDEJCPWO"
+       },
+       {
+        "Name": "AWS_SECRET_ACCESS_KEY",
+        "Value": "wloVZzJSd2R6hYqxFWMFUaPLxrhRbZU0CYT5JIDy"
+       },
+       {
+        "Name": "DATABASE_URL",
+        "Value": "postgres://OfirYC:B.%3F3f%2Apbf%3D2Df%21i@postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com:5432/postgres"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/onchain-listener:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "ONCHAINLISTENERTASKDEFONCHAINLISTENERCONTAINERLogGroupF39E6068"
+        },
+        "awslogs-stream-prefix": "ONCHAINLISTENER-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "ONCHAINLISTENER-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "HostPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "ONCHAINLISTENERTASKDEFExecutionRole8454DAF8",
+      "Arn"
+     ]
+    },
+    "Family": "ONCHAINLISTENER-TASKDEF",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/ONCHAINLISTENER-TASKDEF/Resource"
+   }
+  },
+  "ONCHAINLISTENERTASKDEFONCHAINLISTENERCONTAINERLogGroupF39E6068": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/ONCHAINLISTENER-TASKDEF/ONCHAINLISTENER-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "ONCHAINLISTENERTASKDEFExecutionRole8454DAF8": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/ONCHAINLISTENER-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "ONCHAINLISTENERTASKDEFExecutionRoleDefaultPolicy9DD8F4A2": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/onchain-listener"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "ONCHAINLISTENERTASKDEFONCHAINLISTENERCONTAINERLogGroupF39E6068",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ONCHAINLISTENERTASKDEFExecutionRoleDefaultPolicy9DD8F4A2",
+    "Roles": [
+     {
+      "Ref": "ONCHAINLISTENERTASKDEFExecutionRole8454DAF8"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/ONCHAINLISTENER-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "ONCHAINLISTENERWORKERServiceD6F618DE": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "YCECSClusterB729975E7ADB9F49"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "LaunchType": "FARGATE",
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "YCECSDefaultSecurityServiceGroupDE0B50A6",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "YCECSVpcPrivateSubnet1Subnet1286F6C0"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet2SubnetB580F791"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet3SubnetA6A7C898"
+       }
+      ]
+     }
+    },
+    "ServiceName": "ONCHAINLISTENER-WORKER",
+    "TaskDefinition": {
+     "Ref": "ONCHAINLISTENERTASKDEF1C2AB560"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/ONCHAINLISTENER-WORKER/Service"
+   }
+  },
+  "ONCHAINLISTENERWORKERTaskCountTarget377C102B": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Ref": "YCECSClusterB729975E7ADB9F49"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "ONCHAINLISTENERWORKERServiceD6F618DE",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/ONCHAINLISTENER-WORKER/TaskCount/Target/Resource"
+   }
+  },
+  "FRONTENDTASKDEFC1028475": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/frontend:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "FRONTENDTASKDEFFRONTENDCONTAINERLogGroup63D43CE2"
+        },
+        "awslogs-stream-prefix": "FRONTEND-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "FRONTEND-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "FRONTENDTASKDEFExecutionRole8B3101A0",
+      "Arn"
+     ]
+    },
+    "Family": "FRONTEND-TASKDEF",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/FRONTEND-TASKDEF/Resource"
+   }
+  },
+  "FRONTENDTASKDEFFRONTENDCONTAINERLogGroup63D43CE2": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/FRONTEND-TASKDEF/FRONTEND-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "FRONTENDTASKDEFExecutionRole8B3101A0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/FRONTEND-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "FRONTENDTASKDEFExecutionRoleDefaultPolicyE680D896": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/frontend"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "FRONTENDTASKDEFFRONTENDCONTAINERLogGroup63D43CE2",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "FRONTENDTASKDEFExecutionRoleDefaultPolicyE680D896",
+    "Roles": [
+     {
+      "Ref": "FRONTENDTASKDEFExecutionRole8B3101A0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/FRONTEND-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "FRONTENDSERVICEService25A835C6": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "YCECSClusterB729975E7ADB9F49"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "FRONTEND-CONTAINER",
+      "ContainerPort": 8080,
+      "TargetGroupArn": {
+       "Ref": "YCFRONTENDSERVICETGDBC1B18D"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "YCECSDefaultSecurityServiceGroupDE0B50A6",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "YCECSVpcPrivateSubnet1Subnet1286F6C0"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet2SubnetB580F791"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet3SubnetA6A7C898"
+       }
+      ]
+     }
+    },
+    "ServiceName": "FRONTEND-SERVICE",
+    "TaskDefinition": {
+     "Ref": "FRONTENDTASKDEFC1028475"
+    }
+   },
+   "DependsOn": [
+    "FRONTENDSERVICEYCFRONTENDSERVICEALBYCFRONTENDSERVICEHTTPLISTENER0E432521",
+    "FRONTENDSERVICEYCFRONTENDSERVICEALBYCFRONTENDSERVICEHTTPSLISTENER631849AB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/FRONTEND-SERVICE/Service"
+   }
+  },
+  "FRONTENDSERVICETaskCountTargetF847DF51": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Ref": "YCECSClusterB729975E7ADB9F49"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "FRONTENDSERVICEService25A835C6",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/FRONTEND-SERVICE/TaskCount/Target/Resource"
+   }
+  },
+  "FRONTENDSERVICEYCFRONTENDSERVICEALB02B07ED6": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Name": "YC-FRONTEND-SERVICE-LB",
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "YCECSDefaultSecurityServiceGroupDE0B50A6",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Ref": "YCECSVpcPublicSubnet1Subnet4D7EC8A9"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet2Subnet9E19CD83"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet3Subnet6DBE4C3C"
+     }
+    ],
+    "Type": "application"
+   },
+   "DependsOn": [
+    "YCECSVpcPublicSubnet1DefaultRoute2B39E6BE",
+    "YCECSVpcPublicSubnet1RouteTableAssociation996F68D0",
+    "YCECSVpcPublicSubnet2DefaultRoute3DDE6E3E",
+    "YCECSVpcPublicSubnet2RouteTableAssociationABE2D466",
+    "YCECSVpcPublicSubnet3DefaultRouteEF1C052D",
+    "YCECSVpcPublicSubnet3RouteTableAssociation7035A5DD"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/FRONTEND-SERVICE/YC-FRONTEND-SERVICE-ALB/Resource"
+   }
+  },
+  "FRONTENDSERVICEYCFRONTENDSERVICEALBYCFRONTENDSERVICEHTTPLISTENER0E432521": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCFRONTENDSERVICETGDBC1B18D"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "FRONTENDSERVICEYCFRONTENDSERVICEALB02B07ED6"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/FRONTEND-SERVICE/YC-FRONTEND-SERVICE-ALB/YC-FRONTEND-SERVICE-HTTPLISTENER/Resource"
+   }
+  },
+  "FRONTENDSERVICEYCFRONTENDSERVICEALBYCFRONTENDSERVICEHTTPSLISTENER631849AB": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCFRONTENDSERVICETGDBC1B18D"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "FRONTENDSERVICEYCFRONTENDSERVICEALB02B07ED6"
+    },
+    "Certificates": [
+     {
+      "CertificateArn": "arn:aws:acm:us-east-1:010073361729:certificate/e7cffaaa-f570-4ac2-be09-7a425b6137b4"
+     }
+    ],
+    "Port": 443,
+    "Protocol": "HTTPS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/FRONTEND-SERVICE/YC-FRONTEND-SERVICE-ALB/YC-FRONTEND-SERVICE-HTTPSLISTENER/Resource"
+   }
+  },
+  "YCFRONTENDSERVICETGDBC1B18D": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/",
+    "HealthCheckProtocol": "HTTP",
+    "Matcher": {
+     "HttpCode": "200"
+    },
+    "Port": 8080,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YC-FRONTEND-SERVICE-TG/Resource"
+   }
+  },
+  "yieldchainioALBRECORD0591FF03": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "Name": "yieldchain.io.",
+    "Type": "A",
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::Join": [
+       "",
+       [
+        "dualstack.",
+        {
+         "Fn::GetAtt": [
+          "FRONTENDSERVICEYCFRONTENDSERVICEALB02B07ED6",
+          "DNSName"
+         ]
+        }
+       ]
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "FRONTENDSERVICEYCFRONTENDSERVICEALB02B07ED6",
+       "CanonicalHostedZoneID"
+      ]
+     }
+    },
+    "HostedZoneId": "Z01218335OMCUR3F67FA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/yieldchain.io_ALB_RECORD/Resource"
+   }
+  },
+  "SQSORCHESTRATORTASKDEFA805500D": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "AWS_ACCESS_KEY_ID",
+        "Value": "AKIAQEWDLJVAXDEJCPWO"
+       },
+       {
+        "Name": "AWS_SECRET_ACCESS_KEY",
+        "Value": "wloVZzJSd2R6hYqxFWMFUaPLxrhRbZU0CYT5JIDy"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/sqs-orchestrator:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "SQSORCHESTRATORTASKDEFSQSORCHESTRATORCONTAINERLogGroupBCD679AD"
+        },
+        "awslogs-stream-prefix": "SQSORCHESTRATOR-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "SQSORCHESTRATOR-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "HostPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "SQSORCHESTRATORTASKDEFExecutionRoleB43E20C9",
+      "Arn"
+     ]
+    },
+    "Family": "SQSORCHESTRATOR-TASKDEF",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/SQSORCHESTRATOR-TASKDEF/Resource"
+   }
+  },
+  "SQSORCHESTRATORTASKDEFSQSORCHESTRATORCONTAINERLogGroupBCD679AD": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/SQSORCHESTRATOR-TASKDEF/SQSORCHESTRATOR-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "SQSORCHESTRATORTASKDEFExecutionRoleB43E20C9": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/SQSORCHESTRATOR-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "SQSORCHESTRATORTASKDEFExecutionRoleDefaultPolicy434B3FBB": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/sqs-orchestrator"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "SQSORCHESTRATORTASKDEFSQSORCHESTRATORCONTAINERLogGroupBCD679AD",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "SQSORCHESTRATORTASKDEFExecutionRoleDefaultPolicy434B3FBB",
+    "Roles": [
+     {
+      "Ref": "SQSORCHESTRATORTASKDEFExecutionRoleB43E20C9"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/SQSORCHESTRATOR-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "SQSORCHESTRATORWORKERService71BF5E3E": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "YCECSClusterB729975E7ADB9F49"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "LaunchType": "FARGATE",
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "YCECSDefaultSecurityServiceGroupDE0B50A6",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "YCECSVpcPrivateSubnet1Subnet1286F6C0"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet2SubnetB580F791"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet3SubnetA6A7C898"
+       }
+      ]
+     }
+    },
+    "ServiceName": "SQSORCHESTRATOR-WORKER",
+    "TaskDefinition": {
+     "Ref": "SQSORCHESTRATORTASKDEFA805500D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/SQSORCHESTRATOR-WORKER/Service"
+   }
+  },
+  "SQSORCHESTRATORWORKERTaskCountTargetDA4483D9": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Ref": "YCECSClusterB729975E7ADB9F49"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "SQSORCHESTRATORWORKERService71BF5E3E",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/SQSORCHESTRATOR-WORKER/TaskCount/Target/Resource"
+   }
+  },
+  "OFFCHAINACTIONSTASKDEF2FBCCD06": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "AWS_ACCESS_KEY_ID",
+        "Value": "AKIAQEWDLJVAXDEJCPWO"
+       },
+       {
+        "Name": "AWS_SECRET_ACCESS_KEY",
+        "Value": "wloVZzJSd2R6hYqxFWMFUaPLxrhRbZU0CYT5JIDy"
+       },
+       {
+        "Name": "PRIVATE_KEY",
+        "Value": "e39edcc4392e57bf99671ee281cfbd55d626bfea94fde0dfa577e449fe91d153"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/offchain-actions:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "OFFCHAINACTIONSTASKDEFOFFCHAINACTIONSCONTAINERLogGroup689806D5"
+        },
+        "awslogs-stream-prefix": "OFFCHAINACTIONS-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "OFFCHAINACTIONS-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "HostPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "OFFCHAINACTIONSTASKDEFExecutionRoleB1393F24",
+      "Arn"
+     ]
+    },
+    "Family": "OFFCHAINACTIONS-TASKDEF",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-TASKDEF/Resource"
+   }
+  },
+  "OFFCHAINACTIONSTASKDEFOFFCHAINACTIONSCONTAINERLogGroup689806D5": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-TASKDEF/OFFCHAINACTIONS-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "OFFCHAINACTIONSTASKDEFExecutionRoleB1393F24": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "OFFCHAINACTIONSTASKDEFExecutionRoleDefaultPolicy4F89C4C2": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/offchain-actions"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "OFFCHAINACTIONSTASKDEFOFFCHAINACTIONSCONTAINERLogGroup689806D5",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "OFFCHAINACTIONSTASKDEFExecutionRoleDefaultPolicy4F89C4C2",
+    "Roles": [
+     {
+      "Ref": "OFFCHAINACTIONSTASKDEFExecutionRoleB1393F24"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "OFFCHAINACTIONSWORKERServiceB0B85BB2": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "YCECSClusterB729975E7ADB9F49"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "LaunchType": "FARGATE",
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "YCECSDefaultSecurityServiceGroupDE0B50A6",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "YCECSVpcPrivateSubnet1Subnet1286F6C0"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet2SubnetB580F791"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet3SubnetA6A7C898"
+       }
+      ]
+     }
+    },
+    "ServiceName": "OFFCHAINACTIONS-WORKER",
+    "TaskDefinition": {
+     "Ref": "OFFCHAINACTIONSTASKDEF2FBCCD06"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-WORKER/Service"
+   }
+  },
+  "OFFCHAINACTIONSWORKERTaskCountTarget5F784DA6": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Ref": "YCECSClusterB729975E7ADB9F49"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "OFFCHAINACTIONSWORKERServiceB0B85BB2",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-WORKER/TaskCount/Target/Resource"
+   }
+  },
+  "STRATEGYBUILDERTASKDEF5E8FB4F5": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "DATABASE_URL",
+        "Value": "postgres://OfirYC:B.%3F3f%2Apbf%3D2Df%21i@postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com:5432/postgres"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/strategy-builder:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "STRATEGYBUILDERTASKDEFSTRATEGYBUILDERCONTAINERLogGroup036009BB"
+        },
+        "awslogs-stream-prefix": "STRATEGYBUILDER-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "STRATEGYBUILDER-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "STRATEGYBUILDERTASKDEFExecutionRole6EB81DD4",
+      "Arn"
+     ]
+    },
+    "Family": "STRATEGYBUILDER-TASKDEF",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/STRATEGYBUILDER-TASKDEF/Resource"
+   }
+  },
+  "STRATEGYBUILDERTASKDEFSTRATEGYBUILDERCONTAINERLogGroup036009BB": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/STRATEGYBUILDER-TASKDEF/STRATEGYBUILDER-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "STRATEGYBUILDERTASKDEFExecutionRole6EB81DD4": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/STRATEGYBUILDER-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "STRATEGYBUILDERTASKDEFExecutionRoleDefaultPolicyEB5238B8": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/strategy-builder"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "STRATEGYBUILDERTASKDEFSTRATEGYBUILDERCONTAINERLogGroup036009BB",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "STRATEGYBUILDERTASKDEFExecutionRoleDefaultPolicyEB5238B8",
+    "Roles": [
+     {
+      "Ref": "STRATEGYBUILDERTASKDEFExecutionRole6EB81DD4"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/STRATEGYBUILDER-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "STRATEGYBUILDERSERVICEService875DAC09": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "YCECSClusterB729975E7ADB9F49"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": true,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "STRATEGYBUILDER-CONTAINER",
+      "ContainerPort": 8080,
+      "TargetGroupArn": {
+       "Ref": "YCSTRATEGYBUILDERSERVICETGACE341CD"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "YCECSDefaultSecurityServiceGroupDE0B50A6",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "YCECSVpcPrivateSubnet1Subnet1286F6C0"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet2SubnetB580F791"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet3SubnetA6A7C898"
+       }
+      ]
+     }
+    },
+    "ServiceName": "STRATEGYBUILDER-SERVICE",
+    "TaskDefinition": {
+     "Ref": "STRATEGYBUILDERTASKDEF5E8FB4F5"
+    }
+   },
+   "DependsOn": [
+    "STRATEGYBUILDERSERVICEYCSTRATEGYBUILDERSERVICEALBYCSTRATEGYBUILDERSERVICEHTTPLISTENER361245DF",
+    "STRATEGYBUILDERSERVICEYCSTRATEGYBUILDERSERVICEALBYCSTRATEGYBUILDERSERVICEHTTPSLISTENER865208FE"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/STRATEGYBUILDER-SERVICE/Service"
+   }
+  },
+  "STRATEGYBUILDERSERVICETaskCountTarget00846B1F": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 6,
+    "MinCapacity": 2,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Ref": "YCECSClusterB729975E7ADB9F49"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "STRATEGYBUILDERSERVICEService875DAC09",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/STRATEGYBUILDER-SERVICE/TaskCount/Target/Resource"
+   }
+  },
+  "STRATEGYBUILDERSERVICEYCSTRATEGYBUILDERSERVICEALB5C26067B": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Name": "YC-STRATEGYBUILDER-SERVICE-LB",
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "YCECSDefaultSecurityServiceGroupDE0B50A6",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Ref": "YCECSVpcPublicSubnet1Subnet4D7EC8A9"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet2Subnet9E19CD83"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet3Subnet6DBE4C3C"
+     }
+    ],
+    "Type": "application"
+   },
+   "DependsOn": [
+    "YCECSVpcPublicSubnet1DefaultRoute2B39E6BE",
+    "YCECSVpcPublicSubnet1RouteTableAssociation996F68D0",
+    "YCECSVpcPublicSubnet2DefaultRoute3DDE6E3E",
+    "YCECSVpcPublicSubnet2RouteTableAssociationABE2D466",
+    "YCECSVpcPublicSubnet3DefaultRouteEF1C052D",
+    "YCECSVpcPublicSubnet3RouteTableAssociation7035A5DD"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/STRATEGYBUILDER-SERVICE/YC-STRATEGYBUILDER-SERVICE-ALB/Resource"
+   }
+  },
+  "STRATEGYBUILDERSERVICEYCSTRATEGYBUILDERSERVICEALBYCSTRATEGYBUILDERSERVICEHTTPLISTENER361245DF": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCSTRATEGYBUILDERSERVICETGACE341CD"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "STRATEGYBUILDERSERVICEYCSTRATEGYBUILDERSERVICEALB5C26067B"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/STRATEGYBUILDER-SERVICE/YC-STRATEGYBUILDER-SERVICE-ALB/YC-STRATEGYBUILDER-SERVICE-HTTPLISTENER/Resource"
+   }
+  },
+  "STRATEGYBUILDERSERVICEYCSTRATEGYBUILDERSERVICEALBYCSTRATEGYBUILDERSERVICEHTTPSLISTENER865208FE": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCSTRATEGYBUILDERSERVICETGACE341CD"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "STRATEGYBUILDERSERVICEYCSTRATEGYBUILDERSERVICEALB5C26067B"
+    },
+    "Certificates": [
+     {
+      "CertificateArn": "arn:aws:acm:us-east-1:010073361729:certificate/cee1a590-35a4-4971-9224-e4175e722802"
+     }
+    ],
+    "Port": 443,
+    "Protocol": "HTTPS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/STRATEGYBUILDER-SERVICE/YC-STRATEGYBUILDER-SERVICE-ALB/YC-STRATEGYBUILDER-SERVICE-HTTPSLISTENER/Resource"
+   }
+  },
+  "YCSTRATEGYBUILDERSERVICETGACE341CD": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/",
+    "HealthCheckProtocol": "HTTP",
+    "Matcher": {
+     "HttpCode": "200"
+    },
+    "Port": 8080,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YC-STRATEGYBUILDER-SERVICE-TG/Resource"
+   }
+  },
+  "builderyieldchainioALBRECORD125204D8": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "Name": "builder.yieldchain.io.",
+    "Type": "A",
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::Join": [
+       "",
+       [
+        "dualstack.",
+        {
+         "Fn::GetAtt": [
+          "STRATEGYBUILDERSERVICEYCSTRATEGYBUILDERSERVICEALB5C26067B",
+          "DNSName"
+         ]
+        }
+       ]
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "STRATEGYBUILDERSERVICEYCSTRATEGYBUILDERSERVICEALB5C26067B",
+       "CanonicalHostedZoneID"
+      ]
+     }
+    },
+    "HostedZoneId": "Z01218335OMCUR3F67FA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/builder.yieldchain.io_ALB_RECORD/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31Sy27jMAz8lr0rKtpFg+0xTR8IECwMe9HrglYYLxtHNPRIERj+96X8iNMeetJoSJGjIe/0cqlvf8CHX5jdYVFTqdsigDkoof62aO50+9YYtd7bt2ytsljWZIpYWgyJm1HOMeAfKGuc+Zlbec+GIBDbS3ICz5ssHb8hvELADzirzNFJ4Fx4YwM6wVPCoGS8rYJo/XdEG1SBJjoK51fHsek1fEtsbOXQ+06h8bpd19FLm5Q1wRdwFST5/vCEe7I0if/KsA1AFt0VN74t0J3IDIaMsDBQJ0NSkTVHG5IAp3Ns2FNgd34Ej6rmSkRtubpon3CnCI66zXnwuT8zlpn0xgyoU9A0Anq7IQb20pRsJZO9dHfVOMBPjIipwQcyNcOulIg18u4kO7CaK24l9tjHBsM+3a/zSHy0Y86Er+JDy8sPr66dcmlB7n9K3xwNu13/1x4VorJTOXqObrB2wp2yvEP97m9Otw/6l2z1uydaODGZjqjz4fwPKUjufPECAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,1269 @@
+{
+ "Resources": {
+  "DATAPRVDRTASKDEF02CC6223": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_PORT",
+        "Value": "5432"
+       },
+       {
+        "Name": "POSTGRES_PW",
+        "Value": "B.?3f*pbf=2Df!i"
+       },
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": "postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/data-provider:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "DATAPRVDRTASKDEFDATAPRVDRCONTAINERLogGroupEAC2C55B"
+        },
+        "awslogs-stream-prefix": "DATAPRVDR-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "DATAPRVDR-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "DATAPRVDRTASKDEFExecutionRole13A261AF",
+      "Arn"
+     ]
+    },
+    "Family": "YieldchainClusterYCClusterDATAPRVDRTASKDEF84F0E345",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/DATAPRVDR-TASKDEF/Resource"
+   }
+  },
+  "DATAPRVDRTASKDEFDATAPRVDRCONTAINERLogGroupEAC2C55B": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/DATAPRVDR-TASKDEF/DATAPRVDR-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "DATAPRVDRTASKDEFExecutionRole13A261AF": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/DATAPRVDR-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "DATAPRVDRTASKDEFExecutionRoleDefaultPolicy75C9ED2A": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/data-provider"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "DATAPRVDRTASKDEFDATAPRVDRCONTAINERLogGroupEAC2C55B",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "DATAPRVDRTASKDEFExecutionRoleDefaultPolicy75C9ED2A",
+    "Roles": [
+     {
+      "Ref": "DATAPRVDRTASKDEFExecutionRole13A261AF"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/DATAPRVDR-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRTASKDEF74CD0EBE": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_PORT",
+        "Value": "5432"
+       },
+       {
+        "Name": "POSTGRES_PW",
+        "Value": "B.?3f*pbf=2Df!i"
+       },
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": "postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/integration-provider:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "INTEGRATIONPRVDRTASKDEFINTEGRATIONPRVDRCONTAINERLogGroupDEF46B02"
+        },
+        "awslogs-stream-prefix": "INTEGRATIONPRVDR-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "INTEGRATIONPRVDR-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "INTEGRATIONPRVDRTASKDEFExecutionRoleF31E927A",
+      "Arn"
+     ]
+    },
+    "Family": "YieldchainClusterYCClusterINTEGRATIONPRVDRTASKDEF1AAED302",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/INTEGRATIONPRVDR-TASKDEF/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRTASKDEFINTEGRATIONPRVDRCONTAINERLogGroupDEF46B02": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/INTEGRATIONPRVDR-TASKDEF/INTEGRATIONPRVDR-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRTASKDEFExecutionRoleF31E927A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/INTEGRATIONPRVDR-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "INTEGRATIONPRVDRTASKDEFExecutionRoleDefaultPolicyB1FAA57B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/integration-provider"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "INTEGRATIONPRVDRTASKDEFINTEGRATIONPRVDRCONTAINERLogGroupDEF46B02",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "INTEGRATIONPRVDRTASKDEFExecutionRoleDefaultPolicyB1FAA57B",
+    "Roles": [
+     {
+      "Ref": "INTEGRATIONPRVDRTASKDEFExecutionRoleF31E927A"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/INTEGRATIONPRVDR-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDTASKDEFEB23869D": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/integration-frontend:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "INTEGRATIONFRNTDTASKDEFINTEGRATIONFRNTDCONTAINERLogGroup263028FE"
+        },
+        "awslogs-stream-prefix": "INTEGRATIONFRNTD-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "INTEGRATIONFRNTD-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "INTEGRATIONFRNTDTASKDEFExecutionRoleA26FC75A",
+      "Arn"
+     ]
+    },
+    "Family": "YieldchainClusterYCClusterINTEGRATIONFRNTDTASKDEFEFF20401",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/INTEGRATIONFRNTD-TASKDEF/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDTASKDEFINTEGRATIONFRNTDCONTAINERLogGroup263028FE": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/INTEGRATIONFRNTD-TASKDEF/INTEGRATIONFRNTD-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDTASKDEFExecutionRoleA26FC75A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/INTEGRATIONFRNTD-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "INTEGRATIONFRNTDTASKDEFExecutionRoleDefaultPolicyD49FC3CA": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/integration-frontend"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "INTEGRATIONFRNTDTASKDEFINTEGRATIONFRNTDCONTAINERLogGroup263028FE",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "INTEGRATIONFRNTDTASKDEFExecutionRoleDefaultPolicyD49FC3CA",
+    "Roles": [
+     {
+      "Ref": "INTEGRATIONFRNTDTASKDEFExecutionRoleA26FC75A"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/INTEGRATIONFRNTD-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "ONCHAINLISTENERTASKDEF1C2AB560": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "AWS_ACCESS_KEY_ID",
+        "Value": "AKIAQEWDLJVAXDEJCPWO"
+       },
+       {
+        "Name": "AWS_SECRET_ACCESS_KEY",
+        "Value": "wloVZzJSd2R6hYqxFWMFUaPLxrhRbZU0CYT5JIDy"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/onchain-listener:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "ONCHAINLISTENERTASKDEFONCHAINLISTENERCONTAINERLogGroupF39E6068"
+        },
+        "awslogs-stream-prefix": "ONCHAINLISTENER-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "ONCHAINLISTENER-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "HostPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "ONCHAINLISTENERTASKDEFExecutionRole8454DAF8",
+      "Arn"
+     ]
+    },
+    "Family": "YieldchainClusterYCClusterONCHAINLISTENERTASKDEF22B22625",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/ONCHAINLISTENER-TASKDEF/Resource"
+   }
+  },
+  "ONCHAINLISTENERTASKDEFONCHAINLISTENERCONTAINERLogGroupF39E6068": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/ONCHAINLISTENER-TASKDEF/ONCHAINLISTENER-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "ONCHAINLISTENERTASKDEFExecutionRole8454DAF8": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/ONCHAINLISTENER-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "ONCHAINLISTENERTASKDEFExecutionRoleDefaultPolicy9DD8F4A2": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/onchain-listener"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "ONCHAINLISTENERTASKDEFONCHAINLISTENERCONTAINERLogGroupF39E6068",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ONCHAINLISTENERTASKDEFExecutionRoleDefaultPolicy9DD8F4A2",
+    "Roles": [
+     {
+      "Ref": "ONCHAINLISTENERTASKDEFExecutionRole8454DAF8"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/ONCHAINLISTENER-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "FRONTENDTASKDEFC1028475": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/frontend:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "FRONTENDTASKDEFFRONTENDCONTAINERLogGroup63D43CE2"
+        },
+        "awslogs-stream-prefix": "FRONTEND-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "FRONTEND-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "FRONTENDTASKDEFExecutionRole8B3101A0",
+      "Arn"
+     ]
+    },
+    "Family": "YieldchainClusterYCClusterFRONTENDTASKDEF457FAF65",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/FRONTEND-TASKDEF/Resource"
+   }
+  },
+  "FRONTENDTASKDEFFRONTENDCONTAINERLogGroup63D43CE2": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/FRONTEND-TASKDEF/FRONTEND-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "FRONTENDTASKDEFExecutionRole8B3101A0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/FRONTEND-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "FRONTENDTASKDEFExecutionRoleDefaultPolicyE680D896": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/frontend"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "FRONTENDTASKDEFFRONTENDCONTAINERLogGroup63D43CE2",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "FRONTENDTASKDEFExecutionRoleDefaultPolicyE680D896",
+    "Roles": [
+     {
+      "Ref": "FRONTENDTASKDEFExecutionRole8B3101A0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/FRONTEND-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "SQSORCHESTRATORTASKDEFA805500D": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "AWS_ACCESS_KEY_ID",
+        "Value": "AKIAQEWDLJVAXDEJCPWO"
+       },
+       {
+        "Name": "AWS_SECRET_ACCESS_KEY",
+        "Value": "wloVZzJSd2R6hYqxFWMFUaPLxrhRbZU0CYT5JIDy"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/sqs-orchestrator:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "SQSORCHESTRATORTASKDEFSQSORCHESTRATORCONTAINERLogGroupBCD679AD"
+        },
+        "awslogs-stream-prefix": "SQSORCHESTRATOR-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "SQSORCHESTRATOR-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "HostPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "SQSORCHESTRATORTASKDEFExecutionRoleB43E20C9",
+      "Arn"
+     ]
+    },
+    "Family": "YieldchainClusterYCClusterSQSORCHESTRATORTASKDEFA904F298",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/SQSORCHESTRATOR-TASKDEF/Resource"
+   }
+  },
+  "SQSORCHESTRATORTASKDEFSQSORCHESTRATORCONTAINERLogGroupBCD679AD": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/SQSORCHESTRATOR-TASKDEF/SQSORCHESTRATOR-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "SQSORCHESTRATORTASKDEFExecutionRoleB43E20C9": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/SQSORCHESTRATOR-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "SQSORCHESTRATORTASKDEFExecutionRoleDefaultPolicy434B3FBB": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/sqs-orchestrator"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "SQSORCHESTRATORTASKDEFSQSORCHESTRATORCONTAINERLogGroupBCD679AD",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "SQSORCHESTRATORTASKDEFExecutionRoleDefaultPolicy434B3FBB",
+    "Roles": [
+     {
+      "Ref": "SQSORCHESTRATORTASKDEFExecutionRoleB43E20C9"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/SQSORCHESTRATOR-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "OFFCHAINACTIONSTASKDEF2FBCCD06": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "AWS_ACCESS_KEY_ID",
+        "Value": "AKIAQEWDLJVAXDEJCPWO"
+       },
+       {
+        "Name": "AWS_SECRET_ACCESS_KEY",
+        "Value": "wloVZzJSd2R6hYqxFWMFUaPLxrhRbZU0CYT5JIDy"
+       },
+       {
+        "Name": "PRIVATE_KEY",
+        "Value": "e39edcc4392e57bf99671ee281cfbd55d626bfea94fde0dfa577e449fe91d153"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/offchain-actions:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "OFFCHAINACTIONSTASKDEFOFFCHAINACTIONSCONTAINERLogGroup689806D5"
+        },
+        "awslogs-stream-prefix": "OFFCHAINACTIONS-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "OFFCHAINACTIONS-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "HostPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "OFFCHAINACTIONSTASKDEFExecutionRoleB1393F24",
+      "Arn"
+     ]
+    },
+    "Family": "YieldchainClusterYCClusterOFFCHAINACTIONSTASKDEFA2FB3972",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/OFFCHAINACTIONS-TASKDEF/Resource"
+   }
+  },
+  "OFFCHAINACTIONSTASKDEFOFFCHAINACTIONSCONTAINERLogGroup689806D5": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/OFFCHAINACTIONS-TASKDEF/OFFCHAINACTIONS-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "OFFCHAINACTIONSTASKDEFExecutionRoleB1393F24": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/OFFCHAINACTIONS-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "OFFCHAINACTIONSTASKDEFExecutionRoleDefaultPolicy4F89C4C2": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/offchain-actions"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "OFFCHAINACTIONSTASKDEFOFFCHAINACTIONSCONTAINERLogGroup689806D5",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "OFFCHAINACTIONSTASKDEFExecutionRoleDefaultPolicy4F89C4C2",
+    "Roles": [
+     {
+      "Ref": "OFFCHAINACTIONSTASKDEFExecutionRoleB1393F24"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/OFFCHAINACTIONS-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "STRATEGYBUILDERTASKDEF5E8FB4F5": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_PORT",
+        "Value": "5432"
+       },
+       {
+        "Name": "POSTGRES_PW",
+        "Value": "B.?3f*pbf=2Df!i"
+       },
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": "postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com"
+       },
+       {
+        "Name": "PRIVATE_KEY",
+        "Value": "e39edcc4392e57bf99671ee281cfbd55d626bfea94fde0dfa577e449fe91d153"
+       },
+       {
+        "Name": "ARBISCAN_API_KEY",
+        "Value": ""
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/strategy-builder:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "STRATEGYBUILDERTASKDEFSTRATEGYBUILDERCONTAINERLogGroup036009BB"
+        },
+        "awslogs-stream-prefix": "STRATEGYBUILDER-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "STRATEGYBUILDER-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "HostPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "STRATEGYBUILDERTASKDEFExecutionRole6EB81DD4",
+      "Arn"
+     ]
+    },
+    "Family": "YieldchainClusterYCClusterSTRATEGYBUILDERTASKDEFCD68B14B",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/STRATEGYBUILDER-TASKDEF/Resource"
+   }
+  },
+  "STRATEGYBUILDERTASKDEFSTRATEGYBUILDERCONTAINERLogGroup036009BB": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/STRATEGYBUILDER-TASKDEF/STRATEGYBUILDER-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "STRATEGYBUILDERTASKDEFExecutionRole6EB81DD4": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/STRATEGYBUILDER-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "STRATEGYBUILDERTASKDEFExecutionRoleDefaultPolicyEB5238B8": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/strategy-builder"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "STRATEGYBUILDERTASKDEFSTRATEGYBUILDERCONTAINERLogGroup036009BB",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "STRATEGYBUILDERTASKDEFExecutionRoleDefaultPolicyEB5238B8",
+    "Roles": [
+     {
+      "Ref": "STRATEGYBUILDERTASKDEFExecutionRole6EB81DD4"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/STRATEGYBUILDER-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12PvQ7CMAyEn4U9NSpDBSsgWBhQYEchdSvTNK6SFFRVeXf6A0JiuvN3snVeQZZBulAvn+i8Sgzdob8EpSsh0XPrNIohu/WoHUhs2FNg122VR4HaQ39QrlQBr8pXeyzIUiC2YlfYf8I2KLLofiwKw+Vw4sTl0XHbjFtfHwWpGnrJBkc86ZkN6W4cZxfjFH1qRmE5R3j45TPdwHr46eGJEtfaQDWCnPUNxyDa6e8AAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "Yieldchain-Cluster/YCCluster/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ExportsOutputRefDATAPRVDRTASKDEF02CC62230039EAB5": {
+   "Value": {
+    "Ref": "DATAPRVDRTASKDEF02CC6223"
+   },
+   "Export": {
+    "Name": "YieldchainClusterYCClusterBA26B2BC:ExportsOutputRefDATAPRVDRTASKDEF02CC62230039EAB5"
+   }
+  },
+  "ExportsOutputRefINTEGRATIONPRVDRTASKDEF74CD0EBED817EAD0": {
+   "Value": {
+    "Ref": "INTEGRATIONPRVDRTASKDEF74CD0EBE"
+   },
+   "Export": {
+    "Name": "YieldchainClusterYCClusterBA26B2BC:ExportsOutputRefINTEGRATIONPRVDRTASKDEF74CD0EBED817EAD0"
+   }
+  },
+  "ExportsOutputRefINTEGRATIONFRNTDTASKDEFEB23869D645D9FC4": {
+   "Value": {
+    "Ref": "INTEGRATIONFRNTDTASKDEFEB23869D"
+   },
+   "Export": {
+    "Name": "YieldchainClusterYCClusterBA26B2BC:ExportsOutputRefINTEGRATIONFRNTDTASKDEFEB23869D645D9FC4"
+   }
+  },
+  "ExportsOutputRefONCHAINLISTENERTASKDEF1C2AB5605F14DC19": {
+   "Value": {
+    "Ref": "ONCHAINLISTENERTASKDEF1C2AB560"
+   },
+   "Export": {
+    "Name": "YieldchainClusterYCClusterBA26B2BC:ExportsOutputRefONCHAINLISTENERTASKDEF1C2AB5605F14DC19"
+   }
+  },
+  "ExportsOutputRefFRONTENDTASKDEFC102847568A39EC3": {
+   "Value": {
+    "Ref": "FRONTENDTASKDEFC1028475"
+   },
+   "Export": {
+    "Name": "YieldchainClusterYCClusterBA26B2BC:ExportsOutputRefFRONTENDTASKDEFC102847568A39EC3"
+   }
+  },
+  "ExportsOutputRefSQSORCHESTRATORTASKDEFA805500D83F04AA6": {
+   "Value": {
+    "Ref": "SQSORCHESTRATORTASKDEFA805500D"
+   },
+   "Export": {
+    "Name": "YieldchainClusterYCClusterBA26B2BC:ExportsOutputRefSQSORCHESTRATORTASKDEFA805500D83F04AA6"
+   }
+  },
+  "ExportsOutputRefOFFCHAINACTIONSTASKDEF2FBCCD06235C0F14": {
+   "Value": {
+    "Ref": "OFFCHAINACTIONSTASKDEF2FBCCD06"
+   },
+   "Export": {
+    "Name": "YieldchainClusterYCClusterBA26B2BC:ExportsOutputRefOFFCHAINACTIONSTASKDEF2FBCCD06235C0F14"
+   }
+  },
+  "ExportsOutputRefSTRATEGYBUILDERTASKDEF5E8FB4F5258E7B6C": {
+   "Value": {
+    "Ref": "STRATEGYBUILDERTASKDEF5E8FB4F5"
+   },
+   "Export": {
+    "Name": "YieldchainClusterYCClusterBA26B2BC:ExportsOutputRefSTRATEGYBUILDERTASKDEF5E8FB4F5258E7B6C"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

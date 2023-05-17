@@ -4,6 +4,6 @@ export interface RepoSettings {
 }
 
 export enum ServiceTypes {
-  WORKER = 1,
-  SERVICE = 2,
+  WORKER = "WORKER",
+  SERVICE = "SERVICE",
 }

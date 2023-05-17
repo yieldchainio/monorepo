@@ -1,15 +1,15 @@
 {
   "version": "30.0.0",
   "files": {
-    "9367c94a634da28dda644759e59ddde9b635ce97e193aeae3d3592faaf344142": {
+    "f9d9ca7d2f20a8fd6e0e395b4501594261eb74327a9455ea27172495ba5facf3": {
       "source": {
-        "path": "OFFCHAINACTIONS-Stack.template.json",
+        "path": "YC-Cluster.template.json",
         "packaging": "file"
       },
       "destinations": {
         "010073361729-us-east-1": {
           "bucketName": "cdk-hnb659fds-assets-010073361729-us-east-1",
-          "objectKey": "9367c94a634da28dda644759e59ddde9b635ce97e193aeae3d3592faaf344142.json",
+          "objectKey": "f9d9ca7d2f20a8fd6e0e395b4501594261eb74327a9455ea27172495ba5facf3.json",
           "region": "us-east-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-file-publishing-role-010073361729-us-east-1"
         }

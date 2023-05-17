@@ -1,15 +1,15 @@
 {
   "version": "30.0.0",
   "files": {
-    "500184e7dc64959a7704f2f6c57e9d3738062ccb898f87ee237b7a86d9a52bd3": {
+    "d92155bdac0f699da27ec72de637424cdc54baa1a22d9045cb3ab63df007ef2b": {
       "source": {
-        "path": "INTEGRATIONFRNTD-Stack.template.json",
+        "path": "Yieldchain-Cluster.template.json",
         "packaging": "file"
       },
       "destinations": {
         "010073361729-us-east-1": {
           "bucketName": "cdk-hnb659fds-assets-010073361729-us-east-1",
-          "objectKey": "500184e7dc64959a7704f2f6c57e9d3738062ccb898f87ee237b7a86d9a52bd3.json",
+          "objectKey": "d92155bdac0f699da27ec72de637424cdc54baa1a22d9045cb3ab63df007ef2b.json",
           "region": "us-east-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-file-publishing-role-010073361729-us-east-1"
         }

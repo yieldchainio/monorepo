@@ -8,21 +8,23 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import "source-map-support/register";
 import * as cdk from "aws-cdk-lib";
-import { deploy, isServiceConfig } from "./utils";
 import { configs } from "../services/configs";
+import { YCECSDeployer } from "../lib/deployer";
 
 /**
  * @notice
  * Deploy @ALL Services
  */
+
+const props: cdk.StackProps = {
+  env: {
+    account: "010073361729",
+    region: "us-east-1",
+  },
+};
+
 // Initiate cdk.App() as the scope for the deployment
-const app = new cdk.App();
+const app = new cdk.App(props);
 
-// Iterate over each service and deploy them
-for (const serviceOrWorker of Object.values(configs)) {
-  // Check if it's a service / worker
-  const issserviceconfig = isServiceConfig(serviceOrWorker);
-
-  // Call corresponding function for deployment
-  deploy(app, serviceOrWorker);
-}
+// Deploy all services
+new YCECSDeployer(app, Object.values(configs), props);

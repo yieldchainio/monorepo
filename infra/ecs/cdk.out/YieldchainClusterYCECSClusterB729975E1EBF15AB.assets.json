@@ -1,15 +1,15 @@
 {
   "version": "30.0.0",
   "files": {
-    "2bad82d5dc392e24b90305324330fdfc6db5f2a627afd7e237f373663b2d1382": {
+    "f023a7bf2ec3a1ebe1294608d85933d583a30e281c7f51f58825572f10f21faa": {
       "source": {
-        "path": "DATAPRVDR-Stack.template.json",
+        "path": "YieldchainClusterYCECSClusterB729975E1EBF15AB.template.json",
         "packaging": "file"
       },
       "destinations": {
         "010073361729-us-east-1": {
           "bucketName": "cdk-hnb659fds-assets-010073361729-us-east-1",
-          "objectKey": "2bad82d5dc392e24b90305324330fdfc6db5f2a627afd7e237f373663b2d1382.json",
+          "objectKey": "f023a7bf2ec3a1ebe1294608d85933d583a30e281c7f51f58825572f10f21faa.json",
           "region": "us-east-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-file-publishing-role-010073361729-us-east-1"
         }

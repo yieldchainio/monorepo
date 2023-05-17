@@ -46,13 +46,28 @@ export const StrategyOperationsBox = ({
         isError
       );
     }
+    if (!chain?.id) return;
+
     if (operation == "Deposit") {
-      if (!chain?.id) return;
-      await strategy?.fullDeposit(parseFloat(valueInput.toString()), {
+      return await strategy?.fullDeposit(parseFloat(valueInput.toString()), {
         from: address as unknown as string,
         executionCallback: async (req) => {
           const res = await signer?.sendTransaction(req as any);
-          if (!res) throw "Cannot Deploy - Res Undefined In Execution Callback";
+          if (!res) throw "Cannot Deposit - Res Undefined In Execution Callback";
+          return {
+            hash: res.hash,
+          };
+        },
+        chainID: chain.id,
+      });
+    }
+
+    if (operation == "Withdraw") {
+      return await strategy?.withdraw(parseFloat(valueInput.toString()), {
+        from: address as unknown as string,
+        executionCallback: async (req) => {
+          const res = await signer?.sendTransaction(req as any);
+          if (!res) throw "Cannot Withdraw - Res Undefined In Execution Callback";
           return {
             hash: res.hash,
           };

@@ -15,7 +15,7 @@ export async function getDeploymentData(
 } | null> {
   try {
     const res = await axios.post<BuilderResponse>(
-      "http://builderapi.yieldchain.io/strategy-creation-data",
+      "http://builder.yieldchain.io/strategy-creation-data",
       req
     );
     if (res.data.status) {

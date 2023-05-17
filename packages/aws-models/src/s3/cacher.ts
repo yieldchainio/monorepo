@@ -8,21 +8,21 @@ import { DeletedObjects } from "aws-sdk/clients/s3";
  * @param _valueAssembler - A function used to retreive the value of an inputted argument to the cacher
  *
  */
-export default class BucketCacher<T> extends S3 {
+export class BucketCacher<T> extends S3 {
   // ===================
   //       FIELDS
   // ===================
   bucket: string;
-  keyAssembler: (_arg: T) => string;
-  valueAssembler: (_arg: any) => JSON;
+  keyAssembler: (_arg: T) => string | Promise<string>;
+  valueAssembler: (_arg: any) => JSON | Promise<JSON>;
 
   // ===================
   //     CONSTRUCTOR
   // ===================
   constructor(
     _bucketName: string,
-    _keyAssembler: (_arg: T) => string,
-    _valueAssembler: (_arg: T) => JSON,
+    _keyAssembler: (_arg: T) => string | Promise<string>,
+    _valueAssembler: (_arg: T) => JSON | Promise<JSON>,
     _s3Props: S3.ClientConfiguration = { region: "us-east-1" }
   ) {
     // Super to S3 class
@@ -42,7 +42,7 @@ export default class BucketCacher<T> extends S3 {
    * @method cached()
    * Checks if an inputted argument is cached in the current bucket configuration
    * @param _arg - An argument of the generic @T type used to instantiate this class
-   * @returns a boolean
+   * @returns Whether the item is already cachec or not
    */
   cached = async (_arg: T): Promise<boolean> => {
     // the key
@@ -55,8 +55,7 @@ export default class BucketCacher<T> extends S3 {
     }).promise();
 
     // if we got the value, it means the argument is already cached - we return true
-    if (Body) return true;
-    else return false;
+    return !!Body;
   };
 
   /**

@@ -8,11 +8,11 @@ import { DeletedObjects } from "aws-sdk/clients/s3";
  * @param _valueAssembler - A function used to retreive the value of an inputted argument to the cacher
  *
  */
-export default class BucketCacher<T> extends S3 {
+export declare class BucketCacher<T> extends S3 {
     bucket: string;
-    keyAssembler: (_arg: T) => string;
-    valueAssembler: (_arg: any) => JSON;
-    constructor(_bucketName: string, _keyAssembler: (_arg: T) => string, _valueAssembler: (_arg: T) => JSON, _s3Props?: S3.ClientConfiguration);
+    keyAssembler: (_arg: T) => string | Promise<string>;
+    valueAssembler: (_arg: any) => JSON | Promise<JSON>;
+    constructor(_bucketName: string, _keyAssembler: (_arg: T) => string | Promise<string>, _valueAssembler: (_arg: T) => JSON | Promise<JSON>, _s3Props?: S3.ClientConfiguration);
     /**
      * @method cached()
      * Checks if an inputted argument is cached in the current bucket configuration

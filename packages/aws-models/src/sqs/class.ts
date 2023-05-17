@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config();
 import AWS from "aws-sdk";
-import { Message } from "aws-sdk/clients/sqs";
+import { Message, SendMessageRequest } from "aws-sdk/clients/sqs";
 
-export default class GenericOrchestrator extends AWS.SQS {
+export class SQSQueue<T = any> extends AWS.SQS {
   // ======================
   //         FIELDS
   // ======================
@@ -37,10 +37,11 @@ export default class GenericOrchestrator extends AWS.SQS {
    * @param message
    * @param queueUrl
    */
-  async emit(event: string, message: any, queueUrl: string) {
-    const params = {
-      MessageBody: JSON.stringify({ event, message }),
-      QueueUrl: queueUrl,
+  async emit(messageBody: T, msgGroupID?: string) {
+    const params: SendMessageRequest = {
+      MessageBody: JSON.stringify(messageBody),
+      MessageGroupId: msgGroupID,
+      QueueUrl: this.queue,
       DelaySeconds: 0,
     };
 
@@ -52,7 +53,7 @@ export default class GenericOrchestrator extends AWS.SQS {
    * @param queueUrl
    * @param handler
    */
-  async listen(handler: (msgbody: string) => Promise<any>): Promise<void> {
+  async listen(handler: (msgbody: T) => Promise<any>): Promise<void> {
     // Log that we are currently listening
     console.log(
       "Listening To The",
@@ -88,7 +89,7 @@ export default class GenericOrchestrator extends AWS.SQS {
         // Handle potential empty messages (Not processable)
         if (!message.Body) continue;
 
-        const handlerRes = await handler(message.Body);
+        const handlerRes = await handler(JSON.parse(message.Body));
 
         // Log result of the processing
         if (handlerRes)

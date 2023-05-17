@@ -28,10 +28,11 @@ export class SQSQueue extends AWS.SQS {
      * @param message
      * @param queueUrl
      */
-    async emit(event, message, queueUrl) {
+    async emit(messageBody, msgGroupID) {
         const params = {
-            MessageBody: JSON.stringify({ event, message }),
-            QueueUrl: queueUrl,
+            MessageBody: JSON.stringify(messageBody),
+            MessageGroupId: msgGroupID,
+            QueueUrl: this.queue,
             DelaySeconds: 0,
         };
         await this.sendMessage(params).promise();
@@ -65,7 +66,7 @@ export class SQSQueue extends AWS.SQS {
                 // Handle potential empty messages (Not processable)
                 if (!message.Body)
                     continue;
-                const handlerRes = await handler(message.Body);
+                const handlerRes = await handler(JSON.parse(message.Body));
                 // Log result of the processing
                 if (handlerRes)
                     console.log("YC SQS Listener Succesfully Proccessed Message :) ID:", message.MessageId);
@@ -93,4 +94,4 @@ export class SQSQueue extends AWS.SQS {
         }
     }
 }
-//# sourceMappingURL=orchestrator.js.map
+//# sourceMappingURL=class.js.map

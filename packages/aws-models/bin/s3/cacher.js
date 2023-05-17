@@ -7,7 +7,7 @@ import { S3 } from "aws-sdk";
  * @param _valueAssembler - A function used to retreive the value of an inputted argument to the cacher
  *
  */
-export default class BucketCacher extends S3 {
+export class BucketCacher extends S3 {
     // ===================
     //       FIELDS
     // ===================
@@ -43,10 +43,7 @@ export default class BucketCacher extends S3 {
             Key: key,
         }).promise();
         // if we got the value, it means the argument is already cached - we return true
-        if (Body)
-            return true;
-        else
-            return false;
+        return !!Body;
     };
     /**
      * @method cache()

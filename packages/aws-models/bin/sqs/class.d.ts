@@ -1,5 +1,5 @@
 import AWS from "aws-sdk";
-export declare class SQSQueue extends AWS.SQS {
+export declare class SQSQueue<T = any> extends AWS.SQS {
     readonly queue: string;
     constructor(_queueUrl: string, _sqsProps?: AWS.SQS.ClientConfiguration);
     /**
@@ -8,11 +8,11 @@ export declare class SQSQueue extends AWS.SQS {
      * @param message
      * @param queueUrl
      */
-    emit(event: string, message: any, queueUrl: string): Promise<void>;
+    emit(messageBody: T, msgGroupID?: string): Promise<void>;
     /**
      * Continuously listen for messages on the queue specified, and invoke a handler function
      * @param queueUrl
      * @param handler
      */
-    listen(handler: (msgbody: string) => Promise<any>): Promise<void>;
+    listen(handler: (msgbody: T) => Promise<any>): Promise<void>;
 }

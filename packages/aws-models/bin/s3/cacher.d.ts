@@ -17,7 +17,7 @@ export declare class BucketCacher<T> extends S3 {
      * @method cached()
      * Checks if an inputted argument is cached in the current bucket configuration
      * @param _arg - An argument of the generic @T type used to instantiate this class
-     * @returns a boolean
+     * @returns Whether the item is already cachec or not
      */
     cached: (_arg: T) => Promise<boolean>;
     /**

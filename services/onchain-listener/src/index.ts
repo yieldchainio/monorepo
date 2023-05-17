@@ -13,7 +13,7 @@ import {
 import { isRegisteredStrategy } from "./utils/is-registered-strategy.js";
 
 // We first of all hydrate our context to get access to the networks supported
-await YCClassifications.getInstance().refresh(Endpoints.NETWORKS);
+await YCClassifications.getInstance().initiallize();
 
 // Our providers
 const networks: SupportedYCNetwork[] =

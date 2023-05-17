@@ -1,5 +1,6 @@
 import AWS from "aws-sdk";
-export declare class SQSQueue<T = any> extends AWS.SQS {
+export declare class SQSQueue<T = any> {
+    #private;
     readonly queue: string;
     constructor(_queueUrl: string, _sqsProps?: AWS.SQS.ClientConfiguration);
     /**

@@ -1,12 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { Endpoints, YCClassifications } from "@yc/yc-models";
+import { YCClassifications } from "@yc/yc-models";
 import { BucketCacher, SQSQueue } from "@yc/aws-models";
 import { OnchainListener } from "./classes/onchain-listener.js";
 import { HYDRATE_RUN_ONCHAIN_EVENT_HASH, ONCHAIN_LOGS_SQS_QUEUE_URL, } from "./constants.js";
 import { isRegisteredStrategy } from "./utils/is-registered-strategy.js";
 // We first of all hydrate our context to get access to the networks supported
-await YCClassifications.getInstance().refresh(Endpoints.NETWORKS);
+await YCClassifications.getInstance().initiallize();
 // Our providers
 const networks = YCClassifications.getInstance().networks.flatMap((network) => network.provider && network.diamondAddress ? [network] : []);
 // The instance used to check whether an event is cached or not (to allow for multiple listeners)

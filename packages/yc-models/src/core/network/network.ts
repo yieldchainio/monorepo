@@ -148,7 +148,7 @@ export class YCNetwork extends BaseClass {
     this.logo = _network.logo;
     this.color = _network.color || undefined;
     this.blockExplorer = _network.block_explorer || null;
-    this.diamondAddress = _network.diamond_address as address
+    this.diamondAddress = _network.diamond_address as address | null
 
     /**
      * Initiate the ethers provider if we have a json rpc available

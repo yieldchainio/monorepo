@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { ethers, } from "ethers";
 export class OnchainListener {
     // The providers to listen to
     networks = [];
@@ -20,11 +20,16 @@ export class OnchainListener {
      * Listen to all providers
      */
     async listenToAll() {
-        const promises = [];
-        for (let i = 0; i < this.networks.length; i++)
-            promises.push(this.listen(i));
-        await Promise.all(promises);
-        await this.listenToAll();
+        await this.stopListening();
+        try {
+            for (let i = 0; i < this.networks.length; i++)
+                this.listen(i);
+        }
+        catch (e) {
+            console.error("Caught Error While Listening For Onchain Events. Error:", e);
+            console.log("Restarting Connections...");
+            await this.listenToAll();
+        }
     }
     /**
      * Listen to a single provider
@@ -32,20 +37,23 @@ export class OnchainListener {
     async listen(providerIdx, retry = 0) {
         if (retry >= this.maxConnectionRetries)
             return;
+        console.log("Listening For Provider At Idx", providerIdx, "Percentage Of Retries Used:", `${(retry / this.maxConnectionRetries) * 100}%`);
         const network = this.networks[providerIdx];
         const provider = network.provider;
         const jsonRPC = provider._getConnection().url;
         if (!provider)
             throw "Cannot Listen To Onchain Provider - Undefined At Index";
         try {
-            provider.on("block", async (blockNumber) => {
-                const filter = {
-                    fromBlock: blockNumber,
-                    topics: [ethers.id(this.eventSignature)],
-                };
+            const filter = {
+                topics: [ethers.id(this.eventSignature)],
+            };
+            provider.on(filter, async (event, log) => {
                 const events = await provider.getLogs(filter);
-                for await (const event of events)
+                for await (const event of events) {
+                    console.log("Caught Event! Event:", event);
+                    console.log("Log:", log);
                     await this.eventHandler(event, network);
+                }
             });
         }
         catch (e) {
@@ -60,7 +68,7 @@ export class OnchainListener {
      */
     async stopListening() {
         for (const network of this.networks)
-            network.provider.removeAllListeners();
+            await network.provider.removeAllListeners();
     }
     // Restart listening to the providers
     async restartListeners() {

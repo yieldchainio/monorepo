@@ -82,7 +82,7 @@ model networksv2 {
   name            String
   logo            String
   json_rpc        String
-  diamond_address String
+  diamond_address String?
   block_explorer  String?
   color           String?
   addresses       addressesv2[]

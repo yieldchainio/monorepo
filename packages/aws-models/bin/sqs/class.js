@@ -1,11 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config();
 import AWS from "aws-sdk";
-export class SQSQueue extends AWS.SQS {
+export class SQSQueue {
     // ======================
     //         FIELDS
     // ======================
     queue;
+    #instance;
     // ======================
     //      CONSTRUCTOR
     // ======================
@@ -14,9 +15,7 @@ export class SQSQueue extends AWS.SQS {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     }) {
-        // Super to the SQS class
-        super(_sqsProps);
-        // Set our queue
+        this.#instance = new AWS.SQS(_sqsProps);
         this.queue = _queueUrl;
     }
     // ======================
@@ -35,7 +34,7 @@ export class SQSQueue extends AWS.SQS {
             QueueUrl: this.queue,
             DelaySeconds: 0,
         };
-        await this.sendMessage(params).promise();
+        await this.#instance.sendMessage(params).promise();
     }
     /**
      * Continuously listen for messages on the queue specified, and invoke a handler function
@@ -54,7 +53,7 @@ export class SQSQueue extends AWS.SQS {
         // Wrap in try catch
         try {
             // Call receiveMessage() on the AWS SDK SQS class - Receive
-            const { Messages } = await this.receiveMessage(params).promise();
+            const { Messages } = await this.#instance.receiveMessage(params).promise();
             // @notice
             // If we got no messages back, we immedaitly recurse (No need for further computation)
             if (!Messages || !Messages[0] || !Messages[0].MessageId)
@@ -81,7 +80,7 @@ export class SQSQueue extends AWS.SQS {
                     ReceiptHandle: message.ReceiptHandle || "",
                 };
                 // Send the delete message call to SQS
-                await this.deleteMessage(deleteParams).promise();
+                await this.#instance.deleteMessage(deleteParams).promise();
                 /**
                  * @notice
                  * Finally, we recruse the function call - We do not await it though to avoid too deep of a memory stack

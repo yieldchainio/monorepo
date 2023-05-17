@@ -9,7 +9,7 @@ export declare class SQSQueue<T = any> {
      * @param message
      * @param queueUrl
      */
-    emit(messageBody: T, msgGroupID?: string): Promise<void>;
+    emit(messageBody: T, msgGroupID: string): Promise<void>;
     /**
      * Continuously listen for messages on the queue specified, and invoke a handler function
      * @param queueUrl

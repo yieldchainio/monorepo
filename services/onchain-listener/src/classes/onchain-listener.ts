@@ -1,12 +1,4 @@
-import {
-  EventFilter,
-  JsonRpcProvider,
-  Log,
-  ProviderEvent,
-  ethers,
-} from "ethers";
-import { HYDRATE_RUN_ONCHAIN_EVENT_HASH } from "../constants.js";
-import { EthersJsonRpcProvider } from "@yc/yc-models";
+import { EventFilter, Log, ethers } from "ethers";
 import { SupportedYCNetwork } from "../types.js";
 
 export class OnchainListener {
@@ -65,16 +57,16 @@ export class OnchainListener {
   async listen(providerIdx: number, retry: number = 0) {
     if (retry >= this.maxConnectionRetries) return;
 
-    console.log(
-      "Listening For Provider At Idx",
-      providerIdx,
-      "Percentage Of Retries Used:",
-      `${(retry / this.maxConnectionRetries) * 100}%`
-    );
-
     const network = this.networks[providerIdx];
     const provider = network.provider;
     const jsonRPC = provider._getConnection().url;
+
+    console.log(
+      "Listening For Provider",
+      jsonRPC,
+      "Percentage Of Retries Used:",
+      `${(retry / this.maxConnectionRetries) * 100}%`
+    );
 
     if (!provider)
       throw "Cannot Listen To Onchain Provider - Undefined At Index";
@@ -83,14 +75,9 @@ export class OnchainListener {
       const filter: EventFilter = {
         topics: [ethers.id(this.eventSignature)],
       };
-      provider.on(filter, async (event, log) => {
-        const events = await provider.getLogs(filter);
-
-        for await (const event of events) {
-          console.log("Caught Event! Event:", event);
-          console.log("Log:", log);
-          await this.eventHandler(event, network);
-        }
+      provider.on(filter, async (event: Log) => {
+        console.log("Caught Event!", event.topics?.[1]);
+        this.eventHandler(event, network);
       });
     } catch (e: any) {
       console.error(

@@ -38,14 +38,19 @@ export class BucketCacher {
         // the key
         const key = await this.keyAssembler(_arg);
         // Retreive the key's pair value from the bucket
-        const { Body } = await this.#instance
-            .getObject({
-            Bucket: this.bucket,
-            Key: key,
-        })
-            .promise();
-        // if we got the value, it means the argument is already cached - we return true
-        return !!Body;
+        try {
+            const { Body } = await this.#instance
+                .getObject({
+                Bucket: this.bucket,
+                Key: key,
+            })
+                .promise();
+            // if we got the value, it means the argument is already cached - we return true
+            return !!Body;
+        }
+        catch (e) {
+            return false;
+        }
     };
     /**
      * @method cache()

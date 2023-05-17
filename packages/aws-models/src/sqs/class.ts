@@ -36,7 +36,7 @@ export class SQSQueue<T = any> {
    * @param message
    * @param queueUrl
    */
-  async emit(messageBody: T, msgGroupID?: string) {
+  async emit(messageBody: T, msgGroupID: string) {
     const params: SendMessageRequest = {
       MessageBody: JSON.stringify(messageBody),
       MessageGroupId: msgGroupID,

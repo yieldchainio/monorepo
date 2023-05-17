@@ -11,8 +11,8 @@ export declare class BucketCacher<T> {
     #private;
     bucket: string;
     keyAssembler: (_arg: T) => string | Promise<string>;
-    valueAssembler: (_arg: any) => JSON | Promise<JSON>;
-    constructor(bucketName: string, keyAssembler: (_arg: T) => string | Promise<string>, valueAssembler: (_arg: T) => JSON | Promise<JSON>, s3Props?: AWS.S3.ClientConfiguration);
+    valueAssembler: (_arg: any) => string | Promise<string>;
+    constructor(bucketName: string, keyAssembler: (_arg: T) => string | Promise<string>, valueAssembler: (_arg: T) => string | Promise<string>, s3Props?: AWS.S3.ClientConfiguration);
     /**
      * @method cached()
      * Checks if an inputted argument is cached in the current bucket configuration

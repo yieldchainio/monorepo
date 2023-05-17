@@ -14,7 +14,7 @@ export class BucketCacher<T> {
   // ===================
   bucket: string;
   keyAssembler: (_arg: T) => string | Promise<string>;
-  valueAssembler: (_arg: any) => JSON | Promise<JSON>;
+  valueAssembler: (_arg: any) => string | Promise<string>;
 
   #instance: AWS.S3;
 
@@ -24,7 +24,7 @@ export class BucketCacher<T> {
   constructor(
     bucketName: string,
     keyAssembler: (_arg: T) => string | Promise<string>,
-    valueAssembler: (_arg: T) => JSON | Promise<JSON>,
+    valueAssembler: (_arg: T) => string | Promise<string>,
     s3Props: AWS.S3.ClientConfiguration = { region: "us-east-1" }
   ) {
     this.#instance = new AWS.S3(s3Props);
@@ -51,15 +51,19 @@ export class BucketCacher<T> {
     const key = await this.keyAssembler(_arg);
 
     // Retreive the key's pair value from the bucket
-    const { Body } = await this.#instance
-      .getObject({
-        Bucket: this.bucket,
-        Key: key,
-      })
-      .promise();
+    try {
+      const { Body } = await this.#instance
+        .getObject({
+          Bucket: this.bucket,
+          Key: key,
+        })
+        .promise();
 
-    // if we got the value, it means the argument is already cached - we return true
-    return !!Body;
+      // if we got the value, it means the argument is already cached - we return true
+      return !!Body;
+    } catch (e) {
+      return false;
+    }
   };
 
   /**

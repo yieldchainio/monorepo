@@ -1,4 +1,4 @@
-import { ethers, } from "ethers";
+import { ethers } from "ethers";
 export class OnchainListener {
     // The providers to listen to
     networks = [];
@@ -37,23 +37,19 @@ export class OnchainListener {
     async listen(providerIdx, retry = 0) {
         if (retry >= this.maxConnectionRetries)
             return;
-        console.log("Listening For Provider At Idx", providerIdx, "Percentage Of Retries Used:", `${(retry / this.maxConnectionRetries) * 100}%`);
         const network = this.networks[providerIdx];
         const provider = network.provider;
         const jsonRPC = provider._getConnection().url;
+        console.log("Listening For Provider", jsonRPC, "Percentage Of Retries Used:", `${(retry / this.maxConnectionRetries) * 100}%`);
         if (!provider)
             throw "Cannot Listen To Onchain Provider - Undefined At Index";
         try {
             const filter = {
                 topics: [ethers.id(this.eventSignature)],
             };
-            provider.on(filter, async (event, log) => {
-                const events = await provider.getLogs(filter);
-                for await (const event of events) {
-                    console.log("Caught Event! Event:", event);
-                    console.log("Log:", log);
-                    await this.eventHandler(event, network);
-                }
+            provider.on(filter, async (event) => {
+                console.log("Caught Event!", event.topics?.[1]);
+                this.eventHandler(event, network);
             });
         }
         catch (e) {

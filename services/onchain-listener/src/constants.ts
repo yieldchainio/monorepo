@@ -5,7 +5,7 @@
 import { ethers } from "ethers";
 
 // The hash of the HydrateRun event
-export const HYDRATE_RUN_ONCHAIN_EVENT_HASH = ethers.id("HydrateRun(uint256)");
+export const HYDRATE_RUN_ONCHAIN_EVENT_SIGNATURE = "HydrateRun(uint256)";
 
 // The URL of the SQS queue to input onchain logs into
 export const ONCHAIN_LOGS_SQS_QUEUE_URL =

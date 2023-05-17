@@ -6,14 +6,13 @@ import { DeletedObjects } from "aws-sdk/clients/s3";
  * @param _bucketName - The name of the bucket to look for when caching
  * @param _keyAssembler - A function used to retreive the key of an inputted argument to the cacher
  * @param _valueAssembler - A function used to retreive the value of an inputted argument to the cacher
- *
  */
-declare const S3: typeof AWS.S3;
-export declare class BucketCacher<T> extends S3 {
+export declare class BucketCacher<T> {
+    #private;
     bucket: string;
     keyAssembler: (_arg: T) => string | Promise<string>;
     valueAssembler: (_arg: any) => JSON | Promise<JSON>;
-    constructor(_bucketName: string, _keyAssembler: (_arg: T) => string | Promise<string>, _valueAssembler: (_arg: T) => JSON | Promise<JSON>, _s3Props?: AWS.S3.ClientConfiguration);
+    constructor(bucketName: string, keyAssembler: (_arg: T) => string | Promise<string>, valueAssembler: (_arg: T) => JSON | Promise<JSON>, s3Props?: AWS.S3.ClientConfiguration);
     /**
      * @method cached()
      * Checks if an inputted argument is cached in the current bucket configuration
@@ -51,4 +50,3 @@ export declare class BucketCacher<T> extends S3 {
      */
     clearCache: () => Promise<false | DeletedObjects>;
 }
-export {};

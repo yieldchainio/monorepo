@@ -6,12 +6,9 @@ import { DeletedObjects } from "aws-sdk/clients/s3";
  * @param _bucketName - The name of the bucket to look for when caching
  * @param _keyAssembler - A function used to retreive the key of an inputted argument to the cacher
  * @param _valueAssembler - A function used to retreive the value of an inputted argument to the cacher
- *
  */
 
-const { S3 } = AWS;
-
-export class BucketCacher<T> extends S3 {
+export class BucketCacher<T> {
   // ===================
   //       FIELDS
   // ===================
@@ -19,22 +16,24 @@ export class BucketCacher<T> extends S3 {
   keyAssembler: (_arg: T) => string | Promise<string>;
   valueAssembler: (_arg: any) => JSON | Promise<JSON>;
 
+  #instance: AWS.S3;
+
   // ===================
   //     CONSTRUCTOR
   // ===================
   constructor(
-    _bucketName: string,
-    _keyAssembler: (_arg: T) => string | Promise<string>,
-    _valueAssembler: (_arg: T) => JSON | Promise<JSON>,
-    _s3Props: AWS.S3.ClientConfiguration = { region: "us-east-1" }
+    bucketName: string,
+    keyAssembler: (_arg: T) => string | Promise<string>,
+    valueAssembler: (_arg: T) => JSON | Promise<JSON>,
+    s3Props: AWS.S3.ClientConfiguration = { region: "us-east-1" }
   ) {
+    this.#instance = new AWS.S3(s3Props);
     // Super to S3 class
-    super(_s3Props);
 
     // Set our fields
-    this.bucket = _bucketName;
-    this.keyAssembler = _keyAssembler;
-    this.valueAssembler = _valueAssembler;
+    this.bucket = bucketName;
+    this.keyAssembler = keyAssembler;
+    this.valueAssembler = valueAssembler;
   }
 
   // ===================
@@ -52,10 +51,12 @@ export class BucketCacher<T> extends S3 {
     const key = await this.keyAssembler(_arg);
 
     // Retreive the key's pair value from the bucket
-    const { Body } = await this.getObject({
-      Bucket: this.bucket,
-      Key: key,
-    }).promise();
+    const { Body } = await this.#instance
+      .getObject({
+        Bucket: this.bucket,
+        Key: key,
+      })
+      .promise();
 
     // if we got the value, it means the argument is already cached - we return true
     return !!Body;
@@ -69,11 +70,13 @@ export class BucketCacher<T> extends S3 {
    */
   cache = async (_key: string, value: JSON): Promise<null | string> => {
     // Cache it
-    const { ETag } = await this.putObject({
-      Bucket: this.bucket,
-      Key: _key,
-      Body: value,
-    }).promise();
+    const { ETag } = await this.#instance
+      .putObject({
+        Bucket: this.bucket,
+        Key: _key,
+        Body: value,
+      })
+      .promise();
 
     // Return either the expiration tag we received from the insertion, or null if the operation did not succeed
     if (ETag) return ETag;
@@ -94,11 +97,13 @@ export class BucketCacher<T> extends S3 {
     const value = await this.valueAssembler(_rawArg);
 
     // Cache it
-    const { ETag } = await this.putObject({
-      Bucket: this.bucket,
-      Key: key,
-      Body: value,
-    }).promise();
+    const { ETag } = await this.#instance
+      .putObject({
+        Bucket: this.bucket,
+        Key: key,
+        Body: value,
+      })
+      .promise();
 
     // Return either the expiration tag we received from the insertion, or null if the operation did not succeed
     if (ETag) return ETag;
@@ -117,10 +122,12 @@ export class BucketCacher<T> extends S3 {
     _callback?: (obj: AWS.S3.Object) => F
   ): Promise<F[]> => {
     // get the contents
-    const { Contents } = await this.listObjects({
-      Bucket: this.bucket,
-      Delimiter: _amount?.toString(), // Optional
-    }).promise();
+    const { Contents } = await this.#instance
+      .listObjects({
+        Bucket: this.bucket,
+        Delimiter: _amount?.toString(), // Optional
+      })
+      .promise();
 
     // TODO: Dehash each object's ETAG into the actual value and return these
 
@@ -161,12 +168,14 @@ export class BucketCacher<T> extends S3 {
     });
 
     // We delete the objects
-    const { Deleted } = await this.deleteObjects({
-      Bucket: this.bucket,
-      Delete: {
-        Objects: objs,
-      },
-    }).promise();
+    const { Deleted } = await this.#instance
+      .deleteObjects({
+        Bucket: this.bucket,
+        Delete: {
+          Objects: objs,
+        },
+      })
+      .promise();
 
     // If we deleted no objects we return false
     if (!Deleted) return false;

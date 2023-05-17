@@ -5,26 +5,25 @@ import AWS from "aws-sdk";
  * @param _bucketName - The name of the bucket to look for when caching
  * @param _keyAssembler - A function used to retreive the key of an inputted argument to the cacher
  * @param _valueAssembler - A function used to retreive the value of an inputted argument to the cacher
- *
  */
-const { S3 } = AWS;
-export class BucketCacher extends S3 {
+export class BucketCacher {
     // ===================
     //       FIELDS
     // ===================
     bucket;
     keyAssembler;
     valueAssembler;
+    #instance;
     // ===================
     //     CONSTRUCTOR
     // ===================
-    constructor(_bucketName, _keyAssembler, _valueAssembler, _s3Props = { region: "us-east-1" }) {
+    constructor(bucketName, keyAssembler, valueAssembler, s3Props = { region: "us-east-1" }) {
+        this.#instance = new AWS.S3(s3Props);
         // Super to S3 class
-        super(_s3Props);
         // Set our fields
-        this.bucket = _bucketName;
-        this.keyAssembler = _keyAssembler;
-        this.valueAssembler = _valueAssembler;
+        this.bucket = bucketName;
+        this.keyAssembler = keyAssembler;
+        this.valueAssembler = valueAssembler;
     }
     // ===================
     //       METHODS
@@ -39,10 +38,12 @@ export class BucketCacher extends S3 {
         // the key
         const key = await this.keyAssembler(_arg);
         // Retreive the key's pair value from the bucket
-        const { Body } = await this.getObject({
+        const { Body } = await this.#instance
+            .getObject({
             Bucket: this.bucket,
             Key: key,
-        }).promise();
+        })
+            .promise();
         // if we got the value, it means the argument is already cached - we return true
         return !!Body;
     };
@@ -54,11 +55,13 @@ export class BucketCacher extends S3 {
      */
     cache = async (_key, value) => {
         // Cache it
-        const { ETag } = await this.putObject({
+        const { ETag } = await this.#instance
+            .putObject({
             Bucket: this.bucket,
             Key: _key,
             Body: value,
-        }).promise();
+        })
+            .promise();
         // Return either the expiration tag we received from the insertion, or null if the operation did not succeed
         if (ETag)
             return ETag;
@@ -77,11 +80,13 @@ export class BucketCacher extends S3 {
         // The value
         const value = await this.valueAssembler(_rawArg);
         // Cache it
-        const { ETag } = await this.putObject({
+        const { ETag } = await this.#instance
+            .putObject({
             Bucket: this.bucket,
             Key: key,
             Body: value,
-        }).promise();
+        })
+            .promise();
         // Return either the expiration tag we received from the insertion, or null if the operation did not succeed
         if (ETag)
             return ETag;
@@ -97,10 +102,12 @@ export class BucketCacher extends S3 {
      */
     getCache = async (_amount, _callback) => {
         // get the contents
-        const { Contents } = await this.listObjects({
+        const { Contents } = await this.#instance
+            .listObjects({
             Bucket: this.bucket,
             Delimiter: _amount?.toString(), // Optional
-        }).promise();
+        })
+            .promise();
         // TODO: Dehash each object's ETAG into the actual value and return these
         // If we got a callback we map the objects using it
         if (_callback)
@@ -136,12 +143,14 @@ export class BucketCacher extends S3 {
                 : [];
         });
         // We delete the objects
-        const { Deleted } = await this.deleteObjects({
+        const { Deleted } = await this.#instance
+            .deleteObjects({
             Bucket: this.bucket,
             Delete: {
                 Objects: objs,
             },
-        }).promise();
+        })
+            .promise();
         // If we deleted no objects we return false
         if (!Deleted)
             return false;

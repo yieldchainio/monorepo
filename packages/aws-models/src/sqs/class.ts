@@ -3,11 +3,13 @@ dotenv.config();
 import AWS from "aws-sdk";
 import { Message, SendMessageRequest } from "aws-sdk/clients/sqs";
 
-export class SQSQueue<T = any> extends AWS.SQS {
+export class SQSQueue<T = any> {
   // ======================
   //         FIELDS
   // ======================
   public readonly queue: string;
+
+  #instance: AWS.SQS;
 
   // ======================
   //      CONSTRUCTOR
@@ -20,10 +22,7 @@ export class SQSQueue<T = any> extends AWS.SQS {
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     }
   ) {
-    // Super to the SQS class
-    super(_sqsProps);
-
-    // Set our queue
+    this.#instance = new AWS.SQS(_sqsProps);
     this.queue = _queueUrl;
   }
 
@@ -45,7 +44,7 @@ export class SQSQueue<T = any> extends AWS.SQS {
       DelaySeconds: 0,
     };
 
-    await this.sendMessage(params).promise();
+    await this.#instance.sendMessage(params).promise();
   }
 
   /**
@@ -70,7 +69,7 @@ export class SQSQueue<T = any> extends AWS.SQS {
     // Wrap in try catch
     try {
       // Call receiveMessage() on the AWS SDK SQS class - Receive
-      const { Messages } = await this.receiveMessage(params).promise();
+      const { Messages } = await this.#instance.receiveMessage(params).promise();
 
       // @notice
       // If we got no messages back, we immedaitly recurse (No need for further computation)
@@ -116,7 +115,7 @@ export class SQSQueue<T = any> extends AWS.SQS {
         };
 
         // Send the delete message call to SQS
-        await this.deleteMessage(deleteParams).promise();
+        await this.#instance.deleteMessage(deleteParams).promise();
 
         /**
          * @notice

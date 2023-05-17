@@ -11,6 +11,8 @@
   "author": "Ofir Smolinsky",
   "license": "ISC",
   "dependencies": {
-    "ethers": "^6.3.0"
+    "ethers": "^6.3.0",
+    "@yc/yc-models": "*",
+    "@yc/aws-models": "*"
   }
 }

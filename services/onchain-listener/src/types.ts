@@ -1,27 +1,16 @@
-export type address = string;
-export enum ChainID {
-  Ethereum = 1,
-  BinanceSmartChain = 56,
-  Polygon = 137,
-  Fantom = 250,
-  Avalanche = 43114,
-  Arbitrum = 42161,
+/**
+ * Types for the onchain listener
+ */
+
+import { EthersJsonRpcProvider, YCNetwork, address } from "@yc/yc-models";
+import { Log } from "ethers";
+
+export interface SQSOnchainLog {
+  log: Log;
+  rpc_url: string;
 }
 
-export interface DBStrategy {
-  strategy_identifier: number;
-  address: address;
-  name: string;
-  upkeep_id: number;
-  apy: number;
-  tvl: number;
-  main_protocol_identifier: number;
-  creator_user_identifier: number;
-  chain_id: ChainID;
-  main_token_identifier: number;
-  final_token_identifier: number;
-  is_verified: boolean;
-  is_trending: boolean;
-  execution_interval: number;
-  strategy_object: JSON;
+export type SupportedYCNetwork = YCNetwork & {
+  provider: EthersJsonRpcProvider,
+  diamondAddress: address
 }

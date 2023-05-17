@@ -1,4 +1,4 @@
-import { S3 } from "aws-sdk";
+import AWS from "aws-sdk";
 /**
  * @notice
  * An S3 bucket cacher
@@ -7,6 +7,7 @@ import { S3 } from "aws-sdk";
  * @param _valueAssembler - A function used to retreive the value of an inputted argument to the cacher
  *
  */
+const { S3 } = AWS;
 export class BucketCacher extends S3 {
     // ===================
     //       FIELDS

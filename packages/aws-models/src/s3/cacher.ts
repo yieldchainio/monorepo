@@ -1,4 +1,4 @@
-import { S3 } from "aws-sdk";
+import AWS from "aws-sdk";
 import { DeletedObjects } from "aws-sdk/clients/s3";
 /**
  * @notice
@@ -8,6 +8,9 @@ import { DeletedObjects } from "aws-sdk/clients/s3";
  * @param _valueAssembler - A function used to retreive the value of an inputted argument to the cacher
  *
  */
+
+const { S3 } = AWS;
+
 export class BucketCacher<T> extends S3 {
   // ===================
   //       FIELDS
@@ -23,7 +26,7 @@ export class BucketCacher<T> extends S3 {
     _bucketName: string,
     _keyAssembler: (_arg: T) => string | Promise<string>,
     _valueAssembler: (_arg: T) => JSON | Promise<JSON>,
-    _s3Props: S3.ClientConfiguration = { region: "us-east-1" }
+    _s3Props: AWS.S3.ClientConfiguration = { region: "us-east-1" }
   ) {
     // Super to S3 class
     super(_s3Props);
@@ -109,9 +112,9 @@ export class BucketCacher<T> extends S3 {
    * @param _callback - An optional callback to run on all the (raw) contents before returning them.
    * @returns Key-Value pairs of objects
    */
-  getCache = async <F = S3.Object>(
+  getCache = async <F = AWS.S3.Object>(
     _amount?: number,
-    _callback?: (obj: S3.Object) => F
+    _callback?: (obj: AWS.S3.Object) => F
   ): Promise<F[]> => {
     // get the contents
     const { Contents } = await this.listObjects({
@@ -136,7 +139,7 @@ export class BucketCacher<T> extends S3 {
    */
   clearCache = async (): Promise<false | DeletedObjects> => {
     // We retreive the objects
-    let objects: S3.ObjectList = await this.getCache();
+    let objects: AWS.S3.ObjectList = await this.getCache();
 
     // If we got a falsy response, we return false
     if (!objects) return false;
@@ -147,7 +150,7 @@ export class BucketCacher<T> extends S3 {
     /**
      * we @uses .flatMap() to map each object to it's key, and also filter out undefined ones at the same time
      */
-    const objs = objects.flatMap((obj: S3.Object) => {
+    const objs = objects.flatMap((obj: AWS.S3.Object) => {
       return obj.Key
         ? [
             {

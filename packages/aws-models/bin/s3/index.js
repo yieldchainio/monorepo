@@ -1,2 +1,2 @@
-export * from "./cacher";
+export * from "./cacher.js";
 //# sourceMappingURL=index.js.map

@@ -41,10 +41,12 @@ export async function simulateHydrationRequest(
   const strategyContract = new Contract(
     hydrationRequest.strategyAddress,
     VaultABI,
-    await network.provider.getSigner(network.diamondAddress)
+    fork
   );
 
-  await strategyContract.setForkStatus();
+  await strategyContract.setForkStatus({
+    from: network.diamondAddress,
+  });
 
   const operationRequest: OperationItem | null =
     await hydrationRequest.getOperation();
@@ -57,6 +59,7 @@ export async function simulateHydrationRequest(
   );
 
   const commandCalldatas = await recursivelyExecAndHydrateRun(
+    network.diamondAddress,
     strategyContract,
     virtualTree,
     operationRequest,
@@ -82,6 +85,7 @@ export async function simulateHydrationRequest(
  * @return commandCalldatas - The array of command calldatas
  */
 async function recursivelyExecAndHydrateRun(
+  diamondAddress: address,
   strategyContract: Contract,
   virtualStepsTree: bytes[],
   operationRequest: OperationItem,
@@ -93,7 +97,10 @@ async function recursivelyExecAndHydrateRun(
     await strategyContract.executeStepsTree.send(
       virtualStepsTree,
       startingIndices,
-      operationRequest
+      operationRequest,
+      {
+        from: diamondAddress,
+      }
     )
   ).wait();
 
@@ -124,6 +131,7 @@ async function recursivelyExecAndHydrateRun(
 
   if (fullfillRequests.length > 0)
     return recursivelyExecAndHydrateRun(
+      diamondAddress,
       strategyContract,
       virtualStepsTree,
       operationRequest,

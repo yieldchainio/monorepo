@@ -3,7 +3,7 @@ dotenv.config();
 import { SQSQueue } from "@yc/aws-models";
 import { OFFCHAIN_EXECUTION_REQUESTS_QUEUE_URL, YCClassifications, } from "@yc/yc-models";
 import { Contract, Wallet } from "ethers";
-import { HydrationRequest } from "./helpers/hydrate-run";
+import { HydrationRequest } from "./helpers/hydrate-run/index.js";
 import DiamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
 const offchainRequestsQueue = new SQSQueue(OFFCHAIN_EXECUTION_REQUESTS_QUEUE_URL);
 const ycContext = YCClassifications.getInstance();

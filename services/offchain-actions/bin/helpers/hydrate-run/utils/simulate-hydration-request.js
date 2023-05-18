@@ -17,13 +17,15 @@ export async function simulateHydrationRequest(hydrationRequest) {
         throw "Cannot COmplete Hydration Request - Private Key Undefined";
     const network = hydrationRequest.network;
     const fork = await createFork(network);
-    const strategyContract = new Contract(hydrationRequest.strategyAddress, VaultABI, await network.provider.getSigner(network.diamondAddress));
-    await strategyContract.setForkStatus();
+    const strategyContract = new Contract(hydrationRequest.strategyAddress, VaultABI, fork);
+    await strategyContract.setForkStatus({
+        from: network.diamondAddress,
+    });
     const operationRequest = await hydrationRequest.getOperation();
     if (!operationRequest)
         throw "Cannot Simulate Hydration Request - Operation Request Non Existant";
     const virtualTree = await strategyContract.getVirtualStepsTree(operationRequest?.action);
-    const commandCalldatas = await recursivelyExecAndHydrateRun(strategyContract, virtualTree, operationRequest, fork);
+    const commandCalldatas = await recursivelyExecAndHydrateRun(network.diamondAddress, strategyContract, virtualTree, operationRequest, fork);
     return commandCalldatas.map((value) => value || ZeroHash);
 }
 /**
@@ -39,8 +41,10 @@ export async function simulateHydrationRequest(hydrationRequest) {
  * @param fork - A fork of the original network
  * @return commandCalldatas - The array of command calldatas
  */
-async function recursivelyExecAndHydrateRun(strategyContract, virtualStepsTree, operationRequest, fork, commandCalldatas = [], startingIndices = [0]) {
-    const receipt = await (await strategyContract.executeStepsTree.send(virtualStepsTree, startingIndices, operationRequest)).wait();
+async function recursivelyExecAndHydrateRun(diamondAddress, strategyContract, virtualStepsTree, operationRequest, fork, commandCalldatas = [], startingIndices = [0]) {
+    const receipt = await (await strategyContract.executeStepsTree.send(virtualStepsTree, startingIndices, operationRequest, {
+        from: diamondAddress,
+    })).wait();
     if (!receipt)
         throw "Cannot Recursively Hydrate Run - Sent Execution Run On Fork, But Receipt Is Null.";
     const fullfillRequests = receipt.logs.filter((log) => log.topics[0] == REQUEST_FULLFILL_ONCHAIN_EVENT_HASH &&
@@ -58,7 +62,7 @@ async function recursivelyExecAndHydrateRun(strategyContract, virtualStepsTree, 
         startingIndices.push(stepIndex);
     }
     if (fullfillRequests.length > 0)
-        return recursivelyExecAndHydrateRun(strategyContract, virtualStepsTree, operationRequest, fork, commandCalldatas, startingIndices);
+        return recursivelyExecAndHydrateRun(diamondAddress, strategyContract, virtualStepsTree, operationRequest, fork, commandCalldatas, startingIndices);
     return commandCalldatas;
 }
 //# sourceMappingURL=simulate-hydration-request.js.map

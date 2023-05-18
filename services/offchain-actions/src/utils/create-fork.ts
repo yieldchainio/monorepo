@@ -22,6 +22,9 @@ export async function createFork(network: SupportedYCNetwork) {
         log: (msg: any) => console.log("Ganache Log:", msg),
       },
     },
+    wallet: {
+      unlockedAccounts: [network.diamondAddress],
+    },
   });
 
   const port = await findAvailablePort(3000);
@@ -30,7 +33,7 @@ export async function createFork(network: SupportedYCNetwork) {
     if (e) {
       console.log("Error starting ganache server", e);
     } else {
-      console.log("Ganache server started");
+      console.log("Ganache server started on port", port);
     }
   });
 

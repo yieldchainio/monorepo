@@ -4,3 +4,4 @@ export * from "./ethers.js";
 export * from "./global.js";
 export * from "./onchain.js";
 export * from "./builder.js";
+export * from "./offchain.js";

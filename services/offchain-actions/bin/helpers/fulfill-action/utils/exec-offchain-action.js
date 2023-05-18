@@ -1,5 +1,6 @@
 /**
  * Main Offchain Action Handler, Routes To Client Actions
+ * @param strategyAddress - The address of the requesting strategy
  * @param actionCommand - The FunctionCall struct that was emitted in the RequestFulfill event (decoded)
  * @param provider - The provider this action is on
  * @return ycCommand | null - Either the computed YC command that the client action returned, or null if none/an error
@@ -13,7 +14,7 @@ export async function executeAction(actionCommand, provider) {
         return null;
     }
     try {
-        return await requestedAction(actionCommand);
+        return await requestedAction(actionCommand, provider);
     }
     catch (e) {
         console.error("Caught Error Whilst Executing Offchain Action:", actionCommand.signature, "Error:", e);

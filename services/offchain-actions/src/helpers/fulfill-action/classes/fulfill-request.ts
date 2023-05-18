@@ -3,7 +3,7 @@
  * @param fullfillRequestEvent - An onchain RequestFulfill event
  */
 
-import { FunctionCallStruct, YCFunc, YcCommand } from "@yc/yc-models";
+import { FunctionCallStruct, YCFunc, YcCommand, address } from "@yc/yc-models";
 import { RequestFullfillEvent } from "../../../types.js";
 import { executeAction } from "../utils/exec-offchain-action.js";
 import { AbiCoder, JsonRpcProvider, ZeroAddress } from "ethers";

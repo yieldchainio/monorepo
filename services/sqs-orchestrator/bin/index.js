@@ -1,21 +1,10 @@
-import SQSOrchestrator from "./Orchestrator-Class.js";
-import AWS from "aws-sdk";
-import { onchainEventHandler, forkRequestHandler, forkCreatedHandler, forkDeleteHandler, } from "./handlers.js";
+import { SQSOrchestrator } from "@yc/aws-models";
+import { onchainlogsEventHandler } from "./handlers.js";
 import dotenv from "dotenv";
+import { ONCHAIN_LOGS_QUEUE_URL, } from "./constants.js";
 dotenv.config();
-const sqs = new AWS.SQS({
-    region: "us-east-1",
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
-const orchestrator = new SQSOrchestrator(sqs);
+const orchestrator = SQSOrchestrator.getInstance();
 // Listen for on-chain events
-orchestrator.listen("https://sqs.us-east-1.amazonaws.com/010073361729/Onchain_Logs.fifo", onchainEventHandler);
-// Listen for fork request events
-orchestrator.listen("https://sqs.us-east-1.amazonaws.com/010073361729/Fork-Requests.fifo", forkRequestHandler);
-// Listen for fork created events (Emitted by forkchestrator when a fork is created)
-orchestrator.listen("https://sqs.us-east-1.amazonaws.com/010073361729/Forks-Pipeout.fifo", forkCreatedHandler);
-// Listen for fork deletion events (Emitted by an Offchain action when a fork is no longer needed)
-orchestrator.listen("https://sqs.us-east-1.amazonaws.com/010073361729/Delete-Fork-Requests.fifo", forkDeleteHandler);
+orchestrator.listen(ONCHAIN_LOGS_QUEUE_URL, onchainlogsEventHandler);
 console.log("Orchestrator is listening for events...");
 //# sourceMappingURL=index.js.map

@@ -12,6 +12,7 @@
     "forceConsistentCasingInFileNames": true,
     "rootDir": "./src",
     "outDir": "./bin",
-    "composite": true
+    "composite": true,
+    "resolveJsonModule": true
   }
 }

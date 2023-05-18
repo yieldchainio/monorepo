@@ -1,56 +1,25 @@
-import SQSOrchestrator from "./Orchestrator-Class.js";
-import { isOnchainCached } from "./utils.js";
+import { SQSOrchestrator } from "@yc/aws-models";
+import { InboundOnchainEvent } from "./types.js";
+import { OFFCHAIN_EXECUTION_REQUESTS_QUEUE_URL } from "./constants.js";
 
 // Handle a caught offchain event
-export const onchainEventHandler = async (
-  event: string,
-  Orchestrator: SQSOrchestrator
-) => {
-  if (!(await isOnchainCached(event)))
-    Orchestrator.emit(
-      "StartOffchainAction",
+export const onchainlogsEventHandler = async (
+  event: InboundOnchainEvent
+): Promise<boolean> => {
+  try {
+    console.log("Onchain Logs Handler Invoked. Event:", event);
+
+    await SQSOrchestrator.getInstance().emit(
+      OFFCHAIN_EXECUTION_REQUESTS_QUEUE_URL,
       event,
-      "https://sqs.us-east-1.amazonaws.com/010073361729/Offchain-Actions.fifo"
+      "hydrate_and_execute_run"
     );
-  console.log("Event emitted from handler");
+    return true;
+  } catch (e: any) {
+    console.error(
+      "Caught Error Handling Onchain Log In Orchestrator. Error:",
+      e
+    );
+    return false;
+  }
 };
-
-export const forkRequestHandler = async (
-  event: string,
-  Orchestrator: SQSOrchestrator
-) => {
-  console.log("Inside Fork Request Handler");
-  Orchestrator.emit(
-    "CreateFork",
-    event,
-    "https://sqs.us-east-1.amazonaws.com/010073361729/Create-Fork.fifo"
-  );
-};
-
-// TODO: Add an event emit to have onchain listener listen to the fork?
-export const forkCreatedHandler = async (
-  event: string,
-  Orchestrator: SQSOrchestrator
-) => {
-  console.log("Inside Fork Created Handler");
-  Orchestrator.emit(
-    "ForkReady",
-    event,
-    "https://sqs.us-east-1.amazonaws.com/010073361729/Forks-Ready.fifo"
-  );
-  //   Orchestrator.emit("ListenOnFork", event.Messages[0].Body.forkCreated);
-};
-
-export const forkDeleteHandler = async (
-  event: string,
-  Orchestrator: SQSOrchestrator
-) => {
-  console.log("Inside Fork Delete Handler");
-  Orchestrator.emit(
-    "KillFork",
-    event,
-    "https://sqs.us-east-1.amazonaws.com/010073361729/Kill-Forks.fifo"
-  );
-};
-
-// TODO: If end up adding the event listener to forks thing, add an event that emits every time a fork is deleted

@@ -4,7 +4,7 @@ import { Contract, Log } from "ethers";
 import { Endpoints, YCClassifications, address } from "@yc/yc-models";
 import { BucketCacher, SQSQueue } from "@yc/aws-models";
 import factoryABI from "@yc/yc-models/src/ABIs/factory.json" assert { type: "json" };
-import { SQSOnchainLog, SupportedYCNetwork } from "./types";
+import { SQSOnchainLog, SupportedYCNetwork } from "@yc/yc-models";
 import { OnchainListener } from "./classes/onchain-listener.js";
 import {
   HYDRATE_RUN_ONCHAIN_EVENT_SIGNATURE,

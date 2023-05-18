@@ -1,5 +1,5 @@
 import { EventFilter, Log, ethers } from "ethers";
-import { SupportedYCNetwork } from "../types.js";
+import { SupportedYCNetwork } from "@yc/yc-models";
 
 export class OnchainListener {
   // The providers to listen to

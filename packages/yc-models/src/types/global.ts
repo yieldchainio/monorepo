@@ -33,3 +33,6 @@ export type SignerMethod =
       ) => Promise<{ hash: string }>;
       chainID: number;
     });
+
+// A YC command type (just bytes)
+export type YcCommand = bytes;

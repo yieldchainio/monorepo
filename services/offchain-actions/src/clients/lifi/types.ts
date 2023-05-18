@@ -1,3 +1,20 @@
+/**
+ * Types for lifi client
+ */
+
+// ==============================
+//      YC / Action Related
+// ==============================
+
+
+
+
+
+
+// =======================
+//      EXTERNAL API
+// ======================
+
 export interface ToolConfiguration {
   allowBridges?: string[];
   denyBridges?: string[];

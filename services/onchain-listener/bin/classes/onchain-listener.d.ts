@@ -1,5 +1,5 @@
 import { Log } from "ethers";
-import { SupportedYCNetwork } from "../types.js";
+import { SupportedYCNetwork } from "@yc/yc-models";
 export declare class OnchainListener {
     private networks;
     readonly maxConnectionRetries: number;

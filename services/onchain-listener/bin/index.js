@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { YCClassifications } from "@yc/yc-models";
 import { BucketCacher, SQSQueue } from "@yc/aws-models";
+import { HYDRATE_RUN_ONCHAIN_EVENT_SIGNATURE, YCClassifications, ONCHAIN_LOGS_QUEUE_URL, } from "@yc/yc-models";
 import { OnchainListener } from "./classes/onchain-listener.js";
-import { HYDRATE_RUN_ONCHAIN_EVENT_SIGNATURE, ONCHAIN_LOGS_SQS_QUEUE_URL, } from "./constants.js";
 import { isRegisteredStrategy } from "./utils/is-registered-strategy.js";
 // We first of all hydrate our context to get access to the networks supported
 await YCClassifications.getInstance().initiallize();
@@ -14,7 +13,7 @@ const onchainLogsCacheBucket = new BucketCacher("onchain-logs", (log) => `${log.
     log: log,
 }));
 // SQS Queue instance
-const onchainLogsSQSQueue = new SQSQueue(ONCHAIN_LOGS_SQS_QUEUE_URL);
+const onchainLogsSQSQueue = new SQSQueue(ONCHAIN_LOGS_QUEUE_URL);
 // The handler of a new event caught by the listener
 const newEventHandler = async (event, network) => {
     if (!(await isRegisteredStrategy(event.address, network))) {

@@ -28,3 +28,21 @@ export const TypeflagValues: Record<Typeflags, typeflag> = {
   [Typeflags.INTERNAL_LOAD_FLAG]: "08" as typeflag,
 };
 
+// The hash of the HydrateRun event
+export const HYDRATE_RUN_ONCHAIN_EVENT_SIGNATURE = "HydrateRun(uint256)";
+export const HYDRATE_RUN_ONCHAIN_EVENT_HASH =
+  "0xf764a734f09c7d398fa52cbd72bf4b4d5223679ab9626437eb9013799c0842f8";
+export const REQUEST_FULLFILL_ONCHAIN_EVENT_SIGNATURE =
+  "RequestFullfill(uint256,bytes)";
+export const REQUEST_FULLFILL_ONCHAIN_EVENT_HASH =
+  "19d5ac81a19d99da1743c582714888c08391772346b4b0186542ffe3f2565710";
+
+/**
+ * Constants for SQS
+ */
+
+export const ONCHAIN_LOGS_QUEUE_URL =
+  "https://sqs.us-east-1.amazonaws.com/010073361729/onchain-logs.fifo";
+
+export const OFFCHAIN_EXECUTION_REQUESTS_QUEUE_URL =
+  "https://sqs.us-east-1.amazonaws.com/010073361729/offchain-execution-requests.fifo";

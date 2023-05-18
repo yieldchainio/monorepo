@@ -1,5 +1,5 @@
-import { Contract } from "ethers";
 import factoryABI from "@yc/yc-models/src/ABIs/factory.json" assert { type: "json" };
+import { Contract } from "ethers";
 const diamondContractsCache = new Map();
 const getDiamondContract = (network) => {
     const existing = diamondContractsCache.get(network.diamondAddress);

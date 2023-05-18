@@ -5,7 +5,7 @@
   "description": "",
   "main": "bin/index.js",
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc -b --force",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ofir Smolinsky",
@@ -16,9 +16,10 @@
     "aws-sdk": "latest",
     "axios": "^1.2.0",
     "dotenv": "latest",
-    "ethers": "6.1.0",
+    "ethers": "^6.3.0",
     "ganache": "^7.7.4",
-    "typescript": "latest",
-    "web3": "^1.8.1"
+    "typescript": "^5.0.4",
+    "web3": "^1.8.1",
+    "@yc/yc-models": "*"
   }
 }

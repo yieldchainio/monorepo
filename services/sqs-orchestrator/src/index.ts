@@ -1,10 +1,7 @@
 import { SQSOrchestrator } from "@yc/aws-models";
 import { onchainlogsEventHandler } from "./handlers.js";
 import dotenv from "dotenv";
-import {
-  OFFCHAIN_EXECUTION_REQUESTS_QUEUE_URL,
-  ONCHAIN_LOGS_QUEUE_URL,
-} from "./constants.js";
+import { ONCHAIN_LOGS_QUEUE_URL } from "@yc/yc-models";
 dotenv.config();
 
 const orchestrator: SQSOrchestrator = SQSOrchestrator.getInstance();

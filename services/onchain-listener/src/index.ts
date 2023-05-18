@@ -1,15 +1,17 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { Contract, Log } from "ethers";
-import { Endpoints, YCClassifications, address } from "@yc/yc-models";
+import { Log } from "ethers";
 import { BucketCacher, SQSQueue } from "@yc/aws-models";
-import factoryABI from "@yc/yc-models/src/ABIs/factory.json" assert { type: "json" };
-import { SQSOnchainLog, SupportedYCNetwork } from "@yc/yc-models";
-import { OnchainListener } from "./classes/onchain-listener.js";
 import {
+  SQSOnchainLog,
+  SupportedYCNetwork,
   HYDRATE_RUN_ONCHAIN_EVENT_SIGNATURE,
-  ONCHAIN_LOGS_SQS_QUEUE_URL,
-} from "./constants.js";
+  YCClassifications,
+  address,
+  ONCHAIN_LOGS_QUEUE_URL,
+} from "@yc/yc-models";
+import { OnchainListener } from "./classes/onchain-listener.js";
+
 import { isRegisteredStrategy } from "./utils/is-registered-strategy.js";
 
 // We first of all hydrate our context to get access to the networks supported
@@ -33,7 +35,7 @@ const onchainLogsCacheBucket = new BucketCacher<Log>(
 
 // SQS Queue instance
 const onchainLogsSQSQueue = new SQSQueue<SQSOnchainLog>(
-  ONCHAIN_LOGS_SQS_QUEUE_URL
+  ONCHAIN_LOGS_QUEUE_URL
 );
 
 // The handler of a new event caught by the listener

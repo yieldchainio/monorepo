@@ -1,7 +1,6 @@
-import { address } from "@yc/yc-models";
-import { SupportedYCNetwork } from "../types.js";
-import { Contract } from "ethers";
+import { address, SupportedYCNetwork } from "@yc/yc-models";
 import factoryABI from "@yc/yc-models/src/ABIs/factory.json" assert { type: "json" };
+import { Contract } from "ethers";
 
 const diamondContractsCache = new Map<address, Contract>();
 

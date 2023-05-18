@@ -1,6 +1,6 @@
 import { SQSOrchestrator } from "@yc/aws-models";
 import { InboundOnchainEvent } from "./types.js";
-import { OFFCHAIN_EXECUTION_REQUESTS_QUEUE_URL } from "./constants.js";
+import { OFFCHAIN_EXECUTION_REQUESTS_QUEUE_URL } from "@yc/yc-models";
 
 // Handle a caught offchain event
 export const onchainlogsEventHandler = async (

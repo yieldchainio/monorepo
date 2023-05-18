@@ -1,4 +1,4 @@
-import { SupportedYCNetwork } from "../types.js";
+import { SupportedYCNetwork } from "@yc/yc-models";
 /**
  * Checks if an address is a YC strategy contract
  * @param address - The address to check

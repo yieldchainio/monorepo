@@ -15,5 +15,5 @@ export declare class SQSOrchestrator {
      * @param queueUrl - The URL of the queue to listen to
      * @param handler - The handler to use when a new event is dequeued
      */
-    listen<T>(queueURL: string, handler: (msgbody: T) => Promise<any>): Promise<void>;
+    listen<T>(queueURL: string, handler: (msgbody: T) => Promise<boolean>): Promise<void>;
 }

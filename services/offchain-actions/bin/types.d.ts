@@ -1,0 +1,41 @@
+/**
+ * Types for the offchain actions service
+ */
+import { SQSOnchainLog, bytes } from "@yc/yc-models";
+import { YcCommand, address } from "@yc/yc-models";
+import { Log } from "ethers";
+declare enum ExecutionTypes {
+    SEED = 0,
+    TREE = 1,
+    UPROOT = 2
+}
+export interface OperationItem {
+    action: ExecutionTypes;
+    initiator: address;
+    gas: bigint;
+    arguments: YcCommand[];
+    commandCalldatas: YcCommand[];
+    executed: boolean;
+}
+type requestFullfillEventHash = "19d5ac81a19d99da1743c582714888c08391772346b4b0186542ffe3f2565710";
+type stepIndexRawTopic = bytes;
+type requestedActionRawTopic = bytes;
+export type stepIndexTopic = bigint;
+export type requestedActionTopic = YcCommand;
+export type RequestFullfillEvent = Log & {
+    topics: [
+        requestFullfillEventHash,
+        stepIndexRawTopic,
+        requestedActionRawTopic
+    ];
+};
+type hydrateRunEventHash = "0xf764a734f09c7d398fa52cbd72bf4b4d5223679ab9626437eb9013799c0842f8";
+type operationIndexRawTopic = bytes;
+export type HydrationRequestEvent = Log & {
+    topics: [hydrateRunEventHash, operationIndexRawTopic];
+};
+export type operationIndexTopic = bigint;
+export type SQSHydrationRequestEvent = SQSOnchainLog & {
+    log: HydrationRequestEvent;
+};
+export {};

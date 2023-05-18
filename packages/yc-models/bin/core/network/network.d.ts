@@ -49,8 +49,6 @@ export declare class YCNetwork extends BaseClass {
     blocknumber: () => Promise<number | null>;
     ycDiamond: () => string | null;
     get provider(): EthersJsonRpcProvider;
-    fork: () => EthersJsonRpcProvider | undefined;
-    killFork: () => true | undefined;
     constructor(_network: DBNetwork, _context?: YCClassifications);
     /**
      * Assert an ID to be the same ID of this network

@@ -1,3 +1,6 @@
+/**
+ * Types for lifi client
+ */
 export interface ToolConfiguration {
     allowBridges?: string[];
     denyBridges?: string[];

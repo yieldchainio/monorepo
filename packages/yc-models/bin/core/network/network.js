@@ -83,22 +83,6 @@ class YCNetwork extends BaseClass {
         }
         return this.#provider;
     }
-    // Fork the current chain
-    fork = () => {
-        if (!this.available)
-            throw new Error("YCNetwork ERROR: Cannot Fork (Network Is Not Integrated - JSON RPC UNAVAILABLE)");
-        if (this.#fork)
-            return this.#fork;
-        // TODO: Add ganache fork
-    };
-    // Kill the current fork
-    killFork = () => {
-        if (!this.available)
-            throw new Error("YCNetwork ERROR: Fork Non-Existent (Network Is Not Integrated - JSON RPC UNAVAILABLE)");
-        if (!this.#fork)
-            return true;
-        // TODO: ADd ganache killing here
-    };
     // =====================
     //     CONSTRUCTOR
     // =====================

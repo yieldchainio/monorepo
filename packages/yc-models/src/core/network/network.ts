@@ -110,30 +110,6 @@ export class YCNetwork extends BaseClass {
     return this.#provider;
   }
 
-  // Fork the current chain
-  fork = () => {
-    if (!this.available)
-      throw new Error(
-        "YCNetwork ERROR: Cannot Fork (Network Is Not Integrated - JSON RPC UNAVAILABLE)"
-      );
-
-    if (this.#fork) return this.#fork;
-
-    // TODO: Add ganache fork
-  };
-
-  // Kill the current fork
-  killFork = () => {
-    if (!this.available)
-      throw new Error(
-        "YCNetwork ERROR: Fork Non-Existent (Network Is Not Integrated - JSON RPC UNAVAILABLE)"
-      );
-
-    if (!this.#fork) return true;
-
-    // TODO: ADd ganache killing here
-  };
-
   // =====================
   //     CONSTRUCTOR
   // =====================
@@ -148,7 +124,7 @@ export class YCNetwork extends BaseClass {
     this.logo = _network.logo;
     this.color = _network.color || undefined;
     this.blockExplorer = _network.block_explorer || null;
-    this.diamondAddress = _network.diamond_address as address | null
+    this.diamondAddress = _network.diamond_address as address | null;
 
     /**
      * Initiate the ethers provider if we have a json rpc available

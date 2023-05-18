@@ -25,3 +25,4 @@ export type SignerMethod = EthersExecutor | (Partial<TransactionRequest> & {
     }>;
     chainID: number;
 });
+export type YcCommand = bytes;

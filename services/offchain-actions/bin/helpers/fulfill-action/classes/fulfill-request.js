@@ -13,7 +13,6 @@ export class FulfillRequest {
         this.#forkProvider = fork;
     }
     async fulfill() {
-        console.log("Gonna Fullfill This:", this.#event.args[1]);
         const requestedFunctionCall = decodeFunctionCallStruct(this.#event.args[1]);
         if (!requestedFunctionCall ||
             requestedFunctionCall.target_address == ZeroAddress) {

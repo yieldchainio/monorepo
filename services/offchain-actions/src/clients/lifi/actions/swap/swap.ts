@@ -5,6 +5,7 @@ import { AbiCoder, JsonRpcProvider, Contract } from "ethers";
 import {
   FunctionCallStruct,
   YcCommand,
+  abiDecode,
   abiDecodeYCCommand,
   address,
   bytes,
@@ -13,40 +14,28 @@ import {
 import { lifiQuote } from "../../utils/quote.js";
 import { buildSwapCommand } from "../../utils/command-builders/build-swap.js";
 import VaultAbi from "@yc/yc-models/src/ABIs/strategy.json" assert { type: "json" };
+import { SELF_COMMAND } from "../../../../constants.js";
 
 export const lifiSwap = async (
   functionRequest: FunctionCallStruct,
   strategyAddress: address,
   provider: JsonRpcProvider
 ): Promise<YcCommand> => {
-  const fromToken = abiDecodeYCCommand<address>(
-    functionRequest.args[0],
-    "address"
-  );
-
-  const toToken = abiDecodeYCCommand<address>(
-    functionRequest.args[1],
-    "address"
-  );
-
   console.log("Function Request ARgs", functionRequest.args);
 
-  const fromAmountCommand = functionRequest.args[2];
+  const fromToken = abiDecode<address>(functionRequest.args[0], "address");
+  const toToken = abiDecode<address>(functionRequest.args[1], "address");
+  const fromAmount = abiDecode<bigint>(functionRequest.args[2], "uint256");
 
-  const contract = new Contract(strategyAddress, VaultAbi, provider);
-
-  const fromAmount = await interpretYCCommand<bigint>(
-    functionRequest.args[2],
-    "uint256",
-    contract 
-  );
-
-  console.log("From Amount COmmand", fromAmountCommand);
-  console.log("From AMount,", fromAmount);
+  console.log(fromToken);
+  console.log(toToken);
+  console.log("From Amount COmmand", fromAmount);
 
   const fromChain: number = Number((await provider.getNetwork()).chainId);
 
   const toChain: number = fromChain;
+
+  if (fromAmount == 0n) return SELF_COMMAND;
 
   const request = await lifiQuote(
     fromToken,

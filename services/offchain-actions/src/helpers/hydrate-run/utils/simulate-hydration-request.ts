@@ -110,13 +110,13 @@ async function recursivelyExecAndHydrateRun(
     )
   ).wait();
 
+  console.log("Got Receipt", receipt);
+
   if (!receipt)
     throw "Cannot Recursively Hydrate Run - Sent Execution Run On Fork, But Receipt Is Null.";
 
-  if (!receipt.status) {
-    console.log("Receipt", receipt);
+  if (!receipt.status)
     throw "Cannot Recurisvely Hydrate Run - Sent Transaction On Fork, Execution Reverted";
-  }
 
   const strategyAddress = await strategyContract.getAddress();
 

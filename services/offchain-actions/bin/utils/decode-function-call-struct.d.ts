@@ -4,4 +4,4 @@
  * @return callStruct - The FunctionCall struct
  */
 import { FunctionCallStruct, YcCommand } from "@yc/yc-models";
-export declare function decodeFunctionCallStruct(ycCommand: YcCommand): FunctionCallStruct;
+export declare function decodeFunctionCallStruct(ycCommand: YcCommand, includesTypeflags?: boolean): FunctionCallStruct;

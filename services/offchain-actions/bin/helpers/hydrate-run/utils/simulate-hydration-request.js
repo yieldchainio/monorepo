@@ -26,7 +26,7 @@ export async function simulateHydrationRequest(hydrationRequest) {
     const forkStat = await strategyContract.setForkStatus.populateTransaction();
     await signer.sendTransaction(forkStat);
     console.log("Gas Limit", await hydrationRequest.getGasLimit(fork));
-    const commandCalldatas = await recursivelyExecAndHydrateRun(strategyContract, hydrationRequest.operationIndex, await hydrationRequest.getGasLimit(fork), fork);
+    const commandCalldatas = await recursivelyExecAndHydrateRun(hydrationRequest, strategyContract, hydrationRequest.operationIndex, await hydrationRequest.getGasLimit(fork), fork);
     fork.kill();
     return commandCalldatas.map((value) => value || ZeroHash);
 }
@@ -43,16 +43,23 @@ export async function simulateHydrationRequest(hydrationRequest) {
  * @param fork - A fork of the original network
  * @return commandCalldatas - The array of command calldatas
  */
-async function recursivelyExecAndHydrateRun(strategyContract, operationIdx, gasLimit, fork, commandCalldatas = [], startingIndices = [0]) {
+async function recursivelyExecAndHydrateRun(hydrationRequest, strategyContract, operationIdx, gasLimit, fork, commandCalldatas = [], startingIndices = [0]) {
     console.log("Recursing...");
     await fork.snap();
     const receipt = await (await strategyContract.simulateOperationHydrationAndExecution.send(operationIdx, startingIndices, commandCalldatas, {
         gasLimit: gasLimit * 5n,
     })).wait();
+    console.log("Got Receipt", receipt);
     if (!receipt)
         throw "Cannot Recursively Hydrate Run - Sent Execution Run On Fork, But Receipt Is Null.";
     if (!receipt.status) {
         console.log("Receipt", receipt);
+        console.log("Traces", await fork.traceTxn(receipt.hash));
+        console.log("Opeartion", await hydrationRequest.getOperation());
+        console.log("Operation Index", hydrationRequest.operationIndex);
+        console.log("Starting Indcies", startingIndices);
+        console.log("Command Calldatas", commandCalldatas);
+        console.log("Virtual Steps Tree", await strategyContract.getVirtualStepsTree(2));
         throw "Cannot Recurisvely Hydrate Run - Sent Transaction On Fork, Execution Reverted";
     }
     const strategyAddress = await strategyContract.getAddress();
@@ -80,7 +87,7 @@ async function recursivelyExecAndHydrateRun(strategyContract, operationIdx, gasL
         for (let i = 0; i < commandCalldatas.length; i++)
             if (!commandCalldatas[i])
                 commandCalldatas[i] = ZeroHash;
-        return recursivelyExecAndHydrateRun(strategyContract, operationIdx, gasLimit, fork, commandCalldatas, startingIndices);
+        return recursivelyExecAndHydrateRun(hydrationRequest, strategyContract, operationIdx, gasLimit, fork, commandCalldatas, startingIndices);
     }
     else
         console.log("Finished Simulations. Gonna Execute Onchain...");

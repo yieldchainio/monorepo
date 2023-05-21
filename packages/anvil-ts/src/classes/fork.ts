@@ -1,6 +1,6 @@
 import { ethers, JsonRpcProvider } from "ethers";
 import { findAvailablePort } from "../utils/find-available-port.js";
-import { exec, execSync } from "child_process";
+import { ChildProcess, exec, execSync } from "child_process";
 import { address, bytes, bytes32 } from "@yc/yc-models";
 /**
  * Main fork class
@@ -28,13 +28,15 @@ export class Fork extends JsonRpcProvider {
 
     cmRes.stdout?.on("data", (chunck) => console.log("Got Log! Log:", chunck));
 
-    return new Fork(availablePort);
+    return new Fork(availablePort, cmRes);
   }
 
   #port: number;
-  private constructor(availablePort: number) {
+  #process: ChildProcess;
+  private constructor(availablePort: number, process: ChildProcess) {
     const newRPCURL = `http://127.0.0.1:${availablePort}`;
     super(newRPCURL);
+    this.#process = process;
     this.#port = availablePort;
   }
 
@@ -100,9 +102,9 @@ export class Fork extends JsonRpcProvider {
   /**
    * Kill the fork
    */
-  async kill() {
-    const cmd = `kill -9 $(lsof -ti:${this.#port})`;
-    exec(cmd);
+  kill() {
+    const success = this.#process.kill();
+    return success;
   }
 
   /**

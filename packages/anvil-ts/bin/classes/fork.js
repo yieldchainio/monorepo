@@ -23,12 +23,14 @@ export class Fork extends JsonRpcProvider {
                 res(true);
         }));
         cmRes.stdout?.on("data", (chunck) => console.log("Got Log! Log:", chunck));
-        return new Fork(availablePort);
+        return new Fork(availablePort, cmRes);
     }
     #port;
-    constructor(availablePort) {
+    #process;
+    constructor(availablePort, process) {
         const newRPCURL = `http://127.0.0.1:${availablePort}`;
         super(newRPCURL);
+        this.#process = process;
         this.#port = availablePort;
     }
     async enableLog() {
@@ -83,9 +85,9 @@ export class Fork extends JsonRpcProvider {
     /**
      * Kill the fork
      */
-    async kill() {
-        const cmd = `kill -9 $(lsof -ti:${this.#port})`;
-        exec(cmd);
+    kill() {
+        const success = this.#process.kill();
+        return success;
     }
     /**
      * Get current gas price

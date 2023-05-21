@@ -47,7 +47,7 @@ export declare class Fork extends JsonRpcProvider {
     /**
      * Kill the fork
      */
-    kill(): Promise<void>;
+    kill(): boolean;
     /**
      * Get current gas price
      */

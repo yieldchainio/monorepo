@@ -5,6 +5,7 @@
  */
 import { HydrationRequestEvent, OperationItem } from "../../../types.js";
 import { SupportedYCNetwork, YcCommand, address } from "@yc/yc-models";
+import { Fork } from "@yc/anvil-ts";
 export declare class HydrationRequest {
     #private;
     constructor(hydrationRequest: HydrationRequestEvent, network: SupportedYCNetwork);
@@ -21,7 +22,7 @@ export declare class HydrationRequest {
     /**
      * Get the operation index
      */
-    get operationIndex(): number;
+    get operationIndex(): bigint;
     /**
      * Get the address of the strategy that emitted the request
      */
@@ -30,4 +31,8 @@ export declare class HydrationRequest {
      * Get the network
      */
     get network(): SupportedYCNetwork;
+    /**
+     * Get the gas bundled with this transaction
+     */
+    getGasLimit(fork: Fork): Promise<bigint>;
 }

@@ -9,6 +9,7 @@ import { AbiCoder, Contract, ZeroAddress } from "ethers";
 import VaultAbi from "@yc/yc-models/src/ABIs/strategy.json" assert { type: "json" };
 import { SupportedYCNetwork, YcCommand, address } from "@yc/yc-models";
 import { simulateHydrationRequest } from "../utils/simulate-hydration-request.js";
+import { Fork } from "@yc/anvil-ts";
 
 export class HydrationRequest {
   #request: HydrationRequestEvent;
@@ -37,9 +38,9 @@ export class HydrationRequest {
     const opIndex = AbiCoder.defaultAbiCoder().decode(
       ["uint256"],
       this.#request.topics[1]
-    );
+    )[0];
 
-    if (typeof opIndex !== "number") {
+    if (typeof opIndex !== "bigint") {
       console.error(
         "Cannot Get Hydration Operation - Opindex Is Not A number. Opindex:",
         opIndex
@@ -63,7 +64,7 @@ export class HydrationRequest {
   /**
    * Get the operation index
    */
-  get operationIndex(): number {
+  get operationIndex(): bigint {
     return AbiCoder.defaultAbiCoder().decode(
       ["uint256"],
       this.#request.topics[1]
@@ -82,5 +83,15 @@ export class HydrationRequest {
    */
   get network(): SupportedYCNetwork {
     return this.#network;
+  }
+
+  /**
+   * Get the gas bundled with this transaction
+   */
+  async getGasLimit(fork: Fork): Promise<bigint> {
+    const operation = await this.getOperation();
+    const gasPrice = await fork.gasPrice();
+    if (!operation?.gas) throw "Cannot Get Gas Limit - Operation Gas Undefined";
+    return BigInt(operation.gas) / BigInt(gasPrice);
   }
 }

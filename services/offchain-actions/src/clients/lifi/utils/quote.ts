@@ -11,10 +11,11 @@ export async function lifiQuote(
   fromToken: address,
   toToken: address,
   fromAmount: `${number}`,
+  fromAddress: address,
   fromChain: number,
   toChain: number = fromChain
 ): Promise<LifiQuote> {
-  const requestURL: lifiQuoteRequestURL = `${LIFI_BASE_QUOTE_URL}?fromChain=${fromChain}&toChain=${toChain}&fromToken=${fromToken}&toToken=${toToken}&fromAmount=${fromAmount}&integrator=${"yieldchain.io"}`;
+  const requestURL: lifiQuoteRequestURL = `${LIFI_BASE_QUOTE_URL}?fromChain=${fromChain}&toChain=${toChain}&fromToken=${fromToken}&toToken=${toToken}&fromAmount=${fromAmount}&fromAddress=${fromAddress}&integrator=${"yieldchain.io"}`;
   const res = (await axios.get<LifiQuote>(requestURL)).data;
   return res;
 }

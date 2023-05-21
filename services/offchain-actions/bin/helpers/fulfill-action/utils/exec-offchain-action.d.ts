@@ -6,6 +6,6 @@
  * @return ycCommand | null - Either the computed YC command that the client action returned, or null if none/an error
  * was caught
  */
-import { FunctionCallStruct, YcCommand } from "@yc/yc-models";
+import { FunctionCallStruct, YcCommand, address } from "@yc/yc-models";
 import { JsonRpcProvider } from "ethers";
-export declare function executeAction(actionCommand: FunctionCallStruct, provider: JsonRpcProvider): Promise<YcCommand | null>;
+export declare function executeAction(actionCommand: FunctionCallStruct, strategyAddress: address, provider: JsonRpcProvider): Promise<YcCommand | null>;

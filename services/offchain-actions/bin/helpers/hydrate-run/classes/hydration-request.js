@@ -25,8 +25,8 @@ export class HydrationRequest {
      * @return OperationItem | null - OperationItem if found, null if not
      */
     async getOperation() {
-        const opIndex = AbiCoder.defaultAbiCoder().decode(["uint256"], this.#request.topics[1]);
-        if (typeof opIndex !== "number") {
+        const opIndex = AbiCoder.defaultAbiCoder().decode(["uint256"], this.#request.topics[1])[0];
+        if (typeof opIndex !== "bigint") {
             console.error("Cannot Get Hydration Operation - Opindex Is Not A number. Opindex:", opIndex);
             return null;
         }
@@ -53,6 +53,16 @@ export class HydrationRequest {
      */
     get network() {
         return this.#network;
+    }
+    /**
+     * Get the gas bundled with this transaction
+     */
+    async getGasLimit(fork) {
+        const operation = await this.getOperation();
+        const gasPrice = await fork.gasPrice();
+        if (!operation?.gas)
+            throw "Cannot Get Gas Limit - Operation Gas Undefined";
+        return BigInt(operation.gas) / BigInt(gasPrice);
     }
 }
 //# sourceMappingURL=hydration-request.js.map

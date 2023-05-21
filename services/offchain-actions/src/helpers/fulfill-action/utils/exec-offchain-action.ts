@@ -13,18 +13,19 @@ import { OffchainActions } from "../../../clients/constants.js";
 
 export async function executeAction(
   actionCommand: FunctionCallStruct,
+  strategyAddress: address,
   provider: JsonRpcProvider
 ): Promise<YcCommand | null> {
   const requestedAction = OffchainActions[actionCommand.signature];
   if (!requestedAction) {
     console.error(
-      "Could Not Get Action Fulfilled - Requested Action Is Not Classified"
+      "Could Not Get Action Fulfilled - Requested Action Is Not Classified. Action:" + actionCommand.signature
     );
     return null;
   }
 
   try {
-    return await requestedAction(actionCommand, provider);
+    return await requestedAction(actionCommand, strategyAddress, provider);
   } catch (e: any) {
     console.error(
       "Caught Error Whilst Executing Offchain Action:",

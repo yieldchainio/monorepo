@@ -20,6 +20,7 @@
     "ganache": "^7.7.4",
     "typescript": "^5.0.4",
     "web3": "^1.8.1",
-    "@yc/yc-models": "*"
+    "@yc/yc-models": "*",
+    "@yc/anvil-ts": "*"
   }
 }

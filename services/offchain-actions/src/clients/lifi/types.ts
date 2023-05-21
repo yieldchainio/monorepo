@@ -40,7 +40,7 @@ export interface LifiQuoteRequest extends ToolConfiguration {
 }
 
 export type lifiQuoteRequestURL =
-  `https://li.quest/v1/quote?fromChain=${number}&toChain=${number}&fromToken=${address}&toToken=${address}&fromAmount=${number}&integrator=${"yieldchain.io"}`;
+  `https://li.quest/v1/quote?fromChain=${number}&toChain=${number}&fromToken=${address}&toToken=${address}&fromAmount=${number}&fromAddress=${address}&integrator=${"yieldchain.io"}`;
 
 export interface FeeCost {
   name: string;

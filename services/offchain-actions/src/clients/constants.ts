@@ -11,6 +11,7 @@ export const OffchainActions: Record<
   string,
   (
     requestedCommand: FunctionCallStruct,
+    strategyAddress: address,
     provider: JsonRpcProvider
   ) => Promise<YcCommand>
 > = {

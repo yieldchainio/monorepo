@@ -16,31 +16,24 @@ export function buildSwapCommand(quote) {
     const parsedTransaction = lifiIface.parseTransaction({ data: calldata });
     if (!parsedTransaction)
         throw "Cannot Build Lifiswap Command - Parsing Quote Data Failed";
-    const funcName = parsedTransaction.name;
+    const funcName = parsedTransaction.signature;
     const args = parsedTransaction.args;
     const address = quote.transactionRequest?.to;
     if (!address)
         throw "Cannot Build Lifiswap - Transaction Request 'to' field undefined";
-    if (args.length < 7)
-        throw "Cannot Build Lifiswap Command - Received Less Than 7 Args.";
+    if (args.length < 6) {
+        console.log("Args", args);
+        throw "Cannot Build Lifiswap Command - Received Less Than 6 Args.";
+    }
     const transactionID = encodeFixedYCCommand(args[0], "bytes32");
     const integrator = encodeRefYCCommand(args[1], "string");
     const referrer = encodeRefYCCommand(args[2], "string");
     const receiver = encodeFixedYCCommand(args[3], "address");
     const minAmount = encodeFixedYCCommand(args[4], "uint256");
-    const swapData = encodeRefYCCommand(args[5], SWAP_DATA_TUPLE);
-    const requiresDeposit = encodeFixedYCCommand(args[6], "bool");
+    const swapData = encodeRefYCCommand(args[5], SWAP_DATA_TUPLE + "[]");
     const SwapFunctionCall = {
         target_address: address,
-        args: [
-            transactionID,
-            integrator,
-            referrer,
-            receiver,
-            minAmount,
-            swapData,
-            requiresDeposit,
-        ],
+        args: [transactionID, integrator, referrer, receiver, minAmount, swapData],
         signature: funcName,
     };
     return ("0x" +

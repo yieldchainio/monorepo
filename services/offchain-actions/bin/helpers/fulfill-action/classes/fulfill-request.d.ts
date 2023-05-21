@@ -9,5 +9,5 @@ export declare class FulfillRequest {
     #private;
     constructor(fulfillRequestEvent: RequestFullfillEvent, fork: JsonRpcProvider);
     fulfill(): Promise<YcCommand | null>;
-    get stepIndex(): number | null;
+    get stepIndex(): bigint | null;
 }

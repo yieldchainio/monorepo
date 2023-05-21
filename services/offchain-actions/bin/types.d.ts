@@ -3,7 +3,7 @@
  */
 import { SQSOnchainLog, bytes } from "@yc/yc-models";
 import { YcCommand, address } from "@yc/yc-models";
-import { Log } from "ethers";
+import { Log, EventLog } from "ethers";
 declare enum ExecutionTypes {
     SEED = 0,
     TREE = 1,
@@ -22,7 +22,7 @@ type stepIndexRawTopic = bytes;
 type requestedActionRawTopic = bytes;
 export type stepIndexTopic = bigint;
 export type requestedActionTopic = YcCommand;
-export type RequestFullfillEvent = Log & {
+export type RequestFullfillEvent = EventLog & {
     topics: [
         requestFullfillEventHash,
         stepIndexRawTopic,

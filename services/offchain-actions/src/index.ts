@@ -7,7 +7,7 @@ import {
   YCClassifications,
 } from "@yc/yc-models";
 import { SQSHydrationRequestEvent } from "./types.js";
-import { Contract, JsonRpcProvider, Wallet } from "ethers";
+import { Contract, Wallet } from "ethers";
 import { HydrationRequest } from "./helpers/hydrate-run/index.js";
 import DiamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
 

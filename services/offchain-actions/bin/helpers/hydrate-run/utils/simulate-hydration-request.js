@@ -1,4 +1,4 @@
-import { Contract, ZeroHash, } from "ethers";
+import { Contract, ZeroAddress, JsonRpcSigner, ZeroHash, } from "ethers";
 import { REQUEST_FULLFILL_ONCHAIN_EVENT_HASH, } from "@yc/yc-models";
 import { FulfillRequest } from "../../fulfill-action/index.js";
 import VaultABI from "@yc/yc-models/src/ABIs/strategy.json" assert { type: "json" };
@@ -17,15 +17,16 @@ export async function simulateHydrationRequest(hydrationRequest) {
         throw "Cannot COmplete Hydration Request - Private Key Undefined";
     const network = hydrationRequest.network;
     const fork = await createFork(network);
-    const strategyContract = new Contract(hydrationRequest.strategyAddress, VaultABI, fork);
-    await strategyContract.setForkStatus({
-        from: network.diamondAddress,
-    });
-    const operationRequest = await hydrationRequest.getOperation();
-    if (!operationRequest)
-        throw "Cannot Simulate Hydration Request - Operation Request Non Existant";
-    const virtualTree = await strategyContract.getVirtualStepsTree(operationRequest?.action);
-    const commandCalldatas = await recursivelyExecAndHydrateRun(network.diamondAddress, strategyContract, virtualTree, operationRequest, fork);
+    await fork.enableLog();
+    await fork.prank(ZeroAddress);
+    await fork.autoClownster();
+    console.log("eth_accounts", await fork.send("anvil_nodeInfo", []));
+    const signer = new JsonRpcSigner(fork, ZeroAddress);
+    const strategyContract = new Contract(hydrationRequest.strategyAddress, VaultABI, signer);
+    const forkStat = await strategyContract.setForkStatus.populateTransaction();
+    await signer.sendTransaction(forkStat);
+    const commandCalldatas = await recursivelyExecAndHydrateRun(strategyContract, hydrationRequest.operationIndex, await hydrationRequest.getGasLimit(fork), fork);
+    await fork.kill();
     return commandCalldatas.map((value) => value || ZeroHash);
 }
 /**
@@ -41,19 +42,28 @@ export async function simulateHydrationRequest(hydrationRequest) {
  * @param fork - A fork of the original network
  * @return commandCalldatas - The array of command calldatas
  */
-async function recursivelyExecAndHydrateRun(diamondAddress, strategyContract, virtualStepsTree, operationRequest, fork, commandCalldatas = [], startingIndices = [0]) {
-    const receipt = await (await strategyContract.executeStepsTree.send(virtualStepsTree, startingIndices, operationRequest, {
-        from: diamondAddress,
+async function recursivelyExecAndHydrateRun(strategyContract, operationIdx, gasLimit, fork, commandCalldatas = [], startingIndices = [0]) {
+    await fork.snap();
+    const receipt = await (await strategyContract.simulateOperationHydrationAndExecution.send(operationIdx, startingIndices, commandCalldatas, {
+        gasLimit: gasLimit,
     })).wait();
     if (!receipt)
         throw "Cannot Recursively Hydrate Run - Sent Execution Run On Fork, But Receipt Is Null.";
+    if (!receipt.status)
+        throw "Cannot Recurisvely Hydrate Run - Sent Transaction On Fork, Execution Reverted";
+    const strategyAddress = await strategyContract.getAddress();
     const fullfillRequests = receipt.logs.filter((log) => log.topics[0] == REQUEST_FULLFILL_ONCHAIN_EVENT_HASH &&
-        log.address == strategyContract.target);
+        log.address == strategyAddress);
     startingIndices = [];
     for (const actionRequestEvent of fullfillRequests) {
         const fullfillRequest = new FulfillRequest(actionRequestEvent, fork);
         const hydratedCommand = await fullfillRequest.fulfill();
-        const stepIndex = fullfillRequest.stepIndex;
+        console.log("Fullfilled! Hydrated Command:", hydratedCommand?.slice(0, 4) +
+            "..." +
+            hydratedCommand?.slice(hydratedCommand.length - 4, hydratedCommand.length));
+        const stepIndex = fullfillRequest.stepIndex
+            ? parseInt(fullfillRequest.stepIndex.toString())
+            : null;
         if (!hydratedCommand)
             throw "Cannot Hydrate Run - Action Returned Undefined.";
         if (typeof stepIndex !== "number")
@@ -61,8 +71,15 @@ async function recursivelyExecAndHydrateRun(diamondAddress, strategyContract, vi
         commandCalldatas[stepIndex] = hydratedCommand;
         startingIndices.push(stepIndex);
     }
-    if (fullfillRequests.length > 0)
-        return recursivelyExecAndHydrateRun(diamondAddress, strategyContract, virtualStepsTree, operationRequest, fork, commandCalldatas, startingIndices);
+    if (fullfillRequests.length > 0) {
+        await fork.rollback();
+        for (let i = 0; i < commandCalldatas.length; i++)
+            if (!commandCalldatas[i])
+                commandCalldatas[i] = ZeroHash;
+        return recursivelyExecAndHydrateRun(strategyContract, operationIdx, gasLimit, fork, commandCalldatas, startingIndices);
+    }
+    else
+        console.log("Finished Simulations. Gonna Execute Onchain...");
     return commandCalldatas;
 }
 //# sourceMappingURL=simulate-hydration-request.js.map

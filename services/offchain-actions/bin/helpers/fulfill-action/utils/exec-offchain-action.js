@@ -7,14 +7,14 @@
  * was caught
  */
 import { OffchainActions } from "../../../clients/constants.js";
-export async function executeAction(actionCommand, provider) {
+export async function executeAction(actionCommand, strategyAddress, provider) {
     const requestedAction = OffchainActions[actionCommand.signature];
     if (!requestedAction) {
-        console.error("Could Not Get Action Fulfilled - Requested Action Is Not Classified");
+        console.error("Could Not Get Action Fulfilled - Requested Action Is Not Classified. Action:" + actionCommand.signature);
         return null;
     }
     try {
-        return await requestedAction(actionCommand, provider);
+        return await requestedAction(actionCommand, strategyAddress, provider);
     }
     catch (e) {
         console.error("Caught Error Whilst Executing Offchain Action:", actionCommand.signature, "Error:", e);

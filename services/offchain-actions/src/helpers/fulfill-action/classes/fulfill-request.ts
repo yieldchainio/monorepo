@@ -7,6 +7,7 @@ import { FunctionCallStruct, YCFunc, YcCommand, address } from "@yc/yc-models";
 import { RequestFullfillEvent } from "../../../types.js";
 import { executeAction } from "../utils/exec-offchain-action.js";
 import { AbiCoder, JsonRpcProvider, ZeroAddress } from "ethers";
+import { decodeFunctionCallStruct } from "../../../utils/decode-function-call-struct.js";
 
 export class FulfillRequest {
   #event: RequestFullfillEvent;
@@ -21,11 +22,9 @@ export class FulfillRequest {
   }
 
   async fulfill(): Promise<YcCommand | null> {
-    const requestedFunctionCall: FunctionCallStruct =
-      AbiCoder.defaultAbiCoder().decode(
-        [YCFunc.FunctionCallTuple],
-        this.#event.topics[2]
-      )[0];
+    const requestedFunctionCall: FunctionCallStruct = decodeFunctionCallStruct(
+      this.#event.args[1]
+    );
 
     if (
       !requestedFunctionCall ||
@@ -38,13 +37,14 @@ export class FulfillRequest {
       return null;
     }
 
-    return await executeAction(requestedFunctionCall, this.#forkProvider);
+    return await executeAction(
+      requestedFunctionCall,
+      this.#event.address as address,
+      this.#forkProvider
+    );
   }
 
-  get stepIndex(): number | null {
-    return AbiCoder.defaultAbiCoder().decode(
-      ["uint256"],
-      this.#event.topics[1]
-    )[0];
+  get stepIndex(): bigint | null {
+    return this.#event.args[0];
   }
 }

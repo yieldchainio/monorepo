@@ -98,5 +98,17 @@ export class Fork extends JsonRpcProvider {
     async gasPrice() {
         return await this.send("eth_gasPrice", []);
     }
+    /**
+     * Enable trace
+     */
+    async enableTraces() {
+        return await this.send("anvil_enableTraces", []);
+    }
+    /**
+     * Trace a transaction
+     */
+    async traceTxn(txn) {
+        return await this.send("debug_traceTransaction", [txn]);
+    }
 }
 //# sourceMappingURL=fork.js.map

@@ -52,4 +52,12 @@ export declare class Fork extends JsonRpcProvider {
      * Get current gas price
      */
     gasPrice(): Promise<any>;
+    /**
+     * Enable trace
+     */
+    enableTraces(): Promise<any>;
+    /**
+     * Trace a transaction
+     */
+    traceTxn(txn: bytes): Promise<any>;
 }

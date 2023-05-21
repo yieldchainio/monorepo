@@ -21,6 +21,7 @@ if (!ycContext.initiallized) await ycContext.initiallize();
 const hydrationRequestHandler = async (
   hydrationRequest: SQSHydrationRequestEvent
 ): Promise<boolean> => {
+  const start = Date.now() / 1000;
   const network = ycContext.networks.find(
     (network) => network.jsonRpc == hydrationRequest.rpc_url
   );
@@ -64,6 +65,10 @@ const hydrationRequestHandler = async (
       hydratedCommands
     )
   ).wait();
+
+  const end = Date.now() / 1000;
+
+  console.log("Action Took:", end - start, "Seconds");
 
   return !!res;
 };

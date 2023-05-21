@@ -17,4 +17,12 @@ export function abiDecodeYCCommand(arg, type) {
     const naked = "0x" + arg.slice(6, arg.length);
     return AbiCoder.defaultAbiCoder().decode([type], naked)[0];
 }
+export async function interpretYCCommand(arg, type, contract) {
+    // runViewFunction() uses runFunction() under the hood, so the reuslt is double ABI encoded,
+    // We slice the first 2 pointers
+    const res = await contract.runViewFunction(arg);
+    const sliced = "0x" + res.slice(130, res.length);
+    console.log("Result From View Func", sliced);
+    return AbiCoder.defaultAbiCoder().decode([type], sliced)[0];
+}
 //# sourceMappingURL=encoding-utils.js.map

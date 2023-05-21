@@ -5,6 +5,7 @@
  */
 import { AbiCoder, Contract, ZeroAddress } from "ethers";
 import VaultAbi from "@yc/yc-models/src/ABIs/strategy.json" assert { type: "json" };
+import DiamondAbi from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
 import { simulateHydrationRequest } from "../utils/simulate-hydration-request.js";
 export class HydrationRequest {
     #request;
@@ -60,8 +61,13 @@ export class HydrationRequest {
     async getGasLimit(fork) {
         const operation = await this.getOperation();
         const gasPrice = await fork.gasPrice();
-        if (!operation?.gas)
+        if (operation?.gas == null || operation?.gas == undefined)
             throw "Cannot Get Gas Limit - Operation Gas Undefined";
+        else if (operation.gas == 0n) {
+            const diamondContract = new Contract(this.#network.diamondAddress, DiamondAbi, fork);
+            const vaultGasBalance = (await diamondContract.getStrategyState(this.strategyAddress))[1];
+            return BigInt(vaultGasBalance) / BigInt(gasPrice);
+        }
         return BigInt(operation.gas) / BigInt(gasPrice);
     }
 }

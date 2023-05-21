@@ -59,6 +59,8 @@ export async function simulateHydrationRequest(
 
   await signer.sendTransaction(forkStat);
 
+  console.log("Gas Limit", await hydrationRequest.getGasLimit(fork));
+
   const commandCalldatas = await recursivelyExecAndHydrateRun(
     strategyContract,
     hydrationRequest.operationIndex,
@@ -66,7 +68,7 @@ export async function simulateHydrationRequest(
     fork
   );
 
-  await fork.kill();
+  fork.kill();
 
   return commandCalldatas.map(
     (value: YcCommand | undefined) => value || ZeroHash
@@ -94,6 +96,7 @@ async function recursivelyExecAndHydrateRun(
   commandCalldatas: Array<YcCommand | undefined> = [],
   startingIndices: number[] = [0]
 ): Promise<Array<YcCommand | undefined>> {
+  console.log("Recursing...");
   await fork.snap();
 
   const receipt = await (
@@ -102,7 +105,7 @@ async function recursivelyExecAndHydrateRun(
       startingIndices,
       commandCalldatas,
       {
-        gasLimit: gasLimit,
+        gasLimit: gasLimit * 5n,
       }
     )
   ).wait();
@@ -110,8 +113,10 @@ async function recursivelyExecAndHydrateRun(
   if (!receipt)
     throw "Cannot Recursively Hydrate Run - Sent Execution Run On Fork, But Receipt Is Null.";
 
-  if (!receipt.status)
+  if (!receipt.status) {
+    console.log("Receipt", receipt);
     throw "Cannot Recurisvely Hydrate Run - Sent Transaction On Fork, Execution Reverted";
+  }
 
   const strategyAddress = await strategyContract.getAddress();
 

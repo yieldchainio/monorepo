@@ -17,10 +17,13 @@ export class Fork extends JsonRpcProvider {
         const availablePort = await findAvailablePort(3000);
         const cmd = `anvil --fork-url ${rpcURL} --port ${availablePort}`;
         console.log("Gonna execute this anvil cmd", cmd);
+        console.log("Hey Ser");
         const cmRes = exec(cmd);
         await new Promise((res) => cmRes.stdout?.on("data", (chunck) => {
-            if (chunck.includes("Listening on"))
+            if (chunck.includes("Listening on")) {
+                console.log("Got Listening", chunck);
                 res(true);
+            }
         }));
         cmRes.stdout?.on("data", (chunck) => console.log("Got Log! Log:", chunck));
         return new Fork(availablePort, cmRes);

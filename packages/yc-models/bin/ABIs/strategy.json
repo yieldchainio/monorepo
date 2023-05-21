@@ -682,6 +682,25 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "bytes",
+                "name": "encodedCommandCall",
+                "type": "bytes"
+            }
+        ],
+        "name": "runViewFunction",
+        "outputs": [
+            {
+                "internalType": "bytes",
+                "name": "returnVal",
+                "type": "bytes"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "self",
         "outputs": [

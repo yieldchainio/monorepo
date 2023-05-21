@@ -10,6 +10,7 @@ const ycContext = YCClassifications.getInstance();
 if (!ycContext.initiallized)
     await ycContext.initiallize();
 const hydrationRequestHandler = async (hydrationRequest) => {
+    const start = Date.now() / 1000;
     const network = ycContext.networks.find((network) => network.jsonRpc == hydrationRequest.rpc_url);
     if (!network || !network.diamondAddress || !network.provider) {
         console.error("Cannot Handle Hydration Run Request - Network Is Unsupported.", hydrationRequest.rpc_url, "Network:", network);
@@ -24,6 +25,8 @@ const hydrationRequestHandler = async (hydrationRequest) => {
     const executor = new Wallet(process.env.PRIVATE_KEY, network.provider);
     const diamondContract = new Contract(network.diamondAddress, DiamondABI, executor);
     const res = await (await diamondContract.hydrateAndExecuteRun.send(hydrationInstance.strategyAddress, hydrationInstance.operationIndex, hydratedCommands)).wait();
+    const end = Date.now() / 1000;
+    console.log("Action Took:", end - start, "Seconds");
     return !!res;
 };
 offchainRequestsQueue.listen(hydrationRequestHandler);

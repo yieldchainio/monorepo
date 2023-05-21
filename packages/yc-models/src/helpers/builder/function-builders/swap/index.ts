@@ -29,6 +29,8 @@ export function buildSwapFunction(fromToken: YCToken, toToken: YCToken) {
     YCClassifications.getInstance()
   );
 
+  console.log("Swap Json Function")
+
   // We need to create the amount getter
   const fromTokenDBArgument: DBArgument = {
     id: uuid(),

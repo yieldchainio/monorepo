@@ -13,6 +13,7 @@ export function buildSwapFunction(fromToken, toToken) {
     if (!swapJsonFunction)
         throw "Cannot Complete Swap Config - Swap Function Is Non-Existant.";
     const swapFunction = new YCFunc(swapJsonFunction, YCClassifications.getInstance());
+    console.log("Swap Json Function");
     // We need to create the amount getter
     const fromTokenDBArgument = {
         id: uuid(),

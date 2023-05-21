@@ -19,7 +19,7 @@ export declare const TypeflagValues: Record<Typeflags, typeflag>;
 export declare const HYDRATE_RUN_ONCHAIN_EVENT_SIGNATURE = "HydrateRun(uint256)";
 export declare const HYDRATE_RUN_ONCHAIN_EVENT_HASH = "0xf764a734f09c7d398fa52cbd72bf4b4d5223679ab9626437eb9013799c0842f8";
 export declare const REQUEST_FULLFILL_ONCHAIN_EVENT_SIGNATURE = "RequestFullfill(uint256,bytes)";
-export declare const REQUEST_FULLFILL_ONCHAIN_EVENT_HASH = "19d5ac81a19d99da1743c582714888c08391772346b4b0186542ffe3f2565710";
+export declare const REQUEST_FULLFILL_ONCHAIN_EVENT_HASH = "0x19d5ac81a19d99da1743c582714888c08391772346b4b0186542ffe3f2565710";
 /**
  * Constants for SQS
  */

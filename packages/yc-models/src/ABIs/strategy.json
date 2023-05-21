@@ -108,7 +108,7 @@
         "type": "uint256"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "bytes",
         "name": "ycCommand",
         "type": "bytes"
@@ -381,56 +381,6 @@
   {
     "inputs": [
       {
-        "internalType": "bytes[]",
-        "name": "virtualTree",
-        "type": "bytes[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "startingIndices",
-        "type": "uint256[]"
-      },
-      {
-        "components": [
-          {
-            "internalType": "enum ExecutionTypes",
-            "name": "action",
-            "type": "uint8"
-          },
-          {
-            "internalType": "address",
-            "name": "initiator",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "gas",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes[]",
-            "name": "arguments",
-            "type": "bytes[]"
-          },
-          {
-            "internalType": "bytes[]",
-            "name": "commandCalldatas",
-            "type": "bytes[]"
-          }
-        ],
-        "internalType": "struct OperationItem",
-        "name": "operationRequest",
-        "type": "tuple"
-      }
-    ],
-    "name": "executeStepTree",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bytes",
         "name": "arg",
         "type": "bytes"
@@ -531,6 +481,11 @@
             "internalType": "bytes[]",
             "name": "commandCalldatas",
             "type": "bytes[]"
+          },
+          {
+            "internalType": "bool",
+            "name": "executed",
+            "type": "bool"
           }
         ],
         "internalType": "struct OperationItem",
@@ -571,6 +526,11 @@
             "internalType": "bytes[]",
             "name": "commandCalldatas",
             "type": "bytes[]"
+          },
+          {
+            "internalType": "bool",
+            "name": "executed",
+            "type": "bool"
           }
         ],
         "internalType": "struct OperationItem[]",
@@ -641,6 +601,11 @@
             "internalType": "bytes[]",
             "name": "commandCalldatas",
             "type": "bytes[]"
+          },
+          {
+            "internalType": "bool",
+            "name": "executed",
+            "type": "bool"
           }
         ],
         "internalType": "struct OperationItem",
@@ -727,6 +692,36 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "setForkStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "operationIdx",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "startingIndices",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "commandsHydratedThusFar",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "simulateOperationHydrationAndExecution",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

@@ -87,7 +87,25 @@ export class SQSQueue {
                     ReceiptHandle: message.ReceiptHandle || "",
                 };
                 // Send the delete message call to SQS
-                await this.#instance.deleteMessage(deleteParams).promise();
+                try {
+                    await this.#instance.deleteMessage(deleteParams).promise();
+                }
+                catch (e) {
+                    const { Messages: newMessages } = await this.#instance
+                        .receiveMessage(params)
+                        .promise();
+                    if (!Messages)
+                        throw "Cannot Delete Operation.";
+                    for (const msg of newMessages || []) {
+                        if (msg.MessageId == message.MessageId)
+                            await this.#instance
+                                .deleteMessage({
+                                QueueUrl: this.queue,
+                                ReceiptHandle: msg.ReceiptHandle || "",
+                            })
+                                .promise();
+                    }
+                }
                 /**
                  * @notice
                  * Finally, we recruse the function call - We do not await it though to avoid too deep of a memory stack

@@ -110,5 +110,23 @@ export class Fork extends JsonRpcProvider {
     async traceTxn(txn) {
         return await this.send("debug_traceTransaction", [txn]);
     }
+    /**
+     * Mine a block
+     */
+    async mine() {
+        return await this.send("evm_mine", []);
+    }
+    /**
+     * Disable automine
+     */
+    async disableAutoMine() {
+        return await this.send("evm_setAutomine", [false]);
+    }
+    /**
+     * Enable automine
+     */
+    async enableAutoMine() {
+        return await this.send("evm_setAutomine", [true]);
+    }
 }
 //# sourceMappingURL=fork.js.map

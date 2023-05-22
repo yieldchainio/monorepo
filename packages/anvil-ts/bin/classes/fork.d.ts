@@ -60,4 +60,16 @@ export declare class Fork extends JsonRpcProvider {
      * Trace a transaction
      */
     traceTxn(txn: bytes): Promise<any>;
+    /**
+     * Mine a block
+     */
+    mine(): Promise<any>;
+    /**
+     * Disable automine
+     */
+    disableAutoMine(): Promise<any>;
+    /**
+     * Enable automine
+     */
+    enableAutoMine(): Promise<any>;
 }

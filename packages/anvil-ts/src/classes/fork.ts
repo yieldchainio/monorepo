@@ -18,8 +18,6 @@ export class Fork extends JsonRpcProvider {
   static async fromRpcUrl(rpcURL: string) {
     const availablePort = await findAvailablePort(3000);
     const cmd = `anvil --fork-url ${rpcURL} --port ${availablePort}`;
-    console.log("Gonna execute this anvil cmd", cmd);
-    console.log("Hey Ser")
     const cmRes = exec(cmd);
     await new Promise((res) =>
       cmRes.stdout?.on("data", (chunck) => {
@@ -122,13 +120,34 @@ export class Fork extends JsonRpcProvider {
    * Enable trace
    */
   async enableTraces() {
-    return await this.send("anvil_enableTraces", [])
+    return await this.send("anvil_enableTraces", []);
   }
 
   /**
    * Trace a transaction
    */
-  async traceTxn(txn:  bytes) {
-    return await this.send("debug_traceTransaction", [txn])
+  async traceTxn(txn: bytes) {
+    return await this.send("debug_traceTransaction", [txn]);
+  }
+
+  /**
+   * Mine a block
+   */
+  async mine() {
+    return await this.send("evm_mine", []);
+  }
+
+  /**
+   * Disable automine
+   */
+  async disableAutoMine() {
+    return await this.send("evm_setAutomine", [false]);
+  }
+
+  /**
+   * Enable automine
+   */
+  async enableAutoMine() {
+    return await this.send("evm_setAutomine", [true]);
   }
 }

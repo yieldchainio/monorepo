@@ -46,9 +46,10 @@ export async function simulateHydrationRequest(hydrationRequest) {
 async function recursivelyExecAndHydrateRun(strategyContract, operationIdx, gasLimit, fork, commandCalldatas = [], startingIndices = [0]) {
     console.log("Recursing...");
     await fork.snap();
-    const receipt = await (await strategyContract.simulateOperationHydrationAndExecution.send(operationIdx, startingIndices, commandCalldatas, {
+    const txn = await strategyContract.simulateOperationHydrationAndExecution.send(operationIdx, startingIndices, commandCalldatas, {
         gasLimit: gasLimit * 5n,
-    })).wait();
+    });
+    const receipt = await txn.wait();
     console.log("Got Receipt", receipt);
     if (!receipt)
         throw "Cannot Recursively Hydrate Run - Sent Execution Run On Fork, But Receipt Is Null.";

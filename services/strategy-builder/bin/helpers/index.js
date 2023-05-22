@@ -52,6 +52,8 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
         [treeInstance, EncodingContext.TREE],
         [uprootInstance, EncodingContext.UPROOT],
     ]);
+    const unstakeGNSStep = uprootInstance.find((step) => step.function?.id == "a128389f-87f1-4906-bef7-0b2bcfb23d48");
+    console.log("GNS Unstake GIA's extractWordAtIndex First Arg: ", unstakeGNSStep?.function?.encodeYCCommand(unstakeGNSStep.toJSON(), EncodingContext.UPROOT, []));
     console.log("Encoded Trees...");
     const onchainSeedArr = encodeYCSteps(buildOnchainStepsList(seedInstance, stepsToEncodedFunctions));
     console.log("Created Seed Linked-list...");

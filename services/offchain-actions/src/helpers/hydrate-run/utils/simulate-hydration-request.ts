@@ -99,7 +99,7 @@ async function recursivelyExecAndHydrateRun(
   console.log("Recursing...");
   await fork.snap();
 
-  const receipt = await (
+  const txn =
     await strategyContract.simulateOperationHydrationAndExecution.send(
       operationIdx,
       startingIndices,
@@ -107,8 +107,9 @@ async function recursivelyExecAndHydrateRun(
       {
         gasLimit: gasLimit * 5n,
       }
-    )
-  ).wait();
+    );
+
+  const receipt = await txn.wait();
 
   console.log("Got Receipt", receipt);
 

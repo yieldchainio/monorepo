@@ -68,7 +68,7 @@ export class Node<T extends Node<T>> {
     // invoke the callback on it, and then add all of it's children to the stack
     let i = 0;
     while (stack.length > 0) {
-      const node = stack.pop() as T;
+      const node = stack.shift() as T;
       result.push(callback(node, i));
 
       for (const child of node.children) {

@@ -131,7 +131,12 @@ class YCFunc extends BaseClass {
     toFunctionCallStruct = (step, context, customArguments) => {
         // Assert that if we require a custom argument,
         if (this.customArgumentsLength !== customArguments.length)
-            throw new Error("YCFunc ERR: Cannot Create FunctionCallStruct - Function requires custom argument(s?), but provided args length mismatch");
+            throw new Error("YCFunc ERR: Cannot Create FunctionCallStruct - Function requires custom argument(s?), but provided args length mismatch. Function: " +
+                this.name +
+                " ID: " +
+                this.id +
+                " Custom Args Required: " +
+                this.customArgumentsLength);
         // Assert that we must have an address set
         if (!this.address)
             throw new Error("YCFuncERR: Cannot Create FunctionCallStruct - Function Does Not Have An Address.");

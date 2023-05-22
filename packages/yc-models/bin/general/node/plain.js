@@ -60,7 +60,7 @@ export class Node {
         // invoke the callback on it, and then add all of it's children to the stack
         let i = 0;
         while (stack.length > 0) {
-            const node = stack.pop();
+            const node = stack.shift();
             result.push(callback(node, i));
             for (const child of node.children) {
                 stack.push(child);

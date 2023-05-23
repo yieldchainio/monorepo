@@ -21,6 +21,8 @@
     "typescript": "^5.0.4",
     "web3": "^1.8.1",
     "@yc/yc-models": "*",
-    "@yc/anvil-ts": "*"
+    "@yc/anvil-ts": "*",
+    "@yc/aws-models": "*"
+
   }
 }

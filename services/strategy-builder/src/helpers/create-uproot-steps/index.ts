@@ -6,7 +6,7 @@
  * @return uprootSteps - The uproot steps of the strategy
  */
 
-import { StepType, YCClassifications, YCStep, YCToken } from "@yc/yc-models";
+import { StepType, TriggerTypes, YCClassifications, YCStep, YCToken } from "@yc/yc-models";
 import { v4 as uuid } from "uuid";
 import lodash, { update } from "lodash";
 import { DUPLICATEABLE_FUNCTION_IDS } from "./constants.js";
@@ -28,7 +28,7 @@ export function createUprootSteps(
       tokenPercentages: [],
       inflows: [],
       outflows: [],
-      triggerName: "Withdrawal",
+      triggerType: TriggerTypes.WITHDRAWAL,
       triggerDescription: "When Someone Withdraws Shares",
       triggerIcon: {
         dark: "/icons/withdrawal-light.svg",
@@ -78,7 +78,7 @@ export function createUprootSteps(
 
   addScrapeSwaps(root, depositToken);
 
-  updateParents(root)
-  
+  updateParents(root);
+
   return root;
 }

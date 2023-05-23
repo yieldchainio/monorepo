@@ -5,7 +5,7 @@
  * @param depositToken - The deposit token of the strategy
  * @return uprootSteps - The uproot steps of the strategy
  */
-import { StepType, YCClassifications, YCStep } from "@yc/yc-models";
+import { StepType, TriggerTypes, YCClassifications, YCStep } from "@yc/yc-models";
 import { v4 as uuid } from "uuid";
 import { DUPLICATEABLE_FUNCTION_IDS } from "./constants.js";
 import { reversifyTreeFunctions } from "./helpers/reversify-step-function.js";
@@ -20,7 +20,7 @@ export function createUprootSteps(seedSteps, treeSteps, depositToken) {
         tokenPercentages: [],
         inflows: [],
         outflows: [],
-        triggerName: "Withdrawal",
+        triggerType: TriggerTypes.WITHDRAWAL,
         triggerDescription: "When Someone Withdraws Shares",
         triggerIcon: {
             dark: "/icons/withdrawal-light.svg",

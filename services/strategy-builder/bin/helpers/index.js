@@ -16,7 +16,8 @@ import { buildOnchainStepsList } from "./build-onchain-steps-list/index.js";
 import { encodeYCSteps } from "./encode-yc-steps/index.js";
 import { batchUpdateTokenPercentages } from "./update-token-percentages/index.js";
 import { ethers } from "ethers";
-import factoryABI from "@yc/yc-models/src/ABIs/factory.json" assert { type: "json" };
+import DiamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
+import { buildTriggers } from "./build-triggers/index.js";
 export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisibility, depositTokenID, chainID) {
     const ycContext = YCClassifications.getInstance();
     if (!ycContext.initiallized)
@@ -34,6 +35,8 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
     const treeInstance = new YCStep(treeSteps, ycContext);
     const uprootInstance = createUprootSteps(seedInstance, treeInstance, depositToken);
     console.log("Built Uproot...");
+    const triggers = buildTriggers(treeInstance);
+    console.log("Built triggers...", triggers);
     const seedValidation = validateSteps(seedInstance, ycContext);
     if (!seedValidation.status)
         return { status: false, reason: seedValidation.reason };
@@ -59,12 +62,13 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
     console.log("Created Tree Linked-list...");
     const onchainUprootArr = encodeYCSteps(buildOnchainStepsList(uprootInstance, stepsToEncodedFunctions));
     console.log("Created Uproot Linked-list...");
-    const ycFactoryInstance = new ethers.Contract(network.diamondAddress, factoryABI, new ethers.JsonRpcProvider(network.jsonRpc));
+    const ycFactoryInstance = new ethers.Contract(network.diamondAddress, DiamondABI, new ethers.JsonRpcProvider(network.jsonRpc));
     const vaultCreationArgs = {
         seedSteps: onchainSeedArr,
         treeSteps: onchainTreeArr,
         uprootSteps: onchainUprootArr,
         approvalPairs,
+        triggers,
         depositToken: depositToken.address,
         isPublic: vaultVisibility,
     };

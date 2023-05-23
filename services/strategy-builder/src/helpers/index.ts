@@ -26,6 +26,7 @@ import { encodeYCSteps } from "./encode-yc-steps/index.js";
 import { batchUpdateTokenPercentages } from "./update-token-percentages/index.js";
 import { ethers } from "ethers";
 import DiamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
+import { buildTriggers } from "./build-triggers/index.js";
 
 export async function createDeployableVaultInput(
   seedSteps: JSONStep,
@@ -60,6 +61,10 @@ export async function createDeployableVaultInput(
   );
 
   console.log("Built Uproot...");
+
+  const triggers = buildTriggers(treeInstance);
+
+  console.log("Built triggers...", triggers);
 
   const seedValidation = validateSteps(seedInstance, ycContext);
   if (!seedValidation.status)
@@ -123,6 +128,7 @@ export async function createDeployableVaultInput(
     treeSteps: onchainTreeArr,
     uprootSteps: onchainUprootArr,
     approvalPairs,
+    triggers,
     depositToken: depositToken.address as `0x${string}`,
     isPublic: vaultVisibility,
   };

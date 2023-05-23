@@ -15,6 +15,7 @@
   "dependencies": {
     "ethers": "^6.3.0",
     "typescript": "^5.0.4",
-    "@yc/yc-models":"*"
+    "@yc/yc-models": "*",
+    "@yc/yc-data": "*"
   }
 }

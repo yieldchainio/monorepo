@@ -6,7 +6,6 @@ import { configRoutes } from "./constants";
  * Main layout for the strategy config
  */
 
-import { StrategyCreationLayoutProps } from "./types";
 import { BackdropColor } from "components/backdrop-color";
 import { useDisableScroll } from "utilities/hooks/styles/useDisableScroll";
 import { Navigators } from "../../../components/navigators";
@@ -22,7 +21,7 @@ import { StrategiesDraftsModal } from "components/drafts-modal";
 import { ChildrenProvider } from "components/internal/render-children";
 import { DeploymentModal } from "components/deployment-modal";
 
-const StrategyConfigLayout = ({ children }: StrategyCreationLayoutProps) => {
+const StrategyConfigLayout = ({ children }: { children: React.ReactNode }) => {
   /**
    * Get the state of the config routes to show progress and so on
    */

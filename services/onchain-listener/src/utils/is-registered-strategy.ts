@@ -1,5 +1,5 @@
 import { address, SupportedYCNetwork } from "@yc/yc-models";
-import factoryABI from "@yc/yc-models/src/ABIs/factory.json" assert { type: "json" };
+import diamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
 import { Contract } from "ethers";
 
 const diamondContractsCache = new Map<address, Contract>();
@@ -9,7 +9,7 @@ const getDiamondContract = (network: SupportedYCNetwork) => {
   if (existing) return existing;
   const contract = new Contract(
     network.diamondAddress,
-    factoryABI,
+    diamondABI,
     network.provider
   );
   diamondContractsCache.set(network.diamondAddress, contract);

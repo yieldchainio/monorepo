@@ -20,6 +20,10 @@ export declare class HydrationRequest {
      */
     getOperation(): Promise<OperationItem | null>;
     /**
+     * Get the gas bundled with this hydration request
+     */
+    operationGas(fork: Fork): Promise<bigint | null>;
+    /**
      * Get the operation index
      */
     get operationIndex(): bigint;

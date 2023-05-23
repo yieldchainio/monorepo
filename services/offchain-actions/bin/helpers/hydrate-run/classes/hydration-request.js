@@ -38,6 +38,12 @@ export class HydrationRequest {
         return null;
     }
     /**
+     * Get the gas bundled with this hydration request
+     */
+    async operationGas(fork) {
+        return await new Contract(this.#network.diamondAddress, DiamondAbi, fork).getStrategyOperationGas(this.#request.address, this.operationIndex);
+    }
+    /**
      * Get the operation index
      */
     get operationIndex() {
@@ -59,16 +65,16 @@ export class HydrationRequest {
      * Get the gas bundled with this transaction
      */
     async getGasLimit(fork) {
-        const operation = await this.getOperation();
+        const operationGas = await this.operationGas(fork);
         const gasPrice = await fork.gasPrice();
-        if (operation?.gas == null || operation?.gas == undefined)
+        if (operationGas == null || operationGas == undefined)
             throw "Cannot Get Gas Limit - Operation Gas Undefined";
-        else if (operation.gas == 0n) {
+        else if (operationGas == 0n) {
             const diamondContract = new Contract(this.#network.diamondAddress, DiamondAbi, fork);
-            const vaultGasBalance = (await diamondContract.getStrategyState(this.strategyAddress))[1];
+            const vaultGasBalance = await diamondContract.getStrategyGasBalance(this.strategyAddress);
             return BigInt(vaultGasBalance) / BigInt(gasPrice);
         }
-        return BigInt(operation.gas) / BigInt(gasPrice);
+        return BigInt(operationGas) / BigInt(gasPrice);
     }
 }
 //# sourceMappingURL=hydration-request.js.map

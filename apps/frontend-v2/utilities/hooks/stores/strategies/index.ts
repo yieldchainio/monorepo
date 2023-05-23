@@ -14,7 +14,7 @@ import {
   StrategyStoreState,
 } from "./types";
 import { v4 as uuid } from "uuid";
-import { YCNetwork, YCToken } from "@yc/yc-models";
+import { TriggerTypes, YCNetwork, YCToken } from "@yc/yc-models";
 
 // Initiate the DB storage to the strategies store
 import { strategiesLocalStorage } from "./constants";
@@ -35,7 +35,6 @@ export const useStrategyStore = create<StrategyStore>()(
       /**
        * @State
        */
-
       // UUID of the strategy
       id: startingID,
 
@@ -56,7 +55,7 @@ export const useStrategyStore = create<StrategyStore>()(
         {
           state: "config" as StepState,
           type: StepType.TRIGGER,
-          triggerName: "Automation",
+          triggerType: TriggerTypes.AUTOMATION,
           triggerDescription: "Scheduled Trigger",
           triggerIcon: {
             dark: "/icons/timer-light.svg",
@@ -74,7 +73,7 @@ export const useStrategyStore = create<StrategyStore>()(
           inflows: [get()?.depositToken].flatMap((token: YCToken | null) =>
             token ? [token] : []
           ),
-          triggerName: "Deposit",
+          triggerType: TriggerTypes.DEPOSIT,
           triggerDescription: "When A Vault Deposit Happens",
           triggerIcon: {
             dark: "/icons/deposit-light.svg",

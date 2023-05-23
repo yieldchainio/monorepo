@@ -346,29 +346,6 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "operationIndex",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address payable",
-                "name": "receiver",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "claimAmount",
-                "type": "uint256"
-            }
-        ],
-        "name": "claimOperationGas",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
             }
@@ -376,25 +353,6 @@
         "name": "deposit",
         "outputs": [],
         "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes",
-                "name": "arg",
-                "type": "bytes"
-            }
-        ],
-        "name": "extractFirstWord",
-        "outputs": [
-            {
-                "internalType": "bytes32",
-                "name": "firstWord",
-                "type": "bytes32"
-            }
-        ],
-        "stateMutability": "pure",
         "type": "function"
     },
     {
@@ -679,25 +637,6 @@
         "name": "runStrategy",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes",
-                "name": "encodedCommandCall",
-                "type": "bytes"
-            }
-        ],
-        "name": "runViewFunction",
-        "outputs": [
-            {
-                "internalType": "bytes",
-                "name": "returnVal",
-                "type": "bytes"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {

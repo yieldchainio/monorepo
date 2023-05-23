@@ -17,19 +17,36 @@ export interface YCStepStruct {
   isCallback: boolean;
 }
 
+export enum TriggerTypes {
+  DEPOSIT = "deposit",
+  WITHDRAWAL = "withdrawal",
+  AUTOMATION = "automation",
+}
+
+export interface Trigger {
+  triggerType: TriggerTypes;
+  extraData: bytes;
+}
+
+export interface RegisteredTrigger {
+  triggerType: TriggerTypes;
+  lastStrategyRun: bigint;
+  requiredDelay: bigint;
+}
+
 export interface VaultFactoryInputs {
   seedSteps: bytes[];
   treeSteps: bytes[];
   uprootSteps: bytes[];
   approvalPairs: address[][];
+  triggers: Trigger[];
   depositToken: address;
   isPublic: boolean;
 }
 
-export const VAULT_CREATED_EVENT_SIGNATURE = "VaultCreated(address,address,address)"
-
+export const VAULT_CREATED_EVENT_SIGNATURE =
+  "VaultCreated(address,address,address)";
 
 export interface VaultCreatedEvent {
-  strategyAddress: address,
-
+  strategyAddress: address;
 }

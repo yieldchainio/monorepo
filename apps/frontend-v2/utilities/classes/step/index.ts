@@ -13,6 +13,8 @@ import {
   assert,
   DBFunction,
   JSONStep,
+  StepData,
+  TriggerTypes,
 } from "@yc/yc-models";
 import {
   ActionConfigs,
@@ -191,10 +193,10 @@ export class Step extends Node<Step> implements IStep<Step> {
    * @param idx - Index to insert in
    * @param value - The value to insert
    */
-  setCustomArg(idx: number, value:any) {
-    const newArr = [...this.customArguments]
-    newArr[idx] = value
-    this.customArguments = newArr
+  setCustomArg(idx: number, value: any) {
+    const newArr = [...this.customArguments];
+    newArr[idx] = value;
+    this.customArguments = newArr;
   }
 
   /**
@@ -599,7 +601,7 @@ export class Step extends Node<Step> implements IStep<Step> {
   /**
    * The name of this trigger
    */
-  triggerName: string | null = null;
+  triggerType: TriggerTypes | null = null;
 
   /**
    * A short description of this trigger
@@ -620,7 +622,7 @@ export class Step extends Node<Step> implements IStep<Step> {
   /**
    * Any additional data that the Trigger config will want to save
    */
-  data: any = {};
+  data: StepData = {};
 
   /**
    * Any additional data that the trigger step will want to display on the frontend.
@@ -677,7 +679,7 @@ export class Step extends Node<Step> implements IStep<Step> {
     /**
      * Construct trigger step variables
      */
-    this.triggerName = config?.triggerName || null;
+    this.triggerType = config?.triggerType || null;
     this.triggerIcon = config?.triggerIcon || null;
     this.triggerDescription = config?.triggerDescription || null;
     this.triggerVisuals = config?.triggerVisuals || null;
@@ -950,7 +952,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       }),
       actionConfig: this.actionConfig,
       type: this.type,
-      triggerName: this.triggerName,
+      triggerType: this.triggerType,
       triggerDescription: this.triggerDescription,
       triggerVisuals: this.triggerVisuals,
       triggerIcon: this.triggerIcon,
@@ -981,7 +983,6 @@ export class Step extends Node<Step> implements IStep<Step> {
       ),
       customArguments: this.customArguments,
       type: this.type,
-
     };
   }
 }

@@ -57,7 +57,7 @@ class YCStep extends Node {
     /**
      * The name of this trigger
      */
-    triggerName = null;
+    triggerType = null;
     /**
      * A short description of this trigger
      */
@@ -95,7 +95,7 @@ class YCStep extends Node {
         this.customArguments = _step.customArguments;
         this.data = _step.data;
         this.tokenPercentages = new Map(Array.isArray(_step.tokenPercentages) ? _step.tokenPercentages : []);
-        this.triggerName = _step.triggerName || null;
+        this.triggerType = _step.triggerType || null;
         this.triggerDescription = _step.triggerDescription || null;
         this.triggerIcon = _step.triggerIcon || null;
     }
@@ -140,7 +140,7 @@ class YCStep extends Node {
             this.function?.signature +
             " - " +
             (this.parent?.function?.signature ||
-                this.parent?.triggerName ||
+                this.parent?.triggerType ||
                 "No Parent"));
         for (const child of this.children)
             child.print(indent + 2);

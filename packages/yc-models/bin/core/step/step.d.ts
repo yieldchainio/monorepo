@@ -1,4 +1,4 @@
-import { JSONStep, StepType, YCToken, YCAction, YCClassifications, YCFunc, YCProtocol } from "@yc/yc-models";
+import { JSONStep, StepType, YCToken, YCAction, YCClassifications, YCFunc, YCProtocol, StepData, TriggerTypes } from "@yc/yc-models";
 import { Node } from "../../general/node/plain.js";
 export declare class YCStep extends Node<YCStep> {
     static readonly YCStepTupleSig = "tuple(bytes func, uint256[] childrenIndices, bytes[] conditions, bool isCallback)";
@@ -43,11 +43,11 @@ export declare class YCStep extends Node<YCStep> {
     /**
      * Any additional data that the Trigger config will want to save
      */
-    data: any;
+    data: StepData;
     /**
      * The name of this trigger
      */
-    triggerName: string | null;
+    triggerType: TriggerTypes | null;
     /**
      * A short description of this trigger
      */

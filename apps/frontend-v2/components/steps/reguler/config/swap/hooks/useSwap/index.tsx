@@ -51,10 +51,10 @@ export const useSwap = ({
         throw "Cannot Choose From Token - Token Is Unavailable At This Step";
 
       // Set the step's data to it (for persistant visual representation of the choice)
-      (step.data.swap as SwapData) = {
+      step.data.swap = {
         ...(step.data?.swap || {}),
         fromToken: token.toJSON(),
-      };
+      } as SwapData
 
       // Clear existing outflows
       step.clearOutflows();
@@ -70,10 +70,10 @@ export const useSwap = ({
   const chooseToToken = useCallback(
     (token: YCToken) => {
       // Set the step's data to it (for persistant visual representation of the choice)
-      (step.data.swap as SwapData) = {
+      step.data.swap = {
         ...(step.data?.swap || {}),
         toToken: token.toJSON(),
-      };
+      } as SwapData
 
       // Clear existing inflows
       step.clearInflows();
@@ -91,7 +91,7 @@ export const useSwap = ({
    */
   useEffect(() => {
     // Shorthand for the data
-    const data = step.data.swap as SwapData | null;
+    const data = step.data.swap;
 
     // If our from token is not init yet
     // And there is a persisted DBtoken in the data,

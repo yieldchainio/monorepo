@@ -11,8 +11,7 @@ import { HARVEST_ID } from "components/steps/reguler/constants";
 import { useLogs } from "utilities/hooks/stores/logger";
 import { YCClassifications, YCFunc } from "@yc/yc-models";
 import { completeHarvest } from "../../utils/complete-harvest";
-import { HarvestData } from "../../types";
-import { HarvestConfig } from "../../index.jsx";
+import { HarvestData } from "@yc/yc-models";
 
 export const useHarvest = (step: Step, triggerComparison: () => void) => {
   // ===========
@@ -155,7 +154,7 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
     /**
      * Set the data on the step (used by our useEffect to set the states)
      */
-    (step.data.harvest as HarvestData | undefined) = {
+    step.data.harvest = {
       ...step.data?.harvest,
       func: func.toJSON(),
     };

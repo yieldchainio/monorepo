@@ -81,7 +81,7 @@ const ACTION_IDS_TO_DESCRIPTORS: Record<string, (step: Step) => string> = {
 };
 
 const getTriggerDescription = (step: Step) => {
-  return `On ${step.triggerName}, `;
+  return `On ${step.triggerType}, `;
 };
 
 const getActionDescription = (step: Step) => {

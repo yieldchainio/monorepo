@@ -93,3 +93,48 @@ export enum StepType {
   TRIGGER = "trigger",
   CONDITION = "condition",
 }
+
+export type StepData = {
+  automation?: AutomationData;
+  lp?: AddLiquidityData;
+  harvest?: HarvestData;
+  stake?: StakeData;
+  swap?: SwapData;
+  trigger?: any;
+};
+
+export enum Timestamps {
+  MINUTES = "Minutes",
+  HOURS = "Hours",
+  DAYS = "Days",
+  WEEKS = "Weeks",
+  MONTHS = "Months",
+  YEARS = "Years",
+}
+
+export interface StakeData {
+  protocol: DBProtocol;
+  func: DBFunction | null;
+}
+
+export type SwapData = {
+  fromToken: DBToken | null;
+  toToken: DBToken | null;
+};
+
+export type HarvestData = {
+  func?: DBFunction;
+  externallyUnlocked?: boolean;
+};
+
+export interface AddLiquidityData {
+  tokenA?: DBToken;
+  tokenB?: DBToken;
+  protocol: DBProtocol;
+}
+
+export type AutomationData = {
+  input?: number;
+  timestamp?: Timestamps;
+  interval?: number;
+};

@@ -17,13 +17,13 @@ export const MediumCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
      * Memoize the persisted visual from step's data
      */
     const additionalVisual = useMemo(() => {
-      const Visual = TRIGGER_NAMES_TO_COMPONENTS[step.triggerName as string] as
+      const Visual = TRIGGER_NAMES_TO_COMPONENTS[step.triggerType as string] as
         | TriggerVisual
         | undefined;
 
       if (Visual)
         return <Visual step={step} triggerComparison={triggerComparison} />;
-    }, [step, step.data.trigger, step.triggerName]);
+    }, [step, step.data.trigger, step.triggerType]);
 
     // Return JSX
     return (
@@ -43,7 +43,7 @@ export const MediumCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
             <WrappedImage src={step.triggerIcon} width={24} height={24} />
           </div>
           <div className="flex flex-col gap-1 items-start justify-start">
-            <WrappedText fontSize={14}>{step.triggerName}</WrappedText>
+            <WrappedText fontSize={14}>{step.triggerType}</WrappedText>
             <WrappedText fontSize={11} className="text-opacity-40">
               {step.triggerDescription}
             </WrappedText>

@@ -6,11 +6,11 @@
 import { YCProtocol, YCToken } from "@yc/yc-models";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Step } from "utilities/classes/step";
-import { AddLiquidityData } from "../../types";
 import { useConfigContext } from "../../../hooks/useConfigContext";
 import { useProtocols } from "../../../hooks/useProtocols";
 import { ProtocolType } from "@prisma/client";
 import { useTokens } from "../../../hooks/useTokens";
+import { AddLiquidityData } from "@yc/yc-models";
 
 export const useAddLiquidity = ({
   step,
@@ -65,26 +65,26 @@ export const useAddLiquidity = ({
         throw "Cannot Choose From Token - Token Is Unavailable At This Step";
 
       // Set the step's data to it (for persistant visual representation of the choice)
-      (step.data.lp as AddLiquidityData) = {
+      step.data.lp = {
         ...(step.data?.lp || {}),
         tokenA: token.toJSON(),
-      };
+      } as AddLiquidityData;
 
       // Add this to the step's outflows
       step.addOutflow(token);
 
       triggerComparison();
     },
-    [JSON.stringify(step.toJSON({onlyCompleted: false}))]
+    [JSON.stringify(step.toJSON({ onlyCompleted: false }))]
   );
 
   const chooseTokenB = useCallback(
     (token: YCToken) => {
       // Set the step's data to it (for persistant visual representation of the choice)
-      (step.data.lp as AddLiquidityData) = {
+      step.data.lp = {
         ...(step.data?.lp || {}),
         tokenB: token.toJSON(),
-      };
+      } as AddLiquidityData;
 
       // Add this to the step's outflows
       step.addOutflow(token);
@@ -96,7 +96,7 @@ export const useAddLiquidity = ({
 
   const chooseProtocol = useCallback(
     (protocol: YCProtocol) => {
-      (step.data.lp as AddLiquidityData) = {
+      step.data.lp = {
         ...(step.data?.lp || {}),
         protocol: protocol.toJSON(),
       };
@@ -113,7 +113,7 @@ export const useAddLiquidity = ({
    */
   useEffect(() => {
     // Shorthand for the data
-    const data = step.data.lp as AddLiquidityData | null;
+    const data = step.data.lp;
 
     // If our from token is not init yet
     // And there is a persisted DBtoken in the data,

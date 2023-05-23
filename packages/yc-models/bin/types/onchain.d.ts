@@ -13,11 +13,26 @@ export interface YCStepStruct {
     conditions: bytes[];
     isCallback: boolean;
 }
+export declare enum TriggerTypes {
+    DEPOSIT = "deposit",
+    WITHDRAWAL = "withdrawal",
+    AUTOMATION = "automation"
+}
+export interface Trigger {
+    triggerType: TriggerTypes;
+    extraData: bytes;
+}
+export interface RegisteredTrigger {
+    triggerType: TriggerTypes;
+    lastStrategyRun: bigint;
+    requiredDelay: bigint;
+}
 export interface VaultFactoryInputs {
     seedSteps: bytes[];
     treeSteps: bytes[];
     uprootSteps: bytes[];
     approvalPairs: address[][];
+    triggers: Trigger[];
     depositToken: address;
     isPublic: boolean;
 }

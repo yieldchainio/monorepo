@@ -10,7 +10,7 @@ import { InfoProvider } from "components/info-providers";
 import Dropdown from "components/dropdown";
 import { ToolTipDirection } from "components/info-providers/types";
 import { useAutomation } from "../hooks/useAutomation";
-import { Timestamps } from "../types";
+import { Timestamps } from "@yc/yc-models";
 
 export const SmallAutomationConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {

@@ -13,6 +13,7 @@ import {
   DBFunction,
   JSONStep,
   DBToken,
+  TriggerTypes,
 } from "@yc/yc-models";
 import { ImageSrc } from "components/wrappers/types";
 
@@ -115,7 +116,7 @@ export interface IStepReguler<T extends IStep<T>> {
 
 // An interface for the IStep propreties which are trigger step-related
 export interface IStepTrigger<T extends IStep<T>> {
-  triggerName?: string | null;
+  triggerType?: TriggerTypes | null;
   triggerDescription?: string | null;
   triggerIcon?: ImageSrc;
   data?: any | null;
@@ -166,7 +167,7 @@ export interface JSONFrontendStep {
   actionConfig?: ActionConfigs | null;
 
   // ==TRIGGER== //
-  triggerName?: string | null;
+  triggerType?: TriggerTypes | null
   triggerDescription?: string | null;
   triggerIcon?: ImageSrc;
   data?: any | null;

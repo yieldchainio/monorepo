@@ -2,14 +2,8 @@
  * Types for the automation config
  */
 
-export enum Timestamps {
-  MINUTES = "Minutes",
-  HOURS = "Hours",
-  DAYS = "Days",
-  WEEKS = "Weeks",
-  MONTHS = "Months",
-  YEARS = "Years",
-}
+import { Timestamps } from "@yc/yc-models";
+
 
 export const TIMESTAMPS_TO_VALUE_IN_SECONDS: Record<Timestamps, number> = {
   [Timestamps.MINUTES]: 60,
@@ -20,8 +14,3 @@ export const TIMESTAMPS_TO_VALUE_IN_SECONDS: Record<Timestamps, number> = {
   [Timestamps.YEARS]: 31536000,
 };
 
-export interface AutomationData {
-  input?: number;
-  timestamp?: Timestamps;
-  interval?: number;
-}

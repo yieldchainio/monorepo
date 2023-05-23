@@ -79,7 +79,7 @@ export const useStake = ({
       if (_protocol.id == protocol?.id) return;
 
       // Set the protocol on the step's data (persistant), and also reset the function to null
-      (step.data.stake as StakeData) = {
+      step.data.stake = {
         ...(step.data?.stake || {}),
         protocol: _protocol.toJSON(),
         func: null,
@@ -104,10 +104,10 @@ export const useStake = ({
   const chooseFunction = useCallback(
     (func: YCFunc) => {
       // Change the stake data on the step (persistant)
-      (step.data.stake as StakeData) = {
+      step.data.stake = {
         ...(step.data?.stake || {}),
         func: func.toJSON(),
-      };
+      } as StakeData
 
       // Validate that we have all required outflows available
       if (
@@ -145,7 +145,7 @@ export const useStake = ({
    */
   useEffect(() => {
     // Shorthand for the data
-    const data = step.data.stake as StakeData | null;
+    const data = step.data.stake;
     if (data?.func) {
       const stakeFunc = new YCFunc(data.func, context);
       const rewardsFunc = getRewardsFunction(stakeFunc, context);

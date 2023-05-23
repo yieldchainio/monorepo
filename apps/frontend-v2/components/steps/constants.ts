@@ -11,7 +11,7 @@ import { StepState, StepType } from "utilities/classes/step/types";
 export const DEPOSIT_TRIGGER_CONFIG = {
   type: StepType.TRIGGER,
   state: "complete" as StepState,
-  triggerName: "Deposit",
+  triggerType: "Deposit",
   triggerDescription: "When A Vault Deposit Happens",
   triggerIcon: {
     dark: "/icons/deposit-light.svg",

@@ -17,13 +17,13 @@ export const SmallCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
      * Memoize the persisted visual from step's data
      */
     const additionalVisual = useMemo(() => {
-      const Visual = TRIGGER_NAMES_TO_COMPONENTS[step.triggerName as string] as
+      const Visual = TRIGGER_NAMES_TO_COMPONENTS[step.triggerType as string] as
         | TriggerVisual
         | undefined;
 
       if (Visual)
         return <Visual step={step} triggerComparison={triggerComparison} />;
-    }, [step, step.data.trigger, step.triggerName]);
+    }, [step, step.data.trigger, step.triggerType]);
     return (
       <BaseNode
         className="justify-between px-2 "
@@ -42,7 +42,7 @@ export const SmallCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
           </div>
           <div className="flex flex-col  items-start justify-center w-[60%] overflow-hidden">
             <WrappedText fontSize={13} className="truncate">
-              {step.triggerName}
+              {step.triggerType}
             </WrappedText>
             <WrappedText
               fontSize={10}

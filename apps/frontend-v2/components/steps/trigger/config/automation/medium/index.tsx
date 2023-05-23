@@ -10,7 +10,7 @@ import { useAutomation } from "../hooks/useAutomation";
 import Dropdown from "components/dropdown";
 import { InfoProvider } from "components/info-providers";
 import { ToolTipDirection } from "components/info-providers/types";
-import { Timestamps } from "../types";
+import { Timestamps } from "@yc/yc-models";
 
 export const MediumAutomationConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {

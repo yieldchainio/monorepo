@@ -6,6 +6,7 @@ import { JsonValue } from "@yc/yc-data";
 import { address, ChainID } from "./global.js";
 import type { Typeflags, ProtocolType } from "@prisma/client";
 import { StepType } from "./yc.js";
+import { TriggerTypes } from "./onchain.js";
 
 // A DB Model representing an action
 export interface DBAction {
@@ -139,7 +140,7 @@ export interface JSONStep {
   children: JSONStep[];
   data: any | null;
   type: StepType;
-  triggerName?: string | null;
+  triggerType?: TriggerTypes;
   triggerDescription?: string | null;
   triggerIcon?: string | { dark: string; light: string } | null;
 }

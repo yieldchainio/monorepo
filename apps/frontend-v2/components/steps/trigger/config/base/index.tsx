@@ -61,7 +61,7 @@ export const BaseTriggerConfig = forwardRef<
         <div className="flex flex-row items-center justify-between self-start w-full">
           <div className="flex flex-row items-center justify-start gap-1 self-start ">
             <WrappedText className="text-opacity-50">Trigger:</WrappedText>
-            <WrappedText className="">{step.triggerName}</WrappedText>
+            <WrappedText className="">{step.triggerType}</WrappedText>
           </div>
           <StepOptions
             canvasID={canvasID}

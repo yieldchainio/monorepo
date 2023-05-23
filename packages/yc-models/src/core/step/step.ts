@@ -12,6 +12,8 @@ import {
   YCProtocol,
   DBFunction,
   YCArgument,
+  StepData,
+  TriggerTypes,
 } from "@yc/yc-models";
 import { Node } from "../../general/node/plain.js";
 
@@ -76,7 +78,7 @@ export class YCStep extends Node<YCStep> {
   /**
    * Any additional data that the Trigger config will want to save
    */
-  data: any = {};
+  data: StepData = {};
 
   // -----------
   // Trigger Step Variables
@@ -84,7 +86,7 @@ export class YCStep extends Node<YCStep> {
   /**
    * The name of this trigger
    */
-  triggerName: string | null = null;
+  triggerType: TriggerTypes | null = null;
 
   /**
    * A short description of this trigger
@@ -129,7 +131,7 @@ export class YCStep extends Node<YCStep> {
       Array.isArray(_step.tokenPercentages) ? _step.tokenPercentages : []
     );
 
-    this.triggerName = _step.triggerName || null;
+    this.triggerType = _step.triggerType || null;
     this.triggerDescription = _step.triggerDescription || null;
     this.triggerIcon = _step.triggerIcon || null;
   }
@@ -182,7 +184,7 @@ export class YCStep extends Node<YCStep> {
         this.function?.signature +
         " - " +
         (this.parent?.function?.signature ||
-          this.parent?.triggerName ||
+          this.parent?.triggerType ||
           "No Parent")
     );
 

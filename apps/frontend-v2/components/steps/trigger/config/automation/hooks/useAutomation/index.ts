@@ -4,9 +4,9 @@
  */
 
 import { useEffect, useState } from "react";
-import { AutomationData, Timestamps } from "../../types";
 import { StepProps } from "components/steps/types";
 import { makeInterval } from "../../utils/make-interval";
+import { AutomationData, Timestamps } from "@yc/yc-models";
 
 export const useAutomation = ({ step, triggerComparison }: StepProps) => {
   /**
@@ -23,7 +23,7 @@ export const useAutomation = ({ step, triggerComparison }: StepProps) => {
   const chooseInterval = (interval: number) => {
     if (!interval) return;
 
-    (step.data.automation as AutomationData | undefined) = {
+    step.data.automation = {
       ...(step.data?.automation || {}),
       input: interval,
       interval: makeInterval(interval, timestamp),
@@ -38,7 +38,7 @@ export const useAutomation = ({ step, triggerComparison }: StepProps) => {
   const chooseTimestamp = (timestamp: Timestamps) => {
     if (!timestamp) return;
 
-    (step.data.automation as AutomationData | undefined) = {
+    step.data.automation = {
       ...(step.data?.automation || {}),
       timestamp,
       interval: makeInterval(intervalInput, timestamp),

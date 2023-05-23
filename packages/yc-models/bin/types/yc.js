@@ -20,4 +20,13 @@ export var StepType;
     StepType["TRIGGER"] = "trigger";
     StepType["CONDITION"] = "condition";
 })(StepType || (StepType = {}));
+export var Timestamps;
+(function (Timestamps) {
+    Timestamps["MINUTES"] = "Minutes";
+    Timestamps["HOURS"] = "Hours";
+    Timestamps["DAYS"] = "Days";
+    Timestamps["WEEKS"] = "Weeks";
+    Timestamps["MONTHS"] = "Months";
+    Timestamps["YEARS"] = "Years";
+})(Timestamps || (Timestamps = {}));
 //# sourceMappingURL=yc.js.map

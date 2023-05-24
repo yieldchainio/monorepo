@@ -50,6 +50,7 @@ export class SQSQueue<T = any> {
       DelaySeconds: 0,
     };
 
+    console.log("Gonna Emit this", params);
     await this.#instance.sendMessage(params).promise();
   }
 
@@ -104,10 +105,10 @@ export class SQSQueue<T = any> {
             message.MessageId
           );
         else
-          console.log(
-            "YC SQS Listener Failed To Process Message :( ID:",
-            message.MessageId,
-            "Value:",
+          throw (
+            "YC SQS Listener Failed To Process Message :( ID: " +
+            message.MessageId +
+            " Value: " +
             handlerRes
           );
 

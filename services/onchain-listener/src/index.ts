@@ -34,9 +34,7 @@ const onchainLogsCacheBucket = new BucketCacher<Log>(
 );
 
 // SQS Queue instance
-const onchainLogsSQSQueue = new SQSQueue<SQSOnchainLog>(
-  ONCHAIN_LOGS_QUEUE_URL
-);
+const onchainLogsSQSQueue = new SQSQueue<SQSOnchainLog>(ONCHAIN_LOGS_QUEUE_URL);
 
 // The handler of a new event caught by the listener
 const newEventHandler = async (event: Log, network: SupportedYCNetwork) => {
@@ -58,7 +56,11 @@ const newEventHandler = async (event: Log, network: SupportedYCNetwork) => {
     rpc_url: network.provider._getConnection().url,
   };
 
+  console.log("The sqs onchain log", sqsOnchainLog);
+
   onchainLogsSQSQueue.emit(sqsOnchainLog, "logs");
+
+  console.log("Emitted!");
 };
 
 // The listener instance

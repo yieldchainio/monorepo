@@ -36,6 +36,7 @@ const ENVs: { [key in ServicesAndWorkers]?: Record<string, string> } = {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || "",
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || "",
     PRIVATE_KEY: process.env.PRIVATE_KEY || "",
+    DATABASE_URL: process.env.DATABASE_URL || "",
   },
 
   [ServicesAndWorkers.STRATEGYBUILDER]: {

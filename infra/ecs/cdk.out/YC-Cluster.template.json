@@ -2671,7 +2671,11 @@
        },
        {
         "Name": "PRIVATE_KEY",
-        "Value": "e39edcc4392e57bf99671ee281cfbd55d626bfea94fde0dfa577e449fe91d153"
+        "Value": "771184d670b4b81d9508e9dffc166ba65e84ed80031949d964c90a123e46c4a8"
+       },
+       {
+        "Name": "DATABASE_URL",
+        "Value": "postgres://OfirYC:B.%3F3f%2Apbf%3D2Df%21i@postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com:5432/postgres"
        }
       ],
       "Essential": true,
@@ -3263,7 +3267,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31Sy27jMAz8lr0rKtpFg+0xTR8IECwMe9HrglYYLxtHNPRIERj+96X8iNMeetJoSJGjIe/0cqlvf8CHX5jdYVFTqdsigDkoof62aO50+9YYtd7bt2ytsljWZIpYWgyJm1HOMeAfKGuc+Zlbec+GIBDbS3ICz5ssHb8hvELADzirzNFJ4Fx4YwM6wVPCoGS8rYJo/XdEG1SBJjoK51fHsek1fEtsbOXQ+06h8bpd19FLm5Q1wRdwFST5/vCEe7I0if/KsA1AFt0VN74t0J3IDIaMsDBQJ0NSkTVHG5IAp3Ns2FNgd34Ej6rmSkRtubpon3CnCI66zXnwuT8zlpn0xgyoU9A0Anq7IQb20pRsJZO9dHfVOMBPjIipwQcyNcOulIg18u4kO7CaK24l9tjHBsM+3a/zSHy0Y86Er+JDy8sPr66dcmlB7n9K3xwNu13/1x4VorJTOXqObrB2wp2yvEP97m9Otw/6l2z1uydaODGZjqjz4fwPKUjufPECAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31SXU/rMAz9LbxnAYbgfYwLmoRQ1SJekZuZYtbFVT6Gpqr/Hacf6+DhPvnk2LFPjrPUd3f6+gK+/cJsd4uaSt0WAcxOCfXeolnq9q0xav1h37K1ymJZkyliaTEkbkY5x4CvUNY48zO38p4NQSC2p+IE/m2yFF4gPEHAbziqzNFB4Nx4YwM6wVPBoGQ8rYJo/dyjDapAEx2F45Pj2PQa/ktsbOXQ+06h8bpd19HLmFQ1wUdwFST5fveAH2RpEv+XYRuALLozbrxboDuQGQwZYWGgToakJmuONiQBTufYsKfA7ngPHlXNlYh65uqkfcKdItjrNufB5z5mLDvpjRlQp6BpBPR2QwzsZSjZSjZ7mu6qcYG/GBFTgw9kaoZtKRlr5N5B/sBq7vgsufs+Nxj263xeR+KjHWsmfJYfRp5eeHbslEsf5PZG5uZo2G37t/aoEJWdytFzdIO1E+6U5S3qL395WF7ppb66+PJECycm0x51PsQfsHpQYfECAAA="
    },
    "Metadata": {
     "aws:cdk:path": "YC-Cluster/CDKMetadata/Default"

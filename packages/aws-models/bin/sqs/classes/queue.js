@@ -40,6 +40,7 @@ export class SQSQueue {
             QueueUrl: this.queue,
             DelaySeconds: 0,
         };
+        console.log("Gonna Emit this", params);
         await this.#instance.sendMessage(params).promise();
     }
     /**
@@ -77,7 +78,10 @@ export class SQSQueue {
                 if (handlerRes)
                     console.log("YC SQS Listener Succesfully Proccessed Message :) ID:", message.MessageId);
                 else
-                    console.log("YC SQS Listener Failed To Process Message :( ID:", message.MessageId, "Value:", handlerRes);
+                    throw ("YC SQS Listener Failed To Process Message :( ID: " +
+                        message.MessageId +
+                        " Value: " +
+                        handlerRes);
                 /**
                  * Delete the message from the SQS queue after we are done processing (or not processing if its cached as processed)
                  */

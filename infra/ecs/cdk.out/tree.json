@@ -4136,7 +4136,11 @@
                           },
                           {
                             "name": "PRIVATE_KEY",
-                            "value": "e39edcc4392e57bf99671ee281cfbd55d626bfea94fde0dfa577e449fe91d153"
+                            "value": "771184d670b4b81d9508e9dffc166ba65e84ed80031949d964c90a123e46c4a8"
+                          },
+                          {
+                            "name": "DATABASE_URL",
+                            "value": "postgres://OfirYC:B.%3F3f%2Apbf%3D2Df%21i@postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com:5432/postgres"
                           }
                         ]
                       }

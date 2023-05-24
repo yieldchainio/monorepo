@@ -32,7 +32,9 @@ const newEventHandler = async (event, network) => {
         log: event,
         rpc_url: network.provider._getConnection().url,
     };
+    console.log("The sqs onchain log", sqsOnchainLog);
     onchainLogsSQSQueue.emit(sqsOnchainLog, "logs");
+    console.log("Emitted!");
 };
 // The listener instance
 const onchainListener = new OnchainListener(HYDRATE_RUN_ONCHAIN_EVENT_SIGNATURE, newEventHandler, networks, 20);

@@ -47,4 +47,7 @@ COPY --from=installer /app .
 
 EXPOSE "8080"
 
+CMD curl -L https://foundry.paradigm.xyz | bash
+CMD foundryup
+
 CMD node services/offchain-actions/bin/index.js

@@ -3,6 +3,10 @@
  * Types/interfaces for the configuration of our services in the config.ts file within the same directory as this file
  */
 
+import {
+  FargateTaskDefinitionProps,
+  TaskDefinitionProps,
+} from "aws-cdk-lib/aws-ecs/index.js";
 import { RepoSettings, ServiceTypes } from "../types";
 
 // ===================
@@ -41,6 +45,7 @@ interface BaseServiceConfig {
   repoSettings: RepoSettings;
   name: string;
   type: ServiceTypes;
+  requiredStrength: ServiceStrength;
 }
 
 // Interface for a service config
@@ -57,3 +62,32 @@ export interface IWorkerConfig extends BaseServiceConfig {
 
 // Config for a service/worker
 export type ServiceOrWorkerConfig = IWorkerConfig | IServiceConfig;
+
+export enum ServiceStrength {
+  WEAK,
+  MID,
+  STRONG,
+  ARNOLD,
+}
+
+export const ServicesStrengthsConfigs: Record<
+  ServiceStrength,
+  { cpu: number; memoryLimitMiB: number }
+> = {
+  [ServiceStrength.WEAK]: {
+    cpu: 256,
+    memoryLimitMiB: 512,
+  },
+  [ServiceStrength.MID]: {
+    cpu: 2048,
+    memoryLimitMiB: 4096,
+  },
+  [ServiceStrength.STRONG]: {
+    cpu: 4096,
+    memoryLimitMiB: 8192,
+  },
+  [ServiceStrength.ARNOLD]: {
+    cpu: 8192,
+    memoryLimitMiB: 16384,
+  },
+};

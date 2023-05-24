@@ -4,7 +4,11 @@
 
 import { Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import { IServiceConfig, ServiceOrWorkerConfig } from "../services/configtypes";
+import {
+  IServiceConfig,
+  ServiceOrWorkerConfig,
+  ServicesStrengthsConfigs,
+} from "../services/configtypes";
 import { YCECSCluster } from "./cluster";
 import { ISecurityGroup, SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import { defaultPortMappings, defaultSecurityGroup } from "./utils";
@@ -68,6 +72,7 @@ export class YCECSDeployer extends Stack {
 
       const taskDefinition = new FargateTaskDef(this, taskID, {
         taskRole,
+        ...ServicesStrengthsConfigs[serviceConfig.requiredStrength],
       });
 
       taskDefinition.addContainer(`${serviceConfig.name}-CONTAINER`, {

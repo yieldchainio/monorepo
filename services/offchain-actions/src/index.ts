@@ -26,6 +26,8 @@ const hydrationRequestHandler = async (
     (network) => network.jsonRpc == hydrationRequest.rpc_url
   );
 
+  console.log("Started Handling Offchain Hydration Req...");
+
   if (!network || !network.diamondAddress || !network.provider) {
     console.error(
       "Cannot Handle Hydration Run Request - Network Is Unsupported.",
@@ -41,7 +43,11 @@ const hydrationRequestHandler = async (
     network as SupportedYCNetwork
   );
 
+  console.log("Got Hydration Instance");
+
   const hydratedCommands = await hydrationInstance.simulateHydration();
+
+  console.log("Simulated Request");
 
   if (!process.env.PRIVATE_KEY) {
     console.error(
@@ -57,6 +63,8 @@ const hydrationRequestHandler = async (
     DiamondABI,
     executor
   );
+
+  console.log("Gonna Send Receipt");
 
   const res = await (
     await diamondContract.hydrateAndExecuteRun.send(

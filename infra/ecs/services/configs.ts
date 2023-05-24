@@ -1,3 +1,4 @@
+import { FargateTaskDefinitionProps } from "aws-cdk-lib/aws-ecs/index.js";
 import { defaultPortMappings } from "../lib/utils";
 import { RepoSettings, ServiceTypes } from "../types";
 import {
@@ -5,6 +6,7 @@ import {
   IServiceConfig,
   ServicesAndWorkers,
   ServiceOrWorkerConfig,
+  ServiceStrength,
 } from "./configtypes";
 import { config } from "dotenv";
 config();
@@ -84,6 +86,15 @@ const ecrRepos: { [key in ServicesAndWorkers]?: RepoSettings } = {
   },
 };
 
+const defaultTaskDefProps: FargateTaskDefinitionProps = {
+  cpu: 256,
+  memoryLimitMiB: 512,
+  ephemeralStorageGiB: 21,
+  family: undefined,
+  executionRole: undefined,
+  proxyConfiguration: undefined,
+  volumes: undefined,
+};
 export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
   {
     [ServicesAndWorkers.DATAPROVIDER]: {
@@ -93,6 +104,7 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       name: ServicesAndWorkers.DATAPROVIDER,
       subdomain: "api.yieldchain.io",
       portMappings: [...defaultPortMappings.service],
+      requiredStrength: ServiceStrength.MID,
     },
     [ServicesAndWorkers.INTEGRATIONPRVDR]: {
       repoSettings: ecrRepos.INTEGRATIONPRVDR as RepoSettings,
@@ -101,6 +113,7 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       name: ServicesAndWorkers.INTEGRATIONPRVDR,
       subdomain: "integrationapi.yieldchain.io",
       portMappings: [...defaultPortMappings.service],
+      requiredStrength: ServiceStrength.MID,
     },
     [ServicesAndWorkers.INTEGRATIONFRNTD]: {
       repoSettings: ecrRepos.INTEGRATIONFRNTD as RepoSettings,
@@ -109,12 +122,14 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       name: ServicesAndWorkers.INTEGRATIONFRNTD,
       subdomain: "admindashboard.yieldchain.io",
       portMappings: [...defaultPortMappings.service],
+      requiredStrength: ServiceStrength.MID,
     },
     [ServicesAndWorkers.ONCHAINLISTENER]: {
       repoSettings: ecrRepos.ONCHAINLISTENER as RepoSettings,
       ENVs: ENVs.ONCHAINLISTENER as Record<string, string>,
       type: ServiceTypes.WORKER,
       name: ServicesAndWorkers.ONCHAINLISTENER,
+      requiredStrength: ServiceStrength.STRONG,
     },
     [ServicesAndWorkers.FRONTEND]: {
       repoSettings: ecrRepos.FRONTEND as RepoSettings,
@@ -123,18 +138,21 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       name: ServicesAndWorkers.FRONTEND,
       portMappings: [...defaultPortMappings.service],
       subdomain: "yieldchain.io",
+      requiredStrength: ServiceStrength.MID,
     },
     [ServicesAndWorkers.SQSORCHESTRATOR]: {
       repoSettings: ecrRepos.SQSORCHESTRATOR as RepoSettings,
       ENVs: ENVs.SQSORCHESTRATOR as Record<string, string>,
       type: ServiceTypes.WORKER,
       name: ServicesAndWorkers.SQSORCHESTRATOR,
+      requiredStrength: ServiceStrength.MID,
     },
     [ServicesAndWorkers.OFFCHAINACTIONS]: {
       repoSettings: ecrRepos.OFFCHAINACTIONS as RepoSettings,
       ENVs: ENVs.OFFCHAINACTIONS as Record<string, string>,
       type: ServiceTypes.WORKER,
       name: ServicesAndWorkers.OFFCHAINACTIONS,
+      requiredStrength: ServiceStrength.ARNOLD,
     },
     [ServicesAndWorkers.STRATEGYBUILDER]: {
       repoSettings: ecrRepos.STRATEGYBUILDER as RepoSettings,
@@ -143,5 +161,6 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       name: ServicesAndWorkers.STRATEGYBUILDER,
       portMappings: [...defaultPortMappings.service],
       subdomain: "builder.yieldchain.io",
+      requiredStrength: ServiceStrength.STRONG,
     },
   };

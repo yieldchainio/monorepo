@@ -1073,7 +1073,7 @@
                         ]
                       }
                     ],
-                    "cpu": "256",
+                    "cpu": "2048",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -1084,7 +1084,7 @@
                       ]
                     },
                     "family": "DATAPRVDR-TASKDEF",
-                    "memory": "512",
+                    "memory": "4096",
                     "networkMode": "awsvpc",
                     "requiresCompatibilities": [
                       "FARGATE"
@@ -1665,7 +1665,7 @@
                         ]
                       }
                     ],
-                    "cpu": "256",
+                    "cpu": "2048",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -1676,7 +1676,7 @@
                       ]
                     },
                     "family": "INTEGRATIONPRVDR-TASKDEF",
-                    "memory": "512",
+                    "memory": "4096",
                     "networkMode": "awsvpc",
                     "requiresCompatibilities": [
                       "FARGATE"
@@ -2243,7 +2243,7 @@
                         }
                       }
                     ],
-                    "cpu": "256",
+                    "cpu": "2048",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -2254,7 +2254,7 @@
                       ]
                     },
                     "family": "INTEGRATIONFRNTD-TASKDEF",
-                    "memory": "512",
+                    "memory": "4096",
                     "networkMode": "awsvpc",
                     "requiresCompatibilities": [
                       "FARGATE"
@@ -2835,7 +2835,7 @@
                         ]
                       }
                     ],
-                    "cpu": "256",
+                    "cpu": "4096",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -2846,7 +2846,7 @@
                       ]
                     },
                     "family": "ONCHAINLISTENER-TASKDEF",
-                    "memory": "512",
+                    "memory": "8192",
                     "networkMode": "awsvpc",
                     "requiresCompatibilities": [
                       "FARGATE"
@@ -3187,7 +3187,7 @@
                         }
                       }
                     ],
-                    "cpu": "256",
+                    "cpu": "2048",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -3198,7 +3198,7 @@
                       ]
                     },
                     "family": "FRONTEND-TASKDEF",
-                    "memory": "512",
+                    "memory": "4096",
                     "networkMode": "awsvpc",
                     "requiresCompatibilities": [
                       "FARGATE"
@@ -3775,7 +3775,7 @@
                         ]
                       }
                     ],
-                    "cpu": "256",
+                    "cpu": "2048",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -3786,7 +3786,7 @@
                       ]
                     },
                     "family": "SQSORCHESTRATOR-TASKDEF",
-                    "memory": "512",
+                    "memory": "4096",
                     "networkMode": "awsvpc",
                     "requiresCompatibilities": [
                       "FARGATE"
@@ -4136,7 +4136,7 @@
                           },
                           {
                             "name": "PRIVATE_KEY",
-                            "value": "771184d670b4b81d9508e9dffc166ba65e84ed80031949d964c90a123e46c4a8"
+                            "value": "e39edcc4392e57bf99671ee281cfbd55d626bfea94fde0dfa577e449fe91d153"
                           },
                           {
                             "name": "DATABASE_URL",
@@ -4145,7 +4145,7 @@
                         ]
                       }
                     ],
-                    "cpu": "256",
+                    "cpu": "8192",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -4156,7 +4156,7 @@
                       ]
                     },
                     "family": "OFFCHAINACTIONS-TASKDEF",
-                    "memory": "512",
+                    "memory": "16384",
                     "networkMode": "awsvpc",
                     "requiresCompatibilities": [
                       "FARGATE"
@@ -4503,7 +4503,7 @@
                         ]
                       }
                     ],
-                    "cpu": "256",
+                    "cpu": "4096",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -4514,7 +4514,7 @@
                       ]
                     },
                     "family": "STRATEGYBUILDER-TASKDEF",
-                    "memory": "512",
+                    "memory": "8192",
                     "networkMode": "awsvpc",
                     "requiresCompatibilities": [
                       "FARGATE"

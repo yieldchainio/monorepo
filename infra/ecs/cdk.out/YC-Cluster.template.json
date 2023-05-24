@@ -737,7 +737,7 @@
       ]
      }
     ],
-    "Cpu": "256",
+    "Cpu": "2048",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -748,7 +748,7 @@
      ]
     },
     "Family": "DATAPRVDR-TASKDEF",
-    "Memory": "512",
+    "Memory": "4096",
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"
@@ -1125,7 +1125,7 @@
       ]
      }
     ],
-    "Cpu": "256",
+    "Cpu": "2048",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -1136,7 +1136,7 @@
      ]
     },
     "Family": "INTEGRATIONPRVDR-TASKDEF",
-    "Memory": "512",
+    "Memory": "4096",
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"
@@ -1499,7 +1499,7 @@
       ]
      }
     ],
-    "Cpu": "256",
+    "Cpu": "2048",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -1510,7 +1510,7 @@
      ]
     },
     "Family": "INTEGRATIONFRNTD-TASKDEF",
-    "Memory": "512",
+    "Memory": "4096",
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"
@@ -1887,7 +1887,7 @@
       ]
      }
     ],
-    "Cpu": "256",
+    "Cpu": "4096",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -1898,7 +1898,7 @@
      ]
     },
     "Family": "ONCHAINLISTENER-TASKDEF",
-    "Memory": "512",
+    "Memory": "8192",
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"
@@ -2098,7 +2098,7 @@
       ]
      }
     ],
-    "Cpu": "256",
+    "Cpu": "2048",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -2109,7 +2109,7 @@
      ]
     },
     "Family": "FRONTEND-TASKDEF",
-    "Memory": "512",
+    "Memory": "4096",
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"
@@ -2482,7 +2482,7 @@
       ]
      }
     ],
-    "Cpu": "256",
+    "Cpu": "2048",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -2493,7 +2493,7 @@
      ]
     },
     "Family": "SQSORCHESTRATOR-TASKDEF",
-    "Memory": "512",
+    "Memory": "4096",
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"
@@ -2671,7 +2671,7 @@
        },
        {
         "Name": "PRIVATE_KEY",
-        "Value": "771184d670b4b81d9508e9dffc166ba65e84ed80031949d964c90a123e46c4a8"
+        "Value": "e39edcc4392e57bf99671ee281cfbd55d626bfea94fde0dfa577e449fe91d153"
        },
        {
         "Name": "DATABASE_URL",
@@ -2711,7 +2711,7 @@
       ]
      }
     ],
-    "Cpu": "256",
+    "Cpu": "8192",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -2722,7 +2722,7 @@
      ]
     },
     "Family": "OFFCHAINACTIONS-TASKDEF",
-    "Memory": "512",
+    "Memory": "16384",
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"
@@ -2928,7 +2928,7 @@
       ]
      }
     ],
-    "Cpu": "256",
+    "Cpu": "4096",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -2939,7 +2939,7 @@
      ]
     },
     "Family": "STRATEGYBUILDER-TASKDEF",
-    "Memory": "512",
+    "Memory": "8192",
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"

@@ -10,12 +10,13 @@ import { TRIGGER_BUILDERS } from "./constants.js";
 export function buildTriggers(treeRoot: YCStep): Trigger[] {
   const triggers: Trigger[] = [];
 
+  console.log(treeRoot);
   if (!treeRoot.triggerType)
     throw "Cannot Build Triggers - Root Has No Trigger Type Defined";
 
-  const rootTrigger = TRIGGER_BUILDERS[treeRoot.triggerType](treeRoot)
+  const rootTrigger = TRIGGER_BUILDERS[treeRoot.triggerType](treeRoot);
 
-  triggers[0] = rootTrigger
+  triggers[0] = rootTrigger;
 
   return triggers;
 }

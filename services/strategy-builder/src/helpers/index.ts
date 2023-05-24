@@ -133,11 +133,17 @@ export async function createDeployableVaultInput(
     isPublic: vaultVisibility,
   };
 
+  console.log(
+    "Create Vault Fragments",
+    DiamondABI.filter((fragment) => fragment.name == "createVault")
+  );
+
   const deploymentCalldata =
     await ycFactoryInstance.createVault.populateTransaction(
       ...Object.values(vaultCreationArgs)
     );
 
+  console.log(deploymentCalldata.data);
   return {
     status: true,
     deploymentCalldata: deploymentCalldata.data,

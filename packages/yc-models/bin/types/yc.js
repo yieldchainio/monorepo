@@ -22,11 +22,11 @@ export var StepType;
 })(StepType || (StepType = {}));
 export var Timestamps;
 (function (Timestamps) {
-    Timestamps["MINUTES"] = "Minutes";
-    Timestamps["HOURS"] = "Hours";
-    Timestamps["DAYS"] = "Days";
-    Timestamps["WEEKS"] = "Weeks";
-    Timestamps["MONTHS"] = "Months";
-    Timestamps["YEARS"] = "Years";
+    Timestamps["Minutes"] = "Minutes";
+    Timestamps["Hours"] = "Hours";
+    Timestamps["Days"] = "Days";
+    Timestamps["Weeks"] = "Weeks";
+    Timestamps["Months"] = "Months";
+    Timestamps["Years"] = "Years";
 })(Timestamps || (Timestamps = {}));
 //# sourceMappingURL=yc.js.map

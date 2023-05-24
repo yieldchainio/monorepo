@@ -140,7 +140,7 @@ export interface JSONStep {
   children: JSONStep[];
   data: any | null;
   type: StepType;
-  triggerType?: TriggerTypes;
+  triggerType?: TriggerTypes | null;
   triggerDescription?: string | null;
   triggerIcon?: string | { dark: string; light: string } | null;
 }

@@ -15,7 +15,7 @@ export const useAutomation = ({ step, triggerComparison }: StepProps) => {
   const [intervalInput, setIntervalInput] = useState<number>(
     step.data?.automation?.input || 1
   );
-  const [timestamp, setTimestamp] = useState<Timestamps>(Timestamps.DAYS);
+  const [timestamp, setTimestamp] = useState<Timestamps>(Timestamps.Days);
 
   /**
    * Function to choose the interval input

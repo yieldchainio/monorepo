@@ -14,12 +14,12 @@ export interface YCStepStruct {
     isCallback: boolean;
 }
 export declare enum TriggerTypes {
-    DEPOSIT = "deposit",
-    WITHDRAWAL = "withdrawal",
-    AUTOMATION = "automation"
+    AUTOMATION = "Automation",
+    DEPOSIT = "Deposit",
+    WITHDRAWAL = "Withdrawal"
 }
 export interface Trigger {
-    triggerType: TriggerTypes;
+    triggerType: bigint;
     extraData: bytes;
 }
 export interface RegisteredTrigger {

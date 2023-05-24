@@ -308,6 +308,19 @@
                 "type": "address[2][]"
             },
             {
+                "components": [
+                    {
+                        "internalType": "enum TriggerTypes",
+                        "name": "triggerType",
+                        "type": "uint8"
+                    },
+                    { "internalType": "bytes", "name": "extraData", "type": "bytes" }
+                ],
+                "internalType": "struct Trigger[]",
+                "name": "triggers",
+                "type": "tuple[]"
+            },
+            {
                 "internalType": "contract ERC20",
                 "name": "depositToken",
                 "type": "address"
@@ -480,6 +493,136 @@
                 "name": "strategyState",
                 "type": "tuple"
             }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "checkStrategiesTriggers",
+        "outputs": [
+            {
+                "internalType": "bool[][]",
+                "name": "triggersStatus",
+                "type": "bool[][]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "vaultsIndices",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "bool[][]",
+                "name": "triggersSignals",
+                "type": "bool[][]"
+            }
+        ],
+        "name": "executeStrategiesTriggers",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "contract Vault", "name": "vault", "type": "address" }
+        ],
+        "name": "getVaultTriggers",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "enum TriggerTypes",
+                        "name": "triggerType",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "lastStrategyRun",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "requiredDelay",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct RegisteredTrigger[]",
+                "name": "triggers",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "enum TriggerTypes",
+                        "name": "triggerType",
+                        "type": "uint8"
+                    },
+                    { "internalType": "bytes", "name": "extraData", "type": "bytes" }
+                ],
+                "internalType": "struct Trigger[]",
+                "name": "triggers",
+                "type": "tuple[]"
+            },
+            { "internalType": "contract Vault", "name": "vault", "type": "address" }
+        ],
+        "name": "registerTriggers",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "contract Vault", "name": "vault", "type": "address" },
+            { "internalType": "uint256", "name": "triggerIdx", "type": "uint256" }
+        ],
+        "name": "executeAutomationTrigger",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "enum TriggerTypes",
+                        "name": "triggerType",
+                        "type": "uint8"
+                    },
+                    { "internalType": "bytes", "name": "extraData", "type": "bytes" }
+                ],
+                "internalType": "struct Trigger",
+                "name": "automationTrigger",
+                "type": "tuple"
+            },
+            { "internalType": "contract Vault", "name": "vault", "type": "address" },
+            { "internalType": "uint256", "name": "triggerIdx", "type": "uint256" }
+        ],
+        "name": "registerAutomationTrigger",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "contract Vault", "name": "vault", "type": "address" },
+            { "internalType": "uint256", "name": "triggerIdx", "type": "uint256" }
+        ],
+        "name": "shouldExecuteAutomationTrigger",
+        "outputs": [
+            { "internalType": "bool", "name": "shouldExecute", "type": "bool" }
         ],
         "stateMutability": "view",
         "type": "function"

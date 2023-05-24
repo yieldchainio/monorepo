@@ -18,13 +18,15 @@ export interface YCStepStruct {
 }
 
 export enum TriggerTypes {
-  DEPOSIT = "deposit",
-  WITHDRAWAL = "withdrawal",
-  AUTOMATION = "automation",
+  AUTOMATION = "Automation",
+  DEPOSIT = "Deposit",
+  WITHDRAWAL = "Withdrawal",
 }
 
+
+
 export interface Trigger {
-  triggerType: TriggerTypes;
+  triggerType: bigint;
   extraData: bytes;
 }
 

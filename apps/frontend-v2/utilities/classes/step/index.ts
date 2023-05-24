@@ -983,6 +983,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       ),
       customArguments: this.customArguments,
       type: this.type,
+      triggerType: this.triggerType,
     };
   }
 }

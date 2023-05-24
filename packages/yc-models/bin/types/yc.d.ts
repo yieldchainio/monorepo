@@ -76,12 +76,12 @@ export type StepData = {
     trigger?: any;
 };
 export declare enum Timestamps {
-    MINUTES = "Minutes",
-    HOURS = "Hours",
-    DAYS = "Days",
-    WEEKS = "Weeks",
-    MONTHS = "Months",
-    YEARS = "Years"
+    Minutes = "Minutes",
+    Hours = "Hours",
+    Days = "Days",
+    Weeks = "Weeks",
+    Months = "Months",
+    Years = "Years"
 }
 export interface StakeData {
     protocol: DBProtocol;

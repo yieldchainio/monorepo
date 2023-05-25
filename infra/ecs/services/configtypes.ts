@@ -46,6 +46,7 @@ interface BaseServiceConfig {
   name: string;
   type: ServiceTypes;
   requiredStrength: ServiceStrength;
+  desiredCount: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
 // Interface for a service config
@@ -65,6 +66,7 @@ export type ServiceOrWorkerConfig = IWorkerConfig | IServiceConfig;
 
 export enum ServiceStrength {
   WEAK,
+  SKINNY,
   MID,
   STRONG,
   ARNOLD,
@@ -78,16 +80,20 @@ export const ServicesStrengthsConfigs: Record<
     cpu: 256,
     memoryLimitMiB: 512,
   },
-  [ServiceStrength.MID]: {
-    cpu: 2048,
+  [ServiceStrength.SKINNY]: {
+    cpu: 512,
     memoryLimitMiB: 4096,
+  },
+  [ServiceStrength.MID]: {
+    cpu: 1024,
+    memoryLimitMiB: 8192,
   },
   [ServiceStrength.STRONG]: {
     cpu: 4096,
     memoryLimitMiB: 8192,
   },
   [ServiceStrength.ARNOLD]: {
-    cpu: 8192,
+    cpu: 4096,
     memoryLimitMiB: 16384,
   },
 };

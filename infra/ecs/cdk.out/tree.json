@@ -1073,7 +1073,7 @@
                         ]
                       }
                     ],
-                    "cpu": "2048",
+                    "cpu": "512",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -1665,7 +1665,7 @@
                         ]
                       }
                     ],
-                    "cpu": "2048",
+                    "cpu": "256",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -1676,7 +1676,7 @@
                       ]
                     },
                     "family": "INTEGRATIONPRVDR-TASKDEF",
-                    "memory": "4096",
+                    "memory": "512",
                     "networkMode": "awsvpc",
                     "requiresCompatibilities": [
                       "FARGATE"
@@ -1848,7 +1848,7 @@
                       "maximumPercent": 200,
                       "minimumHealthyPercent": 50
                     },
-                    "desiredCount": 2,
+                    "desiredCount": 1,
                     "enableEcsManagedTags": true,
                     "healthCheckGracePeriodSeconds": 60,
                     "launchType": "FARGATE",
@@ -1918,8 +1918,8 @@
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApplicationAutoScaling::ScalableTarget",
                           "aws:cdk:cloudformation:props": {
-                            "maxCapacity": 6,
-                            "minCapacity": 2,
+                            "maxCapacity": 3,
+                            "minCapacity": 1,
                             "resourceId": {
                               "Fn::Join": [
                                 "",
@@ -2243,7 +2243,7 @@
                         }
                       }
                     ],
-                    "cpu": "2048",
+                    "cpu": "256",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -2254,7 +2254,7 @@
                       ]
                     },
                     "family": "INTEGRATIONFRNTD-TASKDEF",
-                    "memory": "4096",
+                    "memory": "512",
                     "networkMode": "awsvpc",
                     "requiresCompatibilities": [
                       "FARGATE"
@@ -2426,7 +2426,7 @@
                       "maximumPercent": 200,
                       "minimumHealthyPercent": 50
                     },
-                    "desiredCount": 2,
+                    "desiredCount": 1,
                     "enableEcsManagedTags": true,
                     "healthCheckGracePeriodSeconds": 60,
                     "launchType": "FARGATE",
@@ -2496,8 +2496,8 @@
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApplicationAutoScaling::ScalableTarget",
                           "aws:cdk:cloudformation:props": {
-                            "maxCapacity": 6,
-                            "minCapacity": 2,
+                            "maxCapacity": 3,
+                            "minCapacity": 1,
                             "resourceId": {
                               "Fn::Join": [
                                 "",
@@ -2835,7 +2835,7 @@
                         ]
                       }
                     ],
-                    "cpu": "4096",
+                    "cpu": "1024",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -3187,7 +3187,7 @@
                         }
                       }
                     ],
-                    "cpu": "2048",
+                    "cpu": "512",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -3370,7 +3370,7 @@
                       "maximumPercent": 200,
                       "minimumHealthyPercent": 50
                     },
-                    "desiredCount": 2,
+                    "desiredCount": 1,
                     "enableEcsManagedTags": true,
                     "healthCheckGracePeriodSeconds": 60,
                     "launchType": "FARGATE",
@@ -3440,8 +3440,8 @@
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApplicationAutoScaling::ScalableTarget",
                           "aws:cdk:cloudformation:props": {
-                            "maxCapacity": 6,
-                            "minCapacity": 2,
+                            "maxCapacity": 3,
+                            "minCapacity": 1,
                             "resourceId": {
                               "Fn::Join": [
                                 "",
@@ -3775,7 +3775,7 @@
                         ]
                       }
                     ],
-                    "cpu": "2048",
+                    "cpu": "512",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -3958,7 +3958,7 @@
                       "maximumPercent": 200,
                       "minimumHealthyPercent": 50
                     },
-                    "desiredCount": 2,
+                    "desiredCount": 1,
                     "enableEcsManagedTags": true,
                     "launchType": "FARGATE",
                     "networkConfiguration": {
@@ -4018,8 +4018,8 @@
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApplicationAutoScaling::ScalableTarget",
                           "aws:cdk:cloudformation:props": {
-                            "maxCapacity": 6,
-                            "minCapacity": 2,
+                            "maxCapacity": 3,
+                            "minCapacity": 1,
                             "resourceId": {
                               "Fn::Join": [
                                 "",
@@ -4136,7 +4136,7 @@
                           },
                           {
                             "name": "PRIVATE_KEY",
-                            "value": "e39edcc4392e57bf99671ee281cfbd55d626bfea94fde0dfa577e449fe91d153"
+                            "value": "771184d670b4b81d9508e9dffc166ba65e84ed80031949d964c90a123e46c4a8"
                           },
                           {
                             "name": "DATABASE_URL",
@@ -4145,7 +4145,7 @@
                         ]
                       }
                     ],
-                    "cpu": "8192",
+                    "cpu": "4096",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -4503,7 +4503,7 @@
                         ]
                       }
                     ],
-                    "cpu": "4096",
+                    "cpu": "512",
                     "ephemeralStorage": {
                       "sizeInGiB": 21
                     },
@@ -4514,7 +4514,7 @@
                       ]
                     },
                     "family": "STRATEGYBUILDER-TASKDEF",
-                    "memory": "8192",
+                    "memory": "4096",
                     "networkMode": "awsvpc",
                     "requiresCompatibilities": [
                       "FARGATE"
@@ -4686,7 +4686,7 @@
                       "maximumPercent": 200,
                       "minimumHealthyPercent": 50
                     },
-                    "desiredCount": 2,
+                    "desiredCount": 1,
                     "enableEcsManagedTags": true,
                     "healthCheckGracePeriodSeconds": 60,
                     "launchType": "FARGATE",
@@ -4756,8 +4756,8 @@
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApplicationAutoScaling::ScalableTarget",
                           "aws:cdk:cloudformation:props": {
-                            "maxCapacity": 6,
-                            "minCapacity": 2,
+                            "maxCapacity": 3,
+                            "minCapacity": 1,
                             "resourceId": {
                               "Fn::Join": [
                                 "",

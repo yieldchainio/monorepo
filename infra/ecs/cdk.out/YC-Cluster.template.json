@@ -737,7 +737,7 @@
       ]
      }
     ],
-    "Cpu": "2048",
+    "Cpu": "512",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -1125,7 +1125,7 @@
       ]
      }
     ],
-    "Cpu": "2048",
+    "Cpu": "256",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -1136,7 +1136,7 @@
      ]
     },
     "Family": "INTEGRATIONPRVDR-TASKDEF",
-    "Memory": "4096",
+    "Memory": "512",
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"
@@ -1231,7 +1231,7 @@
      "MaximumPercent": 200,
      "MinimumHealthyPercent": 50
     },
-    "DesiredCount": 2,
+    "DesiredCount": 1,
     "EnableECSManagedTags": true,
     "HealthCheckGracePeriodSeconds": 60,
     "LaunchType": "FARGATE",
@@ -1284,8 +1284,8 @@
   "INTEGRATIONPRVDRSERVICETaskCountTargetB48876EB": {
    "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
    "Properties": {
-    "MaxCapacity": 6,
-    "MinCapacity": 2,
+    "MaxCapacity": 3,
+    "MinCapacity": 1,
     "ResourceId": {
      "Fn::Join": [
       "",
@@ -1499,7 +1499,7 @@
       ]
      }
     ],
-    "Cpu": "2048",
+    "Cpu": "256",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -1510,7 +1510,7 @@
      ]
     },
     "Family": "INTEGRATIONFRNTD-TASKDEF",
-    "Memory": "4096",
+    "Memory": "512",
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"
@@ -1605,7 +1605,7 @@
      "MaximumPercent": 200,
      "MinimumHealthyPercent": 50
     },
-    "DesiredCount": 2,
+    "DesiredCount": 1,
     "EnableECSManagedTags": true,
     "HealthCheckGracePeriodSeconds": 60,
     "LaunchType": "FARGATE",
@@ -1658,8 +1658,8 @@
   "INTEGRATIONFRNTDSERVICETaskCountTarget49BD2360": {
    "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
    "Properties": {
-    "MaxCapacity": 6,
-    "MinCapacity": 2,
+    "MaxCapacity": 3,
+    "MinCapacity": 1,
     "ResourceId": {
      "Fn::Join": [
       "",
@@ -1887,7 +1887,7 @@
       ]
      }
     ],
-    "Cpu": "4096",
+    "Cpu": "1024",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -2098,7 +2098,7 @@
       ]
      }
     ],
-    "Cpu": "2048",
+    "Cpu": "512",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -2204,7 +2204,7 @@
      "MaximumPercent": 200,
      "MinimumHealthyPercent": 50
     },
-    "DesiredCount": 2,
+    "DesiredCount": 1,
     "EnableECSManagedTags": true,
     "HealthCheckGracePeriodSeconds": 60,
     "LaunchType": "FARGATE",
@@ -2257,8 +2257,8 @@
   "FRONTENDSERVICETaskCountTargetF847DF51": {
    "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
    "Properties": {
-    "MaxCapacity": 6,
-    "MinCapacity": 2,
+    "MaxCapacity": 3,
+    "MinCapacity": 1,
     "ResourceId": {
      "Fn::Join": [
       "",
@@ -2482,7 +2482,7 @@
       ]
      }
     ],
-    "Cpu": "2048",
+    "Cpu": "512",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -2588,7 +2588,7 @@
      "MaximumPercent": 200,
      "MinimumHealthyPercent": 50
     },
-    "DesiredCount": 2,
+    "DesiredCount": 1,
     "EnableECSManagedTags": true,
     "LaunchType": "FARGATE",
     "NetworkConfiguration": {
@@ -2627,8 +2627,8 @@
   "SQSORCHESTRATORWORKERTaskCountTargetDA4483D9": {
    "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
    "Properties": {
-    "MaxCapacity": 6,
-    "MinCapacity": 2,
+    "MaxCapacity": 3,
+    "MinCapacity": 1,
     "ResourceId": {
      "Fn::Join": [
       "",
@@ -2671,7 +2671,7 @@
        },
        {
         "Name": "PRIVATE_KEY",
-        "Value": "e39edcc4392e57bf99671ee281cfbd55d626bfea94fde0dfa577e449fe91d153"
+        "Value": "771184d670b4b81d9508e9dffc166ba65e84ed80031949d964c90a123e46c4a8"
        },
        {
         "Name": "DATABASE_URL",
@@ -2711,7 +2711,7 @@
       ]
      }
     ],
-    "Cpu": "8192",
+    "Cpu": "4096",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -2928,7 +2928,7 @@
       ]
      }
     ],
-    "Cpu": "4096",
+    "Cpu": "512",
     "EphemeralStorage": {
      "SizeInGiB": 21
     },
@@ -2939,7 +2939,7 @@
      ]
     },
     "Family": "STRATEGYBUILDER-TASKDEF",
-    "Memory": "8192",
+    "Memory": "4096",
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"
@@ -3034,7 +3034,7 @@
      "MaximumPercent": 200,
      "MinimumHealthyPercent": 50
     },
-    "DesiredCount": 2,
+    "DesiredCount": 1,
     "EnableECSManagedTags": true,
     "HealthCheckGracePeriodSeconds": 60,
     "LaunchType": "FARGATE",
@@ -3087,8 +3087,8 @@
   "STRATEGYBUILDERSERVICETaskCountTarget00846B1F": {
    "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
    "Properties": {
-    "MaxCapacity": 6,
-    "MinCapacity": 2,
+    "MaxCapacity": 3,
+    "MinCapacity": 1,
     "ResourceId": {
      "Fn::Join": [
       "",

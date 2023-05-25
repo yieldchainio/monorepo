@@ -96,6 +96,7 @@ export class YCECSDeployer extends Stack {
         {
           securityGroups: serviceSecurityGroups,
           hostedZone,
+          desiredCount: serviceConfig.desiredCount,
         }
       );
     }

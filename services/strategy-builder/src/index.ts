@@ -67,6 +67,7 @@ app.post(
     req: VaultClassificationRequest,
     res: Response<StrategyClassificationResponse>
   ) => {
+    console.log(req);
     const requestedStrategy = req.body;
     const existingStrategy = await prismaClient.strategiesv2.findFirst({
       where: {
@@ -79,20 +80,23 @@ app.post(
         .status(400)
         .json({ status: false, reason: "Strategy Already Exists In Database" });
 
+    const data = {
+      id: requestedStrategy.id,
+      chain_id: requestedStrategy.chainID,
+      seed_steps: requestedStrategy.seedSteps as any,
+      tree_steps: requestedStrategy.treeSteps as any,
+      uproot_steps: requestedStrategy.uprootSteps as any,
+      title: requestedStrategy.title,
+      deposit_token_id: requestedStrategy.depositTokenID,
+      address: requestedStrategy.address,
+      execution_interval: 1000,
+      creator_id: requestedStrategy.creatorID,
+    };
+
+    console.log(req.body);
     try {
       await prismaClient.strategiesv2.create({
-        data: {
-          id: requestedStrategy.id,
-          chain_id: requestedStrategy.chainID,
-          seed_steps: requestedStrategy.seedSteps as any,
-          tree_steps: requestedStrategy.treeSteps as any,
-          uproot_steps: requestedStrategy.uprootSteps as any,
-          title: requestedStrategy.title,
-          deposit_token_id: requestedStrategy.depositTokenID,
-          address: requestedStrategy.address,
-          execution_interval: 1000,
-          creator_id: requestedStrategy.creatorID,
-        },
+        data,
       });
 
       res.status(200).json({ status: true });

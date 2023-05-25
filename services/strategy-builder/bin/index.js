@@ -33,6 +33,7 @@ app.post("/strategy-creation-data", async (req, res, next) => {
     res.status(builderResult.status == true ? 200 : 400).json(builderResult);
 });
 app.post("/add-strategy", async (req, res) => {
+    console.log(req);
     const requestedStrategy = req.body;
     const existingStrategy = await prismaClient.strategiesv2.findFirst({
         where: {
@@ -43,20 +44,22 @@ app.post("/add-strategy", async (req, res) => {
         res
             .status(400)
             .json({ status: false, reason: "Strategy Already Exists In Database" });
+    const data = {
+        id: requestedStrategy.id,
+        chain_id: requestedStrategy.chainID,
+        seed_steps: requestedStrategy.seedSteps,
+        tree_steps: requestedStrategy.treeSteps,
+        uproot_steps: requestedStrategy.uprootSteps,
+        title: requestedStrategy.title,
+        deposit_token_id: requestedStrategy.depositTokenID,
+        address: requestedStrategy.address,
+        execution_interval: 1000,
+        creator_id: requestedStrategy.creatorID,
+    };
+    console.log(req.body);
     try {
         await prismaClient.strategiesv2.create({
-            data: {
-                id: requestedStrategy.id,
-                chain_id: requestedStrategy.chainID,
-                seed_steps: requestedStrategy.seedSteps,
-                tree_steps: requestedStrategy.treeSteps,
-                uproot_steps: requestedStrategy.uprootSteps,
-                title: requestedStrategy.title,
-                deposit_token_id: requestedStrategy.depositTokenID,
-                address: requestedStrategy.address,
-                execution_interval: 1000,
-                creator_id: requestedStrategy.creatorID,
-            },
+            data,
         });
         res.status(200).json({ status: true });
     }

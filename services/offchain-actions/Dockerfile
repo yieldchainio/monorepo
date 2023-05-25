@@ -39,24 +39,24 @@ RUN yarn turbo run build --filter=@yc/offchain-actions...
 
 
 
-# Use the latest foundry image
-FROM ghcr.io/foundry-rs/foundry as foundry-client
+# # Use the latest foundry image
+# FROM ghcr.io/foundry-rs/foundry as foundry-client
 
-# Copy our source code into the container
-WORKDIR /foundry
+# # Copy our source code into the container
+# WORKDIR /foundry
 
-# Build and test the source code
-COPY . .
-RUN  anvil --version
+# # Build and test the source code
+# COPY . .
+# RUN  anvil --version
 
 
 FROM node:alpine AS runner
 WORKDIR /app
 
 
-COPY --from=foundry-client  /usr/local/bin/forge /usr/local/bin/forge
-COPY --from=foundry-client /usr/local/bin/cast /usr/local/bin/cast
-COPY --from=foundry-client /usr/local/bin/anvil /usr/local/bin/anvil
+# COPY --from=foundry-client  /usr/local/bin/forge /usr/local/bin/forge
+# COPY --from=foundry-client /usr/local/bin/cast /usr/local/bin/cast
+# COPY --from=foundry-client /usr/local/bin/anvil /usr/local/bin/anvil
 
 
 # Don't run production as root

@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const args = process.argv;
-exec(
+const res = exec(
   `gh workflow run .github/workflows/build-service.yml -f service_name=${args[2]}`,
   (error, stdout, stderr) => {
     if (error) {
@@ -18,4 +18,5 @@ exec(
   }
 );
 
+res.on("close", (msg) => console.log(msg));
 

@@ -49,6 +49,10 @@ const ENVs: { [key in ServicesAndWorkers]?: Record<string, string> } = {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || "",
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || "",
   },
+  [ServicesAndWorkers.TRIGGERSENGINE]: {
+    PRIVATE_KEY: process.env.PRIVATE_KEY || "",
+    DATABASE_URL: process.env.DATABASE_URL || "",
+  },
 };
 
 const ecrRepos: { [key in ServicesAndWorkers]?: RepoSettings } = {
@@ -84,17 +88,12 @@ const ecrRepos: { [key in ServicesAndWorkers]?: RepoSettings } = {
     id: "SQSORCHESTRATORRepo",
     arn: "arn:aws:ecr:us-east-1:010073361729:repository/sqs-orchestrator",
   },
+  [ServicesAndWorkers.TRIGGERSENGINE]: {
+    id: "TRIGGERSENGINERepo",
+    arn: "arn:aws:ecr:us-east-1:010073361729:repository/triggers-engine",
+  },
 };
 
-const defaultTaskDefProps: FargateTaskDefinitionProps = {
-  cpu: 256,
-  memoryLimitMiB: 512,
-  ephemeralStorageGiB: 21,
-  family: undefined,
-  executionRole: undefined,
-  proxyConfiguration: undefined,
-  volumes: undefined,
-};
 export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
   {
     [ServicesAndWorkers.DATAPROVIDER]: {
@@ -169,6 +168,14 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       portMappings: [...defaultPortMappings.service],
       subdomain: "builder.yieldchain.io",
       requiredStrength: ServiceStrength.SKINNY,
+      desiredCount: 1,
+    },
+    [ServicesAndWorkers.TRIGGERSENGINE]: {
+      repoSettings: ecrRepos.TRIGGERSENGINE as RepoSettings,
+      ENVs: ENVs.STRATEGYBUILDER as Record<string, string>,
+      type: ServiceTypes.WORKER,
+      name: ServicesAndWorkers.TRIGGERSENGINE,
+      requiredStrength: ServiceStrength.MID,
       desiredCount: 1,
     },
   };

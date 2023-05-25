@@ -16,6 +16,7 @@ on:
           - data-provider
           - integration-provider
           - integration-frontend
+          - triggers-engine
 
 jobs:
   build-and-push:

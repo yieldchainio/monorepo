@@ -3264,6 +3264,223 @@
     "aws:cdk:path": "YC-Cluster/builder.yieldchain.io_ALB_RECORD/Resource"
    }
   },
+  "TRIGGERSENGINETASKDEFCAC610D5": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "DATABASE_URL",
+        "Value": "postgres://OfirYC:B.%3F3f%2Apbf%3D2Df%21i@postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com:5432/postgres"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         "010073361729.dkr.ecr.us-east-1.",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/triggers-engine:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "TRIGGERSENGINETASKDEFTRIGGERSENGINECONTAINERLogGroup779A471C"
+        },
+        "awslogs-stream-prefix": "TRIGGERSENGINE-STREAM",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "TRIGGERSENGINE-CONTAINER",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "HostPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "1024",
+    "EphemeralStorage": {
+     "SizeInGiB": 21
+    },
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "TRIGGERSENGINETASKDEFExecutionRole8DEA201D",
+      "Arn"
+     ]
+    },
+    "Family": "TRIGGERSENGINE-TASKDEF",
+    "Memory": "8192",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": "arn:aws:iam::010073361729:role/FullAuthRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/TRIGGERSENGINE-TASKDEF/Resource"
+   }
+  },
+  "TRIGGERSENGINETASKDEFTRIGGERSENGINECONTAINERLogGroup779A471C": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/TRIGGERSENGINE-TASKDEF/TRIGGERSENGINE-CONTAINER/LogGroup/Resource"
+   }
+  },
+  "TRIGGERSENGINETASKDEFExecutionRole8DEA201D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/TRIGGERSENGINE-TASKDEF/ExecutionRole/Resource"
+   }
+  },
+  "TRIGGERSENGINETASKDEFExecutionRoleDefaultPolicy5446F3B4": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:010073361729:repository/triggers-engine"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "TRIGGERSENGINETASKDEFTRIGGERSENGINECONTAINERLogGroup779A471C",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "TRIGGERSENGINETASKDEFExecutionRoleDefaultPolicy5446F3B4",
+    "Roles": [
+     {
+      "Ref": "TRIGGERSENGINETASKDEFExecutionRole8DEA201D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/TRIGGERSENGINE-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "TRIGGERSENGINEWORKERService63A697C2": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "YCECSClusterB729975E7ADB9F49"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": true,
+    "LaunchType": "FARGATE",
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "YCECSDefaultSecurityServiceGroupDE0B50A6",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "YCECSVpcPrivateSubnet1Subnet1286F6C0"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet2SubnetB580F791"
+       },
+       {
+        "Ref": "YCECSVpcPrivateSubnet3SubnetA6A7C898"
+       }
+      ]
+     }
+    },
+    "ServiceName": "TRIGGERSENGINE-WORKER",
+    "TaskDefinition": {
+     "Ref": "TRIGGERSENGINETASKDEFCAC610D5"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/TRIGGERSENGINE-WORKER/Service"
+   }
+  },
+  "TRIGGERSENGINEWORKERTaskCountTargetF5D2185D": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 3,
+    "MinCapacity": 1,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Ref": "YCECSClusterB729975E7ADB9F49"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "TRIGGERSENGINEWORKERService63A697C2",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::010073361729:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/TRIGGERSENGINE-WORKER/TaskCount/Target/Resource"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {

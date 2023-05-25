@@ -17,7 +17,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-deploy-role-010073361729-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-cfn-exec-role-010073361729-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-010073361729-us-east-1/50b02e8edd32a0cdb99f1df601184263497128cb8b5449b4b000d452fb725d03.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-010073361729-us-east-1/0da9cbe9f11d6736699c27694a14a925f0ab3a585a49c600b1066c55dd4a9847.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -685,6 +685,42 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "builderyieldchainioALBRECORD125204D8"
+          }
+        ],
+        "/YC-Cluster/TRIGGERSENGINE-TASKDEF/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TRIGGERSENGINETASKDEFCAC610D5"
+          }
+        ],
+        "/YC-Cluster/TRIGGERSENGINE-TASKDEF/TRIGGERSENGINE-CONTAINER/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TRIGGERSENGINETASKDEFTRIGGERSENGINECONTAINERLogGroup779A471C"
+          }
+        ],
+        "/YC-Cluster/TRIGGERSENGINE-TASKDEF/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TRIGGERSENGINETASKDEFExecutionRole8DEA201D"
+          }
+        ],
+        "/YC-Cluster/TRIGGERSENGINE-TASKDEF/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TRIGGERSENGINETASKDEFExecutionRoleDefaultPolicy5446F3B4"
+          }
+        ],
+        "/YC-Cluster/TRIGGERSENGINE-WORKER/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TRIGGERSENGINEWORKERService63A697C2"
+          }
+        ],
+        "/YC-Cluster/TRIGGERSENGINE-WORKER/TaskCount/Target/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TRIGGERSENGINEWORKERTaskCountTargetF5D2185D"
           }
         ],
         "/YC-Cluster/CDKMetadata/Default": [

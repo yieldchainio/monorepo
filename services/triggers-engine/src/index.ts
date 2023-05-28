@@ -21,12 +21,6 @@ const checkAllStrategiesTriggers = async (diamondContract: Contract) => {
   return (await diamondContract.checkStrategiesTriggers()) as boolean[][];
 };
 
-const executeStrategiesTriggers = async (
-  diamondContract: Contract,
-  validVaultsIndices: number[],
-  signals: boolean[][]
-) => {};
-
 for (const network of supportedNetworks) {
   const signer = new Wallet(process.env.PRIVATE_KEY || "", network.provider);
   const diamondContract = new Contract(

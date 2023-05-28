@@ -12,7 +12,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { YCStrategy } from "@yc/yc-models";
-import "../../../../../css/globals.css";
+import "css/globals.css";
 import { Themes, useTheme } from "utilities/hooks/stores/theme";
 import { useEffect, useState } from "react";
 import WrappedText from "components/wrappers/text";

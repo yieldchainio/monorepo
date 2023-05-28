@@ -2,7 +2,7 @@
  * An accordion sidebar component for the header
  */
 
-import { ModalWrapper } from "components/modal-wrapper";
+import { ModalWrapper } from "components/modals/base/wrapper";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 import Link from "next/link";
@@ -23,7 +23,7 @@ export const Accordion = ({
   const modals = useModals();
 
   // Get the current pathname
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   // Handle a click on the menu (pushes accordion to global state)
   const handleMenuClick = useCallback(() => {

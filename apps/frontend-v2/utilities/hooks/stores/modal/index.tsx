@@ -1,7 +1,7 @@
 import React from "react";
 import { create } from "zustand";
 import { v4 as uuid } from "uuid";
-import { ModalWrapper } from "components/modal-wrapper";
+import { ModalWrapper } from "components/modals/base/wrapper";
 /**
  * @notice
  * @hook useModals()

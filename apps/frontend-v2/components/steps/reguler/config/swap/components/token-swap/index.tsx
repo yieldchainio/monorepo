@@ -4,7 +4,7 @@
  */
 
 import { YCNetwork, YCToken } from "@yc/yc-models";
-import { TokensModalProps } from "components/tokens-modal/types";
+import { TokensModalProps } from "components/modals/tokens/types";
 import WrappedImage from "components/wrappers/image";
 import { forwardRef } from "react";
 import { ChooseToken } from "../../../components/choose-token";

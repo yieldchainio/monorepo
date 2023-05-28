@@ -8,8 +8,8 @@ import Dropdown from "components/dropdown";
 import { DropdownOption, DropdownProps } from "components/dropdown/types";
 import { InfoProvider } from "components/info-providers";
 import { ToolTipDirection } from "components/info-providers/types";
-import { TokensModal } from "components/tokens-modal";
-import { TokensModalProps } from "components/tokens-modal/types";
+import { TokensModal } from "components/modals/tokens";
+import { TokensModalProps } from "components/modals/tokens/types";
 import { forwardRef, useMemo } from "react";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 

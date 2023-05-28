@@ -16,10 +16,10 @@ import {
   strategiesLocalStorage,
 } from "utilities/hooks/stores/strategies/constants";
 import { useModals } from "utilities/hooks/stores/modal";
-import { ModalWrapper } from "components/modal-wrapper";
-import { StrategiesDraftsModal } from "components/drafts-modal";
+import { ModalWrapper } from "components/modals/base/wrapper";
+import { StrategiesDraftsModal } from "components/modals/drafts";
 import { ChildrenProvider } from "components/internal/render-children";
-import { DeploymentModal } from "components/deployment-modal";
+import { DeploymentModal } from "components/modals/deployment";
 
 const StrategyConfigLayout = ({ children }: { children: React.ReactNode }) => {
   /**

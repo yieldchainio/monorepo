@@ -4,7 +4,7 @@
  */
 
 import { Children, isValidElement } from "react";
-import { useModals } from "../../utilities/hooks/stores/modal";
+import { useModals } from "../../../../utilities/hooks/stores/modal";
 
 // The component
 export const ModalProvider = () => {

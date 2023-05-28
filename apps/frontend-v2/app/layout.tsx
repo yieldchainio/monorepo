@@ -4,7 +4,7 @@ import { ClassificationContext } from "@yc/yc-models";
 import { DataVersions, fetchYC } from "utilities/general/storage/fetch-yc";
 import StoreInitiallizor from "utilities/hooks/stores/store-initiallizor";
 import WrappedWagmi from "configs/wagmi";
-import { ModalProvider } from "components/modal-provider";
+import { ModalProvider } from "components/modals/base/provider";
 import { ShallowRouter } from "components/internal/shallow-router";
 import { LoggerProvider } from "components/logger";
 

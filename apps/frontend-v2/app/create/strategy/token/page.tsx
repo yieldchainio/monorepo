@@ -6,7 +6,7 @@
 import WrappedText from "components/wrappers/text";
 import { ConfigTitle } from "../../../../components/strategy-config-title";
 import { useBackdropColorChange } from "utilities/hooks/general/useBackdropColorChange";
-import { TokensModal } from "components/tokens-modal";
+import { TokensModal } from "components/modals/tokens";
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,7 @@ import { useLogs } from "utilities/hooks/stores/logger";
 import { ErrorMessage } from "components/logger/components/error";
 import Dropdown from "components/dropdown";
 import { YCToken } from "@yc/yc-models";
-import { ModalWrapper } from "components/modal-wrapper";
+import { ModalWrapper } from "components/modals/base/wrapper";
 import WrappedImage from "components/wrappers/image";
 import { StrategyConfigWrapper } from "components/strategy-config-wrapper";
 

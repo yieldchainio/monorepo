@@ -24,7 +24,7 @@ import {
 import { BackdropColor } from "components/backdrop-color";
 import { SlideShow } from "components/slideshow";
 import { useModals } from "utilities/hooks/stores/modal";
-import { StrategyModal } from "components/strategy-modal";
+import { StrategyModal } from "components/modals/strategy";
 import { useShallowRouter } from "utilities/hooks/general/useShallowRouter";
 import useDebounce from "utilities/hooks/general/useDebounce";
 import { useLogs } from "utilities/hooks/stores/logger";
@@ -35,8 +35,8 @@ import {
   seriallizeStrategyStore,
   strategiesLocalStorage,
 } from "utilities/hooks/stores/strategies/constants";
-import { ModalWrapper } from "components/modal-wrapper";
-import { TokensModal } from "components/tokens-modal";
+import { ModalWrapper } from "components/modals/base/wrapper";
+import { TokensModal } from "components/modals/tokens";
 import WrappedImage from "components/wrappers/image";
 import {
   Direction,

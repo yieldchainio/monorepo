@@ -5,7 +5,7 @@
  */
 import { useBackdropColorChange } from "utilities/hooks/general/useBackdropColorChange";
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
-import { StepsModal } from "components/steps-modal";
+import { StepsModal } from "components/modals/steps";
 import { ConfigTitle } from "components/strategy-config-title";
 import WrappedText from "components/wrappers/text";
 import { StrategyConfigVerticalWrapper } from "components/strategy-config-wrapper";

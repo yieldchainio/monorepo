@@ -21,7 +21,7 @@ import {
   useMediaBreakpoints,
 } from "utilities/hooks/styles/useMediaBreakpoints";
 import { MediaScreens } from "types/styles/media-breakpoints";
-import { ModalWrapper } from "components/modal-wrapper";
+import { ModalWrapper } from "components/modals/base/wrapper";
 import { useModals } from "utilities/hooks/stores/modal";
 import { SearchableDropdownMenu } from "./menu/searchable";
 

@@ -13,7 +13,7 @@ import { HeadStep } from "components/steps";
 import { Edge } from "components/steps/components/edge";
 import WrappedImage from "components/wrappers/image";
 import { useModals } from "utilities/hooks/stores/modal";
-import { ModalWrapper } from "components/modal-wrapper";
+import { ModalWrapper } from "components/modals/base/wrapper";
 import { StepProps } from "components/steps/types";
 import { SEED_TO_TREE_MARGIN } from "./constants";
 import WrappedText from "components/wrappers/text";

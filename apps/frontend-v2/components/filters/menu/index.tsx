@@ -16,7 +16,7 @@ import { RangeSlider } from "components/slider";
 
 import { FiltersMenuProps } from "../types";
 import { useModals } from "utilities/hooks/stores/modal";
-import { ModalWrapper } from "components/modal-wrapper";
+import { ModalWrapper } from "components/modals/base/wrapper";
 import { RegulerButton } from "components/buttons/reguler";
 
 const getDefaultRangeValues = <T extends BaseFilter<any>>(

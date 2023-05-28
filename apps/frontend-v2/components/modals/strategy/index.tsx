@@ -1,10 +1,10 @@
 /**
  * A modal for the strategies
  */
-import { ModalWrapperProps } from "components/modal-wrapper/types";
-import { ModalWrapper } from "components/modal-wrapper";
+import { ModalWrapperProps } from "components/modals/base/wrapper/types";
+import { ModalWrapper } from "components/modals/base/wrapper";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
-import "../../css/globals.css";
+import "css/globals.css";
 import { TitleSection } from "./components/title-section";
 import { ProfileSection } from "./components/profile-section";
 import { ValueLocked } from "./components/body-sections/value-locked";
@@ -12,10 +12,8 @@ import { GasThroughput } from "./components/body-sections/gas-throughput";
 import { GasBalance } from "./components/body-sections/gas-balance";
 import { ApyChart } from "./components/body-sections/apy-chart";
 import { StrategyOperationsBox } from "./components/body-sections/deposit-withdrawls";
-import { Step } from "utilities/classes/step";
-import { useSteps } from "utilities/hooks/yc/useSteps";
 import { useState } from "react";
-import { StepsModal } from "components/steps-modal";
+import { StepsModal } from "components/modals/steps";
 import { ToggleExpandText } from "./components/utility/toggleExpand";
 import { useStateEffect } from "utilities/hooks/general/useStateEffect";
 import WrappedImage from "components/wrappers/image";

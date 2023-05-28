@@ -13,14 +13,14 @@ import WrappedText from "components/wrappers/text";
 import WrappedImage from "components/wrappers/image";
 import { TokensBundle } from "components/tokens/bundle";
 import { useModals } from "utilities/hooks/stores/modal";
-import { ModalWrapper } from "components/modal-wrapper";
-import { StepsModal } from "components/steps-modal";
+import { ModalWrapper } from "components/modals/base/wrapper";
+import { StepsModal } from "components/modals/steps";
 import { useCallback, useMemo, useState } from "react";
 import { RegulerButton } from "components/buttons/reguler";
 import { strategiesLocalStorage } from "utilities/hooks/stores/strategies/constants";
 import GradientButton from "components/buttons/gradient";
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
-import { EnsureModal } from "components/ensure-modal";
+import { EnsureModal } from "components/modals/ensure";
 
 export const StrategiesDraftsModal = ({
   strategyDrafts,

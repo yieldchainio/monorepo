@@ -2,7 +2,7 @@
  * A modal used to deploy a strategy
  */
 
-import { StepsModal } from "components/steps-modal";
+import { StepsModal } from "components/modals/steps";
 import { DeployModalProps } from "./types";
 import { useEffect, useMemo, useState } from "react";
 import WrappedText from "components/wrappers/text";

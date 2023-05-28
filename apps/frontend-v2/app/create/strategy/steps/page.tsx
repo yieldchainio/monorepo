@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import useDebounce from "utilities/hooks/general/useDebounce";
 import { useBackdropColorChange } from "utilities/hooks/general/useBackdropColorChange";
 import { StrategyConfigVerticalWrapper } from "components/strategy-config-wrapper";
-import { StepsModal } from "components/steps-modal";
+import { StepsModal } from "components/modals/steps";
 import { Step } from "utilities/classes/step";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { YCFunc } from "@yc/yc-models";

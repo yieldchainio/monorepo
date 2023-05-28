@@ -8,8 +8,7 @@
   "scripts": {
     "build": "tsc -b --force",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prisma:generate": "prisma generate",
-    "prisma:db:pull": "prisma db pull"
+    "prisma:generate": "prisma generate"
   },
   "author": "Ofir Smolinsky",
   "license": "ISC",

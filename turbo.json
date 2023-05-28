@@ -3,7 +3,7 @@
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build": {
-      "dependsOn": ["^build", "prisma:db:pull", "prisma:generate"],
+      "dependsOn": ["^build", "prisma:generate"],
       "outputs": ["dist/**", ".next/**"]
     },
     "lint": {

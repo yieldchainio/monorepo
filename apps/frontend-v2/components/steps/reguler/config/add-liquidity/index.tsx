@@ -3,37 +3,34 @@
  */
 
 import { StepProps } from "components/steps/types";
-import { forwardRef } from "react";
-import { StepSizing } from "utilities/classes/step/types";
-import { SmallAddLiquidityConfig } from "./small";
-import { MediumAddLiquidityConfig } from "./medium";
+import {
+  ForwardRefExoticComponent,
+  RefAttributes,
+  forwardRef,
+  useEffect,
+  useState,
+} from "react";
+import { getProtocolLpConfig } from "./utils/get-protocol-lp-config";
 
 export const AddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
-    switch (step.size) {
-      case StepSizing.SMALL:
-        return (
-          <SmallAddLiquidityConfig
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+    const [AddLiqComponent, setAddLiquidityComponent] = useState<
+      ForwardRefExoticComponent<StepProps & RefAttributes<HTMLDivElement>>
+    >(getProtocolLpConfig(step));
 
-      case StepSizing.MEDIUM:
-        return (
-          <MediumAddLiquidityConfig
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
-    }
+    useEffect(() => {
+      setAddLiquidityComponent(getProtocolLpConfig(step));
+    }, [step.protocol?.id]);
+
+    return (
+      <AddLiqComponent
+        step={step}
+        style={style}
+        triggerComparison={triggerComparison}
+        ref={ref}
+        {...props}
+        canvasID={canvasID}
+      />
+    );
   }
 );

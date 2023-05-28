@@ -26,7 +26,7 @@ export const ProtocolsDropdown = forwardRef(
       protocols,
     }: {
       choice?: YCProtocol | null;
-      setChoice: (token: YCProtocol) => void;
+      setChoice: (protocol: YCProtocol) => void;
       dropdownProps?: Partial<DropdownProps>;
       portal?: HTMLElement;
       protocols?: YCProtocol[];

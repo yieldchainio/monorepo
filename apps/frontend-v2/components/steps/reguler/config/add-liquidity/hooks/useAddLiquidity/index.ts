@@ -8,16 +8,18 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Step } from "utilities/classes/step";
 import { useConfigContext } from "../../../hooks/useConfigContext";
 import { useProtocols } from "../../../hooks/useProtocols";
-import { ProtocolType } from "@prisma/client";
 import { useTokens } from "../../../hooks/useTokens";
 import { AddLiquidityData } from "@yc/yc-models";
+import { ProtocolType } from "@prisma/client";
 
 export const useAddLiquidity = ({
   step,
   triggerComparison,
+  protocolType = ProtocolType.LIQUIDITY,
 }: {
   step: Step;
   triggerComparison: () => void;
+  protocolType?: ProtocolType;
 }) => {
   /**
    * Get some base variables that we need (context, network & our available tokens)
@@ -36,7 +38,7 @@ export const useAddLiquidity = ({
    */
   const protocols = useProtocols({
     networks: network ? [network] : undefined,
-    type: ProtocolType.LIQUIDITY,
+    type: protocolType,
   });
 
   /**

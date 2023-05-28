@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc -b --force",
     "test": "echo \"Error: no test specified\" && exit 1"
+    
   },
   "author": "Ofir Smolinsky",
   "license": "ISC",

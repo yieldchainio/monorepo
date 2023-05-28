@@ -6,7 +6,9 @@
   "main": "bin/index.js",
   "scripts": {
     "compile": "tsc -b",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prisma:db:pull": "prisma db pull"
+
   },
   "author": "Ofir Smolinsky",
   "license": "ISC",

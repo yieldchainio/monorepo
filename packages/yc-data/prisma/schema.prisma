@@ -455,7 +455,7 @@ enum ProtocolType {
   LENDING
   STAKING
   PERPS
-
+  UNIV2LP
   @@schema("YieldchainV2")
 }
 

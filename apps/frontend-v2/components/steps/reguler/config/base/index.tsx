@@ -64,7 +64,6 @@ export const BaseActionConfig = forwardRef<
       return true;
     }, [canContinue, step.customArguments]);
 
-    console.log("Can Complete", canComplete)
 
     // Return JSX
     return (

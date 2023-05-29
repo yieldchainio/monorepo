@@ -133,6 +133,7 @@ export interface JSONStep {
         dark: string;
         light: string;
     } | null;
+    chainId: number;
 }
 export interface DBStatistic {
     id: string;

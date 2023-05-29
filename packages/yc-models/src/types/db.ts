@@ -143,6 +143,7 @@ export interface JSONStep {
   triggerType?: TriggerTypes | null;
   triggerDescription?: string | null;
   triggerIcon?: string | { dark: string; light: string } | null;
+  chainId: number;
 }
 
 export interface DBStatistic {

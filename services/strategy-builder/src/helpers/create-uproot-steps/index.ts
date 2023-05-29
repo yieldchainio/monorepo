@@ -6,7 +6,13 @@
  * @return uprootSteps - The uproot steps of the strategy
  */
 
-import { StepType, TriggerTypes, YCClassifications, YCStep, YCToken } from "@yc/yc-models";
+import {
+  StepType,
+  TriggerTypes,
+  YCClassifications,
+  YCStep,
+  YCToken,
+} from "@yc/yc-models";
 import { v4 as uuid } from "uuid";
 import lodash, { update } from "lodash";
 import { DUPLICATEABLE_FUNCTION_IDS } from "./constants.js";
@@ -40,6 +46,7 @@ export function createUprootSteps(
       type: StepType.TRIGGER,
       data: null,
       parentId: null,
+      chainId: treeSteps.chainId,
     },
     YCClassifications.getInstance()
   );

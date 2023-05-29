@@ -35,6 +35,7 @@ export const useStrategyStore = create<StrategyStore>()(
       /**
        * @State
        */
+      
       // UUID of the strategy
       id: startingID,
 
@@ -128,6 +129,10 @@ export const useStrategyStore = create<StrategyStore>()(
 
       // Set the network
       setNetwork: (network: YCNetwork) => {
+        if (network.id) {
+          get().step.map((step) => (step.chainId = network.id));
+          get().seedStep.map((step) => (step.chainId = network.id));
+        }
         set({ network });
       },
 

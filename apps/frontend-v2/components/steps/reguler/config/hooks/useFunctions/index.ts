@@ -22,14 +22,7 @@ export const useFunctions = ({
    * Memoize the filtered functions and return them
    */
   const memoFunctions = useMemo(() => {
-    console.log(
-      "Details Inside Memo",
-      allFunctions.length,
-      networks?.[0]?.name,
-      tokens?.[0]?.symbol,
-      action?.name,
-      protocols?.[0]?.name
-    );
+  
     return allFunctions.filter((func) => {
       // It must be on one of the specified networks, if any
       if (
@@ -74,13 +67,6 @@ export const useFunctions = ({
     protocols?.[0],
   ]);
 
-  console.log(
-    "Function sDetails",
-    allFunctions.length,
-    networks?.[0]?.name,
-    tokens?.[0]?.symbol,
-    action?.name,
-    protocols?.[0]?.name
-  );
+ 
   return memoFunctions;
 };

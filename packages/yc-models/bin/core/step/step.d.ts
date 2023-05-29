@@ -59,6 +59,10 @@ export declare class YCStep extends Node<YCStep> {
         dark: string;
         light: string;
     } | null;
+    /**
+     * Chain ID othis step
+     */
+    chainId: number;
     constructor(_step: JSONStep, _context: YCClassifications);
     /**
      * Convert the step into a JSON step

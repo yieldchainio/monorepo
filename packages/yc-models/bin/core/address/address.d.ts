@@ -43,6 +43,7 @@ export declare class YCContract extends BaseClass {
      * The addresses relating to this one
      */
     readonly relatedContracts: YCContract[];
+    static diamondIdentifier: string;
     constructor(_address: DBContract, _context: YCClassifications);
     /**
      * hasFunction

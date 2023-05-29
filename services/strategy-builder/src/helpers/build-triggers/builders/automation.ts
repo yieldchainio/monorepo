@@ -11,7 +11,6 @@ export function buildAutomationTrigger(root: YCStep): Trigger {
   if (!root.data.automation)
     throw "Cannot Build Automation Trigger - Automation Field Undefined On Root";
 
-  console.log("Root Data", root.data);
   const automationPayload = AbiCoder.defaultAbiCoder().encode(
     ["uint256"],
     [root.data.automation.interval]

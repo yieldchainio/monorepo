@@ -34,10 +34,6 @@ export const useTheme = create<ThemeStore>()(
     }),
     {
       name: "theme",
-      // onRehydrateStorage: (state) => {
-      //   state.setTheme(state.theme)
-      //   console.log("Set THeme:", state.setTheme);
-      // },
     }
   )
 );

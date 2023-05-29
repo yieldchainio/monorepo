@@ -66,6 +66,10 @@ class YCStep extends Node {
      * An icon representing this trigger
      */
     triggerIcon = null;
+    /**
+     * Chain ID othis step
+     */
+    chainId;
     constructor(_step, _context) {
         super();
         this.id = _step.id;
@@ -98,6 +102,7 @@ class YCStep extends Node {
         this.triggerType = _step.triggerType || null;
         this.triggerDescription = _step.triggerDescription || null;
         this.triggerIcon = _step.triggerIcon || null;
+        this.chainId = _step.chainId;
     }
     /**
      * Convert the step into a JSON step
@@ -118,6 +123,7 @@ class YCStep extends Node {
             data: this.data,
             tokenPercentages: Array.from(this.tokenPercentages.entries()),
             type: this.type,
+            chainId: this.chainId,
         };
     };
     /**

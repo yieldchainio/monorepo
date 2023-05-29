@@ -3,7 +3,12 @@
  * delete, expand/minimize, etc
  */
 
-import { EncodingContext } from "@yc/yc-models";
+import {
+  DBFunction,
+  EncodingContext,
+  YCClassifications,
+  YCFunc,
+} from "@yc/yc-models";
 import { DotMenuIcon } from "components/icons/dot-menu";
 import { StepProps } from "components/steps/types";
 import { TooltipDropdown } from "components/tooltip-dropdown";
@@ -39,7 +44,12 @@ export const StepOptions = ({
         className="cursor-pointer group transition duration-200 ease-in-out"
         onClick={() => {
           props.onClick?.();
+          // const jsonFunc = step.function?.toJSON(true) as DBFunction;
+
+          // step.function = new YCFunc(jsonFunc, YCClassifications.getInstance());
+
           // const jsonStep = step.toDeployableJSON();
+
           // if (!jsonStep)
           //   throw logs.lazyPush({
           //     message: "JSON Step is Null!",

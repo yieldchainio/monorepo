@@ -16,6 +16,8 @@ import {
   bytes,
   VaultFactoryInputs,
   BuilderResponse,
+  YCFunc,
+  DBFunction,
 } from "@yc/yc-models";
 import { validateSteps } from "./validate/index.js";
 import { createUprootSteps } from "./create-uproot-steps/index.js";
@@ -133,17 +135,13 @@ export async function createDeployableVaultInput(
     isPublic: vaultVisibility,
   };
 
-  console.log(
-    "Create Vault Fragments",
-    DiamondABI.filter((fragment) => fragment.name == "createVault")
-  );
-
   const deploymentCalldata =
     await ycFactoryInstance.createVault.populateTransaction(
       ...Object.values(vaultCreationArgs)
     );
 
   console.log(deploymentCalldata.data);
+
   return {
     status: true,
     deploymentCalldata: deploymentCalldata.data,

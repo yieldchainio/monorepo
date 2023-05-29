@@ -11,7 +11,7 @@ import { useAssertTokensAmount } from "../../../hooks/useAssertTokensAmount";
 import { ChooseToken } from "../../../../components/choose-token";
 import WrappedText from "components/wrappers/text";
 import { ProtocolsDropdown } from "../../../../components/protocol-dropdown";
-import { completeLPConfig } from "../utils/complete-lp-config";
+import { completeUniV2LPConfig } from "../utils/complete-univ2-lp-config";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { ProtocolType } from "@prisma/client";
 
@@ -35,7 +35,6 @@ export const SmallUniV2AddLiquidityConfig = forwardRef<
   } = useAddLiquidity({
     step,
     triggerComparison,
-    protocolType: ProtocolType.UNIV2LP,
   });
 
   /**
@@ -65,7 +64,7 @@ export const SmallUniV2AddLiquidityConfig = forwardRef<
       step={step}
       triggerComparison={triggerComparison}
       canvasID={canvasID}
-      handleComplete={() => completeLPConfig(step, context)}
+      handleComplete={() => completeUniV2LPConfig(step, context)}
       canContinue={
         protocol
           ? tokenA

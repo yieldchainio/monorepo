@@ -1,4 +1,4 @@
-import { Contract, ethers, Interface, InterfaceAbi } from "ethers";
+import { Contract, ethers, Interface, InterfaceAbi, ZeroAddress } from "ethers";
 import { DBContract } from "../../types/db.js";
 import { YCClassifications } from "../context/context.js";
 import { YCFunc } from "../function/function.js";
@@ -56,6 +56,8 @@ export class YCContract extends BaseClass {
    */
   readonly relatedContracts: YCContract[] = [];
 
+  static diamondIdentifier = "yc-diamond";
+
   // ====================
   //     CONSTRUCTOR
   // ====================
@@ -65,11 +67,15 @@ export class YCContract extends BaseClass {
      */
     super();
     this.id = _address.id;
-    this.address = _address.address;
+
     this.abi = (_address.abi as any[] | null)?.filter(
       (fragment) => Object.keys(fragment).length > 0
     );
     this.network = _context.getNetwork(_address.chain_id);
+    this.address =
+      _address.id == YCContract.diamondIdentifier
+        ? this.network?.diamondAddress || ZeroAddress
+        : _address.address;
     this.protocol = _address.protocol_id as unknown as YCProtocol;
 
     /**

@@ -4,16 +4,12 @@ import { bytes } from "../../types/global.js";
 import { TokenPercentageImplementor, YCFunc } from "../function/function.js";
 import { BaseClass } from "../base/index.js";
 import { Typeflags } from "@prisma/client";
-import {
-  CustomArgsTree,
-  DeployableStep,
-  EncodingContext,
-  typeflags,
-} from "../../types/index.js";
+import { EncodingContext, typeflags } from "../../types/index.js";
 import { getArgumentFlags } from "../../helpers/builder/get-command-flags.js";
 import { AbiCoder } from "ethers";
 import { YCToken } from "..";
 import { trySpecialEncoding } from "../../helpers/builder/special-commands/index.js";
+import { v4 as uuid } from "uuid";
 import { remove0xPrefix } from "../../helpers/builder/remove-0x-prefix.js";
 
 /**
@@ -27,6 +23,7 @@ export class YCArgument extends BaseClass {
   // =======================
   //    PRIVATE VARIABLES
   // =======================
+  instanceID: string;
   #value: string | YCFunc | Array<string | YCFunc>;
   get value() {
     return this.#value;
@@ -34,7 +31,10 @@ export class YCArgument extends BaseClass {
   readonly solidityType: string;
   readonly typeflag: Typeflags;
   readonly retTypeflag: Typeflags;
-  readonly isCustom: boolean;
+  #isCustom: boolean;
+  get isCustom() {
+    return this.#isCustom;
+  }
   readonly devNotes: string | null = null;
   readonly identifier: string;
   readonly name: string | null;
@@ -47,13 +47,14 @@ export class YCArgument extends BaseClass {
   // =======================
   constructor(_argument: DBArgument, _context: YCClassifications) {
     super();
+    this.instanceID = uuid();
     // Init variables
     this.solidityType = _argument.solidity_type;
     this.typeflag = _argument.typeflag;
     this.retTypeflag = _argument.ret_typeflag;
     this.identifier = _argument.id;
     this.name = _argument.name;
-    this.isCustom = _argument.custom;
+    this.#isCustom = _argument.custom;
     this.id = _argument.id;
     this.devNotes = _argument.dev_notes || null;
     this.relatingToken = _argument.relating_token
@@ -78,7 +79,7 @@ export class YCArgument extends BaseClass {
       }
 
       // Assign the value to the YCFunc instance
-      this.#value = new YCFunc(func as DBFunction, _context);
+      this.#value = new YCFunc(func as DBFunction, _context, true);
 
       // Replace the value (func)'s custom arguments with our overrides if any
       this.#overridenCustomArguments = _argument.overridden_custom_values;
@@ -96,11 +97,21 @@ export class YCArgument extends BaseClass {
         const argInstance = new YCArgument(underlyingJsonArg, _context);
         if (!argInstance)
           throw "Cannot Override Custom Args - Did Not Get Arg Instance";
-        this.#value.arguments[i] = argInstance;
+
+        if (this.#value.arguments[i].isCustom)
+          this.#value.arguments[i] = argInstance;
       }
 
       // If the argument type is not a function - we simply use the hardcoded value
-    } else this.#value = _argument.value;
+    } else {
+      try {
+        const parsed = JSON.parse(_argument.value);
+        if (Array.isArray(parsed)) this.#value = parsed;
+        else this.#value = _argument.value;
+      } catch {
+        this.#value = _argument.value;
+      }
+    }
   }
 
   // =============
@@ -108,8 +119,17 @@ export class YCArgument extends BaseClass {
   // =============
   // Set the value of the argument, used by unique utility parsers
   setValue = (newValue: any) => {
-    if (!this.isCustom) throw "Cannot Set Value To Non-Custom Argument";
+    console.log(
+      "Setting New Value. Current Value:",
+      this.#value,
+      "Is Custom:",
+      this.#isCustom,
+      "New Value:",
+      newValue
+    );
+    if (!this.#isCustom) throw "Cannot Set Value To Non-Custom Argument";
     this.#value = newValue;
+    this.#isCustom = false;
   };
 
   // Encode the argument
@@ -141,13 +161,25 @@ export class YCArgument extends BaseClass {
           this.id
         );
 
+      if (this.solidityType == "address")
+        console.log(
+          "About To Encode Address Custom Value... Custom Value:",
+          customValue,
+          "This Arg ID:",
+          this.id,
+          "Value:",
+          this.value
+        );
+
       command += remove0xPrefix(
         AbiCoder.defaultAbiCoder().encode([this.solidityType], [customValue])
       );
     }
     // If we are a function, encode it instead
     else if (this.value instanceof YCFunc)
-      command = remove0xPrefix(this.value.encodeYCCommand(step, context, []));
+      command = remove0xPrefix(
+        this.value.encodeYCCommand(step, context, step.customArguments)
+      );
     // Else, encode our value normally
     else
       command += remove0xPrefix(

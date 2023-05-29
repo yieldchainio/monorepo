@@ -9,6 +9,8 @@ export function encodeTreesFunctions(stepsTrees) {
     for (const tree of stepsTrees)
         tree[0].map((step) => {
             stepIDsToEncodedFunctions.set(step.id, step.function?.encodeYCCommand(step.toJSON(), tree[1], step.customArguments) || ethers.ZeroHash);
+            if (step.function?.id == "19084200-fcc0-46db-9c95-7c0fcebc8d4b")
+                console.log("Encoded Remove Liquidity...", stepIDsToEncodedFunctions.get(step.id));
         });
     return stepIDsToEncodedFunctions;
 }

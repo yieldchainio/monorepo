@@ -98,6 +98,11 @@ export class YCStep extends Node<YCStep> {
    */
   triggerIcon: string | { dark: string; light: string } | null = null;
 
+  /**
+   * Chain ID othis step
+   */
+  chainId: number;
+
   constructor(_step: JSONStep, _context: YCClassifications) {
     super();
     this.id = _step.id;
@@ -134,6 +139,8 @@ export class YCStep extends Node<YCStep> {
     this.triggerType = _step.triggerType || null;
     this.triggerDescription = _step.triggerDescription || null;
     this.triggerIcon = _step.triggerIcon || null;
+
+    this.chainId = _step.chainId;
   }
 
   /**
@@ -160,6 +167,7 @@ export class YCStep extends Node<YCStep> {
       data: this.data,
       tokenPercentages: Array.from(this.tokenPercentages.entries()),
       type: this.type,
+      chainId: this.chainId,
     };
   };
 

@@ -1,6 +1,9 @@
+import { YCClassifications } from "../context/context.js";
+import { YCContract } from "../address/address.js";
 import { YCArgument } from "../argument/argument.js";
 import { BaseClass } from "../base/index.js";
 import { getFunctionFlags } from "../../helpers/builder/get-command-flags.js";
+import { v4 as uuid } from "uuid";
 class YCFunc extends BaseClass {
     // ====================
     //    STATIC FIELDS
@@ -10,6 +13,7 @@ class YCFunc extends BaseClass {
     // ====================
     //    PRIVATE FIELDS
     // ====================
+    instanceID;
     id;
     name;
     address;
@@ -30,7 +34,7 @@ class YCFunc extends BaseClass {
     // ====================
     //     CONSTRUCTOR
     // ====================
-    constructor(_function, _context) {
+    constructor(_function, _context, forceNewInstance = false) {
         super();
         // Static variables
         this.id = _function.id;
@@ -39,8 +43,11 @@ class YCFunc extends BaseClass {
         this.retTypeflag = _function.ret_typeflag;
         this.isCallback = _function.callback;
         this.copyArgs = _function.copy_args;
+        this.instanceID = uuid();
         // Mapping arg identifiers => Full argument instances
         const fullArgs = _function.arguments_ids.map((_arg) => {
+            if (this.id == "dbea21b6-8baa-4bc5-9f68-8ed33ca1c692")
+                console.log("Mapping Arg For Add Liquidity... Typeof Arg:", typeof _arg, "Arg:", _arg);
             if (typeof _arg == "object")
                 return new YCArgument(_arg, _context);
             const jsonArg = _context.rawArguments.find((arg) => arg.id == _arg);
@@ -76,7 +83,7 @@ class YCFunc extends BaseClass {
         this.actions = (_function.actions_ids || []);
         // Get the existing instance (or set ours otherwise)
         const existingFunc = this.getInstance(_function.id);
-        if (existingFunc)
+        if (existingFunc && !forceNewInstance)
             return existingFunc;
         // Set the actual dependency/counter functions
         this.counterFunction = _function.inverse_function_id
@@ -129,21 +136,36 @@ class YCFunc extends BaseClass {
      * @returns A @interface FunctionCallStruct that represents an on-chain FunctionCallStruct struct.
      */
     toFunctionCallStruct = (step, context, customArguments) => {
+        if (this.id == "19084200-fcc0-46db-9c95-7c0fcebc8d4b")
+            console.log("Turning Remove Liquidity into FunctionCall struct... Custom Arguments:", customArguments, "Step Custom Arguments", step.customArguments, "All Arguments", this.arguments.map((arg) => {
+                return arg.name + ", " + (arg.isCustom ? "Custom" : "Not Custom");
+            }));
         // Assert that if we require a custom argument,
-        if (this.customArgumentsLength !== customArguments.length)
-            throw new Error("YCFunc ERR: Cannot Create FunctionCallStruct - Function requires custom argument(s?), but provided args length mismatch. Function: " +
+        if (this.customArgumentsLength > customArguments.length)
+            throw new Error("YCFunc ERR: Cannot Create FunctionCallStruct - Function requires custom argument(s?), but provided args length insufficient. Function: " +
                 this.name +
                 " ID: " +
                 this.id +
                 " Custom Args Required: " +
-                this.customArgumentsLength);
+                this.customArgumentsLength +
+                " Custom Args Provided: " +
+                customArguments.length);
         // Assert that we must have an address set
         if (!this.address)
             throw new Error("YCFuncERR: Cannot Create FunctionCallStruct - Function Does Not Have An Address.");
+        const network = YCClassifications.getInstance().getNetwork(step.chainId);
+        if (!network?.diamondAddress)
+            throw ("Cannot Encode A Function When Diamond Address Is Undefined. Network: " +
+                network?.id +
+                " Function Name: " +
+                this.name);
+        const address = this.address.id == YCContract.diamondIdentifier
+            ? network.diamondAddress
+            : this.address.address;
         // Create the struct
         const struct = {
             // The target address (our address, tells the onchain interpreter where to call the function)
-            target_address: this.address.address,
+            target_address: address,
             // Our arguments. If an argument is not a custom, we encode it. Otherwise, we encode it but
             // input the next custom argument from our array (we shift is so that it is removed)
             args: this.arguments.map((arg) => arg.encodeYCCommand(step, context, arg.isCustom ? customArguments.shift() : undefined)),

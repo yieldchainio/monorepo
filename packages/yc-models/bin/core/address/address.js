@@ -1,4 +1,4 @@
-import { ethers, Interface } from "ethers";
+import { ethers, Interface, ZeroAddress } from "ethers";
 import { BaseClass } from "../base/index.js";
 class YCContract extends BaseClass {
     // ================
@@ -41,6 +41,7 @@ class YCContract extends BaseClass {
      * The addresses relating to this one
      */
     relatedContracts = [];
+    static diamondIdentifier = "yc-diamond";
     // ====================
     //     CONSTRUCTOR
     // ====================
@@ -50,9 +51,12 @@ class YCContract extends BaseClass {
          */
         super();
         this.id = _address.id;
-        this.address = _address.address;
         this.abi = _address.abi?.filter((fragment) => Object.keys(fragment).length > 0);
         this.network = _context.getNetwork(_address.chain_id);
+        this.address =
+            _address.id == YCContract.diamondIdentifier
+                ? this.network?.diamondAddress || ZeroAddress
+                : _address.address;
         this.protocol = _address.protocol_id;
         /**
          * We set some contex-related variables as the string ID first before attemtping to get existing singleton instances.

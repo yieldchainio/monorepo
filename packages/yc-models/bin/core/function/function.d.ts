@@ -11,6 +11,7 @@ import { bytes } from "../../types/index.js";
 export declare class YCFunc extends BaseClass {
     #private;
     static readonly FunctionCallTuple = "tuple(address target_address, bytes[] args, string signature)";
+    instanceID: string;
     readonly id: string;
     readonly name: string;
     readonly address: YCContract | null;
@@ -25,7 +26,7 @@ export declare class YCFunc extends BaseClass {
     readonly retTypeflag: Typeflags;
     get arguments(): YCArgument[];
     readonly copyArgs: boolean;
-    constructor(_function: DBFunction, _context: YCClassifications);
+    constructor(_function: DBFunction, _context: YCClassifications, forceNewInstance?: boolean);
     encodeYCCommand: (step: JSONStep, context: EncodingContext, customArguments: Array<any | YCFunc>) => bytes;
     /**
      * @method toFunctionCallStruct

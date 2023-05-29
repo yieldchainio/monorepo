@@ -37,6 +37,7 @@ export function addScrapeSwaps(uprootTree: YCStep, depositToken: YCToken) {
         children: [],
         data: null,
         type: StepType.STEP,
+        chainId: uprootTree.chainId
       },
       YCClassifications.getInstance()
     );

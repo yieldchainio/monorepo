@@ -172,6 +172,8 @@ export class Step extends Node<Step> implements IStep<Step> {
     // Inherit writeability. Writeability is false by default, but when we add a child to
     // a writeable parent, then it should be writeable
     this.writeable = this.parent?.writeable || this.writeable;
+
+    this.chainId = this.parent?.chainId || null
   };
 
   // ---------------
@@ -576,6 +578,11 @@ export class Step extends Node<Step> implements IStep<Step> {
   function: YCFunc | null = null;
 
   /**
+   * Chain ID of this step
+   */
+  chainId: number | null = null;
+
+  /**
    * Functions that are unlocked starting from this node to it's descendents,
    * by some external factor (i.e, this is a tree strategy and some functions
    * were unlocked by the seed strategy, added to this array)
@@ -657,6 +664,7 @@ export class Step extends Node<Step> implements IStep<Step> {
     this.size = config?.size || this.parent?.size || StepSizing.MEDIUM;
     this.dimensions = this.defaultDimensions[this.size];
     this.type = config?.type || StepType.STEP;
+    this.chainId = config?.chainId || null
     this.inflows = config?.inflows || [];
     this.outflows = config?.outflows || [];
     this.writeable = writeable;
@@ -688,6 +696,7 @@ export class Step extends Node<Step> implements IStep<Step> {
     for (const child of this.children) {
       child.parent = this;
       child.inheritStyle();
+      if (!child.chainId) child.chainId = this.chainId;
     }
 
     // Add an empty placeholder child if our length is 0 and we are writeable
@@ -959,7 +968,8 @@ export class Step extends Node<Step> implements IStep<Step> {
       triggerConfig: this.triggerConfig,
       data: this.data,
       tokenPercentages: Array.from(this.tokenPercentages.entries()),
-      customArguments: this.customArguments, // TODO
+      customArguments: this.customArguments, 
+      chainId: this.chainId || undefined
     };
   };
 
@@ -984,6 +994,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       customArguments: this.customArguments,
       type: this.type,
       triggerType: this.triggerType,
+      chainId: this.chainId || 1,
     };
   }
 }

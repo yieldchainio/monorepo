@@ -15,6 +15,7 @@ import {
 } from "../../types/index.js";
 import { safeToJSON } from "../../helpers/index.js";
 import { YCClassifications } from "../context/context.js";
+import { v4 as uuid } from "uuid";
 
 /**
  * Another base class which has base web3 functionality to support bothbackends and frontneds
@@ -70,7 +71,6 @@ export class BaseWeb3Class {
         ? null
         : YCClassifications.getInstance().getNetwork(signingMethod.chainID);
 
-        
     const provider = network
       ? network.provider
       : (signingMethod as EthersExecutor).provider;
@@ -136,6 +136,12 @@ export class BaseWeb3Class {
 }
 
 export class BaseClass extends BaseWeb3Class {
+  // instanceID: string;
+  // constructor() {
+  //   super();
+  //   this.instanceID = uuid();
+  // }
+
   // Method to convert the class ,including it's getters - to JSON.
   toJSON() {
     return safeToJSON(this);

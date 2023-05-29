@@ -11,8 +11,7 @@ import { ChooseToken } from "../../../../components/choose-token";
 import { useAddLiquidity } from "../../../hooks/useAddLiquidity";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useAssertTokensAmount } from "../../../hooks/useAssertTokensAmount";
-import { completeLPConfig } from "../utils/complete-lp-config";
-import { ProtocolType } from "@prisma/client";
+import { completeUniV2LPConfig } from "../utils/complete-univ2-lp-config";
 
 export const MediumUniV2AddLiquidityConfig = forwardRef<
   HTMLDivElement,
@@ -34,7 +33,6 @@ export const MediumUniV2AddLiquidityConfig = forwardRef<
   } = useAddLiquidity({
     step,
     triggerComparison,
-    protocolType: ProtocolType.UNIV2LP,
   });
 
   /**
@@ -64,7 +62,7 @@ export const MediumUniV2AddLiquidityConfig = forwardRef<
       height="328px"
       step={step}
       triggerComparison={triggerComparison}
-      handleComplete={() => completeLPConfig(step, context)}
+      handleComplete={() => completeUniV2LPConfig(step, context)}
       canContinue={
         protocol
           ? tokenA

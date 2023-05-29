@@ -15,11 +15,12 @@ import { YCToken } from "..";
  */
 export declare class YCArgument extends BaseClass {
     #private;
+    instanceID: string;
     get value(): string | YCFunc | (string | YCFunc)[];
     readonly solidityType: string;
     readonly typeflag: Typeflags;
     readonly retTypeflag: Typeflags;
-    readonly isCustom: boolean;
+    get isCustom(): boolean;
     readonly devNotes: string | null;
     readonly identifier: string;
     readonly name: string | null;

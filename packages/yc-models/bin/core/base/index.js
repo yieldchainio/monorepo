@@ -93,6 +93,11 @@ class BaseWeb3Class {
 }
 export { BaseWeb3Class };
 export class BaseClass extends BaseWeb3Class {
+    // instanceID: string;
+    // constructor() {
+    //   super();
+    //   this.instanceID = uuid();
+    // }
     // Method to convert the class ,including it's getters - to JSON.
     toJSON() {
         return safeToJSON(this);

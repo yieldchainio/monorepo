@@ -138,7 +138,7 @@ export interface IStep<T extends IStep<T>>
     | Map<string, TokenPercentage>;
 
   children?: T[];
-  percentage?: number;
+  chainId?: number | null;
 }
 
 export interface JSONFrontendStep {
@@ -154,6 +154,7 @@ export interface JSONFrontendStep {
   state?: StepState;
   writeable?: boolean;
   tokenPercentages?: Array<[string, TokenPercentage]>;
+  chainId?: number;
 
   // ==REGULER== //
   protocol?: string;
@@ -167,7 +168,7 @@ export interface JSONFrontendStep {
   actionConfig?: ActionConfigs | null;
 
   // ==TRIGGER== //
-  triggerType?: TriggerTypes | null
+  triggerType?: TriggerTypes | null;
   triggerDescription?: string | null;
   triggerIcon?: ImageSrc;
   data?: any | null;

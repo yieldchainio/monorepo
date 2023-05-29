@@ -10,6 +10,7 @@ import {
   YCStep,
   bytes,
   StepsToEncodedFunctions,
+  YCFunc,
 } from "@yc/yc-models";
 import { ethers } from "ethers";
 
@@ -31,6 +32,12 @@ export function encodeTreesFunctions(
           step.customArguments
         ) || ethers.ZeroHash
       );
+
+      if (step.function?.id == "19084200-fcc0-46db-9c95-7c0fcebc8d4b")
+        console.log(
+          "Encoded Remove Liquidity...",
+          stepIDsToEncodedFunctions.get(step.id)
+        );
     });
 
   return stepIDsToEncodedFunctions;

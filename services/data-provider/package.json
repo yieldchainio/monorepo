@@ -13,7 +13,7 @@
   "author": "Ofir Smolinsky",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^4.11.0",
+    "@prisma/client": "^4.14.1",
     "@types/body-parser": "^1.19.2",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",

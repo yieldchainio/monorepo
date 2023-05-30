@@ -1,7 +1,9 @@
+import { YCClassifications } from "../context/context.js";
 import { YCFunc } from "../function/function.js";
 import { BaseClass } from "../base/index.js";
+import { Typeflags } from "@prisma/client";
 import { getArgumentFlags } from "../../helpers/builder/get-command-flags.js";
-import { AbiCoder } from "ethers";
+import { AbiCoder, ZeroHash, ethers } from "ethers";
 import { trySpecialEncoding } from "../../helpers/builder/special-commands/index.js";
 import { v4 as uuid } from "uuid";
 import { remove0xPrefix } from "../../helpers/builder/remove-0x-prefix.js";
@@ -12,7 +14,7 @@ import { remove0xPrefix } from "../../helpers/builder/remove-0x-prefix.js";
  * @dev When arguments r considered dynamic, their type is a 'function' - which means we
  * encode a FunctionCall struct eventually and use the return value of it as the value.
  */
-export class YCArgument extends BaseClass {
+class YCArgument extends BaseClass {
     // =======================
     //    PRIVATE VARIABLES
     // =======================
@@ -156,5 +158,21 @@ export class YCArgument extends BaseClass {
             dev_notes: this.devNotes,
         };
     }
+    static emptyArgument = (type = "uint256") => {
+        const value = type == "address" ? ethers.ZeroAddress : ethers.ZeroHash;
+        return new YCArgument({
+            id: "empty",
+            custom: false,
+            dev_notes: "",
+            value: ZeroHash,
+            solidity_type: "uint256",
+            ret_typeflag: Typeflags.VALUE_VAR_FLAG,
+            typeflag: Typeflags.VALUE_VAR_FLAG,
+            name: "empty",
+            relating_token: null,
+            overridden_custom_values: [],
+        }, YCClassifications.getInstance());
+    };
 }
+export { YCArgument };
 //# sourceMappingURL=argument.js.map

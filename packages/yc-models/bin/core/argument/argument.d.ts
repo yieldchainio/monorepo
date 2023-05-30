@@ -30,4 +30,5 @@ export declare class YCArgument extends BaseClass {
     setValue: (newValue: any) => void;
     encodeYCCommand: (step: JSONStep, context: EncodingContext, customValue?: string | null) => bytes;
     toJSON(retainArgs?: boolean): DBArgument;
+    static emptyArgument: (type?: string) => YCArgument;
 }

@@ -1,3 +1,4 @@
+import { YCClassifications } from "../context/context.js";
 import { Contract, ethers, } from "ethers";
 import { LiFi } from "../../clients/lifi/index.js";
 import { EthersExecutor, } from "../../types/index.js";
@@ -56,6 +57,13 @@ class YCToken extends BaseClass {
      * Token tags
      */
     tags;
+    /**
+     * The parent protocol
+     */
+    #parentProtocolId;
+    get parentProtocol() {
+        return (YCClassifications.getInstance().protocols.find((protocol) => protocol.id == this.#parentProtocolId) || null);
+    }
     // =======================
     //      CONSTRUCTOR
     // =======================
@@ -77,6 +85,7 @@ class YCToken extends BaseClass {
         this.native = this.address == ethers.ZeroAddress ? true : false;
         this.contract = new Contract(this.address, erc20ABI, this.network?.provider);
         this.tags = _token.tags;
+        this.#parentProtocolId = _token.parent_protocol;
         // Return existing singleton if exists
         const existingToken = this.getInstance(_token.id);
         if (existingToken)
@@ -260,7 +269,8 @@ class YCToken extends BaseClass {
             logo: this.logo,
             decimals: this.decimals,
             name: this.name,
-            tags: this.tags
+            tags: this.tags,
+            parent_protocol: this.#parentProtocolId,
         };
     };
 }

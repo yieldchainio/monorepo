@@ -79,6 +79,7 @@ export interface DBToken {
     decimals: number;
     chain_id: ChainID;
     tags: TokenTags[];
+    parent_protocol: string | null;
 }
 export interface DBProtocol {
     id: string;

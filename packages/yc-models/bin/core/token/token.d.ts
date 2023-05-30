@@ -12,6 +12,7 @@ import { TokenTags } from "@prisma/client";
  * A class representing an on-chain token
  */
 export declare class YCToken extends BaseClass {
+    #private;
     /**
      * The name of this token
      */
@@ -56,6 +57,7 @@ export declare class YCToken extends BaseClass {
      * Token tags
      */
     readonly tags: TokenTags[];
+    get parentProtocol(): YCProtocol | null;
     constructor(_token: DBToken, _context: YCClassifications, _network?: YCNetwork);
     /**
      * Parse some formatted number into the raw number of tokens using it's decimals

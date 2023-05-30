@@ -94,6 +94,7 @@ export const completeUniV2LPConfig = (
   );
 
   // Add it as an inflow
+  step.clearInflows();
   step.addInflow(lpToken);
 
   return;

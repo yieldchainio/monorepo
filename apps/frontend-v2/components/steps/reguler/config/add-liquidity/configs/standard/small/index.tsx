@@ -11,7 +11,7 @@ import { useAssertTokensAmount } from "../../../hooks/useAssertTokensAmount";
 import { ChooseToken } from "../../../../components/choose-token";
 import WrappedText from "components/wrappers/text";
 import { ProtocolsDropdown } from "../../../../components/protocol-dropdown";
-import { completeUniV2LPConfig } from "../utils/complete-univ2-lp-config";
+import { completeUniV2LPConfig } from "../utils/complete-standard-lp-config";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { ProtocolType } from "@prisma/client";
 

@@ -32,6 +32,7 @@ export const completeLPConfig = (step: Step, context: YCClassifications) => {
   );
 
   // Add it as an inflow
+  step.clearInflows();
   step.addInflow(lpToken);
 
   // Get the add liquidity function from the context (it's a singleton, on the YC wrapper)

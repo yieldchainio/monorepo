@@ -11,7 +11,7 @@ import { ChooseToken } from "../../../../components/choose-token";
 import { useAddLiquidity } from "../../../hooks/useAddLiquidity";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useAssertTokensAmount } from "../../../hooks/useAssertTokensAmount";
-import { completeUniV2LPConfig } from "../utils/complete-univ2-lp-config";
+import { completeUniV2LPConfig } from "../utils/complete-standard-lp-config";
 
 export const MediumStandardAddLiquidityConfig = forwardRef<
   HTMLDivElement,

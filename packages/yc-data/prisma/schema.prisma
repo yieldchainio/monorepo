@@ -456,6 +456,7 @@ enum ProtocolType {
   STAKING
   PERPS
   UNIV2LP
+  PERPBASKETLP
   @@schema("YieldchainV2")
 }
 

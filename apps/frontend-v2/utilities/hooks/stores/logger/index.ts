@@ -105,4 +105,13 @@ export const useLogs = create<LogsStore>((set, get) => ({
     // Return the message (used for throwing if an error)
     return message;
   },
+  throwError: (msg: string, lifespan: number | Promise<any> = 5000) => {
+    get().lazyPush({
+      message: msg,
+      lifespan,
+      type: "error",
+    });
+
+    throw msg;
+  },
 }));

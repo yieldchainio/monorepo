@@ -25,4 +25,6 @@ export interface LogsStore {
     lifespan?: number | Promise<any>;
     type?: "info" | "error" | "warning" | "success";
   }) => string;
+
+  throwError: (msg: string, lifespan?: number | Promise<any>) => void;
 }

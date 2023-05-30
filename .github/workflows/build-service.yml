@@ -19,6 +19,19 @@ on:
           - triggers-engine
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      id-token: write
+
+    steps:
+      - name: test
+        run: |
+          apk add --no-cache git
+          yarn
+
   build-and-push:
     runs-on: ubuntu-latest
     permissions:

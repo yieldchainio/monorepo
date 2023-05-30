@@ -14,6 +14,7 @@
     "@yc/aws-models": "*",
     "@yc/yc-models": "*",
     "dotenv": "^16.0.3",
-    "ethers": "^6.1.0"
+    "ethers": "^6.1.0",
+    "typescript": "^5.0.4"
   }
 }

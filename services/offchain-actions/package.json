@@ -7,23 +7,20 @@
   "scripts": {
     "build": "tsc -b --force",
     "test": "echo \"Error: no test specified\" && exit 1"
-    
   },
   "author": "Ofir Smolinsky",
   "license": "ISC",
   "dependencies": {
     "@types/aws-sdk": "^2.7.0",
     "@types/node": "^18.15.0",
+    "@yc/anvil-ts": "*",
+    "@yc/aws-models": "*",
+    "@yc/yc-models": "*",
     "aws-sdk": "latest",
     "axios": "^1.2.0",
     "dotenv": "latest",
-    "ethers": "^6.3.0",
+    "ethers": "6.4.0",
     "ganache": "^7.7.4",
-    "typescript": "^5.0.4",
-    "web3": "^1.8.1",
-    "@yc/yc-models": "*",
-    "@yc/anvil-ts": "*",
-    "@yc/aws-models": "*"
-
+    "web3": "^1.8.1"
   }
 }

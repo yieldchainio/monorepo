@@ -12,18 +12,22 @@ if (!ycContext.initiallized)
 const hydrationRequestHandler = async (hydrationRequest) => {
     const start = Date.now() / 1000;
     const network = ycContext.networks.find((network) => network.jsonRpc == hydrationRequest.rpc_url);
+    console.log("Started Handling Offchain Hydration Req...");
     if (!network || !network.diamondAddress || !network.provider) {
         console.error("Cannot Handle Hydration Run Request - Network Is Unsupported.", hydrationRequest.rpc_url, "Network:", network);
         return false;
     }
     const hydrationInstance = new HydrationRequest(hydrationRequest.log, network);
+    console.log("Got Hydration Instance");
     const hydratedCommands = await hydrationInstance.simulateHydration();
+    console.log("Simulated Request");
     if (!process.env.PRIVATE_KEY) {
         console.error("Cannot Process Hydration Run Request - Private Key Of Executor Is Undefined");
         return false;
     }
     const executor = new Wallet(process.env.PRIVATE_KEY, network.provider);
     const diamondContract = new Contract(network.diamondAddress, DiamondABI, executor);
+    console.log("Gonna Send Receipt");
     const res = await (await diamondContract.hydrateAndExecuteRun.send(hydrationInstance.strategyAddress, hydrationInstance.operationIndex, hydratedCommands)).wait();
     const end = Date.now() / 1000;
     console.log("Action Took:", end - start, "Seconds");

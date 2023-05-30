@@ -14,9 +14,9 @@
   "author": "Ofir Smolinsky",
   "license": "ISC",
   "dependencies": {
-    "ethers": "^6.3.0",
-    "typescript": "^5.0.4",
+    "@yc/yc-data": "*",
     "@yc/yc-models": "*",
-    "@yc/yc-data": "*"
+    "ethers": "6.4.0",
+    "typescript": "^5.0.4"
   }
 }

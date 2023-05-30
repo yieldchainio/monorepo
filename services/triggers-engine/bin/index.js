@@ -15,7 +15,6 @@ const supportedNetworks = ycContext.networks.filter((network) => network.diamond
 const checkAllStrategiesTriggers = async (diamondContract) => {
     return (await diamondContract.checkStrategiesTriggers());
 };
-const executeStrategiesTriggers = async (diamondContract, validVaultsIndices, signals) => { };
 for (const network of supportedNetworks) {
     const signer = new Wallet(process.env.PRIVATE_KEY || "", network.provider);
     const diamondContract = new Contract(network.diamondAddress, DiamondABI, signer);

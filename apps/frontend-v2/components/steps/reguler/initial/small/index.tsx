@@ -52,7 +52,7 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
             return (
               <InfoProvider contents={action.name} portal={canvasPortal}>
                 <div
-                  className="bg-custom-componentbg rounded-large flex flex-col gap-2 items-center justify-center py-3 group hover:bg-opacity-50 transition duration-200 ease-in-out"
+                  className="bg-custom-componentbg rounded-large flex flex-col gap-2 items-center justify-center py-3 group hover:bg-opacity-50 transition duration-200 ease-in-out cursor-pointer"
                   onClick={() => {
                     const enumKey = ACTION_IDS_TO_ENUM_KEY[action.id];
                     if (enumKey === undefined)

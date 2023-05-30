@@ -6,6 +6,8 @@ FROM node:alpine AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 RUN apk update
+RUN apk add --no-cache git
+
 # Set working directory
 WORKDIR /app
 RUN yarn add turbo
@@ -16,6 +18,8 @@ RUN yarn turbo prune --scope=@yc/offchain-actions --docker
 FROM node:alpine AS installer
 RUN apk add --no-cache libc6-compat
 RUN apk update
+RUN apk add --no-cache git
+
 WORKDIR /app
 
 # First install dependencies (as they change less often)
@@ -53,6 +57,7 @@ RUN  anvil --version
 FROM node:alpine AS runner
 WORKDIR /app
 
+RUN apk add --no-cache git
 
 COPY --from=foundry-client  /usr/local/bin/forge /usr/local/bin/forge
 COPY --from=foundry-client /usr/local/bin/cast /usr/local/bin/cast

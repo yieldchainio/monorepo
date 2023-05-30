@@ -4,6 +4,8 @@
 FROM node:alpine AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache git
+
 RUN apk update
 # Set working directory
 WORKDIR /app
@@ -14,6 +16,8 @@ RUN yarn turbo prune --scope=@yc/triggers-engine --docker
 # Add lockfile and package.json's of isolated subworkspace
 FROM node:alpine AS installer
 RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache git
+
 RUN apk update
 WORKDIR /app
 
@@ -38,6 +42,9 @@ RUN yarn turbo run build --filter=@yc/triggers-engine...
 
 FROM node:alpine AS runner
 WORKDIR /app
+
+RUN apk add --no-cache git
+
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 expressjs

@@ -3,31 +3,32 @@
  */
 
 import { Step } from "utilities/classes/step";
-import { AddLiquidityData } from "../../../types";
 import {
-  DBArgument,
+  PerpBasketLpData,
+  YCArgument,
   YCClassifications,
   YCFunc,
   YCProtocol,
   YCToken,
 } from "@yc/yc-models";
-import { v4 as uuid } from "uuid";
-import { constants } from "ethers";
+import { ethers } from "ethers";
 import { ADD_LIQUIDITY_FUNCTION_ID } from "../../../constants";
 import { getLpClientId } from "../../../utils/get-lp-client-id";
-import { Typeflags } from "@prisma/client";
-import { BALANCEOF_FUNCTION_ID } from "components/steps/reguler/config/swap/consants.js";
 
-export const completeUniV2LPConfig = (
+export const completePerpBasketLPConfig = (
   step: Step,
   context: YCClassifications
 ) => {
   // Get the LP data
-  const data = step.data?.lp as AddLiquidityData;
+  const data = step.data?.perpBasketLp as PerpBasketLpData;
 
   // Assert that all data must be present
-  if (!data.protocol || !data.tokenA || !data.tokenB)
-    throw "Cannot Complete LP Config - Data Is Not Complete.";
+  if (
+    !data.protocol ||
+    !data.basketDepositToken ||
+    !data.basketRepresentationToken
+  )
+    throw "Cannot Complete Perp Basket LP Config - Data Is Not Complete.";
 
   const protocolLPClientID = getLpClientId(
     new YCProtocol(data.protocol, YCClassifications.getInstance())
@@ -46,31 +47,29 @@ export const completeUniV2LPConfig = (
   );
 
   // The arguments that can be just set in custom args (simple values)
+  // First token is the deposit token user chose for the basket, second token
+  // is dismissed onchain
   const customArgs = [
-    data.tokenA.address,
-    data.tokenB.address,
+    data.basketDepositToken.address,
+    ethers.constants.AddressZero,
     protocolLPClientID,
   ];
 
-  const tokenABalanceArgInstance = (
+  const basketDepositTOkenBalanceArgInstance = (
     addLiquidityFunction.arguments[2].value as YCFunc
   ).arguments[0].value as YCFunc;
-  const tokenBBalanceArgInstance = (
-    addLiquidityFunction.arguments[3].value as YCFunc
-  ).arguments[0].value as YCFunc;
 
-  tokenABalanceArgInstance.arguments[0].setValue(data.tokenA.address);
-  tokenBBalanceArgInstance.arguments[0].setValue(data.tokenB.address);
+  basketDepositTOkenBalanceArgInstance.arguments[0].setValue(
+    data.basketDepositToken.address
+  );
 
   addLiquidityFunction.arguments[2].relatingToken = new YCToken(
-    data.tokenA,
+    data.basketDepositToken,
     YCClassifications.getInstance()
   );
 
-  addLiquidityFunction.arguments[3].relatingToken = new YCToken(
-    data.tokenA,
-    YCClassifications.getInstance()
-  );
+  // Again, it is unused
+  addLiquidityFunction.arguments[3] = YCArgument.emptyArgument();
 
   step.setFunction(addLiquidityFunction);
 
@@ -80,20 +79,7 @@ export const completeUniV2LPConfig = (
   step.customArguments = customArgs.concat(customArgs);
 
   // Create a new YC token as the inflow for the token
-  const lpToken: YCToken = new YCToken(
-    {
-      id: uuid(),
-      name: `${data.tokenA.symbol} + ${data.tokenB.symbol} ${data.protocol.name} LP`,
-      symbol: `${data.protocol.name}-LP`,
-      address: constants.AddressZero,
-      logo: `${data.protocol.logo}`,
-      decimals: 18,
-      chain_id: data.tokenA.chain_id,
-      tags: [],
-      parent_protocol: data.protocol.id,
-    },
-    context
-  );
+  const lpToken: YCToken = new YCToken(data.basketRepresentationToken, context);
 
   // Add it as an inflow
   step.clearInflows();

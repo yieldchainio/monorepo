@@ -43,6 +43,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       disabled,
       type = "reguler",
       refSetter,
+      disableChoosing = false,
       ...props
     }: DropdownProps,
     ref
@@ -182,7 +183,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             : children || menuToReturn)}
 
         <RegulerButton
-          onClick={handleClick}
+          onClick={() => (disableChoosing ? null : handleClick())}
           ref={correcRef as React.MutableRefObject<HTMLDivElement | null>}
           {...buttonProps}
           {...props}
@@ -217,14 +218,16 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
               buttonProps.children
             )}
           </div>
-          <WrappedImage
-            src={{
-              dark: "/icons/dropdown-arrow-light.svg",
-              light: "/icons/dropdown-arrow-dark.svg",
-            }}
-            width={24}
-            height={24}
-          />
+          {!disableChoosing && (
+            <WrappedImage
+              src={{
+                dark: "/icons/dropdown-arrow-light.svg",
+                light: "/icons/dropdown-arrow-dark.svg",
+              }}
+              width={24}
+              height={24}
+            />
+          )}
         </RegulerButton>
       </div>
     );

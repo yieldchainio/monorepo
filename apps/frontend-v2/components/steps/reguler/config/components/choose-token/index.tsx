@@ -69,6 +69,7 @@ export const ChooseToken = forwardRef(
               className: className,
             },
           }}
+          disableChoosing={(tokens?.length || 2) > 1 ? false : true}
         >
           <TokensModal
             handleChoice={(token) => setChoice(token)}

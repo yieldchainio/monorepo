@@ -16,6 +16,7 @@ RUN yarn turbo prune --scope=@yc/data-provider --docker
 FROM node:alpine AS installer
 RUN apk add --no-cache libc6-compat
 RUN apk update
+RUN apk add --no-cache git
 WORKDIR /app
 
 # First install dependencies (as they change less often)
@@ -39,6 +40,8 @@ RUN yarn turbo run build --filter=@yc/data-provider...
 
 FROM node:alpine AS runner
 WORKDIR /app
+RUN apk add --no-cache git
+
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 expressjs

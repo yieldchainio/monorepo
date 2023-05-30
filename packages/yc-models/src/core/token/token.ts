@@ -21,6 +21,7 @@ import {
 } from "../../types/index.js";
 import erc20ABI from "../../ABIs/erc20.json" assert { type: "json" };
 import { BaseClass } from "../base/index.js";
+import { TokenTags } from "@prisma/client";
 
 /**
  * @notice
@@ -82,6 +83,23 @@ export class YCToken extends BaseClass {
    */
   readonly contract: Contract;
 
+  /**
+   * Token tags
+   */
+  readonly tags: TokenTags[];
+
+  /**
+   * The parent protocol
+   */
+  #parentProtocolId: string | null;
+  get parentProtocol(): YCProtocol | null {
+    return (
+      YCClassifications.getInstance().protocols.find(
+        (protocol) => protocol.id == this.#parentProtocolId
+      ) || null
+    );
+  }
+
   // =======================
   //      CONSTRUCTOR
   // =======================
@@ -113,6 +131,9 @@ export class YCToken extends BaseClass {
       this.network?.provider
     );
 
+    this.tags = _token.tags;
+
+    this.#parentProtocolId = _token.parent_protocol;
     // Return existing singleton if exists
     const existingToken = this.getInstance(_token.id);
     if (existingToken) return existingToken;
@@ -351,6 +372,8 @@ export class YCToken extends BaseClass {
       logo: this.logo as string,
       decimals: this.decimals,
       name: this.name,
+      tags: this.tags,
+      parent_protocol: this.#parentProtocolId,
     };
   };
 }

@@ -5,6 +5,7 @@ import { YCProtocol } from "../protocol/protocol.js";
 import { YCNetwork } from "../network/network.js";
 import { SignerMethod } from "../../types/index.js";
 import { BaseClass } from "../base/index.js";
+import { TokenTags } from "@prisma/client";
 /**
  * @notice
  * YCToken
@@ -51,6 +52,10 @@ export declare class YCToken extends BaseClass {
      * A contract object for this token, optional
      */
     readonly contract: Contract;
+    /**
+     * Token tags
+     */
+    readonly tags: TokenTags[];
     constructor(_token: DBToken, _context: YCClassifications, _network?: YCNetwork);
     /**
      * Parse some formatted number into the raw number of tokens using it's decimals

@@ -32,16 +32,19 @@ model functionsv2 {
 }
 
 model tokensv2 {
-  id           String         @id @default(uuid())
-  name         String
-  address      String
-  symbol       String
-  logo         String         @default("https://etherscan.io/images/main/empty-token.png")
-  decimals     Int
-  chain_id     Int
-  markets_ids  String[]
-  argumentsv2  argumentsv2[]
-  strategiesv2 strategiesv2[]
+  id              String         @id @default(uuid())
+  name            String
+  address         String
+  symbol          String
+  logo            String         @default("https://etherscan.io/images/main/empty-token.png")
+  decimals        Int
+  chain_id        Int
+  markets_ids     String[]
+  tags            TokenTags[]    @default([])
+  parent_protocol String?
+  argumentsv2     argumentsv2[]
+  strategiesv2    strategiesv2[]
+  protocols       protocolsv2?   @relation(fields: [parent_protocol], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("tokens")
   @@schema("YieldchainV2")
@@ -125,6 +128,7 @@ model protocolsv2 {
   verified    Boolean
   types       ProtocolType[] @default([INTEGRATION])
   addresses   addressesv2[]
+  tokens      tokensv2[]
   actions     actionsv2[]    @relation("actionsv2Toprotocolsv2")
   networks    networksv2[]   @relation("networksv2Toprotocolsv2")
   strategies  strategiesv2[] @relation("protocolsv2Tostrategiesv2")
@@ -457,6 +461,13 @@ enum ProtocolType {
   PERPS
   UNIV2LP
   PERPBASKETLP
+
+  @@schema("YieldchainV2")
+}
+
+enum TokenTags {
+  PERP_BASKET_LP
+
   @@schema("YieldchainV2")
 }
 

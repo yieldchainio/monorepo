@@ -4,7 +4,7 @@
  */
 import { JsonValue } from "@yc/yc-data";
 import { address, ChainID } from "./global.js";
-import type { Typeflags, ProtocolType } from "@prisma/client";
+import type { Typeflags, ProtocolType, TokenTags } from "@prisma/client";
 import { StepType } from "./yc.js";
 import { TriggerTypes } from "./onchain.js";
 export interface DBAction {
@@ -78,6 +78,7 @@ export interface DBToken {
     logo: string;
     decimals: number;
     chain_id: ChainID;
+    tags: TokenTags[];
 }
 export interface DBProtocol {
     id: string;

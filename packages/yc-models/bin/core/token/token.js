@@ -52,6 +52,10 @@ class YCToken extends BaseClass {
      * A contract object for this token, optional
      */
     contract;
+    /**
+     * Token tags
+     */
+    tags;
     // =======================
     //      CONSTRUCTOR
     // =======================
@@ -72,6 +76,7 @@ class YCToken extends BaseClass {
         this.logo = _token.logo;
         this.native = this.address == ethers.ZeroAddress ? true : false;
         this.contract = new Contract(this.address, erc20ABI, this.network?.provider);
+        this.tags = _token.tags;
         // Return existing singleton if exists
         const existingToken = this.getInstance(_token.id);
         if (existingToken)
@@ -255,6 +260,7 @@ class YCToken extends BaseClass {
             logo: this.logo,
             decimals: this.decimals,
             name: this.name,
+            tags: this.tags
         };
     };
 }

@@ -101,6 +101,7 @@ export type StepData = {
   stake?: StakeData;
   swap?: SwapData;
   trigger?: any;
+  perpBasketLp?: PerpBasketLpData
 };
 
 export enum Timestamps {
@@ -131,6 +132,12 @@ export interface AddLiquidityData {
   tokenA?: DBToken;
   tokenB?: DBToken;
   protocol: DBProtocol;
+}
+
+export interface PerpBasketLpData {
+  basketDepositToken?: DBToken;
+  basketRepresentationToken?: DBToken
+  protocol: DBProtocol
 }
 
 export type AutomationData = {

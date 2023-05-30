@@ -6,7 +6,7 @@ import { BaseClass } from "../base/index.js";
 import { Typeflags } from "@prisma/client";
 import { EncodingContext, typeflags } from "../../types/index.js";
 import { getArgumentFlags } from "../../helpers/builder/get-command-flags.js";
-import { AbiCoder } from "ethers";
+import { AbiCoder, ZeroHash, ethers } from "ethers";
 import { YCToken } from "..";
 import { trySpecialEncoding } from "../../helpers/builder/special-commands/index.js";
 import { v4 as uuid } from "uuid";
@@ -211,4 +211,23 @@ export class YCArgument extends BaseClass {
       dev_notes: this.devNotes,
     };
   }
+
+  static emptyArgument = (type: string = "uint256"): YCArgument => {
+    const value = type == "address" ? ethers.ZeroAddress : ethers.ZeroHash;
+    return new YCArgument(
+      {
+        id: "empty",
+        custom: false,
+        dev_notes: "",
+        value: ZeroHash,
+        solidity_type: "uint256",
+        ret_typeflag: Typeflags.VALUE_VAR_FLAG,
+        typeflag: Typeflags.VALUE_VAR_FLAG,
+        name: "empty",
+        relating_token: null,
+        overridden_custom_values: [],
+      },
+      YCClassifications.getInstance()
+    );
+  };
 }

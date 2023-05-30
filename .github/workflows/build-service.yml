@@ -20,7 +20,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: node:7-alpine
     permissions:
       packages: write
       contents: read

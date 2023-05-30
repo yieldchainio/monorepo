@@ -91,7 +91,7 @@ export const PositionsModal = ({
             },
           },
           {
-            label: "Harvest",
+            label: "Choose",
             callback: (item: YCFunc) => {
               return (
                 <RegulerButton
@@ -99,6 +99,12 @@ export const PositionsModal = ({
                     handleChoice(item);
                     closeModal?.();
                   }}
+                  style={{
+                    paddingTop: "0.5rem",
+                    paddingBottom: "0.5rem",
+                    gap: "0.35rem",
+                  }}
+                  className="group transition duration-500 ease-in-out "
                 >
                   <WrappedImage
                     src={{
@@ -106,7 +112,9 @@ export const PositionsModal = ({
                       light: "/action-icons/harvest-dark.svg",
                     }}
                   />
-                  <WrappedText className="tablet:hidden">Harvest</WrappedText>
+                  <WrappedText className="hidden group-hover:inline transition duration-1000 ease-in-out">
+                    Choose
+                  </WrappedText>
                 </RegulerButton>
               );
             },

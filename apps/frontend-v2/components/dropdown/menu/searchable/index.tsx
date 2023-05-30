@@ -123,6 +123,7 @@ export const SearchableDropdownMenu = forwardRef<
           <WrappedInput
             onChange={(e) => setInput(e.target.value)}
             showGlass={false}
+            data-wheelable={false}
           />
         </div>
         <div
@@ -163,6 +164,7 @@ export const SearchableDropdownMenu = forwardRef<
                       width={24}
                       height={24}
                       className="rounded-[50%]"
+                      data-wheelable={false}
                     />
                   )}
 
@@ -181,6 +183,7 @@ export const SearchableDropdownMenu = forwardRef<
                         fontStyle="reguler"
                         fontSize={16}
                         {...optionProps?.textProps}
+                        data-wheelable={false}
                       >
                         {option.text}
                       </WrappedText>

@@ -51,19 +51,20 @@ export const BaseActionConfig = forwardRef<
     const canvasPortal = useElementPortal(canvasID);
 
     const requiresCustomInputs = useMemo(() => {
-      if (step.customArguments.length > 0) return true;
+      if (step.customArguments.length > 0) {
+        if (step.function?.customArgumentsLength == 0) return false;
+        return true;
+      }
       return false;
-    }, [step.customArguments.length]);
+    }, [step.function?.id]);
 
     const canComplete = useMemo(() => {
-      if (canContinue == "string")
-        return canContinue;
+      if (canContinue == "string") return canContinue;
 
       if (step.customArguments.some((arg) => arg == null))
         return "Complete Custom Inputs To Continue";
       return true;
     }, [canContinue, step.customArguments]);
-
 
     // Return JSX
     return (

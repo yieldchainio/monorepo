@@ -15,7 +15,7 @@ import { completeUniV2LPConfig } from "../utils/complete-univ2-lp-config";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { ProtocolType } from "@prisma/client";
 
-export const SmallUniV2AddLiquidityConfig = forwardRef<
+export const SmallStandardAddLiquidityConfig = forwardRef<
   HTMLDivElement,
   StepProps
 >(({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {

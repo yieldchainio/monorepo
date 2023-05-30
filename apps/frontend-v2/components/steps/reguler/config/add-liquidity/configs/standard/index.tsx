@@ -5,17 +5,17 @@
 import { StepProps } from "components/steps/types";
 import { forwardRef } from "react";
 import { StepSizing } from "utilities/classes/step/types";
-import { SmallUniV2AddLiquidityConfig } from "./small";
-import { MediumUniV2AddLiquidityConfig } from "./medium";
+import { SmallStandardAddLiquidityConfig } from "./small";
+import { MediumStandardAddLiquidityConfig } from "./medium";
 
-export const AddLiquidityUniV2CompatibleConfig = forwardRef<
+export const AddLiquidityStandardConfig = forwardRef<
   HTMLDivElement,
   StepProps
 >(({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
   switch (step.size) {
     case StepSizing.SMALL:
       return (
-        <SmallUniV2AddLiquidityConfig
+        <SmallStandardAddLiquidityConfig
           step={step}
           style={style}
           triggerComparison={triggerComparison}
@@ -27,7 +27,7 @@ export const AddLiquidityUniV2CompatibleConfig = forwardRef<
 
     case StepSizing.MEDIUM:
       return (
-        <MediumUniV2AddLiquidityConfig
+        <MediumStandardAddLiquidityConfig
           step={step}
           style={style}
           triggerComparison={triggerComparison}

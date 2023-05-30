@@ -4,13 +4,13 @@
 
 import { YCProtocol } from "@yc/yc-models";
 import { ProtocolType } from "@prisma/client";
-import { AddLiquidityUniV2CompatibleConfig } from "../configs/index";
+import { AddLiquidityStandardConfig } from "../configs/index";
 import { Step } from "utilities/classes/step/index";
 
 export function getProtocolLpConfig(step: Step) {
   if (step.protocol?.types.includes(ProtocolType.UNIV2LP))
-    return AddLiquidityUniV2CompatibleConfig;
+    return AddLiquidityStandardConfig;
 
   // Fallback
-  return AddLiquidityUniV2CompatibleConfig;
+  return AddLiquidityStandardConfig;
 }

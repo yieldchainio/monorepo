@@ -13,7 +13,7 @@ import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useAssertTokensAmount } from "../../../hooks/useAssertTokensAmount";
 import { completeUniV2LPConfig } from "../utils/complete-univ2-lp-config";
 
-export const MediumUniV2AddLiquidityConfig = forwardRef<
+export const MediumStandardAddLiquidityConfig = forwardRef<
   HTMLDivElement,
   StepProps
 >(({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {

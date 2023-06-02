@@ -11,7 +11,7 @@ RUN apk update
 WORKDIR /app
 RUN yarn add turbo
 COPY . .
-RUN yarn turbo prune --scope=@yc/triggers-engine --docker
+RUN yarn turbo prune --scope=@yc/strategy-builder --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM node:alpine AS installer
@@ -38,7 +38,7 @@ COPY turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN yarn turbo run build --filter=@yc/triggers-engine...
+RUN yarn turbo run build --filter=@yc/strategy-builder...
 
 FROM node:alpine AS runner
 WORKDIR /app
@@ -53,4 +53,4 @@ COPY --from=installer /app .
 
 EXPOSE "8080"
 
-CMD node services/triggers-engine/bin/index.js
+CMD node services/strategy-builder/bin/index.js

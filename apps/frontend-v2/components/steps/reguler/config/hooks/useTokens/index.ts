@@ -17,42 +17,40 @@ export const useTokens = ({ networks, tokens, protocols }: UseTokensProps) => {
   /**
    * Run a memoization on the filtered tokens
    */
-  const memoTokens = useMemo(
-    () =>
-      allTokens.filter((token) => {
-        // If we got an array of fixed tokens, the token must be present there
-        if (tokens && !tokens.find((_token) => _token.id == token.id))
-          return false;
+  const memoTokens = useMemo(() => {
+    return allTokens.filter((token) => {
+      // If we got an array of fixed tokens, the token must be present there
+      if (tokens && !tokens.find((_token) => _token.id == token.id))
+        return false;
 
-        // The token must be present within our provided networks, if any
-        if (
-          networks &&
-          !networks.find((_network) => _network.id === token.network?.id)
+      // The token must be present within our provided networks, if any
+      if (
+        networks &&
+        !networks.find((_network) => _network.id === token.network?.id)
+      )
+        return false;
+
+      // The token must be included in atleast one of the provided protocols, if any
+      if (
+        protocols &&
+        !token.markets.some((protocol) =>
+          protocols.some((_protocol) => _protocol.id == protocol.id)
         )
-          return false;
+      )
+        return false;
 
-        // The token must be included in atleast one of the provided protocols, if any
-        if (
-          protocols &&
-          !protocols.find((protocol) =>
-            protocol.tokens.some((_token) => _token.id === token.id)
-          )
-        )
-          return false;
-
-        return true;
-      }),
-    [
-      allTokens.length,
-      allTokens,
-      networks,
-      networks?.length,
-      tokens,
-      tokens?.length,
-      protocols,
-      protocols?.length,
-    ]
-  );
+      return true;
+    });
+  }, [
+    allTokens.length,
+    allTokens,
+    networks,
+    networks?.length,
+    tokens,
+    tokens?.length,
+    protocols,
+    protocols?.length,
+  ]);
 
   // Return the exchanges
   return memoTokens;

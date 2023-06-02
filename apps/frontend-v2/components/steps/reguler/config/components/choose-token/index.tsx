@@ -11,7 +11,7 @@ import { InfoProvider } from "components/info-providers";
 import { ToolTipDirection } from "components/info-providers/types";
 import { TokensModal } from "components/modals/tokens";
 import { TokensModalProps } from "components/modals/tokens/types";
-import { forwardRef } from "react";
+import { forwardRef, useEffect, useMemo } from "react";
 
 export const ChooseToken = forwardRef(
   (
@@ -35,6 +35,16 @@ export const ChooseToken = forwardRef(
     } & Partial<TokensModalProps>,
     ref
   ) => {
+    const tokensToUse = useMemo(() => {
+      if (!tokens) return undefined;
+      return [...(tokens || [])];
+    }, [tokens, tokens?.length]);
+
+    useEffect(() => {
+      console.log("Running TOkens Lenght THing");
+      if (tokens?.length == 1) setChoice(tokens[0]);
+    }, [tokens?.length]);
+
     return (
       <InfoProvider
         contents={label}
@@ -74,7 +84,7 @@ export const ChooseToken = forwardRef(
           <TokensModal
             handleChoice={(token) => setChoice(token)}
             allowedNetworks={network ? [network] : undefined}
-            allowedTokens={tokens || undefined}
+            allowedTokens={tokensToUse}
             label={label}
           />
         </Dropdown>

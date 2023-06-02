@@ -1,17 +1,18 @@
 /**
- * A Small Add Liquidity Config component
+ * A Small Add Liquidity Config For Perps Basket LPing component
  */
 
 import { StepProps } from "components/steps/types";
 import { forwardRef } from "react";
 import { BaseActionConfig } from "../../../../base";
-import { useAddLiquidity } from "../../../hooks/useAddLiquidity";
-import { useAssertTokensAmount } from "../../../hooks/useAssertTokensAmount";
-import { ChooseToken } from "../../../../components/choose-token";
-import WrappedText from "components/wrappers/text";
 import { ProtocolsDropdown } from "../../../../components/protocol-dropdown";
-import { completePerpBasketLPConfig } from "../utils/complete-perp-basket-lp-config";
+import WrappedText from "components/wrappers/text";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
+import { completePerpBasketLPConfig } from "../utils/complete-perp-basket-lp-config";
+import { TokenSwap } from "components/steps/reguler/config/swap/components/token-swap";
+import { useAddPerpBasketLiquidity } from "../hooks/useAddPerpBasketLiquidity";
+import { YCToken } from "@yc/yc-models";
+import { RepresentedTokensLpBasket } from "../components/represented-basket";
 
 export const SmallPerpBasketAddLiquidityConfig = forwardRef<
   HTMLDivElement,
@@ -24,26 +25,26 @@ export const SmallPerpBasketAddLiquidityConfig = forwardRef<
     protocol,
     protocols,
     chooseProtocol,
-    chooseTokenA,
-    chooseTokenB,
-    tokenA,
-    tokenB,
     network,
     availableTokens,
-  } = useAddLiquidity({
+    representationToken,
+    basketDepositToken,
+    chooseBasketDepositToken,
+    allBasketTokens,
+  } = useAddPerpBasketLiquidity({
     step,
     triggerComparison,
   });
 
   /**
-   * We asser that we must have 2 available outflows from our parent at all times. Otherwise,
-   * it is an invalid attempt of adding an LP config and we hence cancel the action
+   * We assert that we must have 1 available outflows from our parent at all times.
    */
-  useAssertTokensAmount({
-    step,
-    triggerComparison,
-    tokens: availableTokens,
-  });
+  // useAssertTokensAmount({
+  //   step,
+  //   triggerComparison,
+  //   tokens: availableTokens,
+  //   amount: 1,
+  // });
 
   /**
    * Get global context
@@ -57,86 +58,58 @@ export const SmallPerpBasketAddLiquidityConfig = forwardRef<
       style={style}
       ref={ref}
       {...props}
+      canvasID={canvasID}
       width="246px"
-      height="230.5px"
+      height="403px"
       step={step}
       triggerComparison={triggerComparison}
-      canvasID={canvasID}
       handleComplete={() => completePerpBasketLPConfig(step, context)}
       canContinue={
         protocol
-          ? tokenA
-            ? tokenB
+          ? basketDepositToken
+            ? representationToken
               ? true
-              : "Please Choose Token B"
-            : "Please Choose Token A"
+              : "Invalid Representation Token"
+            : "Please Choose Basket Deposit Token"
           : "Please Choose A Protocol"
       }
     >
+      <WrappedText
+        fontSize={12}
+        className=" w-full whitespace-pre-wrap text-opacity-40 mt-[-0.8rem]"
+      >
+        {"Mint an LP basket token, representing liquidity used to trade futures on " +
+          (protocol?.name || "")}
+      </WrappedText>
       <div className="w-full flex flex-col gap-1">
+        <WrappedText className="ml-0.5">Protocol</WrappedText>
         <ProtocolsDropdown
           setChoice={chooseProtocol}
           choice={protocol}
           protocols={protocols}
         />
       </div>
-      <div className="flex flex-row w-full gap-1 items-center justify-center">
-        <ChooseToken
-          tokens={availableTokens}
+      <div className="w-[80%]">
+        <TokenSwap
           network={network}
-          setChoice={chooseTokenA}
-          choice={tokenA}
-          label="Token A"
-          style={{
-            width: "100%",
-          }}
-          dropdownProps={{
-            disabled: !protocol ? "Please Choose A Protocol " : false,
-            textProps: {
-              style: {
-                visibility: "hidden",
-              },
-            },
-            buttonProps: {
-              style: {
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0px",
-                padding: "0.5rem",
-              },
-            },
-          }}
-        />
-        <div className="w-[25px] h-[25px] border-[1px] border-custom-themedBorder rounded-full  z-10 bg-custom-bcomponentbg flex items-center justify-center">
-          <WrappedText>+</WrappedText>
-        </div>
-        <ChooseToken
-          tokens={availableTokens}
-          network={network}
-          setChoice={chooseTokenB}
-          choice={tokenB}
-          label="Token B"
-          style={{
-            width: "100%",
-          }}
-          dropdownProps={{
-            disabled: !protocol ? "Please Choose A Protocol " : false,
-            textProps: {
-              style: {
-                visibility: "hidden",
-              },
-            },
-            buttonProps: {
-              style: {
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0px",
-                padding: "0.5rem",
-              },
-            },
+          fromToken={basketDepositToken}
+          toToken={representationToken}
+          setFromToken={chooseBasketDepositToken}
+          setToToken={(token: YCToken) => null}
+          tokens={{
+            from: availableTokens,
+            to: representationToken ? [representationToken] : [],
           }}
         />
       </div>
+      <RepresentedTokensLpBasket
+        tokens={allBasketTokens}
+        imageProps={{
+          width: 20,
+          height: 20,
+        }}
+        fontSize={12}
+      />
     </BaseActionConfig>
   );
 });

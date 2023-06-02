@@ -43,6 +43,7 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
     step,
     triggerComparison,
     tokens: availableTokens,
+    amount: protocol ? 2 : 1,
   });
 
   /**

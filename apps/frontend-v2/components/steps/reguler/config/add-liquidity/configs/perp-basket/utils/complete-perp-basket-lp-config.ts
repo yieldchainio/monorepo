@@ -4,23 +4,28 @@
 
 import { Step } from "utilities/classes/step";
 import {
+  LPClient,
   PerpBasketLpData,
   YCArgument,
   YCClassifications,
   YCFunc,
   YCProtocol,
+  YCStep,
   YCToken,
 } from "@yc/yc-models";
-import { ethers } from "ethers";
+import { Contract, ethers, providers } from "ethers";
 import { ADD_LIQUIDITY_FUNCTION_ID } from "../../../constants";
 import { getLpClientId } from "../../../utils/get-lp-client-id";
+import DiamondAbi from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
 
-export const completePerpBasketLPConfig = (
+export const completePerpBasketLPConfig = async (
   step: Step,
   context: YCClassifications
 ) => {
   // Get the LP data
   const data = step.data?.perpBasketLp as PerpBasketLpData;
+
+  console.log(data);
 
   // Assert that all data must be present
   if (
@@ -29,6 +34,9 @@ export const completePerpBasketLPConfig = (
     !data.basketRepresentationToken
   )
     throw "Cannot Complete Perp Basket LP Config - Data Is Not Complete.";
+
+  if (!step.chainId)
+    throw "Cannot Complet Perp Basket LP Config - Chain ID not defined on step";
 
   const protocolLPClientID = getLpClientId(
     new YCProtocol(data.protocol, YCClassifications.getInstance())
@@ -85,5 +93,13 @@ export const completePerpBasketLPConfig = (
   step.clearInflows();
   step.addInflow(lpToken);
 
+  // Check if the client has a harvest selector on the LP adapter onchain,
+  // if it does, add some harvest function to this step's unlocked functions
+  const network = YCClassifications.getInstance().getNetwork(step.chainId);
+  if (!network || !network.diamondAddress || !network.jsonRpc)
+    throw "Cannot COmplete Lp Perp basket  - Network Undefined";
+
   return;
 };
+
+const addLPHarvestFunctionToStep = (step: Step) => {};

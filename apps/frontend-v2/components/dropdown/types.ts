@@ -57,6 +57,7 @@ export interface DropdownMenuOptions extends BaseComponentProps, BaseModalChildP
   hideOptionText?: "laptop:hidden" | "";
   modalBehaviour?: "always" | "never" | "auto";
   choiceFocusClass?: string;
+  
 
 }
 

@@ -15,7 +15,7 @@ import { useConfigContext } from "../../../../../hooks/useConfigContext";
 import { useProtocols } from "../../../../../hooks/useProtocols";
 import { useTokens } from "../../../../../hooks/useTokens";
 import { ProtocolType, TokenTags } from "@prisma/client";
-import { useLogs } from "utilities/hooks/stores/logger/index.js";
+import { useLogs } from "utilities/hooks/stores/logger";
 
 export const useAddPerpBasketLiquidity = ({
   step,
@@ -65,7 +65,11 @@ export const useAddPerpBasketLiquidity = ({
     protocols: protocol ? [protocol] : [],
   });
 
-  const logs = useLogs();
+  const allBasketTokens: YCToken[] = useTokens({
+    networks: network ? [network] : undefined,
+    tokens: undefined,
+    protocols: protocol ? [protocol] : [],
+  });
 
   /**
    * Functions to handle choosing the basket deposit token
@@ -73,10 +77,10 @@ export const useAddPerpBasketLiquidity = ({
   const chooseBasketDepositToken = useCallback(
     (token: YCToken) => {
       // Assert that it must be available to us
-      if (!availableTokens.find((_token) => _token.id === token.id))
-        logs.throwError(
-          "Cannot Choose Basket Deposit Token - Token Is Unavailable At This Step"
-        );
+      // if (!availableTokens.find((_token) => _token.id === token.id))
+      //   logs.throwError(
+      //     "Cannot Choose Basket Deposit Token - Token Is Unavailable At This Step"
+      //   );
 
       // Set the step's data to it (for persistant visual representation of the choice)
       step.data.perpBasketLp = {
@@ -100,15 +104,19 @@ export const useAddPerpBasketLiquidity = ({
           _token.parentProtocol?.id == protocol?.id
       );
 
-      if (!token)
-        logs.throwError(
-          "Cannot Choose Protocol - No Perp Basket LP token is classified underneath it"
-        );
+      console.log("Choosing Protocol... TOken:", token);
 
-      step.data.perpBasketLp = {
-        ...(step.data?.perpBasketLp || {}),
+      if (token) {
+        step.data.perpBasketLp = {
+          ...(step.data?.perpBasketLp || {}),
+          protocol: protocol.toJSON(),
+          basketRepresentationToken: token?.toJSON(),
+        };
+      }
+
+      step.data.lp = {
+        ...(step.data.lp || {}),
         protocol: protocol.toJSON(),
-        basketRepresentationToken: token?.toJSON(),
       };
 
       step.protocol = protocol;
@@ -118,14 +126,22 @@ export const useAddPerpBasketLiquidity = ({
     [JSON.stringify(step.toJSON({}))]
   );
 
- 
-
   /**
    * Initiallize the choices from persistance if not yet
    */
   useEffect(() => {
     // Shorthand for the data
     const data = step.data.perpBasketLp;
+    const protocol = data?.protocol || step.data.lp?.protocol;
+    const repToken =
+      data?.basketRepresentationToken ||
+      YCClassifications.getInstance()
+        .tokens.find(
+          (_token) =>
+            _token.tags.includes(TokenTags.PERP_BASKET_LP) &&
+            _token.parentProtocol?.id == protocol?.id
+        )
+        ?.toJSON();
 
     // If our from token is not init yet
     // And there is a persisted DBtoken in the data,
@@ -133,21 +149,29 @@ export const useAddPerpBasketLiquidity = ({
     if (data?.basketDepositToken)
       setBasketDepositToken(new YCToken(data.basketDepositToken, context));
 
-    if (data?.protocol) {
-      const newProtocol = new YCProtocol(data.protocol, context);
+    if (protocol) {
+      const newProtocol = new YCProtocol(protocol, context);
       setProtocol(newProtocol);
       step.protocol = newProtocol;
     }
 
-    if (data?.basketRepresentationToken)
-      setRepresentationToken(
-        new YCToken(data.basketRepresentationToken, context)
-      );
+    if (repToken) {
+      setRepresentationToken(new YCToken(repToken, context));
+    }
   }, [
     step.data.perpBasketLp?.protocol?.id,
     step.data.perpBasketLp?.basketDepositToken?.id,
     step.data.perpBasketLp?.basketRepresentationToken?.id,
   ]);
+
+  // WE watch the standard LP stuff to see if theres any change (initial choices)
+  useEffect(() => {
+    if (step.data.lp?.protocol && !step.data.perpBasketLp?.protocol.id) {
+      chooseProtocol(
+        new YCProtocol(step.data.lp.protocol, YCClassifications.getInstance())
+      );
+    }
+  }, [step.data.lp?.protocol.id]);
 
   // Return the functions & variables
   return {
@@ -158,6 +182,7 @@ export const useAddPerpBasketLiquidity = ({
     availableTokens,
     basketDepositToken,
     representationToken,
+    allBasketTokens,
     chooseBasketDepositToken,
   };
 };

@@ -175,6 +175,12 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       );
     }, [type, options, options.length]);
 
+    useEffect(() => {
+      if (choice && disableChoosing) {
+        setCurrentChoice(choice);
+      }
+    }, [disableChoosing, choice, choice?.data, choice?.image, choice?.text]);
+
     return (
       <div className="relative">
         {menuOpen &&
@@ -183,7 +189,9 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             : children || menuToReturn)}
 
         <RegulerButton
-          onClick={() => (disableChoosing ? null : handleClick())}
+          onClick={() =>
+            disableChoosing ? null : handleClick()
+          }
           ref={correcRef as React.MutableRefObject<HTMLDivElement | null>}
           {...buttonProps}
           {...props}

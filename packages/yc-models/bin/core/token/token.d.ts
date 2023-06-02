@@ -37,10 +37,7 @@ export declare class YCToken extends BaseClass {
      * The logo of this token
      */
     readonly logo: string | null;
-    /**
-     * All of the different "markets" or "protocols" this token is available in
-     */
-    readonly markets: YCProtocol[];
+    get markets(): YCProtocol[];
     /**
      * Whether this is a native token or not (like ETH for ethereum)
      */

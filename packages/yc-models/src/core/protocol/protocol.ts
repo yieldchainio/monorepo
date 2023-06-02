@@ -70,7 +70,13 @@ export class YCProtocol extends BaseClass {
    * All of the tokens available on this protocol.
    * Mostly just relevent for DEXs
    */
-  readonly tokens: YCToken[] = [];
+  #tokens: string[] = [];
+
+  get tokens() {
+    return YCClassifications.getInstance().tokens.filter((token) =>
+      token.markets.find((protocol) => protocol.id == this.id)
+    );
+  }
 
   /**
    * The networks this protocol is available on

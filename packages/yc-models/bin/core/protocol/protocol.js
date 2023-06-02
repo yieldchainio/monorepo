@@ -1,3 +1,4 @@
+import { YCClassifications } from "../context/context.js";
 import { YCSocialMedia } from "../social-media/social-media.js";
 import { BaseClass } from "../base/index.js";
 /**
@@ -52,7 +53,10 @@ class YCProtocol extends BaseClass {
      * All of the tokens available on this protocol.
      * Mostly just relevent for DEXs
      */
-    tokens = [];
+    #tokens = [];
+    get tokens() {
+        return YCClassifications.getInstance().tokens.filter((token) => token.markets.find((protocol) => protocol.id == this.id));
+    }
     /**
      * The networks this protocol is available on
      */

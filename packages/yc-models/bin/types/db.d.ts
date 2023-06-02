@@ -80,6 +80,7 @@ export interface DBToken {
     chain_id: ChainID;
     tags: TokenTags[];
     parent_protocol: string | null;
+    markets_ids: string[];
 }
 export interface DBProtocol {
     id: string;

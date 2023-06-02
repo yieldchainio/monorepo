@@ -732,7 +732,7 @@ export class YCClassifications extends YCClassificationsInternal {
   };
 
   // Get a protoocl
-  getProtocol = (_protocolID: string) => {
+  getProtocol = (_protocolID: string): YCProtocol | null => {
     // Search for the protocol
     let protocol = this.Protocols.find(
       (protocol: DBProtocol) => protocol.id == _protocolID

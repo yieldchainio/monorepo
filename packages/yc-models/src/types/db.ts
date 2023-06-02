@@ -88,7 +88,8 @@ export interface DBToken {
   decimals: number;
   chain_id: ChainID;
   tags: TokenTags[];
-  parent_protocol: string | null
+  parent_protocol: string | null;
+  markets_ids: string[];
 }
 
 export interface DBProtocol {

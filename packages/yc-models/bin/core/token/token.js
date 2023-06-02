@@ -40,7 +40,13 @@ class YCToken extends BaseClass {
     /**
      * All of the different "markets" or "protocols" this token is available in
      */
-    markets = [];
+    #markets = [];
+    get markets() {
+        return this.#markets.flatMap((protocolId) => {
+            const protocol = YCClassifications.getInstance().getProtocol(protocolId);
+            return protocol ? [protocol] : [];
+        });
+    }
     /**
      * Whether this is a native token or not (like ETH for ethereum)
      */
@@ -83,6 +89,7 @@ class YCToken extends BaseClass {
         this.decimals = _token.decimals;
         this.logo = _token.logo;
         this.native = this.address == ethers.ZeroAddress ? true : false;
+        this.#markets = _token.markets_ids;
         this.contract = new Contract(this.address, erc20ABI, this.network?.provider);
         this.tags = _token.tags;
         this.#parentProtocolId = _token.parent_protocol;
@@ -271,6 +278,7 @@ class YCToken extends BaseClass {
             name: this.name,
             tags: this.tags,
             parent_protocol: this.#parentProtocolId,
+            markets_ids: this.#markets
         };
     };
 }

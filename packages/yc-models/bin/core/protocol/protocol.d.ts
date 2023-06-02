@@ -12,6 +12,7 @@ import { YCContract } from "../address/address.js";
  * A class representing a Yieldchain protocol
  */
 export declare class YCProtocol extends BaseClass {
+    #private;
     /**
      * The ID of this protocol (uuid)
      */
@@ -48,11 +49,7 @@ export declare class YCProtocol extends BaseClass {
      * Color of this protocol (can be null, frontend)
      */
     readonly color: string | null;
-    /**
-     * All of the tokens available on this protocol.
-     * Mostly just relevent for DEXs
-     */
-    readonly tokens: YCToken[];
+    get tokens(): YCToken[];
     /**
      * The networks this protocol is available on
      */

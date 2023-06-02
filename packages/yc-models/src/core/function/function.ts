@@ -199,17 +199,6 @@ export class YCFunc extends BaseClass {
     context: EncodingContext,
     customArguments: Array<string | null>
   ): FunctionCallStruct => {
-    if (this.id == "19084200-fcc0-46db-9c95-7c0fcebc8d4b")
-      console.log(
-        "Turning Remove Liquidity into FunctionCall struct... Custom Arguments:",
-        customArguments,
-        "Step Custom Arguments",
-        step.customArguments,
-        "All Arguments",
-        this.arguments.map((arg) => {
-          return arg.name + ", " + (arg.isCustom ? "Custom" : "Not Custom");
-        })
-      );
     // Assert that if we require a custom argument,
     if (this.customArgumentsLength > customArguments.length)
       throw new Error(

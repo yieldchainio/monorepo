@@ -53,8 +53,10 @@ async function recursivelyExecAndHydrateRun(strategyContract, operationIdx, gasL
     console.log("Got Receipt", receipt);
     if (!receipt)
         throw "Cannot Recursively Hydrate Run - Sent Execution Run On Fork, But Receipt Is Null.";
-    if (!receipt.status)
+    if (!receipt.status) {
+        console.log("Calldata used", await strategyContract.simulateOperationHydrationAndExecution.populateTransaction(operationIdx, startingIndices, commandCalldatas));
         throw "Cannot Recurisvely Hydrate Run - Sent Transaction On Fork, Execution Reverted";
+    }
     const strategyAddress = await strategyContract.getAddress();
     const fullfillRequests = receipt.logs.filter((log) => log.topics[0] == REQUEST_FULLFILL_ONCHAIN_EVENT_HASH &&
         log.address == strategyAddress);

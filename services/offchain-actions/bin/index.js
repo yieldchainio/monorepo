@@ -12,7 +12,7 @@ if (!ycContext.initiallized)
 const hydrationRequestHandler = async (hydrationRequest) => {
     const start = Date.now() / 1000;
     const network = ycContext.networks.find((network) => network.jsonRpc == hydrationRequest.rpc_url);
-    console.log("Started Handling Offchain Hydration Req...");
+    console.log("Started Handling Offchain Hydration Req...", process.env.PRIVATE_KEY);
     if (!network || !network.diamondAddress || !network.provider) {
         console.error("Cannot Handle Hydration Run Request - Network Is Unsupported.", hydrationRequest.rpc_url, "Network:", network);
         return false;
@@ -28,7 +28,10 @@ const hydrationRequestHandler = async (hydrationRequest) => {
     const executor = new Wallet(process.env.PRIVATE_KEY, network.provider);
     const diamondContract = new Contract(network.diamondAddress, DiamondABI, executor);
     console.log("Gonna Send Receipt");
-    const res = await (await diamondContract.hydrateAndExecuteRun.send(hydrationInstance.strategyAddress, hydrationInstance.operationIndex, hydratedCommands)).wait();
+    const gasEstimation = await diamondContract.hydrateAndExecuteRun.estimateGas(hydrationInstance.strategyAddress, hydrationInstance.operationIndex, hydratedCommands);
+    const res = await (await diamondContract.hydrateAndExecuteRun(hydrationInstance.strategyAddress, hydrationInstance.operationIndex, hydratedCommands, {
+        gasLimit: gasEstimation * 2n,
+    })).wait();
     const end = Date.now() / 1000;
     console.log("Action Took:", end - start, "Seconds");
     return !!res;

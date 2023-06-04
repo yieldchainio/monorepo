@@ -1,9 +1,8 @@
 import { YCClassifications } from "../context/context.js";
 import { YCFunc } from "../function/function.js";
 import { BaseClass } from "../base/index.js";
-import { Typeflags } from "@prisma/client";
 import { getArgumentFlags } from "../../helpers/builder/get-command-flags.js";
-import { AbiCoder, ZeroHash, ethers } from "ethers";
+import { AbiCoder } from "ethers";
 import { trySpecialEncoding } from "../../helpers/builder/special-commands/index.js";
 import { v4 as uuid } from "uuid";
 import { remove0xPrefix } from "../../helpers/builder/remove-0x-prefix.js";
@@ -159,19 +158,14 @@ class YCArgument extends BaseClass {
         };
     }
     static emptyArgument = (type = "uint256") => {
-        const value = type == "address" ? ethers.ZeroAddress : ethers.ZeroHash;
-        return new YCArgument({
-            id: "empty",
-            custom: false,
-            dev_notes: "",
-            value: ZeroHash,
-            solidity_type: "uint256",
-            ret_typeflag: Typeflags.VALUE_VAR_FLAG,
-            typeflag: Typeflags.VALUE_VAR_FLAG,
-            name: "empty",
-            relating_token: null,
-            overridden_custom_values: [],
-        }, YCClassifications.getInstance());
+        const id = type == "address"
+            ? "da776b52-2500-4471-9b62-c345408fa4be"
+            : "eda550d1-0899-495e-aa18-d17d3f163c68";
+        const context = YCClassifications.getInstance();
+        const arg = context.arguments.find((arg) => arg.id == id);
+        if (!arg)
+            throw "Cannot Get Empty ARg - Undefined In Context";
+        return arg;
     };
 }
 export { YCArgument };

@@ -116,8 +116,17 @@ async function recursivelyExecAndHydrateRun(
   if (!receipt)
     throw "Cannot Recursively Hydrate Run - Sent Execution Run On Fork, But Receipt Is Null.";
 
-  if (!receipt.status)
+  if (!receipt.status) {
+    console.log(
+      "Calldata used",
+      await strategyContract.simulateOperationHydrationAndExecution.populateTransaction(
+        operationIdx,
+        startingIndices,
+        commandCalldatas
+      )
+    );
     throw "Cannot Recurisvely Hydrate Run - Sent Transaction On Fork, Execution Reverted";
+  }
 
   const strategyAddress = await strategyContract.getAddress();
 

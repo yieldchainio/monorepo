@@ -91,6 +91,7 @@ export const completeUniV2LPConfig = (
       chain_id: data.tokenA.chain_id,
       tags: [],
       parent_protocol: data.protocol.id,
+      markets_ids: [],
     },
     context
   );

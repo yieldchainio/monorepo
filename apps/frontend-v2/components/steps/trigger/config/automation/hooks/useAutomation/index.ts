@@ -53,7 +53,11 @@ export const useAutomation = ({ step, triggerComparison }: StepProps) => {
   useEffect(() => {
     // Shorthand of the data w/ typing
     const data = step.data?.automation as AutomationData | undefined;
-    if (!data) return;
+    if (!data) {
+      setIntervalInput(1);
+      setTimestamp(Timestamps.Days);
+      return;
+    }
 
     if (data.input) setIntervalInput(data.input);
     if (data.timestamp) setTimestamp(data.timestamp);
@@ -73,6 +77,8 @@ export const useAutomation = ({ step, triggerComparison }: StepProps) => {
     const description = `Every ${intervalInput} ${Timestamps[timestamp]}`;
     step.triggerDescription = description;
   }, [intervalInput, timestamp]);
+
+  // The initial choice
 
   return { chooseInterval, chooseTimestamp, timestamp, intervalInput };
 };

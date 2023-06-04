@@ -46,8 +46,6 @@ class YCFunc extends BaseClass {
         this.instanceID = uuid();
         // Mapping arg identifiers => Full argument instances
         const fullArgs = _function.arguments_ids.map((_arg) => {
-            if (this.id == "dbea21b6-8baa-4bc5-9f68-8ed33ca1c692")
-                console.log("Mapping Arg For Add Liquidity... Typeof Arg:", typeof _arg, "Arg:", _arg);
             if (typeof _arg == "object")
                 return new YCArgument(_arg, _context);
             const jsonArg = _context.rawArguments.find((arg) => arg.id == _arg);
@@ -55,8 +53,9 @@ class YCFunc extends BaseClass {
         });
         // Throw an error and assign no arguments if the arguments include a null value
         if (fullArgs.includes(null)) {
+            console.log("ARguments IDs, full args:", _function.arguments_ids, fullArgs);
             throw ("YCFunc ERROR: Found Null Argument. Argument Value: " +
-                fullArgs.find((arg) => arg == null));
+                _function.arguments_ids[fullArgs.findIndex((arg) => arg == null)]);
         }
         // Should be sufficient anyway - Typescript whining for no reason.
         else
@@ -136,10 +135,6 @@ class YCFunc extends BaseClass {
      * @returns A @interface FunctionCallStruct that represents an on-chain FunctionCallStruct struct.
      */
     toFunctionCallStruct = (step, context, customArguments) => {
-        if (this.id == "19084200-fcc0-46db-9c95-7c0fcebc8d4b")
-            console.log("Turning Remove Liquidity into FunctionCall struct... Custom Arguments:", customArguments, "Step Custom Arguments", step.customArguments, "All Arguments", this.arguments.map((arg) => {
-                return arg.name + ", " + (arg.isCustom ? "Custom" : "Not Custom");
-            }));
         // Assert that if we require a custom argument,
         if (this.customArgumentsLength > customArguments.length)
             throw new Error("YCFunc ERR: Cannot Create FunctionCallStruct - Function requires custom argument(s?), but provided args length insufficient. Function: " +

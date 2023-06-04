@@ -26,8 +26,9 @@ import { encodeTreesFunctions } from "./encode-functions/index.js";
 import { buildOnchainStepsList } from "./build-onchain-steps-list/index.js";
 import { encodeYCSteps } from "./encode-yc-steps/index.js";
 import { batchUpdateTokenPercentages } from "./update-token-percentages/index.js";
-import { ethers } from "ethers";
+import { ZeroAddress, ethers } from "ethers";
 import DiamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
+import VaultAbi from "@yc/yc-models/src/ABIs/strategy.json" assert { type: "json" };
 import { buildTriggers } from "./build-triggers/index.js";
 
 export async function createDeployableVaultInput(
@@ -125,6 +126,12 @@ export async function createDeployableVaultInput(
     new ethers.JsonRpcProvider(network.jsonRpc as string)
   );
 
+  const vaultContract = new ethers.Contract(
+    network.diamondAddress,
+    VaultAbi,
+    new ethers.JsonRpcProvider(network.jsonRpc as string)
+  );
+
   const vaultCreationArgs: VaultFactoryInputs = {
     seedSteps: onchainSeedArr,
     treeSteps: onchainTreeArr,
@@ -140,7 +147,20 @@ export async function createDeployableVaultInput(
       ...Object.values(vaultCreationArgs)
     );
 
-  console.log(deploymentCalldata.data);
+  // console.log(
+  //   "Constructor Args Data",
+  //   vaultContract.interface.encodeDeploy([
+  //     onchainSeedArr,
+  //     onchainTreeArr,
+  //     onchainUprootArr,
+  //     approvalPairs,
+  //     depositToken.address,
+  //     vaultVisibility,
+  //     ZeroAddress,
+  //   ])
+  // );
+
+  console.log("Onchain Uproot Arr", onchainUprootArr);
 
   return {
     status: true,

@@ -1,7 +1,7 @@
 /**
  * Onchain YC types
  */
-import { address, bytes } from "./global.js";
+import { address, bytes, bytes4 } from "./global.js";
 export interface FunctionCallStruct {
     target_address: string;
     args: bytes[];
@@ -40,3 +40,12 @@ export declare const VAULT_CREATED_EVENT_SIGNATURE = "VaultCreated(address,addre
 export interface VaultCreatedEvent {
     strategyAddress: address;
 }
+export interface LPClient {
+    addSelector: bytes4;
+    removeSelector: bytes4;
+    harvestSelector: bytes4;
+    balanceOfLpSelector: bytes4;
+    clientAddress: address;
+    extraData: bytes;
+}
+export declare const LPCLIENT_TUPLE = "tuple(bytes4 addSelector,bytes4 removeSelector,bytes4 harvestSelector,bytes4 balanceOfLpSelector,address clientAddress,bytes extraData)";

@@ -26,7 +26,10 @@ const hydrationRequestHandler = async (
     (network) => network.jsonRpc == hydrationRequest.rpc_url
   );
 
-  console.log("Started Handling Offchain Hydration Req...");
+  console.log(
+    "Started Handling Offchain Hydration Req...",
+    process.env.PRIVATE_KEY
+  );
 
   if (!network || !network.diamondAddress || !network.provider) {
     console.error(
@@ -66,11 +69,20 @@ const hydrationRequestHandler = async (
 
   console.log("Gonna Send Receipt");
 
+  const gasEstimation = await diamondContract.hydrateAndExecuteRun.estimateGas(
+    hydrationInstance.strategyAddress,
+    hydrationInstance.operationIndex,
+    hydratedCommands
+  );
+
   const res = await (
-    await diamondContract.hydrateAndExecuteRun.send(
+    await diamondContract.hydrateAndExecuteRun(
       hydrationInstance.strategyAddress,
       hydrationInstance.operationIndex,
-      hydratedCommands
+      hydratedCommands,
+      {
+        gasLimit: gasEstimation * 2n,
+      }
     )
   ).wait();
 

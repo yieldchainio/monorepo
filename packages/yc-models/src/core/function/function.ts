@@ -68,13 +68,6 @@ export class YCFunc extends BaseClass {
     // Mapping arg identifiers => Full argument instances
     const fullArgs = _function.arguments_ids.map(
       (_arg: string | DBArgument) => {
-        if (this.id == "dbea21b6-8baa-4bc5-9f68-8ed33ca1c692")
-          console.log(
-            "Mapping Arg For Add Liquidity... Typeof Arg:",
-            typeof _arg,
-            "Arg:",
-            _arg
-          );
         if (typeof _arg == "object") return new YCArgument(_arg, _context);
         const jsonArg = _context.rawArguments.find((arg) => arg.id == _arg);
         return jsonArg ? new YCArgument(jsonArg, _context) : null;
@@ -83,9 +76,16 @@ export class YCFunc extends BaseClass {
 
     // Throw an error and assign no arguments if the arguments include a null value
     if (fullArgs.includes(null)) {
+      console.log(
+        "ARguments IDs, full args:",
+        _function.arguments_ids,
+        fullArgs
+      );
       throw (
         "YCFunc ERROR: Found Null Argument. Argument Value: " +
-        fullArgs.find((arg: YCArgument | null) => arg == null)
+        _function.arguments_ids[
+          fullArgs.findIndex((arg: YCArgument | null) => arg == null)
+        ]
       );
     }
     // Should be sufficient anyway - Typescript whining for no reason.

@@ -85,10 +85,12 @@ export class YCArgument extends BaseClass {
       this.#overridenCustomArguments = _argument.overridden_custom_values;
       for (let i = 0; i < _argument.overridden_custom_values.length; i++) {
         const potentialUnderlyingArgID = _argument.overridden_custom_values[i];
+
         if (potentialUnderlyingArgID == "undefined") continue;
         const underlyingJsonArg = _context.rawArguments.find(
           (arg) => arg.id == potentialUnderlyingArgID
         );
+
         if (!underlyingJsonArg)
           throw (
             "Cannot Get Underlying Arg Of Override. ID: " +
@@ -213,21 +215,13 @@ export class YCArgument extends BaseClass {
   }
 
   static emptyArgument = (type: string = "uint256"): YCArgument => {
-    const value = type == "address" ? ethers.ZeroAddress : ethers.ZeroHash;
-    return new YCArgument(
-      {
-        id: "empty",
-        custom: false,
-        dev_notes: "",
-        value: ZeroHash,
-        solidity_type: "uint256",
-        ret_typeflag: Typeflags.VALUE_VAR_FLAG,
-        typeflag: Typeflags.VALUE_VAR_FLAG,
-        name: "empty",
-        relating_token: null,
-        overridden_custom_values: [],
-      },
-      YCClassifications.getInstance()
-    );
+    const id =
+      type == "address"
+        ? "da776b52-2500-4471-9b62-c345408fa4be"
+        : "eda550d1-0899-495e-aa18-d17d3f163c68";
+    const context = YCClassifications.getInstance();
+    const arg = context.arguments.find((arg) => arg.id == id);
+    if (!arg) throw "Cannot Get Empty ARg - Undefined In Context";
+    return arg;
   };
 }

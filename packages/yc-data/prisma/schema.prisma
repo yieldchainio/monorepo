@@ -467,7 +467,8 @@ enum ProtocolType {
 
 enum TokenTags {
   PERP_BASKET_LP
-  LENDING_MARKET
+  LENDING_COLLATERAL
+  BORROWABLE_ASSET
 
   @@schema("YieldchainV2")
 }

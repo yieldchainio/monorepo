@@ -291,23 +291,13 @@
 // }
 
 // console.log("Tokens TO create", tokensToCreate);
-
-// // await prisma.tokensv2.updateMany({
-// //   where: {
-// //     id: {
-// //       in: tokensToUpdate,
-// //     },
-// //   },
-// //   data: {
-// //     tags: {
-// //       push: "LENDING_MARKET",
-// //     },
-// //     markets_ids: {
-// //       push: AAVE_MARKET_ID,
-// //     },
-// //   },
-// // });
-
-// await prisma.tokensv2.createMany({
-//   data: tokensToCreate,
+// await prisma.tokensv2.updateMany({
+//   where: {
+//     id: {
+//       in: tokensToUpdate,
+//     },
+//   },
+//   data: {
+//     tags: [TokenTags.BORROWABLE_ASSET, TokenTags.LENDING_COLLATERAL],
+//   },
 // });

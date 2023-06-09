@@ -8,11 +8,11 @@ import { BaseActionConfig } from "../../../../base";
 import { ProtocolsDropdown } from "../../../../components/protocol-dropdown";
 import WrappedText from "components/wrappers/text";
 import { ChooseToken } from "../../../../components/choose-token";
-import { useAddLiquidity } from "../../../hooks/useAddLiquidity";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useAssertTokensAmount } from "../../../hooks/useAssertTokensAmount";
 import { completeUniV2LPConfig } from "../utils/complete-standard-lp-config";
 import { RepresentedTokens } from "components/steps/reguler/config/components/represented-basket";
+import { useSupply } from "../hooks/useSupply";
 
 export const MediumStandardAddLiquidityConfig = forwardRef<
   HTMLDivElement,
@@ -25,13 +25,10 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
     protocol,
     protocols,
     chooseProtocol,
-    chooseTokenA,
-    chooseTokenB,
-    tokenA,
-    tokenB,
     network,
     availableTokens,
-  } = useAddLiquidity({
+    test,
+  } = useSupply({
     step,
     triggerComparison,
   });
@@ -40,12 +37,12 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
    * We asser that we must have 2 available outflows from our parent at all times. Otherwise,
    * it is an invalid attempt of adding an LP config and we hence cancel the action
    */
-  useAssertTokensAmount({
-    step,
-    triggerComparison,
-    tokens: availableTokens,
-    amount: protocol ? 2 : 1,
-  });
+  // useAssertTokensAmount({
+  //   step,
+  //   triggerComparison,
+  //   tokens: availableTokens,
+  //   amount: protocol ? 2 : 1,
+  // });
 
   /**
    * Get global context
@@ -65,15 +62,7 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
       step={step}
       triggerComparison={triggerComparison}
       handleComplete={() => completeUniV2LPConfig(step, context)}
-      canContinue={
-        protocol
-          ? tokenA
-            ? tokenB
-              ? true
-              : "Please Choose Token B"
-            : "Please Choose Token A"
-          : "Please Choose A Protocol"
-      }
+      canContinue={true}
     >
       <WrappedText
         fontSize={12}
@@ -81,7 +70,7 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
       >
         {`Supply Collateral To A Lending Market`}
       </WrappedText>
-      <div className="w-full flex flex-col gap-1">
+      <div className="w-full flex flex-col gap-1" onClick={() => test()}>
         <WrappedText className="ml-0.5">Protocol</WrappedText>
         <ProtocolsDropdown
           setChoice={chooseProtocol}
@@ -90,13 +79,13 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
         />
       </div>
 
-      <div className="w-[70%] flex flex-col gap-1">
+      <div className="w-[80%] flex flex-col gap-1">
         <WrappedText className="ml-0.5">Collateral</WrappedText>
         <ChooseToken
           tokens={availableTokens}
           network={network}
-          setChoice={chooseTokenA}
-          choice={tokenA}
+          setChoice={() => null}
+          choice={null}
           label="Token A"
           style={{
             width: "100%",
@@ -105,6 +94,9 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
             disabled: !protocol ? "Please Choose A Protocol " : false,
           }}
         />
+      </div>
+      <div className="w-[75%]">
+        <RepresentedTokens tokens={[]} label="Receive:" />
       </div>
       <div className="w-[75%]">
         <RepresentedTokens tokens={[]} label="Markets:" />

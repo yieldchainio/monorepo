@@ -5,6 +5,7 @@
 
 import {
   PerpBasketLpData,
+  SupplyData,
   YCClassifications,
   YCProtocol,
   YCToken,
@@ -14,8 +15,9 @@ import { Step } from "utilities/classes/step";
 import { useConfigContext } from "../../../../../hooks/useConfigContext";
 import { useProtocols } from "../../../../../hooks/useProtocols";
 import { useTokens } from "../../../../../hooks/useTokens";
-import { ProtocolType, TokenTags } from "@prisma/client";
 import { getSupplyInflowTokens } from "../../utils/get-inflow-token";
+import { ProtocolType, TokenTags } from "@prisma/client";
+import { useLogs } from "utilities/hooks/stores/logger";
 
 export const useSupply = ({
   step,
@@ -49,14 +51,12 @@ export const useSupply = ({
   /**
    * States to keep track of the chosen tokens and protocol
    */
+  const [protocol, setProtocol] = useState<YCProtocol | null>(null);
+
   const [collateralToken, setCollateralToken] = useState<YCToken | null>(null);
 
-  const [basketDepositToken, setBasketDepositToken] = useState<YCToken | null>(
-    null
-  );
   const [representationToken, setRepresentationToken] =
     useState<YCToken | null>(null);
-  const [protocol, setProtocol] = useState<YCProtocol | null>(null);
 
   /**
    * Get all of our available tokens for this add liquidity operation
@@ -65,33 +65,39 @@ export const useSupply = ({
     networks: network ? [network] : undefined,
     tokens: stepAvailableTokens,
     protocols: protocol ? [protocol] : [],
+    tags: [TokenTags.LENDING_COLLATERAL],
   });
 
-  const allBasketTokens: YCToken[] = useTokens({
+  const availableMarkets: YCToken[] = useTokens({
     networks: network ? [network] : undefined,
     tokens: undefined,
     protocols: protocol ? [protocol] : [],
+    tags: [TokenTags.BORROWABLE_ASSET],
   });
+
+  const logs = useLogs();
 
   /**
    * Functions to handle choosing the basket deposit token
    */
-  const chooseBasketDepositToken = useCallback(
-    (token: YCToken) => {
-      // Assert that it must be available to us
-      // if (!availableTokens.find((_token) => _token.id === token.id))
-      //   logs.throwError(
-      //     "Cannot Choose Basket Deposit Token - Token Is Unavailable At This Step"
-      //   );
-
+  const chooseCollateral = useCallback(
+    async (token: YCToken) => {
       // Set the step's data to it (for persistant visual representation of the choice)
-      step.data.perpBasketLp = {
-        ...(step.data.perpBasketLp || {}),
-        basketDepositToken: token.toJSON(),
-      } as PerpBasketLpData;
+      if (!protocol)
+        throw logs.throwError("Cannot choose collateral without protocol");
+
+      const repToken = await getSupplyInflowTokens(protocol, token);
+      step.data.supply = {
+        ...(step.data.supply || {}),
+        collateral: token.toJSON(),
+        representationToken: repToken.toJSON(),
+      } as SupplyData;
 
       // Add this to the step's outflows
+      step.clearFlows();
+
       step.addOutflow(token);
+      step.addInflow(repToken);
 
       triggerComparison();
     },
@@ -105,8 +111,6 @@ export const useSupply = ({
           _token.tags.includes(TokenTags.PERP_BASKET_LP) &&
           _token.parentProtocol?.id == protocol?.id
       );
-
-      console.log("Choosing Protocol... TOken:", token);
 
       if (token) {
         step.data.perpBasketLp = {
@@ -179,6 +183,8 @@ export const useSupply = ({
     const token = YCClassifications.getInstance().tokens.find(
       (token_) => token_.symbol == "USDC" && token_.network?.id == 42161
     );
+    console.log("Token", token);
+    console.log("Protocok", protocol);
     const res = await getSupplyInflowTokens(
       protocol as YCProtocol,
       token as YCToken
@@ -196,5 +202,6 @@ export const useSupply = ({
     representationToken,
     allBasketTokens,
     chooseBasketDepositToken,
+    test,
   };
 };

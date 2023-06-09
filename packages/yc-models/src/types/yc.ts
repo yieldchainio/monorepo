@@ -94,6 +94,13 @@ export enum StepType {
   CONDITION = "condition",
 }
 
+export interface SupplyData {
+  protocol: DBProtocol;
+  collateral?: DBToken | null;
+  representationToken?: DBToken | null;
+
+}
+
 export type StepData = {
   automation?: AutomationData;
   lp?: AddLiquidityData;
@@ -101,7 +108,8 @@ export type StepData = {
   stake?: StakeData;
   swap?: SwapData;
   trigger?: any;
-  perpBasketLp?: PerpBasketLpData
+  perpBasketLp?: PerpBasketLpData;
+  supply?: SupplyData
 };
 
 export enum Timestamps {
@@ -136,8 +144,8 @@ export interface AddLiquidityData {
 
 export interface PerpBasketLpData {
   basketDepositToken?: DBToken;
-  basketRepresentationToken?: DBToken
-  protocol: DBProtocol
+  basketRepresentationToken?: DBToken;
+  protocol: DBProtocol;
 }
 
 export type AutomationData = {

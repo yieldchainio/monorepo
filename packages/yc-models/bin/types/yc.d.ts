@@ -67,6 +67,11 @@ export declare enum StepType {
     TRIGGER = "trigger",
     CONDITION = "condition"
 }
+export interface SupplyData {
+    protocol: DBProtocol;
+    collateral?: DBToken | null;
+    representationToken?: DBToken | null;
+}
 export type StepData = {
     automation?: AutomationData;
     lp?: AddLiquidityData;
@@ -75,6 +80,7 @@ export type StepData = {
     swap?: SwapData;
     trigger?: any;
     perpBasketLp?: PerpBasketLpData;
+    supply?: SupplyData;
 };
 export declare enum Timestamps {
     Minutes = "Minutes",

@@ -17,11 +17,11 @@ const UtilityCommandEncoders = {
  * @param customValues - Array of custom values provided to the argument
  * @return encodedCommand - Either an encoded command if found utility to parse, or null if none
  */
-export const trySpecialEncoding = (step, context, argument) => {
+export const trySpecialEncoding = (step, context, argument, customArgs) => {
     // We only parse functions as special commands
     if (!(argument.value instanceof YCFunc))
         return null;
     // Return either the speicla-encoded command or null if none
-    return (UtilityCommandEncoders[argument.value.id]?.(step, context, argument) || null);
+    return (UtilityCommandEncoders[argument.value.id]?.(step, context, argument, customArgs) || null);
 };
 //# sourceMappingURL=index.js.map

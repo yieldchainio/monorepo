@@ -10,7 +10,12 @@ const GET_INVESTMENT_AMOUNT_ID = "b6ce56d0-d032-47ed-a3ff-8dedd81f0c2d";
  */
 const UtilityCommandEncoders: Record<
   string,
-  (step: JSONStep, context: EncodingContext, argument: YCArgument) => string
+  (
+    step: JSONStep,
+    context: EncodingContext,
+    argument: YCArgument,
+    customArgs: Array<string | null>
+  ) => string
 > = {
   [GET_INVESTMENT_AMOUNT_ID]: encodeGetInvestmentAmount,
 };
@@ -27,13 +32,19 @@ const UtilityCommandEncoders: Record<
 export const trySpecialEncoding = (
   step: JSONStep,
   context: EncodingContext,
-  argument: YCArgument
+  argument: YCArgument,
+  customArgs: Array<string | null>
 ): string | null => {
   // We only parse functions as special commands
   if (!(argument.value instanceof YCFunc)) return null;
 
   // Return either the speicla-encoded command or null if none
   return (
-    UtilityCommandEncoders[argument.value.id]?.(step, context, argument) || null
+    UtilityCommandEncoders[argument.value.id]?.(
+      step,
+      context,
+      argument,
+      customArgs
+    ) || null
   );
 };

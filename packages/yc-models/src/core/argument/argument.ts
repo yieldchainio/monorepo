@@ -39,6 +39,7 @@ export class YCArgument extends BaseClass {
   readonly identifier: string;
   readonly name: string | null;
   readonly id: string;
+
   relatingToken: YCToken | null;
   #overridenCustomArguments: Array<string | null> = [];
 
@@ -138,14 +139,14 @@ export class YCArgument extends BaseClass {
   encodeYCCommand = (
     step: JSONStep,
     context: EncodingContext,
-    customValue?: string | null
+    customArgs: Array<string | null>
   ): bytes => {
     // @notice We first attempt to get some special utility encoding through. If we do, we return that instead.
     // Otherwise, we continue on to the reguler encoding
     const specialCommand: bytes | null = trySpecialEncoding(
       step,
       context,
-      this
+      this,customArgs
     );
     if (specialCommand) return specialCommand;
 
@@ -157,31 +158,37 @@ export class YCArgument extends BaseClass {
 
     // Encode either our value, or provided custom value if we are custom
     if (this.isCustom) {
-      if (customValue == undefined)
+      if (!customArgs.length)
         throw (
           "Cannot Encode Argument As YC Command - Expected Custom Value, But Got None. ID: " +
           this.id
         );
 
-      if (this.solidityType == "address")
-        console.log(
-          "About To Encode Address Custom Value... Custom Value:",
-          customValue,
-          "This Arg ID:",
-          this.id,
-          "Value:",
-          this.value
+      console.log("Gonna use custom arg...", customArgs);
+      try {
+        command += remove0xPrefix(
+          AbiCoder.defaultAbiCoder().encode(
+            [this.solidityType],
+            [customArgs.shift()]
+          )
         );
-
-      command += remove0xPrefix(
-        AbiCoder.defaultAbiCoder().encode([this.solidityType], [customValue])
-      );
+      } catch (e: any) {
+        console.error(
+          "Caught Error Encoding. This Arg:",
+          this,
+          "Custom Values",
+          customArgs
+        );
+        throw e;
+      }
     }
     // If we are a function, encode it instead
-    else if (this.value instanceof YCFunc)
+    else if (this.value instanceof YCFunc) {
+      console.log("Got an arg instance of YCFunc. Gonna pass these custom args:", customArgs)
       command = remove0xPrefix(
-        this.value.encodeYCCommand(step, context, step.customArguments)
+        this.value.encodeYCCommand(step, context, customArgs)
       );
+    }
     // Else, encode our value normally
     else
       command += remove0xPrefix(

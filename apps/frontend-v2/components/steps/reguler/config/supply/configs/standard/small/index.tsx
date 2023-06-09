@@ -11,7 +11,7 @@ import { useAssertTokensAmount } from "../../../hooks/useAssertTokensAmount";
 import { ChooseToken } from "../../../../components/choose-token";
 import WrappedText from "components/wrappers/text";
 import { ProtocolsDropdown } from "../../../../components/protocol-dropdown";
-import { completeUniV2LPConfig } from "../utils/complete-standard-lp-config";
+import { completeStandardSupply } from "../utils/complete-standard-supply-config";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { ProtocolType } from "@prisma/client";
 
@@ -64,7 +64,7 @@ export const SmallStandardAddLiquidityConfig = forwardRef<
       step={step}
       triggerComparison={triggerComparison}
       canvasID={canvasID}
-      handleComplete={() => completeUniV2LPConfig(step, context)}
+      handleComplete={() => completeStandardSupply(step, context)}
       canContinue={
         protocol
           ? tokenA

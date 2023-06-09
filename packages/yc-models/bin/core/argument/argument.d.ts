@@ -28,7 +28,7 @@ export declare class YCArgument extends BaseClass {
     relatingToken: YCToken | null;
     constructor(_argument: DBArgument, _context: YCClassifications);
     setValue: (newValue: any) => void;
-    encodeYCCommand: (step: JSONStep, context: EncodingContext, customValue?: string | null) => bytes;
+    encodeYCCommand: (step: JSONStep, context: EncodingContext, customArgs: Array<string | null>) => bytes;
     toJSON(retainArgs?: boolean): DBArgument;
     static emptyArgument: (type?: string) => YCArgument;
 }

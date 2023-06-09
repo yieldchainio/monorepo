@@ -1,11 +1,11 @@
-import { YCClassifications, YCFunc, } from "../../../../core/index.js";
+import { YCArgument, YCClassifications, YCFunc, } from "../../../../core/index.js";
 import { EncodingContext } from "../../../../types/index.js";
 // Constants
 const WITHDRAW_SHARE_GETTER_ARG_ID = "7ccd7271-211b-4a19-8556-8fdf16e1235e";
 /**
  * Encode a getInvestmentAmount() YC Command
  */
-export const encodeGetInvestmentAmount = (step, context, argument) => {
+export const encodeGetInvestmentAmount = (step, context, argument, customArgs) => {
     // YCArgument value must be function
     if (!(argument.value instanceof YCFunc))
         throw "Cannot Encode Get Investment Amount - Not A Function";
@@ -18,7 +18,7 @@ export const encodeGetInvestmentAmount = (step, context, argument) => {
         if (!withdrawShareRetreiverArg)
             throw "Cannot Encode Get Investment Amount - Withdraw Shares Getter Arg Is undefined";
         argument.value.arguments[1] = withdrawShareRetreiverArg;
-        return argument.value.encodeYCCommand(step, context, []);
+        return argument.value.encodeYCCommand(step, context, customArgs);
     }
     // Must have a relating token if not an uproot context encoding
     if (!argument.relatingToken)
@@ -27,7 +27,13 @@ export const encodeGetInvestmentAmount = (step, context, argument) => {
     const tokenPercentage = new Map(step.tokenPercentages).get(argument.relatingToken.id);
     if (!tokenPercentage)
         throw "Cannot Encode Get Investment Amount - No Token Percentage Set";
-    const fullGetInvestmentCommand = argument.value.encodeYCCommand(step, context, [(100 / tokenPercentage) * 100]);
+    const clonedArg = new YCArgument({
+        ...argument.value.arguments[1].toJSON(true),
+        custom: false,
+        value: `${(100 / tokenPercentage) * 100}`,
+    }, YCClassifications.getInstance());
+    argument.value.arguments[1] = clonedArg;
+    const fullGetInvestmentCommand = argument.value.encodeYCCommand(step, context, customArgs);
     return fullGetInvestmentCommand;
 };
 //# sourceMappingURL=index.js.map

@@ -9,4 +9,4 @@ import { EncodingContext, JSONStep } from "../../../types/index.js";
  * @param customValues - Array of custom values provided to the argument
  * @return encodedCommand - Either an encoded command if found utility to parse, or null if none
  */
-export declare const trySpecialEncoding: (step: JSONStep, context: EncodingContext, argument: YCArgument) => string | null;
+export declare const trySpecialEncoding: (step: JSONStep, context: EncodingContext, argument: YCArgument, customArgs: Array<string | null>) => string | null;

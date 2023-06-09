@@ -10,7 +10,7 @@ import WrappedText from "components/wrappers/text";
 import { ChooseToken } from "../../../../components/choose-token";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useAssertTokensAmount } from "../../../hooks/useAssertTokensAmount";
-import { completeUniV2LPConfig } from "../utils/complete-standard-lp-config";
+import { completeStandardSupply } from "../utils/complete-standard-supply-config";
 import { RepresentedTokens } from "components/steps/reguler/config/components/represented-basket";
 import { useSupply } from "../hooks/useSupply";
 
@@ -47,7 +47,6 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
   //   amount: protocol ? 2 : 1,
   // });
 
-
   /**
    * Get global context
    */
@@ -65,7 +64,7 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
       height="468px"
       step={step}
       triggerComparison={triggerComparison}
-      handleComplete={() => completeUniV2LPConfig(step, context)}
+      handleComplete={() => completeStandardSupply(step, context)}
       canContinue={
         !protocol
           ? "Choose A Protocol"

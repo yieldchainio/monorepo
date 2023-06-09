@@ -3,4 +3,4 @@ import { EncodingContext, JSONStep } from "../../../../types/index.js";
 /**
  * Encode a getInvestmentAmount() YC Command
  */
-export declare const encodeGetInvestmentAmount: (step: JSONStep, context: EncodingContext, argument: YCArgument) => string;
+export declare const encodeGetInvestmentAmount: (step: JSONStep, context: EncodingContext, argument: YCArgument, customArgs: Array<string | null>) => string;

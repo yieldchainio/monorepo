@@ -116,6 +116,7 @@ class YCFunc extends BaseClass {
     encodeYCCommand = (step, context, customArguments) => {
         if (!this.address)
             throw new Error("YCFunc ERR: Cannot Encode - Address Not Found. Function ID: " + this.id);
+        console.log("Encoding Function... Custom args:", customArguments);
         // Ethers interface for encoding
         const iface = this.address.interface;
         // FunctionCallStruct struct that will be ncoded
@@ -158,12 +159,13 @@ class YCFunc extends BaseClass {
             ? network.diamondAddress
             : this.address.address;
         // Create the struct
+        console.log("Gonna encode arguments... custom args:", customArguments);
         const struct = {
             // The target address (our address, tells the onchain interpreter where to call the function)
             target_address: address,
             // Our arguments. If an argument is not a custom, we encode it. Otherwise, we encode it but
             // input the next custom argument from our array (we shift is so that it is removed)
-            args: this.arguments.map((arg) => arg.encodeYCCommand(step, context, arg.isCustom ? customArguments.shift() : undefined)),
+            args: this.arguments.map((arg) => arg.encodeYCCommand(step, context, customArguments)),
             // Our signature (i.e "stakeTokens(uint256,address,string)")
             signature: this.signature,
         };

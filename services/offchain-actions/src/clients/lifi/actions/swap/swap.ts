@@ -37,19 +37,23 @@ export const lifiSwap = async (
 
   if (fromAmount == 0n) return SELF_COMMAND;
 
-  const request = await lifiQuote(
-    fromToken,
-    toToken,
-    fromAmount.toString() as `${number}`,
-    strategyAddress,
-    fromChain,
-    toChain
-  );
+  try {
+    const request = await lifiQuote(
+      fromToken,
+      toToken,
+      fromAmount.toString() as `${number}`,
+      strategyAddress,
+      fromChain,
+      toChain
+    );
 
-  if (!request.transactionRequest?.data)
-    throw "Cannot Complete Lifiswap - Transaction Request Data Undefined";
+    if (!request.transactionRequest?.data)
+      throw "Cannot Complete Lifiswap - Transaction Request Data Undefined";
 
-  const swapCommand: YcCommand = buildSwapCommand(request);
-
-  return swapCommand;
+    const swapCommand: YcCommand = buildSwapCommand(request);
+    return swapCommand;
+  } catch (e: any) {
+    console.error("Lifiswap Error:", e);
+    return SELF_COMMAND;
+  }
 };

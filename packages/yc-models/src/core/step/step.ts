@@ -103,6 +103,12 @@ export class YCStep extends Node<YCStep> {
    */
   chainId: number;
 
+  /**
+   * If false, custom args are not copied when cloning the step.
+   * Otherwise, the same array reference is used
+   */
+  retainCustomArgsRef: boolean = false;
+
   constructor(_step: JSONStep, _context: YCClassifications) {
     super();
     this.id = _step.id;
@@ -141,6 +147,7 @@ export class YCStep extends Node<YCStep> {
     this.triggerIcon = _step.triggerIcon || null;
 
     this.chainId = _step.chainId;
+    this.retainCustomArgsRef = _step.retainCustomArgsRef;
   }
 
   /**
@@ -168,6 +175,7 @@ export class YCStep extends Node<YCStep> {
       tokenPercentages: Array.from(this.tokenPercentages.entries()),
       type: this.type,
       chainId: this.chainId,
+      retainCustomArgsRef: this.retainCustomArgsRef,
     };
   };
 
@@ -176,7 +184,9 @@ export class YCStep extends Node<YCStep> {
    */
   clone(retainFunc: boolean = true) {
     const jsonStep = this.toJSON(retainFunc);
-    jsonStep.customArguments = [...jsonStep.customArguments];
+    jsonStep.customArguments = this.retainCustomArgsRef
+      ? jsonStep.customArguments
+      : [...jsonStep.customArguments];
     jsonStep.tokenPercentages = [...jsonStep.tokenPercentages];
     jsonStep.children = [...jsonStep.children];
     const newStep = new YCStep(jsonStep, YCClassifications.getInstance());

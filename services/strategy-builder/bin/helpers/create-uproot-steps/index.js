@@ -33,6 +33,7 @@ export function createUprootSteps(seedSteps, treeSteps, depositToken) {
         data: null,
         parentId: null,
         chainId: treeSteps.chainId,
+        retainCustomArgsRef: false,
     }, YCClassifications.getInstance());
     const usedFunctions = new Set();
     const shouldAddStep = (step) => {

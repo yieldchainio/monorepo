@@ -173,7 +173,7 @@ export class Step extends Node<Step> implements IStep<Step> {
     // a writeable parent, then it should be writeable
     this.writeable = this.parent?.writeable || this.writeable;
 
-    this.chainId = this.parent?.chainId || null
+    this.chainId = this.parent?.chainId || null;
   };
 
   // ---------------
@@ -583,6 +583,12 @@ export class Step extends Node<Step> implements IStep<Step> {
   chainId: number | null = null;
 
   /**
+   * If false, custom args are not copied when cloning the step.
+   * Otherwise, the same array reference is used
+   */
+  retainCustomArgsRef: boolean = false;
+
+  /**
    * Functions that are unlocked starting from this node to it's descendents,
    * by some external factor (i.e, this is a tree strategy and some functions
    * were unlocked by the seed strategy, added to this array)
@@ -664,7 +670,7 @@ export class Step extends Node<Step> implements IStep<Step> {
     this.size = config?.size || this.parent?.size || StepSizing.MEDIUM;
     this.dimensions = this.defaultDimensions[this.size];
     this.type = config?.type || StepType.STEP;
-    this.chainId = config?.chainId || null
+    this.chainId = config?.chainId || null;
     this.inflows = config?.inflows || [];
     this.outflows = config?.outflows || [];
     this.writeable = writeable;
@@ -673,6 +679,8 @@ export class Step extends Node<Step> implements IStep<Step> {
     this.tokenPercentages = config?.tokenPercentages
       ? new Map<string, TokenPercentage>(config.tokenPercentages)
       : this.tokenPercentages;
+
+    this.retainCustomArgsRef = config?.retainCustomArgsRef || false;
 
     /**
      * Construct reguler step variables
@@ -735,6 +743,7 @@ export class Step extends Node<Step> implements IStep<Step> {
         })
       ),
       size: iStepConfigs?.size,
+      retainCustomArgsRef: step.retainCustomArgsRef,
       ...additionalConfigs,
     };
 
@@ -780,6 +789,7 @@ export class Step extends Node<Step> implements IStep<Step> {
 
       protocol: step.protocol ? context.getProtocol(step.protocol) : null,
       customArguments: step?.customArguments || [],
+      retainCustomArgsRef: step?.retainCustomArgsRef,
     };
     const resStep = new Step(config);
     for (const child of resStep.children) child.parent = resStep;
@@ -953,6 +963,7 @@ export class Step extends Node<Step> implements IStep<Step> {
         funcID: func.func.id,
         used: func.used,
       })),
+      retainCustomArgsRef: this.retainCustomArgsRef,
       state: this.state,
       children: this.children.flatMap((child) => {
         const jsonChild = child.toJSON({ onlyCompleted: false });
@@ -968,8 +979,8 @@ export class Step extends Node<Step> implements IStep<Step> {
       triggerConfig: this.triggerConfig,
       data: this.data,
       tokenPercentages: Array.from(this.tokenPercentages.entries()),
-      customArguments: this.customArguments, 
-      chainId: this.chainId || undefined
+      customArguments: this.customArguments,
+      chainId: this.chainId || undefined,
     };
   };
 
@@ -995,6 +1006,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       type: this.type,
       triggerType: this.triggerType,
       chainId: this.chainId || 1,
+      retainCustomArgsRef: this.retainCustomArgsRef,
     };
   }
 }

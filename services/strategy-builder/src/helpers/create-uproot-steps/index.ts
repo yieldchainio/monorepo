@@ -47,6 +47,7 @@ export function createUprootSteps(
       data: null,
       parentId: null,
       chainId: treeSteps.chainId,
+      retainCustomArgsRef: false,
     },
     YCClassifications.getInstance()
   );

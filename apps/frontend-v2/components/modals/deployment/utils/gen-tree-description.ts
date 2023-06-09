@@ -78,6 +78,10 @@ const ACTION_IDS_TO_DESCRIPTORS: Record<string, (step: Step) => string> = {
     `Swap ${stringifyFlows(step.outflows)} For ${stringifyFlows(
       step.inflows
     )}. `,
+  "b966c7fa-431e-47f9-83a4-fe0d7054a570": (step: Step) =>
+    `Supply ${stringifyFlows(step.outflows)} On ${
+      step.protocol?.name
+    }, Receive ${stringifyFlows(step.inflows)}`,
 };
 
 const getTriggerDescription = (step: Step) => {

@@ -46,7 +46,7 @@ export enum ActionConfigs {
   SWAP = "SWAP",
   LP = "LP",
   HARVEST = "HARVEST",
-  SUPPLY = "SUPPLY"
+  SUPPLY = "SUPPLY",
 }
 
 // The different types of trigger configs
@@ -140,6 +140,7 @@ export interface IStep<T extends IStep<T>>
 
   children?: T[];
   chainId?: number | null;
+  retainCustomArgsRef?: boolean;
 }
 
 export interface JSONFrontendStep {
@@ -156,6 +157,7 @@ export interface JSONFrontendStep {
   writeable?: boolean;
   tokenPercentages?: Array<[string, TokenPercentage]>;
   chainId?: number;
+  retainCustomArgsRef?: boolean
 
   // ==REGULER== //
   protocol?: string;
@@ -175,6 +177,7 @@ export interface JSONFrontendStep {
   data?: any | null;
   triggerVisuals?: React.ReactNode;
   triggerConfig?: TriggerConfigs | null;
+
 }
 
 /**

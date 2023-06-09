@@ -103,7 +103,6 @@ class YCArgument extends BaseClass {
     // =============
     // Set the value of the argument, used by unique utility parsers
     setValue = (newValue) => {
-        console.log("Setting New Value. Current Value:", this.#value, "Is Custom:", this.#isCustom, "New Value:", newValue);
         if (!this.#isCustom)
             throw "Cannot Set Value To Non-Custom Argument";
         this.#value = newValue;
@@ -136,7 +135,6 @@ class YCArgument extends BaseClass {
         }
         // If we are a function, encode it instead
         else if (this.value instanceof YCFunc) {
-            console.log("Got an arg instance of YCFunc. Gonna pass these custom args:", customArgs);
             command = remove0xPrefix(this.value.encodeYCCommand(step, context, customArgs));
         }
         // Else, encode our value normally

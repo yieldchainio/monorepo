@@ -137,6 +137,7 @@ export interface JSONStep {
         light: string;
     } | null;
     chainId: number;
+    retainCustomArgsRef: boolean;
 }
 export interface DBStatistic {
     id: string;

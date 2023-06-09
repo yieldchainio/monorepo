@@ -147,6 +147,7 @@ export interface JSONStep {
   triggerDescription?: string | null;
   triggerIcon?: string | { dark: string; light: string } | null;
   chainId: number;
+  retainCustomArgsRef: boolean;
 }
 
 export interface DBStatistic {

@@ -63,10 +63,20 @@ export const completeStandardSupply = (
     clientId,
     data.collateral.address,
     data.collateral.address, // Used in balanceOf(token) function
+    ethers.constants.HashZero, // Empty extra args
+  ];
+
+  const withdrawalCustomArgs = [
+    clientId,
+    data.collateral.address,
+    clientId, // Client ID for balanceOfPosition
+    data.collateral.address, // Address for balanceOfPosition
     ethers.constants.HashZero,
   ];
 
-  step.customArguments = customArgs.concat(customArgs);
+  step.customArguments = customArgs.concat(withdrawalCustomArgs);
+
+  step.retainCustomArgsRef = true;
 
   return;
 };

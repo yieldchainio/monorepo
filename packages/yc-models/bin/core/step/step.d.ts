@@ -63,6 +63,11 @@ export declare class YCStep extends Node<YCStep> {
      * Chain ID othis step
      */
     chainId: number;
+    /**
+     * If false, custom args are not copied when cloning the step.
+     * Otherwise, the same array reference is used
+     */
+    retainCustomArgsRef: boolean;
     constructor(_step: JSONStep, _context: YCClassifications);
     /**
      * Convert the step into a JSON step

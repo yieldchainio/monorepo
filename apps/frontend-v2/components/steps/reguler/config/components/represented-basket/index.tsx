@@ -5,17 +5,16 @@
 import { TokensBundle } from "components/tokens/bundle";
 import { TokensBundleProps } from "components/tokens/bundle/types";
 import WrappedText from "components/wrappers/text";
-import { TextProps } from "components/wrappers/types";
 
-export const RepresentedTokensLpBasket = ({
+export const RepresentedTokens = ({
   tokens,
   style,
   className,
   imageProps,
   margin,
-
+  label = "Represented Tokens:",
   fontSize = 13,
-}: TokensBundleProps & {fontSize?: number}) => {
+}: TokensBundleProps & { fontSize?: number; label?: string }) => {
   return (
     <div
       className={
@@ -25,7 +24,7 @@ export const RepresentedTokensLpBasket = ({
       }
       style={style}
     >
-      <WrappedText fontSize={fontSize}>Represented Basket:</WrappedText>
+      <WrappedText fontSize={fontSize}>{label}</WrappedText>
       <TokensBundle
         tokens={tokens}
         maxImages={5}

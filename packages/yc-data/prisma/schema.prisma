@@ -467,6 +467,7 @@ enum ProtocolType {
 
 enum TokenTags {
   PERP_BASKET_LP
+  LENDING_MARKET
 
   @@schema("YieldchainV2")
 }

@@ -46,6 +46,7 @@ export enum ActionConfigs {
   SWAP = "SWAP",
   LP = "LP",
   HARVEST = "HARVEST",
+  SUPPLY = "SUPPLY"
 }
 
 // The different types of trigger configs

@@ -71,7 +71,7 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
                     src={action.icon}
                     width={20}
                     height={20}
-                    className="group-hover:scale-[1.05] transition duration-200 ease-in-out will-change-transform"
+                    className="group-hover:scale-[1.1] transition duration-300 ease-in-out will-change-transform"
                     wheelable={false}
                   />
                 </div>

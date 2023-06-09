@@ -10,20 +10,20 @@ import {
   useEffect,
   useState,
 } from "react";
-import { getProtocolLpConfig } from "./utils/get-protocol-lp-config";
+import { getProtocolSupplyConfig } from "./utils/get-protocol-supply-config";
 
-export const AddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
+export const SupplyConfig = forwardRef<HTMLDivElement, StepProps>(
   ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
-    const [AddLiqComponent, setAddLiquidityComponent] = useState<
+    const [SupplyComponent, setSupplyComponent] = useState<
       ForwardRefExoticComponent<StepProps & RefAttributes<HTMLDivElement>>
-    >(getProtocolLpConfig(step));
+    >(getProtocolSupplyConfig(step));
 
     useEffect(() => {
-      setAddLiquidityComponent(getProtocolLpConfig(step));
+      setSupplyComponent(getProtocolSupplyConfig(step));
     }, [step.protocol?.id]);
 
     return (
-      <AddLiqComponent
+      <SupplyComponent
         step={step}
         style={style}
         triggerComparison={triggerComparison}

@@ -12,6 +12,7 @@ import { useAddLiquidity } from "../../../hooks/useAddLiquidity";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useAssertTokensAmount } from "../../../hooks/useAssertTokensAmount";
 import { completeUniV2LPConfig } from "../utils/complete-standard-lp-config";
+import { RepresentedTokens } from "components/steps/reguler/config/components/represented-basket";
 
 export const MediumStandardAddLiquidityConfig = forwardRef<
   HTMLDivElement,
@@ -60,7 +61,7 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
       {...props}
       canvasID={canvasID}
       width="327px"
-      height="328px"
+      height="428px"
       step={step}
       triggerComparison={triggerComparison}
       handleComplete={() => completeUniV2LPConfig(step, context)}
@@ -74,6 +75,12 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
           : "Please Choose A Protocol"
       }
     >
+      <WrappedText
+        fontSize={12}
+        className=" w-full whitespace-pre-wrap text-opacity-40 mt-[-1.5rem]"
+      >
+        {`Supply Collateral To A Lending Market`}
+      </WrappedText>
       <div className="w-full flex flex-col gap-1">
         <WrappedText className="ml-0.5">Protocol</WrappedText>
         <ProtocolsDropdown
@@ -82,7 +89,9 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
           protocols={protocols}
         />
       </div>
-      <div className="flex flex-row w-full gap-1 items-center justify-center">
+
+      <div className="w-[70%] flex flex-col gap-1">
+        <WrappedText className="ml-0.5">Collateral</WrappedText>
         <ChooseToken
           tokens={availableTokens}
           network={network}
@@ -96,22 +105,9 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
             disabled: !protocol ? "Please Choose A Protocol " : false,
           }}
         />
-        <div className="w-[25px] h-[25px] border-[1px] border-custom-themedBorder rounded-full  z-10 bg-custom-bcomponentbg flex items-center justify-center">
-          <WrappedText>+</WrappedText>
-        </div>
-        <ChooseToken
-          tokens={availableTokens}
-          network={network}
-          setChoice={chooseTokenB}
-          choice={tokenB}
-          label="Token B"
-          style={{
-            width: "100%",
-          }}
-          dropdownProps={{
-            disabled: !protocol ? "Please Choose A Protocol " : false,
-          }}
-        />
+      </div>
+      <div className="w-[75%]">
+        <RepresentedTokens tokens={[]} label="Markets:" />
       </div>
     </BaseActionConfig>
   );

@@ -8,7 +8,7 @@ import { StepSizing } from "utilities/classes/step/types";
 import { SmallStandardAddLiquidityConfig } from "./small";
 import { MediumStandardAddLiquidityConfig } from "./medium";
 
-export const AddLiquidityStandardConfig = forwardRef<
+export const SupplyStandardConfig = forwardRef<
   HTMLDivElement,
   StepProps
 >(({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {

@@ -22,6 +22,7 @@ export const ACTION_IDS_TO_ENUM_KEY: Record<string, ActionConfigs> = {
   "62bb7a58-6e0c-4b11-90ce-d416bd3dd10f": ActionConfigs.STAKE,
   "1fd39f5f-d1f0-40f8-afe1-58dd4eb815bf": ActionConfigs.LP,
   "dc5c5c0a-e594-4974-8a46-829a76a95fa7": ActionConfigs.HARVEST,
+  "b966c7fa-431e-47f9-83a4-fe0d7054a570": ActionConfigs.SUPPLY
 };
 
 /**
@@ -45,4 +46,8 @@ export const ACTION_IDS_TO_ICONS: Record<string, ImageSrc> = {
     dark: "/action-icons/swap-light.svg",
     light: "/action-icons/swap-dark.svg",
   },
+  "b966c7fa-431e-47f9-83a4-fe0d7054a570": {
+    dark: "/action-icons/supply-light.svg",
+    light: "/action-icons/supply-dark.svg"
+  }
 };

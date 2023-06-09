@@ -15,12 +15,12 @@ import { useConfigContext } from "../../../../../hooks/useConfigContext";
 import { useProtocols } from "../../../../../hooks/useProtocols";
 import { useTokens } from "../../../../../hooks/useTokens";
 import { ProtocolType, TokenTags } from "@prisma/client";
-import { useLogs } from "utilities/hooks/stores/logger";
+import { getSupplyInflowTokens } from "../../utils/get-inflow-token";
 
-export const useAddPerpBasketLiquidity = ({
+export const useSupply = ({
   step,
   triggerComparison,
-  protocolType = ProtocolType.LIQUIDITY,
+  protocolType = ProtocolType.LENDING,
 }: {
   step: Step;
   triggerComparison: () => void;
@@ -49,6 +49,8 @@ export const useAddPerpBasketLiquidity = ({
   /**
    * States to keep track of the chosen tokens and protocol
    */
+  const [collateralToken, setCollateralToken] = useState<YCToken | null>(null);
+
   const [basketDepositToken, setBasketDepositToken] = useState<YCToken | null>(
     null
   );
@@ -172,6 +174,16 @@ export const useAddPerpBasketLiquidity = ({
       );
     }
   }, [step.data.lp?.protocol.id]);
+
+  async function test() {
+    const token = YCClassifications.getInstance().tokens.find(
+      (token_) => token_.symbol == "USDC" && token_.network?.id == 42161
+    );
+    const res = await getSupplyInflowTokens(
+      protocol as YCProtocol,
+      token as YCToken
+    );
+  }
 
   // Return the functions & variables
   return {

@@ -67,7 +67,6 @@ const NetworkConfig = () => {
           menuProps={{
             modalBehaviour: "always",
             style: {
-              width: "50%",
               marginTop: "10px",
               paddingLeft: "1.2%",
               paddingRight: "1.2%",

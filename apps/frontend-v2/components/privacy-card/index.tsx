@@ -44,7 +44,7 @@ export const PrivacyCard = ({
         {...borderColors}
         borderWidth="2px"
         width="100%"
-        height="70vh"
+        height="100vh"
         className="opacity-50 "
         globalClassname={
           "hover:translate-y-[-2%] active:translate-y-[-1%] hover:shadow-lg hover:shadow-custom-textColor/30 cursor-pointer transition duration-200 ease-in-out" +

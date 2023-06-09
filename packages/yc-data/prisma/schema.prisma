@@ -15,11 +15,11 @@ model functionsv2 {
   inverse_function_id    String?
   dependancy_function_id String?
   address_id             String
-  arguments_ids          String[]
+  arguments_ids          String[]    @default([])
   callback               Boolean     @default(false)
-  actions_ids            String[]
-  inflows                String[]
-  outflows               String[]
+  actions_ids            String[]    @default([])
+  inflows                String[]    @default([])
+  outflows               String[]    @default([])
   ret_typeflag           Typeflags   @default(VALUE_VAR_FLAG)
   typeflag               Typeflags   @default(CALL_COMMAND_FLAG)
   signature              String

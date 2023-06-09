@@ -14,9 +14,9 @@ import {
 import { v4 as uuid } from "uuid";
 import { constants } from "ethers";
 import { ADD_LIQUIDITY_FUNCTION_ID } from "../../../constants";
-import { getLpClientId } from "../../../utils/get-lp-client-id";
 import { Typeflags } from "@prisma/client";
 import { BALANCEOF_FUNCTION_ID } from "components/steps/reguler/config/swap/consants.js";
+import { getProtocolClientId } from "components/steps/utils/get-client-id";
 
 export const completeUniV2LPConfig = (
   step: Step,
@@ -29,7 +29,7 @@ export const completeUniV2LPConfig = (
   if (!data.protocol || !data.tokenA || !data.tokenB)
     throw "Cannot Complete LP Config - Data Is Not Complete.";
 
-  const protocolLPClientID = getLpClientId(
+  const protocolLPClientID = getProtocolClientId(
     new YCProtocol(data.protocol, YCClassifications.getInstance())
   );
 

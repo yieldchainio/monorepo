@@ -10,8 +10,10 @@
     "prisma": "^4.14.1"
   },
   "devDependencies": {
+    "@prisma/client": "^4.15.0",
     "@types/uuid": "^9.0.1",
     "date-fns": "^2.29.3",
+    "prisma": "^4.15.0",
     "to-checksum-address": "^1.0.0"
   },
   "scripts": {

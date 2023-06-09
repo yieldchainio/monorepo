@@ -3,40 +3,29 @@
  */
 
 import { Step } from "utilities/classes/step";
+import { AddLiquidityData } from "../../../types";
 import {
-  LPClient,
-  PerpBasketLpData,
-  YCArgument,
+  DBArgument,
   YCClassifications,
   YCFunc,
   YCProtocol,
-  YCStep,
   YCToken,
 } from "@yc/yc-models";
-import { Contract, ethers, providers } from "ethers";
+import { v4 as uuid } from "uuid";
+import { constants } from "ethers";
 import { ADD_LIQUIDITY_FUNCTION_ID } from "../../../constants";
 import { getProtocolClientId } from "components/steps/utils/get-client-id";
-import DiamondAbi from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
 
-export const completePerpBasketLPConfig = async (
+export const completeUniV2LPConfig = (
   step: Step,
   context: YCClassifications
 ) => {
   // Get the LP data
-  const data = step.data?.perpBasketLp as PerpBasketLpData;
-
-  console.log(data);
+  const data = step.data?.lp as AddLiquidityData;
 
   // Assert that all data must be present
-  if (
-    !data.protocol ||
-    !data.basketDepositToken ||
-    !data.basketRepresentationToken
-  )
-    throw "Cannot Complete Perp Basket LP Config - Data Is Not Complete.";
-
-  if (!step.chainId)
-    throw "Cannot Complet Perp Basket LP Config - Chain ID not defined on step";
+  if (!data.protocol || !data.tokenA || !data.tokenB)
+    throw "Cannot Complete LP Config - Data Is Not Complete.";
 
   const protocolLPClientID = getProtocolClientId(
     new YCProtocol(data.protocol, YCClassifications.getInstance())
@@ -55,29 +44,31 @@ export const completePerpBasketLPConfig = async (
   );
 
   // The arguments that can be just set in custom args (simple values)
-  // First token is the deposit token user chose for the basket, second token
-  // is dismissed onchain
   const customArgs = [
-    data.basketDepositToken.address,
-    ethers.constants.AddressZero,
+    data.tokenA.address,
+    data.tokenB.address,
     protocolLPClientID,
   ];
 
-  const basketDepositTOkenBalanceArgInstance = (
+  const tokenABalanceArgInstance = (
     addLiquidityFunction.arguments[2].value as YCFunc
   ).arguments[0].value as YCFunc;
+  const tokenBBalanceArgInstance = (
+    addLiquidityFunction.arguments[3].value as YCFunc
+  ).arguments[0].value as YCFunc;
 
-  basketDepositTOkenBalanceArgInstance.arguments[0].setValue(
-    data.basketDepositToken.address
-  );
+  tokenABalanceArgInstance.arguments[0].setValue(data.tokenA.address);
+  tokenBBalanceArgInstance.arguments[0].setValue(data.tokenB.address);
 
   addLiquidityFunction.arguments[2].relatingToken = new YCToken(
-    data.basketDepositToken,
+    data.tokenA,
     YCClassifications.getInstance()
   );
 
-  // Again, it is unused
-  addLiquidityFunction.arguments[3] = YCArgument.emptyArgument();
+  addLiquidityFunction.arguments[3].relatingToken = new YCToken(
+    data.tokenA,
+    YCClassifications.getInstance()
+  );
 
   step.setFunction(addLiquidityFunction);
 
@@ -87,19 +78,25 @@ export const completePerpBasketLPConfig = async (
   step.customArguments = customArgs.concat(customArgs);
 
   // Create a new YC token as the inflow for the token
-  const lpToken: YCToken = new YCToken(data.basketRepresentationToken, context);
+  const lpToken: YCToken = new YCToken(
+    {
+      id: uuid(),
+      name: `${data.tokenA.symbol} + ${data.tokenB.symbol} ${data.protocol.name} LP`,
+      symbol: `${data.protocol.name}-LP`,
+      address: constants.AddressZero,
+      logo: `${data.protocol.logo}`,
+      decimals: 18,
+      chain_id: data.tokenA.chain_id,
+      tags: [],
+      parent_protocol: data.protocol.id,
+      markets_ids: []
+    },
+    context
+  );
 
   // Add it as an inflow
   step.clearInflows();
   step.addInflow(lpToken);
 
-  // Check if the client has a harvest selector on the LP adapter onchain,
-  // if it does, add some harvest function to this step's unlocked functions
-  const network = YCClassifications.getInstance().getNetwork(step.chainId);
-  if (!network || !network.diamondAddress || !network.jsonRpc)
-    throw "Cannot COmplete Lp Perp basket  - Network Undefined";
-
   return;
 };
-
-const addLPHarvestFunctionToStep = (step: Step) => {};

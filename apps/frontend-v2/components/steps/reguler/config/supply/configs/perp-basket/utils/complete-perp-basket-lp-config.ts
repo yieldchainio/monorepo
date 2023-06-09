@@ -16,8 +16,6 @@ import {
 import { Contract, ethers, providers } from "ethers";
 import { ADD_LIQUIDITY_FUNCTION_ID } from "../../../constants";
 import { getProtocolClientId } from "components/steps/utils/get-client-id";
-import DiamondAbi from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
-
 export const completePerpBasketLPConfig = async (
   step: Step,
   context: YCClassifications

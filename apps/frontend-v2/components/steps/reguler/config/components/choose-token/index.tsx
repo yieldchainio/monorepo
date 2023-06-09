@@ -41,9 +41,8 @@ export const ChooseToken = forwardRef(
     }, [tokens, tokens?.length]);
 
     useEffect(() => {
-      console.log("Running TOkens Lenght THing");
-      if (tokens?.length == 1) setChoice(tokens[0]);
-    }, [tokens?.length]);
+      if (tokensToUse?.length == 1) setChoice(tokensToUse[0]);
+    }, [tokensToUse?.length]);
 
     return (
       <InfoProvider

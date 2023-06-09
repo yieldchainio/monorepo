@@ -25,13 +25,18 @@ export const RepresentedTokens = ({
       style={style}
     >
       <WrappedText fontSize={fontSize}>{label}</WrappedText>
-      <TokensBundle
-        tokens={tokens}
-        maxImages={5}
-        tooltipEnabled={true}
-        imageProps={imageProps}
-        margin={margin}
-      />
+      {tokens.length ? (
+        <TokensBundle
+          tokens={tokens}
+          maxImages={5}
+          tooltipEnabled={true}
+          imageProps={imageProps}
+          margin={margin}
+          showTextIfSingle
+        />
+      ) : (
+        <WrappedText fontSize={14}>{}</WrappedText>
+      )}
     </div>
   );
 };

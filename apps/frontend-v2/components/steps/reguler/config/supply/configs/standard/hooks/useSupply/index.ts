@@ -86,6 +86,17 @@ export const useSupply = ({
       if (!protocol)
         throw logs.throwError("Cannot choose collateral without protocol");
 
+      // Add this to the step's outflows
+      step.clearFlows();
+      step.addOutflow(token);
+
+      step.data.supply = {
+        ...(step.data.supply || {}),
+        collateral: token.toJSON(),
+      } as SupplyData;
+
+      triggerComparison();
+
       const repToken = await getSupplyInflowTokens(protocol, token);
       step.data.supply = {
         ...(step.data.supply || {}),
@@ -93,37 +104,19 @@ export const useSupply = ({
         representationToken: repToken.toJSON(),
       } as SupplyData;
 
-      // Add this to the step's outflows
-      step.clearFlows();
-
-      step.addOutflow(token);
       step.addInflow(repToken);
 
       triggerComparison();
     },
-    [JSON.stringify(step.toJSON({ onlyCompleted: false }))]
+    [JSON.stringify(step.toJSON({ onlyCompleted: false })), protocol?.id]
   );
 
   const chooseProtocol = useCallback(
     (protocol: YCProtocol) => {
-      const token = YCClassifications.getInstance().tokens.find(
-        (_token) =>
-          _token.tags.includes(TokenTags.PERP_BASKET_LP) &&
-          _token.parentProtocol?.id == protocol?.id
-      );
-
-      if (token) {
-        step.data.perpBasketLp = {
-          ...(step.data?.perpBasketLp || {}),
-          protocol: protocol.toJSON(),
-          basketRepresentationToken: token?.toJSON(),
-        };
-      }
-
-      step.data.lp = {
-        ...(step.data.lp || {}),
+      step.data.supply = {
+        ...(step.data.supply || {}),
         protocol: protocol.toJSON(),
-      };
+      } as SupplyData;
 
       step.protocol = protocol;
 
@@ -137,23 +130,12 @@ export const useSupply = ({
    */
   useEffect(() => {
     // Shorthand for the data
-    const data = step.data.perpBasketLp;
+    const data = step.data.supply;
     const protocol = data?.protocol || step.data.lp?.protocol;
-    const repToken =
-      data?.basketRepresentationToken ||
-      YCClassifications.getInstance()
-        .tokens.find(
-          (_token) =>
-            _token.tags.includes(TokenTags.PERP_BASKET_LP) &&
-            _token.parentProtocol?.id == protocol?.id
-        )
-        ?.toJSON();
+    const repToken = data?.representationToken;
 
-    // If our from token is not init yet
-    // And there is a persisted DBtoken in the data,
-    // Set our token to it
-    if (data?.basketDepositToken)
-      setBasketDepositToken(new YCToken(data.basketDepositToken, context));
+    if (data?.collateral)
+      setCollateralToken(new YCToken(data.collateral, context));
 
     if (protocol) {
       const newProtocol = new YCProtocol(protocol, context);
@@ -165,9 +147,9 @@ export const useSupply = ({
       setRepresentationToken(new YCToken(repToken, context));
     }
   }, [
-    step.data.perpBasketLp?.protocol?.id,
-    step.data.perpBasketLp?.basketDepositToken?.id,
-    step.data.perpBasketLp?.basketRepresentationToken?.id,
+    step.data.supply?.protocol,
+    step.data.supply?.collateral?.id,
+    step.data.supply?.representationToken?.id,
   ]);
 
   // WE watch the standard LP stuff to see if theres any change (initial choices)
@@ -179,18 +161,6 @@ export const useSupply = ({
     }
   }, [step.data.lp?.protocol.id]);
 
-  async function test() {
-    const token = YCClassifications.getInstance().tokens.find(
-      (token_) => token_.symbol == "USDC" && token_.network?.id == 42161
-    );
-    console.log("Token", token);
-    console.log("Protocok", protocol);
-    const res = await getSupplyInflowTokens(
-      protocol as YCProtocol,
-      token as YCToken
-    );
-  }
-
   // Return the functions & variables
   return {
     chooseProtocol,
@@ -198,10 +168,9 @@ export const useSupply = ({
     protocol,
     network,
     availableTokens,
-    basketDepositToken,
+    collateralToken,
     representationToken,
-    allBasketTokens,
-    chooseBasketDepositToken,
-    test,
+    availableMarkets,
+    chooseCollateral,
   };
 };

@@ -67,6 +67,5 @@ async function getAaveV3SupplyInflow(
       YCClassifications.getInstance()
     );
 
-  console.log("Token Got", token);
   return token;
 }

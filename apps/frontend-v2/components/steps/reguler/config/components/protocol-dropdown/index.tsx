@@ -102,9 +102,9 @@ export const ProtocolsDropdown = forwardRef(
             className: "overflow-y-scroll scrollbar-hide",
           }}
           autoChoice={false}
-          choiceHandler={(choice: DropdownOption<YCProtocol>) =>
-            setChoice(choice.data)
-          }
+          choiceHandler={(choice: DropdownOption<YCProtocol>) => {
+            setChoice(choice.data);
+          }}
           {...dropdownProps}
         ></Dropdown>
       </InfoProvider>

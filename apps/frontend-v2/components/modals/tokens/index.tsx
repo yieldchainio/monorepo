@@ -8,7 +8,7 @@ import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { TokensModalProps } from "./types";
 import WrappedText from "components/wrappers/text";
 import { YCNetwork, YCToken } from "@yc/yc-models";
-import { forwardRef, useCallback, useMemo, useState } from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useState } from "react";
 import WrappedInput from "components/wrappers/input";
 import WrappedImage from "components/wrappers/image";
 import { useFilters } from "utilities/hooks/general/useFilters";
@@ -113,6 +113,10 @@ export const TokensModal = forwardRef<HTMLDivElement, TokensModalProps>(
       items: availableTokens,
       filters: [filterByNetwork, filterByInput],
     });
+
+    useEffect(() => {
+      if (tokensToDisplay.length == 1) handleChoice(tokensToDisplay[0]);
+    }, [tokensToDisplay.length]);
 
     return (
       <div

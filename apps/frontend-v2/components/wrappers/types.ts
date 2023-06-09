@@ -3,7 +3,7 @@ import { ChangeEvent, FormEvent } from "react";
 import { Dimensions } from "utilities/classes/step/types";
 
 export interface TextProps {
-  children: string | undefined | null;
+  children?: string | undefined | null | never[];
   fontSize?: number;
   fontStyle?: string;
   fontColor?: string;

@@ -27,7 +27,10 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
     chooseProtocol,
     network,
     availableTokens,
-    test,
+    chooseCollateral,
+    collateralToken,
+    availableMarkets,
+    representationToken,
   } = useSupply({
     step,
     triggerComparison,
@@ -44,6 +47,7 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
   //   amount: protocol ? 2 : 1,
   // });
 
+
   /**
    * Get global context
    */
@@ -52,25 +56,31 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
   // Return the JSX
   return (
     <BaseActionConfig
-      className="flex-col px-0 py-2.5 gap-8 items-start"
+      className="flex-col px-0 py-2.5 gap-7 items-start"
       style={style}
       ref={ref}
       {...props}
       canvasID={canvasID}
       width="327px"
-      height="428px"
+      height="468px"
       step={step}
       triggerComparison={triggerComparison}
       handleComplete={() => completeUniV2LPConfig(step, context)}
-      canContinue={true}
+      canContinue={
+        !protocol
+          ? "Choose A Protocol"
+          : !collateralToken
+          ? "Choose Collateral"
+          : true
+      }
     >
       <WrappedText
         fontSize={12}
-        className=" w-full whitespace-pre-wrap text-opacity-40 mt-[-1.5rem]"
+        className=" w-full whitespace-pre-wrap text-opacity-40 mt-[-1.3rem]"
       >
         {`Supply Collateral To A Lending Market`}
       </WrappedText>
-      <div className="w-full flex flex-col gap-1" onClick={() => test()}>
+      <div className="w-full flex flex-col gap-1">
         <WrappedText className="ml-0.5">Protocol</WrappedText>
         <ProtocolsDropdown
           setChoice={chooseProtocol}
@@ -84,9 +94,8 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
         <ChooseToken
           tokens={availableTokens}
           network={network}
-          setChoice={() => null}
-          choice={null}
-          label="Token A"
+          setChoice={chooseCollateral}
+          choice={collateralToken}
           style={{
             width: "100%",
           }}
@@ -95,11 +104,14 @@ export const MediumStandardAddLiquidityConfig = forwardRef<
           }}
         />
       </div>
-      <div className="w-[75%]">
-        <RepresentedTokens tokens={[]} label="Receive:" />
-      </div>
-      <div className="w-[75%]">
-        <RepresentedTokens tokens={[]} label="Markets:" />
+
+      <div className="w-[75%] flex flex-col gap-4">
+        <RepresentedTokens
+          tokens={representationToken ? [representationToken] : []}
+          label="Receive:"
+        />
+
+        <RepresentedTokens tokens={availableMarkets} label="Markets:" />
       </div>
     </BaseActionConfig>
   );

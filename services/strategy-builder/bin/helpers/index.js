@@ -17,8 +17,8 @@ import { encodeYCSteps } from "./encode-yc-steps/index.js";
 import { batchUpdateTokenPercentages } from "./update-token-percentages/index.js";
 import { ethers } from "ethers";
 import DiamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
-import VaultAbi from "@yc/yc-models/src/ABIs/strategy.json" assert { type: "json" };
 import { buildTriggers } from "./build-triggers/index.js";
+import { SWAP_FUNCTION_ID, } from "../utils/build-swap/constants.js";
 export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisibility, depositTokenID, chainID) {
     const ycContext = YCClassifications.getInstance();
     if (!ycContext.initiallized)
@@ -37,7 +37,7 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
     const uprootInstance = createUprootSteps(seedInstance, treeInstance, depositToken);
     console.log("Built Uproot...");
     const triggers = buildTriggers(treeInstance);
-    console.log("Built triggers...", triggers);
+    console.log("Built triggers...");
     const seedValidation = validateSteps(seedInstance, ycContext);
     if (!seedValidation.status)
         return { status: false, reason: seedValidation.reason };
@@ -57,14 +57,14 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
         [uprootInstance, EncodingContext.UPROOT],
     ]);
     console.log("Encoded Trees...");
+    console.log("Uproot Swaps:", uprootInstance.map((step) => step.function?.id == SWAP_FUNCTION_ID
+        ? [step, stepsToEncodedFunctions.get(step.id)]
+        : null));
     const onchainSeedArr = encodeYCSteps(buildOnchainStepsList(seedInstance, stepsToEncodedFunctions));
-    console.log("Created Seed Linked-list...");
     const onchainTreeArr = encodeYCSteps(buildOnchainStepsList(treeInstance, stepsToEncodedFunctions));
-    console.log("Created Tree Linked-list...");
     const onchainUprootArr = encodeYCSteps(buildOnchainStepsList(uprootInstance, stepsToEncodedFunctions));
-    console.log("Created Uproot Linked-list...");
+    console.log("Created Linked-Lists Of Steps...");
     const ycFactoryInstance = new ethers.Contract(network.diamondAddress, DiamondABI, new ethers.JsonRpcProvider(network.jsonRpc));
-    const vaultContract = new ethers.Contract(network.diamondAddress, VaultAbi, new ethers.JsonRpcProvider(network.jsonRpc));
     const vaultCreationArgs = {
         seedSteps: onchainSeedArr,
         treeSteps: onchainTreeArr,
@@ -75,19 +75,6 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
         isPublic: vaultVisibility,
     };
     const deploymentCalldata = await ycFactoryInstance.createVault.populateTransaction(...Object.values(vaultCreationArgs));
-    // console.log(
-    //   "Constructor Args Data",
-    //   vaultContract.interface.encodeDeploy([
-    //     onchainSeedArr,
-    //     onchainTreeArr,
-    //     onchainUprootArr,
-    //     approvalPairs,
-    //     depositToken.address,
-    //     vaultVisibility,
-    //     ZeroAddress,
-    //   ])
-    // );
-    console.log("Onchain Uproot Arr", onchainUprootArr);
     return {
         status: true,
         deploymentCalldata: deploymentCalldata.data,

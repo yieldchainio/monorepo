@@ -20,6 +20,8 @@ export function reversifyStepFunction(step: YCStep) {
 
     // Left as is :)
     step.function = step.function;
+    step.outflows = step.function?.outflows || [];
+    step.inflows = step.function?.inflows || [];
   } else {
     const newArgs: YCArgument[] | null =
       step.function &&
@@ -31,10 +33,23 @@ export function reversifyStepFunction(step: YCStep) {
 
     step.function = reverseFunction;
     if (newArgs) step.function.setArguments(newArgs);
+    reversifyFlows(step);
   }
 
   step.action = step.function?.actions[0] || step.action;
+}
 
-  step.outflows = step.function?.outflows || [];
-  step.inflows = step.function?.inflows || [];
+function reversifyFlows(step: YCStep) {
+  const functionOutflows = step.function?.outflows || [];
+  const functionInflows = step.function?.inflows || [];
+  const stepOutflows = [...step.outflows];
+  const stepInflows = [...step.inflows];
+
+  if (functionOutflows.length == 0) {
+    step.outflows = stepInflows;
+  }
+
+  if (functionInflows.length == 0) {
+    step.inflows = stepOutflows;
+  }
 }

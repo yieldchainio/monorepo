@@ -13,6 +13,8 @@ export function reversifyStepFunction(step) {
             console.error("Cannot Build Uproot Strategy - Got a step w/o counter function, nor empty outflows whilst reverisfying. Step: ", step);
         // Left as is :)
         step.function = step.function;
+        step.outflows = step.function?.outflows || [];
+        step.inflows = step.function?.inflows || [];
     }
     else {
         const newArgs = step.function &&
@@ -22,9 +24,20 @@ export function reversifyStepFunction(step) {
         step.function = reverseFunction;
         if (newArgs)
             step.function.setArguments(newArgs);
+        reversifyFlows(step);
     }
     step.action = step.function?.actions[0] || step.action;
-    step.outflows = step.function?.outflows || [];
-    step.inflows = step.function?.inflows || [];
+}
+function reversifyFlows(step) {
+    const functionOutflows = step.function?.outflows || [];
+    const functionInflows = step.function?.inflows || [];
+    const stepOutflows = [...step.outflows];
+    const stepInflows = [...step.inflows];
+    if (functionOutflows.length == 0) {
+        step.outflows = stepInflows;
+    }
+    if (functionInflows.length == 0) {
+        step.inflows = stepOutflows;
+    }
 }
 //# sourceMappingURL=reversify-step-function.js.map

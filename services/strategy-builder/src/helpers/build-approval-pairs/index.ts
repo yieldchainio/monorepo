@@ -15,6 +15,7 @@ import {
   address,
   ApprovalPairs,
 } from "@yc/yc-models";
+import { tryGetUnderlyingContract } from "@yc/yc-models";
 import { ethers } from "ethers";
 
 export function buildApprovalPairs(
@@ -54,7 +55,10 @@ function getTreeApprovalPairs(tree: YCStep) {
 
     for (const contract of relatedContracts)
       for (const token of relatedTokens)
-        pairs.push([token.address as address, contract.address as address]);
+        pairs.push([
+          token.address as address,
+          tryGetUnderlyingContract(step.toJSON(), contract),
+        ]);
   });
 
   return pairs;

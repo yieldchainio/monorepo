@@ -30,6 +30,10 @@ import { ZeroAddress, ethers } from "ethers";
 import DiamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
 import VaultAbi from "@yc/yc-models/src/ABIs/strategy.json" assert { type: "json" };
 import { buildTriggers } from "./build-triggers/index.js";
+import {
+  REVERSE_SWAP_FUNCTION_ID,
+  SWAP_FUNCTION_ID,
+} from "../utils/build-swap/constants.js";
 
 export async function createDeployableVaultInput(
   seedSteps: JSONStep,
@@ -67,7 +71,7 @@ export async function createDeployableVaultInput(
 
   const triggers = buildTriggers(treeInstance);
 
-  console.log("Built triggers...", triggers);
+  console.log("Built triggers...");
 
   const seedValidation = validateSteps(seedInstance, ycContext);
   if (!seedValidation.status)
@@ -101,34 +105,32 @@ export async function createDeployableVaultInput(
   ]);
 
   console.log("Encoded Trees...");
+  console.log(
+    "Uproot Swaps:",
+    uprootInstance.map((step) =>
+      step.function?.id == SWAP_FUNCTION_ID
+        ? [step, stepsToEncodedFunctions.get(step.id)]
+        : null
+    )
+  );
 
   const onchainSeedArr: bytes[] = encodeYCSteps(
     buildOnchainStepsList(seedInstance, stepsToEncodedFunctions)
   );
 
-  console.log("Created Seed Linked-list...");
-
   const onchainTreeArr = encodeYCSteps(
     buildOnchainStepsList(treeInstance, stepsToEncodedFunctions)
   );
-
-  console.log("Created Tree Linked-list...");
 
   const onchainUprootArr = encodeYCSteps(
     buildOnchainStepsList(uprootInstance, stepsToEncodedFunctions)
   );
 
-  console.log("Created Uproot Linked-list...");
+  console.log("Created Linked-Lists Of Steps...");
 
   const ycFactoryInstance = new ethers.Contract(
     network.diamondAddress,
     DiamondABI,
-    new ethers.JsonRpcProvider(network.jsonRpc as string)
-  );
-
-  const vaultContract = new ethers.Contract(
-    network.diamondAddress,
-    VaultAbi,
     new ethers.JsonRpcProvider(network.jsonRpc as string)
   );
 
@@ -146,21 +148,6 @@ export async function createDeployableVaultInput(
     await ycFactoryInstance.createVault.populateTransaction(
       ...Object.values(vaultCreationArgs)
     );
-
-  // console.log(
-  //   "Constructor Args Data",
-  //   vaultContract.interface.encodeDeploy([
-  //     onchainSeedArr,
-  //     onchainTreeArr,
-  //     onchainUprootArr,
-  //     approvalPairs,
-  //     depositToken.address,
-  //     vaultVisibility,
-  //     ZeroAddress,
-  //   ])
-  // );
-
-  console.log("Onchain Uproot Arr", onchainUprootArr);
 
   return {
     status: true,

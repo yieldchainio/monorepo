@@ -17,13 +17,26 @@ export function removeUnnecessarySwaps(uprootTree: YCStep) {
     if (step.function?.id !== REVERSE_SWAP_FUNCTION_ID) return;
 
     if (
-      step.find((childInBranch) =>
-        childInBranch.outflows
-          .concat(childInBranch.function?.outflows || [])
-          .some((token) => token.address == step.customArguments[1])
+      step.find(
+        (childInBranch) =>
+          childInBranch.id !== step.id &&
+          childInBranch.outflows
+            .concat(childInBranch.function?.outflows || [])
+            .some((token) => token.address == step.customArguments[1])
       )
-    )
+    ) {
+      console.log(
+        "Found Step Ser",
+        step.find(
+          (childInBranch) =>
+            childInBranch.id !== step.id &&
+            childInBranch.outflows
+              .concat(childInBranch.function?.outflows || [])
+              .some((token) => token.address == step.customArguments[1])
+        )
+      );
       return;
+    }
 
     const indexAsSibling = step?.parent?.children.findIndex(
       (sibling) => sibling.id == step.id

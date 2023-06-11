@@ -6,6 +6,7 @@
  * @param depositToken - Deposit token of the vault
  * @return approvalPairs - 2D array of addresses [[tokenAddress, addressToApprove]]
  */
+import { tryGetUnderlyingContract } from "@yc/yc-models";
 import { ethers } from "ethers";
 export function buildApprovalPairs(seedSteps, treeSteps, uprootSteps, depositToken) {
     const approvalPairs = [];
@@ -34,7 +35,10 @@ function getTreeApprovalPairs(tree) {
             : [];
         for (const contract of relatedContracts)
             for (const token of relatedTokens)
-                pairs.push([token.address, contract.address]);
+                pairs.push([
+                    token.address,
+                    tryGetUnderlyingContract(step.toJSON(), contract),
+                ]);
     });
     return pairs;
 }

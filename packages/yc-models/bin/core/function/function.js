@@ -1,9 +1,10 @@
 import { YCClassifications } from "../context/context.js";
-import { YCContract } from "../address/address.js";
 import { YCArgument } from "../argument/argument.js";
 import { BaseClass } from "../base/index.js";
 import { getFunctionFlags } from "../../helpers/builder/get-command-flags.js";
+import { ZeroAddress } from "ethers";
 import { v4 as uuid } from "uuid";
+import { tryGetUnderlyingContract } from "../../helpers/builder/try-get-underlying-contract/index.js";
 class YCFunc extends BaseClass {
     // ====================
     //    STATIC FIELDS
@@ -154,9 +155,12 @@ class YCFunc extends BaseClass {
                 network?.id +
                 " Function Name: " +
                 this.name);
-        const address = this.address.id == YCContract.diamondIdentifier
-            ? network.diamondAddress
-            : this.address.address;
+        const address = tryGetUnderlyingContract(step, this.address);
+        console.log("Encoding", this.name, "Prev Address ID & Addr:", this.address.id, this.address.address, "New Address:", address);
+        if (!address ||
+            (address == ZeroAddress && this.address.address != ZeroAddress)) {
+            throw "Cannot Encode Function - Received undefined or zero address (when shouldnt have)";
+        }
         // Create the struct
         const struct = {
             // The target address (our address, tells the onchain interpreter where to call the function)

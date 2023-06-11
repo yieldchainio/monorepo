@@ -124,7 +124,6 @@ class YCArgument extends BaseClass {
             if (!customArgs.length)
                 throw ("Cannot Encode Argument As YC Command - Expected Custom Value, But Got None. ID: " +
                     this.id);
-            console.log("Gonna use custom arg...", customArgs);
             try {
                 command += remove0xPrefix(AbiCoder.defaultAbiCoder().encode([this.solidityType], [customArgs.shift()]));
             }

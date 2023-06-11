@@ -6,6 +6,7 @@ import {
   FunctionCallStruct,
   EncodingContext,
   TokenPercentage,
+  address,
 } from "../../types/index.js";
 import { Typeflags } from "@prisma/client";
 import { BaseClass } from "../base/index.js";
@@ -13,8 +14,9 @@ import { YCAction } from "../action/action.js";
 import { YCToken } from "../token/token.js";
 import { getFunctionFlags } from "../../helpers/builder/get-command-flags.js";
 import { bytes } from "../../types/index.js";
-import { uuidV4 } from "ethers";
+import { ZeroAddress, uuidV4 } from "ethers";
 import { v4 as uuid } from "uuid";
+import { tryGetUnderlyingContract } from "../../helpers/builder/try-get-underlying-contract/index.js";
 
 export class YCFunc extends BaseClass {
   // ====================
@@ -35,9 +37,9 @@ export class YCFunc extends BaseClass {
   readonly actions: YCAction[] = [];
   readonly isCallback: boolean;
   readonly counterFunction: YCFunc | null;
-  readonly dependencyFunction: YCFunc | null;
-  readonly outflows: YCToken[] = [];
-  readonly inflows: YCToken[] = [];
+  dependencyFunction: YCFunc | null;
+  outflows: YCToken[] = [];
+  inflows: YCToken[] = [];
   readonly signature: string;
   readonly typeflag: Typeflags;
   readonly retTypeflag: Typeflags;
@@ -226,10 +228,15 @@ export class YCFunc extends BaseClass {
         " Function Name: " +
         this.name
       );
-    const address =
-      this.address.id == YCContract.diamondIdentifier
-        ? network.diamondAddress
-        : this.address.address;
+
+    const address = tryGetUnderlyingContract(step, this.address);
+
+    if (
+      !address ||
+      (address == ZeroAddress && this.address.address != ZeroAddress)
+    ) {
+      throw "Cannot Encode Function - Received undefined or zero address (when shouldnt have)";
+    }
 
     // Create the struct
     const struct: FunctionCallStruct = {

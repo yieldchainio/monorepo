@@ -6,14 +6,12 @@ import { YCNetwork } from "../network/network.js";
 import { YCProtocol } from "../protocol/protocol.js";
 import { BaseClass } from "../base/index.js";
 export declare class YCContract extends BaseClass {
+    #private;
     /**
      * ID of this contract (uuid)
      */
     readonly id: string;
-    /**
-     * Address of this contract (e.g 0x0...00)
-     */
-    readonly address: string;
+    get address(): string;
     /**
      * The ABI of this contract (Fragments of all functions, events, etc)
      */

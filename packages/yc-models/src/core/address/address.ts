@@ -18,7 +18,10 @@ export class YCContract extends BaseClass {
   /**
    * Address of this contract (e.g 0x0...00)
    */
-  readonly address: string;
+  #address: string;
+  get address() {
+    return this.#address;
+  }
 
   /**
    * The ABI of this contract (Fragments of all functions, events, etc)
@@ -33,7 +36,7 @@ export class YCContract extends BaseClass {
   /**
    * The protocol this contract belongs to (e.g, Uniswap DEX contract belongs to Uniswap)
    */
-  readonly protocol: YCProtocol | null = null;
+  protocol: YCProtocol | null = null;
 
   /**
    * All of the classified functions under this contract
@@ -72,7 +75,7 @@ export class YCContract extends BaseClass {
       (fragment) => Object.keys(fragment).length > 0
     );
     this.network = _context.getNetwork(_address.chain_id);
-    this.address =
+    this.#address =
       _address.id == YCContract.diamondIdentifier
         ? this.network?.diamondAddress || ZeroAddress
         : _address.address;

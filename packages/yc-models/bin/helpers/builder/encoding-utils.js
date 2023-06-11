@@ -25,7 +25,6 @@ export async function interpretYCCommand(arg, type, contract) {
     // We slice the first 2 pointers
     const res = await contract.runViewFunction(arg);
     const sliced = "0x" + res.slice(130, res.length);
-    console.log("Result From View Func", sliced);
     return AbiCoder.defaultAbiCoder().decode([type], sliced)[0];
 }
 //# sourceMappingURL=encoding-utils.js.map

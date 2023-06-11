@@ -186,9 +186,7 @@ export class YCToken extends BaseClass {
    * @returns parsed value
    */
   getParsed = (value: number | bigint): bigint => {
-    console.log("Value Got In get parsed", value, "typeof", typeof value);
     if (typeof value == "number") {
-      console.log("Value returning", this.parseDecimals(value));
       return this.parseDecimals(value);
     }
     return value;

@@ -11,7 +11,10 @@ class YCContract extends BaseClass {
     /**
      * Address of this contract (e.g 0x0...00)
      */
-    address;
+    #address;
+    get address() {
+        return this.#address;
+    }
     /**
      * The ABI of this contract (Fragments of all functions, events, etc)
      */
@@ -53,7 +56,7 @@ class YCContract extends BaseClass {
         this.id = _address.id;
         this.abi = _address.abi?.filter((fragment) => Object.keys(fragment).length > 0);
         this.network = _context.getNetwork(_address.chain_id);
-        this.address =
+        this.#address =
             _address.id == YCContract.diamondIdentifier
                 ? this.network?.diamondAddress || ZeroAddress
                 : _address.address;

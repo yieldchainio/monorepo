@@ -427,8 +427,6 @@ export class YCStrategy extends BaseClass {
 
     const bigintGas = BigInt(requiredGasPrepay[0] * 2n);
 
-    console.log("typeof bigint gas", typeof bigintGas);
-
     // Populate a withdrawal
     const withdrawTxn = await this.populateWithdrawal(
       BigInt(this.depositToken.getParsed(amount)),
@@ -437,8 +435,6 @@ export class YCStrategy extends BaseClass {
         value: BigInt(requiredGasPrepay[0] * 2n),
       }
     );
-
-    console.log("Populated withdraw");
 
     // Sign the transaction from the population
     return await this.signTransaction(signer, withdrawTxn);

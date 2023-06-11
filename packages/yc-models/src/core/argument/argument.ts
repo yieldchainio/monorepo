@@ -157,7 +157,6 @@ export class YCArgument extends BaseClass {
           this.id
         );
 
-      console.log("Gonna use custom arg...", customArgs);
       try {
         command += remove0xPrefix(
           AbiCoder.defaultAbiCoder().encode(

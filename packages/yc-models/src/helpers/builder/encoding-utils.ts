@@ -43,6 +43,5 @@ export async function interpretYCCommand<T>(
   const res: bytes = await contract.runViewFunction(arg);
   const sliced = "0x" + res.slice(130, res.length);
 
-  console.log("Result From View Func", sliced);
   return AbiCoder.defaultAbiCoder().decode([type], sliced)[0] as T;
 }

@@ -77,6 +77,7 @@ export class Step extends Node<Step> implements IStep<Step> {
         this.unlockedFunctions[unlockedFunctionIdx] = {
           func: this.unlockedFunctions[unlockedFunctionIdx].func,
           used: false,
+          customArgs: this.unlockedFunctions[unlockedFunctionIdx].customArgs,
         };
 
       // We return false to filter it out and remove it
@@ -186,6 +187,21 @@ export class Step extends Node<Step> implements IStep<Step> {
    */
   setFunction(func: YCFunc | null) {
     this.function = func;
+    if (func) {
+      const externallyUnlocked = this.parent?.unlockedFunctions.find(
+        (_func) => _func.func.id == func.id
+      );
+
+      const requiredCustomFields = getCustomFields(func);
+
+      if (
+        externallyUnlocked &&
+        externallyUnlocked.customArgs.length >= requiredCustomFields.length
+      ) {
+        this.customArguments = externallyUnlocked.customArgs;
+        return;
+      }
+    }
     this.customArguments = func ? getCustomFields(func) : [];
   }
 
@@ -596,6 +612,7 @@ export class Step extends Node<Step> implements IStep<Step> {
   unlockedFunctions: {
     func: YCFunc;
     used: boolean;
+    customArgs: any[];
   }[] = [];
 
   /**
@@ -607,6 +624,8 @@ export class Step extends Node<Step> implements IStep<Step> {
    * Optional custom arguments for the used function
    */
   customArguments: Array<any | null> = [];
+
+  presetCustomArgsIndices: number[] = [];
 
   // -----------
   // Trigger Step Variables
@@ -681,6 +700,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       : this.tokenPercentages;
 
     this.retainCustomArgsRef = config?.retainCustomArgsRef || false;
+    this.presetCustomArgsIndices = config?.presetCustomArgsIndices || [];
 
     /**
      * Construct reguler step variables
@@ -744,6 +764,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       ),
       size: iStepConfigs?.size,
       retainCustomArgsRef: step.retainCustomArgsRef,
+      presetCustomArgsIndices: [],
       ...additionalConfigs,
     };
 
@@ -781,15 +802,16 @@ export class Step extends Node<Step> implements IStep<Step> {
       action: step.action ? context.getAction(step.action) : null,
       function: step.function ? new YCFunc(step.function, context) : null,
       unlockedFunctions: step.unlockedFunctions
-        ? step.unlockedFunctions.flatMap(({ funcID, used }) => {
+        ? step.unlockedFunctions.flatMap(({ funcID, used, customArgs }) => {
             const func = context.getFunction(funcID);
-            return func ? [{ func, used }] : [];
+            return func ? [{ func, used, customArgs }] : [];
           })
         : [],
 
       protocol: step.protocol ? context.getProtocol(step.protocol) : null,
       customArguments: step?.customArguments || [],
       retainCustomArgsRef: step?.retainCustomArgsRef,
+      presetCustomArgsIndices: step?.presetCustomArgsIndices || [],
     };
     const resStep = new Step(config);
     for (const child of resStep.children) child.parent = resStep;
@@ -962,6 +984,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       unlockedFunctions: this.unlockedFunctions.map((func) => ({
         funcID: func.func.id,
         used: func.used,
+        customArgs: func.customArgs,
       })),
       retainCustomArgsRef: this.retainCustomArgsRef,
       state: this.state,
@@ -981,6 +1004,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       tokenPercentages: Array.from(this.tokenPercentages.entries()),
       customArguments: this.customArguments,
       chainId: this.chainId || undefined,
+      presetCustomArgsIndices: this.presetCustomArgsIndices,
     };
   };
 

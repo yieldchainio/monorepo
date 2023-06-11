@@ -53,17 +53,26 @@ export const BaseActionConfig = forwardRef<
     const requiresCustomInputs = useMemo(() => {
       if (step.customArguments.length > 0) {
         if (step.function?.customArgumentsLength == 0) return false;
-        return true;
+        if (
+          (step.function?.customArgumentsLength || 0) -
+            step.presetCustomArgsIndices.length >
+          0
+        )
+          return true;
       }
       return false;
     }, [step.function?.id]);
 
+    console.log("Step Ser", step);
+
     const canComplete = useMemo(() => {
       if (canContinue == "string") return canContinue;
 
-      if (step.customArguments.some((arg) => arg == null))
+      if (step.customArguments.some((arg, i) => arg == null))
         return "Complete Custom Inputs To Continue";
-      return true;
+
+      if (step.customArguments.length == step.presetCustomArgsIndices.length)
+        return true;
     }, [canContinue, step.customArguments]);
 
     // Return JSX

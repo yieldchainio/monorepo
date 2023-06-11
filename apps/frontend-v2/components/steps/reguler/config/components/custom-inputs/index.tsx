@@ -34,8 +34,12 @@ export const CustomArgumentInputs = ({
       </div>
       <div className="w-full h-full flex flex-col gap-3">
         {step.function?.arguments
-          .filter((arg) => arg.isCustom)
+          .filter(
+            (arg, idx) =>
+              arg.isCustom && !step.presetCustomArgsIndices.includes(idx)
+          )
           .map((arg, argIdx) => {
+            console.log("Step", step.presetCustomArgsIndices);
             return (
               <div className="flex flex-col gap-0 items-start">
                 <WrappedText>{arg.name}</WrappedText>

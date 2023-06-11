@@ -111,6 +111,7 @@ export interface IStepReguler<T extends IStep<T>> {
   unlockedFunctions?: {
     func: YCFunc;
     used: boolean;
+    customArgs: any[];
   }[];
   customArguments?: Array<string | null>;
 }
@@ -141,6 +142,7 @@ export interface IStep<T extends IStep<T>>
   children?: T[];
   chainId?: number | null;
   retainCustomArgsRef?: boolean;
+  presetCustomArgsIndices?: number[];
 }
 
 export interface JSONFrontendStep {
@@ -157,7 +159,8 @@ export interface JSONFrontendStep {
   writeable?: boolean;
   tokenPercentages?: Array<[string, TokenPercentage]>;
   chainId?: number;
-  retainCustomArgsRef?: boolean
+  retainCustomArgsRef?: boolean;
+  presetCustomArgsIndices?: number[];
 
   // ==REGULER== //
   protocol?: string;
@@ -166,6 +169,7 @@ export interface JSONFrontendStep {
   unlockedFunctions?: {
     funcID: string;
     used: boolean;
+    customArgs: any[];
   }[];
   customArguments: Array<string | null>;
   actionConfig?: ActionConfigs | null;
@@ -177,7 +181,6 @@ export interface JSONFrontendStep {
   data?: any | null;
   triggerVisuals?: React.ReactNode;
   triggerConfig?: TriggerConfigs | null;
-
 }
 
 /**

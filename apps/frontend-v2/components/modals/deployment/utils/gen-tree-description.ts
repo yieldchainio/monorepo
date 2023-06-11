@@ -65,9 +65,9 @@ const ACTION_IDS_TO_DESCRIPTORS: Record<string, (step: Step) => string> = {
     )} Position On ${step.protocol?.name}. `,
 
   "62bb7a58-6e0c-4b11-90ce-d416bd3dd10f": (step: Step) =>
-    `Stake ${stringifyFlows(step.outflows)} On ${
-      step.protocol?.name
-    }, Get ${stringifyFlows(step.inflows)}. `,
+    `Stake ${stringifyFlows(step.outflows)} On ${step.protocol?.name}${
+      step.inflows.length == 0 ? "." : `, Get ${stringifyFlows(step.inflows)}`
+    } `,
 
   "1fd39f5f-d1f0-40f8-afe1-58dd4eb815bf": (step: Step) =>
     `LP ${stringifyFlows(step.outflows)} On ${

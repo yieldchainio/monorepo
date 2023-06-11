@@ -76,7 +76,7 @@ const StepsConfig = () => {
         const used = rootStep.children.some(
           (child) => child.function?.id === func.id
         );
-        rootStep.unlockedFunctions.push({ func, used });
+        rootStep.unlockedFunctions.push({ func, used, customArgs: [] });
       }
     });
   }, [rootStep.children?.length]);

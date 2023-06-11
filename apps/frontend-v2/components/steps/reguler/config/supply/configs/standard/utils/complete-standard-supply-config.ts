@@ -40,21 +40,15 @@ export const completeStandardSupply = (
   if (!supplyFunction)
     throw "Cannot Complete Lending Config - Supply Function Is undefined";
 
-  const adapterContract = YCClassifications.getInstance().addresses.find(
-    (address) =>
-      address.protocol?.id == data.protocol.id &&
-      address.id.includes("LENDINGADAPTER")
-  );
-
-  if (!adapterContract)
-    throw "Cannot Complete Lending Config - Did Not Find Adapter Contract";
-
   const newSupplyFunction = new YCFunc(
-    { ...supplyFunction.toJSON(), address_id: adapterContract.id },
+    { ...supplyFunction.toJSON() },
     YCClassifications.getInstance()
   );
 
   _setBalanceOfTokenInGIA(newSupplyFunction, 2, data.collateral);
+
+  newSupplyFunction.outflows = step.outflows;
+  newSupplyFunction.inflows = step.inflows;
 
   step.setFunction(newSupplyFunction);
 
@@ -78,6 +72,32 @@ export const completeStandardSupply = (
 
   step.retainCustomArgsRef = true;
 
+  const harvestInterestFunction = YCClassifications.getInstance().getFunction(
+    "892498b9-0aff-4b27-8341-8cec464cc76a"
+  );
+
+  if (!harvestInterestFunction)
+    throw "Cannot Find Interest Harvest Func in Supply";
+
+  const newHarvestInterestFunction = new YCFunc(
+    { ...harvestInterestFunction.toJSON() },
+    YCClassifications.getInstance()
+  );
+
+  newHarvestInterestFunction.inflows.push(
+    new YCToken(data.collateral, YCClassifications.getInstance())
+  );
+
+  newHarvestInterestFunction.dependencyFunction = step.function;
+
+  (newHarvestInterestFunction.address as YCContract).protocol = step.protocol;
+
+  step.unlockedFunctions.push({
+    func: newHarvestInterestFunction,
+    used: false,
+    customArgs: [clientId, data.collateral.address, constants.HashZero],
+  });
+
   return;
 };
 
@@ -92,10 +112,4 @@ function _setBalanceOfTokenInGIA(
     token instanceof YCToken
       ? token
       : new YCToken(token, YCClassifications.getInstance());
-
-  console.log("GIA ARg", giaArg);
-
-  const balOfArg = (giaArg.value as YCFunc).arguments[0].value as YCFunc;
-
-  // balOfArg.arguments[0].setValue(token.address);
 }

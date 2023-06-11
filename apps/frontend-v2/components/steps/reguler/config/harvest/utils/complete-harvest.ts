@@ -38,6 +38,7 @@ export const completeHarvest = (step: Step) => {
           return {
             func: _func.func,
             used: true,
+            customArgs: _func.customArgs,
           };
 
         return _func;

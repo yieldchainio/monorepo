@@ -44,7 +44,7 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
   );
 
   /**
-   * Memoize the parent's function (We use as the "key" (Just an analgoy) to unlocked dependant functions,
+   * Memoize the parent's function (We use as the "key" (Just an analogy) to unlocked dependant functions,
    * which will be our harvestable positions)
    */
   const unlockingFunction = useMemo(
@@ -63,27 +63,24 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
    * or are present within the parent's "unlockedFunctions"
    */
   const harvestFunctions = useMemo(() => {
-    const funcs = allFunctions.filter((func) => {
+    const funcs = allFunctions.flatMap((func) => {
       // It must be harvest-related
-      if (!func.actions.some((action) => action.id === HARVEST_ID))
-        return false;
+      if (!func.actions.some((action) => action.id === HARVEST_ID)) return [];
 
       // If it has no dependency, return true (it's open to all - UNLIKELY)
-      if (!func.dependencyFunction) return true;
+      if (!func.dependencyFunction) return [func];
 
       // It should potentially included in the parent's "unlockedFunctions" (Added externally,
       // e.g from seed steps to tree steps)
-      if (
-        step.parent?.unlockedFunctions.some(
-          (_func) => _func.func.id == func.id && !_func.used
-        )
-      )
-        return true;
+      const unlockedFunc = step.parent?.unlockedFunctions.find(
+        (_func) => _func.func.id == func.id && !_func.used
+      );
+      if (unlockedFunc) return [unlockedFunc.func];
 
       // At this point it must have our function as it's dependency
-      if (func.dependencyFunction?.id == unlockingFunction?.id) return true;
+      if (func.dependencyFunction?.id == unlockingFunction?.id) return [func];
 
-      return false;
+      return [];
     });
 
     if (!funcs && allFunctions.length) throwNoPositions();
@@ -150,6 +147,20 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
     const externallyUnlocked = step.parent?.unlockedFunctions?.some(
       (_func) => _func.func.id == func.id
     );
+
+    if (externallyUnlocked) {
+      const unlockedFunc = step.parent?.unlockedFunctions.find(
+        (_func) => _func.func.id == func.id
+      );
+      if (unlockedFunc && unlockedFunc.customArgs.length > 0) {
+        step.customArguments = unlockedFunc?.customArgs.concat(
+          step.customArguments
+        );
+        step.presetCustomArgsIndices = unlockedFunc?.customArgs.map(
+          (a, idx) => idx
+        );
+      }
+    }
 
     /**
      * Set the data on the step (used by our useEffect to set the states)

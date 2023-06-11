@@ -76,7 +76,7 @@ export const PositionsDropdown = ({
             }}
           />
           <WrappedText>
-            {choice.inflows[0].symbol +
+            {choice.inflows[0]?.symbol +
               (choice.inflows.length > 1
                 ? `, +${choice.inflows.length - 1}`
                 : "")}

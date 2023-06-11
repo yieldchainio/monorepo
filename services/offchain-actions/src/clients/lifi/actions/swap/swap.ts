@@ -21,15 +21,9 @@ export const lifiSwap = async (
   strategyAddress: address,
   provider: JsonRpcProvider
 ): Promise<YcCommand> => {
-  console.log("Function Request ARgs", functionRequest.args);
-
   const fromToken = abiDecode<address>(functionRequest.args[0], "address");
   const toToken = abiDecode<address>(functionRequest.args[1], "address");
   const fromAmount = abiDecode<bigint>(functionRequest.args[2], "uint256");
-
-  console.log(fromToken);
-  console.log(toToken);
-  console.log("From Amount COmmand", fromAmount);
 
   const fromChain: number = Number((await provider.getNetwork()).chainId);
 

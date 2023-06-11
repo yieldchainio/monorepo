@@ -45,8 +45,6 @@ export async function simulateHydrationRequest(
   await fork.prank(ZeroAddress as address);
   await fork.autoClownster();
 
-  console.log("eth_accounts", await fork.send("anvil_nodeInfo", []));
-
   const signer = new JsonRpcSigner(fork, ZeroAddress);
 
   const strategyContract = new Contract(
@@ -58,8 +56,6 @@ export async function simulateHydrationRequest(
   const forkStat = await strategyContract.setForkStatus.populateTransaction();
 
   await signer.sendTransaction(forkStat);
-
-  console.log("Gas Limit", await hydrationRequest.getGasLimit(fork));
 
   const commandCalldatas = await recursivelyExecAndHydrateRun(
     strategyContract,

@@ -7,6 +7,7 @@ import WrappedWagmi from "configs/wagmi";
 import { ModalProvider } from "components/modals/base/provider";
 import { ShallowRouter } from "components/internal/shallow-router";
 import { LoggerProvider } from "components/logger";
+import { WhitelistProtection } from "components/whitelist-protection";
 
 export const metadata = {
   title: "Yieldchain",
@@ -33,6 +34,7 @@ export default async function RootLayout({
       <body className="h-max z-100 bg-custom-bg">
         <WrappedWagmi>
           <ShallowRouter />
+          <WhitelistProtection />
           {children}
           <Header />
           <ModalProvider />

@@ -18,9 +18,9 @@ export declare class YCFunc extends BaseClass {
     readonly actions: YCAction[];
     readonly isCallback: boolean;
     readonly counterFunction: YCFunc | null;
-    readonly dependencyFunction: YCFunc | null;
-    readonly outflows: YCToken[];
-    readonly inflows: YCToken[];
+    dependencyFunction: YCFunc | null;
+    outflows: YCToken[];
+    inflows: YCToken[];
     readonly signature: string;
     readonly typeflag: Typeflags;
     readonly retTypeflag: Typeflags;

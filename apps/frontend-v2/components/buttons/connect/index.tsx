@@ -7,7 +7,12 @@ import { RegulerButtonProps } from "../reguler/types";
  * A custom connect wallet button
  */
 
-const ConnectWalletButton = ({ className, children }: RegulerButtonProps) => {
+const ConnectWalletButton = ({
+  className,
+  children,
+}: RegulerButtonProps & {
+  connectedButton?: React.ReactNode;
+}) => {
   return (
     <ConnectButton.Custom>
       {({

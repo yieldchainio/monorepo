@@ -23,7 +23,7 @@ export declare class YCContract extends BaseClass {
     /**
      * The protocol this contract belongs to (e.g, Uniswap DEX contract belongs to Uniswap)
      */
-    readonly protocol: YCProtocol | null;
+    protocol: YCProtocol | null;
     /**
      * All of the classified functions under this contract
      */

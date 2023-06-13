@@ -501,7 +501,6 @@ export class YCClassifications extends YCClassificationsInternal {
   /**
    * Refresh an endpoint(s)' data
    */
-
   public refresh = async (
     _endpoints: Endpoints[] | Endpoints
   ): Promise<boolean> => {

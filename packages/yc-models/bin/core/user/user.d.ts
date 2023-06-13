@@ -36,6 +36,10 @@ export declare class YCUser extends BaseClass {
      */
     readonly verified: boolean;
     /**
+     * Whether or not this user is whitelisted
+     */
+    readonly whitelisted: boolean;
+    /**
      * The social medias of this user
      */
     readonly socialMedia: YCSocialMedia;

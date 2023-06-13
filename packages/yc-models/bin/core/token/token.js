@@ -9,7 +9,7 @@ import { BaseClass } from "../base/index.js";
  * YCToken
  * A class representing an on-chain token
  */
-class YCToken extends BaseClass {
+export class YCToken extends BaseClass {
     // ============
     //    FIELDS
     // ============
@@ -280,5 +280,4 @@ class YCToken extends BaseClass {
         };
     };
 }
-export { YCToken };
 //# sourceMappingURL=token.js.map

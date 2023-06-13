@@ -50,6 +50,11 @@ export class YCUser extends BaseClass {
   readonly verified: boolean;
 
   /**
+   * Whether or not this user is whitelisted
+   */
+  readonly whitelisted: boolean;
+
+  /**
    * The social medias of this user
    */
   readonly socialMedia: YCSocialMedia;
@@ -159,7 +164,7 @@ export class YCUser extends BaseClass {
     const client: PrismaClient | null = context.client;
 
     // Send the request to the backend
-    const res = await fetchRouter<DBUser | undefined>({
+    const res = await fetchRouter<{ data: DBUser } | DBUser | undefined>({
       backend: {
         fetcher: async () =>
           await client?.usersv2?.update({
@@ -196,7 +201,12 @@ export class YCUser extends BaseClass {
       },
     });
 
-    return res || null;
+    if ("data" in (res || {})) {
+      // @ts-ignore
+      return res.data as DBUser;
+    }
+
+    return (res as DBUser | null) || null;
   };
 
   // =======================
@@ -212,6 +222,7 @@ export class YCUser extends BaseClass {
     this.username = _user.username;
     this.description = _user.description;
     this.profilePic = _user.profile_picture || "";
+    this.whitelisted = _user.whitelisted;
     this.socialMedia = new YCSocialMedia(
       _user.twitter,
       _user.telegram,

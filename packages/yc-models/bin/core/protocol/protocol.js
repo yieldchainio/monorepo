@@ -6,7 +6,7 @@ import { BaseClass } from "../base/index.js";
  * YCProtocol
  * A class representing a Yieldchain protocol
  */
-class YCProtocol extends BaseClass {
+export class YCProtocol extends BaseClass {
     // =================
     //      FIELDS
     // =================
@@ -144,5 +144,4 @@ class YCProtocol extends BaseClass {
         };
     };
 }
-export { YCProtocol };
 //# sourceMappingURL=protocol.js.map

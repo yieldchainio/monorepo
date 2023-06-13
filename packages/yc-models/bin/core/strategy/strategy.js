@@ -6,7 +6,7 @@ import { YCToken } from "../token/token.js";
 import abi from "../../ABIs/strategy.json" assert { type: "json" };
 import { AbiCoder, Contract, ethers, getAddress, } from "ethers";
 import { formatInterval } from "./format-interval.js";
-class YCStrategy extends BaseClass {
+export class YCStrategy extends BaseClass {
     // =================================
     //       FIELDS & GETTERS
     // =================================
@@ -426,5 +426,4 @@ class YCStrategy extends BaseClass {
     // =================
     static instances = new Map();
 }
-export { YCStrategy };
 //# sourceMappingURL=strategy.js.map

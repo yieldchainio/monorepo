@@ -22,7 +22,7 @@ export * from "./types";
  */
 const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
   // Current connected wallet's details
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
 
   // The global address variable that will be used
   const [userAddress, setUserAddress] = useState<`0x${string}` | undefined>(
@@ -45,7 +45,6 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
 
   // ENS Avater of the user
   const { data: ensAvatar } = useEnsAvatar({
-    address: userAddress,
     chainId: 1,
   });
 
@@ -70,15 +69,37 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
   // Whether the user is verified or not
   const [verified, setVerified] = useState<boolean>(false);
 
+  const [whitelisted, setWhitelisted] = useState<boolean>(false);
+
   // Function to update user's details
   const updateDetails = async (newDetails: Partial<UserUpdateArguments>) => {
-    if (!user) return null;
+    if (!user) {
+      console.log("Gonna Return Null", user, userName);
+      return null;
+    }
+
+    console.log("Gonna update to this:", { ...newDetails, id: user.id });
 
     // We call the update details function, spread out the new details
     // and make sure we input the current user's ID
     const res = await YCUser.updateDetails({ ...newDetails, id: user.id });
 
-    if (res) await refresher(Endpoints.USERS);
+    console.log("Update res", res);
+
+    if (res) {
+      await refresher(Endpoints.USERS);
+      setUser(new YCUser(res, YCClassifications.getInstance()));
+    }
+    console.log(
+      "New user in context after refreshing",
+      users.find((usr) => usr.id == user.id)
+    );
+    const newUser = "";
+
+    for (const [key, val] of Object.entries(newDetails)) {
+      // @ts-ignore
+      user[key] = val;
+    }
     return res;
   };
 
@@ -108,6 +129,13 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
       return state.context.YCusers;
     },
     (oldUsers, newUsers) => {
+      console.log(
+        "Old user VS new users comparsion:",
+
+        newUsers.map(
+          (newUsr) => `${newUsr.username}, ${newUsr.socialMedia.twitter.handle}`
+        )
+      );
       const res =
         JSON.stringify(oldUsers.map((usr) => usr.stringify())) ===
         JSON.stringify(newUsers.map((usr) => usr.stringify()));
@@ -175,6 +203,9 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     };
   }, [userAddress, JSON.stringify(users.map((usr) => usr.stringify()))]);
 
+  console.log("user", user);
+  console.log("Use address", userAddress);
+
   /**
    * useEffect for handling an address change (i.e new user)
    */
@@ -186,13 +217,18 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
         (user_) => user_.address.toLowerCase() === userAddress?.toLowerCase()
       );
 
+      console.log("Found user:", _user);
+      console.log("All Users:", users);
+
       // Set the new user
       if (_user) setUser(_user);
+    } else {
+      console.log("useeffect run, user address == userAddress");
     }
 
     // Cleanup
     return () => setUser(null);
-  }, [userAddress]);
+  }, [userAddress, JSON.stringify(users.map((usr) => usr.stringify()))]);
 
   /**
    * useEffect handling users refresh (potential user details update)
@@ -278,6 +314,10 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     return () => setVerified(false);
   }, [user?.verified]);
 
+  useEffect(() => {
+    setWhitelisted(user?.whitelisted || false);
+  }, [user?.whitelisted]);
+
   // Final useEffect checking if we're mounted to avoid hydration
   const mounted = useIsMounted();
 
@@ -292,7 +332,9 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
       socialMedia,
       verified,
       description,
-      id: user?.id
+      id: user?.id,
+      whitelisted,
+      connected: isConnected,
     };
 
   return {
@@ -304,7 +346,9 @@ const useYCUser = (props?: UseYCUserProps): YCUserHookReturn => {
     socialMedia: socialMedia,
     verified: false,
     description: undefined,
-    id: undefined
+    id: undefined,
+    whitelisted,
+    connected: isConnected,
   };
 };
 

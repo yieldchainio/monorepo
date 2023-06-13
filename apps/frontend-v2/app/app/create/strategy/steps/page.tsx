@@ -73,9 +73,23 @@ const StepsConfig = () => {
       // determine if they are already used within the tree by whether or not we can find it used
       // within the tree's root's children
       for (const func of dependants) {
+        const unlockerStep = baseRootStep.find((step) =>
+          step.unlockedFunctions.some(
+            (unlockedFunc) => unlockedFunc.func.id == func.id
+          )
+        );
         const used = rootStep.children.some(
           (child) => child.function?.id === func.id
         );
+
+        if (unlockerStep) {
+          const unlockedFunc = unlockerStep.unlockedFunctions.find(
+            (unlockedFunc) => unlockedFunc.func.id == func.id
+          ) as { func: YCFunc; used: boolean; customArgs: any[] };
+          rootStep.unlockedFunctions.push(unlockedFunc);
+          return;
+        }
+
         rootStep.unlockedFunctions.push({ func, used, customArgs: [] });
       }
     });

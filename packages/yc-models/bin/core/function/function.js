@@ -5,7 +5,7 @@ import { getFunctionFlags } from "../../helpers/builder/get-command-flags.js";
 import { ZeroAddress } from "ethers";
 import { v4 as uuid } from "uuid";
 import { tryGetUnderlyingContract } from "../../helpers/builder/try-get-underlying-contract/index.js";
-class YCFunc extends BaseClass {
+export class YCFunc extends BaseClass {
     // ====================
     //    STATIC FIELDS
     // ====================
@@ -156,7 +156,6 @@ class YCFunc extends BaseClass {
                 " Function Name: " +
                 this.name);
         const address = tryGetUnderlyingContract(step, this.address);
-        console.log("Encoding", this.name, "Prev Address ID & Addr:", this.address.id, this.address.address, "New Address:", address);
         if (!address ||
             (address == ZeroAddress && this.address.address != ZeroAddress)) {
             throw "Cannot Encode Function - Received undefined or zero address (when shouldnt have)";
@@ -223,5 +222,4 @@ class YCFunc extends BaseClass {
         this.#arguments = newArgs;
     }
 }
-export { YCFunc };
 //# sourceMappingURL=function.js.map

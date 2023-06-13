@@ -5,7 +5,7 @@ import { YCToken } from "../token/token.js";
 /**
  * @YCNetwork
  */
-class YCNetwork extends BaseClass {
+export class YCNetwork extends BaseClass {
     // =====================
     //       FIELDS
     // =====================
@@ -182,5 +182,4 @@ class YCNetwork extends BaseClass {
         };
     };
 }
-export { YCNetwork };
 //# sourceMappingURL=network.js.map

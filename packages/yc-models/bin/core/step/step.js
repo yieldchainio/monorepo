@@ -1,6 +1,6 @@
 import { YCToken, YCClassifications, YCFunc, } from "@yc/yc-models";
 import { Node } from "../../general/node/plain.js";
-class YCStep extends Node {
+export class YCStep extends Node {
     // ====================
     //      CONSTNATS
     // ====================
@@ -161,5 +161,4 @@ class YCStep extends Node {
             child.print(indent + 2);
     }
 }
-export { YCStep };
 //# sourceMappingURL=step.js.map

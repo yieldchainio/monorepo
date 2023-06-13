@@ -1,5 +1,5 @@
 "use client";
-import "../../css/globals.css";
+import "css/globals.css";
 import WrappedText from "components/wrappers/text";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import WrappedInput from "components/wrappers/input";
@@ -20,7 +20,7 @@ import "slick-carousel/slick/slick-theme.css";
 import {
   STRATEGIES_FILTERS,
   STRATEGIES_SEARCHBOX_INPUT_NAME,
-} from "../constants";
+} from "../../constants";
 import { BackdropColor } from "components/backdrop-color";
 import { SlideShow } from "components/slideshow";
 import { useModals } from "utilities/hooks/stores/modal";
@@ -28,16 +28,9 @@ import { StrategyModal } from "components/modals/strategy";
 import { useShallowRouter } from "utilities/hooks/general/useShallowRouter";
 import useDebounce from "utilities/hooks/general/useDebounce";
 import { useLogs } from "utilities/hooks/stores/logger";
-import { Canvas } from "components/canvas";
-import { InfoMessage } from "components/logger/components/info";
+
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
-import {
-  seriallizeStrategyStore,
-  strategiesLocalStorage,
-} from "utilities/hooks/stores/strategies/constants";
-import { ModalWrapper } from "components/modals/base/wrapper";
-import { TokensModal } from "components/modals/tokens";
-import WrappedImage from "components/wrappers/image";
+
 import {
   Direction,
   useScrollDirection,

@@ -9,7 +9,7 @@ export * from "./types.js";
  * YCToken
  * A class representing an on-chain token
  */
-class YCUser extends BaseClass {
+export class YCUser extends BaseClass {
     // ==========
     //    FIELDS
     // ==========
@@ -37,6 +37,10 @@ class YCUser extends BaseClass {
      * Whether or not this is a verified user
      */
     verified;
+    /**
+     * Whether or not this user is whitelisted
+     */
+    whitelisted;
     /**
      * The social medias of this user
      */
@@ -143,6 +147,10 @@ class YCUser extends BaseClass {
                 }),
             },
         });
+        if ("data" in (res || {})) {
+            // @ts-ignore
+            return res.data;
+        }
         return res || null;
     };
     // =======================
@@ -158,6 +166,7 @@ class YCUser extends BaseClass {
         this.username = _user.username;
         this.description = _user.description;
         this.profilePic = _user.profile_picture || "";
+        this.whitelisted = _user.whitelisted;
         this.socialMedia = new YCSocialMedia(_user.twitter, _user.telegram, _user.discord);
         this.verified = _user.verified;
         const vaults = _context.rawStrategies
@@ -192,5 +201,4 @@ class YCUser extends BaseClass {
     };
     static instances = new Map();
 }
-export { YCUser };
 //# sourceMappingURL=user.js.map

@@ -5,7 +5,7 @@ import { YCNotFoundError } from "../errors/errors.js";
  * @notice
  * A class represnting social medias - Of a protocol/user
  */
-class YCSocialMedia extends BaseClass {
+export class YCSocialMedia extends BaseClass {
     // Twitter URL
     #twitter = null;
     // Telegram URL
@@ -93,5 +93,4 @@ class YCSocialMedia extends BaseClass {
         };
     }
 }
-export { YCSocialMedia };
 //# sourceMappingURL=social-media.js.map

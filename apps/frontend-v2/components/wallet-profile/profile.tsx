@@ -11,6 +11,7 @@ import EditIcon from "components/icons/edit";
 import { FormEvent, MouseEvent, useState } from "react";
 import CheckmarkIcon from "components/icons/checkmark";
 import SmallLoader from "components/loaders/small";
+import { EditableText } from "components/editable-text";
 
 /**
  * Sub component of the profile for the modal
@@ -37,8 +38,16 @@ const ProfileSection = ({
   const confirmNewUsername = async () => {
     setIsLoading(true);
     setIsEditing(false);
-    updateDetails && (await updateDetails({ username: newUsername }));
+    updateDetails &&
+      userName != newUsername &&
+      (await updateDetails({ username: newUsername }));
     setIsLoading(false);
+  };
+
+  const handleUsernameUpdate = async (newUsername: string) => {
+    updateDetails &&
+      userName != newUsername &&
+      (await updateDetails({ username: newUsername }));
   };
 
   return (
@@ -58,50 +67,10 @@ const ProfileSection = ({
         </div>
         <div className="flex flex-col gap-1 py-1 items-start justify-center">
           <div className="flex flex-row gap-3 items-start">
-            {isEditing ? (
-              <div className="flex flex-row w-[100%] max-w-[130px] whitespace-nowrap items-center justify-between gap-2">
-                <WrappedText
-                  fontSize={22}
-                  fontStyle="light"
-                  className=" w-full border-[0.01px] border-transparent border-b-custom-textColor pr-[80px] text-clip"
-                  contentEditable="true"
-                  id="username_editor"
-                  onInput={(e: FormEvent<HTMLDivElement>) =>
-                    e.currentTarget.textContent &&
-                    setNewUsername(e.currentTarget.textContent)
-                  }
-                  truncate="truncate"
-                >
-                  {userName}
-                </WrappedText>
-                <div className="ml-0" onClick={confirmNewUsername}>
-                  <CheckmarkIcon
-                    className="cursor-pointer hover:text-custom-lightHover transition duration-200 text-custom-textColor"
-                    iconClassname=""
-                  />
-                </div>
-              </div>
-            ) : (
-              <>
-                <WrappedText
-                  fontSize={22}
-                  fontStyle="light"
-                  className="overflow-hidden max-w-[100px] truncate"
-                >
-                  {userName}
-                </WrappedText>
-                <div onClick={() => setIsEditing(!isEditing)}>
-                  {!isLoading ? (
-                    <EditIcon
-                      className="scale-[1.15] mt-1.5 cursor-pointer hover:scale-[1.2] transition duration-200 ease-in-out text-custom-textColor hover:text-custom-lightHover"
-                      iconClassname=""
-                    />
-                  ) : (
-                    <SmallLoader color="fill-[#ffffff]" />
-                  )}
-                </div>
-              </>
-            )}
+            <EditableText
+              text={userName as string}
+              onConfirmChange={handleUsernameUpdate}
+            />
           </div>
           <div className="flex flex-row gap-2 items-center">
             <WrappedText fontSize={13} fontStyle="light" className="opacity-30">

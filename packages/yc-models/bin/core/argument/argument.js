@@ -13,7 +13,7 @@ import { remove0xPrefix } from "../../helpers/builder/remove-0x-prefix.js";
  * @dev When arguments r considered dynamic, their type is a 'function' - which means we
  * encode a FunctionCall struct eventually and use the return value of it as the value.
  */
-class YCArgument extends BaseClass {
+export class YCArgument extends BaseClass {
     // =======================
     //    PRIVATE VARIABLES
     // =======================
@@ -172,5 +172,4 @@ class YCArgument extends BaseClass {
         return arg;
     };
 }
-export { YCArgument };
 //# sourceMappingURL=argument.js.map

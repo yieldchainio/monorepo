@@ -7,7 +7,7 @@ import { YCClassifications } from "../context/context.js";
 /**
  * Another base class which has base web3 functionality to support bothbackends and frontneds
  */
-class BaseWeb3Class {
+export class BaseWeb3Class {
     // Send a transaction with either a signer or a callback that signs populated transactions
     signTransaction = async (signingMethod, transaction) => {
         // If we got a callback as the signing method, we call it with the requests. Otherwise,
@@ -91,7 +91,6 @@ class BaseWeb3Class {
         return signingMethod.from;
     };
 }
-export { BaseWeb3Class };
 export class BaseClass extends BaseWeb3Class {
     // instanceID: string;
     // constructor() {

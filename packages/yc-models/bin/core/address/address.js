@@ -1,6 +1,6 @@
 import { ethers, Interface, ZeroAddress } from "ethers";
 import { BaseClass } from "../base/index.js";
-class YCContract extends BaseClass {
+export class YCContract extends BaseClass {
     // ================
     //      FIELDS
     // ================
@@ -125,5 +125,4 @@ class YCContract extends BaseClass {
     };
     static instances = new Map();
 }
-export { YCContract };
 //# sourceMappingURL=address.js.map

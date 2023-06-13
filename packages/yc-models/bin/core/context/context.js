@@ -286,7 +286,7 @@ class YCClassificationsInternal {
     };
 }
 // A class representing Yieldchain's classifications. Constructs itself with DB info and has retreival methods/"Indexes"
-class YCClassifications extends YCClassificationsInternal {
+export class YCClassifications extends YCClassificationsInternal {
     // =======================
     //      CONSTRUCTOR
     //      (SINGLETON)
@@ -523,5 +523,4 @@ class YCClassifications extends YCClassificationsInternal {
         return this.statistics.filter((stat) => stat.strategyId == _strategyID);
     };
 }
-export { YCClassifications };
 //# sourceMappingURL=context.js.map

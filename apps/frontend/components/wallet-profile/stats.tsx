@@ -23,19 +23,7 @@ function ProfileStats({ createdVaults }: ProfileStatsProps) {
         }}
         key="SectionComponent"
         sectionsClassname="gap-4"
-      >
-        <div className="w-full">
-          <Section fields={{ "Awesome Web3 Protection": "OFF" }}>
-            <RegulerButton
-              onClick={() => null}
-              className="hover:border-green-600 text-sm py-[8px] px-10 border-[2px] mt-3"
-              key="SectionComponent"
-            >
-              Protect Me! 🔒
-            </RegulerButton>
-          </Section>
-        </div>
-      </Section>
+      ></Section>
     </div>
   );
 }

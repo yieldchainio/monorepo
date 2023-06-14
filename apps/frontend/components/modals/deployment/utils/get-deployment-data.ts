@@ -15,7 +15,7 @@ export async function getDeploymentData(
 } | null> {
   try {
     const res = await axios.post<BuilderResponse>(
-      "http://localhost:8080/strategy-creation-data",
+      "https://builder.yieldchain.io/strategy-creation-data",
       req
     );
     if (res.data.status) {

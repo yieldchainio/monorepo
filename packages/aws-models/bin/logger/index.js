@@ -3,7 +3,7 @@
  * Represents an AWS logger,
  * accepts some session ID and sends to cloudwatch
  */
-class AWSLogger {
+export class AWSLogger {
     constructor() { }
     // ===================
     //       METHODS
@@ -16,5 +16,4 @@ class AWSLogger {
         console.log(message);
     };
 }
-export { AWSLogger };
 //# sourceMappingURL=index.js.map

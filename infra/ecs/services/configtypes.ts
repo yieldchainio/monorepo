@@ -55,6 +55,7 @@ export interface IServiceConfig extends BaseServiceConfig {
   type: ServiceTypes.SERVICE;
   subdomain: string | null;
   portMappings: { hostPort: number; containerPort: number }[];
+  includeHealthCheck: boolean;
 }
 
 // Interface for a worker config

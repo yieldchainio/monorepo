@@ -190,7 +190,7 @@ export function Header() {
             direction={ToolTipDirection.BOTTOM}
           >
             <Button
-              onClick={() => router.push("/create/strategy")}
+              onClick={() => router.push("/app/create/strategy")}
               className=" relative font-semibold"
             >
               {createVaultText}

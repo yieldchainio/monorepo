@@ -93,6 +93,9 @@ export class YCECSDeployer extends Stack {
         serviceConfig.type,
         taskDefinition,
         cluster.cluster,
+        "includeHealthCheck" in serviceConfig
+          ? (serviceConfig.includeHealthCheck as boolean)
+          : false,
         {
           securityGroups: serviceSecurityGroups,
           hostedZone,

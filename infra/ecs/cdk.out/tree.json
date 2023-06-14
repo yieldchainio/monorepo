@@ -991,6 +991,35 @@
                   "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroupIngress",
                   "version": "2.66.1"
                 }
+              },
+              "from YCClusterYCECSDefaultSecurityServiceGroupC90C6C51:3000": {
+                "id": "from YCClusterYCECSDefaultSecurityServiceGroupC90C6C51:3000",
+                "path": "YC-Cluster/YCECSDefaultSecurityServiceGroup/from YCClusterYCECSDefaultSecurityServiceGroupC90C6C51:3000",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupIngress",
+                  "aws:cdk:cloudformation:props": {
+                    "ipProtocol": "tcp",
+                    "description": "Load balancer to target",
+                    "fromPort": 3000,
+                    "groupId": {
+                      "Fn::GetAtt": [
+                        "YCECSDefaultSecurityServiceGroupDE0B50A6",
+                        "GroupId"
+                      ]
+                    },
+                    "sourceSecurityGroupId": {
+                      "Fn::GetAtt": [
+                        "YCECSDefaultSecurityServiceGroupDE0B50A6",
+                        "GroupId"
+                      ]
+                    },
+                    "toPort": 3000
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroupIngress",
+                  "version": "2.66.1"
+                }
               }
             },
             "constructInfo": {
@@ -2831,6 +2860,10 @@
                           {
                             "name": "DATABASE_URL",
                             "value": "postgres://OfirYC:B.%3F3f%2Apbf%3D2Df%21i@postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com:5432/postgres"
+                          },
+                          {
+                            "name": "POO",
+                            "value": "PEE"
                           }
                         ]
                       }
@@ -3170,8 +3203,8 @@
                         "name": "FRONTEND-CONTAINER",
                         "portMappings": [
                           {
-                            "containerPort": 8080,
-                            "hostPort": 8080,
+                            "containerPort": 3000,
+                            "hostPort": 3000,
                             "protocol": "tcp"
                           }
                         ],
@@ -3184,7 +3217,13 @@
                             "awslogs-stream-prefix": "FRONTEND-STREAM",
                             "awslogs-region": "us-east-1"
                           }
-                        }
+                        },
+                        "environment": [
+                          {
+                            "name": "PENIS",
+                            "value": "BUTT"
+                          }
+                        ]
                       }
                     ],
                     "cpu": "512",
@@ -3380,7 +3419,7 @@
                           "Ref": "YCFRONTENDSERVICETGDBC1B18D"
                         },
                         "containerName": "FRONTEND-CONTAINER",
-                        "containerPort": 8080
+                        "containerPort": 3000
                       }
                     ],
                     "networkConfiguration": {
@@ -3626,11 +3665,6 @@
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::TargetGroup",
                   "aws:cdk:cloudformation:props": {
-                    "healthCheckPath": "/",
-                    "healthCheckProtocol": "HTTP",
-                    "matcher": {
-                      "httpCode": "200"
-                    },
                     "port": 8080,
                     "protocol": "HTTP",
                     "targetGroupAttributes": [

@@ -57,7 +57,7 @@ function StrategyConfigLayout({ children }: { children: React.ReactNode }) {
    * Get the next and prev functions for our configs (Assinging to buttons)
    */
   const { next, prev, initRoute, currentIndex } = useConfigRouting(
-    "/create/strategy",
+    "/app/create/strategy",
     configRoutesState,
     attemptPushDeploymentModal
   );

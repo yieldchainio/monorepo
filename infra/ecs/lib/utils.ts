@@ -42,9 +42,11 @@ interface portMapping {
 interface IPortMappings {
   service: portMapping[];
   worker: portMapping[];
+  app: portMapping[];
 }
 
 export const defaultPortMappings: IPortMappings = {
   service: [{ containerPort: 8080, hostPort: 8080 }],
   worker: [{ containerPort: 80, hostPort: 80 }],
+  app: [{ containerPort: 3000, hostPort: 3000 }],
 };

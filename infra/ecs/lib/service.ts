@@ -47,6 +47,7 @@ export class YCFargateService extends FargateService {
     serviceType: ServiceTypes,
     taskDef: FargateTaskDefinition,
     cluster: ICluster,
+    includeHealthCheck: boolean,
     props: Partial<FargateServiceProps> & {
       securityGroups: ISecurityGroup[];
       hostedZone: IHostedZone;
@@ -106,6 +107,14 @@ export class YCFargateService extends FargateService {
 
       // @notice
       // Create the target group that points to this service
+      const healthCheck = includeHealthCheck
+        ? {
+            protocol: Protocol.HTTP,
+            healthyHttpCodes: "200", // Considered healthy if 200 is returned
+            path: "/",
+          }
+        : undefined;
+
       const targetGroup: ApplicationTargetGroup = new ApplicationTargetGroup(
         scope,
         `YC-${id}-TG`,
@@ -113,11 +122,7 @@ export class YCFargateService extends FargateService {
           port: 8080,
           protocol: ApplicationProtocol.HTTP,
           targets: [this],
-          healthCheck: {
-            protocol: Protocol.HTTP,
-            healthyHttpCodes: "200", // Considered healthy if 200 is returned
-            path: "/",
-          },
+          healthCheck,
           vpc: cluster.vpc,
         }
       );

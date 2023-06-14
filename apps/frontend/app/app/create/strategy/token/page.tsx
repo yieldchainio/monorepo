@@ -52,7 +52,7 @@ function TokenConfig() {
         id,
       }));
 
-      router.replace("/create/strategy/network");
+      router.replace("/app/create/strategy/network");
     }
   }, [chosenNetwork]);
 

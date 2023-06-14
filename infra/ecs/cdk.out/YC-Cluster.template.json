@@ -693,6 +693,30 @@
     "aws:cdk:path": "YC-Cluster/YCECSDefaultSecurityServiceGroup/from YCClusterYCECSDefaultSecurityServiceGroupC90C6C51:8080"
    }
   },
+  "YCECSDefaultSecurityServiceGroupfromYCClusterYCECSDefaultSecurityServiceGroupC90C6C5130000D6F470D": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "Load balancer to target",
+    "FromPort": 3000,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "YCECSDefaultSecurityServiceGroupDE0B50A6",
+      "GroupId"
+     ]
+    },
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "YCECSDefaultSecurityServiceGroupDE0B50A6",
+      "GroupId"
+     ]
+    },
+    "ToPort": 3000
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YCECSDefaultSecurityServiceGroup/from YCClusterYCECSDefaultSecurityServiceGroupC90C6C51:3000"
+   }
+  },
   "DATAPRVDRTASKDEF02CC6223": {
    "Type": "AWS::ECS::TaskDefinition",
    "Properties": {
@@ -1852,6 +1876,10 @@
        {
         "Name": "DATABASE_URL",
         "Value": "postgres://OfirYC:B.%3F3f%2Apbf%3D2Df%21i@postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com:5432/postgres"
+       },
+       {
+        "Name": "POO",
+        "Value": "PEE"
        }
       ],
       "Essential": true,
@@ -2065,6 +2093,12 @@
    "Properties": {
     "ContainerDefinitions": [
      {
+      "Environment": [
+       {
+        "Name": "PENIS",
+        "Value": "BUTT"
+       }
+      ],
       "Essential": true,
       "Image": {
        "Fn::Join": [
@@ -2091,8 +2125,8 @@
       "Name": "FRONTEND-CONTAINER",
       "PortMappings": [
        {
-        "ContainerPort": 8080,
-        "HostPort": 8080,
+        "ContainerPort": 3000,
+        "HostPort": 3000,
         "Protocol": "tcp"
        }
       ]
@@ -2211,7 +2245,7 @@
     "LoadBalancers": [
      {
       "ContainerName": "FRONTEND-CONTAINER",
-      "ContainerPort": 8080,
+      "ContainerPort": 3000,
       "TargetGroupArn": {
        "Ref": "YCFRONTENDSERVICETGDBC1B18D"
       }
@@ -2379,11 +2413,6 @@
   "YCFRONTENDSERVICETGDBC1B18D": {
    "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
    "Properties": {
-    "HealthCheckPath": "/",
-    "HealthCheckProtocol": "HTTP",
-    "Matcher": {
-     "HttpCode": "200"
-    },
     "Port": 8080,
     "Protocol": "HTTP",
     "TargetGroupAttributes": [

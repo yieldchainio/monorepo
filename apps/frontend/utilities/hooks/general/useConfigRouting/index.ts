@@ -2,7 +2,7 @@
  * A custom hook to extract the logic of routing the different configs,
  *
  * @param baseRoute - a string representing the base route. i.e for strategy it will be:
- *  /create/strategy
+ *  /app/create/strategy
  *
  * @param routes - the routes to iterate
  *

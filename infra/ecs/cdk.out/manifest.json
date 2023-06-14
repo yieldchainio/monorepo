@@ -17,7 +17,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-deploy-role-010073361729-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-cfn-exec-role-010073361729-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-010073361729-us-east-1/0da9cbe9f11d6736699c27694a14a925f0ab3a585a49c600b1066c55dd4a9847.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-010073361729-us-east-1/d93350dce25aebe21c472c22295208b217e8c390aad638475ecf1ec8bc6732b4.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -247,6 +247,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "YCECSDefaultSecurityServiceGroupfromYCClusterYCECSDefaultSecurityServiceGroupC90C6C518080E8287BFE"
+          }
+        ],
+        "/YC-Cluster/YCECSDefaultSecurityServiceGroup/from YCClusterYCECSDefaultSecurityServiceGroupC90C6C51:3000": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "YCECSDefaultSecurityServiceGroupfromYCClusterYCECSDefaultSecurityServiceGroupC90C6C5130000D6F470D"
           }
         ],
         "/YC-Cluster/DATAPRVDR-TASKDEF/Resource": [

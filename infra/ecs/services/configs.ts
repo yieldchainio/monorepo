@@ -23,8 +23,11 @@ const ENVs: { [key in ServicesAndWorkers]?: Record<string, string> } = {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || "",
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || "",
     DATABASE_URL: process.env.DATABASE_URL || "",
+    POO: "PEE",
   },
-  [ServicesAndWorkers.FRONTEND]: {},
+  [ServicesAndWorkers.FRONTEND]: {
+    PENIS: "BUTT",
+  },
 
   [ServicesAndWorkers.INTEGRATIONFRNTD]: {},
 
@@ -104,6 +107,7 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       subdomain: "api.yieldchain.io",
       portMappings: [...defaultPortMappings.service],
       requiredStrength: ServiceStrength.SKINNY,
+      includeHealthCheck: true,
       desiredCount: 2,
     },
     [ServicesAndWorkers.INTEGRATIONPRVDR]: {
@@ -114,6 +118,8 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       subdomain: "integrationapi.yieldchain.io",
       portMappings: [...defaultPortMappings.service],
       requiredStrength: ServiceStrength.WEAK,
+      includeHealthCheck: true,
+
       desiredCount: 1,
     },
     [ServicesAndWorkers.INTEGRATIONFRNTD]: {
@@ -124,6 +130,8 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       subdomain: "admindashboard.yieldchain.io",
       portMappings: [...defaultPortMappings.service],
       requiredStrength: ServiceStrength.WEAK,
+      includeHealthCheck: true,
+
       desiredCount: 1,
     },
     [ServicesAndWorkers.ONCHAINLISTENER]: {
@@ -139,9 +147,11 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       ENVs: ENVs.FRONTEND as Record<string, string>,
       type: ServiceTypes.SERVICE,
       name: ServicesAndWorkers.FRONTEND,
-      portMappings: [...defaultPortMappings.service],
+      portMappings: [...defaultPortMappings.app],
       subdomain: "yieldchain.io",
       requiredStrength: ServiceStrength.SKINNY,
+      includeHealthCheck: false,
+
       desiredCount: 1,
     },
     [ServicesAndWorkers.SQSORCHESTRATOR]: {
@@ -168,6 +178,8 @@ export const configs: { [key in ServicesAndWorkers]?: ServiceOrWorkerConfig } =
       portMappings: [...defaultPortMappings.service],
       subdomain: "builder.yieldchain.io",
       requiredStrength: ServiceStrength.SKINNY,
+      includeHealthCheck: true,
+
       desiredCount: 1,
     },
     [ServicesAndWorkers.TRIGGERSENGINE]: {

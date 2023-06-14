@@ -1,21 +1,14 @@
-name: Build And Push A Single Service
+name: Build And Push A Single App
 
 on:
   workflow_dispatch:
     inputs:
-      service_name:
-        description: "The Service To Build"
+      app_name:
+        description: "The App To Build"
         required: true
         type: choice
         options:
-          - offchain-actions
-          - strategy-builder
-          - onchain-listener
-          - sqs-orchestrator
-          - data-provider
-          - integration-provider
-          - integration-frontend
-          - triggers-engine
+          - frontend
 
 jobs:
   build-and-push:
@@ -46,7 +39,7 @@ jobs:
       - name: Build and Push Docker Image
         id: build-and-push
         run: |
-          service_name=${{ inputs.service_name }}
-          docker buildx build --platform linux/amd64 -f services/$service_name/Dockerfile -t $service_name .
-          docker tag $service_name "${{ steps.ecr_login.outputs.registry }}/$service_name"
-          docker push "${{ steps.ecr_login.outputs.registry }}/$service_name"
+          app_name=${{ inputs.app_name }}
+          docker buildx build --platform linux/amd64 -f apps/$app_name/Dockerfile -t $app_name .
+          docker tag $app_name "${{ steps.ecr_login.outputs.registry }}/$app_name"
+          docker push "${{ steps.ecr_login.outputs.registry }}/$app_name"

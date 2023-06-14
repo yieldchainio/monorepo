@@ -12,7 +12,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "build-push": "node ./scripts/build-push-service.js"
+    "build-push": "node ./scripts/build-push-service.js",
+    "build-push-app": "node ./scripts/build-push-app.js"
   },
   "devDependencies": {
     "@types/node": "^20.1.7",
@@ -26,7 +27,7 @@
   "dependencies": {
     "ethers": "^6.5.1",
     "prisma": "^4.14.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.3"
   },
   "packageManager": "yarn@1.22.19"
 }

@@ -127,7 +127,7 @@ export const TokensModal = forwardRef<HTMLDivElement, TokensModalProps>(
         ref={ref}
         onClick={onClick}
       >
-        <div className="w-[40%] h-full bg-custom-darkSubbg flex flex-col py-4 gap-3 px-3">
+        <div className="w-[40%] tablet:w-max h-full bg-custom-darkSubbg flex flex-col py-4 gap-3 px-3">
           <WrappedText fontSize={16} fontStyle="bold">
             {label}
           </WrappedText>
@@ -137,11 +137,17 @@ export const TokensModal = forwardRef<HTMLDivElement, TokensModalProps>(
             handler={setChosenNetwork}
           />
         </div>
-        <div className="w-[60%] h-full bg-custom-bcomponentbg  py-7 px-16 gap-2  ">
-          <WrappedInput
-            placeholder="Search For A Token's Name, Symbol, Address..."
-            onChange={(e) => setInput(e.target.value)}
-          ></WrappedInput>
+        <div className="w-[60%] tablet:w-full h-full bg-custom-bcomponentbg  py-7 px-16 tablet:px-0 tablet:pl-4 tablet:pr-12 gap-2  ">
+          <div className="w-[90%] self-start">
+            <WrappedInput
+              placeholder="Search For A Token's Name, Symbol, Address..."
+              onChange={(e) => setInput(e.target.value)}
+              iconProps={{
+                width: 22,
+                height: 22,
+              }}
+            ></WrappedInput>
+          </div>
           <TokensList
             tokens={tokensToDisplay}
             handler={(token: YCToken) => {

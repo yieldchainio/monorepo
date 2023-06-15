@@ -2,6 +2,7 @@ import { YCNetwork } from "@yc/yc-models";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 import { useMemo, useState } from "react";
+import { useYCStore } from "utilities/hooks/stores/yc-data";
 
 /**
  * The component rendering all of the network cards
@@ -24,12 +25,12 @@ export const NetworksList = ({
   // @notice for some reason if i used the drilled state it was slow AF. So using this for styling.
   const [networkChosen, setNetworkChosen] = useState(networks[0].id);
   return (
-    <div className="flex flex-col gap-2 w-full overflow-scroll scrollbar-hide bg-inherit">
+    <div className="flex flex-col items-center gap-2 w-full overflow-scroll scrollbar-hide bg-inherit">
       {memoizedNetworks.map((network, i) => (
         <div
           key={i}
           className={
-            "w-full p-[1px] rounded-xl transition duration-200 ease-in-out   " +
+            "w-full tablet:w-max p-[1px] rounded-xl transition duration-500 ease-in-out   " +
             " " +
             (networkChosen == network.id
               ? "bg-gradient-to-r from-custom-ycllb to-custom-ycly "
@@ -40,14 +41,21 @@ export const NetworksList = ({
             handler(network);
           }}
         >
-          <div className="flex flex-row items-center justify-start w-full py-4 px-4 rounded-xl gap-2  cursor-pointer bg-custom-darkSubbg transition duration-200 ease-in-out ">
+          <div className="flex flex-row tablet:flex-col items-center justify-start w-full tablet:w-max py-4 px-4 tablet:py-2 tablet:px-2 rounded-xl gap-2  cursor-pointer bg-custom-darkSubbg transition duration-200 ease-in-out ">
             <WrappedImage
               src={network.logo}
               width={34}
               height={34}
-              className="rounded-full"
+              className="rounded-full tablet:scale-[0.85]"
             />
-            <WrappedText fontSize={16}>{network.name}</WrappedText>
+            <WrappedText
+              fontSize={16}
+              className={
+                networkChosen == network.id ? "tablet:hidden " : "tablet:hidden"
+              }
+            >
+              {network.name}
+            </WrappedText>
           </div>
         </div>
       ))}

@@ -34,6 +34,11 @@ export default async function RootLayout({
       <body className="h-max z-100 bg-custom-bg">
         <WrappedWagmi>
           <ShallowRouter />
+          <link
+            href="fonts/Athletics/stylesheet.css"
+            rel="stylesheet"
+            type="text/css"
+          />
           <WhitelistProtection />
           {children}
           <Header />

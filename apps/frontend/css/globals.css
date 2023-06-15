@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("fonts/Athletics/stylesheet.css");
+
 :root {
   /**
     *  Global Dark/Light mode variables

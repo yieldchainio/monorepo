@@ -6,11 +6,10 @@
   "types": "./src/index.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "4.14.1",
-    "prisma": "^4.14.1"
+    "@prisma/client": "4.15.0",
+    "prisma": "4.15.0"
   },
   "devDependencies": {
-    "@prisma/client": "^4.15.0",
     "@types/uuid": "^9.0.1",
     "date-fns": "^2.29.3",
     "prisma": "^4.15.0",

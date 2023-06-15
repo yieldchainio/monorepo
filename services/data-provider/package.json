@@ -20,6 +20,7 @@
     "@types/node": "^18.15.0",
     "@types/pg": "^8.6.6",
     "@yc/yc-models": "*",
+    "@yc/yc-data": "*",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",

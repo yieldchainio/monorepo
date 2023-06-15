@@ -214,6 +214,16 @@ app.post(
   }
 );
 
+app.get("/ccip-test/:callData", async (req: any, res: any) => {
+  const callData = req.params.callData;
+  res
+    .status(200)
+    .send(
+      callData +
+        "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    );
+});
+
 // ====================
 //        YCAPI
 // ====================

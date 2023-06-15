@@ -50,11 +50,22 @@ export class Step extends Node<Step> implements IStep<Step> {
    * Add a child step
    * @param child - A Step instance
    */
-  addChild = (child: Step, inherit: boolean = true) => {
+  addChild = (
+    child: Step,
+    inherit: boolean = true,
+    propagateInhertiance: boolean = true
+  ) => {
     this.removeEmptyChildren();
     this.children = [...this.children, child];
     child.parent = this;
-    inherit && child.inheritStyle();
+    if (child.state == "empty")
+      console.log(
+        "Adding An Empty child. My size:",
+        this.size,
+        "Child size:",
+        child.size
+      );
+    inherit && child.inheritStyle(propagateInhertiance);
   };
 
   /**
@@ -84,15 +95,14 @@ export class Step extends Node<Step> implements IStep<Step> {
       return false;
     });
     // If the children array is now empty, we add an empty step that is used to add new steps on the frontend (Assuming that we are writable)
-    if (this.children.length === 0 && this.writeable)
-      this.attemptAddEmptyChild();
+    if (this.children.length === 0 && this.writeable) this.tryAddEmptyChild();
   };
 
   /**
    * Add an empty child,
    * used for adding new childs, usually
    */
-  attemptAddEmptyChild = () => {
+  tryAddEmptyChild = () => {
     // We obv dont want an empty child for an empty child
     if (this.state == "empty") return;
 
@@ -101,6 +111,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       this.addChild(
         new Step({
           state: "empty",
+          size: this.size,
         }),
         true
       );
@@ -165,7 +176,7 @@ export class Step extends Node<Step> implements IStep<Step> {
    * @notice
    * Inherits styling from the parent
    */
-  inheritStyle = () => {
+  inheritStyle = (propageThroughTree: boolean = false) => {
     // Inherit the current sizing (e.g when a SMALL parent adds a child, they obv dont want
     // it to be a MEDIUM)
     this.parent?.size !== undefined && this.resize(this.parent.size);
@@ -175,6 +186,9 @@ export class Step extends Node<Step> implements IStep<Step> {
     this.writeable = this.parent?.writeable || this.writeable;
 
     this.chainId = this.parent?.chainId || null;
+
+    if (propageThroughTree)
+      this.children.map((child) => child.inheritStyle(propageThroughTree));
   };
 
   // ---------------
@@ -196,7 +210,8 @@ export class Step extends Node<Step> implements IStep<Step> {
 
       if (
         externallyUnlocked &&
-        externallyUnlocked.customArgs.length >= requiredCustomFields.length
+        (externallyUnlocked.customArgs?.length || 0) >=
+          requiredCustomFields.length
       ) {
         this.customArguments = externallyUnlocked.customArgs;
         return;
@@ -509,7 +524,7 @@ export class Step extends Node<Step> implements IStep<Step> {
   enableDescendentsWriteability = () => {
     this.map((step) => {
       step.writeable = true;
-      step.attemptAddEmptyChild();
+      step.tryAddEmptyChild();
     });
   };
 
@@ -728,9 +743,9 @@ export class Step extends Node<Step> implements IStep<Step> {
     }
 
     // Add an empty placeholder child if our length is 0 and we are writeable
-    this.attemptAddEmptyChild();
+    this.inheritStyle();
 
-    if (this.state == "empty") this.inheritStyle();
+    this.tryAddEmptyChild();
   }
 
   // ========================================

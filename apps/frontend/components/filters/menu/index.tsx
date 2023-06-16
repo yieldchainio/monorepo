@@ -18,6 +18,7 @@ import { FiltersMenuProps } from "../types";
 import { useModals } from "utilities/hooks/stores/modal";
 import { ModalWrapper } from "components/modals/base/wrapper";
 import { RegulerButton } from "components/buttons/reguler";
+import WrappedText from "components/wrappers/text";
 
 const getDefaultRangeValues = <T extends BaseFilter<any>>(
   rangeFilter: FilterConfig<any, RangeFilter<any>> & RangeFilter<any>,
@@ -53,17 +54,16 @@ export const FiltersMenu = <V, T extends BaseFilter<V>>({
               onClick?.();
             }}
           >
-            <DropdownMenu
-              options={filters
-                .filter((filter) => filter.hidden !== true)
+            <div className="flex flex-col gap-8 items-center justify-center w-[80%] max-w-[400px] h-max bg-custom-subbg rounded-xl p-8">
+              {filters
+                .filter((filter) => !filter.hidden)
                 .map((filter) => {
-                  return {
-                    text: filter.name + ":",
-                    data: {
-                      filter: filter,
-                    },
-                    children: [
-                      filter.type === FilterTypes.BOOLEAN ? (
+                  return (
+                    <div className="flex flex-col items-center w-full justify-center gap-1 hover:bg-opacity-[5%] hover:scale-[1] will-change-transform ">
+                      <WrappedText fontSize={20}>
+                        {filter.name + ":"}
+                      </WrappedText>
+                      {filter.type === FilterTypes.BOOLEAN ? (
                         <input
                           className="form-checkbox w-[15px] h-[15px] bg-custom-componentbg text-custom-componentbg focus:ring-0 focus:ring-offset-0 accent-gray-500 rounded-[4px]  ring-[0.5px] ring-custom-textColor ring-opacity-30 transition duration-200 ease-in-out"
                           type={"checkbox"}
@@ -95,28 +95,17 @@ export const FiltersMenu = <V, T extends BaseFilter<V>>({
                             modifyFilter(filter, newFilter);
                           }}
                         />
-                      ) : null,
-                    ],
-                  };
+                      ) : null}
+                    </div>
+                  );
                 })}
-              optionProps={{
-                wrapperClassname:
-                  " bg-blue-900 justify-start hover:bg-opacity-[5%] hover:scale-[1] will-change-transform",
-                textClassname: "text-[14px]",
-                className: " gap-5 justify-between w-full",
-              }}
-              handler={() => null}
-              parentRef={parentRef}
-              className="w-[80%] max-w-[1000px] "
-              modalBehaviour="always"
-            >
               <RegulerButton
                 className="mx-auto pt-1.5 pb-1.5"
                 onClick={() => modals.remove(id)}
               >
                 Done
               </RegulerButton>
-            </DropdownMenu>
+            </div>
           </ModalWrapper>
         ),
       };

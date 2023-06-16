@@ -93,7 +93,9 @@ const DropdownMenu = ({
           >
             <div
               className={
-                "flex items-center w-full py-2.5 px-2.5 gap-2" +
+                "flex flex-row items-center justify-start w-full py-2.5 px-2.5 gap-2 " +
+                  " " +
+                  (hideOptionText ? "laptop:justify-center laptop:gap-0" : "") +
                   " " +
                   optionProps?.className || ""
               }

@@ -149,6 +149,9 @@ export function Header() {
                 })()
               : undefined
           }
+          menuProps={{
+            hideOptionText: "laptop:hidden",
+          }}
         />
         {address ? (
           <Dropdown

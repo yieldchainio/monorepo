@@ -37,7 +37,8 @@ export interface DropdownProps {
   autoChoice?: boolean;
   disabled?: string | false;
   type?: "searchable" | "reguler";
-  disableChoosing?: boolean
+  disableChoosing?: boolean;
+  hideOptionText?: "laptop:hidden" | "";
   refSetter?: (node: HTMLDivElement) => void;
 }
 
@@ -48,7 +49,9 @@ export interface DropdownOptionProps {
   textProps?: Partial<TextProps>;
 }
 // Props Interface
-export interface DropdownMenuOptions extends BaseComponentProps, BaseModalChildProps {
+export interface DropdownMenuOptions
+  extends BaseComponentProps,
+    BaseModalChildProps {
   options: DropdownOption[];
   handler: (_option: DropdownOption) => any;
   parentRef: RefObject<HTMLElement | undefined | null> | null;
@@ -57,8 +60,4 @@ export interface DropdownMenuOptions extends BaseComponentProps, BaseModalChildP
   hideOptionText?: "laptop:hidden" | "";
   modalBehaviour?: "always" | "never" | "auto";
   choiceFocusClass?: string;
-  
-
 }
-
-

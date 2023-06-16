@@ -44,6 +44,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       type = "reguler",
       refSetter,
       disableChoosing = false,
+      hideOptionText,
       ...props
     }: DropdownProps,
     ref

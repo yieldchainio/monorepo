@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("fonts/Athletics/stylesheet.css");
+@import url("public/fonts/Athletics/stylesheet.css");
 
 :root {
   /**

@@ -4,7 +4,10 @@
 
 import { Switch } from "components/switches/base";
 import { CustomInputProps } from "../../types";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
+import { RegulerButton } from "components/buttons/reguler";
+import WrappedText from "components/wrappers/text";
+import WrappedImage from "components/wrappers/image";
 
 export const CustomBooleanInput = ({
   setValue,
@@ -12,6 +15,7 @@ export const CustomBooleanInput = ({
   value,
 }: CustomInputProps<boolean>) => {
   const [trueOrFalse, setTrueOrFalse] = useState(value);
+
   useEffect(() => {
     if (value !== null) {
       setTrueOrFalse(value);
@@ -22,16 +26,25 @@ export const CustomBooleanInput = ({
     if (value == null) setValue(false);
   }, []);
 
+  const OnChild = (
+    <WrappedImage src={"/icons/green-checkmark.svg"} width={16} height={16} />
+  );
+  const OffChild = (
+    <WrappedImage src={"/icons/red-x.svg"} width={16} height={16} />
+  );
+
   return (
-    <Switch
-      handler={(on: boolean) => setValue(on)}
-      overridingState={trueOrFalse}
+    <RegulerButton
+      style={{
+        paddingTop: "0.5rem",
+        paddingBottom: "0.5rem",
+        paddingLeft: "0.5rem",
+        paddingRight: "0.5rem",
+        // borderColor: "var(--themed-border)",
+      }}
+      onClick={() => setValue(!value)}
     >
-      {value ? (
-        <div className="rounded-full w-full h-full bg-green-500"></div>
-      ) : (
-        <div className="rounded-full w-full h-full bg-black bg-opacity-50"></div>
-      )}
-    </Switch>
+      {value ? OnChild : OffChild}
+    </RegulerButton>
   );
 };

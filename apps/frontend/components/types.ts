@@ -9,7 +9,8 @@ export interface BaseComponentProps<T = any> {
 }
 
 export interface BaseModalChildProps extends BaseComponentProps {
-  closeModal?: () => void
+  closeModal?: () => void;
+  modalKey?: number;
 }
 
 export type BreakPoint<T> = T & {

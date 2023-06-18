@@ -12,7 +12,7 @@ export interface EnsureModalProps extends BaseComponentProps {
   confirmLabel?: string;
   cancelLabel?: string;
   feel?: EnsuranceFeel;
-  confirmHandler: () => void | Promise<void>;
-  cancelHandler?: () => void | Promise<void>;
+  confirmHandler: () => void | Promise<void> | any;
+  cancelHandler?: () => void | Promise<void> | any;
   modalKey: number;
 }

@@ -2,10 +2,13 @@
  * A generic implementation of the "Done" button on action configs
  */
 
+import { YCToken } from "@yc/yc-models";
 import GradientButton from "components/buttons/gradient";
 import { InfoProvider } from "components/info-providers";
 import { StepProps } from "components/steps/types";
+import { changeStepState } from "components/steps/utils/handle-state-change";
 import { useMemo } from "react";
+import { Step } from "utilities/classes/step";
 import { StepSizing } from "utilities/classes/step/types";
 
 export const DoneButton = ({
@@ -36,7 +39,8 @@ export const DoneButton = ({
         }}
         onClick={() => {
           handler();
-          step.state = "complete";
+          changeStepState(step, "complete");
+
           triggerComparison();
         }}
       >
@@ -54,7 +58,7 @@ export const DoneButton = ({
             }}
             onClick={() => {
               handler();
-              step.state = "complete";
+              changeStepState(step, "complete");
               triggerComparison();
             }}
           >

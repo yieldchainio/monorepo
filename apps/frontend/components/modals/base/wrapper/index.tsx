@@ -63,6 +63,7 @@ export const ModalWrapper = ({
               if (closeFunction) closeFunction(modalKey);
               else removeModal(modalKey);
             }}
+            modalKey={modalKey}
           />
         );
       })}

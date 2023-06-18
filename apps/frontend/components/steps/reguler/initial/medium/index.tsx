@@ -10,6 +10,7 @@ import { forwardRef } from "react";
 import { useActions } from "../hooks/useActions";
 import { BaseNode } from "components/steps/components/node";
 import { ACTION_IDS_TO_ENUM_KEY } from "../../constants";
+import { changeStepState } from "components/steps/utils/handle-state-change";
 
 /* eslint-disable react/display-name */
 export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
@@ -51,7 +52,8 @@ export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
                     );
                   step.actionConfig = enumKey;
                   step.action = action;
-                  step.state = "config";
+                  changeStepState(step, "config");
+
                   triggerComparison();
                 }}
                 key={`${i}`}

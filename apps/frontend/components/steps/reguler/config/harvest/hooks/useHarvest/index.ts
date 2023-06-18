@@ -12,6 +12,7 @@ import { useLogs } from "utilities/hooks/stores/logger";
 import { YCClassifications, YCFunc } from "@yc/yc-models";
 import { completeHarvest } from "../../utils/complete-harvest";
 import { HarvestData } from "@yc/yc-models";
+import { changeStepState } from "components/steps/utils/handle-state-change";
 
 export const useHarvest = (step: Step, triggerComparison: () => void) => {
   // ===========
@@ -99,7 +100,7 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
   const throwNoPositions = () => {
     if (threw.current) return;
     threw.current = true;
-    step.state = "initial";
+    changeStepState(step, "initial");
     return logs.lazyPush({
       message:
         "You Do Not Have Any Harvestable Position At This Point. Are you sure you are in the correct step?",
@@ -122,7 +123,7 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
           type: "warning",
         })
       );
-      step.state = "initial";
+      changeStepState(step, "initial");
       return;
     }
 

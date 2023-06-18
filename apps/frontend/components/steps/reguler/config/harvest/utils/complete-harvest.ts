@@ -5,6 +5,7 @@
 import { YCClassifications, YCFunc, YCProtocol } from "@yc/yc-models";
 import { Step } from "utilities/classes/step";
 import { HarvestData } from "../types";
+import { changeStepState } from "components/steps/utils/handle-state-change";
 
 export function completeHarvest(step: Step) {
   // Shorthand for the data
@@ -47,7 +48,7 @@ export function completeHarvest(step: Step) {
 
   // Set step's state to complete (Assuming we may be called by internal funcs directly,
   // without the complete button - it may not be done automatically)
-  step.state = "complete";
+  changeStepState(step, "complete");
 
   return;
 }

@@ -6,6 +6,7 @@
 import { useMemo } from "react";
 import { UseStepOptionsProps } from "./types";
 import { DefaultDimensions, StepSizing } from "utilities/classes/step/types";
+import { changeStepState } from "components/steps/utils/handle-state-change";
 
 export const useStepOptions = ({
   expand = true,
@@ -58,7 +59,7 @@ export const useStepOptions = ({
           data: {
             description: "Edit This Step",
             handler: () => {
-              step.changeState("config");
+              changeStepState(step, "config");
             },
           },
         });

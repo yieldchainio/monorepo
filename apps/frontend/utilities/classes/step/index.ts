@@ -126,20 +126,6 @@ export class Step extends Node<Step> implements IStep<Step> {
   };
 
   /**
-   * Change the @state field
-   * @param newState  - the new state to update to
-   * @param actionConf - if the new state is of type CONFIG, an action config must be provided
-   */
-  changeState = (newState: StepState, actionConf?: ActionConfigs) => {
-    assert(
-      !(newState in ActionConfigs) || actionConf !== undefined,
-      "Step ERR: An Action config must be provided if chosen state is 'ActionConfig'."
-    );
-    this.state = newState;
-    if (actionConf) this.actionConfig = actionConf;
-  };
-
-  /**
    * Change the size
    * @param newSize - the new size
    * @param manual - Whether this resize is automatic (i.e, auto resize by zoom?) or manual by the user
@@ -527,6 +513,73 @@ export class Step extends Node<Step> implements IStep<Step> {
       step.tryAddEmptyChild();
     });
   };
+
+  /**
+   * Update the state of the step to complete.
+   * This has some handlers in place to remove children which no longer
+   * comply with this step (i.e, user sets USDC inflow on this step, then adds child
+   * that uses that USDC, then they edt this step and now inflows are only BTC, now the child
+   * should technically be invalid. We remove it.)
+   */
+  setState(newState: StepState) {
+    if (
+      newState == "complete" &&
+      this.outflows.some(
+        (token) => !this.availableTokens.some((_token) => _token.id == token.id)
+      )
+    )
+      throw "Cannot Complete Step - Trying to add unavailable outflows";
+
+    this.state = newState;
+
+    if (newState != "complete") return;
+
+    for (const child of this.children) {
+      if (
+        child.state == "complete" &&
+        child.outflows.some(
+          (token) =>
+            !child.availableTokens.some((token_) => token_.id == token.id)
+        )
+      )
+        this.removeChild(child.id);
+    }
+  }
+
+  /**
+   * Simulate setting the state
+   * @param newState - New state user would like to set
+   * @param handleInvalidDroppedChildren - Function to invoke when dropped children length > 0
+   * @param handleInvalidOutflowCompliance - Function to invoke when own outflows are incompliant
+   * @return droppedChildren - The children that will be dropped as a result of this
+   * @return unavailableOutflows - whether the step's own outflows comply. I.e, it may have
+   * been compliant before with a parent inflowing USDC, then  the parent was edited to
+   * inflow BTC instead.
+   */
+  simulateSetState(newState: StepState) {
+    const droppedChildren =
+      newState == "complete"
+        ? this.children.filter(
+            (child) =>
+              child.state == "complete" &&
+              child.outflows.some(
+                (token) => !this.inflows.some((token_) => token_.id == token.id)
+              )
+          )
+        : newState == "initial"
+        ? this.children.filter((child) => !child.outflows.length)
+        : [];
+
+    const unavailableOutflows = this.outflows.filter(
+      (token) =>
+        !(this.parent?.inflows || []).some((_token) => _token.id == token.id)
+    );
+
+    return {
+      droppedChildren,
+      unavailableOutflows,
+    };
+  }
 
   // ====================
   //      VARIABLES

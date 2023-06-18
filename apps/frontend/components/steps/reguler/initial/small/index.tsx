@@ -14,6 +14,7 @@ import { InfoProvider } from "components/info-providers";
 import { BaseNode } from "components/steps/components/node";
 import { ACTION_IDS_TO_ENUM_KEY } from "../../constants";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
+import { changeStepState } from "components/steps/utils/handle-state-change";
 
 /* eslint-disable react/display-name */
 export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
@@ -49,9 +50,13 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
           className="grid grid-cols-3 gap-2 w-full overflow-scroll scrollbar-hide"
           data-wheelable={false}
         >
-          {actions.map((action,i ) => {
+          {actions.map((action, i) => {
             return (
-              <InfoProvider contents={action.name} portal={canvasPortal} key={`${i}`}>
+              <InfoProvider
+                contents={action.name}
+                portal={canvasPortal}
+                key={`${i}`}
+              >
                 <div
                   className="bg-custom-componentbg rounded-large flex flex-col gap-2 items-center justify-center py-3 group hover:bg-opacity-50 transition duration-200 ease-in-out cursor-pointer"
                   onClick={() => {
@@ -63,7 +68,7 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
                       );
                     step.actionConfig = enumKey;
                     step.action = action;
-                    step.state = "config";
+                    changeStepState(step, "config");
                     triggerComparison();
                   }}
                   data-wheelable={false}

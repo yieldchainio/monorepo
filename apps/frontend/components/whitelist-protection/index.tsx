@@ -16,8 +16,9 @@ export function WhitelistProtection() {
 
   useEffect(() => {
     setTimeout(() => {
-      if (!whitelisted && !path.includes("/whitelist"))
-        router.replace("/whitelist");
+      if (!whitelisted && !path.includes("/whitelist")) {
+        router.replace(`/whitelist?callback=${path}`);
+      }
     }, 2000);
   }, [path]);
 

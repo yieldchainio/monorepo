@@ -87,7 +87,59 @@ export const StrategyModal = ({
           </div>
           <ProfileSection user={strategy?.creator} />
         </div>
-        {!expanded && (
+        <StepsModal
+          strategy={strategy}
+          options={{
+            initialSize: StepSizing.SMALL,
+          }}
+          style={{
+            // background: "none",
+            zIndex: 1000,
+          }}
+          parentStyle={{
+            borderWidth: "0px",
+            borderColor: "transparent",
+          }}
+          utilityButtons={[
+            {
+              children: (
+                <WrappedImage
+                  src={{
+                    dark: "/icons/expand-light.svg",
+                    light: "/icons/expand-dark.svg",
+                  }}
+                  width={14}
+                  height={14}
+                />
+              ),
+
+              label: "Full Screen",
+              onClick: () =>
+                modals.push((id: number) => {
+                  return {
+                    component: (
+                      <ModalWrapper modalKey={id}>
+                        <StepsModal
+                          strategy={strategy}
+                          wrapperProps={{
+                            style: {
+                              width: "80vw",
+                              height: "80vh",
+                            },
+                          }}
+                          parentStyle={{
+                            height: "80vh",
+                          }}
+                        />
+                      </ModalWrapper>
+                    ),
+                  };
+                }),
+            },
+          ]}
+        />
+
+        {/* {!expanded && (
           <div className="w-[80vw] absolute h-[15%] z-1000000000000 bg-gradient-to-t from-custom-bcomponentbg/100 to-custom-bcomponentbg/10  flex flex-row items-end justify-center pb-10 top-[100%] translate-y-[-100%] z-100">
             {" "}
             <ToggleExpandText
@@ -113,11 +165,12 @@ export const StrategyModal = ({
                 style={{ zIndex: 100000 }}
               ></ToggleExpandText>
             </div>
-          )}
+          )} */}
 
-          <div
+        {/* <div
             style={{
               pointerEvents: expanded ? "auto" : "none",
+              zIndex: 100000,
             }}
           >
             <StepsModal
@@ -126,8 +179,8 @@ export const StrategyModal = ({
                 initialSize: StepSizing.SMALL,
               }}
               style={{
-                background: "none",
-                zIndex: 0,
+                // background: "none",
+                zIndex: 1000,
               }}
               parentStyle={{
                 borderWidth: "0px",
@@ -171,8 +224,8 @@ export const StrategyModal = ({
                 },
               ]}
             />
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
       </div>
     </ModalWrapper>
   );

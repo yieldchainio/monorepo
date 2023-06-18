@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useEffect, useMemo } from "react";
 
 import { SocialMediasSection } from "./components/social-media-section";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const WhitelistingStatusTitle = {
   null: "Wen Whitelist? 👀",
@@ -49,10 +49,13 @@ function WhitelistPage() {
 
   const router = useRouter();
 
+  const params = useSearchParams();
+
   useEffect(() => {
+    console.log("Callback param", params.get("callback"));
     if (isWhitelisted)
       setTimeout(() => {
-        router.push("/app");
+        router.replace(params.get("callback") || "/app");
       }, 1000);
   }, [isWhitelisted]);
 

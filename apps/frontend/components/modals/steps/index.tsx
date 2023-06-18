@@ -436,6 +436,7 @@ const BorderedStepsContainer = ({
         left: "0px",
         transform: "translateX(-50%)",
       }}
+      onClick={onClick}
     >
       <WrappedText
         fontSize={26}

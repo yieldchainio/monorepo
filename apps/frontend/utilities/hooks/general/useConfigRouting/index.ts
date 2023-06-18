@@ -13,6 +13,44 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { configProgressStep } from "utilities/hooks/stores/strategies/types";
+import { create } from "zustand";
+import { useStrategyStore } from "utilities/hooks/stores/strategies";
+import { useModals } from "utilities/hooks/stores/modal";
+
+export const useConfigRoutingInBuilder = (callback?: (idx: number) => any) => {
+  const configRoutesState = useStrategyStore((state) => state.strategyConfigs);
+
+  const {
+    next: rawNext,
+    prev: rawPrev,
+    initRoute,
+    currentIndex,
+  } = useConfigRouting(
+    "/app/create/strategy",
+    configRoutesState,
+    callback || ((idx: number) => null)
+  );
+
+  const changeConfigRouteState = useStrategyStore(
+    (state) => state.changeConfigRouteState
+  );
+
+  const next = () => {
+    rawNext((idx: number) => {
+      changeConfigRouteState(idx, "complete");
+      changeConfigRouteState(idx + 1, "active");
+    });
+  };
+
+  const prev = () => {
+    rawPrev((idx: number) => {
+      changeConfigRouteState(idx, "not_complete");
+      changeConfigRouteState(idx - 1, "active");
+    });
+  };
+
+  return { next, prev, initRoute, currentIndex };
+};
 
 export const useConfigRouting = (
   baseRoute: string,
@@ -20,7 +58,7 @@ export const useConfigRouting = (
   constantNextCallback?: (index: number) => void
 ) => {
   // Keep a state of the current index
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const { currentIndex, setCurrentIndex } = useConfigRoutesStore();
 
   // Get the nextjs router
   const router = useRouter();
@@ -70,7 +108,6 @@ export const useConfigRouting = (
         (config) => config.progressStep.state === "active"
       ) || 0;
     routeByIndex(latestCompleteRoute);
-    setCurrentIndex(latestCompleteRoute);
   };
   /**
    * We memoize the progress and return it
@@ -89,3 +126,19 @@ export const useConfigRouting = (
     currentIndex,
   };
 };
+
+interface UseConfigRoutesStore {
+  currentIndex: number;
+  setCurrentIndex: (newIdx: number) => void;
+}
+
+export const useConfigRoutesStore = create<UseConfigRoutesStore>(
+  (set, get) => ({
+    currentIndex: 0,
+    setCurrentIndex: (newIdx: number) => {
+      set({
+        currentIndex: newIdx,
+      });
+    },
+  })
+);

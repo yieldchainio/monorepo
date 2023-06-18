@@ -15,6 +15,11 @@ import { StepsModal } from "components/modals/steps";
 import { Step } from "utilities/classes/step";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { YCFunc } from "@yc/yc-models";
+import {
+  useConfigRoutesStore,
+  useConfigRouting,
+  useConfigRoutingInBuilder,
+} from "utilities/hooks/general/useConfigRouting";
 
 function StepsConfig() {
   // Get the current root step (Should be the root automation trigger on config state)
@@ -31,6 +36,8 @@ function StepsConfig() {
 
   // Set the colors
   useBackdropColorChange("var(--yc-llb)", "var(--yc-ly)");
+
+  const { next, prev, initRoute, currentIndex } = useConfigRoutingInBuilder();
 
   /**
    * We run a useEffect on mount of this page,
@@ -128,6 +135,7 @@ function StepsConfig() {
             rehydrateSteps();
           }}
           canvasID="SEED_ALLOCATION_BUILDER"
+          seedContainerOnClick={prev}
         />
       </StrategyConfigVerticalWrapper>
     </div>

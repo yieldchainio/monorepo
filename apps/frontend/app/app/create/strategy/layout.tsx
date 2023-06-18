@@ -43,7 +43,7 @@ function StrategyConfigLayout({ children }: { children: React.ReactNode }) {
   /**
    * Deployment push function (memoized)
    */
-  function attemptPushDeploymentModal(index: number) {
+  function tryPushDeploymentModal(index: number) {
     if (index === configRoutesState.length - 1)
       modals.lazyPush(
         <DeploymentModal
@@ -59,7 +59,7 @@ function StrategyConfigLayout({ children }: { children: React.ReactNode }) {
   const { next, prev, initRoute, currentIndex } = useConfigRouting(
     "/app/create/strategy",
     configRoutesState,
-    attemptPushDeploymentModal
+    tryPushDeploymentModal
   );
 
   /**
@@ -153,7 +153,12 @@ function StrategyConfigLayout({ children }: { children: React.ReactNode }) {
           !isValidElement(child) ? (
             child
           ) : (
-            <child.type {...child.props} initRoute={initRoute} />
+            <child.type
+              {...child.props}
+              initRoute={initRoute}
+              next={next}
+              prev={prev}
+            />
           )
         }
       >

@@ -41,8 +41,8 @@ export default async function RootLayout({
           />
           <WhitelistProtection />
           {children}
-          <ModalProvider />
           <Header />
+          <ModalProvider />
           <LoggerProvider />
         </WrappedWagmi>
       </body>

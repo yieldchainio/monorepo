@@ -49,7 +49,7 @@ export const ModalWrapper = ({
             onClick={
               child.props.onClick ||
               ((e: any) => {
-                e.stopPropagation();
+                e?.stopPropagation?.();
               })
             }
             className={

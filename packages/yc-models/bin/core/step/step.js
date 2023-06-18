@@ -131,6 +131,9 @@ export class YCStep extends Node {
             type: this.type,
             chainId: this.chainId,
             retainCustomArgsRef: this.retainCustomArgsRef,
+            triggerDescription: this.triggerDescription,
+            triggerIcon: this.triggerIcon,
+            triggerType: this.triggerType,
         };
     };
     /**

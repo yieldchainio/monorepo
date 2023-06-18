@@ -252,7 +252,7 @@ export const StepsModal = ({
         id={canvasID}
       >
         <>
-          {baseRootStep?.map<React.ReactNode>((step: Step, i: number) => {
+          {baseRoot?.map<React.ReactNode>((step: Step, i: number) => {
             return (
               <HeadStep
                 step={step}
@@ -270,7 +270,7 @@ export const StepsModal = ({
               />
             );
           })}
-          {baseRootStep?.map((step: Step) => {
+          {baseRoot?.map((step: Step) => {
             return !step.children.length
               ? null
               : step.children.map((child: Step) => (
@@ -317,14 +317,15 @@ export const StepsModal = ({
               ));
         })}
 
-        {baseRootStep && (
+        {baseRoot && (
           <BorderedStepsContainer
             width={`${baseContainerDimensions.width}px`}
             height={`${baseContainerDimensions.height}px`}
             onClick={() => seedContainerOnClick?.()}
+            writeable={rootStep?.writeable || false}
           />
         )}
-        {baseRootStep && (
+        {baseRoot && (
           <StraightEdge
             parentAnchor={{
               x: 0,
@@ -423,10 +424,19 @@ const BorderedStepsContainer = ({
   width,
   height,
   onClick,
-}: BaseComponentProps & { width: string; height: string }) => {
+  writeable,
+}: BaseComponentProps & {
+  width: string;
+  height: string;
+  writeable: boolean;
+}) => {
   return (
     <div
-      className="group absolute border-[2px] border-custom-border border-dashed rounded-md  bg-custom-bcomponentbg bg-opacity-0 hover:bg-opacity-75 transition duration-200 ease-in-out cursor-pointer flex flex-col items-center justify-center"
+      className={
+        " pointer-events-auto group absolute border-[2px] border-custom-border border-dashed rounded-md  bg-custom-bcomponentbg bg-opacity-0  transition duration-200 ease-in-out cursor-pointer flex flex-col items-center justify-center -z-1000" +
+        " " +
+        (writeable ? "hover:bg-opacity-75" : "")
+      }
       style={{
         width,
         height,
@@ -436,14 +446,16 @@ const BorderedStepsContainer = ({
         left: "0px",
         transform: "translateX(-50%)",
       }}
-      onClick={onClick}
+      onClick={() => writeable && onClick?.()}
     >
-      <WrappedText
-        fontSize={26}
-        className=" text-opacity-0  group-hover:text-opacity-70 transition duration-200 ease-in-out"
-      >
-        Edit Seed Steps
-      </WrappedText>
+      {writeable && (
+        <WrappedText
+          fontSize={26}
+          className=" text-opacity-0  group-hover:text-opacity-70 transition duration-200 ease-in-out"
+        >
+          Edit Seed Steps
+        </WrappedText>
+      )}
     </div>
   );
 };

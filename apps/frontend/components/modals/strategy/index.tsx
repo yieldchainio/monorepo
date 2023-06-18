@@ -19,6 +19,7 @@ import { useStateEffect } from "utilities/hooks/general/useStateEffect";
 import WrappedImage from "components/wrappers/image";
 import { useModals } from "utilities/hooks/stores/modal";
 import { StepSizing } from "utilities/classes/step/types";
+import WrappedText from "components/wrappers/text";
 
 /**
  * @param strategyID - The ID of the strategy to display
@@ -61,7 +62,7 @@ export const StrategyModal = ({
       closeFunction={closeFunction}
     >
       <div
-        className=" w-[80vw]  bg-custom-darkSubbg rounded-lg flex flex-col items-center justify-start p-8 gap-6 relative overflow-hidden"
+        className=" w-[80vw]  bg-custom-darkSubbg rounded-lg flex flex-col items-center justify-start px-8 pt-8 gap-6 relative overflow-hidden"
         style={{
           height: height,
         }}
@@ -86,58 +87,71 @@ export const StrategyModal = ({
             <StrategyOperationsBox strategy={strategy} />
           </div>
           <ProfileSection user={strategy?.creator} />
-        </div>
-        <StepsModal
-          strategy={strategy}
-          options={{
-            initialSize: StepSizing.SMALL,
-          }}
-          style={{
-            // background: "none",
-            zIndex: 1000,
-          }}
-          parentStyle={{
-            borderWidth: "0px",
-            borderColor: "transparent",
-          }}
-          utilityButtons={[
-            {
-              children: (
+          {expanded && (
+            <div className="w-full  flex flex-row items-center justify-center z-1000">
+              <div
+                className="flex flex-row items-center cursor-pointer"
+                onClick={() => setExpanded(!expanded)}
+              >
+                <WrappedText fontSize={20} fontStyle="bold">
+                  Minimize
+                </WrappedText>
                 <WrappedImage
                   src={{
-                    dark: "/icons/expand-light.svg",
-                    light: "/icons/expand-dark.svg",
+                    dark: "/icons/dropdown-arrow-light.svg",
+                    light: "/icons/dropdown-arrow-dark.svg",
                   }}
-                  width={14}
-                  height={14}
-                />
-              ),
+                  width={28}
+                  height={28}
+                  className="group-hover:opacity-80  transition duration-200 ease-in-out group-hover:rotate-[-90deg] "
+                ></WrappedImage>
+              </div>
+            </div>
+          )}
+          <div
+            className="w-full"
+            style={{
+              height: expanded ? "115%" : "30%",
+            }}
+          >
+            <StepsModal
+              strategy={strategy}
+              wrapperProps={{
+                style: {
+                  height: "100%",
+                  width: "100%",
+                },
+              }}
+              parentStyle={{
+                height: "100%",
+                width: "100%",
+              }}
+            />
+          </div>
+        </div>
 
-              label: "Full Screen",
-              onClick: () =>
-                modals.push((id: number) => {
-                  return {
-                    component: (
-                      <ModalWrapper modalKey={id}>
-                        <StepsModal
-                          strategy={strategy}
-                          wrapperProps={{
-                            style: {
-                              width: "80vw",
-                              height: "80vh",
-                            },
-                          }}
-                          parentStyle={{
-                            height: "80vh",
-                          }}
-                        />
-                      </ModalWrapper>
-                    ),
-                  };
-                }),
-            },
-          ]}
-        />
+        {!expanded && (
+          <div className="flex flex-col items-center justify-end w-full h-[28%]  absolute top-[100%] translate-y-[-100%] pb-10">
+            <div
+              className="group flex flex-row gap-1 items-center z-10 cursor-pointer"
+              onClick={() => setExpanded(!expanded)}
+            >
+              <WrappedText fontSize={20} fontStyle="bold">
+                Expand
+              </WrappedText>
+              <WrappedImage
+                src={{
+                  dark: "/icons/dropdown-arrow-light.svg",
+                  light: "/icons/dropdown-arrow-dark.svg",
+                }}
+                width={28}
+                height={28}
+                className="group-hover:opacity-80  transition duration-200 ease-in-out group-hover:rotate-[-90deg] "
+              ></WrappedImage>
+            </div>
+            <div className="bg-custom-bg opacity-80 blur-xl w-full h-[90%] absolute top-[100%] translate-y-[-100%]"></div>
+          </div>
+        )}
 
         {/* {!expanded && (
           <div className="w-[80vw] absolute h-[15%] z-1000000000000 bg-gradient-to-t from-custom-bcomponentbg/100 to-custom-bcomponentbg/10  flex flex-row items-end justify-center pb-10 top-[100%] translate-y-[-100%] z-100">

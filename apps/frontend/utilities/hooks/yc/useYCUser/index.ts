@@ -129,13 +129,6 @@ function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
       return state.context.YCusers;
     },
     (oldUsers, newUsers) => {
-      console.log(
-        "Old user VS new users comparsion:",
-
-        newUsers.map(
-          (newUsr) => `${newUsr.username}, ${newUsr.socialMedia.twitter.handle}`
-        )
-      );
       const res =
         JSON.stringify(oldUsers.map((usr) => usr.stringify())) ===
         JSON.stringify(newUsers.map((usr) => usr.stringify()));
@@ -203,9 +196,6 @@ function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
     };
   }, [userAddress, JSON.stringify(users.map((usr) => usr.stringify()))]);
 
-  console.log("user", user);
-  console.log("Use address", userAddress);
-
   /**
    * useEffect for handling an address change (i.e new user)
    */
@@ -222,8 +212,6 @@ function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
 
       // Set the new user
       if (_user) setUser(_user);
-    } else {
-      console.log("useeffect run, user address == userAddress");
     }
 
     // Cleanup

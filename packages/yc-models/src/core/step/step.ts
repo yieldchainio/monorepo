@@ -174,8 +174,12 @@ export class YCStep extends Node<YCStep> {
       data: this.data,
       tokenPercentages: Array.from(this.tokenPercentages.entries()),
       type: this.type,
+
       chainId: this.chainId,
       retainCustomArgsRef: this.retainCustomArgsRef,
+      triggerDescription: this.triggerDescription,
+      triggerIcon: this.triggerIcon,
+      triggerType: this.triggerType,
     };
   };
 

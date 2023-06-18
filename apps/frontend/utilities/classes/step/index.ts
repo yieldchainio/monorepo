@@ -809,6 +809,7 @@ export class Step extends Node<Step> implements IStep<Step> {
     context,
     iStepConfigs,
   }: DBStepConstructionProps<Step>) => {
+    console.log("Gonna construct FE step from DB Step...", step);
     // If this is the root,
     const additionalConfigs = step.id !== "root" ? {} : DEPOSIT_TRIGGER_CONFIG;
     const stepConfig: IStep<Step> = {
@@ -833,6 +834,11 @@ export class Step extends Node<Step> implements IStep<Step> {
       size: iStepConfigs?.size,
       retainCustomArgsRef: step.retainCustomArgsRef,
       presetCustomArgsIndices: [],
+      type: step.type,
+      triggerDescription: step.triggerDescription,
+      triggerIcon: step.triggerIcon,
+      triggerType: step.triggerType,
+      data: step.data,
       ...additionalConfigs,
     };
 
@@ -1097,6 +1103,9 @@ export class Step extends Node<Step> implements IStep<Step> {
       customArguments: this.customArguments,
       type: this.type,
       triggerType: this.triggerType,
+      triggerDescription: this.triggerDescription,
+      triggerIcon: this.triggerIcon,
+
       chainId: this.chainId || 1,
       retainCustomArgsRef: this.retainCustomArgsRef,
     };

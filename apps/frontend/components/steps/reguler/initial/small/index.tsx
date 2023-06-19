@@ -36,7 +36,6 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, any>(
     return (
       <BaseNode
         className="flex-col px-4 py-2.5 gap-3"
-        style={style}
         ref={ref}
         {...props}
         width="246px"
@@ -44,45 +43,56 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, any>(
       >
         <div className="flex flex-row items-center justify-between w-full">
           <WrappedText fontSize={12}>Select Action</WrappedText>
-          <StepOptions
-            step={step}
-            triggerComparison={triggerComparison}
-          />
+          <StepOptions />
         </div>
         <div
-          className="grid grid-cols-3 gap-2 w-full overflow-scroll scrollbar-hide"
+          className="grid grid-cols-3 pt-0.5 px-2 gap-2 w-full h-full overflow-y-scroll overflow-x-visible scrollbar-hide"
           data-wheelable={false}
         >
-          {actions.map((action, i) => {
+          {actions.map(({ action, speciallyUnlocked }, i) => {
             return (
               <InfoProvider
-                contents={action.name}
+                contents={
+                  action.name +
+                  (speciallyUnlocked ? " - Actions Available!" : "")
+                }
                 portal={canvasPortal}
                 key={`${i}`}
               >
                 <div
-                  className="bg-custom-componentbg rounded-large flex flex-col gap-2 items-center justify-center py-3 group hover:bg-opacity-50 transition duration-200 ease-in-out cursor-pointer"
-                  onClick={() => {
-                    const enumKey = ACTION_IDS_TO_ENUM_KEY[action.id];
-                    if (enumKey === undefined)
-                      throw (
-                        "Cannot Use Action - Undefined Enum Key For: " +
-                        action.id
-                      );
-                    step.actionConfig = enumKey;
-                    step.action = action;
-                    changeStepState(step, "config");
-                    triggerComparison();
-                  }}
+                  className="relative overflow-visible w-full h-full"
                   data-wheelable={false}
                 >
-                  <WrappedImage
-                    src={action.icon}
-                    width={20}
-                    height={20}
-                    className="group-hover:scale-[1.1] transition duration-300 ease-in-out will-change-transform"
-                    wheelable={false}
-                  />
+                  {speciallyUnlocked && (
+                    <div className="cursor-default absolute  overflow-x-visible isolate left-[100%] translate-x-[-65%] z-100 translate-y-[-30%] top-[0px] flex h-3 w-3">
+                      <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></div>
+                      <div className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></div>
+                    </div>
+                  )}
+                  <div
+                    className="h-full w-full bg-custom-componentbg rounded-large flex flex-col gap-2 items-center justify-center py-3 group hover:bg-opacity-50 transition duration-200 ease-in-out cursor-pointer"
+                    onClick={() => {
+                      const enumKey = ACTION_IDS_TO_ENUM_KEY[action.id];
+                      if (enumKey === undefined)
+                        throw (
+                          "Cannot Use Action - Undefined Enum Key For: " +
+                          action.id
+                        );
+                      step.actionConfig = enumKey;
+                      step.action = action;
+                      changeStepState(step, "config");
+                      triggerComparison();
+                    }}
+                    data-wheelable={false}
+                  >
+                    <WrappedImage
+                      src={action.icon}
+                      width={20}
+                      height={20}
+                      className="group-hover:scale-[1.1] transition duration-300 ease-in-out will-change-transform"
+                      wheelable={false}
+                    />
+                  </div>
                 </div>
               </InfoProvider>
             );

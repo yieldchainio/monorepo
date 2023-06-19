@@ -13,8 +13,9 @@ import { YCClassifications, YCFunc } from "@yc/yc-models";
 import { completeHarvest } from "../../utils/complete-harvest";
 import { HarvestData } from "@yc/yc-models";
 import { changeStepState } from "components/steps/utils/handle-state-change";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
-export const useHarvest = (step: Step, triggerComparison: () => void) => {
+export const useHarvest = () => {
   // ===========
   //   GLOBALS
   // ===========
@@ -23,13 +24,12 @@ export const useHarvest = (step: Step, triggerComparison: () => void) => {
    */
   const logs = useLogs();
 
+  const { step, triggerComparison } = useStepContext();
+
   /**
    * Get some base variables that we need (context, network & our available tokens)
    */
-  const { context } = useConfigContext({
-    step,
-    triggerComparison,
-  });
+  const { context } = useConfigContext();
 
   /**
    * Get the harvest action

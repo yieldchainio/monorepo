@@ -7,22 +7,25 @@ import { CancelButton } from "./cancel";
 import { DoneButton } from "./done";
 import { useMemo } from "react";
 import { StepSizing } from "utilities/classes/step/types";
+import { BaseComponentProps } from "components/types";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
+import { useCanvasPortal } from "utilities/hooks/contexts/canvas-context";
 
 export const ActionConfigButtons = ({
   className,
   style,
-  step,
-  triggerComparison,
+
   canContinue,
-  portal,
   cancellable = true,
   handleComplete,
-}: StepProps & {
+}: BaseComponentProps & {
   canContinue?: true | string;
   portal?: HTMLElement;
   handleComplete: () => void;
   cancellable?: boolean;
 }) => {
+  const { step, triggerComparison } = useStepContext();
+  const portal = useCanvasPortal();
   /**
    * Memo some styling
    */

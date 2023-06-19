@@ -14,14 +14,17 @@ import { forwardRef, useMemo } from "react";
 import { StepOptions } from "../../../components/options";
 import { BaseNode } from "components/steps/components/node";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
+import { useCanvasPortal } from "utilities/hooks/contexts/canvas-context";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const SmallCompleteStep = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step } = useStepContext();
     /**
      * Get a portal to the canvas (for tooltips of tokens)
      */
-    const canvasPortal = useElementPortal(canvasID);
+    const canvasPortal = useCanvasPortal();
 
     /**
      * Memoizing for performance
@@ -44,12 +47,8 @@ export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
         width={"246px"}
         height={"56px"}
         ref={ref}
-        style={style}
         {...props}
         className="gap-2 px-4"
-        step={step}
-        triggerComparison={triggerComparison}
-        canvasID={canvasID}
       >
         <WrappedImage
           src={step.protocol?.logo}
@@ -66,21 +65,8 @@ export const SmallCompleteStep = forwardRef<HTMLDivElement, StepProps>(
             {outflowsComponent}
           </div>
         </div>
-        <StepOptions
-          canvasID={canvasID}
-          step={step}
-          onClick={props.onClick}
-          triggerComparison={triggerComparison}
-        />
+        <StepOptions step={step} onClick={props.onClick} />
       </BaseNode>
-      // <div
-      //   className="w-[246px] h-[56px] flex flex-row items-center justify-start gap-2 px-4 bg-custom-bcomponentbg absolute shadow-sm rounded-xl border-[1px] border-custom-themedBorder transition duration-200 ease-in-out animate-stepPopup"
-      //   style={style}
-      //   ref={ref}
-      //   {...props}
-      // >
-
-      // </div>
     );
   }
 );

@@ -11,10 +11,13 @@ import { TokenSwap } from "../components/token-swap";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 import { completeSwapConfig } from "../utils/complete-swap-config";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
+import { useCanvasPortal } from "utilities/hooks/contexts/canvas-context";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const SmallSwapConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const SmallSwapConfig = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step } = useStepContext();
     /**
      * Get all of the handlers & variables from the useSwap hook
      */
@@ -26,12 +29,12 @@ export const SmallSwapConfig = forwardRef<HTMLDivElement, StepProps>(
       exchanges,
       fromToken,
       toToken,
-    } = useSwap({ step, triggerComparison });
+    } = useSwap();
 
     /**
      * Get a portal to the canvas (For tooltips)
      */
-    const canvasPortal = useElementPortal(canvasID);
+    const canvasPortal = useCanvasPortal();
 
     /**
      * Get the global context
@@ -42,13 +45,10 @@ export const SmallSwapConfig = forwardRef<HTMLDivElement, StepProps>(
     return (
       <BaseActionConfig
         className="flex-col px-4 py-2.5 gap-6"
-        style={style}
         ref={ref}
         {...props}
         width="246px"
         height="235px"
-        step={step}
-        triggerComparison={triggerComparison}
         handleComplete={() => completeSwapConfig(step, context)}
         canContinue={
           fromToken
@@ -57,7 +57,6 @@ export const SmallSwapConfig = forwardRef<HTMLDivElement, StepProps>(
               : "Please Choose A To token"
             : "Please Choose A From Token"
         }
-        canvasID={canvasID}
       >
         <TokenSwap
           network={network}

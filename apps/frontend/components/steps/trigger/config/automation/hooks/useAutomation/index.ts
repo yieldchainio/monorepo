@@ -7,8 +7,11 @@ import { useEffect, useState } from "react";
 import { StepProps } from "components/steps/types";
 import { makeInterval } from "../../utils/make-interval";
 import { AutomationData, Timestamps } from "@yc/yc-models";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
-export function useAutomation({ step, triggerComparison }: StepProps) {
+export function useAutomation() {
+  const { step, triggerComparison } = useStepContext();
+
   /**
    * States to keep track of the input
    */

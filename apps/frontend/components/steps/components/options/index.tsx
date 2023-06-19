@@ -14,23 +14,19 @@ import { StepProps } from "components/steps/types";
 import { TooltipDropdown } from "components/tooltip-dropdown";
 import { BaseComponentProps } from "components/types";
 import { Step } from "utilities/classes/step";
+import { useCanvasPortal } from "utilities/hooks/contexts/canvas-context";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 import { useLogs } from "utilities/hooks/stores/logger";
 import { useStepOptions } from "utilities/hooks/yc/useSteps/useStepsOptions";
 
-export const StepOptions = ({
-  step,
-  triggerComparison,
-  canvasID,
-  ...props
-}: StepProps) => {
+export const StepOptions = ({ ...props }: any) => {
+  const { step, triggerComparison } = useStepContext();
   // Get the options to display
   const options = useStepOptions({ step });
 
   // Get the canvas portal
-  const canvasPortal = useElementPortal(canvasID);
-
-  const logs = useLogs();
+  const canvasPortal = useCanvasPortal();
 
   // Return the JSX
   return (

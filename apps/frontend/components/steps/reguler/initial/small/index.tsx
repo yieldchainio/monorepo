@@ -3,7 +3,7 @@
  */
 
 import { StepProps } from "components/steps/types";
-import { forwardRef, useEffect, useMemo } from "react";
+import { forwardRef, useContext, useEffect, useMemo } from "react";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useActions } from "../hooks/useActions";
 import { DefaultDimensions, StepSizing } from "utilities/classes/step/types";
@@ -15,15 +15,22 @@ import { BaseNode } from "components/steps/components/node";
 import { ACTION_IDS_TO_ENUM_KEY } from "../../constants";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 import { changeStepState } from "components/steps/utils/handle-state-change";
+import {
+  StepContext,
+  useStepContext,
+} from "utilities/hooks/contexts/step-context";
+import { useCanvasPortal } from "utilities/hooks/contexts/canvas-context";
 
 /* eslint-disable react/display-name */
-export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const SmallChooseAction = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step, style, triggerComparison } = useStepContext();
+
     // Get the available actions from our hook
     const actions = useActions();
 
     // Get the canvas portal for tooltip
-    const canvasPortal = useElementPortal(canvasID);
+    const canvasPortal = useCanvasPortal();
 
     // Return the JSX
     return (
@@ -34,14 +41,10 @@ export const SmallChooseAction = forwardRef<HTMLDivElement, StepProps>(
         {...props}
         width="246px"
         height="112.5px"
-        step={step}
-        triggerComparison={triggerComparison}
-        canvasID={canvasID}
       >
         <div className="flex flex-row items-center justify-between w-full">
           <WrappedText fontSize={12}>Select Action</WrappedText>
           <StepOptions
-            canvasID={canvasID}
             step={step}
             triggerComparison={triggerComparison}
           />

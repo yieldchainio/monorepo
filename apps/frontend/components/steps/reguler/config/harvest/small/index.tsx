@@ -13,17 +13,17 @@ import { PositionsDropdown } from "../components/positions-dropdown";
 import { InfoProvider } from "components/info-providers";
 import { ToolTipDirection } from "components/info-providers/types";
 import { completeHarvest } from "../utils/complete-harvest";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
+import { useCanvasPortal } from "utilities/hooks/contexts/canvas-context";
 
 /* eslint-disable react/display-name */
-export const SmallHarvestConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const SmallHarvestConfig = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step, triggerComparison } = useStepContext();
     /**
      * Get the harvestable functions
      */
-    const { choosePosition, harvestFunctions, harvestFunction } = useHarvest(
-      step,
-      triggerComparison
-    );
+    const { choosePosition, harvestFunctions, harvestFunction } = useHarvest();
 
     useEffect(() => {
       step.setFunction(harvestFunction);
@@ -32,20 +32,16 @@ export const SmallHarvestConfig = forwardRef<HTMLDivElement, StepProps>(
     /**
      * Get portal to canvas (for tooltips)
      */
-    const canvasPortal = useElementPortal(canvasID);
+    const canvasPortal = useCanvasPortal();
 
     // Return the JSX
     return (
       <BaseActionConfig
         className="flex-col px-0 py-2.5 gap-4 items-start"
-        style={style}
         ref={ref}
         {...props}
-        canvasID={canvasID}
         width="246px"
         height="220.5px"
-        step={step}
-        triggerComparison={triggerComparison}
         handleComplete={() => completeHarvest(step)}
       >
         <InfoProvider

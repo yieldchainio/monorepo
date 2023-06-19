@@ -5,10 +5,12 @@
  */
 
 import { StepProps } from "components/steps/types";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 
-export function useConfigContext({ step, triggerComparison }: StepProps) {
+export function useConfigContext() {
+  const { step } = useStepContext();
   /**
    * Get the global data context (passed onto creations of persisted tokens)
    */

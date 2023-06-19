@@ -7,34 +7,18 @@ import { forwardRef } from "react";
 import { StepSizing } from "utilities/classes/step/types";
 import { SmallSwapConfig } from "./small";
 import { MediumSwapConfig } from "./medium";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const SwapConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const SwapConfig = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step } = useStepContext();
     switch (step.size) {
       case StepSizing.SMALL:
-        return (
-          <SmallSwapConfig
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <SmallSwapConfig ref={ref} {...props} />;
 
       case StepSizing.MEDIUM:
-        return (
-          <MediumSwapConfig
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <MediumSwapConfig ref={ref} {...props} />;
     }
   }
 );

@@ -7,35 +7,18 @@ import { forwardRef } from "react";
 import { StepSizing } from "utilities/classes/step/types";
 import { SmallPerpBasketAddLiquidityConfig } from "./small";
 import { MediumPerpBasketAddLiquidityConfig } from "./medium";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const AddLiquidityPerpBasketConfig = forwardRef<
-  HTMLDivElement,
-  StepProps
->(({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
-  switch (step.size) {
-    case StepSizing.SMALL:
-      return (
-        <SmallPerpBasketAddLiquidityConfig
-          step={step}
-          style={style}
-          triggerComparison={triggerComparison}
-          ref={ref}
-          {...props}
-          canvasID={canvasID}
-        />
-      );
+export const AddLiquidityPerpBasketConfig = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step } = useStepContext();
+    switch (step.size) {
+      case StepSizing.SMALL:
+        return <SmallPerpBasketAddLiquidityConfig ref={ref} {...props} />;
 
-    case StepSizing.MEDIUM:
-      return (
-        <MediumPerpBasketAddLiquidityConfig
-          step={step}
-          style={style}
-          triggerComparison={triggerComparison}
-          ref={ref}
-          {...props}
-          canvasID={canvasID}
-        />
-      );
+      case StepSizing.MEDIUM:
+        return <MediumPerpBasketAddLiquidityConfig ref={ref} {...props} />;
+    }
   }
-});
+);

@@ -77,7 +77,7 @@ const ParentContainer = forwardRef<HTMLDivElement, BaseComponentProps>(
   }
 );
 
-ParentContainer.displayName = "ParentContainer"
+ParentContainer.displayName = "ParentContainer";
 
 /**
  * The actual draggable canvas.
@@ -239,4 +239,4 @@ const DraggableCanvas = forwardRef<HTMLDivElement, DraggableCanvasProps>(
     );
   }
 );
-DraggableCanvas.displayName = "DraggableCanvas"
+DraggableCanvas.displayName = "DraggableCanvas";

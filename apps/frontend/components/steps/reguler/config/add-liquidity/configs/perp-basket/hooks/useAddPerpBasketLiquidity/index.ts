@@ -16,16 +16,14 @@ import { useProtocols } from "../../../../../hooks/useProtocols";
 import { useTokens } from "../../../../../hooks/useTokens";
 import { ProtocolType, TokenTags } from "@prisma/client";
 import { useLogs } from "utilities/hooks/stores/logger";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 export const useAddPerpBasketLiquidity = ({
-  step,
-  triggerComparison,
   protocolType = ProtocolType.LIQUIDITY,
 }: {
-  step: Step;
-  triggerComparison: () => void;
   protocolType?: ProtocolType;
 }) => {
+  const { step, triggerComparison } = useStepContext();
   /**
    * Get some base variables that we need (context, network & our available tokens)
    */
@@ -33,10 +31,7 @@ export const useAddPerpBasketLiquidity = ({
     context,
     network,
     availableTokens: stepAvailableTokens,
-  } = useConfigContext({
-    step,
-    triggerComparison,
-  });
+  } = useConfigContext();
 
   /**
    * Get all protocols with add liquidity available

@@ -11,10 +11,13 @@ import {
   useState,
 } from "react";
 import { getProtocolLpConfig } from "./utils/get-protocol-lp-config";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const AddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const AddLiquidityConfig = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step } = useStepContext();
+
     const [AddLiqComponent, setAddLiquidityComponent] = useState<
       ForwardRefExoticComponent<StepProps & RefAttributes<HTMLDivElement>>
     >(getProtocolLpConfig(step));
@@ -23,15 +26,6 @@ export const AddLiquidityConfig = forwardRef<HTMLDivElement, StepProps>(
       setAddLiquidityComponent(getProtocolLpConfig(step));
     }, [step.protocol?.id]);
 
-    return (
-      <AddLiqComponent
-        step={step}
-        style={style}
-        triggerComparison={triggerComparison}
-        ref={ref}
-        {...props}
-        canvasID={canvasID}
-      />
-    );
+    return <AddLiqComponent ref={ref} {...props} />;
   }
 );

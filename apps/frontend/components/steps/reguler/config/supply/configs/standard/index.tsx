@@ -7,34 +7,19 @@ import { forwardRef } from "react";
 import { StepSizing } from "utilities/classes/step/types";
 import { SmallStandardAddLiquidityConfig } from "./small";
 import { MediumStandardAddLiquidityConfig } from "./medium";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const SupplyStandardConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const SupplyStandardConfig = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step } = useStepContext();
+
     switch (step.size) {
       case StepSizing.SMALL:
-        return (
-          <SmallStandardAddLiquidityConfig
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <SmallStandardAddLiquidityConfig ref={ref} {...props} />;
 
       case StepSizing.MEDIUM:
-        return (
-          <MediumStandardAddLiquidityConfig
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <MediumStandardAddLiquidityConfig ref={ref} {...props} />;
     }
   }
 );

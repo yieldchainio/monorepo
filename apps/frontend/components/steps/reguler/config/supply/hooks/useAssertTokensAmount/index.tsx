@@ -8,18 +8,18 @@ import { useEffect, useRef } from "react";
 import { Step } from "utilities/classes/step";
 import { useLogs } from "utilities/hooks/stores/logger";
 import { WarningMessage } from "components/logger/components/warning";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 export const useAssertTokensAmount = ({
   tokens,
-  step,
-  triggerComparison,
+
   amount = 2,
 }: {
   tokens: YCToken[];
-  step: Step;
-  triggerComparison: () => void;
+
   amount?: number;
 }) => {
+  const { step, triggerComparison } = useStepContext();
   /**
    * @notice
    * We run a useEffect on the length of our available tokens.

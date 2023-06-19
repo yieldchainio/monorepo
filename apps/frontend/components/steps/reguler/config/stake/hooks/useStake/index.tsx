@@ -13,21 +13,14 @@ import { useFunctions } from "../../../hooks/useFunctions";
 import { getRewardsFunction } from "../../utils/getRewardsFunction";
 import { useLogs } from "utilities/hooks/stores/logger";
 import { ErrorMessage } from "components/logger/components/error";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
-export const useStake = ({
-  step,
-  triggerComparison,
-}: {
-  step: Step;
-  triggerComparison: () => void;
-}) => {
+export const useStake = () => {
+  const { step, triggerComparison } = useStepContext();
   /**
    * Get some base variables that we need (context, network & our available tokens)
    */
-  const { context, network, availableTokens } = useConfigContext({
-    step,
-    triggerComparison,
-  });
+  const { context, network, availableTokens } = useConfigContext();
 
   /**
    * Get global logs to throw errors, messages
@@ -107,7 +100,7 @@ export const useStake = ({
       step.data.stake = {
         ...(step.data?.stake || {}),
         func: func.toJSON(),
-      } as StakeData
+      } as StakeData;
 
       // Validate that we have all required outflows available
       if (

@@ -11,21 +11,14 @@ import { SwapData } from "../../types";
 import { useExchanges } from "../useExchanges";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import { useConfigContext } from "../../../hooks/useConfigContext";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
-export const useSwap = ({
-  step,
-  triggerComparison,
-}: {
-  step: Step;
-  triggerComparison: () => void;
-}) => {
+export const useSwap = () => {
+  const { step, triggerComparison } = useStepContext();
   /**
    * Get some base variables that we need (context, network & our available tokens)
    */
-  const { context, network, availableTokens } = useConfigContext({
-    step,
-    triggerComparison,
-  });
+  const { context, network, availableTokens } = useConfigContext();
 
   /**
    * Get the avaialble exchnages
@@ -54,7 +47,7 @@ export const useSwap = ({
       step.data.swap = {
         ...(step.data?.swap || {}),
         fromToken: token.toJSON(),
-      } as SwapData
+      } as SwapData;
 
       // Clear existing outflows
       step.clearOutflows();
@@ -73,7 +66,7 @@ export const useSwap = ({
       step.data.swap = {
         ...(step.data?.swap || {}),
         toToken: token.toJSON(),
-      } as SwapData
+      } as SwapData;
 
       // Clear existing inflows
       step.clearInflows();

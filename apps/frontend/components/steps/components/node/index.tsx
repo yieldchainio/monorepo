@@ -24,11 +24,13 @@ import { InfoProvider } from "components/info-providers";
 import { Step } from "utilities/classes/step";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 import { ToolTipDirection } from "components/info-providers/types";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
+import { useCanvasPortal } from "utilities/hooks/contexts/canvas-context";
 
 /* eslint-disable react/display-name */
 export const BaseNode = forwardRef<
   HTMLDivElement,
-  StepProps & {
+  BaseComponentProps & {
     width: `${number}${string}`;
     height: `${number}${string}`;
   }
@@ -39,17 +41,14 @@ export const BaseNode = forwardRef<
       width,
       height,
       className,
-      style,
-      step,
-      triggerComparison,
-      canvasID,
       ...props
-    }: StepProps & {
+    }: BaseComponentProps & {
       width: `${number}${string}`;
       height: `${number}${string}`;
     },
     ref
   ) => {
+    const { step, style } = useStepContext();
     /**
      * @notice
      *
@@ -77,14 +76,7 @@ export const BaseNode = forwardRef<
           step.state == "complete" &&
           step.children.length &&
           step.children[0].state !== "empty" && (
-            <ChildAdders
-              height={height}
-              width={width}
-              style={style}
-              step={step}
-              triggerComparison={triggerComparison}
-              canvasID={canvasID}
-            />
+            <ChildAdders height={height} width={width} />
           )}
         <div
           className={
@@ -110,14 +102,11 @@ export const BaseNode = forwardRef<
 const ChildAdders = ({
   width,
   height,
-  style,
-  step,
-  canvasID,
-  triggerComparison,
-}: StepProps & {
+}: {
   width: `${number}${string}`;
   height: `${number}${string}`;
 }) => {
+  const { step, style, triggerComparison } = useStepContext();
   /**
    * Memoize the function to add a new child
    */
@@ -138,7 +127,7 @@ const ChildAdders = ({
   /**
    * Get the canvas portal for the tooltip
    */
-  const canvasPortal = useElementPortal(canvasID);
+  const canvasPortal = useCanvasPortal();
 
   return (
     <div className="" style={{ ...style, zIndex: 0, position: "relative" }}>

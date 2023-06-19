@@ -11,28 +11,26 @@ import Dropdown from "components/dropdown";
 import { InfoProvider } from "components/info-providers";
 import { ToolTipDirection } from "components/info-providers/types";
 import { Timestamps } from "@yc/yc-models";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const MediumAutomationConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const MediumAutomationConfig = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step, triggerComparison } = useStepContext();
     /**
      * Get the states & setters from the useAutomation hook
      */
     const { chooseInterval, intervalInput, timestamp, chooseTimestamp } =
-      useAutomation({ step, triggerComparison });
+      useAutomation();
 
     // Return JSX
     return (
       <BaseTriggerConfig
         className="flex-col px-0 py-2.5 gap-8 items-start"
-        style={style}
         ref={ref}
         {...props}
-        canvasID={canvasID}
         width="327px"
         height="220.5px"
-        step={step}
-        triggerComparison={triggerComparison}
         handleComplete={() => null}
       >
         <div className="w-[100%] flex flex-row gap-2 items-start ">

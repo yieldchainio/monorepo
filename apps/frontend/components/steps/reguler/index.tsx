@@ -8,67 +8,34 @@ import { StepSizing, StepType } from "utilities/classes/step/types";
 import { StepProps } from "../types";
 import { SmallCompleteStep } from "./complete/small";
 import { MediumCompleteStep } from "./complete/medium";
-import { forwardRef } from "react";
+import { forwardRef, useContext } from "react";
 import { RegulerCompleteStep } from "./complete";
 import { EmptyStep } from "../placeholder";
 import { RegulerChooseAction } from "./initial";
 import { ActionConfig } from "./config";
+import { StepContext, useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const RegulerStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, triggerComparison, style, canvasID, ...props }: StepProps, ref) => {
+export const RegulerStep = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
     /**
      * Switch case to return corresponding step component depending on state type
      */
 
+    const { step } = useStepContext();
+
     switch (step.state) {
       case "empty":
-        return (
-          <EmptyStep
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <EmptyStep ref={ref} {...props} />;
 
       case "initial":
-        return (
-          <RegulerChooseAction
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <RegulerChooseAction ref={ref} {...props} />;
 
       case "config":
-        return (
-          <ActionConfig
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <ActionConfig ref={ref} {...props} />;
 
       case "complete":
-        return (
-          <RegulerCompleteStep
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <RegulerCompleteStep ref={ref} {...props} />;
     }
   }
 );

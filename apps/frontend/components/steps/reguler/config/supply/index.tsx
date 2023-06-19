@@ -11,10 +11,12 @@ import {
   useState,
 } from "react";
 import { getProtocolSupplyConfig } from "./utils/get-protocol-supply-config";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const SupplyConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const SupplyConfig = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step } = useStepContext();
     const [SupplyComponent, setSupplyComponent] = useState<
       ForwardRefExoticComponent<StepProps & RefAttributes<HTMLDivElement>>
     >(getProtocolSupplyConfig(step));
@@ -23,15 +25,6 @@ export const SupplyConfig = forwardRef<HTMLDivElement, StepProps>(
       setSupplyComponent(getProtocolSupplyConfig(step));
     }, [step.protocol?.id]);
 
-    return (
-      <SupplyComponent
-        step={step}
-        style={style}
-        triggerComparison={triggerComparison}
-        ref={ref}
-        {...props}
-        canvasID={canvasID}
-      />
-    );
+    return <SupplyComponent ref={ref} {...props} />;
   }
 );

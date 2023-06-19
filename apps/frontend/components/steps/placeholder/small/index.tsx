@@ -5,13 +5,19 @@
 import { DashedGradientBorder } from "components/gradient-border/dashed";
 import { StepProps } from "components/steps/types";
 import WrappedText from "components/wrappers/text";
-import { forwardRef } from "react";
+import { forwardRef, useContext } from "react";
 import { Step } from "utilities/classes/step";
 import { StepType } from "utilities/classes/step/types";
+import {
+  StepContext,
+  useStepContext,
+} from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
 export const EmptySmallStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, ...props }: StepProps, ref) => {
+  ({ ...props }: StepProps, ref) => {
+    const { step, style, triggerComparison } = useStepContext();
+
     /**
      * Switch case for the sizing
      */

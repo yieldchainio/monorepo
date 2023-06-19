@@ -7,34 +7,18 @@ import { forwardRef } from "react";
 import { StepSizing } from "utilities/classes/step/types";
 import { SmallHarvestConfig } from "./small";
 import { MediumHarvestConfig } from "./medium";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const HarvestConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const HarvestConfig = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step } = useStepContext();
     switch (step.size) {
       case StepSizing.SMALL:
-        return (
-          <SmallHarvestConfig
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <SmallHarvestConfig ref={ref} {...props} />;
 
       case StepSizing.MEDIUM:
-        return (
-          <MediumHarvestConfig
-            step={step}
-            style={style}
-            triggerComparison={triggerComparison}
-            ref={ref}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <MediumHarvestConfig ref={ref} {...props} />;
     }
   }
 );

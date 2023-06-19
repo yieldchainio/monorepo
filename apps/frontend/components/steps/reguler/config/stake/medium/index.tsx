@@ -14,10 +14,12 @@ import { getRewardsFunction } from "../utils/getRewardsFunction";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
 import WrappedText from "components/wrappers/text";
 import { PoolsDropdown } from "../components/pool-dropdown";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
 export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+  ({ ...props }: StepProps, ref) => {
+    const { step } = useStepContext();
     /**
      * Get all of our stake-related variables, methods from the useStake hook
      */
@@ -28,7 +30,7 @@ export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
       chooseFunction,
       functions,
       stakeFunction,
-    } = useStake({ step, triggerComparison });
+    } = useStake();
 
     useEffect(() => {
       step.setFunction(stakeFunction);
@@ -38,14 +40,10 @@ export const MediumStakeConfig = forwardRef<HTMLDivElement, StepProps>(
     return (
       <BaseActionConfig
         className="flex-col px-0 py-2.5 gap-8 items-start"
-        style={style}
         ref={ref}
         {...props}
-        canvasID={canvasID}
         width="327px"
         height="348px"
-        step={step}
-        triggerComparison={triggerComparison}
         handleComplete={() => {
           // We set the step's function to our stake function on completion
           step.setFunction(stakeFunction);

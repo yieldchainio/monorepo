@@ -13,14 +13,17 @@ import {
 } from "components/tokens/bundle/step";
 import { BaseNode } from "components/steps/components/node";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
+import { useCanvasPortal } from "utilities/hooks/contexts/canvas-context";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const MediumCompleteStep = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step } = useStepContext();
     /**
      * Get a portal to the canvas (for tooltips of tokens)
      */
-    const canvasPortal = useElementPortal(canvasID);
+    const canvasPortal = useCanvasPortal();
 
     /**
      * Memoizing for performance
@@ -41,14 +44,10 @@ export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
     return (
       <BaseNode
         className="flex-col justify-between px-4 py-4"
-        style={style}
         ref={ref}
         {...props}
         width="327px"
         height="96px"
-        step={step}
-        triggerComparison={triggerComparison}
-        canvasID={canvasID}
       >
         <div className="flex flex-row justify-between w-full">
           <div className="flex flex-row items-center justify-center gap-2">
@@ -62,12 +61,7 @@ export const MediumCompleteStep = forwardRef<HTMLDivElement, StepProps>(
               <WrappedText fontSize={12}>{step.action?.name}</WrappedText>
             </div>
           </div>
-          <StepOptions
-            canvasID={canvasID}
-            step={step}
-            onClick={props.onClick}
-            triggerComparison={triggerComparison}
-          />
+          <StepOptions onClick={props.onClick} />
         </div>
         <div className="flex flex-row justify-between w-full pl-1">
           <div className="flex flex-row gap-2 items-center justify-center">

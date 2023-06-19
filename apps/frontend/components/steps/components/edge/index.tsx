@@ -12,6 +12,7 @@ import { forwardRef, useMemo } from "react";
 import { TokenPercentageBox } from "../token-percentage";
 import { useElementPortal } from "utilities/hooks/general/useElementPortal";
 import { BaseComponentProps } from "components/types";
+import { useCanvasPortal } from "utilities/hooks/contexts/canvas-context";
 
 /* eslint-disable react/display-name */
 export const Edge = forwardRef<
@@ -19,26 +20,23 @@ export const Edge = forwardRef<
   {
     parentStep: Step;
     childStep: Step;
-    canvasID?: string;
   } & BaseComponentProps
 >(
   (
     {
       parentStep,
       childStep,
-      canvasID,
       style,
     }: {
       parentStep: Step;
       childStep: Step;
-      canvasID?: string;
     } & BaseComponentProps,
     ref
   ) => {
     /**
      * Portal for the  canvas (used for percentage box tooltip)
      */
-    const canvasPortal = useElementPortal(canvasID);
+    const canvasPortal = useCanvasPortal()
 
     /**
      * Get shortands of some positioning propreties of both the parent and the child

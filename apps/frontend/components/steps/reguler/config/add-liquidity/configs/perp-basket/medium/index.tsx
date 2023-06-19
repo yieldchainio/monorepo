@@ -15,12 +15,15 @@ import { TokenSwap } from "components/steps/reguler/config/swap/components/token
 import { useAddPerpBasketLiquidity } from "../hooks/useAddPerpBasketLiquidity";
 import { YCToken } from "@yc/yc-models";
 import { RepresentedTokensLpBasket } from "components/steps/reguler/config/add-liquidity/configs/perp-basket/components/represented-basket";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
 export const MediumPerpBasketAddLiquidityConfig = forwardRef<
   HTMLDivElement,
-  StepProps
->(({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+  any
+>(({ ...props }: any, ref) => {
+  const { step } = useStepContext();
+
   /**
    * Get the add liquidity variables & methods
    */
@@ -34,10 +37,7 @@ export const MediumPerpBasketAddLiquidityConfig = forwardRef<
     basketDepositToken,
     chooseBasketDepositToken,
     allBasketTokens,
-  } = useAddPerpBasketLiquidity({
-    step,
-    triggerComparison,
-  });
+  } = useAddPerpBasketLiquidity({});
 
   /**
    * We assert that we must have 1 available outflows from our parent at all times.
@@ -58,14 +58,10 @@ export const MediumPerpBasketAddLiquidityConfig = forwardRef<
   return (
     <BaseActionConfig
       className="flex-col px-0 py-2.5 gap-8 items-start"
-      style={style}
       ref={ref}
       {...props}
-      canvasID={canvasID}
       width="327px"
       height="498px"
-      step={step}
-      triggerComparison={triggerComparison}
       handleComplete={() => completePerpBasketLPConfig(step, context)}
       canContinue={
         protocol

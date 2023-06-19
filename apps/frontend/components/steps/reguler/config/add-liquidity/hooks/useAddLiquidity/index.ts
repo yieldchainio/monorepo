@@ -11,16 +11,14 @@ import { useProtocols } from "../../../hooks/useProtocols";
 import { useTokens } from "../../../hooks/useTokens";
 import { AddLiquidityData } from "@yc/yc-models";
 import { ProtocolType } from "@prisma/client";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 export const useAddLiquidity = ({
-  step,
-  triggerComparison,
   protocolType = ProtocolType.LIQUIDITY,
 }: {
-  step: Step;
-  triggerComparison: () => void;
   protocolType?: ProtocolType;
 }) => {
+  const { step, triggerComparison } = useStepContext();
   /**
    * Get some base variables that we need (context, network & our available tokens)
    */
@@ -28,10 +26,7 @@ export const useAddLiquidity = ({
     context,
     network,
     availableTokens: stepAvailableTokens,
-  } = useConfigContext({
-    step,
-    triggerComparison,
-  });
+  } = useConfigContext();
 
   /**
    * Get all protocols with add liquidity available

@@ -9,10 +9,12 @@ import { StepProps } from "../../types";
 import { forwardRef } from "react";
 import { SmallCompleteTrigger } from "./small";
 import { MediumCompleteTrigger } from "./medium";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const TriggerCompleteStep = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, triggerComparison, style, canvasID, ...props }: StepProps, ref) => {
+export const TriggerCompleteStep = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step } = useStepContext();
     /**
      * Switch case to return corresponding step component depending on type & size
      */
@@ -22,28 +24,10 @@ export const TriggerCompleteStep = forwardRef<HTMLDivElement, StepProps>(
      */
     switch (step.size) {
       case StepSizing.SMALL:
-        return (
-          <SmallCompleteTrigger
-            step={step}
-            ref={ref}
-            style={style}
-            triggerComparison={triggerComparison}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <SmallCompleteTrigger ref={ref} {...props} />;
 
       case StepSizing.MEDIUM:
-        return (
-          <MediumCompleteTrigger
-            step={step}
-            ref={ref}
-            style={style}
-            triggerComparison={triggerComparison}
-            {...props}
-            canvasID={canvasID}
-          />
-        );
+        return <MediumCompleteTrigger ref={ref} {...props} />;
     }
   }
 );

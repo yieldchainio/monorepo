@@ -5,12 +5,14 @@
  * Based on the step's type.
  */
 
-import { forwardRef } from "react";
+import { createContext, forwardRef } from "react";
 import { StepProps } from "./types";
 import { TriggerCompleteStep } from "./trigger/complete";
 import { StepType } from "utilities/classes/step/types";
 import { RegulerStep } from "./reguler";
 import { TriggerStep } from "./trigger";
+import { Step } from "utilities/classes/step";
+import { StepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
 export const HeadStep = forwardRef<HTMLDivElement, StepProps>(
@@ -22,26 +24,22 @@ export const HeadStep = forwardRef<HTMLDivElement, StepProps>(
     switch (step.type) {
       case StepType.STEP:
         return (
-          <RegulerStep
-            step={step}
-            style={style}
-            ref={ref}
-            triggerComparison={triggerComparison}
-            {...props}
-            canvasID={canvasID}
-          />
+          <StepContext.Provider
+            value={{
+              step,
+              triggerComparison,
+              style,
+            }}
+          >
+            <RegulerStep ref={ref} {...props} />
+          </StepContext.Provider>
         );
 
       case StepType.TRIGGER:
         return (
-          <TriggerStep
-            step={step}
-            style={style}
-            ref={ref}
-            triggerComparison={triggerComparison}
-            {...props}
-            canvasID={canvasID}
-          />
+          <StepContext.Provider value={{ step, triggerComparison, style }}>
+            <TriggerStep ref={ref} {...props} />
+          </StepContext.Provider>
         );
 
       case StepType.CONDITION:

@@ -10,10 +10,13 @@ import { forwardRef, useMemo } from "react";
 import { StepOptions } from "../../../components/options";
 import { BaseNode } from "components/steps/components/node";
 import { TRIGGER_NAMES_TO_COMPONENTS, TriggerVisual } from "../../constants";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const MediumCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const MediumCompleteTrigger = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step, triggerComparison } = useStepContext();
+
     /**
      * Memoize the persisted visual from step's data
      */
@@ -30,14 +33,10 @@ export const MediumCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
     return (
       <BaseNode
         className="justify-between px-4 py-4 "
-        style={style}
         ref={ref}
         {...props}
         width="327px"
         height="96px"
-        step={step}
-        triggerComparison={triggerComparison}
-        canvasID={canvasID}
       >
         <div className="flex flex-row gap-2 items-center justify-start">
           <div className="flex items-center justify-center p-3 bg-custom-componentbg border-[1px] border-custom-themedBorder dark:border-0  rounded-large">
@@ -52,11 +51,7 @@ export const MediumCompleteTrigger = forwardRef<HTMLDivElement, StepProps>(
         </div>
         <div className="w-[25%] p-4">{additionalVisual}</div>
         <div className="flex flex-col h-full py-0 justify-start ">
-          <StepOptions
-            canvasID={canvasID}
-            step={step}
-            triggerComparison={triggerComparison}
-          />
+          <StepOptions />
         </div>
       </BaseNode>
     );

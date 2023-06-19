@@ -11,10 +11,13 @@ import { ProtocolsDropdown } from "../../components/protocol-dropdown";
 import { useStake } from "../hooks/useStake";
 import { PoolsDropdown } from "../components/pool-dropdown";
 import WrappedText from "components/wrappers/text";
+import { useStepContext } from "utilities/hooks/contexts/step-context";
 
 /* eslint-disable react/display-name */
-export const SmallStakeConfig = forwardRef<HTMLDivElement, StepProps>(
-  ({ step, style, triggerComparison, canvasID, ...props }: StepProps, ref) => {
+export const SmallStakeConfig = forwardRef<HTMLDivElement, any>(
+  ({ ...props }: any, ref) => {
+    const { step } = useStepContext();
+
     /**
      * Get all of our stake-related variables, methods from the useStake hook
      */
@@ -27,7 +30,7 @@ export const SmallStakeConfig = forwardRef<HTMLDivElement, StepProps>(
       functions,
       stakeFunction,
       rewardsFunction,
-    } = useStake({ step, triggerComparison });
+    } = useStake();
 
     useEffect(() => {
       step.setFunction(stakeFunction);
@@ -37,14 +40,10 @@ export const SmallStakeConfig = forwardRef<HTMLDivElement, StepProps>(
     return (
       <BaseActionConfig
         className="flex-col px-0 py-2.5 gap-4 items-start"
-        style={style}
         ref={ref}
         {...props}
-        canvasID={canvasID}
         width="246px"
         height="245.5px"
-        step={step}
-        triggerComparison={triggerComparison}
         handleComplete={() => {
           // We set the step's function to our stake function on completion
           step.setFunction(stakeFunction);

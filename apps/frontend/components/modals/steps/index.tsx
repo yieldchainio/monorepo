@@ -19,6 +19,7 @@ import { SEED_TO_TREE_MARGIN } from "./constants";
 import WrappedText from "components/wrappers/text";
 import { BaseComponentProps } from "components/types";
 import { StraightEdge } from "components/steps/components/edge/components/straight-edge";
+import { CanvasContext } from "utilities/hooks/contexts/canvas-context";
 
 export const StepsModal = ({
   style,
@@ -222,37 +223,69 @@ export const StepsModal = ({
       }}
       {...wrapperProps}
     >
-      <Canvas
-        size={canvasSize as [number, number]}
-        childrenWrapper={<div className="relative w-max h-max mx-auto"></div>}
-        style={style}
-        className={className}
-        parentStyle={parentStyle}
-        utilityButtons={[
-          ...(utilityButtons || []),
-          {
-            children: (
-              <WrappedImage
-                src={{
-                  dark: "/icons/expand-light.svg",
-                  light: "/icons/expand-dark.svg",
-                }}
-                width={14}
-                height={14}
-              />
-            ),
+      <CanvasContext.Provider value={canvasID as string}>
+        <Canvas
+          size={canvasSize as [number, number]}
+          childrenWrapper={<div className="relative w-max h-max mx-auto"></div>}
+          style={style}
+          className={className}
+          parentStyle={parentStyle}
+          utilityButtons={[
+            ...(utilityButtons || []),
+            {
+              children: (
+                <WrappedImage
+                  src={{
+                    dark: "/icons/expand-light.svg",
+                    light: "/icons/expand-dark.svg",
+                  }}
+                  width={14}
+                  height={14}
+                />
+              ),
 
-            label: "Full Screen",
-            onClick: () => toFullScreen(),
-          },
-        ]}
-        setters={{
-          zoom: handleZoom,
-        }}
-        id={canvasID}
-      >
-        <>
-          {baseRoot?.map<React.ReactNode>((step: Step, i: number) => {
+              label: "Full Screen",
+              onClick: () => toFullScreen(),
+            },
+          ]}
+          setters={{
+            zoom: handleZoom,
+          }}
+          id={canvasID}
+        >
+          <>
+            {baseRoot?.map<React.ReactNode>((step: Step, i: number) => {
+              return (
+                <HeadStep
+                  step={step}
+                  style={{
+                    left: step.position.x,
+                    top: step.position.y,
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    transform: "translateX(-50%)",
+                    ...style,
+                  }}
+                  key={step.id}
+                  triggerComparison={triggerComparison}
+                />
+              );
+            })}
+            {baseRoot?.map((step: Step) => {
+              return !step.children.length
+                ? null
+                : step.children.map((child: Step) => (
+                    <Edge
+                      parentStep={step}
+                      childStep={child}
+                      key={`${step.id}_${child.id}`}
+                      style={style}
+                    />
+                  ));
+            })}
+          </>
+
+          {rootStep?.map<React.ReactNode>((step: Step, i: number) => {
             return (
               <HeadStep
                 step={step}
@@ -266,81 +299,47 @@ export const StepsModal = ({
                 }}
                 key={step.id}
                 triggerComparison={triggerComparison}
-                canvasID={canvasID}
               />
             );
           })}
-          {baseRoot?.map((step: Step) => {
+          {rootStep?.map((step: Step) => {
             return !step.children.length
               ? null
               : step.children.map((child: Step) => (
                   <Edge
                     parentStep={step}
                     childStep={child}
-                    canvasID={canvasID}
                     key={`${step.id}_${child.id}`}
                     style={style}
                   />
                 ));
           })}
-        </>
 
-        {rootStep?.map<React.ReactNode>((step: Step, i: number) => {
-          return (
-            <HeadStep
-              step={step}
-              style={{
-                left: step.position.x,
-                top: step.position.y,
-                marginLeft: "auto",
-                marginRight: "auto",
-                transform: "translateX(-50%)",
-                ...style,
-              }}
-              key={step.id}
-              triggerComparison={triggerComparison}
-              canvasID={canvasID}
+          {baseRoot && (
+            <BorderedStepsContainer
+              width={`${baseContainerDimensions.width}px`}
+              height={`${baseContainerDimensions.height}px`}
+              onClick={() => seedContainerOnClick?.()}
+              writeable={rootStep?.writeable || false}
             />
-          );
-        })}
-        {rootStep?.map((step: Step) => {
-          return !step.children.length
-            ? null
-            : step.children.map((child: Step) => (
-                <Edge
-                  parentStep={step}
-                  childStep={child}
-                  canvasID={canvasID}
-                  key={`${step.id}_${child.id}`}
-                  style={style}
-                />
-              ));
-        })}
-
-        {baseRoot && (
-          <BorderedStepsContainer
-            width={`${baseContainerDimensions.width}px`}
-            height={`${baseContainerDimensions.height}px`}
-            onClick={() => seedContainerOnClick?.()}
-            writeable={rootStep?.writeable || false}
-          />
-        )}
-        {baseRoot && (
-          <StraightEdge
-            parentAnchor={{
-              x: 0,
-              y: baseContainerDimensions.height,
-            }}
-            childAnchor={{
-              x: 0,
-              y: rootStep?.position?.y || 0,
-            }}
-            style={{
-              opacity: "50%",
-            }}
-          />
-        )}
-      </Canvas>
+          )}
+          {baseRoot && (
+            <StraightEdge
+              parentAnchor={{
+                x: 0,
+                y: baseContainerDimensions.height,
+              }}
+              childAnchor={{
+                x: 0,
+                y: rootStep?.position?.y || 0,
+              }}
+              style={{
+                opacity: "50%",
+              }}
+            />
+          )}
+        </Canvas>
+      </CanvasContext.Provider>
     </div>
   );
 
@@ -370,54 +369,6 @@ export const StepsModal = ({
   }
 
   return component;
-};
-
-const StepsTree = ({
-  step,
-  canvasID,
-  triggerComparison,
-  style,
-}: Omit<StepProps, "step"> & {
-  step: Step | null;
-  transformX?: string;
-  transformY?: string;
-}) => {
-  return (
-    <>
-      1
-      {step?.map<React.ReactNode>((step: Step, i: number) => {
-        return (
-          <HeadStep
-            step={step}
-            style={{
-              left: step.position.x,
-              top: step.position.y,
-              marginLeft: "auto",
-              marginRight: "auto",
-              transform: "translateX(-50%)",
-              ...style,
-            }}
-            key={step.id}
-            triggerComparison={triggerComparison}
-            canvasID={canvasID}
-          />
-        );
-      })}
-      {step?.map((step: Step) => {
-        return !step.children.length
-          ? null
-          : step.children.map((child: Step) => (
-              <Edge
-                parentStep={step}
-                childStep={child}
-                canvasID={canvasID}
-                key={`${step.id}_${child.id}`}
-                style={style}
-              />
-            ));
-      })}
-    </>
-  );
 };
 
 const BorderedStepsContainer = ({

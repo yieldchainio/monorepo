@@ -12,10 +12,18 @@ export function useActions() {
   // Get all of the available actions
   const allActions = useYCStore((state) => state.context.actions);
 
+  const allFunctions = useYCStore((state) => state.context.functions);
+
   // Memo the available ones
   const availableActions = useMemo(() => {
     return allActions
-      .filter((action) => action.available === true)
+      .filter((action) => {
+        const isAvailable = action.available === true;
+
+        // const isUnlocked = allFunctions.filter((func) => func.actions.some((_action) => action.id == _action.id) && (!func.dependencyFunction || func.dependencyFunction.id == ))
+
+        return isAvailable;
+      })
       .map((action) => {
         action.icon = ACTION_IDS_TO_ICONS[action.id];
         return action;

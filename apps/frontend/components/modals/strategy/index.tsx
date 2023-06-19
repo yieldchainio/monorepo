@@ -90,7 +90,7 @@ export const StrategyModal = ({
           {expanded && (
             <div className="w-full  flex flex-row items-center justify-center z-1000">
               <div
-                className="flex flex-row items-center cursor-pointer"
+                className="group flex flex-row items-center cursor-pointer hover:scale-95 transition duration-200 ease-in-out"
                 onClick={() => setExpanded(!expanded)}
               >
                 <WrappedText fontSize={20} fontStyle="bold">
@@ -103,7 +103,7 @@ export const StrategyModal = ({
                   }}
                   width={28}
                   height={28}
-                  className="group-hover:opacity-80  transition duration-200 ease-in-out group-hover:rotate-[-90deg] "
+                  className="group-hover:opacity-80  transition duration-200 ease-in-out rotate-[-90deg] group-hover:rotate-[0deg] "
                 ></WrappedImage>
               </div>
             </div>
@@ -133,7 +133,7 @@ export const StrategyModal = ({
         {!expanded && (
           <div className="flex flex-col items-center justify-end w-full h-[28%]  absolute top-[100%] translate-y-[-100%] pb-10">
             <div
-              className="group flex flex-row gap-1 items-center z-10 cursor-pointer"
+              className="group flex flex-row gap-1 items-center z-10 cursor-pointer transition duration-200 ease-in-out hover:scale-105"
               onClick={() => setExpanded(!expanded)}
             >
               <WrappedText fontSize={20} fontStyle="bold">

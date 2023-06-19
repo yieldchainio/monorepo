@@ -53,7 +53,8 @@ export const StrategyOperationsBox = ({
         from: address as unknown as string,
         executionCallback: async (req) => {
           const res = await signer?.sendTransaction(req as any);
-          if (!res) throw "Cannot Deposit - Res Undefined In Execution Callback";
+          if (!res)
+            throw "Cannot Deposit - Res Undefined In Execution Callback";
           return {
             hash: res.hash,
           };
@@ -67,7 +68,8 @@ export const StrategyOperationsBox = ({
         from: address as unknown as string,
         executionCallback: async (req) => {
           const res = await signer?.sendTransaction(req as any);
-          if (!res) throw "Cannot Withdraw - Res Undefined In Execution Callback";
+          if (!res)
+            throw "Cannot Withdraw - Res Undefined In Execution Callback";
           return {
             hash: res.hash,
           };
@@ -132,6 +134,7 @@ const InputSection = ({
                 src={strategy?.depositToken?.logo || undefined}
                 width={18}
                 height={18}
+                className="rounded-full"
               />
               <WrappedText fontSize={11} fontStyle="bold" className=" mt-1 ">
                 {strategy?.depositToken?.symbol}

@@ -65,8 +65,6 @@ export const BaseActionConfig = forwardRef<
       return false;
     }, [step.function?.id]);
 
-    console.log("Step Ser", step);
-
     const canComplete = useMemo(() => {
       if (canContinue == "string") return canContinue;
 

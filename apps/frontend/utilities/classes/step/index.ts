@@ -58,13 +58,6 @@ export class Step extends Node<Step> implements IStep<Step> {
     this.removeEmptyChildren();
     this.children = [...this.children, child];
     child.parent = this;
-    if (child.state == "empty")
-      console.log(
-        "Adding An Empty child. My size:",
-        this.size,
-        "Child size:",
-        child.size
-      );
     inherit && child.inheritStyle(propagateInhertiance);
   };
 
@@ -809,7 +802,6 @@ export class Step extends Node<Step> implements IStep<Step> {
     context,
     iStepConfigs,
   }: DBStepConstructionProps<Step>) => {
-    console.log("Gonna construct FE step from DB Step...", step);
     // If this is the root,
     const additionalConfigs = step.id !== "root" ? {} : DEPOSIT_TRIGGER_CONFIG;
     const stepConfig: IStep<Step> = {

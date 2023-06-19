@@ -52,7 +52,6 @@ function WhitelistPage() {
   const params = useSearchParams();
 
   useEffect(() => {
-    console.log("Callback param", params.get("callback"));
     if (isWhitelisted)
       setTimeout(() => {
         router.replace(params.get("callback") || "/app");

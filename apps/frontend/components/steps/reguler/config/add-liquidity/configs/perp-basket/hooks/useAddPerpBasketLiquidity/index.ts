@@ -99,8 +99,6 @@ export const useAddPerpBasketLiquidity = ({
           _token.parentProtocol?.id == protocol?.id
       );
 
-      console.log("Choosing Protocol... TOken:", token);
-
       if (token) {
         step.data.perpBasketLp = {
           ...(step.data?.perpBasketLp || {}),

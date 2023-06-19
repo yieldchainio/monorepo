@@ -74,27 +74,17 @@ function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
   // Function to update user's details
   const updateDetails = async (newDetails: Partial<UserUpdateArguments>) => {
     if (!user) {
-      console.log("Gonna Return Null", user, userName);
       return null;
     }
-
-    console.log("Gonna update to this:", { ...newDetails, id: user.id });
 
     // We call the update details function, spread out the new details
     // and make sure we input the current user's ID
     const res = await YCUser.updateDetails({ ...newDetails, id: user.id });
 
-    console.log("Update res", res);
-
     if (res) {
       await refresher(Endpoints.USERS);
       setUser(new YCUser(res, YCClassifications.getInstance()));
     }
-    console.log(
-      "New user in context after refreshing",
-      users.find((usr) => usr.id == user.id)
-    );
-    const newUser = "";
 
     for (const [key, val] of Object.entries(newDetails)) {
       // @ts-ignore
@@ -206,9 +196,6 @@ function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
       const _user = users.find(
         (user_) => user_.address.toLowerCase() === userAddress?.toLowerCase()
       );
-
-      console.log("Found user:", _user);
-      console.log("All Users:", users);
 
       // Set the new user
       if (_user) setUser(_user);

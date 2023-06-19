@@ -25,8 +25,6 @@ export const completePerpBasketLPConfig = async (
   // Get the LP data
   const data = step.data?.perpBasketLp as PerpBasketLpData;
 
-  console.log(data);
-
   // Assert that all data must be present
   if (
     !data.protocol ||

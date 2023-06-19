@@ -39,7 +39,7 @@ export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
           className="grid grid-cols-3 gap-2 w-full  pt-2 px-2 overflow-y-scroll overflow-x-visible scrollbar-hide"
           data-wheelable={false}
         >
-          {actions.concat(actions).map(({ action, speciallyUnlocked }, i) => {
+          {actions.map(({ action, speciallyUnlocked }, i) => {
             return (
               <div
                 className="relative overflow-visible w-full h-full"

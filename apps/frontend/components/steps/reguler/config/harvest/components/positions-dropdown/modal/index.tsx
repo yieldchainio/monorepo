@@ -61,8 +61,6 @@ export const PositionsModal = ({
               // Get the dependency function (the original position)
               const dependency = item.dependencyFunction as YCFunc;
 
-              console.log("Harvest dep", dependency);
-
               return (
                 <TokensBundle
                   tooltipEnabled={false}

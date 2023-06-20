@@ -57,9 +57,9 @@ export const FiltersMenu = <V, T extends BaseFilter<V>>({
             <div className="flex flex-col gap-8 items-center justify-center w-[80%] max-w-[400px] h-max bg-custom-subbg rounded-xl p-8">
               {filters
                 .filter((filter) => !filter.hidden)
-                .map((filter) => {
+                .map((filter, i) => {
                   return (
-                    <div className="flex flex-col items-center w-full justify-center gap-1 hover:bg-opacity-[5%] hover:scale-[1] will-change-transform ">
+                    <div className="flex flex-col items-center w-full justify-center gap-1 hover:bg-opacity-[5%] hover:scale-[1] will-change-transform " key={`${i}`}>
                       <WrappedText fontSize={20}>
                         {filter.name + ":"}
                       </WrappedText>

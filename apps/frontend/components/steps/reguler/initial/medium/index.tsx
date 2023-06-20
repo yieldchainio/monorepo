@@ -44,6 +44,7 @@ export const MediumChooseAction = forwardRef<HTMLDivElement, StepProps>(
               <div
                 className="relative overflow-visible w-full h-full"
                 data-wheelable={false}
+                key={`${i}`}
               >
                 {speciallyUnlocked && (
                   <InfoProvider contents="Available Actions">

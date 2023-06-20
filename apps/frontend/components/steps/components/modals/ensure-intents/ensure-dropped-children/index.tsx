@@ -30,9 +30,9 @@ export const EnsureDroppedChildren = ({
       modalKey={modalKey as number}
       confirmHandler={() => step.setState(newState)}
     >
-      {childrenToDrop.map((child) => {
+      {childrenToDrop.map((child, i) => {
         return (
-          <div className="flex flex-row gap-2 items-center ">
+          <div className="flex flex-row gap-2 items-center " key={`${i}`}>
             <div className="flex flex-row gap-1 items-center">
               <WrappedImage
                 src={child.protocol?.logo}

@@ -54,7 +54,9 @@ function WhitelistPage() {
   useEffect(() => {
     if (isWhitelisted)
       setTimeout(() => {
-        router.replace(params.get("callback") || "/app");
+        const path = params.get("callback");
+
+        router.replace((path?.includes("/app") ? path : "/app") || "/app");
       }, 1000);
   }, [isWhitelisted]);
 

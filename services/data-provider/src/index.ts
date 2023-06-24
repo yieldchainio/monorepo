@@ -219,10 +219,11 @@ app.get("/ccip-test/:callData", async (req: any, res: any) => {
 
   res
     .status(200)
-    .send(
-      callData +
-        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-    );
+    .json({
+      data:
+        callData +
+        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    });
 });
 
 // ====================

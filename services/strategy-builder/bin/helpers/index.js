@@ -18,7 +18,6 @@ import { batchUpdateTokenPercentages } from "./update-token-percentages/index.js
 import { ethers } from "ethers";
 import DiamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
 import { buildTriggers } from "./build-triggers/index.js";
-import { SWAP_FUNCTION_ID, } from "../utils/build-swap/constants.js";
 export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisibility, depositTokenID, chainID) {
     const ycContext = YCClassifications.getInstance();
     if (!ycContext.initiallized)
@@ -56,10 +55,8 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
         [treeInstance, EncodingContext.TREE],
         [uprootInstance, EncodingContext.UPROOT],
     ]);
+    console.log("Encoded Seed:", seedInstance.map((step) => stepsToEncodedFunctions.get(step.id)));
     console.log("Encoded Trees...");
-    console.log("Uproot Swaps:", uprootInstance.map((step) => step.function?.id == SWAP_FUNCTION_ID
-        ? [step, stepsToEncodedFunctions.get(step.id)]
-        : null));
     const onchainSeedArr = encodeYCSteps(buildOnchainStepsList(seedInstance, stepsToEncodedFunctions));
     const onchainTreeArr = encodeYCSteps(buildOnchainStepsList(treeInstance, stepsToEncodedFunctions));
     const onchainUprootArr = encodeYCSteps(buildOnchainStepsList(uprootInstance, stepsToEncodedFunctions));

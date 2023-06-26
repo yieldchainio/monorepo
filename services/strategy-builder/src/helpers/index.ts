@@ -104,15 +104,12 @@ export async function createDeployableVaultInput(
     [uprootInstance, EncodingContext.UPROOT],
   ]);
 
-  console.log("Encoded Trees...");
   console.log(
-    "Uproot Swaps:",
-    uprootInstance.map((step) =>
-      step.function?.id == SWAP_FUNCTION_ID
-        ? [step, stepsToEncodedFunctions.get(step.id)]
-        : null
-    )
+    "Encoded Seed:",
+    seedInstance.map((step) => stepsToEncodedFunctions.get(step.id))
   );
+
+  console.log("Encoded Trees...");
 
   const onchainSeedArr: bytes[] = encodeYCSteps(
     buildOnchainStepsList(seedInstance, stepsToEncodedFunctions)

@@ -28,6 +28,7 @@ export const StepOptions = ({ ...props }: any) => {
   // Get the canvas portal
   const canvasPortal = useCanvasPortal();
 
+  const logs = useLogs()
   // Return the JSX
   return (
     <TooltipDropdown
@@ -39,24 +40,24 @@ export const StepOptions = ({ ...props }: any) => {
         iconClassname="text-custom-textColor text-opacity-30 group-hover:text-opacity-50 transition duration-200 ease-linear"
         className="cursor-pointer group transition duration-200 ease-in-out"
         onClick={() => {
-          // props.onClick?.();
-          // const jsonFunc = step.function?.toJSON(true) as DBFunction;
+          props.onClick?.();
+          const jsonFunc = step.function?.toJSON(true) as DBFunction;
 
-          // step.function = new YCFunc(jsonFunc, YCClassifications.getInstance());
+          step.function = new YCFunc(jsonFunc, YCClassifications.getInstance());
 
-          // const jsonStep = step.toDeployableJSON();
+          const jsonStep = step.toDeployableJSON();
 
-          // if (!jsonStep)
-          //   throw logs.lazyPush({
-          //     message: "JSON Step is Null!",
-          //     type: "error",
-          //   });
+          if (!jsonStep)
+            throw logs.lazyPush({
+              message: "JSON Step is Null!",
+              type: "error",
+            });
           console.log(step);
-          // console.log(
-          //   step.function?.encodeYCCommand(jsonStep, EncodingContext.SEED, [
-          //     ...step.customArguments,
-          //   ])
-          // );
+          console.log(
+            step.function?.encodeYCCommand(jsonStep, EncodingContext.SEED, [
+              ...step.customArguments,
+            ])
+          );
         }}
       ></DotMenuIcon>
     </TooltipDropdown>

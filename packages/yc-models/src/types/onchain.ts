@@ -45,7 +45,7 @@ export interface VaultFactoryInputs {
 }
 
 export const VAULT_CREATED_EVENT_SIGNATURE =
-  "VaultCreated(address,address,address)";
+  "VaultCreated(address,address,address,bytes)";
 
 export interface VaultCreatedEvent {
   strategyAddress: address;

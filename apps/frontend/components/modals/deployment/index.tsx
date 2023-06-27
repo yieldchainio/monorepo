@@ -297,7 +297,7 @@ export const DeploymentModal = ({
                     message: "Redirecting To Vault's Page...",
                   });
 
-                  router.replace(`app/strategy/${strategyID}`);
+                  router.push(`app/strategy/${strategyID}`);
                 });
               });
             }}

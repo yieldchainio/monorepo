@@ -331,10 +331,10 @@ export class Step extends Node<Step> implements IStep<Step> {
    * @param token - The token to calculate the percentages of
    * @param additionalChilds - Optioanl additional childs to take in mind as clean
    * @returns even - A percentage that is splittable across all clean siblings for this token
-   * @returns available - The maximum available percentage for this token, so the accumlative percentage
-   * of this token not used by dirty siblings
+   * @returns available - The maximum available percentage for this token (the cumlative percentage
+   * of this token not used by dirty siblings)
    * @returns clean - the children that are considered non-dirty that have this flow, along with the index of it
-   * @returns dirty - same format as above but only dirty
+   * @returns dirty - same as above but only dirty
    *
    * @notice this is called on the parent
    */
@@ -742,6 +742,7 @@ export class Step extends Node<Step> implements IStep<Step> {
     inherit: boolean = true
   ) {
     super();
+    console.log("Constructing New Step! Chain ID:", config?.chainId);
     /**
      * Construct global variables
      */
@@ -751,6 +752,8 @@ export class Step extends Node<Step> implements IStep<Step> {
     this.dimensions = this.defaultDimensions[this.size];
     this.type = config?.type || StepType.STEP;
     this.chainId = config?.chainId || null;
+    console.log("Chain ID After first set in construction:", this.chainId);
+
     this.inflows = config?.inflows || [];
     this.outflows = config?.outflows || [];
     this.writeable = writeable;
@@ -788,10 +791,15 @@ export class Step extends Node<Step> implements IStep<Step> {
       if (!child.chainId) child.chainId = this.chainId;
     }
 
+    console.log("Chain ID After Children Loop:", this.chainId);
+
     // Add an empty placeholder child if our length is 0 and we are writeable
-    this.inheritStyle();
+    // this.inheritStyle();
+
+    console.log("Chain ID After Inhertiance", this.chainId);
 
     this.tryAddEmptyChild();
+    console.log("End Chain ID In Construction:", this.chainId);
   }
 
   // ========================================
@@ -848,6 +856,8 @@ export class Step extends Node<Step> implements IStep<Step> {
     context: YCClassifications;
   }): Step => {
     if (!step) return new Step();
+
+    console.log("Getting JSON step... Chain ID:", step.chainId);
     const config: IStep<Step> = {
       ...step,
       id: step.id,
@@ -878,6 +888,7 @@ export class Step extends Node<Step> implements IStep<Step> {
       customArguments: step?.customArguments || [],
       retainCustomArgsRef: step?.retainCustomArgsRef,
       presetCustomArgsIndices: step?.presetCustomArgsIndices || [],
+      chainId: step?.chainId,
     };
     const resStep = new Step(config);
     for (const child of resStep.children) child.parent = resStep;
@@ -1076,6 +1087,10 @@ export class Step extends Node<Step> implements IStep<Step> {
 
   toDeployableJSON(): JSONStep | null {
     if (this.state !== "complete") return null;
+    console.log(
+      "Transforming self into deployable json... this chain ID:",
+      this.chainId
+    );
     return {
       id: this.id,
       action: this.action?.id || "",
@@ -1103,62 +1118,3 @@ export class Step extends Node<Step> implements IStep<Step> {
     };
   }
 }
-
-// const serializeCustomArgs = (
-//   argsTreeArr: CustomArgsTree[]
-// ): CustomArgsTree[] => {
-//   const serialized: CustomArgsTree[] = [];
-
-//   for (const arg of argsTreeArr) {
-//     const serializedArg: CustomArgsTree = {
-//       value: null,
-//       customArgs: arg.customArgs,
-//       preConfigured: true,
-//     };
-
-//     if (typeof arg.value == "object")
-//       serializedArg.value =
-//         arg.value instanceof YCFunc
-//           ? arg.value.toJSON()
-//           : safeToJSON(arg.value);
-//     else serializedArg.value = arg.value;
-
-//     if (arg.customArgs.length > 0)
-//       serializedArg.customArgs = serializeCustomArgs(serializedArg.customArgs);
-
-//     serialized.push(serializedArg);
-//   }
-
-//   return serialized;
-// };
-
-// const deseriallizeCustomArgs = (
-//   argsTreeArr: CustomArgsTree[]
-// ): CustomArgsTree[] => {
-//   function  circulerCreator   (arg: any) {
-//     if (typeof arg !== "object") {
-//       const potentialFunction =
-//         YCClassifications.getInstance().getFunction(arg);
-//       return potentialFunction || arg;
-//     }
-
-//     if (typeof arg == "object") {
-//       const newObj: typeof arg = {};
-//       for (const entry of Object.entries(arg))
-//         newObj[entry[0]] = circulerCreator(entry[1]);
-//       return newObj;
-//     }
-//   };
-//   const deseriallized: CustomArgsTree[] = [];
-
-//   for (const arg of argsTreeArr) {
-//     const deserializedArg: CustomArgsTree = {
-//       value: circulerCreator(arg),
-//       customArgs: arg.customArgs.map((nestedArg) => circulerCreator(nestedArg)),
-//       preConfigured: true,
-//     };
-//     deseriallized.push(deserializedArg);
-//   }
-
-//   return deseriallized;
-// };

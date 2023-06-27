@@ -2,7 +2,7 @@ import { ClassificationContext } from "@yc/yc-models";
 import axios from "axios";
 
 export const fetchYC = async (
-  version: DataVersions
+  version?: DataVersions
 ): Promise<ClassificationContext> => {
   const baseApi = "https://api.yieldchain.io";
 
@@ -18,29 +18,49 @@ export const fetchYC = async (
     _users,
     _statistics,
   ] = await Promise.all([
-    axios.get(baseApi + "/v2/addresses"),
-    axios.get(baseApi + "/v2/functions"),
-    axios.get(baseApi + "/v2/tokens"),
-    axios.get(baseApi + "/v2/parameters"),
-    axios.get(baseApi + "/v2/protocols"),
-    axios.get(baseApi + "/v2/strategies"),
-    axios.get(baseApi + "/v2/networks"),
-    axios.get(baseApi + "/v2/actions"),
-    axios.get(baseApi + "/v2/users"),
-    axios.get(baseApi + "/v2/statistics"),
+    fetch(baseApi + "/v2/addresses", {
+      cache: "no-store",
+    }),
+    fetch(baseApi + "/v2/functions", {
+      cache: "no-store",
+    }),
+    fetch(baseApi + "/v2/tokens", {
+      cache: "no-store",
+    }),
+    fetch(baseApi + "/v2/parameters", {
+      cache: "no-store",
+    }),
+    fetch(baseApi + "/v2/protocols", {
+      cache: "no-store",
+    }),
+    fetch(baseApi + "/v2/strategies", {
+      cache: "no-store",
+    }),
+    fetch(baseApi + "/v2/networks", {
+      cache: "no-store",
+    }),
+    fetch(baseApi + "/v2/actions", {
+      cache: "no-store",
+    }),
+    fetch(baseApi + "/v2/users", {
+      cache: "no-store",
+    }),
+    fetch(baseApi + "/v2/statistics", {
+      cache: "no-store",
+    }),
   ]);
 
   // Set all of the DB info
-  const addresses = _addresses.data.addresses;
-  const funcs = _funcs.data.functions;
-  const tokens = _tokens.data.tokens;
-  const parameters = _parameters.data.parameters;
-  const protocols = _protocols.data.protocols;
-  const strategies = _strategies.data.strategies;
-  const networks = _networks.data.networks;
-  const actions = _actions.data.actions;
-  const users = _users.data.users;
-  const statistics = _statistics.data.statistics;
+  const addresses = (await _addresses.json()).addresses;
+  const funcs = (await _funcs.json()).functions;
+  const tokens = (await _tokens.json()).tokens;
+  const parameters = (await _parameters.json()).parameters;
+  const protocols = (await _protocols.json()).protocols;
+  const strategies = (await _strategies.json()).strategies;
+  const networks = (await _networks.json()).networks;
+  const actions = (await _actions.json()).actions;
+  const users = (await _users.json()).users;
+  const statistics = (await _statistics.json()).statistics;
 
   return {
     addresses,

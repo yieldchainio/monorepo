@@ -18,7 +18,7 @@ export async function addStrategy(
     StrategyClassificationResponse,
     AxiosResponse<StrategyClassificationResponse>,
     StrategyClassificationRequestBody
-  >("http://builder.yieldchain.io/add-strategy", strategy);
+  >("https://builder.yieldchain.io/add-strategy", strategy);
 
   return res.data.status ? res.data.status : res.data.reason;
 }

@@ -1,7 +1,15 @@
-import { DBStrategy, YCClassifications, YCStrategy } from "@yc/yc-models";
+import {
+  ClassificationContext,
+  DBStrategy,
+  YCClassifications,
+  YCStrategy,
+} from "@yc/yc-models";
 import axios from "axios";
 import WrappedImage from "components/wrappers/image";
+import { renderToHTML } from "next/dist/server/render";
 import { ImageResponse } from "next/server";
+import { fetchYC } from "utilities/general/storage/fetch-yc";
+import getData from "utilities/meta/image/get-strategy-image";
 
 // Route segment config
 export const runtime = "edge";
@@ -14,13 +22,21 @@ export const size = {
 };
 
 export const contentType = "image/png";
+// const ReactDOMServer = (await import("react-dom/server")).default;
+// const { renderToStaticMarkup } = ReactDOMServer;
+// const pp = renderToStaticMarkup(<WrappedImage src={""}></WrappedImage>);
 
 // Image generation
-export default async function Image({ params }: { params: { slug: string } }) {
-  const strategies = (
-    await axios.get("https://api.yieldchain.io/v2/strategies")
-  ).data.strategies;
-  const strategy = strategies.find((s: DBStrategy) => s.id == params.slug);
+export default async function Image({ params }: { params: { id: string } }) {
+  const strategies = await (
+    await fetch("https://api.yieldchain.io/v2/strategies", {
+      method: "GET",
+    })
+  ).json();
+
+  const strategy = strategies.strategies.find(
+    (s: DBStrategy) => s.id == params.id
+  );
 
   if (!strategy)
     return new ImageResponse(
@@ -48,9 +64,21 @@ export default async function Image({ params }: { params: { slug: string } }) {
       }
     );
 
-  await YCClassifications.getInstance().initiallize();
+  await YCClassifications.getInstance().initiallize(await fetchYC(), true);
 
   const strat = new YCStrategy(strategy, YCClassifications.getInstance());
+
+  const component = <WrappedImage src={strat.depositToken.logo} />;
+
+  const MaComponent = () => {
+    return <div>Hey Ser</div>;
+  };
+
+  // const prerenderStaticComponent = await getData(
+  //   <WrappedImage src={strat.depositToken.logo} />
+  // );
+
+  // console.log("Static component", prerenderStaticComponent);
 
   return new ImageResponse(
     (
@@ -64,14 +92,12 @@ export default async function Image({ params }: { params: { slug: string } }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "column",
         }}
+        className="flex flex-col"
       >
-        Strategy: {strat.title}
-        <div className="flex flex-row items-center gap-1">
-          <div style={{ fontSize: 32 }}>Deposit Token:</div>
-          <WrappedImage src={strat.depositToken.logo} />
-          <div className="text-[32px]">{strat.depositToken.symbol}</div>
-        </div>
+        <img width={550} height={550} src={strat.depositToken.logo as string} />
+        {/* {prerenderStaticComponent}{" "} */}
       </div>
     ),
     // ImageResponse options

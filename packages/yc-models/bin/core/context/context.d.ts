@@ -95,7 +95,7 @@ export declare class YCClassifications extends YCClassificationsInternal {
      * Convert the class endpoints to JSON
      */
     toJSON: () => ClassificationContext;
-    initiallize: (jsonContext?: ClassificationContext) => Promise<void>;
+    initiallize: (jsonContext?: ClassificationContext, forceFrontend?: boolean) => Promise<void>;
     /**
      * Refresh an endpoint(s)' data
      */

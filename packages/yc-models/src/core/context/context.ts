@@ -479,13 +479,14 @@ export class YCClassifications extends YCClassificationsInternal {
 
   // Initiallize the instance - Populate all endpoints.
   public initiallize = async (
-    jsonContext?: ClassificationContext
+    jsonContext?: ClassificationContext,
+    forceFrontend: boolean = false
   ): Promise<void> => {
     // Only init once
     if (!this.initiallized) this.initiallized = true;
 
     // Set a prisma client if we are not on a frontend
-    this.validateClient();
+    if (!forceFrontend) this.validateClient();
 
     /**
      * Initiallize all of the data

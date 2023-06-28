@@ -253,10 +253,10 @@ function HeaderRoutes() {
         ),
         [MediaScreenSizes.ANY]: (
           <div className="flex gap-4 w-[100%] h-[100%] items-center z-100">
-            <HeaderCatagoryText text="Earn" page="/" />
-            <HeaderCatagoryText text="Portfolio" page="/portfolio" />
-            <HeaderCatagoryText text="My Vaults" page="/creator-dashboard" />
-            <HeaderCatagoryText text="Stake YC" page="/stake-yc" />
+            <HeaderCatagoryText text="Earn" page="/app" />
+            <HeaderCatagoryText text="Portfolio" page="app/portfolio" />
+            <HeaderCatagoryText text="My Vaults" page="app/creator-dashboard" />
+            <HeaderCatagoryText text="Stake YC" page="app/stake-yc" />
           </div>
         ),
       },

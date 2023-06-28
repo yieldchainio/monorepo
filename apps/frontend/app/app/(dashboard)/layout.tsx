@@ -154,7 +154,7 @@ export default function Home() {
             <StrategyModal
               strategyID={stratID.split("/")[1]}
               modalKey={modalKey}
-              callbackRoute={"/"}
+              callbackRoute={"/app"}
             ></StrategyModal>
           ),
         };

@@ -7,6 +7,8 @@ import { useEffect, useMemo } from "react";
 
 import { SocialMediasSection } from "./components/social-media-section";
 import { useRouter, useSearchParams } from "next/navigation";
+import { signMessage } from "@wagmi/core";
+import { RegulerButton } from "components/buttons/reguler";
 
 const WhitelistingStatusTitle = {
   null: "Wen Whitelist? 👀",
@@ -35,7 +37,23 @@ const WhitelistingStatusToComponents: Record<
   React.ReactNode
 > = {
   null: <ConnectWalletButton />,
-  true: <div></div>,
+  true: (
+    <div className="flex flex-col items-center justify-center">
+      <WrappedText>Let's Just Prove It's REALLY You</WrappedText>
+      <RegulerButton
+        onClick={async () =>
+          localStorage.setItem(
+            "ETH_AUTH_SIG",
+            await signMessage({
+              message: "Yieldchain Whitelistooor",
+            })
+          )
+        }
+      >
+        Sign
+      </RegulerButton>
+    </div>
+  ),
   false: <SocialMediasSection />,
 };
 
@@ -51,14 +69,16 @@ function WhitelistPage() {
 
   const params = useSearchParams();
 
+  const sig = localStorage.getItem("ETH_AUTH_SIG");
+
   useEffect(() => {
-    if (isWhitelisted)
+    if (isWhitelisted && sig)
       setTimeout(() => {
         const path = params.get("callback");
 
         router.replace((path?.includes("/app") ? path : "/app") || "/app");
       }, 1000);
-  }, [isWhitelisted]);
+  }, [isWhitelisted, sig]);
 
   return (
     <div className="flex flex-col items-center overflow-hidden justify-start bg-custom-bg w-[100vw] h-[100vh] z-0 absolute pt-[15vh] gap-12">

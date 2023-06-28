@@ -5,21 +5,17 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import useYCUser from "utilities/hooks/yc/useYCUser";
 
 export function WhitelistProtection() {
-  const { address, whitelisted } = useYCUser();
-
   const router = useRouter();
 
   const path = usePathname();
 
   useEffect(() => {
-    setTimeout(() => {
-      if (!whitelisted && !path.includes("/whitelist")) {
-        router.replace(`/whitelist?callback=${path}`);
-      }
-    }, 2000);
+    const sig = localStorage.getItem("ETH_AUTH_SIG");
+    console.log("SIG SER", sig);
+    if (!sig && !path.includes("/whitelist"))
+      router.replace(`/whitelist?callback=${path}`);
   }, [path]);
 
   return null;

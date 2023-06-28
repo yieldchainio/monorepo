@@ -58,7 +58,7 @@ export const StrategyModal = ({
   return (
     <ModalWrapper
       modalKey={modalKey}
-      callbackRoute={callbackRoute || "/"}
+      callbackRoute={callbackRoute || "/app"}
       closeFunction={closeFunction}
     >
       <div

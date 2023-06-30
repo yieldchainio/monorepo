@@ -61,6 +61,10 @@ export declare class YCStrategy extends BaseClass {
      */
     readonly apy: number;
     /**
+     * Created At (Date)
+     */
+    readonly createdAt: Date;
+    /**
      * Get the Total Value Locked Of The Strattegy
      */
     get tvl(): bigint;
@@ -74,7 +78,7 @@ export declare class YCStrategy extends BaseClass {
         interval: number;
         unit: "Days" | "Minutes" | "Seconds" | "Months" | "Weeks" | "Years" | "Day" | "Minute" | "Second" | "Month" | "Week" | "Year" | "Hour" | "Hours";
     };
-    static fromDeploymentCalldata(calldata: bytes, jsonStrategy: DBStrategy, signer: SignerMethod): Promise<YCStrategy | null>;
+    static fromDeploymentCalldata(calldata: bytes, jsonStrategy: Omit<DBStrategy, "createdAt">, signer: SignerMethod): Promise<YCStrategy | null>;
     /**
      * Get the TVL of this vault in USD value - Async (quoting)
      * @param cache - whether to return cached values or not

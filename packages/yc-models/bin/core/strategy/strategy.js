@@ -60,6 +60,10 @@ export class YCStrategy extends BaseClass {
      * The current APY of this strategy
      */
     apy;
+    /**
+     * Created At (Date)
+     */
+    createdAt;
     // Public getters/methods
     /**
      * Get the Total Value Locked Of The Strattegy
@@ -97,7 +101,7 @@ export class YCStrategy extends BaseClass {
             if (!vaultAddress[0])
                 throw "Cannot Add Strategy - Address Topic Undefined";
             jsonStrategy.address = vaultAddress[0];
-            return new YCStrategy(jsonStrategy, YCClassifications.getInstance());
+            return new YCStrategy({ ...jsonStrategy, createdAt: new Date() }, YCClassifications.getInstance());
         }
         return null;
     }
@@ -324,6 +328,7 @@ export class YCStrategy extends BaseClass {
          */
         super();
         this.id = _strategy.id;
+        this.createdAt = new Date(_strategy.createdAt);
         this.address = _strategy.address;
         this.title = _strategy.title;
         this.depositToken = _context.getToken(_strategy.deposit_token_id);

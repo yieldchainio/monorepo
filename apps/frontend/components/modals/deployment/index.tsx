@@ -201,7 +201,7 @@ export const DeploymentModal = ({
 
                     lifespan: 10000,
                   });
-                const jsonStrategy: DBStrategy = {
+                const jsonStrategy: Omit<DBStrategy, "createdAt"> = {
                   id: strategyID,
                   address: "0xunknownatthemoment",
                   title: title || "",

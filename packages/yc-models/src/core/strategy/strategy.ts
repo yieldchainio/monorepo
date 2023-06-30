@@ -140,7 +140,7 @@ export class YCStrategy extends BaseClass {
   // ==================
   static async fromDeploymentCalldata(
     calldata: bytes,
-    jsonStrategy: DBStrategy,
+    jsonStrategy: Omit<DBStrategy, "createdAt">,
     signer: SignerMethod
   ): Promise<YCStrategy | null> {
     const network = YCClassifications.getInstance().getNetwork(
@@ -171,7 +171,10 @@ export class YCStrategy extends BaseClass {
         throw "Cannot Add Strategy - Address Topic Undefined";
       jsonStrategy.address = vaultAddress[0] as address;
 
-      return new YCStrategy(jsonStrategy, YCClassifications.getInstance());
+      return new YCStrategy(
+        { ...jsonStrategy, createdAt: new Date() },
+        YCClassifications.getInstance()
+      );
     }
 
     return null;

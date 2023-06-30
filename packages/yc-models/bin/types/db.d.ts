@@ -27,6 +27,7 @@ export interface DBStrategy {
     seed_steps: JSON;
     tree_steps: JSON;
     uproot_steps: JSON;
+    createdAt: Date;
 }
 export interface DBNetwork {
     id: number;

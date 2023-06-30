@@ -2,9 +2,14 @@
  * Manages triggering strategies
  */
 import { SupportedYCNetwork, YCClassifications, address } from "@yc/yc-models";
-import { Contract, Wallet, ethers } from "ethers";
+import { AbiCoder, Contract, Wallet, ethers } from "ethers";
 import DiamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
 import dotenv from "dotenv";
+import {
+  EMPTY_BYTES_ARRAY,
+  IsTriggerNotReadyError,
+  isInsufficientGasBalanceError,
+} from "./constants";
 dotenv.config();
 
 const ycContext = YCClassifications.getInstance();
@@ -29,11 +34,18 @@ for (const network of supportedNetworks) {
     signer
   );
   const usedBlocks = new Set<number>();
+  const isValidBlock = (blockNum: number) => {
+    if (usedBlocks.has(blockNum)) return false;
+    usedBlocks.add(blockNum);
+    return true;
+  };
   network.provider.on("block", async (blockNum) => {
     console.log("Checking Block #" + blockNum, "On", network.name + "...");
-    if (usedBlocks.has(blockNum)) return;
-    usedBlocks.add(blockNum);
+
+    if (!isValidBlock(blockNum)) return;
+
     const indices: number[] = [];
+
     const strategiesSignals: boolean[][] = (
       await checkAllStrategiesTriggers(diamondContract)
     ).flatMap((signals, index) => {
@@ -47,22 +59,52 @@ for (const network of supportedNetworks) {
 
     if (indices.length == 0) return;
 
+    const allVaults: address[] = await diamondContract.getStrategiesList();
+
     console.log("Going To Trigger", indices.length, "Strategies...");
-    try {
-      await diamondContract.executeStrategiesTriggers(
-        indices,
-        strategiesSignals
-      );
-    } catch (e: any) {
-      const err = e as Error;
-      console.error(
-        "Triggers Engine Caught Error Whilst Executing. Cause:",
-        err.cause,
-        "Msg:",
-        err.message,
-        "Stack:",
-        err.stack
-      );
+
+    for (const strategyIdx of indices) {
+      const vault = allVaults[strategyIdx];
+
+      const triggers = strategiesSignals.shift();
+      if (!triggers)
+        throw "[TriggersEngine]: Iterating over valid vault but triggers shift() returned undefined";
+
+      for (let i = 0; i < triggers.length; i++) {
+        if (triggers[i] == false) continue; // Trigger not ready
+
+        try {
+          const encodedParams = AbiCoder.defaultAbiCoder().encode(
+            ["address", "uint256"],
+            [vault, i]
+          );
+
+          const callData =
+            await diamondContract.executeStrategyTriggerWithData.resolveOffchainData(
+              EMPTY_BYTES_ARRAY,
+              encodedParams,
+              {
+                enableCcipRead: true,
+                blockTag: "latest",
+              }
+            );
+
+          await signer.sendTransaction({
+            to: network.diamondAddress,
+            data: callData,
+          });
+        } catch (error: any) {
+          // If simply not ready we continue on, otherwise throw the exception
+          if (IsTriggerNotReadyError(error)) continue;
+          if (isInsufficientGasBalanceError(error)) continue;
+
+          console.error(
+            "[TriggersEngine]: Caught Unknown Exception While Executing Trigger."
+          );
+
+          throw error;
+        }
+      }
     }
   });
 }

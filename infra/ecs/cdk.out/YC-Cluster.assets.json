@@ -1,7 +1,7 @@
 {
   "version": "30.0.0",
   "files": {
-    "d93350dce25aebe21c472c22295208b217e8c390aad638475ecf1ec8bc6732b4": {
+    "399a84213973e5dc3ad62102a96471340c3d63c82dc2b9c1d0659c5c7a90d6dd": {
       "source": {
         "path": "YC-Cluster.template.json",
         "packaging": "file"
@@ -9,7 +9,7 @@
       "destinations": {
         "010073361729-us-east-1": {
           "bucketName": "cdk-hnb659fds-assets-010073361729-us-east-1",
-          "objectKey": "d93350dce25aebe21c472c22295208b217e8c390aad638475ecf1ec8bc6732b4.json",
+          "objectKey": "399a84213973e5dc3ad62102a96471340c3d63c82dc2b9c1d0659c5c7a90d6dd.json",
           "region": "us-east-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-file-publishing-role-010073361729-us-east-1"
         }

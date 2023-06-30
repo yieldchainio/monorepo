@@ -4144,8 +4144,8 @@
                         "name": "OFFCHAINACTIONS-CONTAINER",
                         "portMappings": [
                           {
-                            "containerPort": 80,
-                            "hostPort": 80,
+                            "containerPort": 8080,
+                            "hostPort": 8080,
                             "protocol": "tcp"
                           }
                         ],
@@ -4167,10 +4167,6 @@
                           {
                             "name": "AWS_SECRET_ACCESS_KEY",
                             "value": "wloVZzJSd2R6hYqxFWMFUaPLxrhRbZU0CYT5JIDy"
-                          },
-                          {
-                            "name": "PRIVATE_KEY",
-                            "value": "771184d670b4b81d9508e9dffc166ba65e84ed80031949d964c90a123e46c4a8"
                           },
                           {
                             "name": "DATABASE_URL",
@@ -4345,13 +4341,13 @@
               "version": "2.66.1"
             }
           },
-          "OFFCHAINACTIONS-WORKER": {
-            "id": "OFFCHAINACTIONS-WORKER",
-            "path": "YC-Cluster/OFFCHAINACTIONS-WORKER",
+          "OFFCHAINACTIONS-SERVICE": {
+            "id": "OFFCHAINACTIONS-SERVICE",
+            "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE",
             "children": {
               "Service": {
                 "id": "Service",
-                "path": "YC-Cluster/OFFCHAINACTIONS-WORKER/Service",
+                "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/Service",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ECS::Service",
                   "aws:cdk:cloudformation:props": {
@@ -4364,7 +4360,17 @@
                     },
                     "desiredCount": 2,
                     "enableEcsManagedTags": true,
+                    "healthCheckGracePeriodSeconds": 60,
                     "launchType": "FARGATE",
+                    "loadBalancers": [
+                      {
+                        "targetGroupArn": {
+                          "Ref": "YCOFFCHAINACTIONSSERVICETG1231AC52"
+                        },
+                        "containerName": "OFFCHAINACTIONS-CONTAINER",
+                        "containerPort": 8080
+                      }
+                    ],
                     "networkConfiguration": {
                       "awsvpcConfiguration": {
                         "assignPublicIp": "DISABLED",
@@ -4389,7 +4395,7 @@
                         ]
                       }
                     },
-                    "serviceName": "OFFCHAINACTIONS-WORKER",
+                    "serviceName": "OFFCHAINACTIONS-SERVICE",
                     "taskDefinition": {
                       "Ref": "OFFCHAINACTIONSTASKDEF2FBCCD06"
                     }
@@ -4402,7 +4408,7 @@
               },
               "ScalingRole": {
                 "id": "ScalingRole",
-                "path": "YC-Cluster/OFFCHAINACTIONS-WORKER/ScalingRole",
+                "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/ScalingRole",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.Resource",
                   "version": "2.66.1"
@@ -4410,15 +4416,15 @@
               },
               "TaskCount": {
                 "id": "TaskCount",
-                "path": "YC-Cluster/OFFCHAINACTIONS-WORKER/TaskCount",
+                "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/TaskCount",
                 "children": {
                   "Target": {
                     "id": "Target",
-                    "path": "YC-Cluster/OFFCHAINACTIONS-WORKER/TaskCount/Target",
+                    "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/TaskCount/Target",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "YC-Cluster/OFFCHAINACTIONS-WORKER/TaskCount/Target/Resource",
+                        "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/TaskCount/Target/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApplicationAutoScaling::ScalableTarget",
                           "aws:cdk:cloudformation:props": {
@@ -4435,7 +4441,7 @@
                                   "/",
                                   {
                                     "Fn::GetAtt": [
-                                      "OFFCHAINACTIONSWORKERServiceB0B85BB2",
+                                      "OFFCHAINACTIONSSERVICEService8BDC8F0F",
                                       "Name"
                                     ]
                                   }
@@ -4463,10 +4469,226 @@
                   "fqn": "aws-cdk-lib.aws_ecs.ScalableTaskCount",
                   "version": "2.66.1"
                 }
+              },
+              "YC-OFFCHAINACTIONS-SERVICE-ALB": {
+                "id": "YC-OFFCHAINACTIONS-SERVICE-ALB",
+                "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+                      "aws:cdk:cloudformation:props": {
+                        "loadBalancerAttributes": [
+                          {
+                            "key": "deletion_protection.enabled",
+                            "value": "false"
+                          }
+                        ],
+                        "name": "YC-OFFCHAINACTIONS-SERVICE-LB",
+                        "scheme": "internet-facing",
+                        "securityGroups": [
+                          {
+                            "Fn::GetAtt": [
+                              "YCECSDefaultSecurityServiceGroupDE0B50A6",
+                              "GroupId"
+                            ]
+                          }
+                        ],
+                        "subnets": [
+                          {
+                            "Ref": "YCECSVpcPublicSubnet1Subnet4D7EC8A9"
+                          },
+                          {
+                            "Ref": "YCECSVpcPublicSubnet2Subnet9E19CD83"
+                          },
+                          {
+                            "Ref": "YCECSVpcPublicSubnet3Subnet6DBE4C3C"
+                          }
+                        ],
+                        "type": "application"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.CfnLoadBalancer",
+                      "version": "2.66.1"
+                    }
+                  },
+                  "YC-OFFCHAINACTIONS-SERVICE-HTTPLISTENER": {
+                    "id": "YC-OFFCHAINACTIONS-SERVICE-HTTPLISTENER",
+                    "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB/YC-OFFCHAINACTIONS-SERVICE-HTTPLISTENER",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB/YC-OFFCHAINACTIONS-SERVICE-HTTPLISTENER/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::Listener",
+                          "aws:cdk:cloudformation:props": {
+                            "defaultActions": [
+                              {
+                                "type": "forward",
+                                "targetGroupArn": {
+                                  "Ref": "YCOFFCHAINACTIONSSERVICETG1231AC52"
+                                }
+                              }
+                            ],
+                            "loadBalancerArn": {
+                              "Ref": "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALB1A8C73A9"
+                            },
+                            "port": 80,
+                            "protocol": "HTTP"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.CfnListener",
+                          "version": "2.66.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationListener",
+                      "version": "2.66.1"
+                    }
+                  },
+                  "YC-OFFCHAINACTIONS-SERVICE-HTTPSLISTENER": {
+                    "id": "YC-OFFCHAINACTIONS-SERVICE-HTTPSLISTENER",
+                    "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB/YC-OFFCHAINACTIONS-SERVICE-HTTPSLISTENER",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB/YC-OFFCHAINACTIONS-SERVICE-HTTPSLISTENER/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::Listener",
+                          "aws:cdk:cloudformation:props": {
+                            "defaultActions": [
+                              {
+                                "type": "forward",
+                                "targetGroupArn": {
+                                  "Ref": "YCOFFCHAINACTIONSSERVICETG1231AC52"
+                                }
+                              }
+                            ],
+                            "loadBalancerArn": {
+                              "Ref": "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALB1A8C73A9"
+                            },
+                            "certificates": [
+                              {
+                                "certificateArn": "arn:aws:acm:us-east-1:010073361729:certificate/6e324254-a79a-465b-b1f5-db7d1c9f8ff1"
+                              }
+                            ],
+                            "port": 443,
+                            "protocol": "HTTPS"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.CfnListener",
+                          "version": "2.66.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationListener",
+                      "version": "2.66.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationLoadBalancer",
+                  "version": "2.66.1"
+                }
               }
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_ecs.FargateService",
+              "version": "2.66.1"
+            }
+          },
+          "YC-OFFCHAINACTIONS-SERVICE-TG": {
+            "id": "YC-OFFCHAINACTIONS-SERVICE-TG",
+            "path": "YC-Cluster/YC-OFFCHAINACTIONS-SERVICE-TG",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "YC-Cluster/YC-OFFCHAINACTIONS-SERVICE-TG/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "healthCheckPath": "/",
+                    "healthCheckProtocol": "HTTP",
+                    "matcher": {
+                      "httpCode": "200"
+                    },
+                    "port": 8080,
+                    "protocol": "HTTP",
+                    "targetGroupAttributes": [
+                      {
+                        "key": "stickiness.enabled",
+                        "value": "false"
+                      }
+                    ],
+                    "targetType": "ip",
+                    "vpcId": {
+                      "Ref": "YCECSVpc16C2B5BF"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.CfnTargetGroup",
+                  "version": "2.66.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationTargetGroup",
+              "version": "2.66.1"
+            }
+          },
+          "actions.yieldchain.io_ALB_RECORD": {
+            "id": "actions.yieldchain.io_ALB_RECORD",
+            "path": "YC-Cluster/actions.yieldchain.io_ALB_RECORD",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "YC-Cluster/actions.yieldchain.io_ALB_RECORD/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "actions.yieldchain.io.",
+                    "type": "A",
+                    "aliasTarget": {
+                      "hostedZoneId": {
+                        "Fn::GetAtt": [
+                          "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALB1A8C73A9",
+                          "CanonicalHostedZoneID"
+                        ]
+                      },
+                      "dnsName": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "dualstack.",
+                            {
+                              "Fn::GetAtt": [
+                                "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALB1A8C73A9",
+                                "DNSName"
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "hostedZoneId": "Z01218335OMCUR3F67FA"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_route53.CfnRecordSet",
+                  "version": "2.66.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_route53.ARecord",
               "version": "2.66.1"
             }
           },

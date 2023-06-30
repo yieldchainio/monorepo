@@ -17,7 +17,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-deploy-role-010073361729-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::010073361729:role/cdk-hnb659fds-cfn-exec-role-010073361729-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-010073361729-us-east-1/d93350dce25aebe21c472c22295208b217e8c390aad638475ecf1ec8bc6732b4.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-010073361729-us-east-1/399a84213973e5dc3ad62102a96471340c3d63c82dc2b9c1d0659c5c7a90d6dd.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -615,16 +615,46 @@
             "data": "OFFCHAINACTIONSTASKDEFExecutionRoleDefaultPolicy4F89C4C2"
           }
         ],
-        "/YC-Cluster/OFFCHAINACTIONS-WORKER/Service": [
+        "/YC-Cluster/OFFCHAINACTIONS-SERVICE/Service": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "OFFCHAINACTIONSWORKERServiceB0B85BB2"
+            "data": "OFFCHAINACTIONSSERVICEService8BDC8F0F"
           }
         ],
-        "/YC-Cluster/OFFCHAINACTIONS-WORKER/TaskCount/Target/Resource": [
+        "/YC-Cluster/OFFCHAINACTIONS-SERVICE/TaskCount/Target/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "OFFCHAINACTIONSWORKERTaskCountTarget5F784DA6"
+            "data": "OFFCHAINACTIONSSERVICETaskCountTarget75D2DF41"
+          }
+        ],
+        "/YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALB1A8C73A9"
+          }
+        ],
+        "/YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB/YC-OFFCHAINACTIONS-SERVICE-HTTPLISTENER/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALBYCOFFCHAINACTIONSSERVICEHTTPLISTENERD9E86BD4"
+          }
+        ],
+        "/YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB/YC-OFFCHAINACTIONS-SERVICE-HTTPSLISTENER/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALBYCOFFCHAINACTIONSSERVICEHTTPSLISTENER66B2AC89"
+          }
+        ],
+        "/YC-Cluster/YC-OFFCHAINACTIONS-SERVICE-TG/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "YCOFFCHAINACTIONSSERVICETG1231AC52"
+          }
+        ],
+        "/YC-Cluster/actions.yieldchain.io_ALB_RECORD/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "actionsyieldchainioALBRECORD9F1304B4"
           }
         ],
         "/YC-Cluster/STRATEGYBUILDER-TASKDEF/Resource": [

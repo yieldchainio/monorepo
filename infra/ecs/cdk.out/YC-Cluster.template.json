@@ -2699,10 +2699,6 @@
         "Value": "wloVZzJSd2R6hYqxFWMFUaPLxrhRbZU0CYT5JIDy"
        },
        {
-        "Name": "PRIVATE_KEY",
-        "Value": "771184d670b4b81d9508e9dffc166ba65e84ed80031949d964c90a123e46c4a8"
-       },
-       {
         "Name": "DATABASE_URL",
         "Value": "postgres://OfirYC:B.%3F3f%2Apbf%3D2Df%21i@postgres-1.ctknysk7lqdz.us-east-1.rds.amazonaws.com:5432/postgres"
        }
@@ -2733,8 +2729,8 @@
       "Name": "OFFCHAINACTIONS-CONTAINER",
       "PortMappings": [
        {
-        "ContainerPort": 80,
-        "HostPort": 80,
+        "ContainerPort": 8080,
+        "HostPort": 8080,
         "Protocol": "tcp"
        }
       ]
@@ -2836,7 +2832,7 @@
     "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-TASKDEF/ExecutionRole/DefaultPolicy/Resource"
    }
   },
-  "OFFCHAINACTIONSWORKERServiceB0B85BB2": {
+  "OFFCHAINACTIONSSERVICEService8BDC8F0F": {
    "Type": "AWS::ECS::Service",
    "Properties": {
     "Cluster": {
@@ -2848,7 +2844,17 @@
     },
     "DesiredCount": 2,
     "EnableECSManagedTags": true,
+    "HealthCheckGracePeriodSeconds": 60,
     "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "OFFCHAINACTIONS-CONTAINER",
+      "ContainerPort": 8080,
+      "TargetGroupArn": {
+       "Ref": "YCOFFCHAINACTIONSSERVICETG1231AC52"
+      }
+     }
+    ],
     "NetworkConfiguration": {
      "AwsvpcConfiguration": {
       "AssignPublicIp": "DISABLED",
@@ -2873,16 +2879,20 @@
       ]
      }
     },
-    "ServiceName": "OFFCHAINACTIONS-WORKER",
+    "ServiceName": "OFFCHAINACTIONS-SERVICE",
     "TaskDefinition": {
      "Ref": "OFFCHAINACTIONSTASKDEF2FBCCD06"
     }
    },
+   "DependsOn": [
+    "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALBYCOFFCHAINACTIONSSERVICEHTTPLISTENERD9E86BD4",
+    "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALBYCOFFCHAINACTIONSSERVICEHTTPSLISTENER66B2AC89"
+   ],
    "Metadata": {
-    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-WORKER/Service"
+    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/Service"
    }
   },
-  "OFFCHAINACTIONSWORKERTaskCountTarget5F784DA6": {
+  "OFFCHAINACTIONSSERVICETaskCountTarget75D2DF41": {
    "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
    "Properties": {
     "MaxCapacity": 6,
@@ -2898,7 +2908,7 @@
        "/",
        {
         "Fn::GetAtt": [
-         "OFFCHAINACTIONSWORKERServiceB0B85BB2",
+         "OFFCHAINACTIONSSERVICEService8BDC8F0F",
          "Name"
         ]
        }
@@ -2910,7 +2920,156 @@
     "ServiceNamespace": "ecs"
    },
    "Metadata": {
-    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-WORKER/TaskCount/Target/Resource"
+    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/TaskCount/Target/Resource"
+   }
+  },
+  "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALB1A8C73A9": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Name": "YC-OFFCHAINACTIONS-SERVICE-LB",
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "YCECSDefaultSecurityServiceGroupDE0B50A6",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Ref": "YCECSVpcPublicSubnet1Subnet4D7EC8A9"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet2Subnet9E19CD83"
+     },
+     {
+      "Ref": "YCECSVpcPublicSubnet3Subnet6DBE4C3C"
+     }
+    ],
+    "Type": "application"
+   },
+   "DependsOn": [
+    "YCECSVpcPublicSubnet1DefaultRoute2B39E6BE",
+    "YCECSVpcPublicSubnet1RouteTableAssociation996F68D0",
+    "YCECSVpcPublicSubnet2DefaultRoute3DDE6E3E",
+    "YCECSVpcPublicSubnet2RouteTableAssociationABE2D466",
+    "YCECSVpcPublicSubnet3DefaultRouteEF1C052D",
+    "YCECSVpcPublicSubnet3RouteTableAssociation7035A5DD"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB/Resource"
+   }
+  },
+  "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALBYCOFFCHAINACTIONSSERVICEHTTPLISTENERD9E86BD4": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCOFFCHAINACTIONSSERVICETG1231AC52"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALB1A8C73A9"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB/YC-OFFCHAINACTIONS-SERVICE-HTTPLISTENER/Resource"
+   }
+  },
+  "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALBYCOFFCHAINACTIONSSERVICEHTTPSLISTENER66B2AC89": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "YCOFFCHAINACTIONSSERVICETG1231AC52"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALB1A8C73A9"
+    },
+    "Certificates": [
+     {
+      "CertificateArn": "arn:aws:acm:us-east-1:010073361729:certificate/6e324254-a79a-465b-b1f5-db7d1c9f8ff1"
+     }
+    ],
+    "Port": 443,
+    "Protocol": "HTTPS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/OFFCHAINACTIONS-SERVICE/YC-OFFCHAINACTIONS-SERVICE-ALB/YC-OFFCHAINACTIONS-SERVICE-HTTPSLISTENER/Resource"
+   }
+  },
+  "YCOFFCHAINACTIONSSERVICETG1231AC52": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/",
+    "HealthCheckProtocol": "HTTP",
+    "Matcher": {
+     "HttpCode": "200"
+    },
+    "Port": 8080,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": {
+     "Ref": "YCECSVpc16C2B5BF"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/YC-OFFCHAINACTIONS-SERVICE-TG/Resource"
+   }
+  },
+  "actionsyieldchainioALBRECORD9F1304B4": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "Name": "actions.yieldchain.io.",
+    "Type": "A",
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::Join": [
+       "",
+       [
+        "dualstack.",
+        {
+         "Fn::GetAtt": [
+          "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALB1A8C73A9",
+          "DNSName"
+         ]
+        }
+       ]
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "OFFCHAINACTIONSSERVICEYCOFFCHAINACTIONSSERVICEALB1A8C73A9",
+       "CanonicalHostedZoneID"
+      ]
+     }
+    },
+    "HostedZoneId": "Z01218335OMCUR3F67FA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "YC-Cluster/actions.yieldchain.io_ALB_RECORD/Resource"
    }
   },
   "STRATEGYBUILDERTASKDEF5E8FB4F5": {
@@ -3513,7 +3672,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31SXU/rMAz9LbxnAYbgfYwLmoRQ1SJekZuZYtbFVT6Gpqr/Hacf6+DhPvnk2LFPjrPUd3f6+gK+/cJsd4uaSt0WAcxOCfXeolnq9q0xav1h37K1ymJZkyliaTEkbkY5x4CvUNY48zO38p4NQSC2p+IE/m2yFF4gPEHAbziqzNFB4Nx4YwM6wVPBoGQ8rYJo/dyjDapAEx2F45Pj2PQa/ktsbOXQ+06h8bpd19HLmFQ1wUdwFST5fveAH2RpEv+XYRuALLozbrxboDuQGQwZYWGgToakJmuONiQBTufYsKfA7ngPHlXNlYh65uqkfcKdItjrNufB5z5mLDvpjRlQp6BpBPR2QwzsZSjZSjZ7mu6qcYG/GBFTgw9kaoZtKRlr5N5B/sBq7vgsufs+Nxj263xeR+KjHWsmfJYfRp5eeHbslEsf5PZG5uZo2G37t/aoEJWdytFzdIO1E+6U5S3qL395WF7ppb66+PJECycm0x51PsQfsHpQYfECAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31Sy27jMAz8lr0r6m6C9p5m2yJAUBh20euCVliXjSMaeqQIDP97KT/idA89aTSkyNGQS313p//8gk+/MPvDoqZSt0UAc1BC/WvRLHX72hi1ebOv2UZlsazJFLG0GBI3o5xjwBcoa5z5mVt7z4YgENtLcgIP2ywdzxCeIOAnnFXm6CRwLry1AZ3gKWFQMt7WQbS+H9EGVaCJjsL5yXFseg0/EltbOfS+U2i8bjd19NImZU3wEVwFSb4//MU3sjSJ/59hG4AsuitufFugO5EZDBlhYaBOhqQiG442JAFO59iwp8DufA8eVc2ViNpxddE+4U4RHHWb8+Bzf2YsM+mNGVCnoGkE9HZDDOylKdlKJnvp7qpxgN8YEVODD2Rqhn0pEWvk3Ul2YD1X3Ensvo8Nhn27X+eR+GjHnAlfxYeWlx9eXTvl0oLcrqRvjobdvv9rjwpR2akcPUc3WDvhTlneo/7wN6flb72Srf7wRAsnJtMRdT6cX1d7XffxAgAA"
    },
    "Metadata": {
     "aws:cdk:path": "YC-Cluster/CDKMetadata/Default"

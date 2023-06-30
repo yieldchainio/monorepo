@@ -31,6 +31,8 @@ export const subdomainsToSSLCertificateARNs: Record<string, string> = {
     "arn:aws:acm:us-east-1:010073361729:certificate/e7cffaaa-f570-4ac2-be09-7a425b6137b4",
   "builder.yieldchain.io":
     "arn:aws:acm:us-east-1:010073361729:certificate/cee1a590-35a4-4971-9224-e4175e722802",
+  "actions.yieldchain.io":
+    "arn:aws:acm:us-east-1:010073361729:certificate/6e324254-a79a-465b-b1f5-db7d1c9f8ff1",
 };
 
 // Port mappings

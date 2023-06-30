@@ -87,7 +87,7 @@ export class BaseWeb3Class {
   // Send multiple transactions
   signTransactions = async (
     signingMethod: SignerMethod,
-    transactions: ContractTransaction[]
+    transactions: Array<Omit<ContractTransaction, "type"> & { type?: any }>
   ) => {
     // If we got a callback as the signing method, we call it with the requests. Otherwise,
     // we got a signer so we make a function that sends the transaction to it

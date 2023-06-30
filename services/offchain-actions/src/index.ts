@@ -75,8 +75,6 @@ async function ccipRequestHandler(
   }
 }
 
-async function batchTriggerCcipRequestHandler() {}
-
 // ============
 //   ENDPOINTS
 // ============

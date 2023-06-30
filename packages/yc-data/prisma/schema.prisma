@@ -154,6 +154,7 @@ model strategiesv2 {
   creator            usersv2       @relation(fields: [creator_id], references: [id])
   token              tokensv2      @relation(fields: [deposit_token_id], references: [id])
   protocols          protocolsv2[] @relation("protocolsv2Tostrategiesv2")
+  createdAt          DateTime      @default(now())
 
   @@map("strategies")
   @@schema("YieldchainV2")

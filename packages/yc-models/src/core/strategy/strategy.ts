@@ -93,6 +93,10 @@ export class YCStrategy extends BaseClass {
    * The current APY of this strategy
    */
   readonly apy: number;
+  /**
+   * Created At (Date)
+   */
+  readonly createdAt: Date;
 
   // Public getters/methods
 
@@ -485,6 +489,7 @@ export class YCStrategy extends BaseClass {
      */
     super();
     this.id = _strategy.id;
+    this.createdAt = new Date(_strategy.createdAt);
     this.address = _strategy.address;
     this.title = _strategy.title;
     this.depositToken = _context.getToken(

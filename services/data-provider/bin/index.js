@@ -147,9 +147,7 @@ app.post("/update-user", async (req, res) => {
 });
 app.get("/ccip-test/:callData", async (req, res) => {
     const callData = req.params.callData;
-    res
-        .status(200)
-        .json({
+    res.status(200).json({
         data: callData +
             "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
     });

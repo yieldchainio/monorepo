@@ -204,7 +204,7 @@ class YCClassificationsInternal {
       backend: {
         fetcher: async () =>
           prismaToJson<DBStrategy[]>(
-            (await this?.Client?.strategiesv2.findMany()) || []
+            (await this?.Client?.strategiesv2.findMany()) || ([] as any)
           ),
         setter: (value: DBStrategy[]) => (this.Strategies = value),
       },

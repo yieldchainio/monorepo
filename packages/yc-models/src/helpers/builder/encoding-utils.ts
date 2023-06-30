@@ -33,6 +33,10 @@ export function abiDecode<T>(arg: bytes, type: string): T {
   return AbiCoder.defaultAbiCoder().decode([type], arg)[0];
 }
 
+export function abiDecodeBatch(args: bytes, types: string[]) {
+  return AbiCoder.defaultAbiCoder().decode(types, args)
+}
+
 export async function interpretYCCommand<T>(
   arg: bytes,
   type: string,

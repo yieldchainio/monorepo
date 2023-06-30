@@ -20,6 +20,9 @@ export function abiDecodeYCCommand(arg, type) {
 export function abiDecode(arg, type) {
     return AbiCoder.defaultAbiCoder().decode([type], arg)[0];
 }
+export function abiDecodeBatch(args, types) {
+    return AbiCoder.defaultAbiCoder().decode(types, args);
+}
 export async function interpretYCCommand(arg, type, contract) {
     // runViewFunction() uses runFunction() under the hood, so the reuslt is double ABI encoded,
     // We slice the first 2 pointers

@@ -38,4 +38,22 @@ export type operationIndexTopic = bigint;
 export type SQSHydrationRequestEvent = SQSOnchainLog & {
     log: HydrationRequestEvent;
 };
+export interface OffchainRequest {
+    initiator: address;
+    chainId: number;
+    stepIndex: number;
+    cachedOffchainCommands: YcCommand[];
+    callTargetAddress: address;
+    signature: string;
+    args: bytes;
+}
+export interface ValidCCIPRes {
+    data: YcCommand;
+    status: 200;
+}
+export interface InvalidCCIPRes {
+    message: string;
+    status: 404;
+}
+export type CCIPRes = ValidCCIPRes | InvalidCCIPRes;
 export {};

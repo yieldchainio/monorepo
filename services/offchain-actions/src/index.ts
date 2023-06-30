@@ -1,96 +1,109 @@
+// ============
+//   IMPORTS
+// ============
 import dotenv from "dotenv";
 dotenv.config();
-import { SQSQueue } from "@yc/aws-models";
-import {
-  OFFCHAIN_EXECUTION_REQUESTS_QUEUE_URL,
-  SupportedYCNetwork,
-  YCClassifications,
-} from "@yc/yc-models";
-import { SQSHydrationRequestEvent } from "./types.js";
-import { Contract, Wallet } from "ethers";
-import { HydrationRequest } from "./helpers/hydrate-run/index.js";
-import DiamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
+import { YCClassifications, YcCommand, bytes } from "@yc/yc-models";
+import { CCIPRes, OffchainRequest, SQSHydrationRequestEvent } from "./types.js";
+import { AbiCoder } from "ethers";
+import { execOffchainAction } from "./utils/exec-offchain-action.js";
+import express, { Response } from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
 
-const offchainRequestsQueue = new SQSQueue<SQSHydrationRequestEvent>(
-  OFFCHAIN_EXECUTION_REQUESTS_QUEUE_URL
-);
+// ============
+//   SETUP
+// ============
+
+const app = express();
+
+const PORT = 8080;
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
 
 const ycContext = YCClassifications.getInstance();
 if (!ycContext.initiallized) await ycContext.initiallize();
 
-const hydrationRequestHandler = async (
-  hydrationRequest: SQSHydrationRequestEvent
-): Promise<boolean> => {
-  const start = Date.now() / 1000;
-  const network = ycContext.networks.find(
-    (network) => network.jsonRpc == hydrationRequest.rpc_url
-  );
+// ============
+//   HANDLERS
+// ============
+async function ccipRequestHandler(
+  actionRequest: OffchainRequest
+): Promise<CCIPRes> {
+  const network = ycContext.getNetwork(actionRequest.chainId);
 
-  console.log(
-    "Started Handling Offchain Hydration Req...",
-    process.env.PRIVATE_KEY
-  );
+  if (!network || !network.diamondAddress || !network.provider)
+    return {
+      status: 404,
+      message:
+        "Network With Chain ID " + actionRequest.chainId + " Not Supported",
+    };
 
-  if (!network || !network.diamondAddress || !network.provider) {
-    console.error(
-      "Cannot Handle Hydration Run Request - Network Is Unsupported.",
-      hydrationRequest.rpc_url,
-      "Network:",
-      network
+  try {
+    const res: YcCommand | null = await execOffchainAction(
+      actionRequest,
+      network.provider
     );
-    return false;
+
+    console.log("Res SEr!!", res);
+
+    if (!res)
+      return {
+        status: 404,
+        message: "Failed To Fetch Offchain Action Data",
+      };
+
+    const offchainCommands: YcCommand[] = [
+      ...actionRequest.cachedOffchainCommands,
+      res,
+    ];
+
+    console.log("Gonna return these offchain commands", offchainCommands);
+
+    return {
+      status: 200,
+      data: AbiCoder.defaultAbiCoder().encode(["bytes[]"], [offchainCommands]),
+    };
+  } catch (e: any) {
+    console.error("Caught An Error While Handling Offchain Action:", e);
+    return {
+      status: 404,
+      message: "Failed To Fetch Offchain Action Data",
+    };
   }
+}
 
-  const hydrationInstance = new HydrationRequest(
-    hydrationRequest.log,
-    network as SupportedYCNetwork
-  );
+async function batchTriggerCcipRequestHandler() {}
 
-  console.log("Got Hydration Instance");
+// ============
+//   ENDPOINTS
+// ============
+app.get("/", (req, res) => {
+  res.status(200).json({ status: "OK" });
+});
 
-  const hydratedCommands = await hydrationInstance.simulateHydration();
+app.get("/offchain-actions/:callData", async (req, res: Response<CCIPRes>) => {
+  try {
+    const offchainRequest: OffchainRequest = AbiCoder.defaultAbiCoder().decode(
+      [
+        "tuple(address initiator, uint256 chainId, uint256 stepIndex, bytes[] cachedOffchainCommands, address callTargetAddress, string signature, bytes args)",
+      ],
+      req.params.callData as bytes
+    )[0];
 
-  console.log("Simulated Request");
+    const data = await ccipRequestHandler(offchainRequest);
 
-  if (!process.env.PRIVATE_KEY) {
-    console.error(
-      "Cannot Process Hydration Run Request - Private Key Of Executor Is Undefined"
-    );
-    return false;
+    res.status(data.status).json(data);
+  } catch (e: any) {
+    res.status(404).json({
+      status: 404,
+      message: e,
+    });
   }
+});
 
-  const executor = new Wallet(process.env.PRIVATE_KEY, network.provider);
-
-  const diamondContract = new Contract(
-    network.diamondAddress,
-    DiamondABI,
-    executor
-  );
-
-  console.log("Gonna Send Receipt");
-
-  const gasEstimation = await diamondContract.hydrateAndExecuteRun.estimateGas(
-    hydrationInstance.strategyAddress,
-    hydrationInstance.operationIndex,
-    hydratedCommands
-  );
-
-  const res = await (
-    await diamondContract.hydrateAndExecuteRun(
-      hydrationInstance.strategyAddress,
-      hydrationInstance.operationIndex,
-      hydratedCommands,
-      {
-        gasLimit: gasEstimation * 2n,
-      }
-    )
-  ).wait();
-
-  const end = Date.now() / 1000;
-
-  console.log("Action Took:", end - start, "Seconds");
-
-  return !!res;
-};
-
-offchainRequestsQueue.listen(hydrationRequestHandler);
+app.listen(PORT, () =>
+  console.log("Offchain Actions Listening On Port", PORT + "...")
+);

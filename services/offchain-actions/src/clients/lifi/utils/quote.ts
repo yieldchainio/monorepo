@@ -16,6 +16,8 @@ export async function lifiQuote(
   toChain: number = fromChain
 ): Promise<LifiQuote> {
   const requestURL: lifiQuoteRequestURL = `${LIFI_BASE_QUOTE_URL}?fromChain=${fromChain}&toChain=${toChain}&fromToken=${fromToken}&toToken=${toToken}&fromAmount=${fromAmount}&fromAddress=${fromAddress}&integrator=${"yieldchain.io"}`;
+  console.log("About to get lifi res...");
   const res = (await axios.get<LifiQuote>(requestURL)).data;
+  console.log("Got lifi res", res);
   return res;
 }

@@ -1,6 +1,7 @@
 /**
  * Constants for the offchain clients
  */
-import { FunctionCallStruct, YcCommand, address } from "@yc/yc-models";
+import { YcCommand } from "@yc/yc-models";
 import { JsonRpcProvider } from "ethers";
-export declare const OffchainActions: Record<string, (requestedCommand: FunctionCallStruct, strategyAddress: address, provider: JsonRpcProvider) => Promise<YcCommand>>;
+import { OffchainRequest } from "../types.js";
+export declare const OffchainActions: Record<string, (requestedAction: OffchainRequest, provider: JsonRpcProvider) => Promise<YcCommand>>;

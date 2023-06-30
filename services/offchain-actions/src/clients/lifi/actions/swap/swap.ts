@@ -6,6 +6,7 @@ import {
   FunctionCallStruct,
   YcCommand,
   abiDecode,
+  abiDecodeBatch,
   abiDecodeYCCommand,
   address,
   bytes,
@@ -15,15 +16,17 @@ import { lifiQuote } from "../../utils/quote.js";
 import { buildSwapCommand } from "../../utils/command-builders/build-swap.js";
 import VaultAbi from "@yc/yc-models/src/ABIs/strategy.json" assert { type: "json" };
 import { SELF_COMMAND } from "../../../../constants.js";
+import { OffchainRequest } from "../../../../types.js";
 
 export const lifiSwap = async (
-  functionRequest: FunctionCallStruct,
-  strategyAddress: address,
+  actionRequest: OffchainRequest,
   provider: JsonRpcProvider
 ): Promise<YcCommand> => {
-  const fromToken = abiDecode<address>(functionRequest.args[0], "address");
-  const toToken = abiDecode<address>(functionRequest.args[1], "address");
-  const fromAmount = abiDecode<bigint>(functionRequest.args[2], "uint256");
+  const [fromToken, toToken, fromAmount] = abiDecodeBatch(actionRequest.args, [
+    "address",
+    "address",
+    "uint256",
+  ]) as unknown as [address, address, bigint];
 
   const fromChain: number = Number((await provider.getNetwork()).chainId);
 
@@ -36,7 +39,7 @@ export const lifiSwap = async (
       fromToken,
       toToken,
       fromAmount.toString() as `${number}`,
-      strategyAddress,
+      actionRequest.initiator,
       fromChain,
       toChain
     );

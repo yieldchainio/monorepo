@@ -7,29 +7,30 @@
  * was caught
  */
 
-import { FunctionCallStruct, YcCommand, address } from "@yc/yc-models";
+import { YcCommand } from "@yc/yc-models";
 import { JsonRpcProvider } from "ethers";
-import { OffchainActions } from "../../../clients/constants.js";
+import { OffchainActions } from "../clients/constants.js";
+import { OffchainRequest } from "../types.js";
 
-export async function executeAction(
-  actionCommand: FunctionCallStruct,
-  strategyAddress: address,
+export async function execOffchainAction(
+  action: OffchainRequest,
   provider: JsonRpcProvider
 ): Promise<YcCommand | null> {
-  const requestedAction = OffchainActions[actionCommand.signature];
+  const requestedAction = OffchainActions[action.signature];
   if (!requestedAction) {
     console.error(
-      "Could Not Get Action Fulfilled - Requested Action Is Not Classified. Action:" + actionCommand.signature
+      "Could Not Get Action Fulfilled - Requested Action Is Not Classified. Action:" +
+        action.signature
     );
     return null;
   }
 
   try {
-    return await requestedAction(actionCommand, strategyAddress, provider);
+    return await requestedAction(action, provider);
   } catch (e: any) {
     console.error(
       "Caught Error Whilst Executing Offchain Action:",
-      actionCommand.signature,
+      action.signature,
       "Error:",
       e
     );

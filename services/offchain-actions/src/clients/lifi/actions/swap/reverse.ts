@@ -12,15 +12,15 @@ import {
 import { lifiQuote } from "../../utils/quote.js";
 import { buildSwapCommand } from "../../utils/command-builders/build-swap.js";
 import { SELF_COMMAND } from "../../../../constants.js";
+import { OffchainRequest } from "../../../../types.js";
 
 export const lifiSwapReverse = async (
-  functionRequest: FunctionCallStruct,
-  strategyAddress: address,
+  actionRequest: OffchainRequest,
   provider: JsonRpcProvider
 ): Promise<YcCommand> => {
-  const fromToken = abiDecode<address>(functionRequest.args[0], "address");
-  const toToken = abiDecode<address>(functionRequest.args[1], "address");
-  const fromAmount = abiDecode<bigint>(functionRequest.args[2], "uint256");
+  const fromToken = abiDecode<address>(actionRequest.args[0], "address");
+  const toToken = abiDecode<address>(actionRequest.args[1], "address");
+  const fromAmount = abiDecode<bigint>(actionRequest.args[2], "uint256");
 
   const fromChain: number = Number((await provider.getNetwork()).chainId);
 
@@ -33,7 +33,7 @@ export const lifiSwapReverse = async (
       fromToken,
       toToken,
       fromAmount.toString() as `${number}`,
-      strategyAddress,
+      actionRequest.initiator,
       fromChain,
       toChain
     );
@@ -47,20 +47,4 @@ export const lifiSwapReverse = async (
     console.error("Lifiswap Error:", e);
     return SELF_COMMAND;
   }
-
-  const request = await lifiQuote(
-    fromToken,
-    toToken,
-    fromAmount.toString() as `${number}`,
-    strategyAddress,
-    fromChain,
-    toChain
-  );
-
-  if (!request.transactionRequest?.data)
-    throw "Cannot Complete lifiSwapReverse - Transaction Request Data Undefined";
-
-  const swapCommand: YcCommand = buildSwapCommand(request);
-
-  return swapCommand;
 };

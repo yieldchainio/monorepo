@@ -5,13 +5,13 @@
 import { FunctionCallStruct, YcCommand, address } from "@yc/yc-models";
 import { JsonRpcProvider } from "ethers";
 import { lifiSwap, lifiSwapReverse } from "./lifi/index.js";
+import { OffchainRequest } from "../types.js";
 
 // Map requested onchain functions => actual offchain functios
 export const OffchainActions: Record<
   string,
   (
-    requestedCommand: FunctionCallStruct,
-    strategyAddress: address,
+    requestedAction: OffchainRequest,
     provider: JsonRpcProvider
   ) => Promise<YcCommand>
 > = {

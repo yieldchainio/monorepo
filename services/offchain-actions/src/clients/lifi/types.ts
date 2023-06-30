@@ -5,10 +5,6 @@
 import { address, bytes } from "@yc/yc-models";
 import { TransactionRequest } from "ethers";
 
-// ==============================
-//      YC / Action Related
-// ==============================
-
 // =======================
 //      EXTERNAL API
 // ======================

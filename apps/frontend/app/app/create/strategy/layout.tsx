@@ -119,7 +119,7 @@ function StrategyConfigLayout({ children }: { children: React.ReactNode }) {
 
   // Return the component
   return (
-    <div className="flex flex-col items-center overflow-hidden justify-start bg-custom-bg w-[100vw] h-[100vh] z-0 absolute pt-[20vh] pb-[20vh]">
+    <div className="relative flex flex-col items-center justify-start  w-full h-[var(--viewport-height)] bg-custom-bg z-0  overflow-hidden">
       <BackdropColor
         color={top}
         style={{ zIndex: -1, top: "-20%", left: "80%", width: "50vw" }}
@@ -134,20 +134,6 @@ function StrategyConfigLayout({ children }: { children: React.ReactNode }) {
         }}
       />
 
-      <Navigators
-        next={next}
-        prev={prev}
-        steps={configRoutesState}
-        nextCallback={(index: number) => {
-          changeConfigRouteState(index, "complete");
-          changeConfigRouteState(index + 1, "active");
-        }}
-        prevCallback={(index: number) => {
-          changeConfigRouteState(index, "not_complete");
-          changeConfigRouteState(index - 1, "active");
-        }}
-        currentIndex={currentIndex}
-      />
       <ChildrenProvider
         callback={(child) =>
           !isValidElement(child) ? (
@@ -164,6 +150,20 @@ function StrategyConfigLayout({ children }: { children: React.ReactNode }) {
       >
         {children}
       </ChildrenProvider>
+      <Navigators
+        next={next}
+        prev={prev}
+        steps={configRoutesState}
+        nextCallback={(index: number) => {
+          changeConfigRouteState(index, "complete");
+          changeConfigRouteState(index + 1, "active");
+        }}
+        prevCallback={(index: number) => {
+          changeConfigRouteState(index, "not_complete");
+          changeConfigRouteState(index - 1, "active");
+        }}
+        currentIndex={currentIndex}
+      />
     </div>
   );
 }

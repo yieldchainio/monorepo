@@ -23,10 +23,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Accordion } from "./accordion";
 import { useStateEffect } from "utilities/hooks/general/useStateEffect";
 import { useRouter } from "next/navigation";
-import {
-  Direction,
-  useScrollDirection,
-} from "utilities/hooks/styles/useHideScroll";
+import { useScrollDirection } from "utilities/hooks/styles/useHideScroll";
 
 enum HeaderLocation {
   HIDDEN = "top-[-65px]",
@@ -81,19 +78,18 @@ export function Header() {
 
   // We get the scorlling direction to hide the header hwen scrolling down
   const scrollDirection = useScrollDirection();
-
+  const topMargin = useMemo(
+    () => (scrollDirection == "down" ? "-top-24" : "top-0"),
+    [scrollDirection]
+  );
   // Return the component
   return (
     <div
-      className={
-        `fixed flex w-[100vw] h-[9vh] min-h-[67px] items-center justify-between pointer-events-auto z-1000 rounded-sm shadow-md transition duration-1000 ease-in-out` +
-        " " +
-        (scrollDirection === Direction.DOWN ? "top-[-9vh]" : "top-[0vh]")
-      }
+      className={`flex flex-row items-center justify-between bg-custom-bg bg-opacity-30 backdrop-blur-sm sticky z-50 ${topMargin} transition-all duration-500  h-20 shadow-md `}
     >
-      <div className="absolute w-full h-full overflow-hidden bg-transparent z-0 opacity-100 rounded-b-lg ">
+      {/* <div className="absolute w-full h-full overflow-hidden bg-transparent z-0 opacity-100 rounded-b-lg ">
         <div className="absolute w-[100vw] h-[100%] bg-custom-header backdrop-blur-3xl bg-opacity-100 z-1 pointer-events-auto overflow-hidden"></div>
-      </div>
+      </div> */}
 
       <div className="relative">
         <div className="flex w-[35%] h-[100%] gap-10 blur-none pl-10 items-center">

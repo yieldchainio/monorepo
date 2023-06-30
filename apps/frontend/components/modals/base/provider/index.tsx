@@ -13,7 +13,7 @@ export function ModalProvider() {
 
   // Return the modals
   return (
-    <div className="w-full z-100000000000000">
+    <div className="fixed w-full z-100000000000000">
       {Children.map(
         modals.map((modal) => modal.component),
         (modal, i) => {

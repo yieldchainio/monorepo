@@ -104,7 +104,7 @@ function StepsConfig() {
 
   // Return the JSX
   return (
-    <div className="flex flex-col items-center justify-between  w-[100%] h-[100%] gap-6">
+    <div className="flex flex-col items-center  w-[100vw] h-[var(--viewport-height)] gap-4 mt-[5vh] mb-[15vh]">
       <ConfigTitle>
         {"Build Your Strategy ⚡"}{" "}
         <WrappedText fontSize={16} className="text-opacity-50">
@@ -124,7 +124,7 @@ function StepsConfig() {
           wrapperProps={{
             style: {
               width: "100%",
-              height: "100%",
+              height: "90%",
               zIndex: 1000,
             },
           }}

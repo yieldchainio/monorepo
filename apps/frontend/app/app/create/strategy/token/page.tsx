@@ -57,7 +57,7 @@ function TokenConfig() {
   }, [chosenNetwork]);
 
   return (
-    <div className="flex flex-col items-center justify-between  w-[100%] h-[50%]">
+    <div className="flex flex-col items-center justify-between  w-[100%] h-[35%] mt-[15vh] mb-[20vh]">
       <ConfigTitle>
         {"Pick A Deposit Token 🍪"}{" "}
         <WrappedText fontSize={16} className="text-opacity-50">

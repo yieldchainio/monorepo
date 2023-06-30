@@ -23,7 +23,7 @@ function PrivacyConfig() {
   const setPrivacy = useStrategyStore((state) => state.setPrivacy);
 
   return (
-    <div className="flex flex-col items-center justify-between  w-[100%] h-[200vh] overflow-visible">
+    <div className="flex flex-col items-center justify-between  w-[100%] h-[100%] overflow-visible mt-[10vh]">
       <ConfigTitle>
         {"Set Vault's Visibility 👀"}{" "}
         <WrappedText fontSize={16} className="text-opacity-50">
@@ -31,7 +31,7 @@ function PrivacyConfig() {
         </WrappedText>{" "}
       </ConfigTitle>
       <StrategyConfigVerticalWrapper>
-        <div className="w-full flex flex-row gap-6 justify-between mt-10 z-0">
+        <div className="w-full flex flex-row gap-6 justify-between mt-10 -z-1">
           <PrivacyCard
             title="Private"
             subtitle="Only you & users you whitelist will be allowed into the vault."

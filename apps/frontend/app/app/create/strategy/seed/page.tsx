@@ -22,7 +22,7 @@ function BaseStepsConfig() {
 
   // Return the JSX
   return (
-    <div className="flex flex-col items-center  w-[100vw] h-[100vh] gap-6">
+    <div className="flex flex-col items-center  w-[100vw] h-[var(--viewport-height)] gap-4 mt-[5vh] mb-[15vh]">
       <ConfigTitle>
         {"Create Initial Allocations 🌱"}{" "}
         <WrappedText
@@ -36,7 +36,7 @@ function BaseStepsConfig() {
       <StrategyConfigVerticalWrapper
         style={{
           width: "90%",
-          height: "90%",
+          height: "100%",
           zIndex: 1000,
         }}
       >
@@ -49,8 +49,8 @@ function BaseStepsConfig() {
           wrapperProps={{
             style: {
               width: "100%",
-              height: "100%",
-              zIndex: 1000,
+              height: "90%",
+              zIndex: 1,
             },
           }}
           comparisonCallback={() => {

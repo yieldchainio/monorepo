@@ -45,7 +45,7 @@ function NetworkConfig() {
 
   return (
     <div
-      className="flex flex-col items-center justify-between  w-[50%] h-[50%]"
+      className="flex flex-col items-center justify-between  w-[50%] h-[35%] mt-[15vh] mb-[20vh]"
       ref={parentRef}
     >
       <ConfigTitle>

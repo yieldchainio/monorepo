@@ -28,11 +28,12 @@ export default async function RootLayout({
       <head></head>
       <meta
         name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
+        content="width=device-width, initial-scale=1, minimum-scale=1"
       />
       <StoreInitiallizor context={data} />
-      <body className="h-max z-100 bg-custom-bg">
+      <body className="bg-custom-bg overflow-x-hidden">
         <WrappedWagmi>
+          <Header />
           <ShallowRouter />
           <link
             href="fonts/Athletics/stylesheet.css"
@@ -41,9 +42,8 @@ export default async function RootLayout({
           />
           <WhitelistProtection />
           {children}
-          <Header />
-          <ModalProvider />
           <LoggerProvider />
+          <ModalProvider />
         </WrappedWagmi>
       </body>
     </html>

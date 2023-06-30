@@ -81,7 +81,7 @@ function WhitelistPage() {
   }, [isWhitelisted, sig]);
 
   return (
-    <div className="flex flex-col items-center overflow-hidden justify-start bg-custom-bg w-[100vw] h-[100vh] z-0 absolute pt-[15vh] gap-12">
+    <div className="flex flex-col items-center overflow-hidden justify-start bg-custom-bg w-[100vw] h-[var(--viewport-height)] z-0 absolute pt-[15vh] gap-12">
       <div className="flex flex-col items-center">
         <WrappedText
           fontSize={52}

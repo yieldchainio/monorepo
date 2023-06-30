@@ -16,6 +16,7 @@ import GradientButton from "components/buttons/gradient";
 import { useRouter } from "next/navigation";
 import { forwardRef, useMemo } from "react";
 import { ProtocolsProvider } from "components/info-providers/protocols";
+import { timeSince } from "utilities/general/format-time-ago";
 
 interface StrategyCardProps {
   strategy?: YCStrategy;
@@ -57,6 +58,16 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
         ? sliceAddress(address || "")
         : undefined;
     }, [socialMedia.twitter.handle, address]);
+
+    const createdAtText = useMemo(
+      () =>
+        strategy?.createdAt
+          ? timeSince(strategy?.createdAt as Date) + " Ago"
+          : "999 Days Ago",
+      [strategy?.createdAt]
+    );
+
+    console.log("Strategy", strategy)
 
     return (
       <div
@@ -108,7 +119,7 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
                       strategy?.depositToken?.formatDecimals(strategy.tvl) || 0
                     ),
                 Title: strategy?.title,
-                Created: "5 Days Ago",
+                Created: createdAtText,
                 Protocols: (
                   <ProtocolsProvider protocols={protocolsNoDupes}>
                     <div className="flex flex-row items-center  gap-[0.05rem] cursor-pointer">

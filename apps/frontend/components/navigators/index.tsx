@@ -44,7 +44,7 @@ export const Navigators = ({
   }, [activeStep, steps, steps.length]);
 
   return (
-    <div className="absolute top-[85%] w-[40%]  z-10 flex flex-col gap-6 tablet:w-[80%]">
+    <div className="fixed top-[82.5%] w-[40%]  z-100000000000 flex flex-col gap-6 tablet:w-[80%]">
       <IncrementalProgressBar steps={steps} color="bg-blue-500" />
       <div className="flex flex-row gap-10">
         <PrevButton prev={prev} callback={prevCallback} enabled={canPrev} />

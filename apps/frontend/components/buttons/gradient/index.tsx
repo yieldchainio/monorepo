@@ -49,7 +49,7 @@ const GradientButton = forwardRef<HTMLDivElement, ButtonProps>(
         }}
         whileHover={{
           background:
-            "linear-gradient(var(--bg), var(--bg)) padding-box, var(--main-gradient) border-box",
+            "linear-gradient(rgb(var(--bg)), rgb(var(--bg))) padding-box, var(--main-gradient) border-box",
           border: "2px solid transparent",
         }}
         onClick={onClick}
@@ -67,6 +67,6 @@ const GradientButton = forwardRef<HTMLDivElement, ButtonProps>(
   }
 );
 
-GradientButton.displayName = "GradientButton"
+GradientButton.displayName = "GradientButton";
 
 export default GradientButton;

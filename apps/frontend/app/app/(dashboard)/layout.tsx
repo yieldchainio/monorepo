@@ -31,10 +31,7 @@ import { useLogs } from "utilities/hooks/stores/logger";
 
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
 
-import {
-  Direction,
-  useScrollDirection,
-} from "utilities/hooks/styles/useHideScroll";
+import { useScrollDirection } from "utilities/hooks/styles/useHideScroll";
 
 export default function Home() {
   // Retreive the strategies from the context
@@ -164,7 +161,7 @@ export default function Home() {
   // Return the component
   return (
     <>
-      <div className="w-full h-full bg-custom-bg absolute text-custom-textColor flex flex-col z-0">
+      <div className="relative w-full bg-custom-bg  text-custom-textColor flex flex-col z-0">
         <BackdropColor color="#3BC7F4" />
         <BackdropColor
           color="#FE0d"
@@ -240,7 +237,7 @@ const BrowseHeroSection = ({
 
   const scrollDirection = useScrollDirection();
   return (
-    <div className="flex flex-col gap-8 mt-[15vh] mx-auto items-center w-[100%] h-full ">
+    <div className="flex flex-col gap-8 mt-[calc(15vh-var(--header-height))] mx-auto items-center w-[100%] h-full ">
       <div className="flex flex-col items-center">
         <WrappedText fontSize={72} fontStyle="black">
           Browse
@@ -256,9 +253,9 @@ const BrowseHeroSection = ({
       <Sticky
         heightToFix={{ viewportHeight: 24 }}
         className={
-          "w-full items-center flex flex-col top-[10vh] gap-5 z-20" +
+          "w-full items-center flex flex-col top-[10vh] gap-5 z-20 transition duration-200 ease-in-out" +
           " " +
-          (scrollDirection == Direction.DOWN ? "top-[3vh]" : "")
+          (scrollDirection == "down" ? "top-[3vh]" : "")
         }
       >
         <div className="w-2/3">

@@ -34,7 +34,7 @@ module.exports = {
         current: "currentColor",
         custom: {
           // Background colors
-          bg: "var(--bg)",
+          bg: ({opacityValue}) => `rgba(var(--bg), ${opacityValue || 1})`,
           subbg: "var(--subbg)",
           darkSubbg: "var(--darkerSubbg)",
           componentbg: ({ opacityValue }) =>

@@ -8,7 +8,7 @@ import WrappedText from "components/wrappers/text";
 
 function Loading() {
   return (
-    <div className="w-[100vw] h-[100vh] overflow-hidden flex flex-col gap-16 items-center justify-center">
+    <div className="w-[100vw] h-[var(--viewport-height)] overflow-hidden flex flex-col gap-16 items-center justify-center">
       <SmallLoader
         color="currentColor"
         className="text-custom-textColor scale-[4]"

@@ -67,7 +67,6 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
       [strategy?.createdAt]
     );
 
-    console.log("Strategy", strategy)
 
     return (
       <div

@@ -742,7 +742,6 @@ export class Step extends Node<Step> implements IStep<Step> {
     inherit: boolean = true
   ) {
     super();
-    console.log("Constructing New Step! Chain ID:", config?.chainId);
     /**
      * Construct global variables
      */
@@ -752,7 +751,6 @@ export class Step extends Node<Step> implements IStep<Step> {
     this.dimensions = this.defaultDimensions[this.size];
     this.type = config?.type || StepType.STEP;
     this.chainId = config?.chainId || null;
-    console.log("Chain ID After first set in construction:", this.chainId);
 
     this.inflows = config?.inflows || [];
     this.outflows = config?.outflows || [];
@@ -791,15 +789,10 @@ export class Step extends Node<Step> implements IStep<Step> {
       if (!child.chainId) child.chainId = this.chainId;
     }
 
-    console.log("Chain ID After Children Loop:", this.chainId);
-
     // Add an empty placeholder child if our length is 0 and we are writeable
     // this.inheritStyle();
 
-    console.log("Chain ID After Inhertiance", this.chainId);
-
     this.tryAddEmptyChild();
-    console.log("End Chain ID In Construction:", this.chainId);
   }
 
   // ========================================
@@ -857,7 +850,6 @@ export class Step extends Node<Step> implements IStep<Step> {
   }): Step => {
     if (!step) return new Step();
 
-    console.log("Getting JSON step... Chain ID:", step.chainId);
     const config: IStep<Step> = {
       ...step,
       id: step.id,
@@ -1087,10 +1079,7 @@ export class Step extends Node<Step> implements IStep<Step> {
 
   toDeployableJSON(): JSONStep | null {
     if (this.state !== "complete") return null;
-    console.log(
-      "Transforming self into deployable json... this chain ID:",
-      this.chainId
-    );
+
     return {
       id: this.id,
       action: this.action?.id || "",

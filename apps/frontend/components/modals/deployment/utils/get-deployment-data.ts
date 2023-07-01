@@ -18,7 +18,6 @@ export async function getDeploymentData(
       "https://builder.yieldchain.io/strategy-creation-data",
       req
     );
-    console.log("Res", res);
     if (res.data.status) {
       return {
         deploymentCalldata: res.data.deploymentCalldata,

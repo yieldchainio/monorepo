@@ -9,7 +9,7 @@ import {
   YCUser,
 } from "@yc/yc-models";
 import { useYCStore } from "utilities/hooks/stores/yc-data";
-import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
+import { useAccount, useEnsAvatar, useEnsName, useNetwork } from "wagmi";
 import Jazzicon from "@raugfer/jazzicon";
 import { useEffect, useState } from "react";
 import { useInternalYCUser } from "utilities/hooks/stores/yc-data";
@@ -23,6 +23,8 @@ export * from "./types";
 function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
   // Current connected wallet's details
   const { address, isConnected } = useAccount();
+
+  useNetwork()
 
   // The global address variable that will be used
   const [userAddress, setUserAddress] = useState<`0x${string}` | undefined>(

@@ -12,7 +12,7 @@ import { GasThroughput } from "./components/body-sections/gas-throughput";
 import { GasBalance } from "./components/body-sections/gas-balance";
 import { ApyChart } from "./components/body-sections/apy-chart";
 import { StrategyOperationsBox } from "./components/body-sections/deposit-withdrawls";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StepsModal } from "components/modals/steps";
 import { ToggleExpandText } from "./components/utility/toggleExpand";
 import { useStateEffect } from "utilities/hooks/general/useStateEffect";
@@ -54,6 +54,20 @@ export const StrategyModal = ({
   // We consume the global modals state to push utility modals (Fund gas, steps fullscreen, etc)
   const modals = useModals();
 
+  const [gasOut, setGasOut] = useState<bigint>(0n);
+
+  useEffect(() => {
+    if (!strategy?.address) return;
+
+    (async () => {
+      const runs = await strategy.getStrategyRuns();
+
+      if (!runs.length) return;
+
+      setGasOut(runs[0].fee);
+    })();
+  }, [strategy?.address]);
+
   // Return the JSX
   return (
     <ModalWrapper
@@ -79,8 +93,8 @@ export const StrategyModal = ({
               <ValueLocked strategy={strategy} />
               <GasThroughput
                 gasIn={10000000000000000n}
-                gasOut={20000000000000000n}
-                token={strategy?.depositToken}
+                gasOut={gasOut}
+                token={strategy?.network?.nativeToken}
               />
               <GasBalance strategy={strategy} />
             </div>

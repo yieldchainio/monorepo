@@ -48,7 +48,7 @@ export const GasThroughput = ({
           fontColor={"green-500"}
           className="text-green-500"
         >
-          {gasInputted ? "+$" + gasInputted?.toFixed(2).toString() : undefined}
+          {`+$0`}
         </WrappedText>
       </InfoSection>
       <Divisor

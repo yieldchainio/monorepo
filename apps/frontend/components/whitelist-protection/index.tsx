@@ -13,7 +13,6 @@ export function WhitelistProtection() {
 
   useEffect(() => {
     const sig = localStorage.getItem("ETH_AUTH_SIG");
-    console.log("SIG SER", sig);
     if (!sig && !path.includes("/whitelist"))
       router.replace(`/whitelist?callback=${path}`);
   }, [path]);

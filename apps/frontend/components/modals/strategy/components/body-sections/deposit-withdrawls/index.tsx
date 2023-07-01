@@ -12,10 +12,10 @@ import WrappedText from "components/wrappers/text";
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import useYCUser from "utilities/hooks/yc/useYCUser";
 import { InterModalSection } from "../../general/modal-section";
-import { useBalance, useNetwork, useSigner } from "wagmi";
+import { useBalance, useContractWrite, useNetwork, useSigner } from "wagmi";
 import useDebounce from "utilities/hooks/general/useDebounce";
 import { InfoProvider } from "components/info-providers";
-useBalance;
+import { TokenInput } from "components/token-input";
 
 export const StrategyOperationsBox = ({
   strategy,
@@ -37,11 +37,11 @@ export const StrategyOperationsBox = ({
     token: strategy?.depositToken.address as `0x${string}`,
   });
 
-  console.log("Balance Data", balanceData);
-
   const { data: signer, isLoading, isError } = useSigner();
 
   const { chain } = useNetwork();
+
+ 
 
   // Handle an operation (Deposit/Withdraw)
   const handleOperation = useCallback(async () => {
@@ -100,13 +100,18 @@ export const StrategyOperationsBox = ({
         setter={setOperation as (status: string) => void}
       />
       <div className="flex flex-col w-full h-full items-center justify-center gap-6">
-        <InputSection
-          strategy={strategy}
-          state={operation}
-          onChange={(value: number) => setValueInput(value)}
-          balance={balanceData}
-          value={valueInput}
-        />
+        <div className="w-full flex flex-row justify-center items-center">
+          <TokenInput
+            token={strategy?.depositToken}
+            value={valueInput}
+            onChange={(newValue: `${number}`) =>
+              setValueInput(parseFloat(newValue))
+            }
+            address={address}
+            className="items-center justify-center"
+          />
+        </div>
+
         <GradientButton
           className="py-3 max-w-[300px]"
           width={"w-[80%]"}
@@ -116,87 +121,6 @@ export const StrategyOperationsBox = ({
         </GradientButton>
       </div>
     </InterModalSection>
-  );
-};
-
-/**
- * Sub component for the input section
- */
-
-const InputSection = ({
-  strategy,
-  state,
-  onChange,
-  balance,
-  value,
-}: {
-  strategy?: YCStrategy;
-  state: "Deposit" | "Withdraw";
-  onChange: (value: number) => any;
-  balance?: {
-    data?: {
-      formatted?: string;
-    };
-    isLoading?: boolean;
-    isError?: boolean;
-  };
-  value: number;
-}) => {
-  const balanceText = useMemo(() => {
-    if (balance?.data?.formatted)
-      return parseFloat(balance.data.formatted).toFixed(7);
-    if (balance?.isLoading) return "Loading...";
-    if (balance?.isError) return "Failed To Fetch";
-  }, [balance?.data?.formatted, balance?.isError, balance?.isLoading]);
-  return (
-    <div className="flex flex-col items-center justify-start gap-2 w-full">
-      <div className="w-[80%] h-max flex flex-col justify-start items-start">
-        <div className="flex flex-row items-center justify-between w-[95%]">
-          <WrappedText className="text-opacity-50 w-max" fontSize={12}>
-            {state + " " + "Amount"}
-          </WrappedText>
-          <InfoProvider contents="Use Max Balance">
-            <WrappedText
-              className="text-opacity-50 w-max cursor-pointer"
-              fontSize={12}
-              onClick={() => {
-                console.log(
-                  balanceText
-                    ? `Gonna Change:, ${value}, "To This:", ${balanceText}`
-                    : "Not Gonna CHange hehe" + balanceText
-                );
-                balanceText ? onChange(parseFloat(balanceText)) : null;
-              }}
-            >
-              {"Balance: " + balanceText}
-            </WrappedText>
-          </InfoProvider>
-        </div>
-
-        <WrappedInput
-          icon={
-            <div className="absolute pointer-events-none mr-6 flex flex-row gap-1 items-center justify-center bg-custom-bg rounded-xl pl-1">
-              <WrappedImage
-                src={strategy?.depositToken?.logo || undefined}
-                width={18}
-                height={18}
-                className="rounded-full"
-              />
-              <WrappedText fontSize={11} fontStyle="bold" className=" mt-1 ">
-                {strategy?.depositToken?.symbol}
-              </WrappedText>
-            </div>
-          }
-          type={"number"}
-          placeholder="0.00"
-          className="w-max pr-[2vw]"
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            onChange(e.target.value as unknown as number)
-          }
-          value={`${value}`}
-        ></WrappedInput>
-      </div>
-    </div>
   );
 };
 

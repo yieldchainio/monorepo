@@ -25,6 +25,8 @@ import { InterModalSection } from "../../general/modal-section";
 import { InfoProvider } from "components/info-providers";
 import { ToolTipDirection } from "components/info-providers/types";
 import Divisor from "components/general/divisor-line";
+import { useModals } from "utilities/hooks/stores/modal";
+import { GasBalanceModal } from "components/modals/gas-balance";
 
 export function GasBalance({ strategy }: { strategy?: YCStrategy }) {
   // A state for the formatted interval (e.g "5 Days", "8 Hours")
@@ -58,6 +60,8 @@ export function GasBalance({ strategy }: { strategy?: YCStrategy }) {
     [MediaScreens.LAPTOP]: "+",
     [MediaScreenSizes.ANY]: "Add Gas",
   });
+
+  const modals = useModals();
 
   return (
     <InterModalSection
@@ -97,14 +101,19 @@ export function GasBalance({ strategy }: { strategy?: YCStrategy }) {
       </InfoSection>
       <div className="flex flex-col gap-1">
         <InfoProvider contents="Add Gas" direction={ToolTipDirection.BOTTOM}>
-          <RegulerButton className=" bg-custom-textColor hover:bg-custom-textColor laptop:pt-[0.5px] laptop:pb-[0.5px] smallLaptop:px-2 laptop:px-2 ">
+          <RegulerButton
+            className=" text-custom-bg/100 bg-custom-textColor hover:bg-custom-textColor laptop:pt-[0.5px] laptop:pb-[0.5px] smallLaptop:px-2 laptop:px-2 "
+            onClick={() =>
+              modals.lazyPush(<GasBalanceModal strategy={strategy} />)
+            }
+          >
             <WrappedText
-              className=" text-custom-bg "
               fontStyle="bold"
               style={{
                 fontSize: "16px",
-                color: "var(--bg)",
               }}
+              className="text-custom-bg/100"
+              fontColor="text-custom-bg/100"
             >
               {addGasText}
             </WrappedText>

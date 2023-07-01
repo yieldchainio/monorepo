@@ -10,6 +10,59 @@ import { ethers, TransactionReceipt, TransactionRequest } from "ethers";
 import { YCStatistic } from "./statistic";
 export declare class YCStrategy extends BaseClass {
     #private;
+    static STRATEGY_RUN_EVENT_SIG: string;
+    static ABI: ({
+        inputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        stateMutability: string;
+        type: string;
+        name?: undefined;
+        anonymous?: undefined;
+        outputs?: undefined;
+    } | {
+        inputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        name: string;
+        type: string;
+        stateMutability?: undefined;
+        anonymous?: undefined;
+        outputs?: undefined;
+    } | {
+        anonymous: boolean;
+        inputs: {
+            indexed: boolean;
+            internalType: string;
+            name: string;
+            type: string; /**
+             * The network this strategy is on
+             */
+        }[];
+        name: string;
+        type: string;
+        stateMutability?: undefined;
+        outputs?: undefined;
+    } | {
+        inputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        name: string;
+        outputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        stateMutability: string;
+        type: string;
+        anonymous?: undefined;
+    })[];
     /**
      * The address of this strategy (e.g 0x00...000)
      */
@@ -196,6 +249,10 @@ export declare class YCStrategy extends BaseClass {
         to: `0x${string}`;
         gasLimit: bigint;
     }>;
+    /**
+     * Get all strategy run transactions
+     */
+    getStrategyRuns(): Promise<TransactionReceipt[]>;
     constructor(_strategy: DBStrategy, _context: YCClassifications);
     getInstance: (id: string) => YCStrategy | null;
     static instances: Map<string, YCStrategy>;

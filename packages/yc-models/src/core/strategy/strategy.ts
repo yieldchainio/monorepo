@@ -24,14 +24,20 @@ import {
   TransactionReceipt,
   TransactionRequest,
 } from "ethers";
-import type { ContractTransaction } from "ethers";
+import type { ContractTransaction, Filter } from "ethers";
 import { YCStatistic } from "./statistic";
 import { formatInterval } from "./format-interval.js";
+import DiamondAbi from "../../ABIs/diamond.json" assert { type: "json" };
 
 export class YCStrategy extends BaseClass {
   // =================================
   //       FIELDS & GETTERS
   // =================================
+
+  static STRATEGY_RUN_EVENT_SIG =
+    "0xdbe3d20b1ff78af2641095f09678c480355661b3df9ad133213c571f19e2e6bd";
+
+  static ABI = abi;
 
   /**
    * The address of this strategy (e.g 0x00...000)
@@ -293,9 +299,18 @@ export class YCStrategy extends BaseClass {
    * @returns The gas balance (bigint)
    */
   gasBalance = async (cache: boolean = true): Promise<bigint> => {
-    return cache && this.#gasBalance
-      ? this.#gasBalance
-      : await this.#setGasBalance();
+    if (!this.network?.diamondAddress) return 0n;
+    const diamondContract = new Contract(
+      this.network.diamondAddress,
+      DiamondAbi,
+      this.network.provider
+    );
+    const balance: bigint | undefined =
+      await diamondContract.getStrategyGasBalance(this.address);
+
+    console.log("Balance Query:", balance);
+
+    return balance || 0n;
   };
 
   /**
@@ -327,6 +342,7 @@ export class YCStrategy extends BaseClass {
   ): Promise<{ balance: bigint; usdValue: number }> => {
     const balance = await this.gasBalance(cache);
     const usdValue = await this.gasBalanceUSD(balance, cache);
+
     return { balance, usdValue };
   };
 
@@ -496,6 +512,24 @@ export class YCStrategy extends BaseClass {
     };
   };
 
+  /**
+   * Get all strategy run transactions
+   */
+  async getStrategyRuns(): Promise<TransactionReceipt[]> {
+    const filter: Filter = {
+      address: this.address,
+      topics: [YCStrategy.STRATEGY_RUN_EVENT_SIG],
+      fromBlock: 0,
+      toBlock: "latest",
+    };
+
+    const logs = await this.network?.provider?.getLogs(filter);
+
+    return await Promise.all(
+      logs?.map(async (log) => await log.getTransactionReceipt()) || []
+    );
+  }
+
   // =================
   //   CONSTRUCTOR
   // =================
@@ -582,9 +616,15 @@ export class YCStrategy extends BaseClass {
 
   // Fethces the strategy's gas balance and sets it
   #setGasBalance = async (): Promise<bigint> => {
-    const balance: bigint | undefined = await this.network?.provider.getBalance(
-      this.address
+    if (!this.network?.diamondAddress) return 0n;
+    const diamondContract = new Contract(
+      this.network.diamondAddress,
+      DiamondAbi,
+      this.network.provider
     );
+    const balance: bigint | undefined =
+      await diamondContract.getStrategyGasBalance(this.address);
+
     if (balance == undefined)
       throw new Error("YCStrategy ERR - Cannot get balance (Got undefined).");
     this.#gasBalance = balance;

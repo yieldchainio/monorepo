@@ -238,14 +238,14 @@ export class YCStrategy extends BaseClass {
             : await this.depositToken?.populateSafeApproval(amount, this.address, {
                 from: this.getSigningAddress(signer),
             });
+        if (approvalTxn != true)
+            await this.signTransaction(signer, approvalTxn);
+        console.log("INside serrrr");
         // Populate a deposit
         const depositTxn = await this.populateDeposit(this.depositToken.getParsed(amount), {
             from: this.getSigningAddress(signer),
-            gasLimit: 1500000,
         });
-        // Call both (or just deposit if allownace is sufficient) and return the receipt
-        const txns = approvalTxn === true ? [depositTxn] : [approvalTxn, depositTxn];
-        return (await this.signTransactions(signer, txns))[1];
+        return await this.signTransaction(signer, depositTxn);
     };
     /**
      * Make a deposit without approvals (for with approvals, see fullDeposit)
@@ -256,15 +256,9 @@ export class YCStrategy extends BaseClass {
     deposit = async (amount, signer) => {
         // Make sure the signer's chain ID matches the strategy's
         await this.network?.assertSignerChainID(signer);
-        const requiredGasPrepay = await this.contract.approxDepositGas.staticCallResult();
-        if (!requiredGasPrepay[0]) {
-            console.error("Errornous Gas Approximation", requiredGasPrepay);
-            throw "Cannot Deposit - Gas Approximation Not Defined On Strategy";
-        }
         // Populate a deposit and sign it
         return await this.signTransaction(signer, await this.populateDeposit(this.depositToken.getParsed(amount), {
             from: this.getSigningAddress(signer),
-            value: requiredGasPrepay[0] * 2n,
         }));
     };
     /**
@@ -276,16 +270,9 @@ export class YCStrategy extends BaseClass {
     withdraw = async (amount, signer) => {
         // Make sure the signer's chain ID matches the strategy's
         await this.network?.assertSignerChainID(signer);
-        const requiredGasPrepay = await this.contract.approxWithdrawalGas.staticCallResult();
-        if (!requiredGasPrepay[0]) {
-            console.error("Errornous Gas Approximation", requiredGasPrepay);
-            throw "Cannot Deposit - Gas Approximation Not Defined On Strategy";
-        }
-        const bigintGas = BigInt(requiredGasPrepay[0] * 2n);
         // Populate a withdrawal
         const withdrawTxn = await this.populateWithdrawal(BigInt(this.depositToken.getParsed(amount)), {
             from: this.getSigningAddress(signer),
-            value: BigInt(requiredGasPrepay[0] * 2n),
         });
         // Sign the transaction from the population
         return await this.signTransaction(signer, withdrawTxn);
@@ -303,7 +290,22 @@ export class YCStrategy extends BaseClass {
      */
     populateDeposit = async (amount, args) => {
         this.#assertDepositToken();
-        return await this.contract.deposit.populateTransaction(amount, args);
+        const data = await this.contract.deposit.resolveOffchainData(amount, {
+            ...args,
+            enableCcipRead: true,
+            blockTag: "latest",
+        });
+        const gasLimit = await this.contract.deposit.estimateGas(amount, {
+            ...args,
+            enableCcipRead: true,
+            blockTag: "latest",
+        });
+        return {
+            from: args.from,
+            data,
+            to: this.address,
+            gasLimit: gasLimit * 3n,
+        };
     };
     /**
      *Popoulate a withdrawal transaction
@@ -316,8 +318,22 @@ export class YCStrategy extends BaseClass {
         this.#assertDepositToken();
         // Assert the user's shares to be sufficient to the inputted amount
         await this.#assertUserShares(args.from || "", this.depositToken.getParsed(amount));
-        // Populate the transaction object & return it
-        return await this.contract.withdraw.populateTransaction(amount, args);
+        const data = await this.contract.withdraw.resolveOffchainData(amount, {
+            ...args,
+            enableCcipRead: true,
+            blockTag: "latest",
+        });
+        const gasLimit = await this.contract.withdraw.estimateGas(amount, {
+            ...args,
+            enableCcipRead: true,
+            blockTag: "latest",
+        });
+        return {
+            from: args.from,
+            data,
+            to: this.address,
+            gasLimit: gasLimit * 5n,
+        };
     };
     // =================
     //   CONSTRUCTOR

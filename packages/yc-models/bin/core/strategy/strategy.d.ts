@@ -176,7 +176,12 @@ export declare class YCStrategy extends BaseClass {
      */
     populateDeposit: (amount: number | bigint, args: Partial<TransactionRequest> & {
         from: string;
-    }) => Promise<ethers.ContractTransaction>;
+    }) => Promise<{
+        from: (ethers.AddressLike | null | undefined) & string;
+        data: string;
+        to: `0x${string}`;
+        gasLimit: bigint;
+    }>;
     /**
      *Popoulate a withdrawal transaction
      * @param amount - the amount to withdraw
@@ -185,7 +190,12 @@ export declare class YCStrategy extends BaseClass {
      */
     populateWithdrawal: (amount: number | bigint, args: Partial<TransactionRequest> & {
         from: string;
-    }) => Promise<ethers.ContractTransaction>;
+    }) => Promise<{
+        from: (ethers.AddressLike | null | undefined) & string;
+        data: string;
+        to: `0x${string}`;
+        gasLimit: bigint;
+    }>;
     constructor(_strategy: DBStrategy, _context: YCClassifications);
     getInstance: (id: string) => YCStrategy | null;
     static instances: Map<string, YCStrategy>;

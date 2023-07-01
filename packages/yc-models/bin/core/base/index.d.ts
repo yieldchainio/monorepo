@@ -9,7 +9,9 @@ import { SignerMethod } from "../../types/index.js";
 export declare class BaseWeb3Class {
     signTransaction: (signingMethod: SignerMethod, transaction: ContractTransaction) => Promise<TransactionReceipt>;
     static signTransaction: (signingMethod: SignerMethod, transaction: ContractTransaction) => Promise<TransactionReceipt>;
-    signTransactions: (signingMethod: SignerMethod, transactions: ContractTransaction[]) => Promise<TransactionReceipt[]>;
+    signTransactions: (signingMethod: SignerMethod, transactions: Array<Omit<ContractTransaction, "type"> & {
+        type?: any;
+    }>) => Promise<TransactionReceipt[]>;
     getSigningAddress: (signingMethod: SignerMethod) => string;
     static getSigningAddress: (signingMethod: SignerMethod) => string;
 }

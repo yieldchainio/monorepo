@@ -357,6 +357,10 @@ export class YCStrategy extends BaseClass {
           from: this.getSigningAddress(signer),
         });
 
+    if (approvalTxn != true) await this.signTransaction(signer, approvalTxn);
+
+    console.log("INside serrrr");
+
     // Populate a deposit
     const depositTxn = await this.populateDeposit(
       this.depositToken.getParsed(amount),
@@ -365,11 +369,7 @@ export class YCStrategy extends BaseClass {
       }
     );
 
-    // Call both (or just deposit if allownace is sufficient) and return the receipt
-    const txns =
-      approvalTxn === true ? [depositTxn] : [approvalTxn, depositTxn];
-
-    return (await this.signTransactions(signer, txns))[1];
+    return await this.signTransaction(signer, depositTxn);
   };
 
   /**
@@ -443,10 +443,17 @@ export class YCStrategy extends BaseClass {
       blockTag: "latest",
     });
 
+    const gasLimit = await this.contract.deposit.estimateGas(amount, {
+      ...args,
+      enableCcipRead: true,
+      blockTag: "latest",
+    });
+
     return {
       from: args.from,
       data,
       to: this.address,
+      gasLimit: gasLimit * 3n,
     };
   };
 
@@ -475,10 +482,17 @@ export class YCStrategy extends BaseClass {
       blockTag: "latest",
     });
 
+    const gasLimit = await this.contract.withdraw.estimateGas(amount, {
+      ...args,
+      enableCcipRead: true,
+      blockTag: "latest",
+    });
+
     return {
       from: args.from,
       data,
       to: this.address,
+      gasLimit: gasLimit * 5n,
     };
   };
 

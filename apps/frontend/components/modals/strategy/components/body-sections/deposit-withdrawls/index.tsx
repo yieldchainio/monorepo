@@ -143,7 +143,8 @@ const InputSection = ({
   value: number;
 }) => {
   const balanceText = useMemo(() => {
-    if (balance?.data?.formatted) return balance.data.formatted;
+    if (balance?.data?.formatted)
+      return parseFloat(balance.data.formatted).toFixed(7);
     if (balance?.isLoading) return "Loading...";
     if (balance?.isError) return "Failed To Fetch";
   }, [balance?.data?.formatted, balance?.isError, balance?.isLoading]);

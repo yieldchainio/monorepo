@@ -22,14 +22,6 @@ export const PositionsDropdown = ({
   className,
 }: PositionsDropdownProps) => {
   // ===========
-  //   GLOBALS
-  // ===========
-  /**
-   * Get global context
-   */
-  const context = useYCStore((state) => state.context);
-
-  // ===========
   //    MEMOS
   // ===========
   /**
@@ -46,7 +38,7 @@ export const PositionsDropdown = ({
     // Return the choice (showing the inflows of the harvest, and outflows of dependancy in small)
     return {
       image: (
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center gap-1">
           <TokensBundle
             tokens={choice.inflows}
             imageProps={{

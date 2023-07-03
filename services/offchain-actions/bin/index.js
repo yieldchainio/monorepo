@@ -56,28 +56,11 @@ async function ccipRequestHandler(actionRequest) {
         };
     }
 }
-async function batchTriggerCcipRequestHandler() { }
 // ============
 //   ENDPOINTS
 // ============
 app.get("/", (req, res) => {
     res.status(200).json({ status: "OK" });
-});
-// Handle batch request
-app.get("/offchain-actions/batch/:callData", async (req, res) => {
-    try {
-        const offchainRequest = AbiCoder.defaultAbiCoder().decode([
-            "tuple(address initiator, uint256 chainId, uint256 stepIndex, bytes[] cachedOffchainCommands, address callTargetAddress, string signature, bytes args)",
-        ], req.params.callData)[0];
-        const data = await ccipRequestHandler(offchainRequest);
-        res.status(data.status).json(data);
-    }
-    catch (e) {
-        res.status(404).json({
-            status: 404,
-            message: e,
-        });
-    }
 });
 app.get("/offchain-actions/:callData", async (req, res) => {
     try {

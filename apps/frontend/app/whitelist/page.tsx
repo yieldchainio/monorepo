@@ -39,7 +39,7 @@ const WhitelistingStatusToComponents: Record<
   null: <ConnectWalletButton />,
   true: (
     <div className="flex flex-col items-center justify-center">
-      <WrappedText>Let's Just Prove It's REALLY You</WrappedText>
+      <WrappedText>{"Let's Just Prove It's REALLY You"}</WrappedText>
       <RegulerButton
         onClick={async () =>
           localStorage.setItem(

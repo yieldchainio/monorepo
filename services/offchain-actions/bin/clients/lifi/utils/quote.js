@@ -4,10 +4,10 @@
 import { LIFI_BASE_QUOTE_URL } from "../constants.js";
 import axios from "axios";
 export async function lifiQuote(fromToken, toToken, fromAmount, fromAddress, fromChain, toChain = fromChain) {
-    const requestURL = `${LIFI_BASE_QUOTE_URL}?fromChain=${fromChain}&toChain=${toChain}&fromToken=${fromToken}&toToken=${toToken}&fromAmount=${fromAmount}&fromAddress=${fromAddress}&integrator=${"yieldchain.io"}`;
+    const requestURL = `${LIFI_BASE_QUOTE_URL}?fromChain=${fromChain}&toChain=${toChain}&fromToken=${fromToken}&toToken=${toToken}&fromAmount=${fromAmount}&fromAddress=${fromAddress}&integrator=${"yieldchain.io"}&denyExchanges=dodo`;
     console.log("About to get lifi res...");
     const res = (await axios.get(requestURL)).data;
-    console.log("Got lifi res", res);
+    console.log("LI.FI Res On Exchange:", res.tool);
     return res;
 }
 //# sourceMappingURL=quote.js.map

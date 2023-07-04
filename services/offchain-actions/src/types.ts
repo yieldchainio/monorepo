@@ -10,6 +10,11 @@ import {
 import { YcCommand, address } from "@yc/yc-models";
 import { Log, EventLog } from "ethers";
 
+export interface CCIPPostReqBody {
+  data: bytes;
+  sender: address;
+}
+
 enum ExecutionTypes {
   SEED,
   TREE,

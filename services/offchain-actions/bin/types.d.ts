@@ -4,6 +4,10 @@
 import { SQSOnchainLog, bytes } from "@yc/yc-models";
 import { YcCommand, address } from "@yc/yc-models";
 import { Log, EventLog } from "ethers";
+export interface CCIPPostReqBody {
+    data: bytes;
+    sender: address;
+}
 declare enum ExecutionTypes {
     SEED = 0,
     TREE = 1,

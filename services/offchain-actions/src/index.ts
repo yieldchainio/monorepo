@@ -4,12 +4,18 @@
 import dotenv from "dotenv";
 dotenv.config();
 import { YCClassifications, YcCommand, bytes } from "@yc/yc-models";
-import { CCIPRes, OffchainRequest, SQSHydrationRequestEvent } from "./types.js";
+import {
+  CCIPPostReqBody,
+  CCIPRes,
+  OffchainRequest,
+  SQSHydrationRequestEvent,
+} from "./types.js";
 import { AbiCoder } from "ethers";
 import { execOffchainAction } from "./utils/exec-offchain-action.js";
-import express, { Response } from "express";
+import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import { isBytesLike } from "./utils/is-bytes-like.js";
 
 // ============
 //   SETUP
@@ -51,8 +57,6 @@ async function ccipRequestHandler(
       network.provider
     );
 
-    console.log("Res SEr!!", res);
-
     if (!res)
       return {
         status: 404,
@@ -86,25 +90,40 @@ app.get("/", (req, res) => {
   res.status(200).json({ status: "OK" });
 });
 
-app.get("/offchain-actions/:callData", async (req, res: Response<CCIPRes>) => {
-  try {
-    const offchainRequest: OffchainRequest = AbiCoder.defaultAbiCoder().decode(
-      [
-        "tuple(address initiator, uint256 chainId, uint256 stepIndex, bytes[] cachedOffchainCommands, address callTargetAddress, string signature, bytes args)",
-      ],
-      req.params.callData as bytes
-    )[0];
+app.post(
+  "/offchain-actions",
+  async (req: Request<CCIPPostReqBody>, res: Response<CCIPRes>) => {
+    try {
+      const ccipBody = req.body;
+      const callData = ccipBody.data;
 
-    const data = await ccipRequestHandler(offchainRequest);
+      console.log("req body", req.body);
 
-    res.status(data.status).json(data);
-  } catch (e: any) {
-    res.status(404).json({
-      status: 404,
-      message: e,
-    });
+      if (!isBytesLike(callData))
+        return res.status(404).json({
+          status: 404,
+          message: "Calldata Is Not Hexadecimal bytes format",
+        });
+
+      const offchainRequest: OffchainRequest =
+        AbiCoder.defaultAbiCoder().decode(
+          [
+            "tuple(address initiator, uint256 chainId, uint256 stepIndex, bytes[] cachedOffchainCommands, address callTargetAddress, string signature, bytes args)",
+          ],
+          callData
+        )[0];
+
+      const data = await ccipRequestHandler(offchainRequest);
+
+      res.status(data.status).json(data);
+    } catch (e: any) {
+      res.status(404).json({
+        status: 404,
+        message: e,
+      });
+    }
   }
-});
+);
 
 app.listen(PORT, () =>
   console.log("Offchain Actions Listening On Port", PORT + "...")

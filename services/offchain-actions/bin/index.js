@@ -9,13 +9,16 @@ import { execOffchainAction } from "./utils/exec-offchain-action.js";
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import { isBytesLike } from "./utils/is-bytes-like.js";
 // ============
 //   SETUP
 // ============
 const app = express();
 const PORT = 8080;
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
+app.use(bodyParser.json({
+    limit: "50mb",
+}));
 app.use(cors());
 const ycContext = YCClassifications.getInstance();
 if (!ycContext.initiallized)
@@ -32,7 +35,6 @@ async function ccipRequestHandler(actionRequest) {
         };
     try {
         const res = await execOffchainAction(actionRequest, network.provider);
-        console.log("Res SEr!!", res);
         if (!res)
             return {
                 status: 404,
@@ -62,11 +64,19 @@ async function ccipRequestHandler(actionRequest) {
 app.get("/", (req, res) => {
     res.status(200).json({ status: "OK" });
 });
-app.get("/offchain-actions/:callData", async (req, res) => {
+app.post("/offchain-actions", async (req, res) => {
     try {
+        const ccipBody = req.body;
+        const callData = ccipBody.data;
+        console.log("req body", req.body);
+        if (!isBytesLike(callData))
+            return res.status(404).json({
+                status: 404,
+                message: "Calldata Is Not Hexadecimal bytes format",
+            });
         const offchainRequest = AbiCoder.defaultAbiCoder().decode([
             "tuple(address initiator, uint256 chainId, uint256 stepIndex, bytes[] cachedOffchainCommands, address callTargetAddress, string signature, bytes args)",
-        ], req.params.callData)[0];
+        ], callData)[0];
         const data = await ccipRequestHandler(offchainRequest);
         res.status(data.status).json(data);
     }

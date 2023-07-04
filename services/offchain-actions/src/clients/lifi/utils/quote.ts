@@ -15,9 +15,9 @@ export async function lifiQuote(
   fromChain: number,
   toChain: number = fromChain
 ): Promise<LifiQuote> {
-  const requestURL: lifiQuoteRequestURL = `${LIFI_BASE_QUOTE_URL}?fromChain=${fromChain}&toChain=${toChain}&fromToken=${fromToken}&toToken=${toToken}&fromAmount=${fromAmount}&fromAddress=${fromAddress}&integrator=${"yieldchain.io"}`;
+  const requestURL: lifiQuoteRequestURL = `${LIFI_BASE_QUOTE_URL}?fromChain=${fromChain}&toChain=${toChain}&fromToken=${fromToken}&toToken=${toToken}&fromAmount=${fromAmount}&fromAddress=${fromAddress}&integrator=${"yieldchain.io"}&denyExchanges=dodo`;
   console.log("About to get lifi res...");
   const res = (await axios.get<LifiQuote>(requestURL)).data;
-  console.log("Got lifi res", res);
+  console.log("LI.FI Res On Exchange:", res.tool);
   return res;
 }

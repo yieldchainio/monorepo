@@ -1,0 +1,1 @@
+{"version":3,"file":"query-total-shares.js","sourceRoot":"","sources":["../../src/utils/query-total-shares.ts"],"names":[],"mappings":"AAAA;;GAEG;AAKH,MAAM,CAAC,KAAK,UAAU,gBAAgB,CACpC,KAAiB,EACjB,QAAkB;IAElB,OAAO,MAAM,KAAK,CAAC,QAAQ,CAAC,WAAW,CAAC;QACtC,QAAQ;KACT,CAAC,CAAC;AACL,CAAC"}

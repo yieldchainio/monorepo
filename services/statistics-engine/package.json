@@ -1,0 +1,21 @@
+{
+  "name": "@yc/statistics-engine",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "bin/index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ofir Smolinsky",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^4.16.2",
+    "@yc/anvil-ts": "*",
+    "@yc/aws-models": "*",
+    "@yc/yc-models": "*",
+    "ethers": "https://github.com/OfirYC/ethers.js",
+    "prisma": "^4.16.2"
+  }
+}

@@ -90,6 +90,10 @@ app.get("/", (req, res) => {
   res.status(200).json({ status: "OK" });
 });
 
+app.post("/shit", (req, res) => {
+  res.status(200).json({ status: "OK" });
+});
+
 app.post(
   "/offchain-actions",
   async (req: Request<CCIPPostReqBody>, res: Response<CCIPRes>) => {
@@ -117,6 +121,10 @@ app.post(
 
       res.status(data.status).json(data);
     } catch (e: any) {
+      console.error(
+        "[OffchainActionsEndpoint]: Caught Error In /offchain-actions request:",
+        e
+      );
       res.status(404).json({
         status: 404,
         message: e,

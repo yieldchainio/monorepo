@@ -97,4 +97,6 @@ const WrappedInput = forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
+WrappedInput.displayName = "WrappedInput";
+
 export default WrappedInput;

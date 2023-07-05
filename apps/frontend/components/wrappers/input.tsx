@@ -8,7 +8,7 @@ import WrappedText from "./text";
  * for ease of use with skeletons and global styling
  */
 
-const WrappedInput = forwardRef<HTMLElement, InputProps>(
+const WrappedInput = forwardRef<HTMLInputElement, InputProps>(
   (
     {
       fontSize = 14,
@@ -62,7 +62,7 @@ const WrappedInput = forwardRef<HTMLElement, InputProps>(
           } `}
           onChange={onChange}
           onClick={() => {
-            ref.current?.focus();
+            if (typeof ref == "object") ref?.current?.focus();
           }}
           placeholder={placeholder}
           type={type}

@@ -34,7 +34,6 @@ export const BaseActionConfig = forwardRef<
       width,
       height,
       className = "flex-col ",
-      style,
       canContinue,
       handleComplete,
       ...props
@@ -46,7 +45,8 @@ export const BaseActionConfig = forwardRef<
     },
     ref
   ) => {
-    const { step, triggerComparison } = useStepContext();
+    const { step, triggerComparison, style } = useStepContext();
+
     /**
      * Get a portal to our canvas for tooltips
      */
@@ -84,7 +84,10 @@ export const BaseActionConfig = forwardRef<
             triggerComparison={triggerComparison}
             style={{
               ...style,
-              left: ((style?.left || 0) as number) + parseInt(width) * 1.1,
+
+              left: `${
+                ((style?.left || 0) as number) + parseInt(width) * 1.1
+              }px`,
             }}
             {...props}
             className={className}
@@ -94,7 +97,6 @@ export const BaseActionConfig = forwardRef<
           width={width}
           height={height}
           className={(className || "") + " " + "py-6 px-6 z-[100]"}
-          {...props}
           ref={ref}
         >
           <div className="flex flex-row items-center justify-between self-start w-full">

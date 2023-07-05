@@ -70,7 +70,7 @@ const DepositSubSection = ({
   useEffect(() => {
     (async () => {
       const runs = await strategy?.getStrategyRuns();
-      setLatestRunCost(runs?.[0].fee || 0n);
+      setLatestRunCost(runs?.[0]?.fee || 0n);
     })();
   }, [strategy?.address]);
 
@@ -114,7 +114,6 @@ const DepositSubSection = ({
         <TokenInput
           token={network?.nativeToken || undefined}
           onChange={(newVal) => {
-
             setFormattedInput(parseFloat(newVal));
           }}
           address={address}
@@ -160,7 +159,7 @@ const CoinSection = () => {
     <div className="relative flex flex-col bg-custom-componentbg/50 w-full h-full overflow-hidden tablet:hidden rounded-lg">
       <WrappedImage
         src={"/icons/big-coins.svg"}
-        className=" w-[100%] h-[100%] absolute top-[100%] left-[100%] translate-x-[-80%] translate-y-[-90%]"
+        className=" w-[200%] h-[200%] absolute top-[100%] left-[100%] translate-x-[-88.5%] translate-y-[-70%]"
       ></WrappedImage>
     </div>
   );

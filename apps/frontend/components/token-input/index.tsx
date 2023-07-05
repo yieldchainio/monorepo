@@ -10,7 +10,7 @@ import WrappedImage from "components/wrappers/image";
 import WrappedInput from "components/wrappers/input";
 import WrappedText from "components/wrappers/text";
 import { constants } from "ethers";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useMemo, useRef, useState } from "react";
 import useDebounce from "utilities/hooks/general/useDebounce";
 import { useBalance } from "wagmi";
 
@@ -26,6 +26,8 @@ export const TokenInput = <T extends `${number}` | number>({
   onChange: (newValue: `${number}`) => void;
   value?: T;
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const balance = useBalance({
     address: address as `0x${string}`,
     token:
@@ -41,6 +43,14 @@ export const TokenInput = <T extends `${number}` | number>({
     if (balance?.isError) return "Failed To Fetch";
   }, [balance?.data?.formatted, balance?.isError, balance?.isLoading]);
 
+  const [overridingValue, setOverridingValue] = useState<`${number}`>();
+
+  const handleBalanceClick = () => {
+    if (balanceText == null) return;
+    onChange(balanceText as `${number}`);
+    if (inputRef.current) inputRef.current.value = balanceText;
+  };
+
   return (
     <div className={"flex flex-col gap-2  w-full" + " " + (className || "")}>
       <div className="w-[80%] h-max flex flex-col justify-start items-start">
@@ -55,9 +65,7 @@ export const TokenInput = <T extends `${number}` | number>({
             <WrappedText
               className="text-opacity-50 w-max cursor-pointer"
               fontSize={12}
-              onClick={() => {
-                balanceText ? onChange(balanceText as `${number}`) : null;
-              }}
+              onClick={handleBalanceClick}
             >
               {"Balance: " + balanceText}
             </WrappedText>
@@ -65,6 +73,7 @@ export const TokenInput = <T extends `${number}` | number>({
         </div>
 
         <WrappedInput
+          ref={inputRef}
           min={0.00001}
           icon={
             <div className="absolute pointer-events-none mr-6 flex flex-row gap-1 items-center justify-center bg-custom-bg rounded-xl pl-1">
@@ -89,6 +98,7 @@ export const TokenInput = <T extends `${number}` | number>({
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange(e.target.value as `${number}`)
           }
+          overridingValue={overridingValue}
           // value={`${value}`}
         ></WrappedInput>
       </div>

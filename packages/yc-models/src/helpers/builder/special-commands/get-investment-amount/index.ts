@@ -48,11 +48,16 @@ export const encodeGetInvestmentAmount = (
   if (!tokenPercentage)
     throw "Cannot Encode Get Investment Amount - No Token Percentage Set";
 
+  console.log(
+    "Setting This Val In GIA:",
+    `${Math.ceil((100 / tokenPercentage) * 100)}`
+  );
+
   const clonedArg = new YCArgument(
     {
       ...argument.value.arguments[1].toJSON(true),
       custom: false,
-      value: `${(100 / tokenPercentage) * 100}`,
+      value: `${Math.ceil((100 / tokenPercentage) * 100)}`,
     },
     YCClassifications.getInstance()
   );

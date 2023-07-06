@@ -50,6 +50,9 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
     console.log("Updated Token Percentages...");
     const approvalPairs = buildApprovalPairs(seedInstance, treeInstance, uprootInstance, depositToken);
     console.log("Built Approval Pairs...");
+    console.log("Token PErcentages", seedInstance.map((step) => {
+        return Array.from(step.tokenPercentages.entries()).map(([tokenAddr, number]) => number);
+    }));
     const stepsToEncodedFunctions = encodeTreesFunctions([
         [seedInstance, EncodingContext.SEED],
         [treeInstance, EncodingContext.TREE],

@@ -99,7 +99,7 @@ export class Fork extends JsonRpcProvider {
    * Write to storage manually
    */
 
-  async write(address: address, slot: bytes32, newValue: bytes) {
+  async write(address: address, slot: bytes32, newValue: bytes32) {
     await this.send("anvil_setStorageAt", [address, slot, newValue]);
   }
 
@@ -152,4 +152,5 @@ export class Fork extends JsonRpcProvider {
   async enableAutoMine() {
     return await this.send("evm_setAutomine", [true]);
   }
+
 }

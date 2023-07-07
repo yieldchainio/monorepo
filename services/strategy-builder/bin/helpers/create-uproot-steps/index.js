@@ -45,8 +45,7 @@ export function createUprootSteps(seedSteps, treeSteps, depositToken) {
         usedFunctions.add(step.function.id);
         // Only allow functions which have a counter function, or that have 0 outflows (net neutral for the vault)
         if (!step.function.counterFunction)
-            if (step.function.outflows.length > 0)
-                return false;
+            return false;
         return true;
     };
     hydrateAndFlipTree(

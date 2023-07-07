@@ -15,11 +15,13 @@ export function buildOnchainStepsList(stepsTree, stepFunctions) {
         stepIdsToIndices.set(step.id, index);
         if (!encodedFunc)
             throw "Cannot Create Linked List - Func Unavailable";
+        const isCallback = step.function?.isCallback || false;
         linkedList.push({
             func: encodedFunc,
             childrenIndices,
             conditions,
-            isCallback: step.function?.isCallback || false,
+            isCallback: isCallback,
+            mvc: isCallback ? "" : "",
         });
         if (!step.parent?.id)
             return;

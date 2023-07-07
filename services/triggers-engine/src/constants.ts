@@ -18,7 +18,7 @@ function isCustomRevert(error: any): error is { data: string } {
 }
 
 function hasSelector(error: { data: string }, selector: `0x${string}`) {
-  return error.data.slice(0, 8) == selector;
+  return error.data.slice(0, 10) == selector;
 }
 export function IsTriggerNotReadyError(error: any): boolean {
   return isCustomRevert(error) && hasSelector(error, TriggerNotReadySelector);

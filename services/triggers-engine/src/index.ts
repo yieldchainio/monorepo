@@ -2,14 +2,16 @@
  * Manages triggering strategies
  */
 import { SupportedYCNetwork, YCClassifications, address } from "@yc/yc-models";
-import { AbiCoder, Contract, Wallet, ethers } from "ethers";
+import { AbiCoder, Contract, Wallet, ethers, TransactionRequest } from "ethers";
 import DiamondABI from "@yc/yc-models/src/ABIs/diamond.json" assert { type: "json" };
 import dotenv from "dotenv";
 import {
   EMPTY_BYTES_ARRAY,
   IsTriggerNotReadyError,
   isInsufficientGasBalanceError,
-} from "./constants";
+} from "./constants.js";
+import { BlocksQueue } from "./classes/blocks-queue.js";
+import { TriggersQueue } from "./classes/triggers-queue.js";
 dotenv.config();
 
 const ycContext = YCClassifications.getInstance();
@@ -22,8 +24,13 @@ const supportedNetworks = ycContext.networks.filter(
   (network) => network.diamondAddress && network.provider
 ) as SupportedYCNetwork[];
 
-const checkAllStrategiesTriggers = async (diamondContract: Contract) => {
-  return (await diamondContract.checkStrategiesTriggers()) as boolean[][];
+const checkAllStrategiesTriggers = async (
+  diamondContract: Contract,
+  blockTag: number
+) => {
+  return (await diamondContract.checkStrategiesTriggers({
+    blockTag,
+  })) as boolean[][];
 };
 
 for (const network of supportedNetworks) {
@@ -33,21 +40,14 @@ for (const network of supportedNetworks) {
     DiamondABI,
     signer
   );
-  const usedBlocks = new Set<number>();
-  const isValidBlock = (blockNum: number) => {
-    if (usedBlocks.has(blockNum)) return false;
-    usedBlocks.add(blockNum);
-    return true;
-  };
-  network.provider.on("block", async (blockNum) => {
-    console.log("Checking Block #" + blockNum, "On", network.name + "...");
 
-    if (!isValidBlock(blockNum)) return;
+  const triggersQueue = new TriggersQueue(signer, diamondContract);
 
+  async function processBlock(blockNum: number) {
     const indices: number[] = [];
 
     const strategiesSignals: boolean[][] = (
-      await checkAllStrategiesTriggers(diamondContract)
+      await checkAllStrategiesTriggers(diamondContract, blockNum)
     ).flatMap((signals, index) => {
       if (signals.includes(true)) {
         indices.push(index);
@@ -70,41 +70,12 @@ for (const network of supportedNetworks) {
       if (!triggers)
         throw "[TriggersEngine]: Iterating over valid vault but triggers shift() returned undefined";
 
-      for (let i = 0; i < triggers.length; i++) {
-        if (triggers[i] == false) continue; // Trigger not ready
-
-        try {
-          const encodedParams = AbiCoder.defaultAbiCoder().encode(
-            ["address", "uint256"],
-            [vault, i]
-          );
-
-          const callData =
-            await diamondContract.executeStrategyTriggerWithData.resolveOffchainData(
-              EMPTY_BYTES_ARRAY,
-              encodedParams,
-              {
-                enableCcipRead: true,
-                blockTag: "latest",
-              }
-            );
-
-          await signer.sendTransaction({
-            to: network.diamondAddress,
-            data: callData,
-          });
-        } catch (error: any) {
-          // If simply not ready we continue on, otherwise throw the exception
-          if (IsTriggerNotReadyError(error)) continue;
-          if (isInsufficientGasBalanceError(error)) continue;
-
-          console.error(
-            "[TriggersEngine]: Caught Unknown Exception While Executing Trigger."
-          );
-
-          throw error;
-        }
-      }
+      for (let i = 0; i < triggers.length; i++)
+        if (triggers[i] == true) triggersQueue.push(vault, i); // Only if trigger valid & ready
     }
-  });
+  }
+
+  const blocksQueue = new BlocksQueue(network, processBlock);
+
+  blocksQueue.start();
 }

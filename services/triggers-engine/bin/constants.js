@@ -8,7 +8,7 @@ function isCustomRevert(error) {
         error.data.slice(0, 2) == "0x");
 }
 function hasSelector(error, selector) {
-    return error.data.slice(0, 8) == selector;
+    return error.data.slice(0, 10) == selector;
 }
 export function IsTriggerNotReadyError(error) {
     return isCustomRevert(error) && hasSelector(error, TriggerNotReadySelector);

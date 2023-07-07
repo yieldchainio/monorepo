@@ -41,8 +41,6 @@ export const StrategyOperationsBox = ({
 
   const { chain } = useNetwork();
 
- 
-
   // Handle an operation (Deposit/Withdraw)
   const handleOperation = useCallback(async () => {
     if (!signer) {
@@ -109,6 +107,14 @@ export const StrategyOperationsBox = ({
             }
             address={address}
             className="items-center justify-center"
+            balanceType={
+              operation == "Deposit"
+                ? "balance"
+                : {
+                    type: "shares",
+                    strategy: strategy,
+                  }
+            }
           />
         </div>
 

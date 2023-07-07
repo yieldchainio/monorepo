@@ -30,7 +30,6 @@ const WrappedInput = forwardRef<HTMLInputElement, InputProps>(
       title,
       value,
       defaultValue,
-      overridingValue,
       min,
       max,
     }: InputProps,

@@ -2,7 +2,7 @@
  * Onchain YC types
  */
 
-import { address, bytes, bytes4 } from "./global.js";
+import { YcCommand, address, bytes, bytes4 } from "./global.js";
 
 export interface FunctionCallStruct {
   target_address: string;
@@ -15,6 +15,7 @@ export interface YCStepStruct {
   childrenIndices: number[];
   conditions: bytes[];
   isCallback: boolean;
+  mvc: YcCommand | bytes
 }
 
 export enum TriggerTypes {

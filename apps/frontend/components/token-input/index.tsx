@@ -3,28 +3,35 @@
  * display balance and so on
  */
 
-import { YCToken } from "@yc/yc-models";
+import { YCStrategy, YCToken } from "@yc/yc-models";
 import { InfoProvider } from "components/info-providers";
 import { BaseComponentProps } from "components/types";
 import WrappedImage from "components/wrappers/image";
 import WrappedInput from "components/wrappers/input";
 import WrappedText from "components/wrappers/text";
 import { constants } from "ethers";
-import { ChangeEvent, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import useDebounce from "utilities/hooks/general/useDebounce";
+import useYCUser from "utilities/hooks/yc/useYCUser";
 import { useBalance } from "wagmi";
 
 export const TokenInput = <T extends `${number}` | number>({
   token,
   address,
   onChange,
-  value,
+  balanceType = "balance",
   className,
 }: BaseComponentProps & {
   token?: YCToken;
   address?: string;
   onChange: (newValue: `${number}`) => void;
   value?: T;
+  balanceType?:
+    | "balance"
+    | {
+        type: "shares";
+        strategy?: YCStrategy;
+      };
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -36,14 +43,31 @@ export const TokenInput = <T extends `${number}` | number>({
         : (token?.address as `0x${string}`),
   });
 
-  const balanceText = useMemo(() => {
-    if (balance?.data?.formatted)
-      return parseFloat(balance.data.formatted).toFixed(7);
-    if (balance?.isLoading) return "Loading...";
-    if (balance?.isError) return "Failed To Fetch";
-  }, [balance?.data?.formatted, balance?.isError, balance?.isLoading]);
+  const [balanceText, setBalanceText] = useState<string>("Loading...");
 
-  const [overridingValue, setOverridingValue] = useState<`${number}`>();
+  useEffect(() => {
+    if (typeof balanceType == "string") {
+      if (balance?.data?.formatted)
+        setBalanceText(parseFloat(balance.data.formatted).toFixed(7));
+      if (balance?.isLoading) setBalanceText("Loading...");
+      if (balance?.isError) setBalanceText("Failed To Fetch");
+      return;
+    }
+
+    if (balanceType?.strategy && address) {
+      (async () => {
+        const strat = balanceType.strategy as unknown as YCStrategy;
+        const shares = await strat.userShares(address, true);
+        setBalanceText(strat.depositToken.formatDecimals(shares).toFixed(7));
+      })();
+    }
+  }, [
+    balance?.data?.formatted,
+    balance?.isError,
+    balance?.isLoading,
+    balanceType,
+    (balanceType as { strategy?: YCStrategy })?.strategy,
+  ]);
 
   const handleBalanceClick = () => {
     if (balanceText == null) return;
@@ -67,7 +91,8 @@ export const TokenInput = <T extends `${number}` | number>({
               fontSize={12}
               onClick={handleBalanceClick}
             >
-              {"Balance: " + balanceText}
+              {(typeof balanceType == "string" ? "Balance: " : "Shares: ") +
+                balanceText}
             </WrappedText>
           </InfoProvider>
         </div>
@@ -98,8 +123,6 @@ export const TokenInput = <T extends `${number}` | number>({
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange(e.target.value as `${number}`)
           }
-          overridingValue={overridingValue}
-          // value={`${value}`}
         ></WrappedInput>
       </div>
     </div>

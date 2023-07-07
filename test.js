@@ -1,9 +1,11 @@
-import axios from "axios";
+// import { PrismaClient } from "@prisma/client";
 
-const res = await axios.get("http://localhost:8080/v2/strategies");
+// const prisma = new PrismaClient();
 
-const data = res.data.strategies;
-
-const createdAt = data[0].createdAt;
-
-console.log(typeof new Date(createdAt));
+// console.log(
+//   await prisma.tokensv2.findMany({
+//     where: {
+//       address: "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f",
+//     },
+//   })
+// );

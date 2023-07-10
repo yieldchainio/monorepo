@@ -1,6 +1,5 @@
 const { exec, execSync } = require("child_process");
 const dotenv = require("dotenv");
-dotenv.config();
 
 const args = process.argv;
 

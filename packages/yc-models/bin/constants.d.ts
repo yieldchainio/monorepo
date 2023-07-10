@@ -12,6 +12,7 @@ export declare const STATICCALL_COMMAND_FLAG = 5;
 export declare const CALL_COMMAND_FLAG = 6;
 export declare const DELEGATECALL_COMMAND_FLAG = 7;
 export declare const INTERNAL_LOAD_FLAG = 8;
+export declare const NULLISH_COMMAND = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
 /**
  * Map typeflag enum from prisma to actual byte flags as strings
  */

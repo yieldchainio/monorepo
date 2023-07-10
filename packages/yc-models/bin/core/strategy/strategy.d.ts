@@ -39,9 +39,7 @@ export declare class YCStrategy extends BaseClass {
             indexed: boolean;
             internalType: string;
             name: string;
-            type: string; /**
-             * The network this strategy is on
-             */
+            type: string;
         }[];
         name: string;
         type: string;

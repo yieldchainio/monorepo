@@ -5,7 +5,7 @@ export class YCStep extends Node {
     //      CONSTNATS
     // ====================
     // The signature used to encode/decode the YCStep struct - i.e a tuple representing it's fields
-    static YCStepTupleSig = "tuple(bytes func, uint256[] childrenIndices, bytes[] conditions, bool isCallback)";
+    static YCStepTupleSig = "tuple(bytes func, uint256[] childrenIndices, bytes[] conditions, bool isCallback, bytes mvc)";
     // ====================
     //      VARIABLES
     // ====================

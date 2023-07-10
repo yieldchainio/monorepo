@@ -1,7 +1,7 @@
 import { JSONStep, StepType, YCToken, YCAction, YCClassifications, YCFunc, YCProtocol, StepData, TriggerTypes } from "@yc/yc-models";
 import { Node } from "../../general/node/plain.js";
 export declare class YCStep extends Node<YCStep> {
-    static readonly YCStepTupleSig = "tuple(bytes func, uint256[] childrenIndices, bytes[] conditions, bool isCallback)";
+    static readonly YCStepTupleSig = "tuple(bytes func, uint256[] childrenIndices, bytes[] conditions, bool isCallback, bytes mvc)";
     /**
      * The UUID of this step
      */

@@ -64,6 +64,9 @@ async function ccipRequestHandler(actionRequest) {
 app.get("/", (req, res) => {
     res.status(200).json({ status: "OK" });
 });
+app.post("/shit", (req, res) => {
+    res.status(200).json({ status: "OK" });
+});
 app.post("/offchain-actions", async (req, res) => {
     try {
         const ccipBody = req.body;
@@ -81,6 +84,7 @@ app.post("/offchain-actions", async (req, res) => {
         res.status(data.status).json(data);
     }
     catch (e) {
+        console.error("[OffchainActionsEndpoint]: Caught Error In /offchain-actions request:", e);
         res.status(404).json({
             status: 404,
             message: e,

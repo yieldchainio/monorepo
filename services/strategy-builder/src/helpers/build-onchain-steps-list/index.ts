@@ -11,6 +11,7 @@ import {
   StepsToEncodedFunctions,
   YCStep,
   bytes,
+  buildMVC,
 } from "@yc/yc-models";
 
 export function buildOnchainStepsList(
@@ -36,7 +37,7 @@ export function buildOnchainStepsList(
       childrenIndices,
       conditions,
       isCallback: isCallback,
-      mvc: isCallback ? "" : "",
+      mvc: isCallback ? buildMVC(step) : "0x00",
     });
 
     if (!step.parent?.id) return;
@@ -47,5 +48,6 @@ export function buildOnchainStepsList(
     linkedList[parentIdx].childrenIndices.push(index);
   });
 
+  console.log("Callbacks:", linkedList.flatMap((step) => step.isCallback ? [] : [step.mvc]))
   return linkedList;
 }

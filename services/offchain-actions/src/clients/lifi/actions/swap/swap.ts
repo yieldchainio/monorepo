@@ -3,19 +3,13 @@
  */
 import { AbiCoder, JsonRpcProvider, Contract } from "ethers";
 import {
-  FunctionCallStruct,
+  NULLISH_COMMAND,
   YcCommand,
-  abiDecode,
   abiDecodeBatch,
-  abiDecodeYCCommand,
   address,
-  bytes,
-  interpretYCCommand,
 } from "@yc/yc-models";
 import { lifiQuote } from "../../utils/quote.js";
 import { buildSwapCommand } from "../../utils/command-builders/build-swap.js";
-import VaultAbi from "@yc/yc-models/src/ABIs/strategy.json" assert { type: "json" };
-import { SELF_COMMAND } from "../../../../constants.js";
 import { OffchainRequest } from "../../../../types.js";
 
 export const lifiSwap = async (
@@ -32,7 +26,7 @@ export const lifiSwap = async (
 
   const toChain: number = fromChain;
 
-  if (fromAmount == 0n) return SELF_COMMAND;
+  if (fromAmount == 0n) return NULLISH_COMMAND;
 
   try {
     const request = await lifiQuote(
@@ -51,6 +45,6 @@ export const lifiSwap = async (
     return swapCommand;
   } catch (e: any) {
     console.error("Lifiswap Error:", e);
-    return SELF_COMMAND;
+    return NULLISH_COMMAND;
   }
 };

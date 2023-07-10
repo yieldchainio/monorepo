@@ -60,7 +60,7 @@ export async function createDeployableVaultInput(seedSteps, treeSteps, vaultVisi
     const onchainSeedArr = encodeYCSteps(buildOnchainStepsList(seedInstance, stepsToEncodedFunctions));
     const onchainTreeArr = encodeYCSteps(buildOnchainStepsList(treeInstance, stepsToEncodedFunctions));
     const onchainUprootArr = encodeYCSteps(buildOnchainStepsList(uprootInstance, stepsToEncodedFunctions));
-    console.log("Created Linked-Lists Of Steps...");
+    console.log("Created Linked-Lists Of Steps... Seed:", onchainSeedArr);
     const ycFactoryInstance = new ethers.Contract(network.diamondAddress, DiamondABI, new ethers.JsonRpcProvider(network.jsonRpc));
     const vaultCreationArgs = {
         seedSteps: onchainSeedArr,

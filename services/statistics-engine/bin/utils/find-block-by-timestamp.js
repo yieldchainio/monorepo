@@ -14,7 +14,6 @@ export async function findBlockByTimestamp(provider, timestamp, maxDelta = 10) {
     let closestBlock = (await provider.getBlock(closestBlockNumber));
     let foundExactBlock = false;
     while (minBlockNumber <= maxBlockNumber) {
-        console.log(`checking blockNumber=${closestBlockNumber}...`);
         if (closestBlock.timestamp === timestamp) {
             foundExactBlock = true;
             break;
@@ -32,7 +31,7 @@ export async function findBlockByTimestamp(provider, timestamp, maxDelta = 10) {
     const previousBlock = await provider.getBlock(previousBlockNumber);
     const nextBlockNumber = closestBlockNumber + 1;
     const nextBlock = await provider.getBlock(nextBlockNumber);
-    console.log("Closest block", closestBlockNumber);
+    return closestBlockNumber;
 }
 function isApproxEqual(num1, num2, maxDelta) {
     return Math.abs(num1 - num2) <= maxDelta;

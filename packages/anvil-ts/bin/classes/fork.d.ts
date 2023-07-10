@@ -43,7 +43,7 @@ export declare class Fork extends JsonRpcProvider {
     /**
      * Write to storage manually
      */
-    write(address: address, slot: bytes32, newValue: bytes): Promise<void>;
+    write(address: address, slot: bytes32, newValue: bytes32): Promise<void>;
     /**
      * Kill the fork
      */

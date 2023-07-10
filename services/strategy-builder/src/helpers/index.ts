@@ -123,7 +123,7 @@ export async function createDeployableVaultInput(
     buildOnchainStepsList(uprootInstance, stepsToEncodedFunctions)
   );
 
-  console.log("Created Linked-Lists Of Steps...");
+  console.log("Created Linked-Lists Of Steps... Seed:", onchainSeedArr);
 
   const ycFactoryInstance = new ethers.Contract(
     network.diamondAddress,

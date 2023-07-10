@@ -1,0 +1,1 @@
+{"version":3,"file":"type-checkers.js","sourceRoot":"","sources":["../../src/utils/type-checkers.ts"],"names":[],"mappings":"AAGA,MAAM,UAAU,cAAc,CAAC,OAA0B;IACvD,IAAI,OAAO,IAAI,IAAI,IAAI,OAAO,IAAI,UAAU,IAAI,OAAO,IAAI,SAAS,IAAI,OAAO,IAAI,OAAO,CAAC,OAAO,IAAI,IAAI;QAAE,OAAO,IAAI,CAAC;IACxH,OAAO,KAAK,CAAC;AACf,CAAC"}

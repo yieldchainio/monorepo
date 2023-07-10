@@ -13,6 +13,8 @@ export const CALL_COMMAND_FLAG = 0x06;
 export const DELEGATECALL_COMMAND_FLAG = 0x07;
 export const INTERNAL_LOAD_FLAG = 0x08;
 
+export const NULLISH_COMMAND = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
 /**
  * Map typeflag enum from prisma to actual byte flags as strings
  */

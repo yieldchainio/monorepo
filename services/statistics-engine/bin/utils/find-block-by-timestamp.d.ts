@@ -4,4 +4,4 @@
  * @param timestamp - Desired timestamp
  */
 import { Provider } from "ethers";
-export declare function findBlockByTimestamp(provider: Provider, timestamp: number, maxDelta?: number): Promise<void>;
+export declare function findBlockByTimestamp(provider: Provider, timestamp: number, maxDelta?: number): Promise<number>;

@@ -5,6 +5,7 @@
  * @return YCStep (Struct) array, specifying the encoded function, whether it's a callback,
  * and the indices of it's children within the array
  */
+import { buildMVC, } from "@yc/yc-models";
 export function buildOnchainStepsList(stepsTree, stepFunctions) {
     const stepIdsToIndices = new Map();
     const linkedList = [];
@@ -21,7 +22,7 @@ export function buildOnchainStepsList(stepsTree, stepFunctions) {
             childrenIndices,
             conditions,
             isCallback: isCallback,
-            mvc: isCallback ? "" : "",
+            mvc: isCallback ? buildMVC(step) : "0x00",
         });
         if (!step.parent?.id)
             return;
@@ -30,6 +31,7 @@ export function buildOnchainStepsList(stepsTree, stepFunctions) {
             throw "Cannot Create Linked List - Parent index is undefined";
         linkedList[parentIdx].childrenIndices.push(index);
     });
+    console.log("Callbacks:", linkedList.flatMap((step) => step.isCallback ? [] : [step.mvc]));
     return linkedList;
 }
 //# sourceMappingURL=index.js.map

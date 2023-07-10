@@ -1,1 +1,1 @@
-export declare const isBytesLike: (param: string) => param is `0x${string}`;
+export declare const isBytesLike: (param: unknown) => param is `0x${string}`;

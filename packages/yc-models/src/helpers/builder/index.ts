@@ -4,3 +4,4 @@ export * from "./special-commands/index.js";
 export * from "./function-builders/index.js";
 export * from "./encoding-utils.js";
 export * from "./try-get-underlying-contract/index.js";
+export * from "./mvcs/index.js"

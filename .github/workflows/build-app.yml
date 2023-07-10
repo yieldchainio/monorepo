@@ -43,3 +43,9 @@ jobs:
           docker buildx build --platform linux/amd64 -f apps/$app_name/Dockerfile -t $app_name .
           docker tag $app_name "${{ steps.ecr_login.outputs.registry }}/$app_name"
           docker push "${{ steps.ecr_login.outputs.registry }}/$app_name"
+
+      - name: Redeploy Service Tasks
+        id: redeploy-service-task
+        run: |
+          service_name=$(node scripts/get-service-by-tag.js ${{inputs.app_name}})
+          aws ecs update-service --cluster YC-Cluster --service $service_name --force-new-deployment      

@@ -54,5 +54,5 @@ jobs:
       - name: Redeploy Service Tasks
         id: redeploy-service-task
         run: |
-          service_name=${{ inputs.service_name }}
+          service_name=$(node scripts/get-service-by-tag.js ${{inputs.service_name}})
           aws ecs update-service --cluster YC-Cluster --service $service_name --force-new-deployment

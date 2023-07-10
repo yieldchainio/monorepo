@@ -53,4 +53,4 @@ jobs:
 
       - name: Force deployment
         run: |
-          aws ecs update-service --cluster ff_prod --service ff_prod --force-new-deployment
+          aws ecs update-service --cluster YC-Cluster --service $service_name --force-new-deployment

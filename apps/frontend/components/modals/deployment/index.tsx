@@ -26,6 +26,7 @@ import { useSigner } from "wagmi";
 import useYCUser from "utilities/hooks/yc/useYCUser";
 import { addStrategy } from "./utils/add-strategy";
 import { useRouter } from "next/navigation";
+import { InfoProvider } from "components/info-providers";
 
 export const DeploymentModal = ({
   seedRootStep,
@@ -133,17 +134,38 @@ export const DeploymentModal = ({
       className="w-[80%] h-[80%] flex flex-row mx-auto my-auto overflow-hidden rounded-large "
       onClick={onClick}
     >
-      <div className=" flex flex-col  bg-custom-bcomponentbg w-[100%] py-14 px-12 gap-10">
-        <div className="flex flex-col gap-3">
-          <WrappedText fontStyle="bold" fontSize={28}>
+      <div className=" flex flex-col  bg-custom-bcomponentbg w-[100%] py-14 px-12 gap-10 overflow-x-hidden">
+        <div className="flex flex-col gap-3 overflow-x-hidden">
+          <WrappedText fontStyle="bold" fontSize={28} className="truncate">
             {`Review Details For ${title}`}
           </WrappedText>
-          <WrappedText fontSize={14} className="w-[100%] whitespace-pre-wrap ">
-            {descriptions[0]}
-          </WrappedText>
-          <WrappedText fontSize={14} className="w-[100%] whitespace-pre-wrap ">
-            {descriptions[1]}
-          </WrappedText>
+          <div className="flex flex-col gap-3  ">
+            <WrappedText
+              fontSize={14}
+              className="w-[100%] whitespace-pre-wrap  text-ellipsis "
+            >
+              {descriptions[0]}
+            </WrappedText>
+            <InfoProvider
+              contents={
+                <WrappedText fontSize={14} className="whitespace-pre-wrap">
+                  {descriptions[1]}
+                </WrappedText>
+              }
+              style={{
+                width: "400px",
+                whiteSpace: "pre-wrap",
+                height: "max",
+              }}
+            >
+              <WrappedText
+                fontSize={14}
+                className="w-[100%] overflow-y-visible overflow-x-hidden  text-ellipsis "
+              >
+                {descriptions[1]}
+              </WrappedText>
+            </InfoProvider>
+          </div>
         </div>
         <div className="flex flex-col gap-6">
           {strategySections.map((section, i) => {

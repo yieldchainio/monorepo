@@ -212,7 +212,7 @@ export const InfoProvider = ({
             {!overrideDefaultComponent ? (
               <div
                 className={
-                  "flex flex-col bg-custom-componentbg shadow-md absolute px-3 py-1.5 z-[100000] w-max h-max rounded-xl " +
+                  "flex flex-col bg-custom-componentbg shadow-md absolute px-3 py-1.5 z-[100000] rounded-xl " +
                   TOOLTIP_ANIMATION[direction] +
                   " " +
                   className

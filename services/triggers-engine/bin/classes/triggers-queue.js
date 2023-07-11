@@ -38,7 +38,7 @@ export class TriggersQueue {
                     continue;
                 if (isInsufficientGasBalanceError(error))
                     continue;
-                console.error("[TriggersEngine]: Caught Unknown Exception While Preparing Trigger Execution.");
+                console.error("[TriggersEngine]: Caught Unknown Exception While Preparing Trigger Execution.", error);
             }
         }
         this.#isHandling = false;

@@ -11,10 +11,12 @@ import {
 import { lifiQuote } from "../../utils/quote.js";
 import { buildSwapCommand } from "../../utils/command-builders/build-swap.js";
 import { OffchainRequest } from "../../../../types.js";
+import { LIFI_MAX_RETRIES } from "../../constants.js";
 
 export const lifiSwap = async (
   actionRequest: OffchainRequest,
-  provider: JsonRpcProvider
+  provider: JsonRpcProvider,
+  attempt: number = 0
 ): Promise<YcCommand> => {
   const [fromToken, toToken, fromAmount] = abiDecodeBatch(actionRequest.args, [
     "address",
@@ -45,6 +47,7 @@ export const lifiSwap = async (
     return swapCommand;
   } catch (e: any) {
     console.error("Lifiswap Error:", e);
-    return NULLISH_COMMAND;
+    if (attempt > LIFI_MAX_RETRIES) return NULLISH_COMMAND;
+    return lifiSwap(actionRequest, provider, attempt + 1);
   }
 };

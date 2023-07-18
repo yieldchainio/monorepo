@@ -9,3 +9,7 @@ export function sliceAddress(address: string) {
     address?.slice(address.length - 4, address.length)
   );
 }
+
+export function sliceTxnHash(hash: string) {
+  return hash.slice(0, 6) + "..." + hash?.slice(hash.length - 6, hash.length);
+}

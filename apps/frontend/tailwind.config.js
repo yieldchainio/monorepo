@@ -34,7 +34,7 @@ module.exports = {
         current: "currentColor",
         custom: {
           // Background colors
-          bg: ({opacityValue}) => `rgba(var(--bg), ${opacityValue || 1})`,
+          bg: ({ opacityValue }) => `rgba(var(--bg), ${opacityValue || 1})`,
           subbg: "var(--subbg)",
           darkSubbg: "var(--darkerSubbg)",
           componentbg: ({ opacityValue }) =>
@@ -115,6 +115,7 @@ module.exports = {
         fill: "fill 0.4s ease-in-out",
         stepPopup: "stepPopup 0.2s ease-in-out",
         straightEdge: "straightEdge 0.5s ease-in-out",
+        slideLeft: "slideLeft 0.2s ease-in-out",
       },
       keyframes: (theme) => ({
         popup: {
@@ -163,6 +164,16 @@ module.exports = {
           },
           "100%": {
             transform: "translateX(0%)",
+          },
+        },
+        slideLeft: {
+          "0%": {
+            transform: "translateX(100%)",
+            opacity: "0%",
+          },
+          "100%": {
+            transform: "translateX(0%)",
+            opacity: "100%",
           },
         },
         log: {

@@ -9,7 +9,7 @@ import { ImageProps, TextProps } from "components/wrappers/types";
 export interface TokensBundleProps extends BaseComponentProps {
   tokens: YCToken[];
   maxImages?: number;
-  imageProps?: ImageProps;
+  imageProps?: Partial<ImageProps>;
   margin?: number;
   tooltipEnabled?: boolean;
   textProps?: Partial<TextProps>;

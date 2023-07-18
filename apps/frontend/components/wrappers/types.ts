@@ -58,7 +58,7 @@ export type ImageSrc =
   | null;
 
 export interface ImageProps {
-  src?: ImageSrc;
+  src: ImageSrc | undefined;
   width?: number;
   height?: number;
   className?: string;

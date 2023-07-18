@@ -8,7 +8,7 @@ import { GradientBorderProps } from "./types";
 
 export const GradientBorder = ({
   heavyColor = "var(--yc-lb)",
-  lightColor = "var(--yc-y)",
+  lightColor = "var(--yc-ly)",
   borderRadius = "20px",
   gradientDegree = "90deg",
   style = {},

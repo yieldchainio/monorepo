@@ -32,6 +32,7 @@ import { useLogs } from "utilities/hooks/stores/logger";
 import { useStrategyStore } from "utilities/hooks/stores/strategies";
 
 import { useScrollDirection } from "utilities/hooks/styles/useHideScroll";
+import { UpgradeTierModal } from "components/modals/upgrade";
 
 export default function Home() {
   // Retreive the strategies from the context
@@ -133,6 +134,10 @@ export default function Home() {
 
   // The modals state for us to push into
   const modals = useModals();
+
+  useEffect(() => {
+    modals.lazyPush(<UpgradeTierModal />);
+  }, []);
 
   useShallowRouter((pathname: string) => {
     // Return immediatly if the pathname does not include the word strategy

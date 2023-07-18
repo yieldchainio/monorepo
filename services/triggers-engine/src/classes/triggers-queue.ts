@@ -41,7 +41,13 @@ export class TriggersQueue {
         triggerIdx: number;
       };
 
+
       try {
+
+      const gasBalance = await this.#diamondContract.getStrategyGasBalance(vault)
+
+      if (gasBalance == 0n) continue;
+      
         const encodedParams = AbiCoder.defaultAbiCoder().encode(
           ["address", "uint256"],
           [vault, triggerIdx]

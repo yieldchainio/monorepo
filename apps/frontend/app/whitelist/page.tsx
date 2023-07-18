@@ -39,19 +39,24 @@ const WhitelistingStatusToComponents: Record<
   null: <ConnectWalletButton />,
   true: (
     <div className="flex flex-col items-center justify-center">
-      <WrappedText>{"Let's Just Prove It's REALLY You"}</WrappedText>
-      <RegulerButton
-        onClick={async () =>
-          localStorage.setItem(
-            "ETH_AUTH_SIG",
-            await signMessage({
-              message: "Yieldchain Whitelistooor",
-            })
-          )
-        }
-      >
-        Sign
-      </RegulerButton>
+      {!localStorage.getItem("ETH_AUTH_SIG") && (
+        <>
+          {" "}
+          <WrappedText>{"Let's Just Prove It's REALLY You"}</WrappedText>
+          <RegulerButton
+            onClick={async () =>
+              localStorage.setItem(
+                "ETH_AUTH_SIG",
+                await signMessage({
+                  message: "Yieldchain Whitelistooor",
+                })
+              )
+            }
+          >
+            Sign
+          </RegulerButton>{" "}
+        </>
+      )}
     </div>
   ),
   false: <SocialMediasSection />,

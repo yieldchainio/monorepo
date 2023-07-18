@@ -1,6 +1,7 @@
 import { PrismaClient } from "@yc/yc-data";
-import { Endpoints, ClassificationContext, YCUser, YCAction, YCStrategy, YCContract, YCNetwork, YCProtocol, YCToken, YCArgument, YCFunc, DBContract, DBFunction, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBAction, DBUser, DBStatistic } from "@yc/yc-models";
+import { Endpoints, ClassificationContext, YCUser, YCAction, YCStrategy, YCContract, YCNetwork, YCProtocol, YCToken, YCArgument, YCFunc, DBContract, DBFunction, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBAction, DBUser, DBStatistic, JSONTier } from "@yc/yc-models";
 import { YCStatistic } from "../strategy/statistic.js";
+import { YCTier } from "../tier";
 /**
  * @notice
  * A complete context of Yieldchain's current classified Database.
@@ -22,6 +23,7 @@ declare class YCClassificationsInternal {
     protected Actions: DBAction[];
     protected Statistics: DBStatistic[];
     protected Users: DBUser[];
+    protected Tiers: JSONTier[];
     YCContractes: YCContract[];
     YCfunctions: YCFunc[];
     YCtokens: YCToken[];
@@ -32,6 +34,7 @@ declare class YCClassificationsInternal {
     YCactions: YCAction[];
     YCusers: YCUser[];
     YCStatistics: YCStatistic[];
+    YCTiers: YCTier[];
     protected Client: PrismaClient | null;
     /**
      * @notice
@@ -50,6 +53,7 @@ declare class YCClassificationsInternal {
     protected fetchStrategies: () => Promise<void>;
     protected fetchActions: () => Promise<void>;
     protected fetchStatistics: () => Promise<void>;
+    protected fetchTiers: () => Promise<void>;
     protected refreshNetworks: () => Promise<void>;
     protected refreshProtocols: () => Promise<void>;
     protected refreshTokens: () => Promise<void>;
@@ -60,6 +64,7 @@ declare class YCClassificationsInternal {
     protected refreshStrategies: () => Promise<void>;
     protected refreshActions: () => Promise<void>;
     protected refreshStatistics: () => Promise<void>;
+    protected refreshTiers: () => Promise<void>;
     /**
      * Fetch all endpoints
      */

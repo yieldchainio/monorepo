@@ -25,8 +25,10 @@ import {
   DBUser,
   fetchRouter,
   DBStatistic,
+  JSONTier,
 } from "@yc/yc-models";
 import { YCStatistic } from "../strategy/statistic.js";
+import { YCTier } from "../tier";
 
 /**
  * @notice
@@ -70,6 +72,7 @@ class YCClassificationsInternal {
   protected Actions: DBAction[] = [];
   protected Statistics: DBStatistic[] = [];
   protected Users: DBUser[] = [];
+  protected Tiers: JSONTier[] = [];
 
   YCContractes: YCContract[] = [];
   YCfunctions: YCFunc[] = [];
@@ -81,6 +84,7 @@ class YCClassificationsInternal {
   YCactions: YCAction[] = [];
   YCusers: YCUser[] = [];
   YCStatistics: YCStatistic[] = [];
+  YCTiers: YCTier[] = [];
 
   // Prisma Client
   protected Client: PrismaClient | null = null;
@@ -242,6 +246,21 @@ class YCClassificationsInternal {
       })) || [];
   };
 
+  protected fetchTiers = async () => {
+    this.Tiers =
+      (await fetchRouter<JSONTier[]>({
+        backend: {
+          fetcher: async () => (await this?.Client?.tier.findMany()) || [],
+        },
+        frontend: {
+          fetcher: async () =>
+            await (
+              await axios.get(YCClassifications.apiURL + "/v2/tiers")
+            ).data.tiers,
+        },
+      })) || [];
+  };
+
   // All of the fetching functions
   protected refreshNetworks = async () => {
     this.YCnetworks = this.Networks.map(
@@ -310,6 +329,10 @@ class YCClassificationsInternal {
     this.YCStatistics = this.Statistics.map(
       (statistic: DBStatistic) => new YCStatistic(statistic)
     );
+  };
+
+  protected refreshTiers = async () => {
+    this.YCTiers = this.Tiers.map((tier: JSONTier) => new YCTier(tier));
   };
 
   /**
@@ -409,6 +432,11 @@ class YCClassificationsInternal {
       refresh: this.refreshStatistics,
       get: () => YCClassificationsInternal.Instance.Statistics,
     },
+    [Endpoints.TIERS]: {
+      fetch: this.fetchTiers,
+      refresh: this.refreshTiers,
+      get: () => YCClassifications.Instance.Tiers,
+    },
   };
 
   /**
@@ -457,6 +485,7 @@ export class YCClassifications extends YCClassificationsInternal {
     this.Strategies = jsonContext.strategies;
     this.Users = jsonContext.users;
     this.Statistics = jsonContext.statistics;
+    this.Tiers = jsonContext.tiers;
   };
 
   /**

@@ -14,5 +14,6 @@ export var Endpoints;
     Endpoints["ADDRESSES"] = "addresses";
     Endpoints["ACTIONS"] = "actions";
     Endpoints["STATISTICS"] = "statistics";
+    Endpoints["TIERS"] = "tiers";
 })(Endpoints || (Endpoints = {}));
 //# sourceMappingURL=types.js.map

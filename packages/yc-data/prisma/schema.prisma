@@ -9,6 +9,14 @@ datasource db {
   schemas  = ["Yieldchain", "YieldchainV2"]
 }
 
+model tier {
+  id       Int      @id
+  name     String
+  benefits String[]
+
+  @@schema("YieldchainV2")
+}
+
 model functionsv2 {
   id                     String      @id @default(uuid())
   name                   String

@@ -15,6 +15,7 @@ import {
   address,
   SignupArguments,
   UserUpdateArguments,
+  JSONTier,
 } from "@yc/yc-models";
 import dotenv from "dotenv";
 dotenv.config();
@@ -132,6 +133,11 @@ app.get("/v2/actions", async (req: any, res: any) => {
   res.status(200).json({ actions });
 });
 
+app.get("/v2/tiers", async (req: any, res: any) => {
+  const tiers: JSONTier[] = await prisma.tier.findMany();
+  res.status(200).json({ tiers });
+});
+
 app.post(
   "/signup",
   async (
@@ -213,16 +219,6 @@ app.post(
     else res.status(400);
   }
 );
-
-app.get("/ccip-test/:callData", async (req: any, res: any) => {
-  const callData = req.params.callData;
-
-  res.status(200).json({
-    data:
-      callData +
-      "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-  });
-});
 
 // ====================
 //        YCAPI

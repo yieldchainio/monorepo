@@ -98,6 +98,10 @@ app.get("/v2/actions", async (req, res) => {
     const actions = await prisma.actionsv2.findMany();
     res.status(200).json({ actions });
 });
+app.get("/v2/tiers", async (req, res) => {
+    const tiers = await prisma.tier.findMany();
+    res.status(200).json({ tiers });
+});
 app.post("/signup", async (req, res) => {
     const data = req.body;
     if (await prisma.usersv2.findFirst({
@@ -144,13 +148,6 @@ app.post("/update-user", async (req, res) => {
         res.status(200).json({ user: data });
     else
         res.status(400);
-});
-app.get("/ccip-test/:callData", async (req, res) => {
-    const callData = req.params.callData;
-    res.status(200).json({
-        data: callData +
-            "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-    });
 });
 // ====================
 //        YCAPI

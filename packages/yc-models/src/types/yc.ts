@@ -14,6 +14,7 @@ import {
   DBNetwork,
   DBUser,
   DBStatistic,
+  JSONTier,
 } from "./db.js";
 export interface ClassificationContext {
   addresses: DBContract[];
@@ -26,6 +27,7 @@ export interface ClassificationContext {
   networks: DBNetwork[];
   users: DBUser[];
   statistics: DBStatistic[];
+  tiers: JSONTier[]
 }
 
 // A step inputted from the frontend

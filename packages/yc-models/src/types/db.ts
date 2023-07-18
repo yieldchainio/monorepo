@@ -163,3 +163,9 @@ export enum FlowDirection {
   INFLOW,
   OUTFLOW,
 }
+
+export interface JSONTier {
+  id: number;
+  name: string;
+  benefits: string[]
+}

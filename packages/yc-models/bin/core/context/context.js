@@ -3,6 +3,7 @@ import axios from "axios";
 import { PrismaClient, prismaToJson } from "@yc/yc-data";
 import { Endpoints, YCUser, YCAction, YCStrategy, YCContract, YCNetwork, YCProtocol, YCToken, YCArgument, YCFunc, fetchRouter, } from "@yc/yc-models";
 import { YCStatistic } from "../strategy/statistic.js";
+import { YCTier } from "../tier";
 /**
  * @notice
  * A complete context of Yieldchain's current classified Database.
@@ -38,6 +39,7 @@ class YCClassificationsInternal {
     Actions = [];
     Statistics = [];
     Users = [];
+    Tiers = [];
     YCContractes = [];
     YCfunctions = [];
     YCtokens = [];
@@ -48,6 +50,7 @@ class YCClassificationsInternal {
     YCactions = [];
     YCusers = [];
     YCStatistics = [];
+    YCTiers = [];
     // Prisma Client
     Client = null;
     /**
@@ -158,6 +161,17 @@ class YCClassificationsInternal {
                 },
             })) || [];
     };
+    fetchTiers = async () => {
+        this.Tiers =
+            (await fetchRouter({
+                backend: {
+                    fetcher: async () => (await this?.Client?.tier.findMany()) || [],
+                },
+                frontend: {
+                    fetcher: async () => await (await axios.get(YCClassifications.apiURL + "/v2/tiers")).data.tiers,
+                },
+            })) || [];
+    };
     // All of the fetching functions
     refreshNetworks = async () => {
         this.YCnetworks = this.Networks.map((network) => new YCNetwork(network, YCClassificationsInternal.getInstance()));
@@ -188,6 +202,9 @@ class YCClassificationsInternal {
     };
     refreshStatistics = async () => {
         this.YCStatistics = this.Statistics.map((statistic) => new YCStatistic(statistic));
+    };
+    refreshTiers = async () => {
+        this.YCTiers = this.Tiers.map((tier) => new YCTier(tier));
     };
     /**
      * Fetch all endpoints
@@ -272,6 +289,11 @@ class YCClassificationsInternal {
             refresh: this.refreshStatistics,
             get: () => YCClassificationsInternal.Instance.Statistics,
         },
+        [Endpoints.TIERS]: {
+            fetch: this.fetchTiers,
+            refresh: this.refreshTiers,
+            get: () => YCClassifications.Instance.Tiers,
+        },
     };
     /**
      * Validates we are not on a browser, and creates a client as needed
@@ -315,6 +337,7 @@ export class YCClassifications extends YCClassificationsInternal {
         this.Strategies = jsonContext.strategies;
         this.Users = jsonContext.users;
         this.Statistics = jsonContext.statistics;
+        this.Tiers = jsonContext.tiers;
     };
     /**
      * Convert the class endpoints to JSON

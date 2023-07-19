@@ -110,6 +110,7 @@ export declare class YCClassifications extends YCClassificationsInternal {
     get rawAddresses(): DBContract[];
     get networks(): YCNetwork[];
     get functions(): YCFunc[];
+    get tiers(): YCTier[];
     get rawFunctions(): DBFunction[];
     get arguments(): YCArgument[];
     get rawArguments(): DBArgument[];

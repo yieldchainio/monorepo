@@ -14,9 +14,19 @@ export class YCTier {
   readonly id: number;
 
   /**
-   * The name of this token
+   * The name of this tier
    */
   readonly name: string;
+
+  /**
+   * Title of the tier
+   */
+  readonly title: string;
+
+  /**
+   * Description of the tier
+   */
+  readonly description: string;
 
   /**
    * Benefits of this tier
@@ -33,16 +43,29 @@ export class YCTier {
     this.name = _tier.name;
     this.id = _tier.id;
     this.benefits = _tier.benefits;
+    this.title = _tier.title;
+    this.description = _tier.description;
   }
   // =======================
   //        METHODS
   // =======================
-  async details(network: YCNetwork): Promise<{
+  #details: {
+    isActive: boolean;
+    powerLevel: bigint;
+    monthlyPrice: bigint;
+    lifetimePrice: bigint;
+  } | null = null;
+
+  async details(
+    network: YCNetwork,
+    cache: boolean = true
+  ): Promise<{
     isActive: boolean;
     powerLevel: bigint;
     monthlyPrice: bigint;
     lifetimePrice: bigint;
   }> {
+    if (cache && this.#details) return this.#details;
     if (!network.diamondAddress || !network.provider)
       throw "Cannot Get Tier Details - Diamond Address Undefined";
 
@@ -56,11 +79,15 @@ export class YCTier {
       this.id
     );
 
-    return {
+    const obj = {
       isActive: details[0],
       powerLevel: details[1],
       monthlyPrice: details[2],
       lifetimePrice: details[3],
     };
+
+    this.#details = obj;
+
+    return obj;
   }
 }

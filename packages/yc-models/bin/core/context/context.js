@@ -429,6 +429,11 @@ export class YCClassifications extends YCClassificationsInternal {
             this.YCfunctions = this.Functions.map((func) => new YCFunc(func, this));
         return this.YCfunctions;
     }
+    get tiers() {
+        if (!this.YCTiers.length)
+            this.YCTiers = this.Tiers.map((tier) => new YCTier(tier));
+        return this.YCTiers;
+    }
     get rawFunctions() {
         return this.Functions;
     }

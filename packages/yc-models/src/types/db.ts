@@ -31,7 +31,7 @@ export interface DBStrategy {
   seed_steps: JSON;
   tree_steps: JSON;
   uproot_steps: JSON;
-  createdAt: Date
+  createdAt: Date;
 }
 
 // A DB Model representing a network
@@ -167,5 +167,7 @@ export enum FlowDirection {
 export interface JSONTier {
   id: number;
   name: string;
-  benefits: string[]
+  benefits: string[];
+  title: string;
+  description: string;
 }

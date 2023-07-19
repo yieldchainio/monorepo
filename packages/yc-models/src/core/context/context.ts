@@ -613,6 +613,13 @@ export class YCClassifications extends YCClassificationsInternal {
     return this.YCfunctions;
   }
 
+  get tiers() {
+    if (!this.YCTiers.length)
+      this.YCTiers = this.Tiers.map((tier: JSONTier) => new YCTier(tier));
+
+    return this.YCTiers;
+  }
+
   get rawFunctions() {
     return this.Functions;
   }

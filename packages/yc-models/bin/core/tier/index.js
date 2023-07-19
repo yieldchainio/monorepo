@@ -9,9 +9,17 @@ export class YCTier {
      */
     id;
     /**
-     * The name of this token
+     * The name of this tier
      */
     name;
+    /**
+     * Title of the tier
+     */
+    title;
+    /**
+     * Description of the tier
+     */
+    description;
     /**
      * Benefits of this tier
      */
@@ -26,21 +34,28 @@ export class YCTier {
         this.name = _tier.name;
         this.id = _tier.id;
         this.benefits = _tier.benefits;
+        this.title = _tier.title;
+        this.description = _tier.description;
     }
     // =======================
     //        METHODS
     // =======================
-    async details(network) {
+    #details = null;
+    async details(network, cache = true) {
+        if (cache && this.#details)
+            return this.#details;
         if (!network.diamondAddress || !network.provider)
             throw "Cannot Get Tier Details - Diamond Address Undefined";
         const diamond = new Contract(network.diamondAddress, DiamondABI, network.provider);
         const details = await diamond.getTier(this.id);
-        return {
+        const obj = {
             isActive: details[0],
             powerLevel: details[1],
             monthlyPrice: details[2],
             lifetimePrice: details[3],
         };
+        this.#details = obj;
+        return obj;
     }
 }
 //# sourceMappingURL=index.js.map

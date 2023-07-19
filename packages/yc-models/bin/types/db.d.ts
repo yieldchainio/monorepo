@@ -155,4 +155,6 @@ export interface JSONTier {
     id: number;
     name: string;
     benefits: string[];
+    title: string;
+    description: string;
 }

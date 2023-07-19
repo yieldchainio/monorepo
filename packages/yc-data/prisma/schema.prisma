@@ -10,11 +10,13 @@ datasource db {
 }
 
 model tier {
-  id          Int      @id
-  name        String
-  benefits    String[]
-  title       String
-  description String
+  id             Int      @id
+  name           String
+  benefits       String[]
+  title          String
+  description    String
+  monthly_price  BigInt
+  lifetime_price BigInt
 
   @@schema("YieldchainV2")
 }

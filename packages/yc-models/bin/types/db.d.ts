@@ -157,4 +157,6 @@ export interface JSONTier {
     benefits: string[];
     title: string;
     description: string;
+    monthly_price: bigint;
+    lifetime_price: bigint;
 }

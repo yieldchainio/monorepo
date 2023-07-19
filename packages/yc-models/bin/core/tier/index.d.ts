@@ -22,6 +22,11 @@ export declare class YCTier {
      * Benefits of this tier
      */
     readonly benefits: string[];
+    /**
+     * Prices of the tier
+     */
+    readonly monthlyPrice: bigint;
+    readonly lifetimePrice: bigint;
     constructor(_tier: JSONTier);
     details(network: YCNetwork, cache?: boolean): Promise<{
         isActive: boolean;

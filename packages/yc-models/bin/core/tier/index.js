@@ -24,6 +24,11 @@ export class YCTier {
      * Benefits of this tier
      */
     benefits;
+    /**
+     * Prices of the tier
+     */
+    monthlyPrice;
+    lifetimePrice;
     // =======================
     //      CONSTRUCTOR
     // =======================
@@ -36,6 +41,8 @@ export class YCTier {
         this.benefits = _tier.benefits;
         this.title = _tier.title;
         this.description = _tier.description;
+        this.monthlyPrice = _tier.monthly_price;
+        this.lifetimePrice = _tier.lifetime_price;
     }
     // =======================
     //        METHODS

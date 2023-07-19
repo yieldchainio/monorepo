@@ -33,6 +33,12 @@ export class YCTier {
    */
   readonly benefits: string[];
 
+  /**
+   * Prices of the tier
+   */
+  readonly monthlyPrice: bigint;
+  readonly lifetimePrice: bigint;
+
   // =======================
   //      CONSTRUCTOR
   // =======================
@@ -45,6 +51,8 @@ export class YCTier {
     this.benefits = _tier.benefits;
     this.title = _tier.title;
     this.description = _tier.description;
+    this.monthlyPrice = _tier.monthly_price;
+    this.lifetimePrice = _tier.lifetime_price;
   }
   // =======================
   //        METHODS

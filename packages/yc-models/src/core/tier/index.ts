@@ -51,8 +51,8 @@ export class YCTier {
     this.benefits = _tier.benefits;
     this.title = _tier.title;
     this.description = _tier.description;
-    this.monthlyPrice = _tier.monthly_price;
-    this.lifetimePrice = _tier.lifetime_price;
+    this.monthlyPrice = BigInt(_tier.monthly_price);
+    this.lifetimePrice = BigInt(_tier.lifetime_price);
   }
   // =======================
   //        METHODS

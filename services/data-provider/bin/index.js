@@ -100,7 +100,15 @@ app.get("/v2/actions", async (req, res) => {
 });
 app.get("/v2/tiers", async (req, res) => {
     const tiers = await prisma.tier.findMany();
-    res.status(200).json({ tiers });
+    res
+        .status(200)
+        .json({
+        tiers: tiers.map((tier) => ({
+            ...tier,
+            monthly_price: tier.monthly_price.toString(),
+            lifetime_price: tier.lifetime_price.toString(),
+        })),
+    });
 });
 app.post("/signup", async (req, res) => {
     const data = req.body;

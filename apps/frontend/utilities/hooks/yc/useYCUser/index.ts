@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import { useInternalYCUser } from "utilities/hooks/stores/yc-data";
 import { useIsMounted } from "../../general/useIsMounted";
 import { UseYCUserProps, YCUserHookReturn } from "./types";
+import { YCTier } from "@yc/yc-models";
+import { useYCNetwork } from "../useYCNetwork";
 export * from "./types";
 
 /**
@@ -24,7 +26,9 @@ function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
   // Current connected wallet's details
   const { address, isConnected } = useAccount();
 
-  useNetwork()
+  useNetwork();
+
+  const network = useYCNetwork();
 
   // The global address variable that will be used
   const [userAddress, setUserAddress] = useState<`0x${string}` | undefined>(
@@ -66,6 +70,10 @@ function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
   // User's social media
   const [socialMedia, setSocialMedia] = useState<YCSocialMedia>(
     user?.socialMedia || new YCSocialMedia()
+  );
+
+  const [tier, setTier] = useState<YCTier>(
+    YCClassifications.getInstance().tiers[0]
   );
 
   // Whether the user is verified or not
@@ -295,6 +303,16 @@ function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
     setWhitelisted(user?.whitelisted || false);
   }, [user?.whitelisted]);
 
+  useEffect(() => {
+    if (!network || !network.diamondAddress || !address) return;
+
+    (async () => {
+      const newTier = await YCTier.fromUserAddress(address, network);
+      console.log("New Tier", newTier);
+      setTier(newTier);
+    })();
+  }, [address, network]);
+
   // Final useEffect checking if we're mounted to avoid hydration
   const mounted = useIsMounted();
 
@@ -312,6 +330,7 @@ function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
       id: user?.id,
       whitelisted,
       connected: isConnected,
+      tier,
     };
 
   return {
@@ -326,6 +345,7 @@ function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
     id: undefined,
     whitelisted,
     connected: isConnected,
+    tier,
   };
 }
 

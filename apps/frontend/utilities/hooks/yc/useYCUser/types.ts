@@ -5,6 +5,7 @@ import {
   YCStrategy,
   address,
 } from "@yc/yc-models";
+import { YCTier } from "@yc/yc-models/src/core/tier";
 
 // Interface for return value of the YCUser hook
 export interface YCUserHookReturn {
@@ -20,7 +21,8 @@ export interface YCUserHookReturn {
   description: string | undefined;
   id?: string;
   whitelisted: boolean;
-  connected: boolean
+  connected: boolean;
+  tier: YCTier;
 }
 
 // Interface for the useYCUser's props

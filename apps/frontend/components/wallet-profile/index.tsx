@@ -9,7 +9,7 @@ import ProfileSection from "./profile";
 import ProfileStats from "./stats";
 
 export function ProfileModal({ ...props }) {
-  const { address, userName, profilePic, createdVaults, updateDetails } =
+  const { address, userName, profilePic, createdVaults, updateDetails, tier } =
     useYCUser();
 
   return (
@@ -24,7 +24,7 @@ export function ProfileModal({ ...props }) {
         createdVaults={createdVaults}
         updateDetails={updateDetails}
       />
-      <ProfileStats createdVaults={createdVaults.length || 0} />
+      <ProfileStats createdVaults={createdVaults.length || 0} tier={tier} />
     </div>
   );
 }

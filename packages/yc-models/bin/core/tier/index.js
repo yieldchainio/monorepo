@@ -1,5 +1,6 @@
 import { Contract } from "ethers";
 import DiamondABI from "../../ABIs/diamond.json" assert { type: "json" };
+import { YCClassifications } from "../..";
 export class YCTier {
     // ============
     //    FIELDS
@@ -63,6 +64,17 @@ export class YCTier {
             throw "Cannot Get Tier Details - Diamond Address Undefined";
         const diamond = new Contract(network.diamondAddress, DiamondABI, network.provider);
         return diamond.upgradeTier.populateTransaction(this.id, amount, isLifetime);
+    }
+    static async fromUserAddress(address, network) {
+        if (!network.diamondAddress || !network.provider)
+            throw "Cannot Get Tier Details - Diamond Address Undefined";
+        const diamond = new Contract(network.diamondAddress, DiamondABI, network.provider);
+        const tierID = (await diamond.getUserTier(address))[0];
+        console.log("User Tier From Onchain", tierID);
+        const tier = YCClassifications.getInstance().tiers.find((_tier) => _tier.id == tierID);
+        if (!tier)
+            return YCClassifications.getInstance().tiers[0];
+        return tier;
     }
 }
 //# sourceMappingURL=index.js.map

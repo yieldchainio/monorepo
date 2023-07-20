@@ -1,4 +1,4 @@
-import { JSONTier } from "../../types";
+import { JSONTier, address } from "../../types";
 import { YCNetwork } from "../network/network";
 export declare class YCTier {
     /**
@@ -34,4 +34,5 @@ export declare class YCTier {
      */
     getDuration(tokenAmount: bigint): number;
     populateUpgradeTransaction(amount: bigint, isLifetime: boolean, network: YCNetwork): Promise<import("ethers").ContractTransaction>;
+    static fromUserAddress(address: address, network: YCNetwork): Promise<YCTier>;
 }

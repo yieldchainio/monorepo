@@ -135,10 +135,6 @@ export default function Home() {
   // The modals state for us to push into
   const modals = useModals();
 
-  useEffect(() => {
-    modals.lazyPush(<UpgradeTierModal />);
-  }, []);
-
   useShallowRouter((pathname: string) => {
     // Return immediatly if the pathname does not include the word strategy
     if (!pathname.includes("strategy")) return;

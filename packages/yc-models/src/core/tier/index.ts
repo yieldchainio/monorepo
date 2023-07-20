@@ -1,7 +1,8 @@
 import { Contract } from "ethers";
-import { JSONTier } from "../../types";
+import { JSONTier, address } from "../../types";
 import { YCNetwork } from "../network/network";
 import DiamondABI from "../../ABIs/diamond.json" assert { type: "json" };
+import { YCClassifications } from "../..";
 
 export class YCTier {
   // ============
@@ -63,7 +64,7 @@ export class YCTier {
    * @return duration the token amount would be sufficient for in months
    */
   getDuration(tokenAmount: bigint): number {
-    return Number(tokenAmount / this.monthlyPrice) 
+    return Number(tokenAmount / this.monthlyPrice);
   }
   // =======================
   //        METHODS
@@ -84,5 +85,25 @@ export class YCTier {
     );
 
     return diamond.upgradeTier.populateTransaction(this.id, amount, isLifetime);
+  }
+
+  static async fromUserAddress(address: address, network: YCNetwork) {
+    if (!network.diamondAddress || !network.provider)
+      throw "Cannot Get Tier Details - Diamond Address Undefined";
+
+    const diamond = new Contract(
+      network.diamondAddress,
+      DiamondABI,
+      network.provider
+    );
+
+    const tierID = (await diamond.getUserTier(address))[0];
+
+    const tier = YCClassifications.getInstance().tiers.find(
+      (_tier) => _tier.id == tierID
+    );
+
+    if (!tier) return YCClassifications.getInstance().tiers[0];
+    return tier;
   }
 }

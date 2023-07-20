@@ -12,4 +12,5 @@ export * from "./strategy/strategy.js";
 export * from "./token/token.js";
 export * from "./user/user.js";
 export * from "./utils/fetch-router.js";
+export * from "./tier/index.js";
 //# sourceMappingURL=index.js.map

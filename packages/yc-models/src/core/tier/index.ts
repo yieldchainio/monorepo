@@ -55,25 +55,25 @@ export class YCTier {
     this.lifetimePrice = BigInt(_tier.lifetime_price);
   }
   // =======================
+  //        GETTERS
+  // =======================
+  /**
+   * Get the duration a token amount would be sufficent for (Months)
+   * @param tokenAmount - Amount of tokens to get the duration of (@notice decimals included!!)
+   * @return duration the token amount would be sufficient for in months
+   */
+  getDuration(tokenAmount: bigint): number {
+    return Number(tokenAmount / this.monthlyPrice) 
+  }
+  // =======================
   //        METHODS
   // =======================
-  #details: {
-    isActive: boolean;
-    powerLevel: bigint;
-    monthlyPrice: bigint;
-    lifetimePrice: bigint;
-  } | null = null;
 
-  async details(
-    network: YCNetwork,
-    cache: boolean = true
-  ): Promise<{
-    isActive: boolean;
-    powerLevel: bigint;
-    monthlyPrice: bigint;
-    lifetimePrice: bigint;
-  }> {
-    if (cache && this.#details) return this.#details;
+  async populateUpgradeTransaction(
+    amount: bigint,
+    isLifetime: boolean,
+    network: YCNetwork
+  ) {
     if (!network.diamondAddress || !network.provider)
       throw "Cannot Get Tier Details - Diamond Address Undefined";
 
@@ -83,19 +83,6 @@ export class YCTier {
       network.provider
     );
 
-    const details: [boolean, bigint, bigint, bigint] = await diamond.getTier(
-      this.id
-    );
-
-    const obj = {
-      isActive: details[0],
-      powerLevel: details[1],
-      monthlyPrice: details[2],
-      lifetimePrice: details[3],
-    };
-
-    this.#details = obj;
-
-    return obj;
+    return diamond.upgradeTier.populateTransaction(this.id, amount, isLifetime);
   }
 }

@@ -45,24 +45,24 @@ export class YCTier {
         this.lifetimePrice = BigInt(_tier.lifetime_price);
     }
     // =======================
+    //        GETTERS
+    // =======================
+    /**
+     * Get the duration a token amount would be sufficent for (Months)
+     * @param tokenAmount - Amount of tokens to get the duration of (@notice decimals included!!)
+     * @return duration the token amount would be sufficient for in months
+     */
+    getDuration(tokenAmount) {
+        return Number(tokenAmount / this.monthlyPrice);
+    }
+    // =======================
     //        METHODS
     // =======================
-    #details = null;
-    async details(network, cache = true) {
-        if (cache && this.#details)
-            return this.#details;
+    async populateUpgradeTransaction(amount, isLifetime, network) {
         if (!network.diamondAddress || !network.provider)
             throw "Cannot Get Tier Details - Diamond Address Undefined";
         const diamond = new Contract(network.diamondAddress, DiamondABI, network.provider);
-        const details = await diamond.getTier(this.id);
-        const obj = {
-            isActive: details[0],
-            powerLevel: details[1],
-            monthlyPrice: details[2],
-            lifetimePrice: details[3],
-        };
-        this.#details = obj;
-        return obj;
+        return diamond.upgradeTier.populateTransaction(this.id, amount, isLifetime);
     }
 }
 //# sourceMappingURL=index.js.map

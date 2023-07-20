@@ -181,20 +181,23 @@ export const TransactionsSubmmiter = ({
         {currentStatus == "success" && (
           <TransactionHash hash={currentTransactionHash} />
         )}
-        <div className="w-full self-end">
-          <SimpleIncrementalStepBar
-            steps={transactions.map((txn, i) => {
-              if (activeIdx > i || currentStatus == "success") return txn.successProps.title;
-              if (currentStatus == "loading") return txn.loadingProps.title;
-              if (currentStatus == "error") return txn.errorProps.title;
-              
-              return txn.awaitingSubmitProps.title;
-            })}
-            activeIdx={transactions.length - transactionsState.length}
-            color="bg-blue-500"
-            size={"16px"}
-          />
-        </div>
+        {transactions.length > 1 && (
+          <div className="w-full self-end">
+            <SimpleIncrementalStepBar
+              steps={transactions.map((txn, i) => {
+                if (activeIdx > i || currentStatus == "success")
+                  return txn.successProps.title;
+                if (currentStatus == "loading") return txn.loadingProps.title;
+                if (currentStatus == "error") return txn.errorProps.title;
+
+                return txn.awaitingSubmitProps.title;
+              })}
+              activeIdx={transactions.length - transactionsState.length}
+              color="bg-blue-500"
+              size={"16px"}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

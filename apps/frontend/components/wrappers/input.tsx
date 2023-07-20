@@ -12,6 +12,7 @@ const WrappedInput = forwardRef<HTMLInputElement, InputProps>(
   (
     {
       fontSize = 14,
+      step,
       fontStyle = "reguler",
       fontFamily = "athletics",
       fontColor = "custom-textColor",
@@ -68,6 +69,7 @@ const WrappedInput = forwardRef<HTMLInputElement, InputProps>(
           style={style || {}}
           value={value}
           defaultValue={defaultValue}
+          step={step || "0.01"}
           // min={min}
           // max={max}
           // onKeyUp={async () => {
@@ -78,7 +80,6 @@ const WrappedInput = forwardRef<HTMLInputElement, InputProps>(
           //   if (parseFloat(ref.current?.value || "0") > (max || 10000000000000))
           //     (ref.current || { value: "0" }).value = max?.toString() || "";
           // }}
-          step="0.01"
         />
         {showGlass &&
           (typeof icon == "string" ? (

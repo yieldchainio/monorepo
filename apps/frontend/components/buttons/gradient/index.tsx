@@ -20,7 +20,10 @@ interface ButtonProps {
  * @param className - @optional tailwindcss class
  */
 
-const GradientButton = forwardRef<HTMLDivElement, ButtonProps>(
+const GradientButton = forwardRef<
+  HTMLDivElement,
+  ButtonProps & { disabled: boolean }
+>(
   (
     {
       children,
@@ -28,8 +31,9 @@ const GradientButton = forwardRef<HTMLDivElement, ButtonProps>(
       className,
       width = "w-max",
       style,
+      disabled = false,
       ...props
-    }: ButtonProps,
+    }: ButtonProps & { disabled?: boolean },
     ref
   ) => {
     return (
@@ -39,6 +43,10 @@ const GradientButton = forwardRef<HTMLDivElement, ButtonProps>(
           width +
           " " +
           " max-w-[400px] h-max font-athletics font-bold text-[14.5px] flex items-center justify-center cursor-pointer z-100 hover:text-custom-textColor select-none blur-none text-black transition duration-200 ease-in-out active:scale-[0.99] py-2 px-5 tablet:px-3.5 tablet:py-1.5 " +
+          (disabled
+            ? "pointer-events-none opacity-40 cursor-not-allowed "
+            : "") +
+          " " +
           (className || "")
         }
         style={{

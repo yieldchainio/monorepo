@@ -5,6 +5,7 @@
 import GradientButton from "components/buttons/gradient";
 import { GradientBorder } from "components/gradient-border";
 import { BaseComponentProps } from "components/types";
+import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 
 export const Tier = ({
@@ -44,7 +45,7 @@ export const Tier = ({
         lightColor={borderColors?.lightColor}
         style={{
           minWidth: "150px",
-          ...style
+          ...style,
         }}
       >
         <div className="w-full h-max flex flex-col items-center justify-start py-14 gap-14 ">
@@ -63,11 +64,12 @@ export const Tier = ({
               {description}
             </WrappedText>
           </div>
-          <div className="flex flex-col gap-2 items-start justify-center mt-auto ">
-            <div className="flex flex-row gap-1.5 ">
-              <GradientButton>Buy Now</GradientButton>
-            </div>
-          </div>
+          {
+            <GradientButton className="gap-1 mt-auto" onClick={onClick} disabled={price == 0}>
+              <WrappedImage src="/icons/usdc.svg" width={18} height={18} /> Buy
+              Now
+            </GradientButton>
+          }
         </div>
       </GradientBorder>
     </div>

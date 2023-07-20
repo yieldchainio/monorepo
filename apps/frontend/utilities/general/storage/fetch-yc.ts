@@ -17,6 +17,7 @@ export const fetchYC = async (
     _actions,
     _users,
     _statistics,
+    _tiers,
   ] = await Promise.all([
     fetch(baseApi + "/v2/addresses", {
       cache: "no-store",
@@ -48,6 +49,9 @@ export const fetchYC = async (
     fetch(baseApi + "/v2/statistics", {
       cache: "no-store",
     }),
+    fetch(baseApi + "/v2/tiers", {
+      cache: "no-store",
+    }),
   ]);
 
   // Set all of the DB info
@@ -61,6 +65,7 @@ export const fetchYC = async (
   const actions = (await _actions.json()).actions;
   const users = (await _users.json()).users;
   const statistics = (await _statistics.json()).statistics;
+  const tiers = (await _tiers.json()).tiers;
 
   return {
     addresses,
@@ -73,6 +78,7 @@ export const fetchYC = async (
     parameters,
     tokens,
     statistics,
+    tiers,
   };
 };
 

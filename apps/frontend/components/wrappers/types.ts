@@ -47,6 +47,7 @@ export interface InputProps extends Omit<BaseComponentProps, "onClick"> {
   min?: number;
   max?: number;
   overridingValue?: any
+  step?: `${number}`
 }
 
 export type ImageSrc =

@@ -1,7 +1,6 @@
 import { JSONTier } from "../../types";
 import { YCNetwork } from "../network/network";
 export declare class YCTier {
-    #private;
     /**
      * ID Of the tier
      */
@@ -28,10 +27,11 @@ export declare class YCTier {
     readonly monthlyPrice: bigint;
     readonly lifetimePrice: bigint;
     constructor(_tier: JSONTier);
-    details(network: YCNetwork, cache?: boolean): Promise<{
-        isActive: boolean;
-        powerLevel: bigint;
-        monthlyPrice: bigint;
-        lifetimePrice: bigint;
-    }>;
+    /**
+     * Get the duration a token amount would be sufficent for (Months)
+     * @param tokenAmount - Amount of tokens to get the duration of (@notice decimals included!!)
+     * @return duration the token amount would be sufficient for in months
+     */
+    getDuration(tokenAmount: bigint): number;
+    populateUpgradeTransaction(amount: bigint, isLifetime: boolean, network: YCNetwork): Promise<import("ethers").ContractTransaction>;
 }

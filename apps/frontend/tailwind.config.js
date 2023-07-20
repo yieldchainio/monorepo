@@ -116,6 +116,7 @@ module.exports = {
         stepPopup: "stepPopup 0.2s ease-in-out",
         straightEdge: "straightEdge 0.5s ease-in-out",
         slideLeft: "slideLeft 0.2s ease-in-out",
+        errorShake: "errorShake 0.4s 1 linear",
       },
       keyframes: (theme) => ({
         popup: {
@@ -247,6 +248,14 @@ module.exports = {
           "100%": {
             transform: "translateX(0px)",
           },
+        },
+        errorShake: {
+          "0%": { transform: "translate(30px)" },
+          "20%": { transform: "translate(-30px)" },
+          "40%": { transform: "translate(15px)" },
+          "60%": { transform: "translate(-15px)" },
+          "80%": { transform: "translate(8px) " },
+          "100%": { transform: "translate(0px)" },
         },
       }),
       backgroundSize: {

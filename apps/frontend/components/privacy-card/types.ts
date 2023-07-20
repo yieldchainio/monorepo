@@ -9,9 +9,11 @@ export interface PrivacyCardProps {
   chosen: boolean;
   heavyColor: string;
   lightColor: string;
-  setOwn: () => void;
+  setOwn: (chosen: boolean) => void;
   emojies: string;
   reasons: ReasonToChoose[]
+  blocked?: boolean
+  blockedContent?: React.ReactNode
 }
 
 export type ReasonToChoose = {

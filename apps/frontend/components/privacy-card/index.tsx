@@ -4,7 +4,7 @@
 
 import { GradientBorder } from "components/gradient-border";
 import WrappedText from "components/wrappers/text";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { PrivacyCardProps } from "./types";
 
 export const PrivacyCard = ({
@@ -17,15 +17,29 @@ export const PrivacyCard = ({
   setOwn,
   emojies,
   reasons,
+  blocked = false,
+  blockedContent,
 }: PrivacyCardProps) => {
   // Memoize some styling stuff depending on props
 
   // The X Axis translation based on whether this is a left or rightous card
   const xAxisTranslation = useMemo(() => {
-    return position == "left"
-      ? "translate-x-[-2%] hover:translate-x-[0%] active:translate-x-[-1%]"
-      : "translate-x-[2%] hover:translate-x-[0%] active:translate-x-[1%]";
-  }, [position]);
+    let base =
+      (position == "left" ? "translate-x-[-2%]" : "translate-x-[2%]") + " ";
+
+    if (blocked) base += "cursor-not-allowed";
+    else
+      base +=
+        "cursor-pointer hover:translate-y-[-2%] active:translate-y-[-1%] " +
+        (position == "left"
+          ? "hover:translate-x-[0%] active:translate-x-[-1%]"
+          : "hover:translate-x-[0%] active:translate-x-[1%]");
+    return base;
+  }, [position, blocked]);
+
+  useEffect(() => {
+    if (blocked && chosen) setOwn(false);
+  }, [blocked]);
 
   // The border coloring - If chosen, is colorful. Otherwise, is turned off
   const borderColors: { heavyColor: string; lightColor: string } =
@@ -38,7 +52,12 @@ export const PrivacyCard = ({
     }, [chosen]);
 
   return (
-    <div className="w-full" onClick={setOwn}>
+    <div
+      className="w-full"
+      onClick={() => {
+        if (!blocked) setOwn(true);
+      }}
+    >
       <GradientBorder
         borderRadius="1rem"
         {...borderColors}
@@ -47,12 +66,13 @@ export const PrivacyCard = ({
         height="100vh"
         className="opacity-50 "
         globalClassname={
-          "hover:translate-y-[-2%] active:translate-y-[-1%] hover:shadow-lg hover:shadow-custom-textColor/30 cursor-pointer transition duration-200 ease-in-out" +
+          "hover:shadow-lg hover:shadow-custom-textColor/35 transition duration-200 ease-in-out" +
           " " +
           xAxisTranslation
         }
       >
-        <div className="w-full h-full bg-custom-bcomponentbg bg-opacity-50 backdrop-blur-xl flex flex-col items-center justify-start py-20 gap-14">
+        <div className="relative w-full h-full bg-custom-bcomponentbg bg-opacity-50 backdrop-blur-xl flex flex-col items-center justify-start py-20 gap-14">
+          {blocked && blockedContent}
           <div className="flex flex-col gap-2 items-center justify-center  w-[50%] mobile:w-[60%]  ">
             <WrappedText
               fontSize={42}

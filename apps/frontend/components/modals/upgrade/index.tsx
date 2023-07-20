@@ -23,7 +23,7 @@ export const UpgradeTierModal = ({
   return (
     <div
       className={
-        "flex flex-row py-16 px-16 bg-custom-bcomponentbg rounded-lg w-[90vw] tablet:flex-col tablet:gap-6 h-[70%]  mt-auto mb-auto" +
+        "flex flex-row py-16 px-16 bg-custom-bcomponentbg rounded-lg w-[90vw] tablet:flex-col tablet:gap-6 h-[70%] tablet:h-max  mt-auto mb-auto" +
         " " +
         (className || "")
       }

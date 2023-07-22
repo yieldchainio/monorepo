@@ -1,6 +1,6 @@
 import { DropdownMenuOptions, DropdownOption } from "../types";
 import { BaseComponentProps } from "components/types";
-import { CSSProperties, RefObject, useMemo, useState } from "react";
+import { CSSProperties, RefObject, useEffect, useMemo, useState } from "react";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 import { TextProps } from "components/wrappers/types";
@@ -34,11 +34,16 @@ const DropdownMenu = ({
   // IF we are loading a choice rn or not
   const [loading, setLoading] = useState<boolean | DropdownOption>(false);
 
+  useEffect(() => {
+    alert(`Loading Changed! Typeof: ${typeof loading}`);
+  }, [loading]);
+
   // Choice focus state
   const [focusedChoice, setFocusedChoice] = useState<number>();
 
   // Called when a choice is made
   const choiceHandler = async (option: DropdownOption) => {
+    alert("Choice Handler Menu...")
     setLoading(option);
     await handler(option);
     setLoading(false);
@@ -101,6 +106,7 @@ const DropdownMenu = ({
               }
               onClick={async () => {
                 setFocusedChoice(i);
+                alert("Onclick")
                 await choiceHandler(option);
               }}
               data-wheelable={false}

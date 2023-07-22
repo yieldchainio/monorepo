@@ -122,7 +122,9 @@ export function Header() {
           choiceHandler={async (
             _choice: DropdownOption<{ chain_id: number }>
           ) => {
-            return await switchNetwork(_choice.data.chain_id);
+            console.log("IN Network Choice Handler");
+            const res = await switchNetwork(_choice.data.chain_id);
+            console.log("Resolved network choice handler");
           }}
           textProps={{ className: "laptop:hidden", fontSize: 16 }}
           choice={

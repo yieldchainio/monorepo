@@ -40,9 +40,11 @@ export function useChainSwitch() {
   const switchNetwork = async (_chainId: number) => {
     if (switchNetworkAsync)
       try {
+        console.log("Before Switch Network aSync");
         await switchNetworkAsync(
           ("0x" + _chainId.toString(16)) as unknown as number
         );
+        console.log("After Switch Network Async");
       } catch (e: any) {
         // Get our chain
         const chain = chains.find((chain: Chain) => chain.id == _chainId);

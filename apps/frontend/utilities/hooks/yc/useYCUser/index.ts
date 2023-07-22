@@ -308,7 +308,6 @@ function useYCUser(props?: UseYCUserProps): YCUserHookReturn {
 
     (async () => {
       const newTier = await YCTier.fromUserAddress(address, network);
-      console.log("New Tier", newTier);
       setTier(newTier);
     })();
   }, [address, network]);

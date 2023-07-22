@@ -36,7 +36,7 @@ const WrappedImage = ({
         className={
           "select-none text-custom-textColor" + (" " + className || "")
         }
-        onClick={() => onClick && onClick()}
+        onClick={(e) => onClick && onClick(e)}
         style={style || {}}
         data-wheelable={wheelable}
       />

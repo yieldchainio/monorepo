@@ -1,5 +1,5 @@
 import { BaseComponentProps } from "components/types";
-import { ChangeEvent, FormEvent } from "react";
+import { ChangeEvent, FormEvent, MouseEvent } from "react";
 import { Dimensions } from "utilities/classes/step/types";
 
 export interface TextProps {
@@ -46,8 +46,8 @@ export interface InputProps extends Omit<BaseComponentProps, "onClick"> {
   defaultValue?: string;
   min?: number;
   max?: number;
-  overridingValue?: any
-  step?: `${number}`
+  overridingValue?: any;
+  step?: `${number}`;
 }
 
 export type ImageSrc =
@@ -65,7 +65,8 @@ export interface ImageProps {
   className?: string;
   alt?: string;
   getColor?: boolean;
-  onClick?: () => any;
+  onClick?: (e?: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => any;
+
   style?: React.CSSProperties;
-  wheelable?: boolean
+  wheelable?: boolean;
 }

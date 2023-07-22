@@ -5,13 +5,23 @@ export const CloseButton = ({
   onClick,
   style,
   className,
-}: BaseComponentProps) => {
+  inverted = false,
+}: BaseComponentProps & {
+  inverted?: boolean;
+}) => {
   return (
     <WrappedImage
-      src={{
-        dark: "/icons/x-light.svg",
-        light: "/icons/x-dark.svg",
-      }}
+      src={
+        inverted
+          ? {
+              light: "/icons/x-light.svg",
+              dark: "/icons/x-dark.svg",
+            }
+          : {
+              dark: "/icons/x-light.svg",
+              light: "/icons/x-dark.svg",
+            }
+      }
       width={12}
       height={12}
       className={

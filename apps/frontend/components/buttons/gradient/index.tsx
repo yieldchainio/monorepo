@@ -22,7 +22,7 @@ interface ButtonProps {
 
 const GradientButton = forwardRef<
   HTMLDivElement,
-  ButtonProps & { disabled: boolean }
+  ButtonProps & { disabled?: boolean }
 >(
   (
     {

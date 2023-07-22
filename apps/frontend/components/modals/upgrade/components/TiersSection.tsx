@@ -116,8 +116,6 @@ export const TiersSection = ({ chosenTier }: { chosenTier: YCTier }) => {
                 },
               ]}
               onConfirm={() => {
-                alert("Submmitinggg " + network.diamondAddress);
-
                 if (!network.diamondAddress)
                   throw logs.lazyPush({
                     type: "error",

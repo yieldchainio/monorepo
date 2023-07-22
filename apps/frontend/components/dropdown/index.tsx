@@ -128,7 +128,25 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 justifyContent: "center",
               }}
             >
-              {children || menuToReturn}
+              {children ||
+                (type === "reguler" ? (
+                  <DropdownMenu
+                    options={options}
+                    handler={handleChoice}
+                    parentRef={correcRef}
+                    {...menuProps}
+                    className="static"
+                  />
+                ) : (
+                  <SearchableDropdownMenu
+                    options={options}
+                    handler={handleChoice}
+                    parentRef={correcRef}
+                    {...menuProps}
+                  >
+                    {children}
+                  </SearchableDropdownMenu>
+                ))}
             </ModalWrapper>
           ),
           id: UUID,
@@ -137,8 +155,18 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
     // The choice handler we pass on, accepts DropdownOption's data (any)
     const handleChoice = async (_choice: DropdownOption) => {
-      // if we got a choice handler, pass the choice to it
-      if (choiceHandler) await choiceHandler(_choice);
+      alert("Hit Handle Choice...");
+
+      const res = choiceHandler?.(_choice);
+
+      alert("Res B4 Await - " + res + " " + typeof res);
+      console.log("Res", res);
+
+      res?.then((p: any, poo: any) => console.log("Res pee poo", p, poo));
+
+      if (res instanceof Promise) await res;
+
+      alert("Executed Choice handler In handle choice");
 
       // Close the menu
       if (closeOnChoice !== false) setMenuOpen(false);
@@ -152,30 +180,6 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       return dropdownBtnRef;
     }, [ref, dropdownBtnRef, dropdownBtnRef.current]);
 
-    const menuToReturn = useMemo(() => {
-      if (type === "reguler")
-        return (
-          <DropdownMenu
-            options={options}
-            handler={handleChoice}
-            parentRef={correcRef}
-            {...menuProps}
-            className="static"
-          />
-        );
-
-      return (
-        <SearchableDropdownMenu
-          options={options}
-          handler={handleChoice}
-          parentRef={correcRef}
-          {...menuProps}
-        >
-          {children}
-        </SearchableDropdownMenu>
-      );
-    }, [type, options, options.length]);
-
     useEffect(() => {
       if (choice && disableChoosing) {
         setCurrentChoice(choice);
@@ -187,7 +191,25 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         {menuOpen &&
           (window.innerWidth <= MediaScreenSizes.TABLET || manualModal
             ? null
-            : children || menuToReturn)}
+            : children ||
+              (type === "reguler" ? (
+                <DropdownMenu
+                  options={options}
+                  handler={handleChoice}
+                  parentRef={correcRef}
+                  {...menuProps}
+                  className="static"
+                />
+              ) : (
+                <SearchableDropdownMenu
+                  options={options}
+                  handler={handleChoice}
+                  parentRef={correcRef}
+                  {...menuProps}
+                >
+                  {children}
+                </SearchableDropdownMenu>
+              )))}
 
         <RegulerButton
           onClick={() => (disableChoosing ? null : handleClick())}

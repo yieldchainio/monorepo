@@ -15,7 +15,7 @@ export interface DBAction {
     table_name: string | null;
     functions_ids: string[];
 }
-export interface DBStrategy {
+export interface JSONStrategy {
     id: string;
     address: address;
     title: string;

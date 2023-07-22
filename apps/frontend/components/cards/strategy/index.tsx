@@ -33,7 +33,7 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
     // Modal provider
     const router = useRouter();
     function routeToStrategy() {
-      router.push(`app/strategy/${strategy?.id || ""}`);
+      router.push(`/app/strategy/${strategy?.id || ""}`);
     }
 
     // Some memoization
@@ -66,7 +66,6 @@ export const StrategyCard = forwardRef<HTMLDivElement, StrategyCardProps>(
           : "999 Days Ago",
       [strategy?.createdAt]
     );
-
 
     return (
       <div

@@ -1,3 +1,4 @@
+import { Contract } from "ethers";
 import { SignerMethod, address } from "../../types/index.js";
 import { DBNetwork } from "../../types/db.js";
 import { EthersJsonRpcProvider } from "../../types/ethers.js";
@@ -47,7 +48,8 @@ export declare class YCNetwork extends BaseClass {
     readonly protocols: YCProtocol[];
     readonly blockExplorer: string | null;
     blocknumber: () => Promise<number | null>;
-    ycDiamond: () => string | null;
+    get diamond(): Contract;
+    get diamondAddr(): address;
     get provider(): EthersJsonRpcProvider;
     constructor(_network: DBNetwork, _context?: YCClassifications);
     /**

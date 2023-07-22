@@ -7,7 +7,7 @@ import {
   SignerMethod,
   VAULT_CREATED_EVENT_SIGNATURE,
 } from "../../types/index.js";
-import { DBStrategy, JSONStep } from "../../types/db.js";
+import { JSONStrategy, JSONStep } from "../../types/db.js";
 import { BaseClass, BaseWeb3Class } from "../base/index.js";
 import { YCClassifications } from "../context/context.js";
 import { YCNetwork } from "../network/network.js";
@@ -147,7 +147,7 @@ export class YCStrategy extends BaseClass {
   // ==================
   static async fromDeploymentCalldata(
     calldata: bytes,
-    jsonStrategy: Omit<DBStrategy, "createdAt">,
+    jsonStrategy: Omit<JSONStrategy, "createdAt">,
     signer: SignerMethod
   ): Promise<YCStrategy | null> {
     const network = YCClassifications.getInstance().getNetwork(
@@ -533,7 +533,7 @@ export class YCStrategy extends BaseClass {
   // =================
   //   CONSTRUCTOR
   // =================
-  constructor(_strategy: DBStrategy, _context: YCClassifications) {
+  constructor(_strategy: JSONStrategy, _context: YCClassifications) {
     /**
      * Set static vars
      */

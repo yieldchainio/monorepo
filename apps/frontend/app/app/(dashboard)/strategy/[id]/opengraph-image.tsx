@@ -1,6 +1,6 @@
 import {
   ClassificationContext,
-  DBStrategy,
+  JSONStrategy,
   YCClassifications,
   YCStrategy,
 } from "@yc/yc-models";
@@ -35,7 +35,7 @@ export default async function Image({ params }: { params: { id: string } }) {
   ).json();
 
   const strategy = strategies.strategies.find(
-    (s: DBStrategy) => s.id == params.id
+    (s: JSONStrategy) => s.id == params.id
   );
 
   if (!strategy)

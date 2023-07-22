@@ -1,6 +1,6 @@
 import { PrismaClient } from "@yc/yc-data";
 import axios from "axios";
-import { DBStrategy, DBUser } from "../../types/db.js";
+import { JSONStrategy, DBUser } from "../../types/db.js";
 import { BaseClass } from "../base/index.js";
 import { YCClassifications } from "../context/context.js";
 import { YCSocialMedia } from "../social-media/social-media.js";

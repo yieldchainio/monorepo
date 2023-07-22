@@ -11,11 +11,13 @@ import { useStrategyStore } from "utilities/hooks/stores/strategies";
 import WrappedImage from "components/wrappers/image";
 import { TokensBundle } from "components/tokens/bundle";
 import {
-  DBStrategy,
+  JSONStrategy,
   JSONStep,
   YCClassifications,
   YCStrategy,
   YCToken,
+  address,
+  VAULT_CREATED_EVENT_SIGNATURE,
 } from "@yc/yc-models";
 import GradientButton from "components/buttons/gradient";
 import { RegulerButton } from "components/buttons/reguler";
@@ -27,6 +29,10 @@ import useYCUser from "utilities/hooks/yc/useYCUser";
 import { addStrategy } from "./utils/add-strategy";
 import { useRouter } from "next/navigation";
 import { InfoProvider } from "components/info-providers";
+import { useSubmitTransactions } from "utilities/hooks/web3/useSubmitTransactions";
+import { TransactionReceipt } from "components/transactions-submmiter/types";
+import { ethers } from "ethers";
+import { defaultAbiCoder } from "ethers/lib/utils.js";
 
 export const DeploymentModal = ({
   seedRootStep,
@@ -49,6 +55,104 @@ export const DeploymentModal = ({
   const { address, id } = useYCUser();
 
   const { data: signer, isLoading, isError } = useSigner();
+
+  const { submitTransactions } = useSubmitTransactions();
+
+  const deployStrategy = async (builderResult: {
+    uprootSteps: JSONStep;
+    deploymentCalldata: string;
+  }) => {
+    if (!network)
+      throw logs.lazyPush({
+        type: "error",
+        message: "Invalid Network - Cannot Deploy.",
+      });
+
+    submitTransactions(
+      [
+        {
+          type: "createVault",
+          builderResult,
+          network: network,
+          strategy: {
+            id: uuid(),
+            title: title || "",
+            chain_id: network?.id || 1,
+            deposit_token_id: depositToken?.id || "",
+            creator_id: id || "",
+            verified: false,
+            seed_steps: seedRootStep.toDeployableJSON() as any,
+            tree_steps: treeRootStep.toDeployableJSON() as any,
+            uproot_steps: builderResult.uprootSteps as any,
+          },
+        },
+      ],
+      (receipts: TransactionReceipt[]) => {
+        console.log("Receipts,", receipts);
+        addDeployedStrategy(builderResult, receipts[0]);
+      }
+    );
+  };
+
+  const addDeployedStrategy = async (
+    builderResult: {
+      uprootSteps: JSONStep;
+      deploymentCalldata: string;
+    },
+    deploymentReceipt: TransactionReceipt
+  ) => {
+    console.log("Receipt", deploymentReceipt);
+    if (!deploymentReceipt) return;
+
+    const deployLog = deploymentReceipt.logs.find(
+      (log) => log.topics[0] == ethers.utils.id(VAULT_CREATED_EVENT_SIGNATURE)
+    );
+
+    if (!deployLog) return "Finding Strategy Address...";
+
+    const vaultAddress: address = defaultAbiCoder.decode(
+      ["address"],
+      deployLog.topics[1]
+    )[0];
+
+    const jsonStrategy = {
+      id: uuid(),
+      title: title || "",
+      chain_id: network?.id || 1,
+      deposit_token_id: depositToken?.id || "",
+      creator_id: id || "",
+      verified: false,
+      seed_steps: seedRootStep.toDeployableJSON() as any,
+      tree_steps: treeRootStep.toDeployableJSON() as any,
+      uproot_steps: builderResult.uprootSteps as any,
+      execution_interval: 500,
+      address: vaultAddress,
+      createdAt: new Date(),
+    };
+
+    const strategy = new YCStrategy(
+      jsonStrategy,
+      YCClassifications.getInstance()
+    );
+
+    await addStrategy({
+      id: strategy.id,
+      address: strategy.address,
+      creatorID: id || "",
+      seedSteps: seedRootStep.toDeployableJSON() as any,
+      treeSteps: treeRootStep.toDeployableJSON() as any,
+      uprootSteps: builderResult.uprootSteps,
+      vaultVisibility: visibility,
+      depositTokenID: depositToken?.id as string,
+      chainID: network?.id as number,
+      verified: true,
+      title: title as string,
+    });
+
+    YCClassifications.getInstance().YCstrategies.push(strategy);
+
+    router.push(`/app/strategy/${strategy.id}`);
+  };
 
   /**
    * Memoize all of the above as "Sections"
@@ -207,121 +311,25 @@ export const DeploymentModal = ({
                 lifespan: deploymentDataPromise,
               });
 
-              await deploymentDataPromise.then(async (builderResult) => {
-                const strategyID = uuid();
-                if (!network || !depositToken || !title)
-                  return logs.lazyPush({
-                    type: "error",
-                    message:
-                      "Please Complete All Strategy Details Before Deploying",
-                  });
-                if (!builderResult || !builderResult.uprootSteps.id)
-                  return logs.lazyPush({
-                    type: "error",
-                    message:
-                      "Building Strategy Failed. Please Contact Team On Telegram/Discord",
+              const builderResult = await deploymentDataPromise;
 
-                    lifespan: 10000,
-                  });
-                const jsonStrategy: Omit<DBStrategy, "createdAt"> = {
-                  id: strategyID,
-                  address: "0xunknownatthemoment",
-                  title: title || "",
-                  chain_id: network?.id || 1,
-                  deposit_token_id: depositToken?.id || "",
-                  creator_id: id || "",
-                  verified: false,
-                  execution_interval: 1000,
-                  seed_steps: seedRootStep.toDeployableJSON() as any,
-                  tree_steps: treeRootStep.toDeployableJSON() as any,
-                  uproot_steps: builderResult.uprootSteps as any,
-                };
-
-                const strategyPromise = YCStrategy.fromDeploymentCalldata(
-                  builderResult.deploymentCalldata,
-                  jsonStrategy,
-                  {
-                    from: address as unknown as string,
-                    executionCallback: async (req) => {
-                      const res = await signer?.sendTransaction(req as any);
-                      if (!res)
-                        throw "Cannot Deploy - Res Undefined In Execution Callback";
-                      return {
-                        hash: res.hash,
-                      };
-                    },
-                    chainID: network.id,
-                  }
-                );
-
-                logs.lazyPush({
+              if (!network || !depositToken || !title)
+                return logs.lazyPush({
+                  type: "error",
                   message:
-                    "Submit The Deployment Transaction In Your Wallet...",
-                  lifespan: strategyPromise,
+                    "Please Complete All Strategy Details Before Deploying",
                 });
 
-                const strategy = await strategyPromise;
-
-                if (!strategy)
-                  return logs.lazyPush({
-                    type: "error",
-                    message:
-                      "Building Strategy Failed. Please Contact Team On Telegram/Discord",
-
-                    lifespan: 10000,
-                  });
-
-                logs.lazyPush({
-                  type: "success",
+              if (!builderResult || !builderResult.uprootSteps.id)
+                return logs.lazyPush({
+                  type: "error",
                   message:
-                    strategy.title +
-                    " Vault Deployed Successfully At " +
-                    strategy.address,
+                    "Building Strategy Failed. Please Contact Team On Telegram/Discord",
+
                   lifespan: 10000,
                 });
 
-                YCClassifications.getInstance().YCstrategies.push(strategy);
-
-                const addedPromise = addStrategy({
-                  id: strategy.id,
-                  address: strategy.address,
-                  creatorID: id || "",
-                  seedSteps: seedRootStep.toDeployableJSON() as any,
-                  treeSteps: treeRootStep.toDeployableJSON() as any,
-                  uprootSteps: builderResult.uprootSteps,
-                  vaultVisibility: visibility,
-                  depositTokenID: depositToken.id,
-                  chainID: network.id,
-                  verified: true,
-                  title,
-                });
-
-                logs.lazyPush({
-                  type: "info",
-                  message: "Adding Strategy To Our System...",
-                  lifespan: addedPromise,
-                });
-
-                addedPromise.then((added) => {
-                  if (!added)
-                    return logs.lazyPush({
-                      type: "error",
-                      message:
-                        "Failed To Add Strategy To Database - Contact Team For Help",
-                    });
-
-                  logs.lazyPush({
-                    type: "success",
-                    message: "Added Stratey Successfully",
-                  });
-
-                  logs.lazyPush({
-                    message: "Redirecting To Vault's Page...",
-                  });
-
-                  router.push(`/app/strategy/${strategyID}`);
-                });
-              });
+              await deployStrategy(builderResult);
             }}
           >
             Deploy 🚀

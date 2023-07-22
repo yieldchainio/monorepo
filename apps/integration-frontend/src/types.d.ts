@@ -60,7 +60,7 @@ export interface DBContract {
   abi: JSON;
   functions: number[];
 }
-export interface DBStrategy {
+export interface JSONStrategy {
   strategy_identifier: number;
   address: string;
   name: string;

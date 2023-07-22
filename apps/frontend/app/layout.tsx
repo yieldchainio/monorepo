@@ -43,8 +43,8 @@ export default async function RootLayout({
           />
           <WhitelistProtection />
           {children}
-          <PepeAd />
           <ModalProvider />
+          <PepeAd />
           <LoggerProvider />
         </WrappedWagmi>
       </body>

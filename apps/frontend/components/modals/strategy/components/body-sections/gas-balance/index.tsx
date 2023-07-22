@@ -69,15 +69,6 @@ export function GasBalance({ strategy }: { strategy?: YCStrategy }) {
       className="flex-col pt-8 tablet:pt-4 pb-2 tablet:items-center  justify-start items-start gap-4 tablet:gap-2"
       width="w-[40%] tablet:w-full"
     >
-      <InfoSection title="Runs Every" className="tablet:hidden">
-        {formattedInterval}
-      </InfoSection>
-      {/* <Divisor
-        className="w-[90%] border-custom-textColor smallLaptop:hidden "
-        style={{
-          borderColor: "rgba(var(--text), 0.1)",
-        }}
-      /> */}
       <InfoSection title="Gas Balance">
         <div className="flex flex-row gap-2 items-end">
           <WrappedText fontSize={20} className="tablet:text-[16px]">

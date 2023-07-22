@@ -9,7 +9,7 @@ import {
   DBFunction,
   DBToken,
   DBArgument,
-  DBStrategy,
+  JSONStrategy,
   DBProtocol,
   DBNetwork,
   DBUser,
@@ -22,12 +22,12 @@ export interface ClassificationContext {
   tokens: DBToken[];
   parameters: DBArgument[]; // TODO: Change name to arguments
   protocols: DBProtocol[];
-  strategies: DBStrategy[];
+  strategies: JSONStrategy[];
   actions: DBAction[];
   networks: DBNetwork[];
   users: DBUser[];
   statistics: DBStatistic[];
-  tiers: JSONTier[]
+  tiers: JSONTier[];
 }
 
 // A step inputted from the frontend
@@ -100,7 +100,6 @@ export interface SupplyData {
   protocol: DBProtocol;
   collateral?: DBToken | null;
   representationToken?: DBToken | null;
-
 }
 
 export type StepData = {
@@ -111,7 +110,7 @@ export type StepData = {
   swap?: SwapData;
   trigger?: any;
   perpBasketLp?: PerpBasketLpData;
-  supply?: SupplyData
+  supply?: SupplyData;
 };
 
 export enum Timestamps {

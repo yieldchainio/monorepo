@@ -1,5 +1,6 @@
 import WrappedImage from "components/wrappers/image";
 import {
+  TransactionReceipt,
   TransactionStateProps,
   TransactionSubmmiterProps,
   Transactions,
@@ -24,6 +25,7 @@ export const TransactionsSubmmiter = ({
   className,
   onClick,
   closeModal,
+  onCompletion,
 }: TransactionSubmmiterProps) => {
   // ====================
   //    HOOKS/GLOBALS
@@ -38,6 +40,8 @@ export const TransactionsSubmmiter = ({
   if (transactions.length == 0) closeModal?.();
 
   const [transactionsState, setTransactionsState] = useState(transactions);
+
+  const [receipts, setReceipts] = useState<TransactionReceipt[]>([]);
 
   const activeIdx = useMemo(() => {
     return transactions.length - transactionsState.length;
@@ -70,12 +74,6 @@ export const TransactionsSubmmiter = ({
   //   HANDLERS
   // ============
   const handleTransactionCompleted = () => {
-    console.log(
-      "Transactions Original:",
-      transactions,
-      "Transations State:",
-      transactionsState
-    );
     if (transactionsState.length == 1) {
       setCurrentStatus("success");
       return;
@@ -117,6 +115,8 @@ export const TransactionsSubmmiter = ({
 
       const receipt = await result.wait();
 
+      setReceipts([...receipts, receipt]);
+
       if (!receipt.status) throw "Transaction Failed On Mainnet";
 
       handleTransactionCompleted();
@@ -130,6 +130,11 @@ export const TransactionsSubmmiter = ({
   const handleTransactionError = (err?: Error) => {
     console.error("Caught Error Handling Transaction Submit:", err || error);
   };
+
+  useEffect(() => {
+    if (currentStatus == "success" && onCompletion && receipts.length)
+      onCompletion(receipts);
+  }, [receipts.length, receipts, currentStatus]);
 
   // ================
   //   SIDE EFFECTS
@@ -166,6 +171,7 @@ export const TransactionsSubmmiter = ({
         statusProps={currentStatusProps}
         status={currentStatus}
         key={`${currentStatus}_${activeIdx}`}
+        latestReceipt={receipts[receipts.length - 1]}
       />
       <div className="flex flex-col items-center justify-start gap-4 w-full text-elipsis">
         {currentStatus == "awaitingSubmit" && <ProceedInWalletInfo />}
@@ -206,9 +212,11 @@ export const TransactionsSubmmiter = ({
 const ContentSection = ({
   statusProps,
   status,
+  latestReceipt,
 }: {
   statusProps: TransactionStateProps;
   status: status;
+  latestReceipt?: TransactionReceipt;
 }) => {
   return (
     <div className="flex flex-col items-center justify-start gap-4">
@@ -224,10 +232,13 @@ const ContentSection = ({
         <ChildrenProvider
           textProps={{
             fontSize: 14,
-            className: "text-opacity-70",
+            className:
+              "text-opacity-70 truncate whitespace-pre-wrap text-center",
           }}
         >
-          {statusProps.description}
+          {typeof statusProps.description == "function"
+            ? statusProps.description(latestReceipt as TransactionReceipt)
+            : statusProps.description}
         </ChildrenProvider>
       </div>
     </div>

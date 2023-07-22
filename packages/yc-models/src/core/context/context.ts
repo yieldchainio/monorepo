@@ -18,7 +18,7 @@ import {
   DBFunction,
   DBToken,
   DBArgument,
-  DBStrategy,
+  JSONStrategy,
   DBProtocol,
   DBNetwork,
   DBAction,
@@ -67,7 +67,7 @@ class YCClassificationsInternal {
   protected Tokens: DBToken[] = [];
   protected Parameters: DBArgument[] = []; // TODO: Change name to arguments
   protected Protocols: DBProtocol[] = [];
-  protected Strategies: DBStrategy[] = [];
+  protected Strategies: JSONStrategy[] = [];
   protected Networks: DBNetwork[] = [];
   protected Actions: DBAction[] = [];
   protected Statistics: DBStatistic[] = [];
@@ -204,20 +204,20 @@ class YCClassificationsInternal {
   };
 
   protected fetchStrategies = async () => {
-    (await fetchRouter<DBStrategy[]>({
+    (await fetchRouter<JSONStrategy[]>({
       backend: {
         fetcher: async () =>
-          prismaToJson<DBStrategy[]>(
+          prismaToJson<JSONStrategy[]>(
             (await this?.Client?.strategiesv2.findMany()) || ([] as any)
           ),
-        setter: (value: DBStrategy[]) => (this.Strategies = value),
+        setter: (value: JSONStrategy[]) => (this.Strategies = value),
       },
       frontend: {
         fetcher: async () =>
           await (
             await axios.get(YCClassifications.apiURL + "/v2/strategies")
           ).data.strategies,
-        setter: (value: DBStrategy[]) => (this.Strategies = value),
+        setter: (value: JSONStrategy[]) => (this.Strategies = value),
       },
     })) || [];
   };
@@ -313,7 +313,7 @@ class YCClassificationsInternal {
 
   protected refreshStrategies = async () => {
     this.YCstrategies = this.Strategies.map(
-      (strategy: DBStrategy) =>
+      (strategy: JSONStrategy) =>
         new YCStrategy(strategy, YCClassificationsInternal.getInstance())
     );
   };
@@ -640,7 +640,7 @@ export class YCClassifications extends YCClassificationsInternal {
   get strategies() {
     if (!this.YCstrategies.length) {
       this.YCstrategies = this.Strategies.map(
-        (strategy: DBStrategy) => new YCStrategy(strategy, this)
+        (strategy: JSONStrategy) => new YCStrategy(strategy, this)
       );
     }
     return this.YCstrategies;

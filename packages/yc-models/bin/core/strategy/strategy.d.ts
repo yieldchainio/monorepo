@@ -1,5 +1,5 @@
 import { address, bytes, EthersContract, SignerMethod } from "../../types/index.js";
-import { DBStrategy } from "../../types/db.js";
+import { JSONStrategy } from "../../types/db.js";
 import { BaseClass } from "../base/index.js";
 import { YCClassifications } from "../context/context.js";
 import { YCNetwork } from "../network/network.js";
@@ -129,7 +129,7 @@ export declare class YCStrategy extends BaseClass {
         interval: number;
         unit: "Days" | "Minutes" | "Seconds" | "Months" | "Weeks" | "Years" | "Day" | "Minute" | "Second" | "Month" | "Week" | "Year" | "Hour" | "Hours";
     };
-    static fromDeploymentCalldata(calldata: bytes, jsonStrategy: Omit<DBStrategy, "createdAt">, signer: SignerMethod): Promise<YCStrategy | null>;
+    static fromDeploymentCalldata(calldata: bytes, jsonStrategy: Omit<JSONStrategy, "createdAt">, signer: SignerMethod): Promise<YCStrategy | null>;
     /**
      * Get the TVL of this vault in USD value - Async (quoting)
      * @param cache - whether to return cached values or not
@@ -251,7 +251,7 @@ export declare class YCStrategy extends BaseClass {
      * Get all strategy run transactions
      */
     getStrategyRuns(): Promise<TransactionReceipt[]>;
-    constructor(_strategy: DBStrategy, _context: YCClassifications);
+    constructor(_strategy: JSONStrategy, _context: YCClassifications);
     getInstance: (id: string) => YCStrategy | null;
     static instances: Map<string, YCStrategy>;
 }

@@ -70,7 +70,6 @@ export class YCTier {
             throw "Cannot Get Tier Details - Diamond Address Undefined";
         const diamond = new Contract(network.diamondAddress, DiamondABI, network.provider);
         const tierID = (await diamond.getUserTier(address))[0];
-        console.log("User Tier From Onchain", tierID);
         const tier = YCClassifications.getInstance().tiers.find((_tier) => _tier.id == tierID);
         if (!tier)
             return YCClassifications.getInstance().tiers[0];

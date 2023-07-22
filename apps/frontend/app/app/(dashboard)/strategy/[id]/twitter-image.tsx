@@ -1,4 +1,4 @@
-import { DBStrategy, YCClassifications, YCStrategy } from "@yc/yc-models";
+import { JSONStrategy, YCClassifications, YCStrategy } from "@yc/yc-models";
 import axios from "axios";
 import WrappedImage from "components/wrappers/image";
 import { ImageResponse } from "next/server";
@@ -20,7 +20,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
   const strategies = (
     await axios.get("https://api.yieldchain.io/v2/strategies")
   ).data.strategies;
-  const strategy = strategies.find((s: DBStrategy) => s.id == params.slug);
+  const strategy = strategies.find((s: JSONStrategy) => s.id == params.slug);
 
   if (!strategy)
     return new ImageResponse(

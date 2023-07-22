@@ -6,6 +6,7 @@ import { TransactionOrUtility, UtilityTransactionRequest } from "../types";
 import { ContractTransaction } from "ethers";
 import { parseApprovalTransaction } from "./approve";
 import { parseUpgradeTierTransaction } from "./upgrade-tier";
+import { parseCreateVaultTransaction } from "./create-vault";
 
 export function parseTransactionRequest(
   req: TransactionOrUtility
@@ -19,6 +20,9 @@ export function parseTransactionRequest(
       return parseApprovalTransaction(req);
     case "upgradeTier":
       return parseUpgradeTierTransaction(req);
+
+    case "createVault":
+      return parseCreateVaultTransaction(req);
     default:
       throw "Unsupported Utility Transaction";
   }

@@ -1,4 +1,12 @@
-import { YCToken, address } from "@yc/yc-models";
+import {
+  BuilderResponse,
+  JSONStep,
+  JSONStrategy,
+  YCNetwork,
+  YCToken,
+  address,
+  bytes,
+} from "@yc/yc-models";
 import { YCTier } from "@yc/yc-models/src/core/tier";
 import { Transaction } from "components/transactions-submmiter/types";
 
@@ -17,9 +25,20 @@ export interface UpgradeTierTransactionRequest {
   isLifetime: boolean;
 }
 
+export interface CreateVaultTransactionRequest {
+  type: "createVault";
+  builderResult: {
+    deploymentCalldata: bytes;
+    uprootSteps: JSONStep;
+  };
+  strategy: Omit<JSONStrategy, "createdAt" | "address" | "execution_interval">;
+  network: YCNetwork;
+}
+
 export type UtilityTransactionRequest =
   | ApprovalTransactionRequest
-  | UpgradeTierTransactionRequest;
+  | UpgradeTierTransactionRequest
+  | CreateVaultTransactionRequest;
 
 export type TransactionOrUtility = Transaction | UtilityTransactionRequest;
 

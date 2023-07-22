@@ -2,14 +2,14 @@
  * @notice
  * A complete context of Yieldchain's current classified Database.
  */
-import { DBContract, DBAction, DBFunction, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBUser, DBStatistic, JSONTier } from "./db.js";
+import { DBContract, DBAction, DBFunction, DBToken, DBArgument, JSONStrategy, DBProtocol, DBNetwork, DBUser, DBStatistic, JSONTier } from "./db.js";
 export interface ClassificationContext {
     addresses: DBContract[];
     funcs: DBFunction[];
     tokens: DBToken[];
     parameters: DBArgument[];
     protocols: DBProtocol[];
-    strategies: DBStrategy[];
+    strategies: JSONStrategy[];
     actions: DBAction[];
     networks: DBNetwork[];
     users: DBUser[];

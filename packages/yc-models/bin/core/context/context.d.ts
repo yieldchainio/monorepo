@@ -1,5 +1,5 @@
 import { PrismaClient } from "@yc/yc-data";
-import { Endpoints, ClassificationContext, YCUser, YCAction, YCStrategy, YCContract, YCNetwork, YCProtocol, YCToken, YCArgument, YCFunc, DBContract, DBFunction, DBToken, DBArgument, DBStrategy, DBProtocol, DBNetwork, DBAction, DBUser, DBStatistic, JSONTier } from "@yc/yc-models";
+import { Endpoints, ClassificationContext, YCUser, YCAction, YCStrategy, YCContract, YCNetwork, YCProtocol, YCToken, YCArgument, YCFunc, DBContract, DBFunction, DBToken, DBArgument, JSONStrategy, DBProtocol, DBNetwork, DBAction, DBUser, DBStatistic, JSONTier } from "@yc/yc-models";
 import { YCStatistic } from "../strategy/statistic.js";
 import { YCTier } from "../tier";
 /**
@@ -18,7 +18,7 @@ declare class YCClassificationsInternal {
     protected Tokens: DBToken[];
     protected Parameters: DBArgument[];
     protected Protocols: DBProtocol[];
-    protected Strategies: DBStrategy[];
+    protected Strategies: JSONStrategy[];
     protected Networks: DBNetwork[];
     protected Actions: DBAction[];
     protected Statistics: DBStatistic[];
@@ -115,7 +115,7 @@ export declare class YCClassifications extends YCClassificationsInternal {
     get arguments(): YCArgument[];
     get rawArguments(): DBArgument[];
     get strategies(): YCStrategy[];
-    get rawStrategies(): DBStrategy[];
+    get rawStrategies(): JSONStrategy[];
     get protocols(): YCProtocol[];
     get tokens(): YCToken[];
     get rawTokens(): DBToken[];

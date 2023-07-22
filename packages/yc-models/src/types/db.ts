@@ -19,7 +19,7 @@ export interface DBAction {
 }
 
 // A DB Model representing a strategy
-export interface DBStrategy {
+export interface JSONStrategy {
   id: string;
   address: address;
   title: string;

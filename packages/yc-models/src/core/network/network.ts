@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import { SignerMethod, address } from "../../types/index.js";
 import { DBNetwork } from "../../types/db.js";
 import { EthersExecutor, EthersJsonRpcProvider } from "../../types/ethers.js";
@@ -6,6 +6,7 @@ import { BaseClass } from "../base/index.js";
 import { YCClassifications } from "../context/context.js";
 import { YCProtocol } from "../protocol/protocol.js";
 import { YCToken } from "../token/token.js";
+import DiamondABI from "../../ABIs/diamond.json" assert { type: "json" };
 
 /**
  * @YCNetwork
@@ -93,10 +94,19 @@ export class YCNetwork extends BaseClass {
   };
 
   // Get the YC Diamond address on this chain
-  ycDiamond = (): string | null => {
-    return this.diamondAddress || null;
-  };
+  get diamond(): Contract {
+    if (!this.diamondAddress)
+      throw "Cannot Get YC Diamond Contract - Address Is Undefined On Network";
 
+    return new Contract(this.diamondAddress, DiamondABI, this.provider);
+  }
+
+  get diamondAddr(): address {
+    if (!this.diamondAddress)
+      throw "Cannot Get YC Diamond Address -  Is Undefined On Network";
+
+    return this.diamondAddress;
+  }
   // Ethers provider
   get provider(): EthersJsonRpcProvider {
     if (!this.#provider) {

@@ -25,9 +25,9 @@ export const TransactionImage = ({
       />
       {subImage && (
         <WrappedImage
-          width={8}
-          height={8}
-          className="absolute top-[80%] left-[80%] translate-x-[-100%] translate-y-[-100%]"
+          width={18}
+          height={18}
+          className="absolute top-[100%] left-[100%] translate-x-[-75%] translate-y-[-100%] rounded-full border-[1px] border-custom-bcomponentbg"
           src={subImage}
         />
       )}

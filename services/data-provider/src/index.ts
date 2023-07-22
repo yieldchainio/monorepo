@@ -4,7 +4,7 @@ import cors from "cors";
 import {
   DBContract,
   DBArgument,
-  DBStrategy,
+  JSONStrategy,
   DBToken,
   DBProtocol,
   DBFlow,
@@ -73,7 +73,7 @@ app.get("/v2/networks", async (req: any, res: any) => {
  */
 app.get("/v2/strategies", async (req: any, res: any) => {
   // @ts-ignore
-  const strategies: DBStrategy[] = await prisma.strategiesv2.findMany(); // TODO: Change strategiesv2 token id to string, migrate
+  const strategies: JSONStrategy[] = await prisma.strategiesv2.findMany(); // TODO: Change strategiesv2 token id to string, migrate
   res.status(200).json({ strategies });
 });
 
@@ -135,15 +135,13 @@ app.get("/v2/actions", async (req: any, res: any) => {
 
 app.get("/v2/tiers", async (req: any, res: any) => {
   const tiers: JSONTier[] = await prisma.tier.findMany();
-  res
-    .status(200)
-    .json({
-      tiers: tiers.map((tier) => ({
-        ...tier,
-        monthly_price: tier.monthly_price.toString(),
-        lifetime_price: tier.lifetime_price.toString(),
-      })),
-    });
+  res.status(200).json({
+    tiers: tiers.map((tier) => ({
+      ...tier,
+      monthly_price: tier.monthly_price.toString(),
+      lifetime_price: tier.lifetime_price.toString(),
+    })),
+  });
 });
 
 app.post(

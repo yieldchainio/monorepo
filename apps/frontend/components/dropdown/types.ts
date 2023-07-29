@@ -32,7 +32,7 @@ export interface DropdownProps {
   buttonProps?: RegulerButtonProps;
   menuProps?: Partial<DropdownMenuOptions>;
   textProps?: Omit<TextProps, "children">;
-  imageProps?: ImageProps;
+  imageProps?: Partial<ImageProps>;
   manualModal?: boolean;
   autoChoice?: boolean;
   disabled?: string | false;

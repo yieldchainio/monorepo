@@ -4,6 +4,7 @@ import { UpgradeTierModal } from "components/modals/upgrade";
 import WrappedImage from "components/wrappers/image";
 import WrappedText from "components/wrappers/text";
 import { useEffect, useState } from "react";
+import { getLocalItem } from "utilities/general/local-storage";
 import { useModals } from "utilities/hooks/stores/modal";
 
 export const PepeAd = () => {
@@ -12,8 +13,8 @@ export const PepeAd = () => {
   const [shouldShow, setShouldShow] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!localStorage.getItem("HIDE_PREMIUM_PEPE")) setShouldShow(true);
-  }, [localStorage.getItem("HIDE_PREMIUM_PEPE")]);
+    if (!getLocalItem("HIDE_PREMIUM_PEPE")) setShouldShow(true);
+  }, [getLocalItem("HIDE_PREMIUM_PEPE")]);
 
   if (shouldShow)
     return (

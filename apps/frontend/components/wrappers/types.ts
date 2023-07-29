@@ -32,7 +32,7 @@ export interface InputProps extends Omit<BaseComponentProps, "onClick"> {
   placeholderClassname?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => any;
   icon?: string | React.ReactNode;
-  iconProps?: ImageProps;
+  iconProps?: Partial<ImageProps>;
   showGlass?: boolean;
   fontColor?: string;
   select?: Selection;

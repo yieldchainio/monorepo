@@ -9,6 +9,7 @@ import { ShallowRouter } from "components/internal/shallow-router";
 import { LoggerProvider } from "components/logger";
 import { WhitelistProtection } from "components/whitelist-protection";
 import { PepeAd } from "components/pepe-ad";
+import { PremiumAd } from "components/premium-ad";
 
 export const metadata = {
   title: "Yieldchain",
@@ -44,7 +45,8 @@ export default async function RootLayout({
           <WhitelistProtection />
           {children}
           <ModalProvider />
-          <PepeAd />
+          {/* <PepeAd /> */}
+          <PremiumAd />
           <LoggerProvider />
         </WrappedWagmi>
       </body>

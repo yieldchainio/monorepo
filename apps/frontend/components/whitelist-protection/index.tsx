@@ -5,6 +5,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { getLocalItem } from "utilities/general/local-storage";
 
 export function WhitelistProtection() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export function WhitelistProtection() {
   const path = usePathname();
 
   useEffect(() => {
-    const sig = localStorage.getItem("ETH_AUTH_SIG");
+    const sig = getLocalItem("ETH_AUTH_SIG");
     if (!sig && !path.includes("/whitelist"))
       router.replace(`/whitelist?callback=${path}`);
   }, [path]);

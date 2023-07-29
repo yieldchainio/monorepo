@@ -13,7 +13,7 @@ interface TextProps {
   fontSize: number;
   className?: string;
 }
-export function ImageSkeleton({ width, height, className }: ImageProps) {
+export function ImageSkeleton({ width, height, className }:  Partial<ImageProps>) {
   return (
     <div
       className={

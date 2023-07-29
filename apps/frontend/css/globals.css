@@ -95,6 +95,9 @@ html {
 
   --yc-lb: rgba(0, 178, 236, 1);
   --yc-yellow: rgba(217, 202, 15, 1);
+  
+  --ycb: 104, 218, 255;
+  --ycy: 254, 244, 100;
 
   --yc-llb: rgb(104, 218, 255);
   --yc-ly: rgb(254, 244, 100);
@@ -156,6 +159,9 @@ html.dark {
   --bigcomponentbg: var(--dark-bigcomponentbg);
   --off: var(--dark-turnedoff-text);
   --offhover: var(--dark-turnedoff-text-hover);
+
+  --ycb: 0, 178, 236;
+  --ycy: 217, 202, 15;
 
   /*texts*/
   --text: var(--dark-mode-text);

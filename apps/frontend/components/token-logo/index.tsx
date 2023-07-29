@@ -16,7 +16,7 @@ export const TokenLogo = ({
   className,
   onClick,
   style,
-}: ImageProps) => {
+}:  Partial<ImageProps>) => {
   return (
     <div className="w-max h-max bg-custom-bcomponentbg rounded-full p-[0.3rem]">
       <div className="bg-custom-bg w-max h-max rounded-full p-1">

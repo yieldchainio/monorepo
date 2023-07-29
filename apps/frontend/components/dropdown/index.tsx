@@ -155,18 +155,11 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
     // The choice handler we pass on, accepts DropdownOption's data (any)
     const handleChoice = async (_choice: DropdownOption) => {
-      alert("Hit Handle Choice...");
-
       const res = choiceHandler?.(_choice);
-
-      alert("Res B4 Await - " + res + " " + typeof res);
-      console.log("Res", res);
 
       res?.then((p: any, poo: any) => console.log("Res pee poo", p, poo));
 
       if (res instanceof Promise) await res;
-
-      alert("Executed Choice handler In handle choice");
 
       // Close the menu
       if (closeOnChoice !== false) setMenuOpen(false);

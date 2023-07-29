@@ -9,6 +9,7 @@ import { SocialMediasSection } from "./components/social-media-section";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signMessage } from "@wagmi/core";
 import { RegulerButton } from "components/buttons/reguler";
+import { getLocalItem } from "utilities/general/local-storage";
 
 const WhitelistingStatusTitle = {
   null: "Wen Whitelist? 👀",
@@ -39,7 +40,7 @@ const WhitelistingStatusToComponents: Record<
   null: <ConnectWalletButton />,
   true: (
     <div className="flex flex-col items-center justify-center">
-      {!localStorage.getItem("ETH_AUTH_SIG") && (
+      {!getLocalItem("ETH_AUTH_SIG") && (
         <>
           {" "}
           <WrappedText>{"Let's Just Prove It's REALLY You"}</WrappedText>
@@ -74,7 +75,7 @@ function WhitelistPage() {
 
   const params = useSearchParams();
 
-  const sig = localStorage.getItem("ETH_AUTH_SIG");
+  const sig = getLocalItem("ETH_AUTH_SIG");
 
   useEffect(() => {
     if (isWhitelisted && sig)

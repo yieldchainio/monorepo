@@ -86,7 +86,7 @@ export function DepositTriggerToken({ step, triggerComparison }: StepProps) {
   );
 }
 
-function GreenPlus({ width, height, className, style }: ImageProps) {
+function GreenPlus({ width, height, className, style }:  Partial<ImageProps>) {
   return (
     <WrappedText
       fontColor="green-500"

@@ -101,8 +101,6 @@ export const TiersSection = ({ chosenTier }: { chosenTier: YCTier }) => {
                   condition: (value: string): string | true => {
                     const parsed = parseFloat(value);
 
-                    alert("Parsed " + parsed);
-
                     if (parsed < 1) return "Min. 1 Month";
 
                     return true;

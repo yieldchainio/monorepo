@@ -10,7 +10,7 @@ import { forwardRef } from "react";
 /* eslint-disable react/display-name */
 export const PlusCircle = forwardRef<
   HTMLDivElement,
-  BaseComponentProps & ImageProps
+  BaseComponentProps & Partial<ImageProps>
 >(
   (
     {
@@ -20,7 +20,7 @@ export const PlusCircle = forwardRef<
       width = 20,
       height = 20,
       ...props
-    }: BaseComponentProps & ImageProps,
+    }: BaseComponentProps & Partial<ImageProps>,
     ref
   ) => {
     return (

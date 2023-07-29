@@ -1,0 +1,1 @@
+const GMX_YC_REFERRAL_CODE = "";

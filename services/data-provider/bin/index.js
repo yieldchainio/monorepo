@@ -100,9 +100,38 @@ app.get("/v2/actions", async (req, res) => {
 });
 app.get("/v2/tiers", async (req, res) => {
     const tiers = await prisma.tier.findMany();
-    res
-        .status(200)
-        .json({
+    res.status(200).json({
+        tiers: tiers.map((tier) => ({
+            ...tier,
+            monthly_price: tier.monthly_price.toString(),
+            lifetime_price: tier.lifetime_price.toString(),
+        })),
+    });
+});
+app.get("/v2/data", async (req, res) => {
+    const tokens = await prisma.tokensv2.findMany();
+    const networks = await prisma.networksv2.findMany();
+    // @ts-ignore
+    const strategies = await prisma.strategiesv2.findMany(); // TODO: Change strategiesv2 token id to string, migrate
+    const protocols = await prisma.protocolsv2.findMany();
+    const addresses = await prisma.addressesv2.findMany();
+    const parameters = await prisma.argumentsv2.findMany();
+    const users = await prisma.usersv2.findMany();
+    const functions = await prisma.functionsv2.findMany();
+    const statistics = await prisma.statistics.findMany();
+    const actions = await prisma.actionsv2.findMany();
+    const tiers = await prisma.tier.findMany();
+    res.status(200).json({
+        tokens,
+        networks,
+        strategies,
+        protocols,
+        addresses,
+        parameters,
+        users,
+        functions,
+        statistics,
+        actions,
         tiers: tiers.map((tier) => ({
             ...tier,
             monthly_price: tier.monthly_price.toString(),
